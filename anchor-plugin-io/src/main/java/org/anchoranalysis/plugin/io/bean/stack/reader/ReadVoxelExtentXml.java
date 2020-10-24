@@ -78,7 +78,7 @@ public class ReadVoxelExtentXml extends StackReader {
     @Override
     public OpenedRaster openFile(Path path) throws ImageIOException {
 
-        OpenedRaster delegate = stackReader.openFile(path);
+        OpenedRaster delegate = stackReader.openFile(path); // NOSONAR
 
         Optional<Resolution> sr = readMetadata(path, acceptNoResolution);
 

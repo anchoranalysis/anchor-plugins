@@ -67,7 +67,7 @@ public class LineBoundCalculator extends BoundCalculator {
                     getInitializationParameters()
                             .getMarkBounds()
                             .calculateMinMax(
-                                    outlineChannel.resolution(), rotMatrix.getNumDim() >= 3);
+                                    outlineChannel.resolution(), rotMatrix.getNumberDimensions() >= 3);
 
             int maxPossiblePoint = (int) Math.ceil(minMax.getMax());
 
@@ -75,7 +75,7 @@ public class LineBoundCalculator extends BoundCalculator {
                     new Point3d(
                             rotMatrix.getMatrix().get(0, 0),
                             rotMatrix.getMatrix().get(1, 0),
-                            rotMatrix.getNumDim() >= 3 ? rotMatrix.getMatrix().get(2, 0) : 0);
+                            rotMatrix.getNumberDimensions() >= 3 ? rotMatrix.getMatrix().get(2, 0) : 0);
             Point3d margInverse = Point3d.immutableScale(marg, -1);
 
             // This is 2D Type of code

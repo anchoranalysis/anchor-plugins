@@ -199,8 +199,8 @@ public class MarkEllipseSimple extends MarkSplitProposer {
                                 minRadScaleStart, minRadScaleEnd);
 
         RotationMatrix rotMat = orientation.createRotationMatrix();
-        double[] pointArr1 = rotMat.rotatedPoint(new double[] {-1 * extent, 0});
-        double[] pointArr2 = rotMat.rotatedPoint(new double[] {extent, 0});
+        double[] pointArr1 = rotMat.rotatePoint(new double[] {-1 * extent, 0});
+        double[] pointArr2 = rotMat.rotatePoint(new double[] {extent, 0});
 
         Point3d point1 =
                 new Point3d(

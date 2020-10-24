@@ -67,7 +67,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 
         RotationMatrix rotationMatrix = orientation.createRotationMatrix();
 
-        boolean is3D = rotationMatrix.getNumDim() >= 3;
+        boolean is3D = rotationMatrix.getNumberDimensions() >= 3;
 
         return pointOnOutline(centerPoint, marginalStepFrom(rotationMatrix, is3D), is3D);
     }
