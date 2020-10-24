@@ -71,7 +71,7 @@ public abstract class BioformatsWriter extends StackWriter {
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions options)
+            StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
         throw new ImageIOException(
                 "Writing time-series is unsupported by this " + StackWriter.class.getSimpleName());

@@ -54,9 +54,9 @@ public abstract class RasterWriterDelegateBase extends StackWriter {
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions options)
+            StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
-        selectDelegate(options).writeStackSeries(stackSeries, filePath, makeRGB, options);
+        selectDelegate(options).writeStackSeries(stackSeries, filePath, options);
     }
 
     /**
