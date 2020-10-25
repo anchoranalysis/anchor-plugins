@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.stack.NamedStacks;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;

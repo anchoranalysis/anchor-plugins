@@ -33,8 +33,8 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.stack.NamedStacks;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
 
 /**
  * Source of channels for aggregating.
