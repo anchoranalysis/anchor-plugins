@@ -29,8 +29,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import javax.imageio.ImageIO;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.image.core.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.OneOrThreeChannelsWriter;
 
