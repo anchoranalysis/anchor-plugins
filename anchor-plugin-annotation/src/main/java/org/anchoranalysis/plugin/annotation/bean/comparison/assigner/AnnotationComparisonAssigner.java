@@ -30,6 +30,7 @@ import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
@@ -47,5 +48,12 @@ public abstract class AnnotationComparisonAssigner<T extends Assignment>
     public abstract AnnotationGroup<T> groupForKey(String key);
 
     /** Can more than one object exist? */
-    public abstract boolean moreThanOneObj();
+    public abstract boolean moreThanOneObject();
+    
+    /**
+     * Adds any default outputs that should occur from the assigner.
+     * 
+     * @param outputs
+     */
+    public abstract void addDefaultOutputs( OutputEnabledMutable outputs );
 }
