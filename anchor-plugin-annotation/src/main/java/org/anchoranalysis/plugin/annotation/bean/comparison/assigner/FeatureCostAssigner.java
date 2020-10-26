@@ -114,8 +114,8 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
                             assignmentCreator::getCosts);
 
             return assignment;
-        } catch (FeatureCalculationException | InitException e1) {
-            throw new CreateException(e1);
+        } catch (FeatureCalculationException | InitException e) {
+            throw new CreateException(e);
         }
     }
 
