@@ -130,7 +130,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
 
     private static Stack grayscaleToRGB(Channel channel) {
         try {
-            return new Stack(channel, channel.duplicate(), channel.duplicate());
+            return new Stack(true, channel, channel.duplicate(), channel.duplicate());
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }
