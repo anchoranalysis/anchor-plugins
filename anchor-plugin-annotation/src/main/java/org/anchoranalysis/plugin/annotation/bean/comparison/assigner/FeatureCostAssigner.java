@@ -38,19 +38,42 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObject;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
+
+/**
+ * Assigns an objects from one set of objects to another based upon a cost (degree of overlap).
+ *
+ * <p>This is a form of <a href="https://en.wikipedia.org/wiki/Bipartite_graph">bipartite matching</a>.
+ * 
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>costMatrix</td><td>no</td><td>a CSV file showing a matrix of costs calculated for the objects.</td></tr>
+ * </tbody>
+ * </table>
+ * 
+ * @author Owen Feehan
+ */
 public class FeatureCostAssigner extends AnnotationComparisonAssigner<AssignmentOverlapFromPairs> {
 
+    private static final String OUTPUT_COST_MATRIX = "costMatrix";
+    
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
 
     @BeanField @Getter @Setter private double maxCost = 1.0;
 
-    @BeanField @Getter @Setter private int numDecimalPlaces = 3;
+    @BeanField @Getter @Setter private int numberDecimalPlaces = 3;
 
     @BeanField @Getter @Setter private boolean removeTouchingBorderXY = false;
     // END BEAN PROPERTIES
@@ -86,8 +109,8 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
             context.getOutputter()
                     .writerSelective()
                     .write(
-                            "costMatrix",
-                            () -> new ObjectsCostMatrixGenerator(numDecimalPlaces),
+                            OUTPUT_COST_MATRIX,
+                            () -> new ObjectsCostMatrixGenerator(numberDecimalPlaces),
                             assignmentCreator::getCosts);
 
             return assignment;
@@ -102,7 +125,12 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
     }
 
     @Override
-    public boolean moreThanOneObj() {
+    public boolean moreThanOneObject() {
         return true;
+    }
+
+    @Override
+    public void addDefaultOutputs(OutputEnabledMutable outputs) {
+        // NO OUTPUTS TO ADD
     }
 }
