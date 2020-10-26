@@ -29,14 +29,11 @@ package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -69,19 +66,9 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
      */
     @BeanField @Getter @Setter private boolean requireTouching = true;
 
-    /**
-     * Saves all objects that are inputs to the merge, outputs from the merge, or intermediate
-     * merges along the way
-     */
-    @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsSave;
-    // END BEAN PROPERTIES
-
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objectsSource)
             throws CreateException {
-
-        Optional<ObjectCollection> saveObjects = OptionalFactory.create(objectsSave);
-        saveObjects.ifPresent(objects -> objects.addAll(objectsSource));
 
         getLogger()
                 .messageLogger()
@@ -89,7 +76,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 
         try {
             ObjectCollection merged =
-                    mergeMultiplex(objectsSource, a -> mergeConnectedComponents(a, saveObjects));
+                    mergeMultiplex(objectsSource, this::mergeConnectedComponents);
 
             getLogger().messageLogger().logFormatted("There are %d final objects", merged.size());
 
@@ -113,13 +100,10 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
      * Tries to merge objects
      *
      * @param objects objects to be merged
-     * @param saveObjects if defined, all merged objects are added to this collection
      * @return
      * @throws OperationFailedException
      */
-    private ObjectCollection mergeConnectedComponents(
-            ObjectCollection objects, Optional<ObjectCollection> saveObjects)
-            throws OperationFailedException {
+    private ObjectCollection mergeConnectedComponents(ObjectCollection objects) throws OperationFailedException {
 
         MessageLogger logger = getLogger().messageLogger();
 
@@ -133,7 +117,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
         logger.log("\nBefore");
         graph.logGraphDescription();
 
-        while (tryMerge(graph, saveObjects)) {
+        while (tryMerge(graph)) {
             // NOTHING TO DO, we just keep merging until we cannot merge any moore
         }
 
@@ -147,11 +131,10 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
      * Search for suitable merges in graph, and merges them
      *
      * @param graph the graph containing objects that can maybe be merged
-     * @param saveObjects if defined, all merged objects are added to this collection
      * @return
      * @throws OperationFailedException
      */
-    private boolean tryMerge(MergeGraph graph, Optional<ObjectCollection> saveObjects)
+    private boolean tryMerge(MergeGraph graph)
             throws OperationFailedException {
 
         // Find the edge with the best improvement
@@ -160,9 +143,6 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
         if (edgeToMerge == null) {
             return false;
         }
-
-        // When we decide to merge, we save the merged object
-        saveObjects.ifPresent(so -> so.add(edgeToMerge.getPayload().getVertex().getObject()));
 
         graph.merge(edgeToMerge);
 

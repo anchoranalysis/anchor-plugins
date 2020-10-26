@@ -84,7 +84,7 @@ public abstract class BioformatsWriter extends StackWriter {
             throw new ImageIOException("This stack has no channels to write.");
         }
 
-        boolean rgb = options.writeAsRGB(stack.getNumberChannels());
+        boolean rgb = options.writeAsRGB(stack);
 
         if (stack.allChannelsHaveIdenticalType()) {
             writeHomogeneousChannels(stack, filePath, rgb);

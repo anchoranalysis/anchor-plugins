@@ -85,7 +85,7 @@ public class FromChannelOrMask extends StackProvider {
     private Stack createStackFromChannel(Channel channel) {
         if (rgb) {
             try {
-                return new Stack(channel, channel.duplicate(), channel.duplicate());
+                return new Stack(true, channel, channel.duplicate(), channel.duplicate());
             } catch (IncorrectImageSizeException e) {
                 throw new AnchorImpossibleSituationException();
             }
