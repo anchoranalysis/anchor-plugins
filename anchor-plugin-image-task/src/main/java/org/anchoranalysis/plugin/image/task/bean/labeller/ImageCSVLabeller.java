@@ -33,12 +33,12 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.experiment.label.FileLabelMap;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.plugin.image.task.labeller.FileLabelMap;
 import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
 
 public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> {

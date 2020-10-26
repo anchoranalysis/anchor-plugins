@@ -61,11 +61,12 @@ import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsMergedAsMaskGenerator;
-import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.object.output.grayscale.ObjectsMergedAsMaskGenerator;
+import org.anchoranalysis.image.io.object.output.hdf5.HDF5ObjectsGenerator;
+import org.anchoranalysis.image.io.object.output.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
+import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
@@ -80,7 +81,6 @@ import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.segment.SharedStateSegmentInstance;
-import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
 
 /**
  * Using a model-pool, performs instance segmentation on an image producing zero, one or more

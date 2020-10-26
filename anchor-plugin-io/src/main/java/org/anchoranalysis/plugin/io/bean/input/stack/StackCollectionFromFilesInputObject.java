@@ -37,7 +37,9 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
+import org.anchoranalysis.image.io.stack.input.TimeSequenceSupplier;
 import org.anchoranalysis.io.input.files.FileInput;
 
 @RequiredArgsConstructor

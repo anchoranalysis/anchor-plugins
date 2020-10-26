@@ -56,7 +56,7 @@ import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithPrope
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
-import org.anchoranalysis.image.io.generator.raster.RasterGeneratorDelegateToRaster;
+import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorDelegateToRaster;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
 import org.anchoranalysis.io.generator.collection.CollectionGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;

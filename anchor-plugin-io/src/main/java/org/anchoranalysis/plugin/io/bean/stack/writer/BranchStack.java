@@ -29,7 +29,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
  * Uses different raster-writers depending on whether it is always 2D (not a z-stack) or possibly

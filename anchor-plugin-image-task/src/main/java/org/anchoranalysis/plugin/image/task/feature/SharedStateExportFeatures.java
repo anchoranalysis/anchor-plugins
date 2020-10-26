@@ -49,7 +49,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.io.stack.OutputSequenceStackFactory;
+import org.anchoranalysis.image.io.stack.output.OutputSequenceStackFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;

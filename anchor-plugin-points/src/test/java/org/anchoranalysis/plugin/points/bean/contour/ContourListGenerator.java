@@ -37,7 +37,7 @@ import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
-import org.anchoranalysis.image.io.generator.raster.RasterGeneratorDelegateToRaster;
+import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorDelegateToRaster;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 import org.anchoranalysis.mpp.mark.ColoredMarks;

@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.io.channel.ChannelGetter;
+import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 
 @AllArgsConstructor
 public class ChannelGetterForTimepoint {

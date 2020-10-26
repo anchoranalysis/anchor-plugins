@@ -49,12 +49,11 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.stack.NamedStacksOutputter;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.stack.output.NamedStacksOutputter;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -62,6 +61,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
+import org.anchoranalysis.plugin.image.task.bean.RasterTask;
 
 /**
  * Task to scale an image.

@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.io.bean.input.channel;
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
-import org.anchoranalysis.image.io.channel.NamedEntries;
+import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
+import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.input.path.PathSupplier;
 

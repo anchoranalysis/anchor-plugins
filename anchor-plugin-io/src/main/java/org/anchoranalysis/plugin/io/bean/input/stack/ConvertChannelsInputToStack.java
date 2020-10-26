@@ -39,8 +39,10 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
+import org.anchoranalysis.image.io.stack.input.TimeSequenceSupplier;
 
 /**
  * An input object that converts {@link NamedChannelsInput} to {@link StackSequenceInput}

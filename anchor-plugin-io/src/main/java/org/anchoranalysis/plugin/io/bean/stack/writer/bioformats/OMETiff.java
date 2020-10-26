@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 import loci.formats.IFormatWriter;
 import loci.formats.out.OMETiffWriter;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
  * Writes a stack to the filesystem as a OME-XML using the <a

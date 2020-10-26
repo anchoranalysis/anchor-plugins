@@ -32,8 +32,8 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.StackInputInitParamsCreator;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
