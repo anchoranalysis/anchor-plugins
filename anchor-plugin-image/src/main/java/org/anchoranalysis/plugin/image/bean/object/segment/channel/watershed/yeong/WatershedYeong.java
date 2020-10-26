@@ -99,7 +99,6 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
             }
         }
 
-        // TODO let's only work on the areas with regions
         convertAllToConnectedComponents(matS, objectMask);
 
         try {
