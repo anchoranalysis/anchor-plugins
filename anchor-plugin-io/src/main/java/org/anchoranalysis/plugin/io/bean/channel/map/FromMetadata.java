@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.io.bean.channel.map;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
+import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 
 public class FromMetadata extends ChannelMap {
 

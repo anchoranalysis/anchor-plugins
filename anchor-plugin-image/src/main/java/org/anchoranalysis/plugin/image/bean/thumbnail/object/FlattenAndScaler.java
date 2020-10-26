@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.scale.ScaledElements;
 import org.anchoranalysis.image.core.object.scale.Scaler;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
+import org.anchoranalysis.image.io.stack.output.box.ScaleableBackground;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;

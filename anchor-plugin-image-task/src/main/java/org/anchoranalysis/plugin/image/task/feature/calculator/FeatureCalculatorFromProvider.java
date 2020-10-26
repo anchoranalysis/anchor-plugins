@@ -51,8 +51,8 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.StackInputInitParamsCreator;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**

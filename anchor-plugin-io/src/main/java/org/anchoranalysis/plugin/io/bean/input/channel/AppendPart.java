@@ -36,11 +36,11 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesConcatenate;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesConcatenate;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.input.path.PathSupplier;
 

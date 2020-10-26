@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.spatial.Padding;
 import org.anchoranalysis.image.core.stack.DisplayStack;
-import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawCroppedObjectsGenerator;
+import org.anchoranalysis.image.io.object.output.rgb.DrawCroppedObjectsGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.overlay.bean.DrawObject;

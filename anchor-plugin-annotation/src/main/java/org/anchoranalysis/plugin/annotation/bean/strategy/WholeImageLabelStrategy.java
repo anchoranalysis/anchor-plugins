@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.plugin.annotation.bean.label.AnnotationLabel;
 import org.anchoranalysis.plugin.annotation.bean.label.GroupedAnnotationLabels;

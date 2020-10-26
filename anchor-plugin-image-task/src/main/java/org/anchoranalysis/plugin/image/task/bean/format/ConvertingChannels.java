@@ -32,7 +32,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
-import org.anchoranalysis.image.io.channel.ChannelGetter;
+import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 
 @AllArgsConstructor
 class ConvertingChannels implements ChannelGetter {

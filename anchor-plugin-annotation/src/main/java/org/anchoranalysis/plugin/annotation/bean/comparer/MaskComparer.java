@@ -40,7 +40,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.MaskReader;
+import org.anchoranalysis.image.io.stack.input.MaskReader;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;

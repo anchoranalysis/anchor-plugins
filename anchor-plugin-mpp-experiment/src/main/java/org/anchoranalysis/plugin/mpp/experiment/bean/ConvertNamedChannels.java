@@ -40,14 +40,14 @@ import org.anchoranalysis.experiment.io.ReplaceTask;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.input.stack.ConvertChannelsInputToStack;
-import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
 
 /**
  * Converts {@link NamedChannelsInput} to a variety of others to match a delegate task

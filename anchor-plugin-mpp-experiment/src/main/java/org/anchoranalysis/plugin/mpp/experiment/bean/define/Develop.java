@@ -43,7 +43,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
+import org.anchoranalysis.image.io.bean.object.feature.OutputFeatureTable;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;

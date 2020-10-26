@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
+import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;

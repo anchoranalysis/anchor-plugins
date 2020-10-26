@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;

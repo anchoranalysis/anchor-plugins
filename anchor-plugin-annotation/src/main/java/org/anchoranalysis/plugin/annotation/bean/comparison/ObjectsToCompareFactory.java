@@ -35,7 +35,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 
 /**
  * Summarizes the size of images.

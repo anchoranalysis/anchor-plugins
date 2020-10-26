@@ -44,7 +44,7 @@ import org.anchoranalysis.image.core.stack.ProviderAsStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.object.draw.Filled;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
-import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.object.output.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;

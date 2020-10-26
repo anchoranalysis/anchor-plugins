@@ -42,7 +42,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;

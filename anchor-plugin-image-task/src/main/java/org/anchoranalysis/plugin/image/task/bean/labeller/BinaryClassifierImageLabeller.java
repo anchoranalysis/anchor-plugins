@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculatorFromProvider;
 

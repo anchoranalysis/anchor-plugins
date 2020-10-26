@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.bean.thumbnail.stack.ScaleToSize;
 import org.anchoranalysis.plugin.image.bean.thumbnail.stack.ThumbnailFromStack;

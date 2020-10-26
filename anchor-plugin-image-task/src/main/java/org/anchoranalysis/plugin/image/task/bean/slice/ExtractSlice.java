@@ -51,8 +51,8 @@ import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSin
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.stack.NamedStacksOutputter;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.stack.output.NamedStacksOutputter;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;

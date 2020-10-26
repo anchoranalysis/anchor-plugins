@@ -33,12 +33,12 @@ import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 
 class GroupingInput extends NamedChannelsInput {

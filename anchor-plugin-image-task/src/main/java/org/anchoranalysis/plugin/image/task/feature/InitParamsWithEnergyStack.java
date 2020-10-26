@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @Value

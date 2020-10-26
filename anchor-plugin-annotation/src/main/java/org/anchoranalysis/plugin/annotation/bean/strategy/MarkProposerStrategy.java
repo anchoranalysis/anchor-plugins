@@ -35,7 +35,7 @@ import org.anchoranalysis.annotation.io.bean.comparer.MultipleComparer;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;

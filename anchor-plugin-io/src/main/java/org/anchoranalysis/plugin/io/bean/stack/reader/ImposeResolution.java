@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 
 public class ImposeResolution extends StackReader {
 

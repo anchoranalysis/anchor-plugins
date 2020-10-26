@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 import java.io.IOException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
+import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
