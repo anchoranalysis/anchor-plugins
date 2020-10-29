@@ -74,7 +74,7 @@ public class QuickExperiment<S> extends Experiment {
      */
     @BeanField @Getter @Setter private String fileInput;
 
-    @BeanField @Getter @Setter private String folderOutput;
+    @BeanField @Getter @Setter private String directoryOutput;
 
     @BeanField @Getter @Setter private Task<MultiInput, S> task;
 
@@ -175,7 +175,7 @@ public class QuickExperiment<S> extends Experiment {
 
     private OutputManager createOutputManager(Path inPathBaseDir) {
 
-        Path pathFolderOut = BeanPathUtilities.pathRelativeToBean(this, folderOutput);
+        Path pathFolderOut = BeanPathUtilities.pathRelativeToBean(this, directoryOutput);
 
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
