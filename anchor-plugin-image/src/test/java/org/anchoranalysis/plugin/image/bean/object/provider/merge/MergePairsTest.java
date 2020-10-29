@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 import static org.anchoranalysis.plugin.image.bean.object.provider.merge.MergeTestHelper.*;
 
 import java.nio.file.Path;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;

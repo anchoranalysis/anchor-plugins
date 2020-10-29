@@ -26,48 +26,39 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.identifier.name.SimpleNameValue;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
-import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.bean.object.draw.Outline;
-import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorDelegateToRaster;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
-import org.anchoranalysis.io.generator.collection.CollectionGenerator;
-import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
-import org.anchoranalysis.io.input.path.DerivePathException;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
-import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInput;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVSharedState;
@@ -76,46 +67,35 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.IndexedCSVRows;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.MapGroupToRow;
 
 /**
- * Given a CSV with a point representing an object-mask, the object-masks are extracted from a
- * segmentation
+ * Given a CSV with a point representing one or more object-masks, these object-masks are extracted from a
+ * segmentation.
  *
- * <p>The CSV filePath should be the same for all rasters passed as input. It gets cached between
+ * <p>The CSV file-path should be the same for all rasters passed as input. It gets cached between
  * the threads.
+ * 
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>outline</td><td>yes</td><td>RGB image displaying the outline of the extracted object in a cropped region around the objects.</td></tr>
+ * <tr><td>unique_point</td><td>no</td><td>A XML file that stores a unique point on each extracted object (uniqueness only guaranteed if no objects overlap).</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
  *
  * @author Owen Feehan
  */
 public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCSVSharedState> {
-
-    private class CSVRowRGBOutlineGenerator
-            extends RasterGeneratorDelegateToRaster<ObjectCollectionWithProperties, CSVRow> {
-
-        /** All objects associated with the image. */
-        private ObjectCollectionRTree allObjects;
-
-        public CSVRowRGBOutlineGenerator(
-                DrawObject drawObject,
-                ObjectCollectionRTree allObjects,
-                DisplayStack background,
-                RGBColor colorFirst,
-                RGBColor colorSecond) {
-            super(
-                    createRGBMaskGenerator(
-                            drawObject, background, new ColorList(colorFirst, colorSecond)));
-            this.allObjects = allObjects;
-        }
-
-        @Override
-        protected ObjectCollectionWithProperties convertBeforeAssign(CSVRow element)
-                throws OperationFailedException {
-            return element.findObjectsMatchingRow(allObjects);
-        }
-
-        @Override
-        protected Stack convertBeforeTransform(Stack stack) {
-            return stack;
-        }
-    }
-
+    
+    private static final String GROUP_SUBDIRECTORY = "groups";
+    
+    private static final ManifestDirectoryDescription GROUP_MANIFEST_DESCRIPTION = new ManifestDirectoryDescription(
+            "groupedDirectory", "groupedOutline", new StringsWithoutOrder());
+    
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter
     private DerivePath idGenerator; // Translates an input file name to a unique ID
@@ -123,12 +103,9 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
     /** The stack that is the background for our objects */
     @BeanField @Getter @Setter private StackProvider stack;
 
-    /** Column definition for the CSVfiles */
+    /** Column definition for the CSV files */
     @BeanField @Getter @Setter private ColumnDefinition columnDefinition;
     // END BEAN PROPERTIES
-
-    private static final RGBColor COLOR_FIRST = new RGBColor(255, 0, 0);
-    private static final RGBColor COLOR_SECOND = new RGBColor(0, 255, 0);
 
     @Override
     public InputTypesExpected inputTypesExpected() {
@@ -146,14 +123,17 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-
+    
     @Override
     public void doJobOnInput(InputBound<FromCSVInput, FromCSVSharedState> inputBound)
             throws JobExecutionException {
 
-        FromCSVInput input = inputBound.getInput();
-        InputOutputContext context = inputBound.context();
-
+        if (!OutlineOutputHelper.anyOutputEnabled(inputBound.context().getOutputter().outputsEnabled())) {
+            // If no outputs are enabled, there's nothing to do, so exit early
+        }
+        
+        FromCSVInput input = inputBound.getInput();        
+        InputOutputContext groupContext = inputBound.context().subdirectory(GROUP_SUBDIRECTORY, GROUP_MANIFEST_DESCRIPTION, false);
         try {
             IndexedCSVRows groupedRows =
                     inputBound
@@ -161,29 +141,28 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                             .getIndexedRowsOrCreate(input.getCsvFilePath(), columnDefinition);
 
             // We look for rows that match our File ID
-            String fileID =
-                    idStringForPath(input.pathForBinding(), context.isDebugEnabled()).toString();
-            MapGroupToRow mapGroup = groupedRows.get(fileID);
+            String fileIdentifier = IdentifierHelper.identifierForPathAsString(
+                    idGenerator,
+                    input.pathForBinding(),
+                    groupContext.isDebugEnabled());
+            MapGroupToRow mapGroup = groupedRows.get(fileIdentifier);
 
-            if (mapGroup == null) {
-                context.getMessageReporter()
-                        .logFormatted(
-                                "No matching rows in CSV file for id '%s' from '%s'",
-                                fileID, input.pathForBinding());
-                return;
+            if (mapGroup != null) {
+                processFileWithMap(
+                        MPPInitParamsFactory.create(groupContext, Optional.empty(), Optional.of(input))
+                                .getImage(),
+                        mapGroup,
+                        groupedRows.groupNameSet(),
+                        groupContext,
+                        inputBound.context().getOutputter().outputsEnabled());
+            } else {
+                groupContext.getMessageReporter()
+                    .logFormatted(
+                        "No matching rows in CSV file for id '%s' from %s",
+                        fileIdentifier, input.pathForBinding().map( path -> "'" + path.toString() + "'").orElse("<no binding path>"));
             }
 
-            processFileWithMap(
-                    MPPInitParamsFactory.create(context, Optional.empty(), Optional.of(input))
-                            .getImage(),
-                    mapGroup,
-                    groupedRows.groupNameSet(),
-                    context);
-
-        } catch (GetOperationFailedException
-                | OperationFailedException
-                | DerivePathException
-                | CreateException e) {
+        } catch (AnchorFriendlyCheckedException e) {
             throw new JobExecutionException(e);
         }
     }
@@ -196,47 +175,35 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        assert false;
-        return super.defaultOutputs();
-    }
-
-    private DisplayStack createBackgroundStack(ImageInitParams so, Logger logger)
-            throws CreateException, InitException {
-        // Get our background-stack and objects. We duplicate to avoid threading issues
-        StackProvider providerCopy = stack.duplicateBean();
-        providerCopy.initRecursive(so, logger);
-        return DisplayStack.create(providerCopy.create());
-    }
-
-    private Path idStringForPath(Optional<Path> path, boolean debugMode)
-            throws DerivePathException {
-        if (!path.isPresent()) {
-            throw new DerivePathException(
-                    "A binding-path is not present for the input, but is required");
-        }
-
-        return idGenerator != null ? idGenerator.deriveFrom(path.get(), debugMode) : path.get();
+        return super.defaultOutputs().addEnabledOutputFirst(OutlineOutputHelper.OUTPUT_OUTLINE);
     }
 
     private void processFileWithMap(
             ImageInitParams imageInit,
             MapGroupToRow mapGroup,
             Set<String> groupNameSet,
-            InputOutputContext context)
+            InputOutputContext groupContext,
+            SingleLevelOutputEnabled outputRules)
             throws OperationFailedException {
 
         try {
-            DisplayStack background = createBackgroundStack(imageInit, context.getLogger());
-
             ObjectCollectionRTree objects =
-                    new ObjectCollectionRTree(inputs(imageInit, context.getLogger()));
+                    new ObjectCollectionRTree(inputs(imageInit, groupContext.getLogger()));
 
+            // Create a writer with output-naming rules not from the group-context, but the top-level experiment context.
+            ElementWriterSupplier<Collection<CSVRow>> writer = () -> OutlineOutputHelper.createGenerator(
+                   objects,
+                   () -> createBackgroundStack(imageInit, groupContext.getLogger()),
+                   getPadding(),
+                   outputRules
+             );
+            
             // Loop through each group, and output a series of TIFFs, where set of objects is shown
             // on a successive image, cropped appropriately
             for (String groupName : groupNameSet) {
-                context.getMessageReporter().logFormatted("Processing group '%s'", groupName);
+                groupContext.getMessageReporter().logFormatted("Processing group '%s'", groupName);
 
-                processRows(mapGroup.get(groupName), groupName, objects, background, context);
+                processRows(mapGroup.get(groupName), groupName, writer, groupContext);
             }
         } catch (CreateException | InitException e) {
             throw new OperationFailedException(e);
@@ -246,61 +213,32 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
     private void processRows(
             Collection<CSVRow> rows,
             String groupName,
-            ObjectCollectionRTree objects,
-            DisplayStack background,
-            InputOutputContext context) {
+            ElementWriterSupplier<Collection<CSVRow>> writer,
+            InputOutputContext groupContext
+    ) {
         if (rows != null && !rows.isEmpty()) {
-            outputGroup(
-                    String.format("group_%s", groupName),
-                    rows,
-                    objects,
-                    background,
-                    context.getOutputter());
-        } else {
-            context.getMessageReporter().logFormatted("No matching rows for group '%s'", groupName);
-        }
-    }
-
-    private void outputGroup(
-            String label,
-            Collection<CSVRow> rows,
-            ObjectCollectionRTree objects,
-            DisplayStack background,
-            Outputter outputter) {
-
-        outputter
+            
+            groupContext.getOutputter()
                 .writerPermissive()
                 .write(
-                        label,
-                        () -> {
-                            try {
-                                return createGenerator(label, objects, background);
-                            } catch (SetOperationFailedException e) {
-                                throw new OutputWriteFailedException(e);
-                            }
-                        },
+                        groupName,
+                        writer,
                         () -> rows);
+
+        } else {
+            groupContext.getMessageReporter().logFormatted("No matching rows for group '%s'", groupName);
+        }
     }
-
-    private CollectionGenerator<CSVRow> createGenerator(
-            String label, ObjectCollectionRTree objects, DisplayStack background)
-            throws SetOperationFailedException {
-        Outline outlineWriter = new Outline(1, false);
-
-        CombinedListGenerator<CSVRow> listGenerator =
-                new CombinedListGenerator<>(
-                        Stream.of(
-                                new SimpleNameValue<>(
-                                        label,
-                                        new CSVRowRGBOutlineGenerator(
-                                                outlineWriter,
-                                                objects,
-                                                background,
-                                                COLOR_FIRST,
-                                                COLOR_SECOND)),
-                                new SimpleNameValue<>("idXML", new CSVRowXMLGenerator())));
-
-        // Output the group
-        return new CollectionGenerator<>(listGenerator, "pair");
+    
+    private DisplayStack createBackgroundStack(ImageInitParams params, Logger logger)
+            throws OutputWriteFailedException {
+        // Get our background-stack and objects. We duplicate to avoid threading issues
+        StackProvider providerCopy = stack.duplicateBean();
+        try {
+            providerCopy.initRecursive(params, logger);
+            return DisplayStack.create(providerCopy.create());
+        } catch (CreateException | InitException e) {
+            throw new OutputWriteFailedException(e);
+        }
     }
 }
