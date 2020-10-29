@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
@@ -184,7 +185,7 @@ public class QuickExperiment<S> extends Experiment {
             outputManager.localise(getLocalPath());
         } catch (BeanMisconfiguredException e) {
             // Should never arise, as getLocalPath() should always be absolute
-            assert (false);
+            throw new AnchorFriendlyRuntimeException(e);
         }
 
         DirectoryStructure filePathResolver = new DirectoryStructure();
@@ -194,7 +195,7 @@ public class QuickExperiment<S> extends Experiment {
             filePathResolver.localise(getLocalPath());
         } catch (BeanMisconfiguredException e) {
             // Should never arise, as getLocalPath() should always be absolute
-            assert (false);
+            throw new AnchorFriendlyRuntimeException(e);
         }
         outputManager.setFilePathPrefixer(filePathResolver);
         outputManager.setOutputWriteSettings(outputWriteSettings);
