@@ -48,14 +48,12 @@ import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.files.SearchDirectory;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bean.enabled.All;
-import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.IgnoreUnderscorePrefixUnless;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.DirectoryStructure;
 import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
-import org.anchoranalysis.plugin.mpp.experiment.bean.output.LegacyOutputEnabled;
 
 /**
  * A quick way of defining an InputOutputExperiment where several assumptions are made.
@@ -63,7 +61,6 @@ import org.anchoranalysis.plugin.mpp.experiment.bean.output.LegacyOutputEnabled;
  * @author Owen Feehan
  * @param <S> shared-state
  */
-@SuppressWarnings("deprecation")
 public class QuickExperiment<S> extends Experiment {
 
     // START BEAN PROPERTIES
@@ -81,12 +78,6 @@ public class QuickExperiment<S> extends Experiment {
     @BeanField @Getter @Setter private Task<MultiInput, S> task;
 
     @BeanField @Getter @Setter private String inputName = "stackInput";
-
-    @BeanField @Getter @Setter private OutputEnabled outputEnabled = All.INSTANCE;
-
-    @BeanField @Getter @Setter private OutputEnabled objects = All.INSTANCE;
-
-    @BeanField @Getter @Setter private OutputEnabled stacksOutputEnabled = All.INSTANCE;
 
     @BeanField @Getter @Setter
     private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
@@ -187,7 +178,7 @@ public class QuickExperiment<S> extends Experiment {
 
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
-        outputManager.setOutputsEnabled(outputRules());
+        outputManager.setOutputsEnabled( new IgnoreUnderscorePrefixUnless() );
 
         try {
             outputManager.localise(getLocalPath());
@@ -208,13 +199,5 @@ public class QuickExperiment<S> extends Experiment {
         outputManager.setFilePathPrefixer(filePathResolver);
         outputManager.setOutputWriteSettings(outputWriteSettings);
         return outputManager;
-    }
-
-    private LegacyOutputEnabled outputRules() {
-        LegacyOutputEnabled rules = new LegacyOutputEnabled();
-        rules.setOutputEnabled(outputEnabled);
-        rules.setObjects(objects);
-        rules.setStacksOutputEnabled(stacksOutputEnabled);
-        return rules;
     }
 }
