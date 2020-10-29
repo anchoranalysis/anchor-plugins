@@ -34,7 +34,6 @@ import org.w3c.dom.Element;
 @AllArgsConstructor
 class AddToXMLDocument {
 
-    private static final String ELEMENT_NAME_NUMBER_VOXELS = "numPixels";
     private static final String ELEMENT_NAME_POINT = "point";
 
     /** Top-level element in XML document to which this class adds new children */
@@ -50,11 +49,8 @@ class AddToXMLDocument {
      * @param array array of elements, some of whom describe an object-mask
      * @param indices indices of which elements describe the object-mask
      */
-    public void addObjectMask(String suffix, String[] array, ObjectInCsvRowIndices indices) {
-        addInteger(
-                ELEMENT_NAME_NUMBER_VOXELS + suffix,
-                ArrayExtracter.getAsInt(array, indices.getNumberVoxels()));
-        addPoint(ELEMENT_NAME_POINT + suffix, ArrayExtracter.getAsPoint(array, indices.getPoint()));
+    public void addObjectMask(String suffix, String[] array, ObjectInCsvColumn indices) {
+        addPoint(ELEMENT_NAME_POINT + suffix, ArrayExtracter.getAsPoint(array, indices.getIndexColumnUniqueVoxel(), indices.isFirst()));
     }
 
     /**
@@ -69,17 +65,6 @@ class AddToXMLDocument {
         appendIntegerNode(createdElement, "x", point.x());
         appendIntegerNode(createdElement, "y", point.y());
         appendIntegerNode(createdElement, "z", point.z());
-    }
-
-    /**
-     * Adds a child-element to the {@code topLevelParent} representing a particular integer element
-     * from an array
-     *
-     * @param elementName element-name
-     * @param val value of element
-     */
-    private void addInteger(String elementName, int val) {
-        appendIntegerNode(topLevelParent, elementName, val);
     }
 
     private void appendIntegerNode(Element parentElement, String elementName, int val) {

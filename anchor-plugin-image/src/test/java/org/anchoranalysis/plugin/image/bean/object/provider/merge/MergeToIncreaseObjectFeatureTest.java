@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 
 import java.nio.file.Path;
 import java.util.function.ToDoubleFunction;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;

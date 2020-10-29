@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.objects;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -41,7 +42,7 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 public class FromCSVInput implements InputFromManager, InputForMPPBean {
 
     private MultiInput input;
-    private Path csvFilePath;
+    @Getter private Path csvFilePath;
 
     @Override
     public String name() {
@@ -56,10 +57,6 @@ public class FromCSVInput implements InputFromManager, InputForMPPBean {
     @Override
     public void close(ErrorReporter errorReporter) {
         input.close(errorReporter);
-    }
-
-    public Path getCsvFilePath() {
-        return csvFilePath;
     }
 
     @Override

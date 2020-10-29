@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.quick.bean.experiment;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;

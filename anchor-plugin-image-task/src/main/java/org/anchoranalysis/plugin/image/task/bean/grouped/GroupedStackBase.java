@@ -74,7 +74,7 @@ public abstract class GroupedStackBase<S, T>
 
     private static final ManifestDirectoryDescription MANIFEST_DESCRIPTION_GROUP_FOLDER =
             new ManifestDirectoryDescription(
-                    "groupedFolder", "groupedStack", new StringsWithoutOrder());
+                    "groupedDirectory", "groupedStack", new StringsWithoutOrder());
 
     // START BEAN PROPERTIES
     /**

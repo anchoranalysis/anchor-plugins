@@ -32,7 +32,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
