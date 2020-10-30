@@ -81,13 +81,13 @@ public class ExperimentStructure extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootFolderPrefix(
+    public DirectoryWithPrefix rootDirectoryPrefix(
             String experimentIdentifier, FilePathPrefixerContext context)
             throws PathPrefixerException {
 
         createDelegateIfNeeded();
 
-        return delegate.rootFolderPrefix(experimentIdentifier, context);
+        return delegate.rootDirectoryPrefix(experimentIdentifier, context);
     }
 
     private void createDelegateIfNeeded() throws PathPrefixerException {

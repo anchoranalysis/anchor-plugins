@@ -47,7 +47,7 @@ import org.xml.sax.SAXException;
 
 public class AnchorMetadataXmlTest {
 
-    @Rule public TemporaryFolder folder = new TemporaryFolder();
+    @Rule public TemporaryFolder directory = new TemporaryFolder();
 
     @Test
     public void test()
@@ -56,7 +56,7 @@ public class AnchorMetadataXmlTest {
 
         Resolution resolution = createMockResolution();
 
-        Path pathOut = folder.newFile("mockRes01.xml").toPath();
+        Path pathOut = directory.newFile("mockRes01.xml").toPath();
 
         ResolutionAsXml.writeResolutionXml(resolution, pathOut);
 

@@ -48,7 +48,7 @@ public class ObjectCollectionCompressionTest {
     private TestLoaderImage loader =
             new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
 
-    @Rule public TemporaryFolder folder = new TemporaryFolder();
+    @Rule public TemporaryFolder directory = new TemporaryFolder();
 
     @Test
     public void testCompression()
@@ -58,7 +58,7 @@ public class ObjectCollectionCompressionTest {
         ObjectCollectionWithSize uncompressed = calculateUncompressed(PATH_UNCOMPRESSED_OBJECTS);
 
         ObjectCollectionWithSize compressed =
-                calculateCompressed(uncompressed.getObjects(), folder.getRoot().toPath());
+                calculateCompressed(uncompressed.getObjects(), directory.getRoot().toPath());
 
         double relativeSize = uncompressed.relativeSize(compressed);
 

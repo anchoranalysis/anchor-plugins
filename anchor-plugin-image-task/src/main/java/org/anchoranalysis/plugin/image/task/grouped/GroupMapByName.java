@@ -53,9 +53,9 @@ import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCach
  */
 public abstract class GroupMapByName<S, T> {
 
-    private MapCreate<MultiName, T> map;
+    private final MapCreate<MultiName, T> map;
 
-    private String nounT;
+    private final String nounT;
 
     private final ManifestDirectoryDescription manifestDirectoryDescription;
 

@@ -61,7 +61,7 @@ class CompareHelper {
             throws OperationFailedException {
 
         DualComparer comparer =
-                DualComparerFactory.compareExplicitFolderToTest(
+                DualComparerFactory.compareExplicitDirectoryToTest(
                         pathAbsoluteOutput, pathRelativeSaved);
 
         for (String path : relativePaths) {

@@ -40,7 +40,7 @@ import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SuppressNonMax
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.test.image.InputOutputContextFixture;
-import org.anchoranalysis.test.image.WriteIntoFolder;
+import org.anchoranalysis.test.image.WriteIntoDirectory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class SegmentTextTest {
 
     private SegmentStackIntoObjectsPooled<?> segmenter;
 
-    @Rule public WriteIntoFolder writer = new WriteIntoFolder(false);
+    @Rule public WriteIntoDirectory writer = new WriteIntoDirectory(false);
 
     @Before
     public void setUp() throws InitException {

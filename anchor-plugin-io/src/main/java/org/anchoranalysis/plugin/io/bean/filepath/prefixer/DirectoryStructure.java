@@ -61,7 +61,7 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
 
     // START BEAN PROPERTIES
     /** If false, the folders are ignored, and only the file-name is used in the output */
-    @BeanField @Getter @Setter private boolean includeFolders = true;
+    @BeanField @Getter @Setter private boolean includeDirectories = true;
 
     @BeanField @AllowEmpty @Getter @Setter private String inPathPrefix = "";
     // END BEAN PROPERTIES
@@ -89,7 +89,7 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
     }
 
     private Path buildOutPath(Path root, PathDifference ff) {
-        if (includeFolders) {
+        if (includeDirectories) {
             return root.resolve(ff.combined());
         } else {
             return root.resolve(ff.getFilename());

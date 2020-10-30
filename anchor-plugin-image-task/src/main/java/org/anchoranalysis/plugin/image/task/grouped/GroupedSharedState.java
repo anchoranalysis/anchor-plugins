@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.grouped;
 
 import java.util.function.Function;
+import lombok.Getter;
 
 /**
  * Commonality between shared state for gouped export tasks
@@ -37,19 +38,15 @@ import java.util.function.Function;
  */
 public class GroupedSharedState<S, T> {
 
-    private ConsistentChannelChecker channelChecker = new ConsistentChannelChecker();
+    @Getter private ConsistentChannelChecker channelChecker = new ConsistentChannelChecker();
 
     private GroupMapByName<S, T> groupMap;
 
-    private Function<ConsistentChannelChecker, GroupMapByName<S, T>> createGroupMap;
+    private final Function<ConsistentChannelChecker, GroupMapByName<S, T>> createGroupMap;
 
     public GroupedSharedState(
             Function<ConsistentChannelChecker, GroupMapByName<S, T>> createGroupMap) {
         this.createGroupMap = createGroupMap;
-    }
-
-    public ConsistentChannelChecker getChannelChecker() {
-        return channelChecker;
     }
 
     public GroupMapByName<S, T> getGroupMap() {

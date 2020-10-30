@@ -152,7 +152,7 @@ class TaskSingleInputHelper {
     }
 
     private static ParametersExperiment createParametersExperiment(
-            Path pathTempFolder,
+            Path pathTemporaryDirectory,
             OutputterChecked outputter,
             PathPrefixer prefixer,
             StatefulMessageLogger logger)

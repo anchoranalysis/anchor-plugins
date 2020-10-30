@@ -95,14 +95,14 @@ public class ManifestCouplingDefinition implements InputFromManager {
             Manifest experimentManifest = manifestDeserializer.deserializeManifest(experimentFile);
 
             // We look for all experimental files in the manifest
-            FinderExperimentFileDirectories finderExperimentFileFolders =
+            FinderExperimentFileDirectories finderExperimentFileDirectories =
                     new FinderExperimentFileDirectories();
-            if (!finderExperimentFileFolders.doFind(experimentManifest)) {
+            if (!finderExperimentFileDirectories.doFind(experimentManifest)) {
                 break;
             }
 
             // For each experiment folder, we look for a manifest
-            for (MutableDirectory folderWrite : finderExperimentFileFolders.getList()) {
+            for (MutableDirectory folderWrite : finderExperimentFileDirectories.getList()) {
                 CoupledManifests coupledManifests =
                         readManifestsFromDirectory(
                                 folderWrite, experimentManifest, manifestDeserializer, logger);

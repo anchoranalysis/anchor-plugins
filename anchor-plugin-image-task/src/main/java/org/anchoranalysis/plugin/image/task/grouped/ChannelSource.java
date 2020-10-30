@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.grouped;
 
 import java.util.Optional;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
@@ -45,7 +46,7 @@ import org.anchoranalysis.image.core.stack.named.NamedStacks;
 public class ChannelSource {
 
     // START REQUIRED ARGUMENTS
-    private final NamedStacks stackStore;
+    @Getter private final NamedStacks stackStore;
     private final ConsistentChannelChecker channelChecker;
     // END REQUIRED ARGUMENTS
 
@@ -108,9 +109,5 @@ public class ChannelSource {
         } else {
             return channel;
         }
-    }
-
-    public NamedStacks getStackStore() {
-        return stackStore;
     }
 }

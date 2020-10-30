@@ -49,7 +49,7 @@ import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjects
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
 import org.anchoranalysis.test.image.EnergyStackFixture;
-import org.anchoranalysis.test.image.WriteIntoFolder;
+import org.anchoranalysis.test.image.WriteIntoDirectory;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -66,7 +66,7 @@ public class OutlinePreserveRelativeSizeTest {
 
     private static final Stack BACKGROUND = EnergyStackFixture.create(true, false).asStack();
 
-    @Rule public WriteIntoFolder writer = new WriteIntoFolder(false);
+    @Rule public WriteIntoDirectory writer = new WriteIntoDirectory(false);
 
     @Test
     public void testThumbnails() throws OperationFailedException, CreateException {
@@ -82,8 +82,8 @@ public class OutlinePreserveRelativeSizeTest {
         }
 
         DualComparer comparer =
-                DualComparerFactory.compareTemporaryFolderToTest(
-                        writer.getFolder(), Optional.of("thumbnails"), "thumbnails01");
+                DualComparerFactory.compareTemporaryDirectoryToTest(
+                        writer.getDirectory(), Optional.of("thumbnails"), "thumbnails01");
         assertTrue(
                 "thumbnails are identical to saved copy", comparer.compareTwoSubdirectories("."));
     }

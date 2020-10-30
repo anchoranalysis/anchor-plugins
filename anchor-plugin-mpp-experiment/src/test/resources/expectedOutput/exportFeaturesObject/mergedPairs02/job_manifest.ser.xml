@@ -1,5 +1,5 @@
 <org.anchoranalysis.io.manifest.Manifest>
-  <rootFolder>
+  <rootDirectory>
     <subdirectories>
       <org.anchoranalysis.io.generator.sequence.IndexableSubdirectory>
         <parent class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../../.."/>
@@ -88,7 +88,7 @@
       <directory class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../.."/>
       <files>
         <org.anchoranalysis.io.manifest.file.OutputtedFile>
-          <parentFolder class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../../../.."/>
+          <parentDirectory class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../../../.."/>
           <fileName>energyStackParams.xml</fileName>
           <outputName>energyStackParams</outputName>
           <index></index>
@@ -99,5 +99,5 @@
         </org.anchoranalysis.io.manifest.file.OutputtedFile>
       </files>
     </delegate>
-  </rootFolder>
+  </rootDirectory>
 </org.anchoranalysis.io.manifest.Manifest>

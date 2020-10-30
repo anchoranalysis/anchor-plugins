@@ -76,13 +76,13 @@ public class PathRegEx extends PathPrefixerAvoidResolve {
     /**
      * Creates a FilePathPrefix based upon an ordered array of string components
      *
-     * @param outFolderPath the base folder of the prefixer
+     * @param outDirectoryPath the base folder of the prefixer
      * @param components ordered array of string components
      * @return the file-path-prefix
      */
-    private static DirectoryWithPrefix createPrefix(Path outFolderPath, String[] components) {
+    private static DirectoryWithPrefix createPrefix(Path outDirectoryPath, String[] components) {
 
-        Path path = outFolderPath;
+        Path path = outDirectoryPath;
 
         for (int g = 0; g < components.length; g++) {
             path = path.resolve(components[g]);

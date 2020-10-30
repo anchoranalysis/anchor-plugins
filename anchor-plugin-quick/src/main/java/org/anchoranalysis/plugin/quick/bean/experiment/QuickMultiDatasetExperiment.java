@@ -73,7 +73,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
         implements ReplaceInputManager, ReplaceOutputManager {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String folderDataset;
+    @BeanField @Getter @Setter private String directoryDataset;
 
     @BeanField @Getter @Setter private StringSet datasets;
 
@@ -150,7 +150,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
             throws ExperimentExecutionException {
 
         delegate.secondInitBeforeExecution(
-                getXMLConfiguration(), folderDataset, beanExtension, createProcessor());
+                getXMLConfiguration(), directoryDataset, beanExtension, createProcessor());
 
         // If there's a replacement manager run it on this
         if (replacementInputManager != null) {

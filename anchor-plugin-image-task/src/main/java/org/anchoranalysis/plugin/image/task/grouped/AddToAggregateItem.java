@@ -38,5 +38,5 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 @FunctionalInterface
 public interface AddToAggregateItem<S, T> {
 
-    void add(S ind, T agg) throws OperationFailedException;
+    void add(S individual, T aggregate) throws OperationFailedException;
 }
