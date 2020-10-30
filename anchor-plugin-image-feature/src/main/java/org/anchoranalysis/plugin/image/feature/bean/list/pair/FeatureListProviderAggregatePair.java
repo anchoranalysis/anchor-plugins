@@ -39,8 +39,8 @@ import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.bean.object.pair.Merged;
 import org.anchoranalysis.image.feature.bean.object.pair.Second;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.plugin.operator.feature.bean.list.Mean;
 
 /**

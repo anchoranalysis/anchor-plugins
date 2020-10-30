@@ -35,7 +35,6 @@ import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
-import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.arithmetic.DoubleUtilities;
@@ -178,7 +177,7 @@ public class MergeGraph {
 
     private ObjectVertex createVertex(ObjectMask obj) throws OperationFailedException {
         try {
-            return new ObjectVertex(obj, payloadCalculator.calc(obj));
+            return new ObjectVertex(obj, payloadCalculator.calculate(obj));
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }

@@ -32,8 +32,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
-import org.anchoranalysis.image.feature.object.calculation.CalculateNumVoxels;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.calculation.CalculateNumberVoxels;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
@@ -56,7 +56,7 @@ public class NumberRemovedVoxelsAfterClosing extends FeatureSingleObject {
         ObjectMask closed =
                 input.calculate(CalculateClosing.of(input.resolver(), iterations, do3D));
 
-        double numVoxels = input.calculate(new CalculateNumVoxels(false));
+        double numVoxels = input.calculate(new CalculateNumberVoxels(false));
 
         return closed.numberVoxelsOn() - numVoxels;
     }

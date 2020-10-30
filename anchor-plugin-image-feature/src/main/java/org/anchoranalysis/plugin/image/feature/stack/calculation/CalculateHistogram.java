@@ -32,7 +32,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.math.histogram.Histogram;
 
 @AllArgsConstructor

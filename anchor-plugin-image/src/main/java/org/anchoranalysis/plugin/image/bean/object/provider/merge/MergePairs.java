@@ -45,11 +45,11 @@ import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSin
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
-import org.anchoranalysis.image.feature.session.merged.PairsTableCalculator;
+import org.anchoranalysis.image.feature.calculator.merged.MergedPairsFeatures;
+import org.anchoranalysis.image.feature.calculator.merged.PairsTableCalculator;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.plugin.image.object.merge.PayloadCalculator;
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriorityFromPair;
 

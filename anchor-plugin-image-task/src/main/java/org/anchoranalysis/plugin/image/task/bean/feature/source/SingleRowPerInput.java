@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.name.SimpleName;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;

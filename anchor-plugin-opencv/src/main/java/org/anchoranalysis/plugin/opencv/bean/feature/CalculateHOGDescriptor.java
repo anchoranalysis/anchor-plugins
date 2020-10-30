@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.anchoranalysis.spatial.Extent;
 import org.opencv.core.Mat;

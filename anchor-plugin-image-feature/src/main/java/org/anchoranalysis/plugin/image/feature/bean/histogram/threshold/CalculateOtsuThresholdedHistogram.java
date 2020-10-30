@@ -35,7 +35,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
 

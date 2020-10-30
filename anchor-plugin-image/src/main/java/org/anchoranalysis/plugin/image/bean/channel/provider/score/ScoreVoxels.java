@@ -43,7 +43,7 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.feature.bean.score.VoxelScore;
+import org.anchoranalysis.image.feature.bean.VoxelScore;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.VoxelsWrapperList;

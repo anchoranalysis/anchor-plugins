@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.points.bean.feature.object.conic;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 
 public class AxisRatioEllipsoid extends EllipsoidBase {

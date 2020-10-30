@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
  * The number of voxel-faces along the surface (the faces of each voxel that touch outside)
