@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
+import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.math.relation.EqualTo;
 

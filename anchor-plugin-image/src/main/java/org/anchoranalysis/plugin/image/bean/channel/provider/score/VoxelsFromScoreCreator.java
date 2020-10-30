@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
-import org.anchoranalysis.image.feature.bean.score.VoxelScore;
+import org.anchoranalysis.image.feature.bean.VoxelScore;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.VoxelsWrapperList;

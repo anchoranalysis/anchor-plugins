@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 

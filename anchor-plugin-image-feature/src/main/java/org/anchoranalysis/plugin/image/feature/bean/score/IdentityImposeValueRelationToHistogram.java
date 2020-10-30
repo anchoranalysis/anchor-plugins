@@ -36,7 +36,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.bean.score.VoxelScore;
+import org.anchoranalysis.image.feature.bean.VoxelScore;
 import org.anchoranalysis.math.histogram.Histogram;
 
 public class IdentityImposeValueRelationToHistogram extends VoxelScore {

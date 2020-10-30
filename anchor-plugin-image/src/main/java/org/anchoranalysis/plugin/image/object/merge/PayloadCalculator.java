@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image-feature
+ * anchor-image-feature
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,35 +24,13 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological;
+package org.anchoranalysis.plugin.image.object.merge;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
-import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateErosion;
 
-public class Erode extends DerivedObject {
+@FunctionalInterface
+public interface PayloadCalculator {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int iterations;
-
-    @BeanField @Getter @Setter private boolean do3D = true;
-    // END BEAN PROPERTIES
-
-    @Override
-    protected FeatureCalculation<ObjectMask, FeatureInputSingleObject>
-            createCachedCalculationForDerived(
-                    CalculationResolver<FeatureInputSingleObject> session) {
-        return CalculateErosion.of(session, iterations, do3D);
-    }
-
-    @Override
-    public ChildCacheName cacheName() {
-        return new ChildCacheName(Erode.class, iterations + "_" + do3D);
-    }
+    double calculate(ObjectMask object) throws FeatureCalculationException;
 }

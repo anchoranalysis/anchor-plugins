@@ -34,9 +34,9 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import org.anchoranalysis.image.feature.histogram.Mean;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.bean.histogram.Mean;
+import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
  * Calculates a statistic from the intensity values covered by a single object-mask in a channel.

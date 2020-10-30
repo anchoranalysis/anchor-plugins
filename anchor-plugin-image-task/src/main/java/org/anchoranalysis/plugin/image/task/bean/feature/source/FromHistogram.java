@@ -48,7 +48,7 @@ import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMult
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.image.io.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.histogram.input.HistogramCSVReader;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
