@@ -65,11 +65,11 @@ public class CoupledManifests implements InputFromManager {
     private String generateName(Logger logger) throws PathDifferenceException {
 
         if (experimentManifest.isPresent()) {
-            Path experimentRootFolder =
-                    getExperimentManifest().get().getRootFolder().calculatePath();
+            Path experimentRootDirectory =
+                    getExperimentManifest().get().getRootDirectory().calculatePath();
 
             PathDifference difference =
-                    PathDifference.differenceFrom(experimentRootFolder, jobManifest.getRootPath());
+                    PathDifference.differenceFrom(experimentRootDirectory, jobManifest.getRootPath());
             return difference.combined().toString();
 
         } else {

@@ -114,7 +114,7 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
 
     private void populateDelegateIfNeeded() {
         if (!populatedDelegate) {
-            delegate.setFolderDataset(folderDataset());
+            delegate.setDirectoryDataset(directoryDataset());
             delegate.setOutput(output());
             delegate.setLogExperimentPath(loggerPath("Experiment"));
             delegate.setLogTaskPath(loggerPath("Task"));
@@ -123,7 +123,7 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
         }
     }
 
-    private String folderDataset() {
+    private String directoryDataset() {
         return String.format(
                 "%s../Filesets/For%s/", pathPrefix(), StringUtils.capitalize(experimentType));
     }

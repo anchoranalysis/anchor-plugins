@@ -48,7 +48,7 @@ import org.junit.rules.TemporaryFolder;
  */
 public class ObjectCollectionWriterTest {
 
-    @Rule public TemporaryFolder folder = new TemporaryFolder();
+    @Rule public TemporaryFolder directory = new TemporaryFolder();
 
     private ObjectCollectionFixture fixture = new ObjectCollectionFixture();
 
@@ -74,7 +74,7 @@ public class ObjectCollectionWriterTest {
     private void testWriteRead(boolean hdf5)
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
-        Path path = folder.getRoot().toPath();
+        Path path = directory.getRoot().toPath();
 
         ObjectCollection objects = fixture.createMockObjects(2, 7);
         writeObjects(objects, path, generator(hdf5, false));

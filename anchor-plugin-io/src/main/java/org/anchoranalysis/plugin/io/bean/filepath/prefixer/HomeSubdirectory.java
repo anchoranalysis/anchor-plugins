@@ -82,14 +82,14 @@ public class HomeSubdirectory extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
+    public DirectoryWithPrefix rootDirectoryPrefix(String expName, FilePathPrefixerContext context)
             throws PathPrefixerException {
         try {
             initIfPossible();
         } catch (InitException e) {
             throw new PathPrefixerException(e);
         }
-        return delegate.rootFolderPrefix(expName, context);
+        return delegate.rootDirectoryPrefix(expName, context);
     }
 
     private Path homeDir() throws InitException {

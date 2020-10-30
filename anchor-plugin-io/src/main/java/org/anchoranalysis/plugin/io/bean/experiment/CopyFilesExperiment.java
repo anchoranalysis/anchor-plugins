@@ -68,9 +68,9 @@ public class CopyFilesExperiment extends Experiment {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private FilesProvider filesProvider;
 
-    @BeanField @Getter @Setter private FilePath sourceFolderPath;
+    @BeanField @Getter @Setter private FilePath sourceDirectoryPath;
 
-    @BeanField @Getter @Setter private FilePath destinationFolderPath;
+    @BeanField @Getter @Setter private FilePath destinationDirectoryPath;
 
     @BeanField @Getter @Setter private boolean dummyMode = false;
 
@@ -104,7 +104,7 @@ public class CopyFilesExperiment extends Experiment {
         try {
             doCopying(
                     findMatchingFiles(arguments),
-                    sourceFolderPath.path(arguments.isDebugModeEnabled()),
+                    sourceDirectoryPath.path(arguments.isDebugModeEnabled()),
                     destination,
                     logger);
             logger.close(true);
@@ -116,7 +116,7 @@ public class CopyFilesExperiment extends Experiment {
 
     private Path determineDestination(boolean debugEnabled) throws ExperimentExecutionException {
         try {
-            return destinationFolderPath.path(debugEnabled);
+            return destinationDirectoryPath.path(debugEnabled);
         } catch (InputReadFailedException exc) {
             throw new ExperimentExecutionException("Cannot determine destination directory", exc);
         }

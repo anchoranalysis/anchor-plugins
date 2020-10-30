@@ -175,7 +175,7 @@ public class QuickExperiment<S> extends Experiment {
 
     private OutputManager createOutputManager(Path inPathBaseDir) {
 
-        Path pathFolderOut = BeanPathUtilities.pathRelativeToBean(this, directoryOutput);
+        Path pathDirectoryOut = BeanPathUtilities.pathRelativeToBean(this, directoryOutput);
 
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
@@ -190,7 +190,7 @@ public class QuickExperiment<S> extends Experiment {
 
         DirectoryStructure filePathResolver = new DirectoryStructure();
         filePathResolver.setInPathPrefix(inPathBaseDir.toString());
-        filePathResolver.setOutPathPrefix(pathFolderOut.toString());
+        filePathResolver.setOutPathPrefix(pathDirectoryOut.toString());
         try {
             filePathResolver.localise(getLocalPath());
         } catch (BeanMisconfiguredException e) {

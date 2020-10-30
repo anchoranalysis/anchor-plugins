@@ -83,9 +83,9 @@ public class Rooted extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
+    public DirectoryWithPrefix rootDirectoryPrefix(String expName, FilePathPrefixerContext context)
             throws PathPrefixerException {
-        DirectoryWithPrefix fpp = filePathPrefixer.rootFolderPrefixAvoidResolve(expName);
+        DirectoryWithPrefix fpp = filePathPrefixer.rootDirectoryPrefixAvoidResolve(expName);
         fpp.setDirectory(folderPathOut(fpp.getDirectory(), context.isDebugMode()));
         return fpp;
     }

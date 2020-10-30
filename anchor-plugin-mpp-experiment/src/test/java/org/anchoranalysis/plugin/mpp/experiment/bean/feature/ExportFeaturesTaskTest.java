@@ -65,7 +65,7 @@ public class ExportFeaturesTaskTest {
     private static final String RELATIVE_PATH_SAVED_RESULTS =
             "expectedOutput/exportFeaturesObject/";
 
-    @Rule public TemporaryFolder folder = new TemporaryFolder();
+    @Rule public TemporaryFolder directory = new TemporaryFolder();
 
     @BeforeClass
     public static void setup() {
@@ -241,7 +241,7 @@ public class ExportFeaturesTaskTest {
             TaskSingleInputHelper.runTaskAndCompareOutputs(
                     MultiInputFixture.createInput(taskFixture.energyStack()),
                     taskFixture.createTask(),
-                    folder.getRoot().toPath(),
+                    directory.getRoot().toPath(),
                     RELATIVE_PATH_SAVED_RESULTS + suffixPathDirSaved,
                     OUTPUTS_TO_COMPARE);
         } catch (CreateException e) {

@@ -29,7 +29,7 @@ import java.util.Optional;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.plugin.io.bean.stack.writer.bioformats.OMEXML;
 
-public class OMEXMLTest extends OMETestBase {
+public class OMEXMLTest extends OMETestBase {   // NOSONAR
 
     public OMEXMLTest() {
         super("ome.xml", true, Optional.empty());
