@@ -35,12 +35,12 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
-import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -84,7 +84,7 @@ public class SplitByObjects extends WithDimensionsBase {
 
         // An Integer buffer with 0 by default and the same bounds as the object to be split
         BoundedVoxels<UnsignedIntBuffer> voxelsWithIdentifiers =
-                BoundedVoxelsFactory.createInt(objectToSplit.boundingBox());
+                VoxelsFactory.getUnsignedInt().createBounded(objectToSplit.boundingBox());
 
         // Populate boundedVbId with id values
         int count = 1;
