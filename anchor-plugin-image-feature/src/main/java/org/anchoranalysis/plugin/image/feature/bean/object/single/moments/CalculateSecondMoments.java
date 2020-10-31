@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.math.moment.ImageMoments;
+import org.anchoranalysis.math.statistics.moment.ImageMoments;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**

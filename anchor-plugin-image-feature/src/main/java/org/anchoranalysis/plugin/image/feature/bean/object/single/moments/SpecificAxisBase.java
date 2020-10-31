@@ -30,8 +30,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.math.moment.EigenvalueAndVector;
-import org.anchoranalysis.math.moment.ImageMoments;
+import org.anchoranalysis.math.statistics.moment.EigenvalueAndVector;
+import org.anchoranalysis.math.statistics.moment.ImageMoments;
 
 /**
  * A feature based one one-specific principal-axis as identified by image moments.

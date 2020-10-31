@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
-import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
+import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
@@ -105,7 +105,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     }
 
     private static Voxels<UnsignedByteBuffer> outline(ObjectMask object, boolean useZ) {
-        OutlineKernel3 kernel = new OutlineKernel3(object.binaryValuesByte(), false, useZ);
+        OutlineKernel kernel = new OutlineKernel(object.binaryValuesByte(), false, useZ);
         return ApplyKernel.apply(kernel, object.voxels(), object.binaryValuesByte());
     }
 }

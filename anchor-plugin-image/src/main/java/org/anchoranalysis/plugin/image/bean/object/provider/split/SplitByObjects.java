@@ -38,12 +38,12 @@ import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
+import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
 import org.anchoranalysis.spatial.Extent;
 

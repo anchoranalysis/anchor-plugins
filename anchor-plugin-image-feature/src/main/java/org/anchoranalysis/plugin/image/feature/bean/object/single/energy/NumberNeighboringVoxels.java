@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
-import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3NeighborMatchValue;
+import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelNeighborMatchValue;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelParameters;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.OutlineKernelBase;
@@ -67,8 +67,8 @@ public class NumberNeighboringVoxels extends OutlineKernelBase {
             throws FeatureCalculationException {
         Channel channel = energyStack.get().getChannel(energyIndex);
 
-        OutlineKernel3NeighborMatchValue kernelMatch =
-                new OutlineKernel3NeighborMatchValue(object, binaryVoxels(channel), parameters);
+        OutlineKernelNeighborMatchValue kernelMatch =
+                new OutlineKernelNeighborMatchValue(object, binaryVoxels(channel), parameters);
         return ApplyKernel.applyForCount(kernelMatch, object.voxels());
     }
 

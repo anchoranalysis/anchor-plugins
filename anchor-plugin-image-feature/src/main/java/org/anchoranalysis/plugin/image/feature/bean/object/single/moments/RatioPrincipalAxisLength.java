@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.math.moment.ImageMoments;
+import org.anchoranalysis.math.statistics.moment.ImageMoments;
 
 /**
  * Calculates the ratio of prinicpal-axis length using Image Moments
