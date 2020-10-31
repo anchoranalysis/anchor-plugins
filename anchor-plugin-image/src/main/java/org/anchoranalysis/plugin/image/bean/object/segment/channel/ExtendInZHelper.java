@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
-import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
@@ -63,7 +63,7 @@ class ExtendInZHelper {
 
         BoundingBox newBBox = createBoundingBoxForAllZ(obj2D.boundingBox(), mask3D.extent().z());
 
-        BoundedVoxels<UnsignedByteBuffer> newMask = BoundedVoxelsFactory.createByte(newBBox);
+        BoundedVoxels<UnsignedByteBuffer> newMask = VoxelsFactory.getUnsignedByte().createBounded(newBBox);
 
         ReadableTuple3i max = newBBox.calculateCornerMax();
         Point3i point = new Point3i();
