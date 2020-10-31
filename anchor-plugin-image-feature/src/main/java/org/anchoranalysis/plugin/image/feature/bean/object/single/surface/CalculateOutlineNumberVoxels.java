@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
-import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
+import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 @AllArgsConstructor
@@ -57,13 +57,13 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureIn
         if (do3D && mip) {
             // If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
 
-            OutlineKernel3 kernel = new OutlineKernel3(object.binaryValuesByte(), false, false);
+            OutlineKernel kernel = new OutlineKernel(object.binaryValuesByte(), false, false);
 
             return ApplyKernel.applyForCount(kernel, object.extract().projectMax());
 
         } else {
             return ApplyKernel.applyForCount(
-                    new OutlineKernel3(object.binaryValuesByte(), false, do3D), object.voxels());
+                    new OutlineKernel(object.binaryValuesByte(), false, do3D), object.voxels());
         }
     }
 

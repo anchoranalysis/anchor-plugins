@@ -40,10 +40,10 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFromObjects;
 import org.anchoranalysis.image.core.mask.combine.MaskAnd;
 import org.anchoranalysis.image.core.mask.combine.MaskOr;
+import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.plugin.imagej.mask.ApplyImageJMorphologicalOperation;
 import org.anchoranalysis.spatial.Extent;
 

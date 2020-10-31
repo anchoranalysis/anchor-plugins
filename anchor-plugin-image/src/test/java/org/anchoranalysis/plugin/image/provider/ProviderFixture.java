@@ -45,8 +45,8 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.io.ImageInitParamsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.image.InputOutputContextFixture;
 

@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.math.moment.EigenvalueAndVector;
+import org.anchoranalysis.math.statistics.moment.EigenvalueAndVector;
 import org.anchoranalysis.spatial.axis.AxisTypeConverter;
 import org.anchoranalysis.spatial.axis.AxisTypeException;
 

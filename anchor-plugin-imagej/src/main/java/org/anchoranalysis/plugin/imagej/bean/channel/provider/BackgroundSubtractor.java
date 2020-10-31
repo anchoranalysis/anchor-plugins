@@ -37,24 +37,19 @@ public class BackgroundSubtractor extends WithRadiusBase {
 
     @Override
     protected Channel createFromChannel(Channel channel, int radius) throws CreateException {
-        return subtractBackground(channel, radius, true);
-    }
-
-    public static Channel subtractBackground(Channel channel, int radius, boolean doPreSmooth) {
-        ImagePlus imp = ConvertToImagePlus.from(channel);
+        ImagePlus image = ConvertToImagePlus.from(channel);
 
         BackgroundSubtracter plugin = new BackgroundSubtracter();
-        for (int z = 0; z < channel.dimensions().z(); z++) {
+        channel.extent().iterateOverZ( z ->
             plugin.rollingBallBackground(
-                    imp.getStack().getProcessor(z + 1),
+                    image.getStack().getProcessor(z + 1),
                     radius,
                     false,
                     false,
                     false,
-                    doPreSmooth,
-                    true);
-        }
-
-        return ConvertFromImagePlus.toChannel(imp, channel.resolution());
+                    true,
+                    true)
+        );
+        return ConvertFromImagePlus.toChannel(image, channel.resolution());
     }
 }

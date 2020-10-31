@@ -35,9 +35,9 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
-import org.anchoranalysis.image.voxel.object.morphological.accept.AcceptIterationList;
-import org.anchoranalysis.image.voxel.object.morphological.accept.RejectIterationIfAllHigh;
-import org.anchoranalysis.image.voxel.object.morphological.accept.RejectIterationIfLowDisconnected;
+import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationList;
+import org.anchoranalysis.image.voxel.object.morphological.predicate.RejectIterationIfAllHigh;
+import org.anchoranalysis.image.voxel.object.morphological.predicate.RejectIterationIfLowDisconnected;
 import org.anchoranalysis.spatial.Extent;
 
 /**
