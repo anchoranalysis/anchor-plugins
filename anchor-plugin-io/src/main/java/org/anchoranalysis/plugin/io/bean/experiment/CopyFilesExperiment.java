@@ -43,19 +43,16 @@ import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
-import org.anchoranalysis.experiment.bean.Experiment;
-import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
-import org.anchoranalysis.experiment.bean.log.LoggingDestination;
-import org.anchoranalysis.experiment.bean.log.ToConsole;
+import org.anchoranalysis.experiment.bean.io.OutputExperiment;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.BindFailedException;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.SimpleCopy;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.naming.CopyFilesNaming;
@@ -63,14 +60,12 @@ import org.anchoranalysis.plugin.io.bean.copyfilesmode.naming.PreserveName;
 import org.anchoranalysis.plugin.io.bean.filepath.FilePath;
 import org.apache.commons.io.FileUtils;
 
-public class CopyFilesExperiment extends Experiment {
+public class CopyFilesExperiment extends OutputExperiment {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private FilesProvider filesProvider;
 
     @BeanField @Getter @Setter private FilePath sourceDirectoryPath;
-
-    @BeanField @Getter @Setter private FilePath destinationDirectoryPath;
 
     @BeanField @Getter @Setter private boolean dummyMode = false;
 
@@ -78,56 +73,33 @@ public class CopyFilesExperiment extends Experiment {
 
     @BeanField @Getter @Setter private CopyFilesNaming copyFilesNaming = new PreserveName();
 
-    @BeanField @Getter @Setter private ExperimentIdentifier experimentIdentifier = null;
-
     @BeanField @Getter @Setter private boolean silentlyDeleteExisting = true;
-
-    @BeanField @Getter @Setter private LoggingDestination log = new ToConsole();
     // END BEAN PROPERTIES
 
     @Override
-    public void executeExperiment(ExperimentExecutionArguments arguments)
+    protected void executeExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException {
-
         // Determine a destination for the output, and create a corresponding logger
-        Path destination = determineDestination(arguments.isDebugModeEnabled());
+        Path destination = params.getOutputter().getOutputDirectory();
 
-        StatefulMessageLogger logger;
-        try {
-            logger = createLoggerFor(destination, arguments);
-        } catch (BindFailedException e) {
-            throw new ExperimentExecutionException(e);
-        }
+        StatefulMessageLogger logger = params.getLoggerExperiment();
+        
 
         logger.log("Reading files: ");
 
+        Collection<File> matchingFiles = findMatchingFiles(params.getExperimentArguments());
+        
+        // Find common parent directory
+        
         try {
             doCopying(
-                    findMatchingFiles(arguments),
-                    sourceDirectoryPath.path(arguments.isDebugModeEnabled()),
+                    matchingFiles,
+                    sourceDirectoryPath.path(params.getExperimentArguments().isDebugModeEnabled()),
                     destination,
                     logger);
-            logger.close(true);
         } catch (InputReadFailedException e) {
-            logger.close(false);
             throw new ExperimentExecutionException(e);
         }
-    }
-
-    private Path determineDestination(boolean debugEnabled) throws ExperimentExecutionException {
-        try {
-            return destinationDirectoryPath.path(debugEnabled);
-        } catch (InputReadFailedException exc) {
-            throw new ExperimentExecutionException("Cannot determine destination directory", exc);
-        }
-    }
-
-    private StatefulMessageLogger createLoggerFor(
-            Path destination, ExperimentExecutionArguments arguments) throws BindFailedException {
-        return log.createWithConsoleFallback(
-                OutputterChecked.createForDirectoryPermissive(destination, silentlyDeleteExisting),
-                arguments,
-                false);
     }
 
     @Override
@@ -223,5 +195,11 @@ public class CopyFilesExperiment extends Experiment {
         } catch (IOException e) {
             throw new ExperimentExecutionException("Cannot create input context", e);
         }
+    }
+
+    @Override
+    protected MultiLevelOutputEnabled defaultOutputs() {
+        assert(false);
+        return null;
     }
 }

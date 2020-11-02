@@ -43,9 +43,10 @@ class RGBWriterShort extends RGBWriter {
     @Override
     protected void mergeSliceAsRGB(int z, int capacity) throws ImageIOException {
         UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacity * 3 * 2);
-        putSliceShort(merged, channelRed, z);
-        putSliceShort(merged, channelGreen, z);
-        putSliceShort(merged, channelBlue, z);
+        ShortBuffer mergedAsShort = merged.getDelegate().asShortBuffer();
+        putSliceShort(mergedAsShort, channelRed, z);
+        putSliceShort(mergedAsShort, channelGreen, z);
+        putSliceShort(mergedAsShort, channelBlue, z);
         try {
             writer.saveBytes(z, merged.array());
         } catch (FormatException | IOException e) {
@@ -53,9 +54,9 @@ class RGBWriterShort extends RGBWriter {
         }
     }
 
-    private static void putSliceShort(UnsignedByteBuffer merged, Channel channel, int z) {
+    private static void putSliceShort(ShortBuffer merged, Channel channel, int z) {
         ShortBuffer source = channel.voxels().asShort().sliceBuffer(z).getDelegate();
         source.rewind();
-        merged.getDelegate().asShortBuffer().put(source);
+        merged.put(source);
     }
 }

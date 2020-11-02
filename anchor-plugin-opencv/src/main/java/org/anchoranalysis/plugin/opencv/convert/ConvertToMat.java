@@ -88,11 +88,9 @@ public class ConvertToMat {
         VoxelDataType dataType = stack.getChannel(0).getVoxelDataType();
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return fromRGBByte(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
-        } else if (dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
-            return fromRGBShort(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
         } else {
             throw new CreateException(
-                    "Only unsigned 8- and unsigned 16-bit channels are supported for RGB");
+                    "Only unsigned 8-bit channels are supported for RGB");
         }
     }
 
@@ -146,27 +144,6 @@ public class ConvertToMat {
                     byte[] colArr = new byte[] {blue.getRaw(), green.getRaw(), red.getRaw()};
                     mat.put(point.y(), point.x(), colArr);
                 });
-        return mat;
-    }
-
-    private static Mat fromRGBShort(Channel channelRed, Channel channelGreen, Channel channelBlue) {
-
-        Extent extent = channelRed.extent();
-        Preconditions.checkArgument(extent.z() == 1);
-
-        Mat mat = createEmptyMat(channelRed.extent(), CvType.CV_16UC3);
-
-        UnsignedShortBuffer red = BufferHelper.extractShort(channelRed);
-        UnsignedShortBuffer green = BufferHelper.extractShort(channelGreen);
-        UnsignedShortBuffer blue = BufferHelper.extractShort(channelBlue);
-
-        extent.iterateOverXY(
-                point -> {
-                    // Note BGR format in OpenCV
-                    short[] colArr = new short[] {blue.getRaw(), green.getRaw(), red.getRaw()};
-                    mat.put(point.y(), point.x(), colArr);
-                });
-
         return mat;
     }
 }
