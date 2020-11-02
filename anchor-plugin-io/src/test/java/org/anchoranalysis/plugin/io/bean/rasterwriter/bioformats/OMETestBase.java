@@ -26,14 +26,12 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
 
 import java.io.IOException;
-import java.util.Optional;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.test.image.rasterwriter.RasterWriterTestBase;
+import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
 import org.junit.Test;
 
 /**
@@ -54,14 +52,11 @@ public abstract class OMETestBase extends RasterWriterTestBase {
      * Creates for a particular extension and types of comparison.
      *
      * @param extension the extension (without a leading period).
-     * @param bytewiseCompare iff true, a bytewise comparison occurs between the saved-file and the
-     *     newly created file.
-     * @param extensionVoxelwiseCompare iff defined, a voxel-wise comparison occurs with the
-     *     saved-rasters from a different extension.
+     * @param comparisonPlan what kind of comparisons to execute on the tests.
      */
     public OMETestBase(
-            String extension, boolean bytewiseCompare, Optional<String> extensionVoxelwiseCompare) {
-        super(extension, true, bytewiseCompare, extensionVoxelwiseCompare);
+            String extension, ComparisonPlan comparisonPlan) {
+        super(extension, true, comparisonPlan);
     }
 
     @Test
@@ -77,16 +72,6 @@ public abstract class OMETestBase extends RasterWriterTestBase {
     @Test
     public void testThreeChannelsSeparate() throws ImageIOException, IOException {
         tester.testThreeChannelsSeparate(SUPPORTED_VOXEL_TYPES);
-    }
-
-    @Test
-    public void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
-        tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);
-    }
-
-    @Test
-    public void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
-        tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
     }
 
     @Test

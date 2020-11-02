@@ -68,7 +68,7 @@ class ExtendInZHelper {
         ReadableTuple3i max = newBBox.calculateCornerMax();
         Point3i point = new Point3i();
 
-        BinaryValuesByte bv = mask3D.binaryValues().createByte();
+        BinaryValuesByte binaryValues = mask3D.binaryValues().createByte();
 
         UnsignedByteBuffer bufferIn2D = obj2D.voxels().sliceBuffer(0);
 
@@ -77,24 +77,21 @@ class ExtendInZHelper {
             UnsignedByteBuffer bufferMask3D = mask3D.voxels().sliceBuffer(point.z());
             UnsignedByteBuffer bufferOut3D = newMask.voxels().sliceBuffer(point.z());
 
-            int ind = 0;
+            int offset = 0;
 
             for (point.setY(newBBox.cornerMin().y()); point.y() <= max.y(); point.incrementY()) {
-
                 for (point.setX(newBBox.cornerMin().x());
                         point.x() <= max.x();
-                        point.incrementX(), ind++) {
+                        point.incrementX(), offset++) {
 
-                    if (bufferIn2D.getRaw(ind) != bv.getOnByte()) {
-                        continue;
+                    if (bufferIn2D.getRaw(offset) == binaryValues.getOnByte()) {
+                        int indexGlobal = mask3D.extent().offset(point.x(), point.y());
+                        bufferOut3D.putRaw(
+                                offset,
+                                bufferMask3D.getRaw(indexGlobal) == binaryValues.getOnByte()
+                                        ? binaryValues.getOnByte()
+                                        : binaryValues.getOffByte());    
                     }
-
-                    int indexGlobal = mask3D.extent().offset(point.x(), point.y());
-                    bufferOut3D.putRaw(
-                            ind,
-                            bufferMask3D.getRaw(indexGlobal) == bv.getOnByte()
-                                    ? bv.getOnByte()
-                                    : bv.getOffByte());
                 }
             }
         }

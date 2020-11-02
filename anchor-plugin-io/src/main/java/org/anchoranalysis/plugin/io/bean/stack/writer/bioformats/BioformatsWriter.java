@@ -33,6 +33,7 @@ import loci.common.services.DependencyException;
 import loci.common.services.ServiceException;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
+import lombok.AllArgsConstructor;
 import ome.xml.model.enums.PixelType;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -59,7 +60,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  *   <li>float
  * </ul>
  *
- * <p>Note that when writing as RGB, it insists on three channels, and only supported unsigned 8-bit
+ * <p>Note that not all implementations support writing as RGB. When they do, it insists on three channels, and only supported unsigned 8-bit
  * or unsigned-16 bit as channel types.
  *
  * <p>If a stack has heterogeneous channel types (i.e. not all channels have the same type) then it
@@ -67,8 +68,12 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public abstract class BioformatsWriter extends StackWriter {
 
+    /** Whether the writer supports writing RGB images or not. */
+    private final boolean supportsRGB;
+    
     @Override
     public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
@@ -86,6 +91,10 @@ public abstract class BioformatsWriter extends StackWriter {
 
         boolean rgb = options.writeAsRGB(stack);
 
+        if (rgb && !supportsRGB) {
+            throw new ImageIOException("Trying to write a RGB file but this writer does not support it.");
+        }
+        
         if (stack.allChannelsHaveIdenticalType()) {
             writeHomogeneousChannels(stack, filePath, rgb);
         } else {
@@ -180,7 +189,6 @@ public abstract class BioformatsWriter extends StackWriter {
 
         try {
             PixelType pixelType = VoxelTypeHelper.pixelTypeFor(voxelDataTypeToWrite);
-
             writer.setMetadataRetrieve(
                     MetadataUtilities.createMetadata(
                             stack.dimensions(),

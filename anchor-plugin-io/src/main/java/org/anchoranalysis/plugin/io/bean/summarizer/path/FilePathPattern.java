@@ -84,7 +84,7 @@ public class FilePathPattern extends Summarizer<Path> {
             return paths.get(0).toString();
         }
 
-        Pattern pattern = PathPatternFinder.findPatternPath(paths, selectIOCase());
+        Pattern pattern = PathPatternFinder.findPatternPaths(paths, selectIOCase());
         return pattern.describeDetailed();
     }
 

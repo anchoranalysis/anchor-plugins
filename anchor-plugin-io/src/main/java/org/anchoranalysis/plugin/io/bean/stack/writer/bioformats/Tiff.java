@@ -42,6 +42,13 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
  */
 public class Tiff extends BioformatsWriter {
 
+    /**
+     * Default constructor.
+     */
+    public Tiff() {
+        super(true);
+    }
+
     @Override
     public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
