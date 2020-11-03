@@ -31,7 +31,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
- * Writes a stack to the filesystem as an <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-xml/"OME-XML</a> using the <a
+ * Writes a stack to the filesystem as an <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-xml/">OME-XML</a> using the <a
  * href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a> library.
  *
  * <p>This is particularly useful for stacks of images that have an unusual number of channels
