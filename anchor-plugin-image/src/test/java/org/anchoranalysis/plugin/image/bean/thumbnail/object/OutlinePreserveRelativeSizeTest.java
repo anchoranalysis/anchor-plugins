@@ -53,6 +53,12 @@ import org.anchoranalysis.test.image.WriteIntoDirectory;
 import org.junit.Rule;
 import org.junit.Test;
 
+/**
+ * Tests {@link OutlinePreserveRelativeSize}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class OutlinePreserveRelativeSizeTest {
 
     private static final SizeXY SIZE = new SizeXY(300, 200);
