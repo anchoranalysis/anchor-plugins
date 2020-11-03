@@ -72,17 +72,17 @@ public class SegmentTextTest {
 
     @Test
     public void testRGB() throws SegmentationFailedException {
-        segmentStack(loader.carRGB(), SegmentTextResults.rgb());
+        assertExpectedSegmentation(loader.carRGB(), SegmentTextResults.rgb());
     }
 
     @Test
     public void testGrayscale8Bit() throws SegmentationFailedException {
-        segmentStack(loader.carGrayscale8Bit(), SegmentTextResults.grayscale());
+        assertExpectedSegmentation(loader.carGrayscale8Bit(), SegmentTextResults.grayscale());
     }
 
     private static int count = 0;
 
-    private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes)
+    private void assertExpectedSegmentation(Stack stack, List<BoundingBox> expectedBoxes)
             throws SegmentationFailedException {
         SegmentedObjects segmentResults = segmenter.segment(stack);
         writer.writeObjects("objects" + count++, segmentResults.asObjects(), loader.carRGB());

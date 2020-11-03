@@ -115,8 +115,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     }
 
     private OutputSequenceFactory<MarksWithEnergyBreakdown> createSequenceFactory(
-            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
-            throws OutputWriteFailedException {
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
 
         OutputterChecked outputter = initParams.getInitContext().getOutputter().getChecked();
 

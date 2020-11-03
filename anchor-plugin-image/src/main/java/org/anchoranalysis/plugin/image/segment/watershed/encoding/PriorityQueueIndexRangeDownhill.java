@@ -57,7 +57,6 @@ public class PriorityQueueIndexRangeDownhill<T> {
     }
 
     public void put(T item, int indexValue) {
-        assert (indexValue < lists.length);
         List<T> list = lists[indexValue];
 
         lists[indexValue].add(item);
