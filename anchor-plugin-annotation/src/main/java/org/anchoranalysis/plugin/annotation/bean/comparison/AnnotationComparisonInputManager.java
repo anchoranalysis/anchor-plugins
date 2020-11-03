@@ -100,9 +100,9 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
         return FunctionalProgress.mapList(
                 listInputs,
                 progressReporter,
-                input ->
+                inputFromList ->
                         new AnnotationComparisonInput<>(
-                                input,
+                                inputFromList,
                                 Tuple.of(comparerLeft, comparerRight),
                                 Tuple.of(nameLeft, nameRight),
                                 stackReader));
