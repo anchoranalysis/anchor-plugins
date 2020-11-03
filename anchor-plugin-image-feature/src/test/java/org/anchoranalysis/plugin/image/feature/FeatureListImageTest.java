@@ -122,33 +122,36 @@ public class FeatureListImageTest {
 
         ObjectMaskFixture objectFixture = new ObjectMaskFixture(ENERGY_STACK.dimensions());
 
-        assertCalc(
-                session.calculate(createInput(objectFixture.create1())),
+        assertCalculateObject(
+                session,
+                objectFixture.create1(),
                 31.5,
                 29.0,
                 3.0,
                 59.0,
-                225.02857142857144,
+                0.07142857142857142,
                 2744.0,
                 560.0);
 
-        assertCalc(
-                session.calculate(createInput(objectFixture.create2())),
+        assertCalculateObject(
+                session,
+                objectFixture.create2(),
                 7.5,
                 21.0,
                 7.0,
                 28.5,
-                195.93956043956044,
+                0.32142857142857145,
                 108.0,
                 66.0);
 
-        assertCalc(
-                session.calculate(createInput(objectFixture.create3())),
+        assertCalculateObject(
+                session,
+                objectFixture.create3(),
                 21.5,
                 35.0,
                 2.0,
                 55.5,
-                159.37306501547988,
+                1.6996904024767803,
                 612.0,
                 162.0);
     }
@@ -181,8 +184,11 @@ public class FeatureListImageTest {
     private static FeatureInputHistogram createParams(Histogram histogram) throws CreateException {
         return new FeatureInputHistogram(histogram, ENERGY_STACK.resolution());
     }
-
-    private static FeatureInputSingleObject createInput(ObjectMask object) throws CreateException {
-        return new FeatureInputSingleObject(object, ENERGY_STACK);
+    
+    private static void assertCalculateObject(FeatureCalculatorMulti<FeatureInputSingleObject> session,
+            ObjectMask objectMaskToCalculate, Object... expectedVals) throws NamedFeatureCalculateException, CreateException {
+        assertCalc(
+                session.calculate(new FeatureInputSingleObject(objectMaskToCalculate, ENERGY_STACK)),
+                expectedVals);
     }
 }

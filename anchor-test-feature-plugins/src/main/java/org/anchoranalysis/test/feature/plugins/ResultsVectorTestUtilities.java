@@ -37,11 +37,11 @@ public class ResultsVectorTestUtilities {
 
     private static double eps = 1e-16;
 
-    public static void assertCalc(ResultsVector rv, Object... expectedVals) {
-        boolean areEquals = rv.equalsPrecision(eps, expectedVals);
+    public static void assertCalc(ResultsVector results, Object... expectedVals) {
+        boolean areEquals = results.equalsPrecision(eps, expectedVals);
         if (!areEquals) {
             System.out.println("assertCalc failed"); // NOSONAR
-            System.out.printf("Results: \t%s%n", rv); // NOSONAR
+            System.out.printf("Results: \t%s%n", results); // NOSONAR
         }
         assertTrue(areEquals);
     }
