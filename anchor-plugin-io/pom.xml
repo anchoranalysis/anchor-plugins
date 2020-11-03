@@ -57,7 +57,11 @@
 		<dependency>
 		  <groupId>com.owenfeehan.pathpatternfinder</groupId>
 		  <artifactId>path-pattern-finder</artifactId>
-		  <version>1.4.4-SNAPSHOT</version>
+		  <version>   	<dependency>
+	  <groupId>com.owenfeehan.pathpatternfinder</groupId>
+	  <artifactId>path-pattern-finder</artifactId>
+	  <version>${path-pattern-finder.version}</version>
+	</dependency></version>
 		</dependency>
 	
 		<dependency>
