@@ -222,27 +222,27 @@ public class ExportFeaturesTaskTest {
                 fixture -> fixture.featureLoader().changeSingleToReferenceShared());
     }
 
-    private void testOnTask(String outputDir, Consumer<TaskFixture> changeFixture)
+    private void testOnTask(String outputDirectory, Consumer<TaskFixture> changeFixture)
             throws OperationFailedException {
         changeFixture.accept(taskFixture);
-        testOnTask(outputDir);
+        testOnTask(outputDirectory);
     }
 
     /**
      * Runs a test to check if the results of {@link ExportFeatures} correspond to saved-values
      *
-     * @param suffixPathDirSaved a suffix to identify where to find the saved-output to compare
+     * @param suffixPathDirectorySaved a suffix to identify where to find the saved-output to compare
      *     against
      * @throws OperationFailedException
      */
-    private void testOnTask(String suffixPathDirSaved) throws OperationFailedException {
+    private void testOnTask(String suffixPathDirectorySaved) throws OperationFailedException {
 
         try {
             TaskSingleInputHelper.runTaskAndCompareOutputs(
                     MultiInputFixture.createInput(taskFixture.energyStack()),
                     taskFixture.createTask(),
                     directory.getRoot().toPath(),
-                    RELATIVE_PATH_SAVED_RESULTS + suffixPathDirSaved,
+                    RELATIVE_PATH_SAVED_RESULTS + suffixPathDirectorySaved,
                     OUTPUTS_TO_COMPARE);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
