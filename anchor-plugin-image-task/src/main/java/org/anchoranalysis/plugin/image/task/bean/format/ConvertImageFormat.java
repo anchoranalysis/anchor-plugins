@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.bean.format;
 
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -118,7 +119,7 @@ public class ConvertImageFormat
 
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<NamedChannelsInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
@@ -127,7 +128,7 @@ public class ConvertImageFormat
      * Sets a new output-sequence for the series
      *
      * <p>It's important to do this here rather than in {@link #beforeAnyJobIsExecuted(Outputter,
-     * ConcurrencyPlan, ParametersExperiment)} as {@code context} is now bound with the
+     * ConcurrencyPlan, List, ParametersExperiment)} as {@code context} is now bound with the
      * directory/prefix related to the input.
      */
     @Override

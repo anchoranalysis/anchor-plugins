@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.bean.labeller;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -76,7 +77,7 @@ public class ImageAssignLabel<T>
 
     @Override
     public SharedStateFilteredImageOutput<T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<ProvidesStackInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new SharedStateFilteredImageOutput<>(outputter, imageLabeller);
@@ -103,7 +104,7 @@ public class ImageAssignLabel<T>
 
         try {
             String groupIdentifier =
-                    params.getSharedState().labelFor(params.getInput(), params.context());
+                    params.getSharedState().labelFor(params.getInput(), params.getContextJob());
 
             params.getSharedState().writeRow(params.getInput().name(), groupIdentifier);
 
@@ -111,7 +112,7 @@ public class ImageAssignLabel<T>
                 outputStack(
                         groupIdentifier,
                         createFromProviderWith(
-                                outputStackProvider, params.getInput(), params.context()),
+                                outputStackProvider, params.getInput(), params.getContextJob()),
                         params.getInput().name(),
                         params.getSharedState());
             }

@@ -29,19 +29,16 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Value;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.system.path.PathDifferenceException;
-import org.anchoranalysis.core.value.TypedValue;
-import org.anchoranalysis.io.generator.tabular.CSVWriter;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.plugin.io.shared.AnonymizeSharedState;
+import org.anchoranalysis.plugin.io.shared.NumberToStringConverter;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -51,106 +48,43 @@ import org.apache.commons.io.FilenameUtils;
  *
  * @author feehano
  */
-public class Anonymize implements CopyFilesNaming {
-
-    private static final String OUTPUT_CSV_FILENAME = "output.csv";
-
-    @Value
-    private static class FileMapping {
-        private final Path original;
-        private final String anonymized;
-        private final int iter;
-    }
-
-    // START BEAN PROPERTIES
-    /**
-     * Iff true, a mapping.csv file is created showing the mapping between the original-names and
-     * the anonymized versions
-     */
-    @BeanField @Getter @Setter private boolean outputCSV = true;
-    // END BEAN PROPERTIES
-
-    private Optional<List<FileMapping>> optionalMappings;
-    private String formatStr;
-
+public class Anonymize extends CopyFilesNaming<AnonymizeSharedState> {
+    
     @Override
-    public void beforeCopying(Path destDir, int totalNumFiles) {
-        optionalMappings = OptionalUtilities.createFromFlag(outputCSV, ArrayList::new);
-
-        formatStr = createFormatStrForMaxNum(totalNumFiles);
+    public AnonymizeSharedState beforeCopying(Path destinationDirectory, int totalNumberFiles) {
+        return new AnonymizeSharedState(
+            new NumberToStringConverter(totalNumberFiles),
+            createMappingToShuffledIndices(totalNumberFiles)
+        );
     }
 
     @Override
-    public Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter)
+    public Optional<Path> destinationPathRelative(Path sourceDirectory, Path destinationDirectory, File file, int iter, AnonymizeSharedState sharedState)
             throws OutputWriteFailedException {
-        String ext = FilenameUtils.getExtension(file.toString());
-        String fileNameNew = createNumericString(iter) + "." + ext;
-
-        if (optionalMappings.isPresent()) {
-            try {
-                addMapping(optionalMappings.get(), sourceDir, file, iter, fileNameNew);
-            } catch (PathDifferenceException e) {
-                throw new OutputWriteFailedException(e);
-            }
+        Integer mappedIteration = sharedState.getMapping().get(iter);
+        if (mappedIteration==null) {
+            throw new OutputWriteFailedException("An unexpected value was passed as iteration, and no mapping is available: " + iter);
         }
-
-        return Optional.of(Paths.get(fileNameNew));
+        String filenameToCopyTo = sharedState.getNumberConverter().convert(mappedIteration) + "." + FilenameUtils.getExtension(file.toString());
+        return Optional.of(Paths.get(filenameToCopyTo));
     }
-
-    @Override
-    public void afterCopying(Path destDir, boolean dummyMode) throws OutputWriteFailedException {
-
-        if (optionalMappings.isPresent() && !dummyMode) {
-            writeOutputCSV(optionalMappings.get(), destDir);
-            optionalMappings = Optional.empty();
+    
+    private static Map<Integer,Integer> createMappingToShuffledIndices( int totalNumberFiles ) {
+        List<Integer> indices = createSequence(totalNumberFiles);
+        Collections.shuffle(indices);
+        return mapIndexToElement(indices);
+    }
+    
+    /** Creates a list with a sequence of Integers from 0 to {@code maxNumberExclusive - 1} (inclusive). */
+    private static List<Integer> createSequence(int maxNumberExclusive) {
+        return IntStream.range(0, maxNumberExclusive).boxed().collect( Collectors.toList() );
+    }
+    
+    private static <T> Map<Integer,T> mapIndexToElement(List<T> list) {
+        Map<Integer,T> map = new HashMap<>();
+        for( int i=0; i<list.size(); i++) {
+            map.put(i, list.get(i));
         }
-    }
-
-    private void addMapping(
-            List<FileMapping> mapping, Path sourceDir, File file, int iter, String fileNameNew)
-            throws PathDifferenceException {
-        synchronized (this) {
-            mapping.add( // NOSONAR
-                    new FileMapping(
-                            NamingUtilities.filePathDifference(sourceDir, file.toPath()),
-                            fileNameNew,
-                            iter));
-        }
-    }
-
-    private void writeOutputCSV(List<FileMapping> listMappings, Path destDir)
-            throws OutputWriteFailedException {
-
-        Path csvOut = destDir.resolve(OUTPUT_CSV_FILENAME);
-
-        CSVWriter csvWriter = CSVWriter.create(csvOut);
-
-        csvWriter.writeHeaders(Arrays.asList("iter", "in", "out"));
-
-        try {
-            for (FileMapping mapping : listMappings) {
-                csvWriter.writeRow(
-                        Arrays.asList(
-                                new TypedValue(mapping.getIter()),
-                                new TypedValue(mapping.getOriginal().toString()),
-                                new TypedValue(mapping.getAnonymized())));
-            }
-        } finally {
-            csvWriter.close();
-        }
-    }
-
-    private String createNumericString(int iter) {
-        return String.format(formatStr, iter);
-    }
-
-    private static String createFormatStrForMaxNum(int maxNum) {
-        int maxNumDigits = (int) Math.ceil(Math.log10(maxNum));
-
-        if (maxNumDigits > 0) {
-            return "%0" + maxNumDigits + "d";
-        } else {
-            return "%d";
-        }
+        return map;
     }
 }

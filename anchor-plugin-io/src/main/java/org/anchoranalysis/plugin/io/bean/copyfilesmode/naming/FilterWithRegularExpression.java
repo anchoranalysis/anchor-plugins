@@ -24,22 +24,46 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod;
+package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import org.anchoranalysis.core.exception.CreateException;
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
 
-public class SimpleCopy extends CopyFilesMethod {
+/**
+ * Rejects files that fail to match a particular regular-expression
+ *
+ * @author Owen Feehan
+ */
+public class FilterWithRegularExpression extends RegularExpressionBase {
+
+    // START BEAN PROPERTIES
+    /**
+     * Iff true, then a file is rejected if the regular-expression matches and vice-versa.
+     * 
+     * <p>This is the <b>opposite</b> to normal behaviour.
+     */
+    @BeanField @Getter @Setter private boolean invert = false;
+    // END BEAN PROPERTIES
 
     @Override
-    public void createWithDir(Path source, Path destination) throws CreateException {
-        try {
-            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new CreateException(e);
+    protected Optional<Path> destinationPathRelative(Path path, String regex) {
+        if (acceptPath(path, regex)) {
+            return Optional.of(path);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private boolean acceptPath(Path path, String regex) {
+        boolean matches = NamingUtilities.convertToString(path).matches(regex);
+
+        if (invert) {
+            return !matches;
+        } else {
+            return matches;
         }
     }
 }

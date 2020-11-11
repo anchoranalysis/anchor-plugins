@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -78,7 +79,7 @@ public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack
 
     @Override
     public OutputSequenceIncrementing<Stack> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<NamedChannelsInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return OutputSequenceStackFactory.NO_RESTRICTIONS.incrementingByOneCurrentDirectory(

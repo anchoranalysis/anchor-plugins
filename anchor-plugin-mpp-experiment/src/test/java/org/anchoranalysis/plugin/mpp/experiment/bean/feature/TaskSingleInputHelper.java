@@ -34,6 +34,7 @@ import static org.mockito.Mockito.when;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -133,7 +134,7 @@ class TaskSingleInputHelper {
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);
             S sharedState =
-                    task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, paramsExperiment);
+                    task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, Arrays.asList(input), paramsExperiment);
 
             boolean successful =
                     task.executeJob(

@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.bean.task;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -52,7 +53,7 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
 
     @Override
     public Summarizer<S> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<T> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         if (params.isDetailedLogging()) {
@@ -89,15 +90,14 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
         return true;
     }
 
-    // Extract object for summary
+    /** Extract object for summary. */
     protected abstract S extractObjectForSummary(T input);
 
-    private void summarizeExperimentArguments(MessageLogger log, ExperimentExecutionArguments eea) {
-
-        eea.getInputDirectory()
+    private void summarizeExperimentArguments(MessageLogger log, ExperimentExecutionArguments arguments) {
+        arguments.getInputDirectory()
                 .ifPresent(dir -> log.logFormatted("An input-directory has been set as %s", dir));
 
-        eea.getOutputDirectory()
+        arguments.getOutputDirectory()
                 .ifPresent(dir -> log.logFormatted("An output-directory has been set as %s", dir));
     }
 }

@@ -115,8 +115,8 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
         try {
             define.processInputImage(
                     params.getInput(),
-                    params.context(),
-                    paramsInit -> outputObjects(paramsInit, params.context()));
+                    params.getContextJob(),
+                    paramsInit -> outputObjects(paramsInit, params.getContextJob()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -135,7 +135,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
 
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<MultiInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }

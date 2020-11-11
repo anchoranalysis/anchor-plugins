@@ -24,24 +24,28 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
+package org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
+import java.nio.file.StandardCopyOption;
+import org.anchoranalysis.core.exception.CreateException;
 
-public abstract class CopyFilesNamingOneRegEx extends CopyFilesNamingOne {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String regex;
-    // END BEAN PROPERTIES
+/**
+ * Makes a simple bytewise copy of a file, where no byte is changed.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class Bytewise extends CopyFilesMethod {
 
     @Override
-    public Optional<Path> destinationPathRelative(Path pathDelegate) {
-        return destinationPathRelative(pathDelegate, regex);
+    public void makeCopyWithDirectory(Path source, Path destination) throws CreateException {
+        try {
+            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new CreateException(e);
+        }
     }
-
-    protected abstract Optional<Path> destinationPathRelative(Path pathDelegate, String regex);
 }

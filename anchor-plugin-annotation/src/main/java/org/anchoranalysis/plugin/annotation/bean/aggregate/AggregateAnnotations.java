@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.annotation.bean.aggregate;
 
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
@@ -52,7 +53,7 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
 
     @Override
     public AggregateSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<AnnotationWithStrategy<S>> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new AggregateSharedState();

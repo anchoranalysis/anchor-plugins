@@ -24,30 +24,35 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
+package org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * A regular expression substitution (replaceAll) is applied to the relative-path
- *
+ * Create a voxelwise <b>compressed copy</b> of any TIFF file being copied, and otherwise do a {@link Bytewise} copy.
+ *  
  * @author Owen Feehan
+ *
  */
-public class ApplyRegExSubstitution extends CopyFilesNamingOneRegEx {
+public class CompressAnyTIFF extends CopyFilesMethod {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String replacement;
-    // END BEAN PROPERTIES
+    private Bytewise simpleCopy = new Bytewise();
 
     @Override
-    protected Optional<Path> destinationPathRelative(Path pathDelegate, String regex) {
-        String pathAfterRegEx =
-                NamingUtilities.convertToString(pathDelegate).replaceAll(regex, replacement);
-        return Optional.of(Paths.get(pathAfterRegEx));
+    public void makeCopyWithDirectory(Path source, Path destination) throws CreateException {
+
+        String fileName = source.getFileName().toString().toLowerCase();
+
+        try {
+            if (fileName.endsWith(".tif") || fileName.endsWith(".tiff")) {
+                CopyTIFFAndCompress.apply(source.toString(), destination);
+            } else {
+                simpleCopy.makeCopy(source, destination);
+            }
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
     }
 }

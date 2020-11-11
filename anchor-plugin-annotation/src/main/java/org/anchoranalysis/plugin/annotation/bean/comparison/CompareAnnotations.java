@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
 import io.vavr.Tuple2;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -113,7 +114,7 @@ public class CompareAnnotations<T extends Assignment>
 
     @Override
     public SharedState<T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<AnnotationComparisonInput<ProvidesStackInput>> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {
@@ -145,7 +146,7 @@ public class CompareAnnotations<T extends Assignment>
                         input,
                         background,
                         descriptiveSplit,
-                        params.context(),
+                        params.getContextJob(),
                         params.getSharedState());
 
         if (assignment.isPresent()) {

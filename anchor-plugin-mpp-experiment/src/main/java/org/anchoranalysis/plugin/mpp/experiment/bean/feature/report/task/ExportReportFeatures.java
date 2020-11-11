@@ -64,7 +64,7 @@ public class ExportReportFeatures extends Task<MultiInput, CSVWriter> {
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<MultiInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         Optional<CSVWriter> writer;
@@ -104,7 +104,7 @@ public class ExportReportFeatures extends Task<MultiInput, CSVWriter> {
         try {
             define.processInputMPP(
                     input.getInput(),
-                    input.context(),
+                    input.getContextJob(),
                     soMPP ->
                             writeFeaturesIntoReporter(
                                     soMPP, writer, input.getInput().name(), input.getLogger()));

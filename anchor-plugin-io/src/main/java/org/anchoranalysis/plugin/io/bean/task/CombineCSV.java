@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.task;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -63,7 +64,7 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<FileInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {

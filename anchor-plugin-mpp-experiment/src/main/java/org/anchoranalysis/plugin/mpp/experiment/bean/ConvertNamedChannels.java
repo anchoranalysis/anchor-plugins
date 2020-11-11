@@ -26,7 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean;
 
-import java.util.function.Function;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -41,13 +44,13 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.files.FileWithDirectoryInput;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.io.bean.input.stack.ConvertChannelsInputToStack;
+import org.anchoranalysis.plugin.mpp.experiment.SharedStateRememberConverted;
 
 /**
  * Converts {@link NamedChannelsInput} to a variety of others to match a delegate task
@@ -60,38 +63,45 @@ import org.anchoranalysis.plugin.io.bean.input.stack.ConvertChannelsInputToStack
  * @param <S> shared-state of the task
  * @param <U> the named-channels-input the delegate task contains
  */
-public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends NamedChannelsInput>
-        extends Task<T, S> implements ReplaceTask<U, S> {
+public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends InputFromManager>
+        extends Task<T, SharedStateRememberConverted<U,S>> implements ReplaceTask<U, S> {
 
     // START BEAN PROPERTIES
+    /** The underlying task that will be called, perhaps with a different input-type. */
     @BeanField @Getter @Setter private Task<U, S> task;
     // END BEAN PROPERTIES
 
     @Override
-    public S beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+    public SharedStateRememberConverted<U,S> beforeAnyJobIsExecuted(
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<T> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
-        return task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, params);
+       
+        // If a directory is associated with the inputs, as needed for conversion to {@link FileWithDirectoryInput}.
+        Optional<Path> directory = Optional.empty();
+        
+        // Derive a directory if needed
+        InputTypesExpected expectedFromDelegate = task.inputTypesExpected();
+        if (expectedFromDelegate.doesClassInheritFromAny(FileWithDirectoryInput.class)) {
+            directory = Optional.of(CommonRootHelper.findCommonPathRoot(inputs));
+        }
+        
+        SharedStateRememberConverted<U,S> sharedState = new SharedStateRememberConverted<>();
+        List<U> convertedInputs = convertListAndPopulateMap(inputs, sharedState, directory);
+        sharedState.setSharedState(
+                task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, convertedInputs, params)
+        );
+        return sharedState;
     }
 
     @Override
-    public void doJobOnInput(InputBound<T, S> inputBound) throws JobExecutionException {
+    public void doJobOnInput(InputBound<T,  SharedStateRememberConverted<U,S>> inputBound) throws JobExecutionException {
 
-        Class<? extends InputFromManager> inputClass = inputBound.getInput().getClass();
-
-        InputTypesExpected expectedFromDelegate = task.inputTypesExpected();
-        if (expectedFromDelegate.doesClassInheritFromAny(inputClass)) {
-            // All good, the delegate happily accepts our type without change
-            doJobWithNamedChannelInput(inputBound);
-        } else if (expectedFromDelegate.doesClassInheritFromAny(MultiInput.class)) {
-            doJobWithMultiInput(inputBound);
-        } else if (expectedFromDelegate.doesClassInheritFromAny(StackSequenceInput.class)) {
-            doJobWithStackSequenceInput(inputBound);
+        Optional<U> inputConverted = inputBound.getSharedState().findConvertedInputFor( inputBound.getInput() );
+        
+        if (inputConverted.isPresent()) {
+            task.doJobOnInput( inputBound.changeInputAndSharedState(inputConverted.get(), inputBound.getSharedState().getSharedState()) );    
         } else {
-            throw new JobExecutionException(
-                    String.format(
-                            "Cannot pass or convert the input-type (%s) to match the delegate's expected input-type:%n%s",
-                            inputClass, expectedFromDelegate));
+            throw new JobExecutionException("No converted-input can be found in the map");
         }
     }
 
@@ -104,9 +114,10 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Nam
     }
 
     @Override
-    public void afterAllJobsAreExecuted(S sharedState, InputOutputContext context)
+    public void afterAllJobsAreExecuted( SharedStateRememberConverted<U,S> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
-        task.afterAllJobsAreExecuted(sharedState, context);
+        sharedState.forgetAll();
+        task.afterAllJobsAreExecuted(sharedState.getSharedState(), context);
     }
 
     @Override
@@ -124,27 +135,19 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Nam
         return task.defaultOutputs();
     }
 
-    private void doJobWithNamedChannelInput(InputBound<T, S> input) throws JobExecutionException {
-        doJobWithInputCast(input);
-    }
-
-    private void doJobWithMultiInput(InputBound<T, S> input) throws JobExecutionException {
-        doJobWithConvertedInput(input, MultiInput::new);
-    }
-
-    private void doJobWithStackSequenceInput(InputBound<T, S> input) throws JobExecutionException {
-        doJobWithConvertedInput(input, ConvertChannelsInputToStack::new);
-    }
-
-    private void doJobWithConvertedInput(
-            InputBound<T, S> input, Function<T, InputFromManager> deriveChangedInput)
-            throws JobExecutionException {
-        doJobWithInputCast(input.changeInput(deriveChangedInput.apply(input.getInput())));
-    }
-
+    /** Convert all inputs, placing them into the map. */
     @SuppressWarnings("unchecked")
-    private void doJobWithInputCast(InputBound<? extends InputFromManager, S> input)
-            throws JobExecutionException {
-        task.doJobOnInput((InputBound<U, S>) input);
+    private List<U> convertListAndPopulateMap(List<T> inputs, SharedStateRememberConverted<U,S> sharedState, Optional<Path> directory) throws ExperimentExecutionException {
+        List<U> out = new ArrayList<>();
+        
+        InputTypesExpected inputTypesExpected = task.inputTypesExpected();
+        
+        for(T input : inputs) {
+            // Convert and put in both the map and the list
+            U converted = (U) ConvertInputHelper.convert(input, inputTypesExpected, directory);
+            sharedState.rememberConverted(input, converted);
+            out.add(converted);
+        }
+        return out;
     }
 }

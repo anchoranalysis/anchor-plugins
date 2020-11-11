@@ -49,7 +49,7 @@ public abstract class RasterTask<S, U> extends Task<NamedChannelsInput, S> {
     @Override
     public void doJobOnInput(InputBound<NamedChannelsInput, S> input) throws JobExecutionException {
 
-        InputOutputContext context = input.context();
+        InputOutputContext context = input.getContextJob();
 
         try {
             int numberSeries = input.getInput().numberSeries();

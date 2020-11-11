@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.slice;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
@@ -84,7 +85,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
     @Override
     public SharedStateSelectedSlice beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<NamedChannelsInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new SharedStateSelectedSlice(outputter);
@@ -106,7 +107,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
             // Create an energy stack
             EnergyStack energyStack =
                     FeatureCalculatorRepeated.extractStack(
-                            params.getInput(), stackEnergy, params.context());
+                            params.getInput(), stackEnergy, params.getContextJob());
 
             int optimaSliceIndex =
                     selectSlice(
