@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.scale;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
@@ -84,7 +85,7 @@ public class ScaleImage extends RasterTask<NoSharedState, NoSharedState> {
 
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<NamedChannelsInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }

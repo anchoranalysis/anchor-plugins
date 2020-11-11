@@ -91,9 +91,9 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
         try {
             define.processInputImage(
                     params.getInput(),
-                    params.context(),
+                    params.getContextJob(),
                     imageInitParams ->
-                            outputFeaturesAndEnergyStack(imageInitParams, params.context()));
+                            outputFeaturesAndEnergyStack(imageInitParams, params.getContextJob()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
-import org.anchoranalysis.plugin.io.summarizer.FrequencyMap;
+import org.anchoranalysis.plugin.io.shared.FrequencyMap;
 
 /**
  * Summarzes {@link NamedChannelsInput} in different ways
@@ -49,6 +49,6 @@ public abstract class SummarizerNamedChannels<T> extends Summarizer<NamedChannel
     protected abstract String describeNoun();
 
     protected void incrementCount(T key) {
-        map.incrCount(key);
+        map.incrementCount(key);
     }
 }

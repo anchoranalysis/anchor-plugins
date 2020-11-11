@@ -30,25 +30,22 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class PreserveName implements CopyFilesNaming {
+public class PreserveName extends CopyFilesNaming<NoSharedState> {
 
     @Override
-    public void beforeCopying(Path destDir, int totalNumFiles) {
+    public NoSharedState beforeCopying(Path destinationDirectory, int totalNumberFiles) {
         // NOTHING TO DO
+        return NoSharedState.INSTANCE;
     }
 
     @Override
-    public void afterCopying(Path destDir, boolean dummyMode) throws OutputWriteFailedException {
-        // NOTHING TO DO
-    }
-
-    @Override
-    public Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter)
+    public Optional<Path> destinationPathRelative(Path sourceDirectory, Path destinationDirectory, File file, int iter, NoSharedState sharedState)
             throws OutputWriteFailedException {
         try {
-            return Optional.of(NamingUtilities.filePathDifference(sourceDir, file.toPath()));
+            return Optional.of(NamingUtilities.filePathDifference(sourceDirectory, file.toPath()));
         } catch (PathDifferenceException e) {
             throw new OutputWriteFailedException(e);
         }

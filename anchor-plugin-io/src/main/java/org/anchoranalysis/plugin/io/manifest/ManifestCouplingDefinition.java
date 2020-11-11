@@ -50,7 +50,7 @@ import org.apache.commons.logging.LogFactory;
 // Links image manifests to experimental manifests
 public class ManifestCouplingDefinition implements InputFromManager {
 
-    private static final String JOB_MANIFEST_FILENAME_TO_READ = Task.OUTPUT_NAME_MANIFEST + ".ser";
+    private static final String JOB_MANIFEST_FILENAME_TO_READ = Task.OUTPUT_MANIFEST + ".ser";
 
     private List<CoupledManifests> listCoupledManifests = new ArrayList<>();
     private MultiMap mapExperimentalToImages = new MultiValueMap();

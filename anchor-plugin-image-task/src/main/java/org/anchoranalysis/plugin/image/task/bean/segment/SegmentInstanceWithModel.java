@@ -180,7 +180,7 @@ public class SegmentInstanceWithModel<T>
 
     @Override
     public SharedStateSegmentInstance<T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan plan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan plan, List<StackSequenceInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             initializeBeans(params.getContext());
@@ -198,7 +198,7 @@ public class SegmentInstanceWithModel<T>
     public void doJobOnInput(InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input)
             throws JobExecutionException {
         try {
-            initializeBeans(input.context());
+            initializeBeans(input.getContextJob());
 
             Stack stack = inputStack(input);
 
@@ -209,7 +209,7 @@ public class SegmentInstanceWithModel<T>
 
             if (!segments.isEmpty() || !ignoreNoObjects) {
                 writeOutputsForImage(
-                        stack, segments.asObjects(), background, input.context().getOutputter());
+                        stack, segments.asObjects(), background, input.getContextJob().getOutputter());
 
                 calculateFeaturesForImage(input, stack, segments.asList());
             }
@@ -265,10 +265,10 @@ public class SegmentInstanceWithModel<T>
         CalculateFeaturesForObjects<FeatureInputSingleObject> calculator =
                 new CalculateFeaturesForObjects<>(
                         COMBINE_OBJECTS,
-                        new InitParamsWithEnergyStack(energyStack, input.context()),
+                        new InitParamsWithEnergyStack(energyStack, input.getContextJob()),
                         true,
                         input.getSharedState()
-                                .createInputProcessContext(Optional.empty(), input.context()));
+                                .createInputProcessContext(Optional.empty(), input.getContextJob()));
         calculator.calculateFeaturesForObjects(
                 deriveObjects(segments),
                 energyStack,

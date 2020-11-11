@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.segment;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -107,7 +108,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
     @Override
     public ExperimentState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<MultiInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         ExperimentState experimentState = segment.createExperimentState();
         experimentState.outputBeforeAnyTasksAreExecuted(outputter);
@@ -129,7 +130,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
             MarkCollection marks =
                     segment.duplicateBean()
-                            .segment(stackCollection, objects, paramsCreated, inputBound.context());
+                            .segment(stackCollection, objects, paramsCreated, inputBound.getContextJob());
             writeVisualization(
                     marks, inputBound.getOutputter(), stackCollection, inputBound.getLogger());
 

@@ -27,42 +27,27 @@
 package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
- * Rejects files that fail to match a particular regular-expression
+ * A regular expression substitution (replaceAll) is applied to the relative-path
  *
  * @author Owen Feehan
  */
-public class EnsureRegExMatch extends CopyFilesNamingOneRegEx {
+public class SubstituteRegularExpression extends RegularExpressionBase {
 
     // START BEAN PROPERTIES
-    /**
-     * Iff true, then a file is rejected if regEx matches and vice-versa (opposite to normal
-     * behaviour)
-     */
-    @BeanField @Getter @Setter private boolean invert = false;
+    @BeanField @Getter @Setter private String replacement;
     // END BEAN PROPERTIES
 
     @Override
-    protected Optional<Path> destinationPathRelative(Path pathDelegate, String regex) {
-        if (acceptPath(pathDelegate, regex)) {
-            return Optional.of(pathDelegate);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    private boolean acceptPath(Path path, String regex) {
-        boolean matches = NamingUtilities.convertToString(path).matches(regex);
-
-        if (invert) {
-            return !matches;
-        } else {
-            return matches;
-        }
+    protected Optional<Path> destinationPathRelative(Path path, String regex) {
+        String pathAfterRegEx =
+                NamingUtilities.convertToString(path).replaceAll(regex, replacement);
+        return Optional.of(Paths.get(pathAfterRegEx));
     }
 }

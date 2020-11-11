@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -99,7 +100,7 @@ public abstract class GroupedStackBase<S, T>
 
     @Override
     public GroupedSharedState<S, T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<ProvidesStackInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         return new GroupedSharedState<>(this::createGroupMap);
     }
@@ -109,7 +110,7 @@ public abstract class GroupedStackBase<S, T>
             throws JobExecutionException {
 
         ProvidesStackInput input = params.getInput();
-        InputOutputContext context = params.context();
+        InputOutputContext context = params.getContextJob();
 
         // Extract a group name
         Optional<String> groupName =

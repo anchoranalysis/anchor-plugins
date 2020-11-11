@@ -24,29 +24,30 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod;
+package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.OperationFailedException;
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
 
-public class CompressTIFF extends CopyFilesMethod {
+/**
+ * A base class for {@link CopyFilesNaming} classes that use a regular-expression.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class RegularExpressionBase extends CopyFilesNamingOne {
 
-    private SimpleCopy simpleCopy = new SimpleCopy();
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String regex;
+    // END BEAN PROPERTIES
 
     @Override
-    public void createWithDir(Path source, Path destination) throws CreateException {
-
-        String fileName = source.getFileName().toString().toLowerCase();
-
-        try {
-            if (fileName.endsWith(".tif") || fileName.endsWith(".tiff")) {
-                CopyTIFFAndCompress.apply(source.toString(), destination);
-            } else {
-                simpleCopy.createDestinationFile(source, destination);
-            }
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
-        }
+    public Optional<Path> destinationPathRelative(Path path) {
+        return destinationPathRelative(path, regex);
     }
+
+    protected abstract Optional<Path> destinationPathRelative(Path path, String regex);
 }

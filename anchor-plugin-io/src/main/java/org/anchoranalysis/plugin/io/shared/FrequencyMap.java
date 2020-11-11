@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.summarizer;
+package org.anchoranalysis.plugin.io.shared;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -41,7 +41,7 @@ public class FrequencyMap<T> {
 
     private Map<T, Integer> map = new TreeMap<>();
 
-    public synchronized void incrCount(T key) {
+    public synchronized void incrementCount(T key) {
 
         Integer cnt = map.get(key);
 

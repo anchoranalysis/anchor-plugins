@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
@@ -114,7 +115,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
 
     @Override
     public FromCSVSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<FromCSVInput> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         return new FromCSVSharedState();
     }
@@ -128,12 +129,12 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
     public void doJobOnInput(InputBound<FromCSVInput, FromCSVSharedState> inputBound)
             throws JobExecutionException {
 
-        if (!OutlineOutputHelper.anyOutputEnabled(inputBound.context().getOutputter().outputsEnabled())) {
+        if (!OutlineOutputHelper.anyOutputEnabled(inputBound.getContextJob().getOutputter().outputsEnabled())) {
             // If no outputs are enabled, there's nothing to do, so exit early
         }
         
         FromCSVInput input = inputBound.getInput();        
-        InputOutputContext groupContext = inputBound.context().subdirectory(GROUP_SUBDIRECTORY, GROUP_MANIFEST_DESCRIPTION, false);
+        InputOutputContext groupContext = inputBound.getContextJob().subdirectory(GROUP_SUBDIRECTORY, GROUP_MANIFEST_DESCRIPTION, false);
         try {
             IndexedCSVRows groupedRows =
                     inputBound
@@ -154,7 +155,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                         mapGroup,
                         groupedRows.groupNameSet(),
                         groupContext,
-                        inputBound.context().getOutputter().outputsEnabled());
+                        inputBound.getContextJob().getOutputter().outputsEnabled());
             } else {
                 groupContext.getMessageReporter()
                     .logFormatted(

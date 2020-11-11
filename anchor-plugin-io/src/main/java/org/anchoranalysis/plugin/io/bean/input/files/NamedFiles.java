@@ -26,23 +26,15 @@
 
 package org.anchoranalysis.plugin.io.bean.input.files;
 
-import java.io.File;
-import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.files.FileInput;
-import org.anchoranalysis.io.input.files.FilesProviderException;
-import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
-import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
 
 /**
  * File-paths
@@ -50,13 +42,11 @@ import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class NamedFiles extends InputManager<FileInput> {
+public class NamedFiles extends NamedFilesBase<FileInput> {
 
     // START BEAN PROPERTIES
     /** The files to use as inputs. */
     @BeanField @Getter @Setter private FilesProvider filesProvider;
-
-    @BeanField @Getter @Setter private FileNamer namer = new RemoveExtensions(new PatternSpan());
     // END BEAN PROPERTIES
 
     public NamedFiles(FilesProvider filesProvider) {
@@ -65,13 +55,6 @@ public class NamedFiles extends InputManager<FileInput> {
 
     @Override
     public List<FileInput> inputs(InputManagerParams params) throws InputReadFailedException {
-        try {
-            Collection<File> files = filesProvider.create(params);
-
-            return FunctionalList.mapToList(
-                    namer.deriveNameUnique(files, params.getLogger()), FileInput::new);
-        } catch (FilesProviderException e) {
-            throw new InputReadFailedException("Cannot find files", e);
-        }
+        return createInputsFromFiles(filesProvider, params, FileInput::new);
     }
 }
