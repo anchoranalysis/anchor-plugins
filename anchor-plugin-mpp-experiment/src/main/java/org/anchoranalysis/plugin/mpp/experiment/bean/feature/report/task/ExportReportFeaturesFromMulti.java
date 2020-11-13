@@ -26,32 +26,31 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report.task;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
-import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
-import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
-import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
-
 
 /**
- * Creates a report of feature values from a {@link DeserializedManifest} and a {@link ManifestCouplingDefinition}.
+ * Creates a report of feature values from a {@link DefineOutputterMPP} and a {@link MultiInput}.
  *
  * <p>The following outputs are produced:
  *
@@ -67,58 +66,64 @@ import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
  * 
  * @author Owen Feehan
  */
-public class ExportReportFeaturesFromManifest
-        extends ExportReportFeatures<ManifestCouplingDefinition,NoSharedState,DeserializedManifest> {
+public class ExportReportFeaturesFromMulti extends ExportReportFeatures<MultiInput, CSVWriter, MPPInitParams> {
+    
+    // START BEAN PROPERTIES
+    @BeanField @OptionalBean @Getter @Setter private DefineOutputterMPP define;
+    // END BEAN PROPERTIES
+
+    @Override
+    public CSVWriter beforeAnyJobIsExecuted(
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<MultiInput> inputs, ParametersExperiment params)
+            throws ExperimentExecutionException {
+
+        Optional<CSVWriter> writer;
+        try {
+            writer = createWriter(params.getOutputter().getChecked());
+        } catch (OutputWriteFailedException e) {
+            throw new ExperimentExecutionException(e);
+        }
+
+        if (!writer.isPresent()) {
+            throw new ExperimentExecutionException(
+                    "'featureReport' output not enabled, as is required");
+        }
+        
+        writer.get().writeHeaders(headerNames(Optional.of("id")));
+
+        return writer.get();
+    }
 
     @Override
     public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(ManifestCouplingDefinition.class);
+        return new InputTypesExpected(MultiInput.class);
     }
 
     @Override
-    public NoSharedState beforeAnyJobIsExecuted(Outputter outputter,
-            ConcurrencyPlan concurrencyPlan, List<ManifestCouplingDefinition> inputs,
-            ParametersExperiment params) throws ExperimentExecutionException {
-        return NoSharedState.INSTANCE;
-    }
-    
-    @Override
-    public void doJobOnInput(InputBound<ManifestCouplingDefinition, NoSharedState> params)
-            throws JobExecutionException {
+    public void doJobOnInput(InputBound<MultiInput, CSVWriter> input) throws JobExecutionException {
+
+        CSVWriter writer = input.getSharedState();
+
+        if (!writer.isOutputEnabled()) {
+            return;
+        }
 
         try {
-            Optional<CSVWriter> writer = createWriter(params.getOutputter().getChecked());
-            if (writer.isPresent()) {
-                writeCSV(writer.get(), params.getInput(), params.getLogger());
-            }
+            define.processInputMPP(
+                    input.getInput(),
+                    input.getContextJob(),
+                    soMPP ->
+                            writeFeaturesIntoReporter(
+                                    soMPP, writer, Optional.of(input.getInput().name()), input.getLogger()));
 
-        } catch (OutputWriteFailedException e) {
+        } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
         }
     }
 
     @Override
-    public void afterAllJobsAreExecuted(NoSharedState sharedState, InputOutputContext context)
+    public void afterAllJobsAreExecuted(CSVWriter writer, InputOutputContext context)
             throws ExperimentExecutionException {
-        // NOTHING TO DO
-    }
-    
-    private void writeCSV(CSVWriter writer, ManifestCouplingDefinition input, Logger logger)
-            throws JobExecutionException {
-        try {
-            writer.writeHeaders( headerNames(Optional.empty()) );
-
-            Iterator<CoupledManifests> iterator = input.iteratorCoupledManifests();
-            while (iterator.hasNext()) {
-                try {
-                    writeFeaturesIntoReporter(iterator.next().getJobManifest(), writer, Optional.empty(), logger);
-                } catch (NumberFormatException e) {
-                    throw new JobExecutionException(e);
-                }
-            }
-
-        } finally {
-            writer.close();
-        }
+        writer.close();
     }
 }

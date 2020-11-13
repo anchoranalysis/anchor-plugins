@@ -31,6 +31,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.io.output.bean.ReportFeature;
@@ -39,38 +40,25 @@ import org.anchoranalysis.io.output.bean.ReportFeature;
 class ReportFeatureUtilities {
 
     public static <T> List<String> headerNames(
-            List<? extends ReportFeature<T>> list, Logger logger) {
-
-        // Create a list of headers
-        List<String> headerNames = new ArrayList<>();
-        for (ReportFeature<T> feateature : list) {
-            String name;
-            try {
-                name = feateature.title();
-            } catch (OperationFailedException e) {
-                name = "error";
-                logger.errorReporter().recordError(ReportFeatureUtilities.class, e);
-            }
-            headerNames.add(name);
-        }
-        return headerNames;
+            List<? extends ReportFeature<T>> list) {
+        return FunctionalList.mapToList(list, ReportFeature::title);
     }
 
     public static <T> List<TypedValue> elementList(
-            List<? extends ReportFeature<T>> list, T obj, Logger logger) {
+            List<? extends ReportFeature<T>> list, T featureParam, Logger logger) {
 
         List<TypedValue> rowElements = new ArrayList<>();
 
-        for (ReportFeature<T> feat : list) {
+        for (ReportFeature<T> feature : list) {
             String value;
             try {
-                value = feat.featureDescription(obj, logger);
+                value = feature.featureDescription(featureParam, logger);
             } catch (OperationFailedException e) {
                 value = "error";
                 logger.errorReporter().recordError(ReportFeatureUtilities.class, e);
             }
 
-            rowElements.add(new TypedValue(value, feat.isNumeric()));
+            rowElements.add(new TypedValue(value, feature.isNumeric()));
         }
 
         return rowElements;
