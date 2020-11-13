@@ -36,10 +36,10 @@ import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 public class TextFileAsIntegerFromPath extends ReportFeatureForManifestFileBase {
 
     @Override
-    public String featureDescription(DeserializedManifest object, Logger logger)
+    public String featureDescription(DeserializedManifest param, Logger logger)
             throws OperationFailedException {
 
-        Path executionTimePath = object.getRootPath().resolve(getFileName() + ".txt");
+        Path executionTimePath = param.getRootPath().resolve(getFileName() + ".txt");
 
         if (executionTimePath.toFile().exists()) {
             String execTime;

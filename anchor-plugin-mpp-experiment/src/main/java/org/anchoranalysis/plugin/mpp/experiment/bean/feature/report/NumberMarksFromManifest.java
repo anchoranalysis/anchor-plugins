@@ -39,14 +39,14 @@ import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 public class NumberMarksFromManifest extends ReportFeatureForManifest {
 
     @Override
-    public String featureDescription(DeserializedManifest object, Logger logger)
+    public String featureDescription(DeserializedManifest param, Logger logger)
             throws OperationFailedException {
 
         FinderSerializedObject<MarkCollection> finder =
                 new FinderSerializedObject<>(
                         "marks", new ErrorReporterIntoLog(new ConsoleMessageLogger()));
 
-        Manifest manifest = object.get();
+        Manifest manifest = param.get();
 
         if (!finder.doFind(manifest)) {
             throw new OperationFailedException("Cannot find marks in manifest");
@@ -65,7 +65,7 @@ public class NumberMarksFromManifest extends ReportFeatureForManifest {
     }
 
     @Override
-    public String title() throws OperationFailedException {
+    public String title() {
         return "marksSize";
     }
 }

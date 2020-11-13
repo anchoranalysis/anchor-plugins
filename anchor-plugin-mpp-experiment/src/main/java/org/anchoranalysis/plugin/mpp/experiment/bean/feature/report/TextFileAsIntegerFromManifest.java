@@ -35,12 +35,12 @@ import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 public class TextFileAsIntegerFromManifest extends ReportFeatureForManifestFileBase {
 
     @Override
-    public String featureDescription(DeserializedManifest object, Logger logger)
+    public String featureDescription(DeserializedManifest param, Logger logger)
             throws OperationFailedException {
 
         FinderFileAsText finder = new FinderFileAsText(getFileName(), null);
 
-        Manifest manifest = object.get();
+        Manifest manifest = param.get();
 
         if (!finder.doFind(manifest)) {
             throw new OperationFailedException(
