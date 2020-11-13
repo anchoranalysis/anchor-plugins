@@ -49,11 +49,11 @@ class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
 
     @Override
     protected void writeGroupOutputInSubdirectory(
-            String outputName,
+            String partName,
             Histogram agg,
             ConsistentChannelChecker channelChecker,
             InputOutputContext context)
             throws IOException {
-        writer.writeHistogramToFile(agg, outputName, context);
+        writer.writeHistogramToFile(agg, partName, context);
     }
 }
