@@ -37,9 +37,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.FunctionalProgress;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
-import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressMultiple;
+import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -68,38 +68,36 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
     public List<AnnotationComparisonInput<T>> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
-        try (ProgressReporterMultiple prm =
-                new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
+        try (ProgressMultiple progressMultiple =
+                new ProgressMultiple(params.getProgress(), 2)) {
 
-            Iterator<T> itr = input.inputs(params).iterator();
+            Iterator<T> iterator = input.inputs(params).iterator();
 
-            prm.incrementWorker();
+            progressMultiple.incrementWorker();
 
             List<T> tempList = new ArrayList<>();
-            while (itr.hasNext()) {
-                tempList.add(itr.next());
+            while (iterator.hasNext()) {
+                tempList.add(iterator.next());
             }
 
-            List<AnnotationComparisonInput<T>> outList;
             try {
-                outList =
+                List<AnnotationComparisonInput<T>> outList =
                         createListInputWithAnnotationPath(
-                                tempList, new ProgressReporterOneOfMany(prm));
+                                tempList, new ProgressOneOfMany(progressMultiple));
+                progressMultiple.incrementWorker();
+                return outList;
             } catch (CreateException e) {
                 throw new InputReadFailedException(
                         "Cannot create inputs (with annotation path)", e);
             }
-            prm.incrementWorker();
-
-            return outList;
         }
     }
 
     private List<AnnotationComparisonInput<T>> createListInputWithAnnotationPath(
-            List<T> listInputs, ProgressReporter progressReporter) throws CreateException {
+            List<T> listInputs, Progress progress) throws CreateException {
         return FunctionalProgress.mapList(
                 listInputs,
-                progressReporter,
+                progress,
                 inputFromList ->
                         new AnnotationComparisonInput<>(
                                 inputFromList,

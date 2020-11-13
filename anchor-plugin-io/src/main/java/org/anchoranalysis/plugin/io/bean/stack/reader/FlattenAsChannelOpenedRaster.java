@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.stack.reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -62,7 +62,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
+    public TimeSequence open(int seriesIndex, Progress progress)
             throws ImageIOException {
         // We open each-series, verify assumptions, and combine the channels
 
@@ -71,7 +71,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
 
             for (int i = 0; i < numSeries; i++) {
 
-                TimeSequence ts = delegate.open(seriesIndex, progressReporter);
+                TimeSequence ts = delegate.open(seriesIndex, progress);
 
                 addStack(extractStacksAndVerify(ts), out);
             }

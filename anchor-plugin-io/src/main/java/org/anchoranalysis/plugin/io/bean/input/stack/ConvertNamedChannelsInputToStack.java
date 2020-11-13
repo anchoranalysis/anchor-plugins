@@ -33,10 +33,10 @@ import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationExcep
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressMultiple;
+import org.anchoranalysis.core.progress.ProgressIgnore;
+import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -98,7 +98,7 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progress)
+            Progress progress)
             throws OperationFailedException {
         String stackName = channelName.orElse(DEFAULT_STACK_NAME);
         addConvertedInputToStacks(stackName, stacks, seriesIndex, progress);
@@ -109,7 +109,7 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progress)
+            Progress progress)
             throws OperationFailedException {
         addConvertedInputToStacks(name, stacks, seriesIndex, progress);
     }
@@ -120,13 +120,13 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
     }
 
     private TimeSequence convert(
-            ProgressReporter progress, NamedChannelsInput input, int seriesIndex)
+            Progress progress, NamedChannelsInput input, int seriesIndex)
             throws OperationFailedException {
 
-        try (ProgressReporterMultiple progressMultiple = new ProgressReporterMultiple(progress, 2)) {
+        try (ProgressMultiple progressMultiple = new ProgressMultiple(progress, 2)) {
 
             NamedChannelsForSeries channels =
-                    input.createChannelsForSeries(seriesIndex, new ProgressReporterOneOfMany(progressMultiple));
+                    input.createChannelsForSeries(seriesIndex, new ProgressOneOfMany(progressMultiple));
             progressMultiple.incrementWorker();
 
             return new TimeSequence(stackFromChannels(channels, progressMultiple));
@@ -136,12 +136,12 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
         }
     }
         
-    private void addConvertedInputToStacks(String name, NamedProviderStore<TimeSequence> stacks, int seriesIndex, ProgressReporter progress) throws OperationFailedException {
+    private void addConvertedInputToStacks(String name, NamedProviderStore<TimeSequence> stacks, int seriesIndex, Progress progress) throws OperationFailedException {
         stacks.add(name, () -> convert(progress, input, seriesIndex) );
     }
 
     private Stack stackFromChannels(
-            NamedChannelsForSeries channels, ProgressReporterMultiple progress)
+            NamedChannelsForSeries channels, ProgressMultiple progress)
             throws OperationFailedException {
         try {
             if (channelName.isPresent()) {
@@ -150,7 +150,7 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
                             channels.getChannel(
                                     channelName.get(),
                                     timeIndex,
-                                    new ProgressReporterOneOfMany(progress));
+                                    new ProgressOneOfMany(progress));
                     return new Stack(channel);
                 } catch (GetOperationFailedException e) {
                     throw new OperationFailedException(e);
@@ -180,6 +180,6 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
     }
     
     private Channel extractChannel(NamedChannelsForSeries channels, String channelName) throws GetOperationFailedException {
-        return channels.getChannel(channelName, timeIndex, ProgressReporterNull.get());
+        return channels.getChannel(channelName, timeIndex, ProgressIgnore.get());
     }
 }

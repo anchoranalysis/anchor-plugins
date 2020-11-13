@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
@@ -89,10 +89,10 @@ class AppendPart extends NamedChannelsInputPart {
 
     @Override
     public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException {
+            int seriesIndex, Progress progress) throws ImageIOException {
 
         NamedChannelsForSeries existing =
-                delegate.createChannelsForSeries(seriesIndex, progressReporter);
+                delegate.createChannelsForSeries(seriesIndex, progress);
 
         openRasterIfNecessary();
 

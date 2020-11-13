@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
@@ -70,7 +70,7 @@ class GroupingInput extends NamedChannelsInput {
 
     @Override
     public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException {
+            int seriesIndex, Progress progress) throws ImageIOException {
         ensureChannelMapExists();
         return new NamedChannelsForSeriesMap(openedRaster, channelMap, seriesIndex);
     }

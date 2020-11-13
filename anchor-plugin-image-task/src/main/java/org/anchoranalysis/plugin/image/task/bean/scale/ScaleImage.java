@@ -36,7 +36,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -116,7 +116,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     public void doJobOnInput(InputBound<StackSequenceInput, NoSharedState> input)
             throws JobExecutionException {
         try {
-            NamedStacks stacks = input.getInput().asSet(ProgressReporterNull.get());
+            NamedStacks stacks = input.getInput().asSet(ProgressIgnore.get());
             
             ImageInitParams soImage = ImageInitParamsFactory.create(input.getContextJob());
             // We store each channel as a stack in our collection, in case they need to be

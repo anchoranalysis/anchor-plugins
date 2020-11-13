@@ -31,7 +31,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
+import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
@@ -52,15 +52,15 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
     @Override
     public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
 
-        try (ProgressReporterMultiple prm =
-                new ProgressReporterMultiple(params.getProgressReporter(), list.size())) {
+        try (ProgressMultiple progressMultiple =
+                new ProgressMultiple(params.getProgress(), list.size())) {
 
             ArrayList<T> listOut = new ArrayList<>();
 
             for (InputManager<T> inputManager : list) {
                 listOut.addAll(inputManager.inputs(params));
 
-                prm.incrementWorker();
+                progressMultiple.incrementWorker();
             }
             return listOut;
         }

@@ -37,8 +37,8 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.ProgressReporterConsole;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressConsole;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -174,7 +174,7 @@ public class ConvertImageFormat
                     seriesIndex,
                     channels.channelNames(),
                     numberSeries,
-                    channels.sizeT(ProgressReporterNull.get()),
+                    channels.sizeT(ProgressIgnore.get()),
                     channelGetter,
                     sharedStateJob,
                     context.getLogger());
@@ -236,7 +236,7 @@ public class ConvertImageFormat
 
     private NamedChannelsForSeries createChannelCollection(
             NamedChannelsInput input, int seriesIndex) throws ImageIOException {
-        return input.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
+        return input.createChannelsForSeries(seriesIndex, new ProgressConsole(1));
     }
 
     private void addStackToOutput(

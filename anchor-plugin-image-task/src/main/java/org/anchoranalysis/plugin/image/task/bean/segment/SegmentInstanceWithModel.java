@@ -40,7 +40,7 @@ import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -334,7 +334,7 @@ public class SegmentInstanceWithModel<T>
             TimeSequence sequence =
                     input.getInput()
                             .createStackSequenceForSeries(0)
-                            .get(ProgressReporterNull.get());
+                            .get(ProgressIgnore.get());
             return sequence.get(0);
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);
