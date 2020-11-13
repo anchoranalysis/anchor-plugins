@@ -38,8 +38,8 @@ class ScoreHelper {
         return source.getConfidence() - overlapping.getConfidence();
     }
 
-    public static double overlapScore(int numberVoxelsClipped, ObjectMask sourceElement) {
+    public static double overlapScore(int numberVoxelsCamped, ObjectMask sourceElement) {
         // The latter part of this calculation is likely being repeated. Consider caching.
-        return ((double) numberVoxelsClipped) / sourceElement.numberVoxelsOn();
+        return ((double) numberVoxelsCamped) / sourceElement.numberVoxelsOn();
     }
 }

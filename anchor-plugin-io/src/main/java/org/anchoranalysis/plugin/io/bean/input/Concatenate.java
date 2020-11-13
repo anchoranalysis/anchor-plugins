@@ -60,7 +60,7 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
             for (InputManager<T> inputManager : list) {
                 listOut.addAll(inputManager.inputs(params));
 
-                prm.incrWorker();
+                prm.incrementWorker();
             }
             return listOut;
         }

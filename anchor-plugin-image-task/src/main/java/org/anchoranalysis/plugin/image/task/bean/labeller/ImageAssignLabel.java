@@ -99,22 +99,22 @@ public class ImageAssignLabel<T>
 
     @Override
     public void doJobOnInput(
-            InputBound<ProvidesStackInput, SharedStateFilteredImageOutput<T>> params)
+            InputBound<ProvidesStackInput, SharedStateFilteredImageOutput<T>> input)
             throws JobExecutionException {
 
         try {
             String groupIdentifier =
-                    params.getSharedState().labelFor(params.getInput(), params.getContextJob());
+                    input.getSharedState().labelFor(input.getInput(), input.getContextJob());
 
-            params.getSharedState().writeRow(params.getInput().name(), groupIdentifier);
+            input.getSharedState().writeRow(input.getInput().name(), groupIdentifier);
 
             if (outputStackProvider != null) {
                 outputStack(
                         groupIdentifier,
                         createFromProviderWith(
-                                outputStackProvider, params.getInput(), params.getContextJob()),
-                        params.getInput().name(),
-                        params.getSharedState());
+                                outputStackProvider, input.getInput(), input.getContextJob()),
+                        input.getInput().name(),
+                        input.getSharedState());
             }
         } catch (OperationFailedException | CreateException e) {
             throw new JobExecutionException(e);

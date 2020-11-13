@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.junit.Test;
 
 public class FilePathPrefixerLastDirectoryAsPrefixTest {
-
+    
     @Test
     public void test() throws PathPrefixerException {
 
@@ -52,14 +52,14 @@ public class FilePathPrefixerLastDirectoryAsPrefixTest {
         DirectoryWithPrefix out = prefixer.outFilePrefixFromPath(path, root);
 
         assertEquals(Paths.get("/g/h"), out.getDirectory());
-        assertEquals("i_outprefix", out.getFilenamePrefix());
+        assertEquals("i_", out.prefixWithDelimeter());
     }
 
     private PathPrefixerAvoidResolve createDelegate(NamedPath path, Path root)
             throws PathPrefixerException {
         PathPrefixerAvoidResolve prefixer = mock(PathPrefixerAvoidResolve.class);
         when(prefixer.outFilePrefixFromPath(path, root))
-                .thenReturn(new DirectoryWithPrefix(Paths.get("/g/h/i/"), "outprefix"));
+                .thenReturn(new DirectoryWithPrefix(Paths.get("/g/h/i/"), "", "_"));
         return prefixer;
     }
 }

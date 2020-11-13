@@ -51,9 +51,9 @@ import org.anchoranalysis.io.input.path.PathSupplier;
  */
 class AppendPart extends NamedChannelsInputPart {
 
-    private NamedChannelsInputPart delegate;
-    private AdditionalChannel additionalChannel;
-    private StackReader stackReader;
+    private final NamedChannelsInputPart delegate;
+    private final AdditionalChannel additionalChannel;
+    private final StackReader stackReader;
 
     private OpenedRaster openedRasterMemo;
 
@@ -63,7 +63,6 @@ class AppendPart extends NamedChannelsInputPart {
             int channelIndex,
             PathSupplier filePath,
             StackReader stackReader) {
-        super();
         this.delegate = delegate;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
         this.stackReader = stackReader;
@@ -92,13 +91,13 @@ class AppendPart extends NamedChannelsInputPart {
     public NamedChannelsForSeries createChannelsForSeries(
             int seriesIndex, ProgressReporter progressReporter) throws ImageIOException {
 
-        NamedChannelsForSeries exst =
+        NamedChannelsForSeries existing =
                 delegate.createChannelsForSeries(seriesIndex, progressReporter);
 
         openRasterIfNecessary();
 
         NamedChannelsForSeriesConcatenate out = new NamedChannelsForSeriesConcatenate();
-        out.add(exst);
+        out.add(existing);
         out.add(
                 new NamedChannelsForSeriesMap(
                         openedRasterMemo, additionalChannel.createChannelMap(), seriesIndex));

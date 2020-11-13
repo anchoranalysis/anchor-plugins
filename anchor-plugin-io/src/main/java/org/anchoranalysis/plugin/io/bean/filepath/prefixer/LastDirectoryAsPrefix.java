@@ -62,21 +62,16 @@ public class LastDirectoryAsPrefix extends PathPrefixerAvoidResolve {
 
         DirectoryWithPrefix prefix = filePathPrefixer.outFilePrefixFromPath(path, root);
 
-        Path dir = prefix.getDirectory();
+        Path directory = prefix.getDirectory();
 
-        if (dir.getNameCount() > 0) {
+        if (directory.getNameCount() > 0) {
 
-            String finalDirName = dir.getName(dir.getNameCount() - 1).toString();
+            String finalDirectoryName = directory.getName(directory.getNameCount() - 1).toString();
 
             // Remove the final directory from the output
             prefix.setDirectory(prefix.getDirectory().resolve("..").normalize());
-
-            if (prefix.getFilenamePrefix() != null) {
-                prefix.setFilenamePrefix(finalDirName + delimiter + prefix.getFilenamePrefix());
-            } else {
-                prefix.setFilenamePrefix(finalDirName);
-            }
-
+            prefix.setPrefix(finalDirectoryName);
+            prefix.setDelimiter(delimiter);
             return prefix;
 
         } else {

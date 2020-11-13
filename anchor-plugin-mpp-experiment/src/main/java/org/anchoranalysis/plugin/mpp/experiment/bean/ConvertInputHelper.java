@@ -11,7 +11,7 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.files.FileWithDirectoryInput;
 import org.anchoranalysis.io.input.files.NamedFile;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.io.bean.input.stack.ConvertChannelsInputToStack;
+import org.anchoranalysis.plugin.io.bean.input.stack.ConvertNamedChannelsInputToStack;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -32,7 +32,7 @@ class ConvertInputHelper {
         } else if (inputTypesExpected.doesClassInheritFromAny(MultiInput.class)) {
             return new MultiInput(input);
         } else if (inputTypesExpected.doesClassInheritFromAny(StackSequenceInput.class)) {
-            return new ConvertChannelsInputToStack(input);
+            return new ConvertNamedChannelsInputToStack(input);
         } else if (inputTypesExpected.doesClassInheritFromAny(FileWithDirectoryInput.class)) {
             return convertToFileWithDirectory(input, directory);
         

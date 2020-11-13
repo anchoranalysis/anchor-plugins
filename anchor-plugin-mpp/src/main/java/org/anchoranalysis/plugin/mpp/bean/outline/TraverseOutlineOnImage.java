@@ -185,13 +185,13 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private static BoundingBox createBoxAroundPoint(Point3i point, Tuple3i width, Extent clipTo) {
+    private static BoundingBox createBoxAroundPoint(Point3i point, Tuple3i width, Extent clampTo) {
         // We create a raster around the point, maxDistance*2 in both directions, so long as it
         // doesn't escape the region
         BoundingBox box =
                 new BoundingBox(
                         Point3i.immutableSubtract(point, width),
                         Point3i.immutableAdd(point, width));
-        return box.clipTo(clipTo);
+        return box.clampTo(clampTo);
     }
 }

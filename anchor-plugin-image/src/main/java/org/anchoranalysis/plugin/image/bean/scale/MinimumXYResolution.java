@@ -36,18 +36,18 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-public class ScaleCalculatorMinXYRes extends ScaleCalculator {
+public class MinimumXYResolution extends ScaleCalculator {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private double minXYRes = 10e-9;
+    @BeanField @Getter @Setter private double minResolution = 10e-9;
     // STOP BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> sourceDimensions)
+    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled)
             throws OperationFailedException {
 
         Resolution resolution =
-                sourceDimensions
+                dimensionsToBeScaled
                         .flatMap(Dimensions::resolution)
                         .orElseThrow(
                                 () -> new OperationFailedException("No source resolution exists"));
@@ -58,21 +58,21 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
                     "Channel has zero x or y resolution. Cannot scale to min res.");
         }
 
-        int x = ratio(resolution.x(), minXYRes);
-        int y = ratio(resolution.y(), minXYRes);
+        int x = ratio(resolution.x(), minResolution);
+        int y = ratio(resolution.y(), minResolution);
 
         if (x < 0) {
             throw new OperationFailedException(
                     String.format(
                             "Insufficient resolution (%E). %E is required",
-                            resolution.x(), minXYRes));
+                            resolution.x(), minResolution));
         }
 
         if (y < 0) {
             throw new OperationFailedException(
                     String.format(
                             "Insufficient resolution (%E). %E is required",
-                            resolution.y(), minXYRes));
+                            resolution.y(), minResolution));
         }
 
         double xScaleDownRatio = twoToMinusPower(x);

@@ -38,6 +38,7 @@ import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
@@ -66,20 +67,28 @@ public class ScaleXY extends ChannelProviderUnary {
             MessageLogger logger)
             throws CreateException {
         try {
-            logger.logFormatted("incoming Image Resolution: %s\n", channel.resolution());
+            logResolution("Incoming", channel, logger);
 
             ScaleFactor scaleFactor = scaleCalculator.calculate(Optional.of(channel.dimensions()));
 
-            logger.logFormatted("Scale Factor: %s\n", scaleFactor.toString());
+            logger.logFormatted("Scale Factor: %s", scaleFactor.toString());
 
             Channel channelOut = channel.scaleXY(scaleFactor, interpolator);
 
-            logger.logFormatted("outgoing Image Resolution: %s\n", channelOut.resolution());
+            logResolution("Outgoing", channelOut, logger);
 
             return channelOut;
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
+    }
+    
+    private static void logResolution(String prefix, Channel channel, MessageLogger logger) {
+        logger.logFormatted("%s image resolution: %s", prefix, describeResolution(channel.resolution()) );
+    }
+    
+    private static String describeResolution( Optional<Resolution> resolution ) {
+        return resolution.map(Resolution::toString).orElse("undefined");
     }
 }

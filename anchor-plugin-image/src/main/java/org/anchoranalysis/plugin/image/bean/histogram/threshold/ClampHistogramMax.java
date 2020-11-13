@@ -24,26 +24,45 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.scale;
+package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 
-import java.util.Optional;
+import com.google.common.base.Preconditions;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
+import org.anchoranalysis.math.histogram.Histogram;
+import org.anchoranalysis.math.relation.GreaterThan;
 
-public class ScaleCalculatorInverted extends ScaleCalculator {
+/**
+ * Clamps the input-histogram to a certain maximum value, and then delegates the calculate-level.
+ *
+ * @author Owen Feehan
+ */
+@EqualsAndHashCode(callSuper = true)
+public class ClampHistogramMax extends CalculateLevelOne {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
-    // END BEAN PROPERTIES
+    private static final GreaterThan RELATION = new GreaterThan();
+
+    // START BEAN
+    @BeanField @Getter @Setter private int max;
+    // END BEAN
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> sourceDimensions)
-            throws OperationFailedException {
-        return scaleCalculator.calculate(sourceDimensions).invert();
+    public int calculateLevel(Histogram histogram) throws OperationFailedException {
+        return calculateLevelIncoming(createClamped(histogram, max));
+    }
+
+    private static Histogram createClamped(Histogram histogram, int maxVal) {
+        Preconditions.checkArgument(maxVal <= histogram.getMaxBin());
+
+        long numAbove = histogram.countThreshold(RELATION, maxVal);
+
+        Histogram out = new Histogram(histogram.getMaxBin());
+        histogram.iterateBinsUntil(maxVal, out::incrementValueBy);
+        out.incrementValueBy(maxVal, numAbove);
+        return out;
     }
 }

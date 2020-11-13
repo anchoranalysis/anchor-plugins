@@ -94,7 +94,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
             int seriesIndex,
-            ProgressReporter progressReporter)
+            ProgressReporter progress)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }
@@ -104,14 +104,14 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progressReporter)
+            ProgressReporter progress)
             throws OperationFailedException {
 
         stacks.add(
                 name,
                 () -> {
                     try {
-                        return createStackSequenceForSeries(seriesIndex).get(progressReporter);
+                        return createStackSequenceForSeries(seriesIndex).get(progress);
                     } catch (ImageIOException e) {
                         throw new OperationFailedException(e);
                     }

@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Clips a value if it lies outside the range - instead returning particular constants if below or
+ * Clamps a value if it lies outside the range - instead returning particular constants if below or
  * above an acceptable range
  *
  * @author Owen Feehan

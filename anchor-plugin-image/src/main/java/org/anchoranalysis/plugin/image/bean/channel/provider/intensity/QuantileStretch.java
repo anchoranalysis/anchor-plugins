@@ -84,11 +84,11 @@ public class QuantileStretch extends ChannelProviderUnary {
         double rangeMult = 255 / (rangeMax - rangeMin);
 
         IterateVoxelsAll.changeIntensity(
-                voxels, value -> roundAndClip((value - rangeMin) * rangeMult));
+                voxels, value -> roundAndClamp((value - rangeMin) * rangeMult));
     }
 
-    /** Rounds a value up or down, and clips to ensure its in the range 0..255 inclusive */
-    private static int roundAndClip(double value) {
+    /** Rounds a value up or down, and clamps to ensure its in the range 0..255 inclusive */
+    private static int roundAndClamp(double value) {
 
         int rounded = (int) Math.round(value);
 
