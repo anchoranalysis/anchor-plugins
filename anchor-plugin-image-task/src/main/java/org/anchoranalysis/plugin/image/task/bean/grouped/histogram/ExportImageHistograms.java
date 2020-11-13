@@ -165,4 +165,9 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
     private GroupedHistogramWriter createWriter() {
         return new GroupedHistogramWriter(OUTPUT_HISTOGRAMS, csvIgnoreZeros);
     }
+
+    @Override
+    protected String outputNameForGroups() {
+        return OUTPUT_SUM;
+    }
 }

@@ -34,11 +34,14 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -50,10 +53,12 @@ import org.anchoranalysis.plugin.image.task.bean.labeller.ImageLabeller;
  */
 public class SharedStateFilteredImageOutput<T> {
 
+    private static final ManifestDirectoryDescription MANIFEST_DIRECTORY_LABELS = new ManifestDirectoryDescription("labels","labelled_outputs", new StringsWithoutOrder() );
+    
     private ImageLabeller<T> filter;
     private Outputter baseOutputter;
 
-    private GroupedMultiplexOutputters outputters;
+    private Optional<GroupedMultiplexOutputters> outputters;
 
     private Optional<FeatureCSVWriter> csvWriter;
 
@@ -61,22 +66,27 @@ public class SharedStateFilteredImageOutput<T> {
 
     private boolean groupIdentifierForCalled = false;
 
+    private final String outputNameImages;
+    
     /**
      * @param baseOutputter
      * @param filter the filter must not yet have been inited()
+     * @param outputNameMapping the output-name for the CSV that is created showing the mapping between inputs and labels.
+     * @param outputNameImages the output-name for the labels sub-directory in which copies images are placed in sub-directories.
      * @throws CreateException
      */
-    public SharedStateFilteredImageOutput(Outputter baseOutputter, ImageLabeller<T> filter)
+    public SharedStateFilteredImageOutput(Outputter baseOutputter, ImageLabeller<T> filter, String outputNameMapping, String outputNameImages)
             throws CreateException {
 
         this.baseOutputter = baseOutputter;
         this.filter = filter;
+        this.outputNameImages = outputNameImages;
 
         // The CSV file with all names and corresponding groups
         try {
             this.csvWriter =
                     FeatureCSVWriter.create(
-                            new FeatureCSVMetadata("group", Arrays.asList("name", "group")),
+                            new FeatureCSVMetadata(outputNameMapping, Arrays.asList("name", "group")),
                             baseOutputter);
         } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
@@ -115,9 +125,8 @@ public class SharedStateFilteredImageOutput<T> {
     }
 
     /** groupIdentifierFor should always called at least once before getOutputManagerFor */
-    public Outputter getOutputterFor(String groupIdentifier) {
-        assert (groupIdentifierForCalled);
-        return outputters.getOutputterFor(groupIdentifier);
+    public Optional<Outputter> getOutputterFor(String groupIdentifier) {
+        return outputters.map( outputter -> outputter.getOutputterFor(groupIdentifier) );
     }
 
     public T getFilterInitParams(Path pathForBinding) throws InitException {
@@ -128,8 +137,9 @@ public class SharedStateFilteredImageOutput<T> {
     }
 
     private void initFilterOutputters(Path pathForBinding) throws InitException {
-        this.outputters =
+        Optional<Outputter> outputterLabelsSubdirectory = baseOutputter.writerSelective().createSubdirectory(outputNameImages, MANIFEST_DIRECTORY_LABELS, false);
+        this.outputters = OptionalUtilities.map( outputterLabelsSubdirectory, directory ->
                 new GroupedMultiplexOutputters(
-                        baseOutputter, filter.allLabels(getFilterInitParams(pathForBinding)));
+                        directory, filter.allLabels(getFilterInitParams(pathForBinding))));
     }
 }

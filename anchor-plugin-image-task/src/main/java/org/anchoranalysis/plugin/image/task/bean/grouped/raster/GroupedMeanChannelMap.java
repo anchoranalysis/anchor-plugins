@@ -40,8 +40,14 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
 
     private static final String MANIFEST_FUNCTION = "channelMean";
 
-    public GroupedMeanChannelMap() {
+    private final String outputName;
+    /**
+     * 
+     * @param outputName the first-level output-name used to determine whether mean channels will be written or not
+     */
+    public GroupedMeanChannelMap(String outputName) {
         super("channel", MANIFEST_FUNCTION, RunningSumChannel::new);
+        this.outputName = outputName;
     }
 
     @Override
@@ -51,19 +57,18 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
 
     @Override
     protected void writeGroupOutputInSubdirectory(
-            String outputName,
+            String partName,
             RunningSumChannel agg,
             ConsistentChannelChecker channelChecker,
             InputOutputContext context)
             throws IOException {
         // TODO change always2D
         VoxelDataType outputType = channelChecker.getChannelType();
-        context.getOutputter()
-                .writerPermissive()
+        context.getOutputter().writerSecondLevel(outputName)
                 .write(
-                        outputName,
+                        partName,
                         () -> new ChannelGenerator(MANIFEST_FUNCTION),
-                        () -> generatorWithMean(agg, outputType, outputName, context));
+                        () -> generatorWithMean(agg, outputType, partName, context));
     }
 
     private static Channel generatorWithMean(

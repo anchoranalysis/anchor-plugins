@@ -133,7 +133,7 @@ public abstract class GroupMapByName<S, T> {
     protected abstract void addTo(S ind, T agg) throws OperationFailedException;
 
     protected abstract void writeGroupOutputInSubdirectory(
-            String outputName,
+            String partName,
             T agg,
             ConsistentChannelChecker channelChecker,
             InputOutputContext context)

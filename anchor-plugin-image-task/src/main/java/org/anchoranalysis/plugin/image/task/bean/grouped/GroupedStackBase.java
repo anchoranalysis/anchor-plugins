@@ -66,13 +66,6 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 public abstract class GroupedStackBase<S, T>
         extends Task<ProvidesStackInput, GroupedSharedState<S, T>> {
 
-    /**
-     * A fallback output-name for the grouped directory if nothing else is specified.
-     *
-     * <p>This is specified by {@link #subdirectoryForGroupOutputs()}.
-     */
-    private static final String OUTPUT_FALLBACK_GROUPED = "grouped";
-
     private static final ManifestDirectoryDescription MANIFEST_DESCRIPTION_GROUP_FOLDER =
             new ManifestDirectoryDescription(
                     "groupedDirectory", "groupedStack", new StringsWithoutOrder());
@@ -130,8 +123,7 @@ public abstract class GroupedStackBase<S, T>
 
         try {
             Optional<String> subdirectoryName = subdirectoryForGroupOutputs();
-            String groupedOutputName = subdirectoryName.orElse(OUTPUT_FALLBACK_GROUPED);
-            if (context.getOutputter().outputsEnabled().isOutputEnabled(groupedOutputName)) {
+            if (context.getOutputter().outputsEnabled().isOutputEnabled(outputNameForGroups())) {
                 sharedState
                         .getGroupMap()
                         .outputGroupedData(
@@ -147,6 +139,16 @@ public abstract class GroupedStackBase<S, T>
         }
     }
 
+    /** 
+     * The first-level output-name used for determining if groups are written.
+     * 
+     * <p>Second-level matches against this, will determine which specific groups
+     * may or may not be written.
+     * 
+     * @return
+     */
+    protected abstract String outputNameForGroups();
+    
     /** An optional subdirectory where the group outputs are placed. */
     protected abstract Optional<String> subdirectoryForGroupOutputs();
 
