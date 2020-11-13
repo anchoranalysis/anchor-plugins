@@ -42,7 +42,6 @@ import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesConcatenate;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
 import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.io.input.files.FileInput;
@@ -103,9 +102,7 @@ class MapPart extends NamedChannelsInputPart {
             seriesIndex = openedRaster().numberSeries() - 1;
         }
 
-        NamedChannelsForSeriesConcatenate out = new NamedChannelsForSeriesConcatenate();
-        out.add(new NamedChannelsForSeriesMap(openedRaster(), channelMap(), seriesIndex));
-        return out;
+        return new NamedChannelsForSeriesMap(openedRaster(), channelMap(), seriesIndex);
     }
 
     @Override

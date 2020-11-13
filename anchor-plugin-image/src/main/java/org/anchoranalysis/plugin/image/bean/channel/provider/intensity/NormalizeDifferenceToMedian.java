@@ -91,7 +91,7 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
                 channelLookup.voxels().asByte(),
                 (point, buffer, bufferLookup, offset, offsetLookup) -> {
                     int valueToAssign =
-                            clipValue(
+                            clampValue(
                                     buffer.getUnsigned(offset)
                                             - medianFromObject
                                             + bufferLookup.getUnsigned(offsetLookup));
@@ -100,7 +100,7 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
                 });
     }
 
-    private static int clipValue(int value) {
+    private static int clampValue(int value) {
         if (value < 0) {
             return 0;
         } else if (value > 255) {

@@ -57,7 +57,7 @@ public class Combine extends FilesProvider {
 
                 ProgressReporterOneOfMany prLocal = new ProgressReporterOneOfMany(prm);
                 combined.addAll(fp.create(params.withProgressReporter(prLocal)));
-                prm.incrWorker();
+                prm.incrementWorker();
             }
             return combined;
         }

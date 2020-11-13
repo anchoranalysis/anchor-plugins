@@ -80,7 +80,7 @@ class FindLargestMultipleWithin {
     }
 
     /**
-     * The minimum scale factor from X and Y resolution, clipped at the a maximum of maxScaleFactor
+     * The minimum scale factor from X and Y resolution, clamped at the a maximum of maxScaleFactor
      */
     private static int minScaleFactorUnder(ScaleFactor sf, int maxScaleFactor) {
         int min = minScaleFactor(sf);

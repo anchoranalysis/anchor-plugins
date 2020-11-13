@@ -103,7 +103,7 @@ public class ConvertImageFormat
     /** Optionally, includes only certain channels when converting. */
     @BeanField @OptionalBean @Getter @Setter private ChannelFilter channelFilter = null;
 
-    /** Optionally, how to convert from one bit-depth to another (scaling, clipping etc.) */
+    /** Optionally, how to convert from one bit-depth to another (scaling, clamping etc.) */
     @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo channelConverter = null;
     // END BEAN PROPERTIES
 

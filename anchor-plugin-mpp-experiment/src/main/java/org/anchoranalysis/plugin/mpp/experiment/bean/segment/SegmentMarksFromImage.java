@@ -65,7 +65,23 @@ import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
 
 /**
  * Segments an image into a collection of {@link Mark}s.
+ * 
+ * <p>The following outputs are produced:
  *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>marks</td><td>yes</td><td>The segmented outcome as serialized XML using <a href="https://x-stream.github.io/">XStream</a>.</td></tr>
+ * <tr><td>outline</td><td>yes</td><td>A RGB image showing <i>outline-colored</i> segmented marks on a background.</td></tr>
+ * <tr><td>solid</td><td>no</td><td>A RGB image showing <i>solidly-colored</i> segmented marks on a background.</td></tr>
+ * <tr><td rowspan="3"><i>any outputs produced by {@link SegmentIntoMarks}</i> in {@code segment}.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
+ * 
  * @author Owen Feehan
  */
 public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {

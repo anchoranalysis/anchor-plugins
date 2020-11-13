@@ -53,7 +53,7 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.mpp.experiment.SharedStateRememberConverted;
 
 /**
- * Converts {@link NamedChannelsInput} to a variety of others to match a delegate task
+ * Converts {@link NamedChannelsInput} to a variety of others to match a delegate task.
  *
  * <p>Note that the presence of {@link ReplaceTask} gives special behavior to this task in the
  * {@link JobProcessor}

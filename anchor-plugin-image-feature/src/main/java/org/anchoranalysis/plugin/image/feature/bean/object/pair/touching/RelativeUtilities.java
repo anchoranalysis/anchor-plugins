@@ -50,7 +50,7 @@ class RelativeUtilities {
         BoundingBox boxIntersectRel =
                 new BoundingBox(
                         box.relativePositionTo(objectRelativeBase.boundingBox()), box.extent());
-        return boxIntersectRel.clipTo(objectRelativeBase.boundingBox().extent());
+        return boxIntersectRel.clampTo(objectRelativeBase.boundingBox().extent());
     }
 
     /**

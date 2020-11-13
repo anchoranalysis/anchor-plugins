@@ -88,7 +88,7 @@ public class SubtractMean extends UnaryWithMaskBase {
 
         int intensitySubtracted = intensity - mean;
 
-        // Clip so it never falls below 0
+        // Clamp so it never falls below 0
         if (intensitySubtracted < 0) {
             intensitySubtracted = 0;
         }

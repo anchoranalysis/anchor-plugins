@@ -46,12 +46,18 @@ public class BranchChannels extends RasterWriterDelegateBase {
     @BeanField @Getter @Setter private StackWriter writer;
 
     /**
-     * Writer employed if a stack is a one or three-channeled image, that is <b>not 3D</b>, and not
-     * RGB.
+     * Writer employed if a stack is a single-channeled image.
      */
-    @BeanField @OptionalBean @Getter @Setter private StackWriter whenOneOrThreeChannels;
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenSingleChannel;
+    
+    /**
+     * Writer employed if a stack is a <b>three-channeled non-RGB</b> image.
+     */
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenThreeChannels;
 
-    /** Writer employed if a stack is a three-channeled RGB image and is <b>not 3D</b>. */
+    /** 
+     * Writer employed if a stack is a <b>three-channeled RGB</b> image.
+     */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGB;
     // END BEAN PROPERTIES
 
@@ -59,8 +65,10 @@ public class BranchChannels extends RasterWriterDelegateBase {
     protected StackWriter selectDelegate(StackWriteOptions writeOptions) {
         if (writeOptions.isRgb()) {
             return writerOrDefault(whenRGB);
-        } else if (writeOptions.isAlwaysOneOrThreeChannels()) {
-            return writerOrDefault(whenOneOrThreeChannels);
+        } else if (writeOptions.isThreeChannels()) {
+            return writerOrDefault(whenThreeChannels);
+        } else if (writeOptions.isSingleChannel()) {
+            return writerOrDefault(whenSingleChannel);            
         } else {
             return writer;
         }

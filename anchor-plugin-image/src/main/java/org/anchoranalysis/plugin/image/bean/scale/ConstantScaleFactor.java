@@ -30,51 +30,20 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 
-public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
+public class ConstantScaleFactor extends ScaleCalculator {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private DimensionsProvider dimensionsSource;
-
-    @BeanField @Getter @Setter private DimensionsProvider dimensionsTarget;
+    @BeanField @Getter @Setter private double value;
     // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> sourceDimensions)
+    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled)
             throws OperationFailedException {
-
-        Optional<Dimensions> dimensions = maybeReplaceSourceDimensions(sourceDimensions);
-
-        if (!dimensions.isPresent()) {
-            throw new OperationFailedException("No source dimensions can be found");
-        }
-
-        try {
-            return ScaleFactorUtilities.relativeScale(
-                    dimensions.get().extent(), dimensionsTarget.create().extent());
-        } catch (CreateException e) {
-            throw new OperationFailedException(e);
-        }
-    }
-
-    private Optional<Dimensions> maybeReplaceSourceDimensions(Optional<Dimensions> sourceDimensions)
-            throws OperationFailedException {
-        if (dimensionsSource != null) {
-            try {
-                return Optional.of(dimensionsSource.create());
-            } catch (CreateException e) {
-                throw new OperationFailedException(e);
-            }
-        } else {
-            return sourceDimensions;
-        }
+        return new ScaleFactor(value);
     }
 }

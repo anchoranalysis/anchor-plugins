@@ -73,7 +73,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
 
             Iterator<T> itr = input.inputs(params).iterator();
 
-            prm.incrWorker();
+            prm.incrementWorker();
 
             List<T> tempList = new ArrayList<>();
             while (itr.hasNext()) {
@@ -89,7 +89,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
                 throw new InputReadFailedException(
                         "Cannot create inputs (with annotation path)", e);
             }
-            prm.incrWorker();
+            prm.incrementWorker();
 
             return outList;
         }

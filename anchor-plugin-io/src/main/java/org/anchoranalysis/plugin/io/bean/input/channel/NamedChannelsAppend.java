@@ -77,7 +77,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
             Iterator<NamedChannelsInputPart> itr = input.inputs(params).iterator();
 
-            prm.incrWorker();
+            prm.incrementWorker();
 
             List<NamedChannelsInputPart> listTemp = new ArrayList<>();
             while (itr.hasNext()) {
@@ -90,7 +90,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
                             new ProgressReporterOneOfMany(prm),
                             params.isDebugModeActivated());
 
-            prm.incrWorker();
+            prm.incrementWorker();
 
             return outList;
         }

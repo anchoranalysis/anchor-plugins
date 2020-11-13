@@ -80,6 +80,6 @@ public class InsideBoxOn extends FromDimensionsBase {
                 new BoundingBox(new Point3d(minX, minY, minZ), new Point3d(maxX, maxY, maxZ));
 
         // Make sure box is inside channel
-        return box.clipTo(dimensions.extent());
+        return box.clampTo(dimensions.extent());
     }
 }

@@ -39,31 +39,24 @@ import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
 import org.anchoranalysis.image.io.stack.input.OpenedRaster;
-import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 class GroupingInput extends NamedChannelsInput {
 
-    // The opened raster with multiple files
-    private OpenedRaster openedRaster = null;
+    // START REQUIRED ARGUMENTS
+    /** A virtual path uniquely representing this particular file. */
+    private final Path virtualPath;
+    
+    /** The opened raster with multiple files. */
+    private final OpenedRaster openedRaster;
 
-    // A virtual path uniquely representing this particular file
-    private Path virtualPath;
+    private final ChannelMap channelMapCreator;
+    // END REQUIRED ARGUMENTS
 
-    private ChannelMap channelMapCreator;
-
-    private NamedEntries channelMap = null;
+    private NamedEntries channelMap;
 
     private String inputName;
-
-    // The root object that is used to provide the inputName and pathForBinding
-    //
-    public GroupingInput(
-            Path virtualPath, MultiFileReaderOpenedRaster mfor, ChannelMap channelMapCreator) {
-        super();
-        this.virtualPath = virtualPath;
-        this.openedRaster = mfor;
-        this.channelMapCreator = channelMapCreator;
-    }
 
     @Override
     public int numberSeries() throws ImageIOException {
@@ -107,6 +100,11 @@ class GroupingInput extends NamedChannelsInput {
         }
     }
 
+    @Override
+    public int bitDepth() throws ImageIOException {
+        return openedRaster.bitDepth();
+    }
+
     private void ensureChannelMapExists() throws ImageIOException {
         // Lazy creation
         if (channelMap == null) {
@@ -116,10 +114,5 @@ class GroupingInput extends NamedChannelsInput {
                 throw new ImageIOException(e);
             }
         }
-    }
-
-    @Override
-    public int bitDepth() throws ImageIOException {
-        return openedRaster.bitDepth();
     }
 }

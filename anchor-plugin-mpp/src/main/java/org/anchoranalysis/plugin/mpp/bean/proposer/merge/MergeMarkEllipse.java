@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.mpp.points.PointClipper;
+import org.anchoranalysis.mpp.points.PointClamper;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.spatial.point.Point3d;
@@ -107,7 +107,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
                         randomNumberGenerator.sampleDoubleFromZeroCenteredRange(
                                 JITTER_HALF_WIDTH)));
 
-        return PointClipper.clip(pointNew, energyStack.dimensions());
+        return PointClamper.clamp(pointNew, energyStack.dimensions());
     }
 
     @SuppressWarnings("unused")

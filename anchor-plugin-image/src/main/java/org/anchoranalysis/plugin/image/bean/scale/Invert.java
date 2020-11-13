@@ -24,45 +24,32 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.histogram.threshold;
+package org.anchoranalysis.plugin.image.bean.scale;
 
-import com.google.common.base.Preconditions;
-import lombok.EqualsAndHashCode;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
-import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.math.relation.GreaterThan;
+import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * Clips the input-histogram to a certain maximum value, and then delegates the calculate-level.
- *
+ * Invert the {@link ScaleFactor} calculated by the {@code scaleCalculator} delegate.
+ * 
  * @author Owen Feehan
  */
-@EqualsAndHashCode(callSuper = true)
-public class ClipHistogramMax extends CalculateLevelOne {
+public class Invert extends ScaleCalculator {
 
-    private static final GreaterThan RELATION = new GreaterThan();
-
-    // START BEAN
-    @BeanField @Getter @Setter private int max;
-    // END BEAN
+    // START BEAN PROPERTIES
+    /** The delegate {@link ScaleCalculator} whose calculation will be inverted. */
+    @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
+    // END BEAN PROPERTIES
 
     @Override
-    public int calculateLevel(Histogram histogram) throws OperationFailedException {
-        return calculateLevelIncoming(createClipped(histogram, max));
-    }
-
-    private static Histogram createClipped(Histogram histogram, int maxVal) {
-        Preconditions.checkArgument(maxVal <= histogram.getMaxBin());
-
-        long numAbove = histogram.countThreshold(RELATION, maxVal);
-
-        Histogram out = new Histogram(histogram.getMaxBin());
-        histogram.iterateBinsUntil(maxVal, out::incrementValueBy);
-        out.incrementValueBy(maxVal, numAbove);
-        return out;
+    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled)
+            throws OperationFailedException {
+        return scaleCalculator.calculate(dimensionsToBeScaled).invert();
     }
 }

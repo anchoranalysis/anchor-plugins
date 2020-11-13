@@ -46,11 +46,26 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 /**
  * Aggregates many per-image annotations together in form of a CSV file.
  *
+   <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>aggregated</td><td>yes</td><td>a CSV file with each image and corresponding image-label.</td></tr>
+ * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
+ * 
  * @author Owen Feehan
  */
 public class AggregateAnnotations<S extends AnnotatorStrategy>
         extends Task<AnnotationWithStrategy<S>, AggregateSharedState> {
 
+    private static final String OUTPUT_AGGREGATED = "aggregated";
+    
     @Override
     public AggregateSharedState beforeAnyJobIsExecuted(
             Outputter outputter, ConcurrencyPlan concurrencyPlan, List<AnnotationWithStrategy<S>> inputs, ParametersExperiment params)
@@ -78,7 +93,7 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
         context.getOutputter()
                 .writerSelective()
                 .write(
-                        "annotationsAgg",
+                        OUTPUT_AGGREGATED,
                         AnnotationAggregateCSVGenerator::new,
                         sharedState::getAnnotations);
     }
@@ -105,7 +120,6 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_AGGREGATED);
     }
 }
