@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
@@ -94,7 +94,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
             int seriesIndex,
-            ProgressReporter progress)
+            Progress progress)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }
@@ -104,7 +104,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progress)
+            Progress progress)
             throws OperationFailedException {
 
         stacks.add(
@@ -120,9 +120,9 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
     private static TimeSequenceSupplier openRasterAsOperation(
             final OpenedRaster openedRaster, final int seriesNum) {
-        return progressReporter -> {
+        return progress -> {
             try {
-                return openedRaster.open(seriesNum, progressReporter);
+                return openedRaster.open(seriesNum, progress);
             } catch (ImageIOException e) {
                 throw new OperationFailedException(e);
             }

@@ -40,9 +40,9 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.functional.FunctionalProgress;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
-import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressMultiple;
+import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -72,12 +72,12 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     public List<NamedChannelsInputPart> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
-        try (ProgressReporterMultiple prm =
-                new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
+        try (ProgressMultiple progressMultiple =
+                new ProgressMultiple(params.getProgress(), 2)) {
 
             Iterator<NamedChannelsInputPart> itr = input.inputs(params).iterator();
 
-            prm.incrementWorker();
+            progressMultiple.incrementWorker();
 
             List<NamedChannelsInputPart> listTemp = new ArrayList<>();
             while (itr.hasNext()) {
@@ -87,10 +87,10 @@ public class NamedChannelsAppend extends NamedChannelsBase {
             List<NamedChannelsInputPart> outList =
                     createOutList(
                             listTemp,
-                            new ProgressReporterOneOfMany(prm),
+                            new ProgressOneOfMany(progressMultiple),
                             params.isDebugModeActivated());
 
-            prm.incrementWorker();
+            progressMultiple.incrementWorker();
 
             return outList;
         }
@@ -98,12 +98,12 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
     private List<NamedChannelsInputPart> createOutList(
             List<NamedChannelsInputPart> listTemp,
-            ProgressReporter progressReporter,
+            Progress progress,
             boolean debugMode)
             throws InputReadFailedException {
         try {
             return FunctionalProgress.mapListOptional(
-                    listTemp, progressReporter, ncc -> maybeAppend(ncc, debugMode));
+                    listTemp, progress, ncc -> maybeAppend(ncc, debugMode));
         } catch (DerivePathException e) {
             throw new InputReadFailedException(e);
         }

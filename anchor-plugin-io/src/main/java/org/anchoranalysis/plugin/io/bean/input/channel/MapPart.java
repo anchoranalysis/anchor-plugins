@@ -34,7 +34,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
@@ -95,7 +95,7 @@ class MapPart extends NamedChannelsInputPart {
     // Where most of our time is being taken up when opening a raster
     @Override
     public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException {
+            int seriesIndex, Progress progress) throws ImageIOException {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {

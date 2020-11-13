@@ -33,8 +33,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
-import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
+import org.anchoranalysis.core.progress.ProgressMultiple;
+import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.files.FilesProviderException;
@@ -48,16 +48,16 @@ public class Combine extends FilesProvider {
     @Override
     public Collection<File> create(InputManagerParams params) throws FilesProviderException {
 
-        try (ProgressReporterMultiple prm =
-                new ProgressReporterMultiple(params.getProgressReporter(), list.size())) {
+        try (ProgressMultiple progressMultiple =
+                new ProgressMultiple(params.getProgress(), list.size())) {
 
             List<File> combined = new ArrayList<>();
 
-            for (FilesProvider fp : list) {
+            for (FilesProvider provider : list) {
 
-                ProgressReporterOneOfMany prLocal = new ProgressReporterOneOfMany(prm);
-                combined.addAll(fp.create(params.withProgressReporter(prLocal)));
-                prm.incrementWorker();
+                ProgressOneOfMany progressLocal = new ProgressOneOfMany(progressMultiple);
+                combined.addAll(provider.create(params.withProgressReporter(progressLocal)));
+                progressMultiple.incrementWorker();
             }
             return combined;
         }

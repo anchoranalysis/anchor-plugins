@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
+import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.filefilter.IOFileFilter;
 
@@ -51,12 +51,12 @@ class WalkToDepth extends DirectoryWalker<File> {
     }
 
     private int exactDepth;
-    private ProgressReporterMultiple prm;
+    private ProgressMultiple progressMultiple;
 
-    public WalkToDepth(int exactDepth, ProgressReporterMultiple prm) {
+    public WalkToDepth(int exactDepth, ProgressMultiple progressMultiple) {
         super(null, new RejectAllFiles(), exactDepth);
         this.exactDepth = exactDepth;
-        this.prm = prm;
+        this.progressMultiple = progressMultiple;
     }
 
     public List<File> findDirs(File root) throws IOException {
@@ -74,7 +74,7 @@ class WalkToDepth extends DirectoryWalker<File> {
     protected boolean handleDirectory(File directory, int depth, Collection<File> results) {
 
         if (depth == 1) {
-            prm.incrementWorker();
+            progressMultiple.incrementWorker();
         }
 
         if (depth == exactDepth) {

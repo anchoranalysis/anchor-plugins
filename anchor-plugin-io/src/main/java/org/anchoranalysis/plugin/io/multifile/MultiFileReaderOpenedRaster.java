@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.io.multifile;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -56,15 +56,15 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
+    public TimeSequence open(int seriesIndex, Progress progress)
             throws ImageIOException {
 
         try {
-            progressReporter.open();
-            return getOrCreateMemo(progressReporter).createSequence();
+            progress.open();
+            return getOrCreateMemo(progress).createSequence();
 
         } finally {
-            progressReporter.close();
+            progress.close();
         }
     }
 
@@ -75,7 +75,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
 
     @Override
     public int numberChannels() throws ImageIOException {
-        MultiFile memo = getOrCreateMemo(ProgressReporterNull.get());
+        MultiFile memo = getOrCreateMemo(ProgressIgnore.get());
 
         if (!memo.numChannelDefined()) {
             throw new ImageIOException("Number of channel is not defined");
@@ -86,7 +86,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
 
     @Override
     public int bitDepth() throws ImageIOException {
-        MultiFile memo = getOrCreateMemo(ProgressReporterNull.get());
+        MultiFile memo = getOrCreateMemo(ProgressIgnore.get());
         return memo.dataType().numberBits();
     }
 
@@ -98,7 +98,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
     @Override
     public int numberFrames() throws ImageIOException {
 
-        MultiFile multiFile = getOrCreateMemo(ProgressReporterNull.get());
+        MultiFile multiFile = getOrCreateMemo(ProgressIgnore.get());
 
         if (!multiFile.numFramesDefined()) {
             throw new ImageIOException("Number of frames is not defined");
@@ -118,14 +118,14 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
     }
 
     private void addDetailsFromBag(
-            MultiFile multiFile, int seriesIndex, ProgressReporter progressReporter)
+            MultiFile multiFile, int seriesIndex, Progress progress)
             throws ImageIOException {
 
         for (FileDetails fd : fileBag) {
 
             OpenedRaster or = stackReader.openFile(fd.getFilePath());
             try {
-                TimeSequence ts = or.open(seriesIndex, progressReporter);
+                TimeSequence ts = or.open(seriesIndex, progress);
                 multiFile.add(
                         ts.get(0),
                         fd.getChannelNum(),
@@ -143,10 +143,10 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
         }
     }
 
-    private MultiFile getOrCreateMemo(ProgressReporter progressReporter) throws ImageIOException {
+    private MultiFile getOrCreateMemo(Progress progress) throws ImageIOException {
         if (multiFileMemo == null) {
             multiFileMemo = new MultiFile(fileBag);
-            addDetailsFromBag(multiFileMemo, 0, progressReporter);
+            addDetailsFromBag(multiFileMemo, 0, progress);
         }
         return multiFileMemo;
     }

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.stack.reader;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -63,9 +63,9 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
+    public TimeSequence open(int seriesIndex, Progress progress)
             throws ImageIOException {
-        TimeSequence sequence = delegate.open(seriesIndex, progressReporter);
+        TimeSequence sequence = delegate.open(seriesIndex, progress);
 
         for (Stack stack : sequence) {
             Optional<Resolution> res = processor.maybeUpdatedResolution(stack.resolution());

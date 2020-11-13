@@ -33,7 +33,7 @@ import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
+import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectoryString;
 import org.anchoranalysis.io.input.files.FilesProviderException;
@@ -58,9 +58,9 @@ public class DirectoryDepth extends FilesProviderWithDirectoryString {
 
         int numFiles = filesDir.length;
 
-        try (ProgressReporterMultiple prm =
-                new ProgressReporterMultiple(params.getProgressReporter(), numFiles)) {
-            WalkToDepth walkTo = new WalkToDepth(exactDepth, prm);
+        try (ProgressMultiple progressMultiple =
+                new ProgressMultiple(params.getProgress(), numFiles)) {
+            WalkToDepth walkTo = new WalkToDepth(exactDepth, progressMultiple);
             return walkTo.findDirs(directory.toFile());
         } catch (IOException e) {
             throw new FilesProviderException(e);

@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -120,13 +120,13 @@ public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack
 
         try {
             NamedChannelsForSeries namedChannels =
-                    input.getInput().createChannelsForSeries(0, ProgressReporterNull.get());
+                    input.getInput().createChannelsForSeries(0, ProgressIgnore.get());
 
-            ProgressReporter progressReporter = ProgressReporterNull.get();
+            Progress progress = ProgressIgnore.get();
 
-            Channel red = namedChannels.getChannel("red", 0, progressReporter);
-            Channel blue = namedChannels.getChannel("blue", 0, progressReporter);
-            Channel green = namedChannels.getChannel("green", 0, progressReporter);
+            Channel red = namedChannels.getChannel("red", 0, progress);
+            Channel blue = namedChannels.getChannel("blue", 0, progress);
+            Channel green = namedChannels.getChannel("green", 0, progress);
 
             if (!red.dimensions().equals(blue.dimensions())
                     || !blue.dimensions().equals(green.dimensions())) {
