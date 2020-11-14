@@ -23,41 +23,16 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
+package org.anchoranalysis.plugin.io.bean.stack.writer;
 
-import loci.formats.IFormatWriter;
-import loci.formats.out.OMEXMLWriter;
-import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.plugin.io.bean.stack.writer.ImageIOWriter;
+import org.anchoranalysis.test.image.rasterwriter.PNGTestBase;
 
-/**
- * Writes a stack to the filesystem as an <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-xml/">OME-XML</a> using the <a
- * href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a> library.
- *
- * <p>This is particularly useful for stacks of images that have an unusual number of channels
- * (neither 1 or 3 channels), and which most other file formats cannot support.
- *
- * <p>Note that OMEXML seems to struggle with reading/writing RGB files, so these files
- * are <b>not supported</b>.
- * 
- * @author Owen Feehan
- */
-public class OMEXML extends BioformatsWriter {
-
-    /**
-     * Default constructor.
-     */
-    public OMEXML() {
-        super(false);
-    }
-    
-    @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return "ome.xml";
-    }
+public class ImageIOWriterTest extends PNGTestBase {
 
     @Override
-    protected IFormatWriter createWriter() throws ImageIOException {
-        return new OMEXMLWriter();
+    protected StackWriter createWriter() {
+        return new ImageIOWriter();
     }
 }

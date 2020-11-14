@@ -32,7 +32,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.OneOrThreeChannelsWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.OneOrThreeChannelsWriter;
 
 public class ImageIOWriter extends OneOrThreeChannelsWriter {
 
