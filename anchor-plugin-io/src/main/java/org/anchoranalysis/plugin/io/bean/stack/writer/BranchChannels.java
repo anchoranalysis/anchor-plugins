@@ -28,33 +28,57 @@ package org.anchoranalysis.plugin.io.bean.stack.writer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
- * Uses different raster-writers depending on whether it is always 2D (not a z-stack) or possibly
- * 3D.
+ * Uses different raster-writers depending on the number/type of channels.
  *
  * <p>If any optional condition does not have a writer, then {@code writer} is used in this case.
  *
  * @author Owen Feehan
  */
-public class BranchStack extends StackWriterDelegateBase {
+public class BranchChannels extends StackWriterDelegateBase {
 
     // START BEAN PROPERTIES
-    /** Writer to use if it is guaranteed that the image will always be 2D. */
-    @BeanField @Getter @Setter private StackWriter writerAlways2D;
+    /** Default writer, if a more specific writer is not specified for a condition. */
+    @BeanField @Getter @Setter private StackWriter writer;
 
-    /** Otherwise the writer to use. */
-    @BeanField @Getter @Setter private StackWriter writerElse;
+    /**
+     * Writer employed if a stack is a single-channeled image.
+     */
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenSingleChannel;
+    
+    /**
+     * Writer employed if a stack is a <b>three-channeled non-RGB</b> image.
+     */
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenThreeChannels;
+
+    /** 
+     * Writer employed if a stack is a <b>three-channeled RGB</b> image.
+     */
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGB;
     // END BEAN PROPERTIES
 
     @Override
     protected StackWriter selectDelegate(StackWriteOptions writeOptions) {
-        if (writeOptions.isAlways2D()) {
-            return writerAlways2D;
+        if (writeOptions.isRgb()) {
+            return writerOrDefault(whenRGB);
+        } else if (writeOptions.isThreeChannels()) {
+            return writerOrDefault(whenThreeChannels);
+        } else if (writeOptions.isSingleChannel()) {
+            return writerOrDefault(whenSingleChannel);            
         } else {
-            return writerElse;
+            return writer;
+        }
+    }
+
+    private StackWriter writerOrDefault(StackWriter writerMaybeNull) {
+        if (writerMaybeNull != null) {
+            return writerMaybeNull;
+        } else {
+            return writer;
         }
     }
 }

@@ -38,6 +38,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Loads a feature-list to be used in tests.
@@ -48,27 +49,21 @@ import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
  * @param <T> feature-input-type returned by the list
  * @author Owen Feehan
  */
+@RequiredArgsConstructor
 class LoadFeatureListProviderFixture<T extends FeatureInput> {
 
     private static final String SINGLE_FEATURE_NAME = "someFeature";
 
-    private TestLoader loader;
-    private String defaultPath;
+    // START REQUIRED ARGUMENTS
+    /** A loader for finding XML files. */
+    private final TestLoader loader;
+    
+    /** The features in this XML file are used if no other option is set. */
+    private final String defaultPathToXML;
+    // END REQUIRED ARGUMENTS
 
     /** The to use, if set. If empty, the default is used instead. */
     private Optional<List<NamedBean<FeatureListProvider<T>>>> features = Optional.empty();
-
-    /**
-     * Constructor
-     *
-     * @param loader a loader for finding XML files
-     * @param defaultPathToXml the features in this XML file are used if no other option is set
-     */
-    public LoadFeatureListProviderFixture(TestLoader loader, String defaultPathToXml) {
-        super();
-        this.loader = loader;
-        this.defaultPath = defaultPathToXml;
-    }
 
     /**
      * Additionally include a shell feature in the "single" features
@@ -99,7 +94,7 @@ class LoadFeatureListProviderFixture<T extends FeatureInput> {
         if (features.isPresent()) {
             return features.get();
         } else {
-            return loadFeatures(loader, defaultPath);
+            return loadFeatures(loader, defaultPathToXML);
         }
     }
 
