@@ -25,36 +25,24 @@
  */
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
-import loci.formats.IFormatWriter;
-import loci.formats.out.OMETiffWriter;
-import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
+import org.anchoranalysis.io.bioformats.bean.writer.Tiff;
+import org.anchoranalysis.test.image.rasterwriter.TiffTestBase;
 
 /**
- * Writes a stack to the filesystem as an <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/">OME-TIFF</a> using the <a
- * href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a> library.
- *
- * <p>This is particularly useful for stacks of images that have an unusual number of channels
- * (neither 1 or 3 channels), and which most other file formats cannot support.
+ * Tests writing TIFFs using the Bioformats plugin.
  *
  * @author Owen Feehan
  */
-public class OMETiff extends BioformatsWriter {
+public class TiffTest extends TiffTestBase {
 
-    /**
-     * Default constructor.
-     */
-    public OMETiff() {
-        super(true);
-    }
-    
-    @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return "ome.tif";
+    static {
+        ConfigureBioformatsLogging.instance().makeSureConfigured();
     }
 
     @Override
-    protected IFormatWriter createWriter() throws ImageIOException {
-        return new OMETiffWriter();
+    protected StackWriter createWriter() {
+        return new Tiff();
     }
 }

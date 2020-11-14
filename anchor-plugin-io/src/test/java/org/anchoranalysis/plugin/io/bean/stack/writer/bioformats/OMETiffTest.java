@@ -23,46 +23,52 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import org.anchoranalysis.plugin.io.bean.stack.writer.bioformats.OMEXML;
+import org.anchoranalysis.io.bioformats.bean.writer.OMETiff;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
 import org.junit.Test;
 
 /**
- * Creates <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-xml/">OME-XML</a> files of various types, and checks they are identical to previously-saved copies in resources.
+ * Creates <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/">OME-TIFF</a> files of various types, and checks they are identical to previously-saved copies in resources.
  * 
  * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be used to quickly created the saved copies in the resources.
  * 
  * @author Owen Feehan
  *
  */
-public class OMEXMLTest extends OMETestBase {   // NOSONAR
+public class OMETiffTest extends OMETestBase {
 
-    private static final ComparisonPlan COMPARISON_PLAN = new ComparisonPlan(false, Optional.of("ome.tif"), false);
+    /** 
+     * The plan on how to compare images.
+     * 
+     * <p>Do not do a byewiseComparison as the OME-TIFF files contain differences
+     * each time a new file is produced. Unsure why, perhaps connected with UUIDs?
+     */
+    private static final ComparisonPlan COMPARISON_PLAN = new ComparisonPlan(false, Optional.empty(), false);
     
-    public OMEXMLTest() {
-        super("ome.xml", COMPARISON_PLAN);
+    public OMETiffTest() {
+        super("ome.tif", COMPARISON_PLAN);
     }
     
-    @Test(expected = ImageIOException.class)
+    @Test
     public void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);
     }
 
-    @Test(expected = ImageIOException.class)
+    @Test
     public void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
     }
 
     @Override
     protected StackWriter createWriter() {
-        return new OMEXML();
+        return new OMETiff();
     }
 }

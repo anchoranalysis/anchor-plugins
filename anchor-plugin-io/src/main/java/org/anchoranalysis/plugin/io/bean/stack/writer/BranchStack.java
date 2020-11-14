@@ -28,7 +28,8 @@ package org.anchoranalysis.plugin.io.bean.stack.writer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriterDelegateBase;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
@@ -39,7 +40,7 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
  *
  * @author Owen Feehan
  */
-public class BranchStack extends RasterWriterDelegateBase {
+public class BranchStack extends StackWriterDelegateBase {
 
     // START BEAN PROPERTIES
     /** Writer to use if it is guaranteed that the image will always be 2D. */

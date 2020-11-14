@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.rasterwriter;
+package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import static org.junit.Assert.*;
 

@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.OneOrThreeChannelsWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.OneOrThreeChannelsWriter;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.opencv.imgcodecs.Imgcodecs;

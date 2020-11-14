@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Implementations of {@link org.anchoranalysis.image.io.bean.stack.StackWriter} and any other types
+ * Implementations of {@link org.anchoranalysis.image.io.bean.stack.writer.StackWriter} and any other types
  * of writers that use OpenCV.
  */
 package org.anchoranalysis.plugin.opencv.bean.writer;
