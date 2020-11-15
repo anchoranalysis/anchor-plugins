@@ -57,10 +57,9 @@ public class Autoname extends ChannelMap {
 
         NamedEntries map = new NamedEntries();
 
-        // null indicates that there are no names
-        Optional<List<String>> names = openedRaster.channelNames();
-
         try {
+            Optional<List<String>> names = openedRaster.channelNames();
+            
             boolean rgb = openedRaster.isRGB() && openedRaster.numberChannels() == 3;
 
             // The insertion order is critical here to remember R, G, B
