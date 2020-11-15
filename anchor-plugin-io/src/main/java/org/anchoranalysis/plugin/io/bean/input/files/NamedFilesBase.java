@@ -41,7 +41,9 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 import org.anchoranalysis.io.input.files.NamedFile;
 import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -50,6 +52,7 @@ import lombok.Setter;
  *
  * @param <T> input-type
  */
+@NoArgsConstructor @AllArgsConstructor
 public abstract class NamedFilesBase<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
@@ -59,18 +62,18 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
     /**
      * Creates a list of inputs from a {@link FilesProvider} which together with the {@code namer} can create the inputs.
      * 
-     * @param filesProvider the files-provider
+     * @param files the files-provider
      * @param params parameters for the input-manager
      * @param mapToInput a function that maps a created {@link NamedFile} to the eventual input-type. 
      * @return a newly created list of inputs
      * @throws InputReadFailedException
      */
-    protected List<T> createInputsFromFiles(FilesProvider filesProvider, InputManagerParams params, Function<NamedFile,T> mapToInput) throws InputReadFailedException {
+    protected List<T> createInputsFromFiles(FilesProvider files, InputManagerParams params, Function<NamedFile,T> mapToInput) throws InputReadFailedException {
         try {
-            Collection<File> files = filesProvider.create(params);
+            Collection<File> filesCreated = files.create(params);
 
             return FunctionalList.mapToList(
-                    namer.deriveNameUnique(files, params.getLogger()), mapToInput);
+                    namer.deriveNameUnique(filesCreated, params.getLogger()), mapToInput);
         } catch (FilesProviderException e) {
             throw new InputReadFailedException("Cannot find files", e);
         }

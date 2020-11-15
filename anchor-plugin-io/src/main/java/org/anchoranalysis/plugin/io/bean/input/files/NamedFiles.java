@@ -33,6 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.files.FileInput;
 
@@ -46,15 +47,20 @@ public class NamedFiles extends NamedFilesBase<FileInput> {
 
     // START BEAN PROPERTIES
     /** The files to use as inputs. */
-    @BeanField @Getter @Setter private FilesProvider filesProvider;
+    @BeanField @Getter @Setter private FilesProvider files;
     // END BEAN PROPERTIES
 
-    public NamedFiles(FilesProvider filesProvider) {
-        this.filesProvider = filesProvider;
+    public NamedFiles(FilesProvider files) {
+        this.files = files;
+    }
+    
+    public NamedFiles(FilesProvider files, FileNamer namer) {
+        super(namer);
+        this.files = files;
     }
 
     @Override
     public List<FileInput> inputs(InputManagerParams params) throws InputReadFailedException {
-        return createInputsFromFiles(filesProvider, params, FileInput::new);
+        return createInputsFromFiles(files, params, FileInput::new);
     }
 }

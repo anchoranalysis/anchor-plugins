@@ -38,13 +38,13 @@ public class NamedFilesWithDirectory extends NamedFilesBase<FileWithDirectoryInp
 
     // START BEAN PROPERTIES
     /** The files to use as inputs. */
-    @BeanField @Getter @Setter private FilesProviderWithDirectory filesProvider;
+    @BeanField @Getter @Setter private FilesProviderWithDirectory files;
     // END BEAN PROPERTIES
     
     @Override
     public List<FileWithDirectoryInput> inputs(InputManagerParams params)
             throws InputReadFailedException {
-        return createInputsFromFiles(filesProvider, params, namedFile -> new FileWithDirectoryInput(namedFile, filesProvider.getDirectoryAsPath(params.getInputContext())) );
+        return createInputsFromFiles(files, params, namedFile -> new FileWithDirectoryInput(namedFile, files.getDirectoryAsPath(params.getInputContext())) );
     }
 
 }

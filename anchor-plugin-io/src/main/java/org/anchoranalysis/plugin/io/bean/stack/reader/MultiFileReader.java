@@ -87,8 +87,8 @@ public class MultiFileReader extends StackReader {
                 bag.add(
                         new FileDetails(
                                 f.toPath().toAbsolutePath(),
-                                filePathParser.getChannelNum(),
-                                filePathParser.getZSliceNum(),
+                                filePathParser.getChannelIndex(),
+                                filePathParser.getZSliceIndex(),
                                 filePathParser.getTimeIndex()));
             }
         }

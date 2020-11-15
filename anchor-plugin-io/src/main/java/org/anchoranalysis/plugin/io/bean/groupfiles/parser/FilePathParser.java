@@ -33,9 +33,9 @@ public abstract class FilePathParser extends AnchorBean<FilePathParser> {
 
     public abstract boolean setPath(String path);
 
-    public abstract Optional<Integer> getChannelNum();
+    public abstract Optional<Integer> getChannelIndex();
 
-    public abstract Optional<Integer> getZSliceNum();
+    public abstract Optional<Integer> getZSliceIndex();
 
     public abstract Optional<Integer> getTimeIndex();
 

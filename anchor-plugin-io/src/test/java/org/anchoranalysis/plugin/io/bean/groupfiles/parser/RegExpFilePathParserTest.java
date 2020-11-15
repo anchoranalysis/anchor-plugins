@@ -44,13 +44,13 @@ public class RegExpFilePathParserTest {
 
         parser.setPath("hello_4_2_world");
 
-        assertTrue(parser.getChannelNum().get() == 2);
-        assertTrue(parser.getZSliceNum().get() == 4);
+        assertTrue(parser.getChannelIndex().get() == 2);
+        assertTrue(parser.getZSliceIndex().get() == 4);
 
         parser.setChannelGroupID(0);
 
         parser.setPath("hello_5_7_world");
 
-        assertTrue(parser.getZSliceNum().get() == 5);
+        assertTrue(parser.getZSliceIndex().get() == 5);
     }
 }
