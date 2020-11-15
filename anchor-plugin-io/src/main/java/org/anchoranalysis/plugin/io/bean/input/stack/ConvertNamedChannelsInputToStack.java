@@ -35,10 +35,10 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -145,33 +145,24 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
             throws OperationFailedException {
         try {
             if (channelName.isPresent()) {
-                try {
-                    Channel channel =
-                            channels.getChannel(
-                                    channelName.get(),
-                                    timeIndex,
-                                    new ProgressOneOfMany(progress));
-                    return new Stack(channel);
-                } catch (GetOperationFailedException e) {
-                    throw new OperationFailedException(e);
-                }
+                return new Stack( extractChannel(channels, channelName.get(), progress) );
             } else if (channels.isRGB()) {
-                return rgbStackFromChannels(channels);
+                return rgbStackFromChannels(channels, progress);
             } else {
                 return channels.allChannelsAsStack(timeIndex).get();
             }
-        } catch (ImageIOException e) {
+        } catch (ImageIOException | GetOperationFailedException e) {
             throw new OperationFailedException(e);
         }
     }
     
-    private Stack rgbStackFromChannels(NamedChannelsForSeries channels) throws OperationFailedException {
+    private Stack rgbStackFromChannels(NamedChannelsForSeries channels, ProgressMultiple progress) throws OperationFailedException {
         if (channels.numberChannels() !=3 ) {
             throw new OperationFailedException("There must be exactly 3 channels for a RGB stack, but there are " + channels.numberChannels());
         }
         
         try {
-            return new Stack(true, extractChannel(channels,"red"), extractChannel(channels,"green"), extractChannel(channels,"blue") );
+            return new Stack(true, extractChannel(channels, RGBChannelNames.RED,progress), extractChannel(channels,RGBChannelNames.GREEN,progress), extractChannel(channels,RGBChannelNames.BLUE,progress) );
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         } catch (GetOperationFailedException e) {
@@ -179,7 +170,7 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
         }
     }
     
-    private Channel extractChannel(NamedChannelsForSeries channels, String channelName) throws GetOperationFailedException {
-        return channels.getChannel(channelName, timeIndex, ProgressIgnore.get());
+    private Channel extractChannel(NamedChannelsForSeries channels, String channelName, ProgressMultiple progress) throws GetOperationFailedException {
+        return channels.getChannel(channelName, timeIndex, new ProgressOneOfMany(progress));
     }
 }
