@@ -37,6 +37,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
@@ -55,10 +56,6 @@ import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
  * @author Owen Feehan
  */
 public class RGB extends ChannelConvertStyle {
-
-    private static final String CHANNEL_NAME_RED = "red";
-    private static final String CHANNEL_NAME_GREEN = "green";
-    private static final String CHANNEL_NAME_BLUE = "blue";
 
     // START BEAN PROPERTIES
     /**
@@ -102,9 +99,9 @@ public class RGB extends ChannelConvertStyle {
             ChannelGetterForTimepoint channelGetter, MessageLogger logger) throws CreateException {
 
         Stack stackRearranged = new Stack();
-        addChannelOrBlank(CHANNEL_NAME_RED, channelGetter, stackRearranged, logger);
-        addChannelOrBlank(CHANNEL_NAME_GREEN, channelGetter, stackRearranged, logger);
-        addChannelOrBlank(CHANNEL_NAME_BLUE, channelGetter, stackRearranged, logger);
+        addChannelOrBlank(RGBChannelNames.RED, channelGetter, stackRearranged, logger);
+        addChannelOrBlank(RGBChannelNames.GREEN, channelGetter, stackRearranged, logger);
+        addChannelOrBlank(RGBChannelNames.BLUE, channelGetter, stackRearranged, logger);
         return stackRearranged;
     }
 
@@ -136,9 +133,9 @@ public class RGB extends ChannelConvertStyle {
 
         for (String key : channelNames) {
             // If a key doesn't match one of the expected red-green-blue names
-            if (!(key.equals(CHANNEL_NAME_RED)
-                    || key.equals(CHANNEL_NAME_GREEN)
-                    || key.equals(CHANNEL_NAME_BLUE))) {
+            if (!(key.equals(RGBChannelNames.RED)
+                    || key.equals(RGBChannelNames.GREEN)
+                    || key.equals(RGBChannelNames.BLUE))) {
                 return false;
             }
         }

@@ -44,6 +44,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
@@ -124,9 +125,9 @@ public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack
 
             Progress progress = ProgressIgnore.get();
 
-            Channel red = namedChannels.getChannel("red", 0, progress);
-            Channel blue = namedChannels.getChannel("blue", 0, progress);
-            Channel green = namedChannels.getChannel("green", 0, progress);
+            Channel red = namedChannels.getChannel(RGBChannelNames.RED, 0, progress);
+            Channel green = namedChannels.getChannel(RGBChannelNames.GREEN, 0, progress);
+            Channel blue = namedChannels.getChannel(RGBChannelNames.BLUE, 0, progress);
 
             if (!red.dimensions().equals(blue.dimensions())
                     || !blue.dimensions().equals(green.dimensions())) {
