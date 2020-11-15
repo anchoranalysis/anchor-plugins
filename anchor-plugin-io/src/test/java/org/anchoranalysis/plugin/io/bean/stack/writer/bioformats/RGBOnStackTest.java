@@ -62,7 +62,7 @@ public class RGBOnStackTest {
     }
     
     private void assertForFormat(String formatExtension) {
-        assertTrue( loadStack(formatExtension).isRgb() );
+        assertTrue( loadStack(formatExtension).isRGB() );
     }
     
     private Stack loadStack(String extension) {

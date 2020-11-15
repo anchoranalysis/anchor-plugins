@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
-import org.anchoranalysis.plugin.io.bean.stack.writer.ImageIOWriter;
 import org.anchoranalysis.test.image.rasterwriter.PNGTestBase;
 
 public class ImageIOWriterTest extends PNGTestBase {

@@ -75,7 +75,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
     }
 
     @Override
-    public Optional<List<String>> channelNames() {
+    public Optional<List<String>> channelNames() throws ImageIOException {
         return delegate.channelNames();
     }
 
