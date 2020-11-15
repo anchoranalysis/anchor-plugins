@@ -60,7 +60,7 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
     @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
 
     /** A path to the main channel of each file */
-    @BeanField @Getter @Setter private FilesProviderWithDirectory filesProvider;
+    @BeanField @Getter @Setter private FilesProviderWithDirectory files;
 
     /** Assigns each input a unique compact name. */
     @BeanField @Getter @Setter private FileNamer namer = new LastDirectories();
@@ -82,6 +82,6 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
 
     protected InputManager<FileInput> fileInputManager() throws BeanMisconfiguredException {
         return InputManagerFactory.createFiles(
-                rootName, filesProvider, namer, regex, filterFilesCsv);
+                rootName, files, namer, regex, filterFilesCsv);
     }
 }

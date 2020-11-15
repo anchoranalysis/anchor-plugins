@@ -121,7 +121,7 @@ public class ExperimentResultsExperimentStructure extends FilesProvider {
         Rooted out = new Rooted();
         out.setDisableDebugMode(true);
         out.setRootName(rootName);
-        out.setFilesProvider(createFiles());
+        out.setFiles(createFiles());
         return out;
     }
 
