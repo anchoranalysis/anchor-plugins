@@ -30,10 +30,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
@@ -48,15 +46,13 @@ import org.anchoranalysis.plugin.io.bean.channel.map.Autoname;
  */
 public class NamedChannels extends NamedChannelsBase {
 
-    // START BEANS
+    // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<FileInput> fileInput;
-
-    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
-
+    
     @BeanField @Getter @Setter private ChannelMap channelMap = new Autoname();
 
     @BeanField @Getter @Setter private boolean useLastSeriesIndexOnly = false;
-    // END BEANS
+    // END BEAN PROPERTIES
 
     @Override
     public List<NamedChannelsInputPart> inputs(InputManagerParams params)

@@ -34,13 +34,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.core.progress.ProgressOneOfMany;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
@@ -48,7 +47,7 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 
 public class AnnotationComparisonInputManager<T extends InputFromManager>
-        extends InputManager<AnnotationComparisonInput<T>> {
+        extends InputManagerWithStackReader<AnnotationComparisonInput<T>> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<T> input;
@@ -60,8 +59,6 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
     @BeanField @Getter @Setter private Comparer comparerLeft;
 
     @BeanField @Getter @Setter private Comparer comparerRight;
-
-    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
     // END BEAN PROPERTIES
 
     @Override
@@ -103,6 +100,6 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
                                 inputFromList,
                                 Tuple.of(comparerLeft, comparerRight),
                                 Tuple.of(nameLeft, nameRight),
-                                stackReader));
+                                getStackReader()));
     }
 }

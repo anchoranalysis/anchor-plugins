@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.files.FileInput;
 import org.anchoranalysis.plugin.io.bean.channel.map.FromEntries;

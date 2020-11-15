@@ -36,14 +36,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.core.progress.ProgressOneOfMany;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
@@ -56,9 +54,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<NamedChannelsInputPart> input;
-
-    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
-
+    
     @BeanField @OptionalBean @Getter @Setter private List<NamedBean<DerivePath>> listAppend;
 
     @BeanField @Getter @Setter private boolean forceEagerEvaluation = false;
@@ -75,13 +71,13 @@ public class NamedChannelsAppend extends NamedChannelsBase {
         try (ProgressMultiple progressMultiple =
                 new ProgressMultiple(params.getProgress(), 2)) {
 
-            Iterator<NamedChannelsInputPart> itr = input.inputs(params).iterator();
+            Iterator<NamedChannelsInputPart> iterator = input.inputs(params).iterator();
 
             progressMultiple.incrementWorker();
 
             List<NamedChannelsInputPart> listTemp = new ArrayList<>();
-            while (itr.hasNext()) {
-                listTemp.add(itr.next());
+            while (iterator.hasNext()) {
+                listTemp.add(iterator.next());
             }
 
             List<NamedChannelsInputPart> outList =
@@ -103,24 +99,24 @@ public class NamedChannelsAppend extends NamedChannelsBase {
             throws InputReadFailedException {
         try {
             return FunctionalProgress.mapListOptional(
-                    listTemp, progress, ncc -> maybeAppend(ncc, debugMode));
+                    listTemp, progress, channels -> maybeAppend(channels, debugMode));
         } catch (DerivePathException e) {
             throw new InputReadFailedException(e);
         }
     }
 
     private Optional<NamedChannelsInputPart> maybeAppend(
-            final NamedChannelsInputPart ncc, boolean debugMode) throws DerivePathException {
+            final NamedChannelsInputPart channels, boolean debugMode) throws DerivePathException {
         if (ignoreFileNotFoundAppend) {
 
             try {
-                return Optional.of(append(ncc, debugMode));
+                return Optional.of(append(channels, debugMode));
             } catch (DerivePathException e) {
                 return Optional.empty();
             }
 
         } else {
-            return Optional.of(append(ncc, debugMode));
+            return Optional.of(append(channels, debugMode));
         }
     }
 
@@ -149,7 +145,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
                 }
             }
 
-            out = new AppendPart(out, namedPath.getName(), 0, outPath, stackReader);
+            out = new AppendPart(out, namedPath.getName(), 0, outPath, getStackReader());
         }
 
         return out;
