@@ -31,9 +31,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
@@ -46,12 +45,10 @@ import org.anchoranalysis.io.input.files.FileInput;
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class Stacks extends InputManager<StackSequenceInput> {
+public class Stacks extends InputManagerWithStackReader<StackSequenceInput> {
 
     // START BEANS
     @BeanField @Getter @Setter private InputManager<FileInput> fileInput;
-
-    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     @BeanField @Getter @Setter private boolean useLastSeriesIndexOnly;
     // END BEANS

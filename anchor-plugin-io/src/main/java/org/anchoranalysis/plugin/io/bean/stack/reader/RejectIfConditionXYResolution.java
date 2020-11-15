@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.math.relation.RelationToValue;
 

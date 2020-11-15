@@ -32,7 +32,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
@@ -46,10 +47,13 @@ import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCs
  *
  * <p>This provides a quicker means to specify certain projects.
  *
+ * <p>Note that {@code stackReader} is used for reading the main input-raster and {@code stackReaderAppend}
+ * is used for reading any appended files. Both are initialized to a default reader if not specified.
+ * 
  * @author Owen Feehan
  * @param <T> input-type
  */
-public abstract class QuickBase<T extends InputFromManager> extends InputManager<T> {
+public abstract class QuickBase<T extends InputFromManager> extends InputManagerWithStackReader<T> {
 
     // START BEAN PROPERTIES
     /** If non-empty then a rooted filesystem is used with this root */
@@ -71,9 +75,6 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
      * name of the experiment.
      */
     @BeanField @OptionalBean @Getter @Setter private String regex;
-
-    /** The raster-reader for reading the main file */
-    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     /** The raster-reader for reading any appended files */
     @BeanField @DefaultInstance @Getter @Setter private StackReader stackReaderAppend;

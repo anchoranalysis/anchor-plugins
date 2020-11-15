@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
