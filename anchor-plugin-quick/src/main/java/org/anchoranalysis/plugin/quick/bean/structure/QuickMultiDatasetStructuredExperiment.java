@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.io.ReplaceInputManager;
@@ -171,7 +171,7 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
     }
 
     @Override
-    public void executeExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
         populateDelegateIfNeeded();
         delegate.executeExperiment(arguments);

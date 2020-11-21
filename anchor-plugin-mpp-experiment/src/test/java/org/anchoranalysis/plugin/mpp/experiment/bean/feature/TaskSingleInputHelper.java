@@ -42,9 +42,9 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
@@ -160,7 +160,7 @@ class TaskSingleInputHelper {
             throws InputReadFailedException {
         ParametersExperiment params =
                 new ParametersExperiment(
-                        new ExperimentExecutionArguments(Paths.get(".")),
+                        new ExecutionArguments(Paths.get(".")),
                         "arbitraryExperimentName",
                         Optional.empty(),
                         outputter,

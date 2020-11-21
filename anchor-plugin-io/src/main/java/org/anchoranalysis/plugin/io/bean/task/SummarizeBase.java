@@ -33,9 +33,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -93,11 +93,11 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
     /** Extract object for summary. */
     protected abstract S extractObjectForSummary(T input);
 
-    private void summarizeExperimentArguments(MessageLogger log, ExperimentExecutionArguments arguments) {
-        arguments.getInputDirectory()
+    private void summarizeExperimentArguments(MessageLogger log, ExecutionArguments arguments) {
+        arguments.input().getInputDirectory()
                 .ifPresent(dir -> log.logFormatted("An input-directory has been set as %s", dir));
 
-        arguments.getOutputDirectory()
+        arguments.output().getOutputDirectory()
                 .ifPresent(dir -> log.logFormatted("An output-directory has been set as %s", dir));
     }
 }

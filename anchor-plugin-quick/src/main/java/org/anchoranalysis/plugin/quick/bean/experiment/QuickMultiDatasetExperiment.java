@@ -42,8 +42,8 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
@@ -147,7 +147,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     }
 
     @Override
-    public void executeExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         delegate.secondInitBeforeExecution(
@@ -168,7 +168,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
         return true;
     }
 
-    private void executeAllDatasets(ExperimentExecutionArguments expArgs) {
+    private void executeAllDatasets(ExecutionArguments expArgs) {
         Logger reporter = new Logger(new ConsoleMessageLogger());
 
         MonitoredSequentialExecutor<String> serialExecutor =
@@ -183,7 +183,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     }
 
     private boolean executeSingleDataset(
-            String name, ExperimentExecutionArguments expArgs, ErrorReporter errorReporter) {
+            String name, ExecutionArguments expArgs, ErrorReporter errorReporter) {
 
         // Set the name of the experiment
         experimentIdentifier.setName(name + identifierSuffix);

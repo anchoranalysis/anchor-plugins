@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.quick.bean.experiment;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
@@ -69,7 +69,7 @@ class RepeatedExperiment<T extends InputFromManager, S> {
      */
     public void executeForManager(
             InputManager<T> inputManager,
-            ExperimentExecutionArguments expArgs,
+            ExecutionArguments expArgs,
             BeanInstanceMap defaultInstances)
             throws ExperimentExecutionException {
 
