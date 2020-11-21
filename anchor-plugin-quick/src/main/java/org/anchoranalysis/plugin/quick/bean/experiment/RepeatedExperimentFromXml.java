@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
@@ -96,7 +96,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
      */
     public void executeForManagerFromXml(
             String datasetName,
-            ExperimentExecutionArguments expArgs,
+            ExecutionArguments expArgs,
             BeanInstanceMap defaultInstances)
             throws ExperimentExecutionException {
 
@@ -108,7 +108,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
 
     public void executeForManager(
             InputManager<T> inputManager,
-            ExperimentExecutionArguments expArgs,
+            ExecutionArguments expArgs,
             BeanInstanceMap defaultInstances)
             throws ExperimentExecutionException {
         delegate.executeForManager(inputManager, expArgs, defaultInstances);

@@ -38,8 +38,8 @@ import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
@@ -107,7 +107,7 @@ public class QuickExperiment<S> extends Experiment {
     }
 
     @Override
-    public void executeExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
         delegate.associateXml(getXMLConfiguration());
 
