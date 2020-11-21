@@ -33,16 +33,19 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 
 public class AppendKeyValueParams extends FilePathBaseAppendToManager {
 
+    private static final String PARAMS_FILENAME_WITHOUT_EXTENSION = "keyValueParams";
+    
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean includeFileName = false;
 
     // If non-empty this directory is appended to make the out path string
-    @BeanField @AllowEmpty @Getter @Setter private String subDirectory = "";
+    @BeanField @AllowEmpty @Getter @Setter private String subdirectory = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -53,16 +56,14 @@ public class AppendKeyValueParams extends FilePathBaseAppendToManager {
 
     @Override
     protected String createOutPathString() throws BeanMisconfiguredException {
-
         String firstPart = selectMaybeDir(selectFirstPart());
-
-        return String.format("%s/keyValueParams.xml", firstPart);
+        return NonImageFileFormat.XML.buildPath(firstPart, PARAMS_FILENAME_WITHOUT_EXTENSION);
     }
 
     private String selectMaybeDir(String firstPart) {
 
-        if (!subDirectory.isEmpty()) {
-            return String.format("%s/%s", firstPart, subDirectory);
+        if (!subdirectory.isEmpty()) {
+            return String.format("%s/%s", firstPart, subdirectory);
         } else {
             return firstPart;
         }

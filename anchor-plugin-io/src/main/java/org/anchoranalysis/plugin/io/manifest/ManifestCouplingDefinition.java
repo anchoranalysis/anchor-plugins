@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
@@ -50,7 +51,7 @@ import org.apache.commons.logging.LogFactory;
 // Links image manifests to experimental manifests
 public class ManifestCouplingDefinition implements InputFromManager {
 
-    private static final String JOB_MANIFEST_FILENAME_TO_READ = Task.OUTPUT_MANIFEST + ".ser";
+    private static final String JOB_MANIFEST_FILENAME_TO_READ = NonImageFileFormat.SERIALIZED_BINARY.buildPath(Task.OUTPUT_MANIFEST);
 
     private List<CoupledManifests> listCoupledManifests = new ArrayList<>();
     private MultiMap mapExperimentalToImages = new MultiValueMap();

@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 
@@ -43,7 +44,7 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 public class AppendStackDirect extends FilePathBaseAppendToManager {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String extension = "tif";
+    @BeanField @Getter @Setter private String extension = ImageFileFormat.TIFF.getDefaultExtension();
     // END BEAN PROPERTIES
 
     @Override

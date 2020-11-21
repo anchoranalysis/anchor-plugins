@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 
 /** A CSV that is appended from the root of a project */
 public class AppendCsv extends FilePathAppendBase {
@@ -44,6 +45,6 @@ public class AppendCsv extends FilePathAppendBase {
 
     @Override
     protected String createOutPathString() throws BeanMisconfiguredException {
-        return String.format("%s/%s.csv", firstPart(), getFileId());
+        return NonImageFileFormat.CSV.buildPath(firstPart(), getFileId());
     }
 }

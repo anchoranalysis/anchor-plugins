@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
@@ -129,12 +130,14 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
     }
 
     private String output() {
-        return String.format("%s../IO/OutputManager/%s.xml", pathPrefix(), experimentType);
+        String directory = pathPrefix() + "../IO/OutputManager";
+        return NonImageFileFormat.XML.buildPath(directory, experimentType);
     }
 
     private String loggerPath(String suffix) {
-        return String.format(
-                "%s/include/logger%s.xml", pathPrefix(), StringUtils.capitalize(suffix));
+        String directory = pathPrefix() + "include/";
+        String filename = "logger" + StringUtils.capitalize(suffix);
+        return NonImageFileFormat.XML.buildPath(directory, filename);
     }
 
     private String pathPrefix() {

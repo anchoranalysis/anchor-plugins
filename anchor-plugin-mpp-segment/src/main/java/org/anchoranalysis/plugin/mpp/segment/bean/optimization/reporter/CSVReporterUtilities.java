@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.io.generator.text.TextFileOutputter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -43,7 +44,7 @@ public class CSVReporterUtilities {
             FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams,
             String manifestFunction) {
         return TextFileOutputter.create(
-                "csv",
+                NonImageFileFormat.CSV.extensionWithoutPeriod(),
                 Optional.of(new ManifestDescription("csv", manifestFunction)),
                 initParams.getInitContext().getOutputter().getChecked(),
                 outputName);

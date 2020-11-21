@@ -30,6 +30,7 @@ import static org.anchoranalysis.plugin.io.test.image.HelperReadWriteObjects.*;
 import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Path;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -83,7 +84,7 @@ public class ObjectCollectionCompressionTest {
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
 
-        Path pathOut = root.resolve(TEMPORARY_FOLDER_OUT + ".h5");
+        Path pathOut = NonImageFileFormat.HDF5.buildPath(root, TEMPORARY_FOLDER_OUT);
 
         ObjectCollection objectsCompressed = writeAndReadAgain(objectsUncompressed, root, pathOut);
 

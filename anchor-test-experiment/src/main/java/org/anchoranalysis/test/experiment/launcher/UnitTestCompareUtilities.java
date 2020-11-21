@@ -29,6 +29,7 @@ package org.anchoranalysis.test.experiment.launcher;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
@@ -96,7 +97,7 @@ public class UnitTestCompareUtilities {
 
         String[] subdirectories = selectSubdirectories(pathTestDataDirectory, includeShared);
 
-        TestLoader loaderTemp =
+        TestLoader loaderTemporary =
                 launcher.runExperimentInTemporaryDirectory(
                         createPathExperiment(experimentName),
                         Optional.of(createPathReplacementInput(pathTestDataDirectory)),
@@ -108,19 +109,19 @@ public class UnitTestCompareUtilities {
         String pathSavedOutput = createPathSavedOutput(experimentName);
 
         return DualComparerFactory.compareTwoSubdirectoriesInLoader(
-                loader, pathSavedOutput, loaderTemp, pathOutput);
+                loader, pathSavedOutput, loaderTemporary, pathOutput);
     }
 
     private static String createPathExperiment(String experimentName) {
-        return String.format("anchorConfig/Experiments/DNAPipeline/%s.xml", experimentName);
+        return NonImageFileFormat.XML.buildPath("anchorConfig/Experiments/DNAPipeline/", experimentName);
     }
 
     private static String createPathReplacementInput(String pathTestDataDirectory) {
-        return String.format("%s/input.xml", pathTestDataDirectory);
+        return NonImageFileFormat.XML.buildPath(pathTestDataDirectory, "input");
     }
 
     private static String createPathReplacementOutput(String pathTestDataDirectory) {
-        return String.format("%s/outputManager.xml", pathTestDataDirectory);
+        return NonImageFileFormat.XML.buildPath(pathTestDataDirectory, "outputManager");
     }
 
     private static String createPathTestDataDirectory(String experimentName) {

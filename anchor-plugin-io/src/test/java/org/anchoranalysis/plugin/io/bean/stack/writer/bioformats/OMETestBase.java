@@ -26,6 +26,7 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import java.io.IOException;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -51,12 +52,12 @@ public abstract class OMETestBase extends RasterWriterTestBase {
     /**
      * Creates for a particular extension and types of comparison.
      *
-     * @param extension the extension (without a leading period).
+     * @param format the format to be tested and written.
      * @param comparisonPlan what kind of comparisons to execute on the tests.
      */
     public OMETestBase(
-            String extension, ComparisonPlan comparisonPlan) {
-        super(extension, true, comparisonPlan);
+            ImageFileFormat format, ComparisonPlan comparisonPlan) {
+        super(format, true, comparisonPlan);
     }
 
     @Test
