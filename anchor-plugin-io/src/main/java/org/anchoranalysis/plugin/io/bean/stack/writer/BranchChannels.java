@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.function.Supplier;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
@@ -35,8 +36,11 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 /**
  * Uses different raster-writers depending on the number/type of channels.
  *
- * <p>If any optional condition does not have a writer, then {@code writer} is used in this case.
+ * <p>If any optional condition does not have a writer, then {@code writer} is used in this case. An
+ * exception is {@code whenBinaryChannel}, which instead falls back to {@code whenSingleChannel} if unspecified.
  *
+ * <p>{@code whenBinaryChannel} is given precedence over {@code whenSingleChannel}.
+ * 
  * @author Owen Feehan
  */
 public class BranchChannels extends StackWriterDelegateBase {
@@ -46,7 +50,7 @@ public class BranchChannels extends StackWriterDelegateBase {
     @BeanField @Getter @Setter private StackWriter writer;
 
     /**
-     * Writer employed if a stack is a single-channeled image.
+     * Writer employed if a stack is a single-channeled image, not guaranteed to be binary.
      */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenSingleChannel;
     
@@ -59,6 +63,11 @@ public class BranchChannels extends StackWriterDelegateBase {
      * Writer employed if a stack is a <b>three-channeled RGB</b> image.
      */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGB;
+    
+    /** 
+     * Writer employed if a stack is a <b>single-channeled binary</b> image.
+     */
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenBinaryChannel;
     // END BEAN PROPERTIES
 
     @Override
@@ -68,17 +77,33 @@ public class BranchChannels extends StackWriterDelegateBase {
         } else if (writeOptions.isThreeChannels()) {
             return writerOrDefault(whenThreeChannels);
         } else if (writeOptions.isSingleChannel()) {
-            return writerOrDefault(whenSingleChannel);            
+            return singleChannel(writeOptions);
         } else {
             return writer;
         }
     }
+    
+    private StackWriter singleChannel(StackWriteOptions writeOptions) {
+        if (writeOptions.isBinary()) {
+            return writerOrFallback(whenBinaryChannel, this::singleNonBinaryChannel);
+        } else {
+            return singleNonBinaryChannel();
+        }
+    }
+    
+    private StackWriter singleNonBinaryChannel() {
+        return writerOrDefault(whenSingleChannel);
+    }
 
     private StackWriter writerOrDefault(StackWriter writerMaybeNull) {
+        return writerOrFallback(writerMaybeNull, () -> writer);
+    }
+    
+    private static StackWriter writerOrFallback(StackWriter writerMaybeNull, Supplier<StackWriter> writerFallback) {
         if (writerMaybeNull != null) {
             return writerMaybeNull;
         } else {
-            return writer;
+            return writerFallback.get();
         }
     }
 }
