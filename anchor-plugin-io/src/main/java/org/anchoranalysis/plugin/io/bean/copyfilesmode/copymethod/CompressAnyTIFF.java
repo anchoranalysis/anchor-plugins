@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod;
 import java.nio.file.Path;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.format.ImageFileFormat;
 
 /**
  * Create a voxelwise <b>compressed copy</b> of any TIFF file being copied, and otherwise do a {@link Bytewise} copy.
@@ -46,7 +47,7 @@ public class CompressAnyTIFF extends CopyFilesMethod {
         String fileName = source.getFileName().toString().toLowerCase();
 
         try {
-            if (fileName.endsWith(".tif") || fileName.endsWith(".tiff")) {
+            if (ImageFileFormat.TIFF.matches(fileName)) {
                 CopyTIFFAndCompress.apply(source.toString(), destination);
             } else {
                 simpleCopy.makeCopy(source, destination);

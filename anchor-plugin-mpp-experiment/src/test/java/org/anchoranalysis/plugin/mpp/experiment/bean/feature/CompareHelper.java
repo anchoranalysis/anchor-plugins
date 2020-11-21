@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.OperationFailedRuntimeException;
+import org.anchoranalysis.core.format.ImageFileFormat;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
@@ -99,13 +101,13 @@ class CompareHelper {
     private static boolean compareForExtra(DualComparer comparer, String relativePath)
             throws OperationFailedException {
         try {
-            if (hasExtension(relativePath, ".tif")) {
+            if (ImageFileFormat.TIFF.matches(relativePath)) {
                 return comparer.compareTwoImages(relativePath);
-            } else if (hasExtension(relativePath, ".csv")) {
+            } else if (NonImageFileFormat.CSV.matches(relativePath)) {
                 return comparer.compareTwoCsvFiles(relativePath, CSV_COMPARER, System.out);
-            } else if (hasExtension(relativePath, ".xml")) {
+            } else if (NonImageFileFormat.XML.matches(relativePath)) {
                 return comparer.compareTwoXmlDocuments(relativePath);
-            } else if (hasExtension(relativePath, ".h5")) {
+            } else if (NonImageFileFormat.HDF5.matches(relativePath)) {
                 return comparer.compareTwoObjectCollections(relativePath);
             } else {
                 throw new OperationFailedRuntimeException("Extension not supported");
@@ -113,10 +115,5 @@ class CompareHelper {
         } catch (IOException | CSVReaderException e) {
             throw new OperationFailedException(e);
         }
-    }
-
-    /** Does a string end in an extension, ignoring case? */
-    private static boolean hasExtension(String str, String endsWith) {
-        return str.toLowerCase().endsWith(endsWith);
     }
 }

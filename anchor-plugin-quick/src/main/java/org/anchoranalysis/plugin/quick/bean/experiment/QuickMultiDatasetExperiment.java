@@ -39,6 +39,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
@@ -81,7 +82,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     // debug-mode and uses this instead.
     @BeanField @AllowEmpty @Getter @Setter private String datasetSpecific = "";
 
-    @BeanField @Getter @Setter private String beanExtension = ".xml";
+    @BeanField @Getter @Setter private String beanExtension = NonImageFileFormat.XML.extensionWithPeriod();
 
     /** Relative path to a logger for the experiment in gneeral */
     @BeanField @Getter @Setter private String logExperimentPath = "";

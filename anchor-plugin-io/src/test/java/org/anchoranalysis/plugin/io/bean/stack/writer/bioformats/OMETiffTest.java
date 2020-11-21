@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import java.io.IOException;
 import java.util.Optional;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -54,7 +55,7 @@ public class OMETiffTest extends OMETestBase {
     private static final ComparisonPlan COMPARISON_PLAN = new ComparisonPlan(false, Optional.empty(), false);
     
     public OMETiffTest() {
-        super("ome.tif", COMPARISON_PLAN);
+        super(ImageFileFormat.OME_TIFF, COMPARISON_PLAN);
     }
     
     @Test

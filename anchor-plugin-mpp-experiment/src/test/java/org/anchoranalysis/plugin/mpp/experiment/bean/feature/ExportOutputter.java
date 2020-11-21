@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -56,7 +57,7 @@ class ExportOutputter {
         "energyStack/energyStack_02.tif",
         "energyStackParams.xml",
         "grouped/arbitraryGroup/featuresAggregatedGroup.xml",
-        String.format("objects/%s.h5", MultiInputFixture.OBJECTS_NAME),
+        NonImageFileFormat.HDF5.buildPath("objects",MultiInputFixture.OBJECTS_NAME),
         "job_manifest.ser.xml"
     };
 }

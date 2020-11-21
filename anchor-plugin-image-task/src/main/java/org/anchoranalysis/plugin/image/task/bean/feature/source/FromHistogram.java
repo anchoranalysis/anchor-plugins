@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -166,11 +167,11 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     private static Histogram readHistogramFromCsv(FileInput input) throws CSVReaderException {
         File file = input.getFile();
 
-        if (!file.getName().toLowerCase().endsWith(".csv")) {
+        if (NonImageFileFormat.CSV.matches(file.getName())) {
+            return HistogramCSVReader.readHistogramFromFile(file.toPath());    
+        } else {
             throw new CSVReaderException(
-                    "This task expects a CSV fule encoding a histogram as input. The file path must end with .csv");
+                    "This task expects a CSV file encoding a histogram as input. The file path must end with " + NonImageFileFormat.CSV.extensionWithPeriod());
         }
-
-        return HistogramCSVReader.readHistogramFromFile(file.toPath());
     }
 }

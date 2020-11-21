@@ -30,11 +30,12 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.StackSeries;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
  * A base class for a {@link StackWriter} delegates to another {@link StackWriter} based on values
- * of a {@link StackWriteOptions}.
+ * of a {@link StackWriteAttributes}.
  *
  * @author Owen Feehan
  */

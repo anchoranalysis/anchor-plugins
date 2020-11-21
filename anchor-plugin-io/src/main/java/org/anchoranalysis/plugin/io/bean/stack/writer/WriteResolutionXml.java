@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -85,7 +85,7 @@ public class WriteResolutionXml extends StackWriter {
     private void writeResolutionXml(Path filePath, Optional<Resolution> resolution)
             throws ImageIOException {
         if (resolution.isPresent()) {
-            Path pathOut = Paths.get(filePath.toString() + ".xml");
+            Path pathOut = NonImageFileFormat.XML.buildPath(filePath);
             ResolutionAsXml.writeResolutionXml(resolution.get(), pathOut);
         }
     }

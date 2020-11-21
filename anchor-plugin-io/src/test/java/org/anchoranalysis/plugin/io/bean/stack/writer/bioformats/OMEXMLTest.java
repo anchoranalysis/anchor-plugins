@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import java.io.IOException;
 import java.util.Optional;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -45,10 +46,10 @@ import org.junit.Test;
  */
 public class OMEXMLTest extends OMETestBase {   // NOSONAR
 
-    private static final ComparisonPlan COMPARISON_PLAN = new ComparisonPlan(false, Optional.of("ome.tif"), false);
+    private static final ComparisonPlan COMPARISON_PLAN = new ComparisonPlan(false, Optional.of(ImageFileFormat.OME_TIFF), false);
     
     public OMEXMLTest() {
-        super("ome.xml", COMPARISON_PLAN);
+        super(ImageFileFormat.OME_XML, COMPARISON_PLAN);
     }
     
     @Test(expected = ImageIOException.class)

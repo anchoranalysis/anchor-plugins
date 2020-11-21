@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
@@ -112,7 +113,7 @@ public class QuickExperiment<S> extends Experiment {
 
         Path combinedFileFilter = BeanPathUtilities.pathRelativeToBean(this, fileInput);
 
-        if (combinedFileFilter.endsWith(".xml") || combinedFileFilter.endsWith(".XML")) {
+        if (NonImageFileFormat.XML.matches(combinedFileFilter)) {
 
             // Creates from an XML bean
             delegate.setInput(createInputManagerBean(combinedFileFilter));

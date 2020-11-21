@@ -51,7 +51,7 @@ public class BranchStack extends StackWriterDelegateBase {
 
     @Override
     protected StackWriter selectDelegate(StackWriteOptions writeOptions) {
-        if (writeOptions.isAlways2D()) {
+        if (writeOptions.getAttributes().isAlways2D()) {
             return writerAlways2D;
         } else {
             return writerElse;

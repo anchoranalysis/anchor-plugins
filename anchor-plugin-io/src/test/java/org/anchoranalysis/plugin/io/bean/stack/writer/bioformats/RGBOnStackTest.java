@@ -26,6 +26,7 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import static org.junit.Assert.assertTrue;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
@@ -48,17 +49,17 @@ public class RGBOnStackTest {
 
     @Test
     public void testOMETiff() {
-        assertForFormat("ome.tif");
+        assertForFormat(ImageFileFormat.OME_TIFF.getDefaultExtension());
     }
     
     @Test
     public void testTiff() {
-        assertForFormat("tif");
+        assertForFormat(ImageFileFormat.TIFF.getDefaultExtension());
     }
     
     @Test
     public void testPNG() {
-        assertForFormat("png");
+        assertForFormat(ImageFileFormat.PNG.getDefaultExtension());
     }
     
     private void assertForFormat(String formatExtension) {

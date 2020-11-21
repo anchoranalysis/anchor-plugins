@@ -31,6 +31,7 @@ import java.util.function.Supplier;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
@@ -72,11 +73,12 @@ public class BranchChannels extends StackWriterDelegateBase {
 
     @Override
     protected StackWriter selectDelegate(StackWriteOptions writeOptions) {
-        if (writeOptions.isRgb()) {
+        StackWriteAttributes attributes = writeOptions.getAttributes();
+        if (attributes.isRgb()) {
             return writerOrDefault(whenRGB);
-        } else if (writeOptions.isThreeChannels()) {
+        } else if (attributes.isThreeChannels()) {
             return writerOrDefault(whenThreeChannels);
-        } else if (writeOptions.isSingleChannel()) {
+        } else if (attributes.isSingleChannel()) {
             return singleChannel(writeOptions);
         } else {
             return writer;
@@ -84,7 +86,7 @@ public class BranchChannels extends StackWriterDelegateBase {
     }
     
     private StackWriter singleChannel(StackWriteOptions writeOptions) {
-        if (writeOptions.isBinary()) {
+        if (writeOptions.getAttributes().isBinary()) {
             return writerOrFallback(whenBinaryChannel, this::singleNonBinaryChannel);
         } else {
             return singleNonBinaryChannel();
