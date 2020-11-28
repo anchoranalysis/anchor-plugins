@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
@@ -85,7 +85,10 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
     @Override
     public SharedStateSelectedSlice beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<NamedChannelsInput> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<NamedChannelsInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new SharedStateSelectedSlice(outputter);

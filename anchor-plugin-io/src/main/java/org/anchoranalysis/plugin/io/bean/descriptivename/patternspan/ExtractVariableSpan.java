@@ -126,10 +126,10 @@ class ExtractVariableSpan {
             return extractFromFittedElements(fittedElements.get());
         } else {
             throw new OperationFailedException(
-                    String.format("Cannot match pattern %s against %s", pattern, str));            
+                    String.format("Cannot match pattern %s against %s", pattern, str));
         }
     }
-    
+
     private String extractFromFittedElements(String[] fittedElements) {
         Preconditions.checkArgument(fittedElements.length == pattern.size());
 

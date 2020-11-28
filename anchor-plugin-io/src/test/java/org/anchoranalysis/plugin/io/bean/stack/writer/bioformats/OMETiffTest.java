@@ -37,27 +37,29 @@ import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
 import org.junit.Test;
 
 /**
- * Creates <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/">OME-TIFF</a> files of various types, and checks they are identical to previously-saved copies in resources.
- * 
- * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be used to quickly created the saved copies in the resources.
- * 
- * @author Owen Feehan
+ * Creates <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/">OME-TIFF</a> files of
+ * various types, and checks they are identical to previously-saved copies in resources.
  *
+ * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be
+ * used to quickly created the saved copies in the resources.
+ *
+ * @author Owen Feehan
  */
 public class OMETiffTest extends OMETestBase {
 
-    /** 
+    /**
      * The plan on how to compare images.
-     * 
-     * <p>Do not do a byewiseComparison as the OME-TIFF files contain differences
-     * each time a new file is produced. Unsure why, perhaps connected with UUIDs?
+     *
+     * <p>Do not do a byewiseComparison as the OME-TIFF files contain differences each time a new
+     * file is produced. Unsure why, perhaps connected with UUIDs?
      */
-    private static final ComparisonPlan COMPARISON_PLAN = new ComparisonPlan(false, Optional.empty(), false);
-    
+    private static final ComparisonPlan COMPARISON_PLAN =
+            new ComparisonPlan(false, Optional.empty(), false);
+
     public OMETiffTest() {
         super(ImageFileFormat.OME_TIFF, COMPARISON_PLAN);
     }
-    
+
     @Test
     public void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);

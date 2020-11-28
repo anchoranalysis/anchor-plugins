@@ -113,7 +113,8 @@ public class UnitTestCompareUtilities {
     }
 
     private static String createPathExperiment(String experimentName) {
-        return NonImageFileFormat.XML.buildPath("anchorConfig/Experiments/DNAPipeline/", experimentName);
+        return NonImageFileFormat.XML.buildPath(
+                "anchorConfig/Experiments/DNAPipeline/", experimentName);
     }
 
     private static String createPathReplacementInput(String pathTestDataDirectory) {
@@ -144,7 +145,8 @@ public class UnitTestCompareUtilities {
      *     location ../../shared relative to the rest root)
      * @return an array of subdirectory paths (relative to the rest root)
      */
-    private static String[] selectSubdirectories(String pathTestDataDirectory, boolean includeShared) {
+    private static String[] selectSubdirectories(
+            String pathTestDataDirectory, boolean includeShared) {
         if (includeShared) {
             return new String[] {
                 "anchorConfig",

@@ -94,8 +94,8 @@ class MapPart extends NamedChannelsInputPart {
 
     // Where most of our time is being taken up when opening a raster
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, Progress progress) throws ImageIOException {
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
+            throws ImageIOException {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {

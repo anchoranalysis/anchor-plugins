@@ -34,9 +34,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
  * A base class for {@link CopyFilesNaming} classes that use a regular-expression.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class RegularExpressionBase extends CopyFilesNamingOne {
 

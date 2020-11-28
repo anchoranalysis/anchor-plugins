@@ -95,13 +95,12 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
      * @throws ExperimentExecutionException
      */
     public void executeForManagerFromXml(
-            String datasetName,
-            ExecutionArguments expArgs,
-            BeanInstanceMap defaultInstances)
+            String datasetName, ExecutionArguments expArgs, BeanInstanceMap defaultInstances)
             throws ExperimentExecutionException {
 
         // Create a bean for the dataset and execute
-        InputManager<T> input = createInputManager(datasetName, pathDatasetDirectory, beanExtension);
+        InputManager<T> input =
+                createInputManager(datasetName, pathDatasetDirectory, beanExtension);
 
         delegate.executeForManager(input, expArgs, defaultInstances);
     }

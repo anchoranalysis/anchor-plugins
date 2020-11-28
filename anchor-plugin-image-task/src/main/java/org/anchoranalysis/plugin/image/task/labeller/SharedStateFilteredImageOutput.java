@@ -53,8 +53,10 @@ import org.anchoranalysis.plugin.image.task.bean.labeller.ImageLabeller;
  */
 public class SharedStateFilteredImageOutput<T> {
 
-    private static final ManifestDirectoryDescription MANIFEST_DIRECTORY_LABELS = new ManifestDirectoryDescription("labels","labelled_outputs", new StringsWithoutOrder() );
-    
+    private static final ManifestDirectoryDescription MANIFEST_DIRECTORY_LABELS =
+            new ManifestDirectoryDescription(
+                    "labels", "labelled_outputs", new StringsWithoutOrder());
+
     private ImageLabeller<T> filter;
     private Outputter baseOutputter;
 
@@ -67,15 +69,21 @@ public class SharedStateFilteredImageOutput<T> {
     private boolean groupIdentifierForCalled = false;
 
     private final String outputNameImages;
-    
+
     /**
      * @param baseOutputter
      * @param filter the filter must not yet have been inited()
-     * @param outputNameMapping the output-name for the CSV that is created showing the mapping between inputs and labels.
-     * @param outputNameImages the output-name for the labels sub-directory in which copies images are placed in sub-directories.
+     * @param outputNameMapping the output-name for the CSV that is created showing the mapping
+     *     between inputs and labels.
+     * @param outputNameImages the output-name for the labels sub-directory in which copies images
+     *     are placed in sub-directories.
      * @throws CreateException
      */
-    public SharedStateFilteredImageOutput(Outputter baseOutputter, ImageLabeller<T> filter, String outputNameMapping, String outputNameImages)
+    public SharedStateFilteredImageOutput(
+            Outputter baseOutputter,
+            ImageLabeller<T> filter,
+            String outputNameMapping,
+            String outputNameImages)
             throws CreateException {
 
         this.baseOutputter = baseOutputter;
@@ -86,7 +94,8 @@ public class SharedStateFilteredImageOutput<T> {
         try {
             this.csvWriter =
                     FeatureCSVWriter.create(
-                            new FeatureCSVMetadata(outputNameMapping, Arrays.asList("name", "group")),
+                            new FeatureCSVMetadata(
+                                    outputNameMapping, Arrays.asList("name", "group")),
                             baseOutputter);
         } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
@@ -126,7 +135,7 @@ public class SharedStateFilteredImageOutput<T> {
 
     /** groupIdentifierFor should always called at least once before getOutputManagerFor */
     public Optional<Outputter> getOutputterFor(String groupIdentifier) {
-        return outputters.map( outputter -> outputter.getOutputterFor(groupIdentifier) );
+        return outputters.map(outputter -> outputter.getOutputterFor(groupIdentifier));
     }
 
     public T getFilterInitParams(Path pathForBinding) throws InitException {
@@ -137,9 +146,16 @@ public class SharedStateFilteredImageOutput<T> {
     }
 
     private void initFilterOutputters(Path pathForBinding) throws InitException {
-        Optional<Outputter> outputterLabelsSubdirectory = baseOutputter.writerSelective().createSubdirectory(outputNameImages, MANIFEST_DIRECTORY_LABELS, false);
-        this.outputters = OptionalUtilities.map( outputterLabelsSubdirectory, directory ->
-                new GroupedMultiplexOutputters(
-                        directory, filter.allLabels(getFilterInitParams(pathForBinding))));
+        Optional<Outputter> outputterLabelsSubdirectory =
+                baseOutputter
+                        .writerSelective()
+                        .createSubdirectory(outputNameImages, MANIFEST_DIRECTORY_LABELS, false);
+        this.outputters =
+                OptionalUtilities.map(
+                        outputterLabelsSubdirectory,
+                        directory ->
+                                new GroupedMultiplexOutputters(
+                                        directory,
+                                        filter.allLabels(getFilterInitParams(pathForBinding))));
     }
 }

@@ -55,9 +55,8 @@ import org.junit.Test;
 
 /**
  * Tests {@link OutlinePreserveRelativeSize}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class OutlinePreserveRelativeSizeTest {
 

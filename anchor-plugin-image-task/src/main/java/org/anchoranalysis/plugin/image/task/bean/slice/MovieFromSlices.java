@@ -80,7 +80,10 @@ public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack
 
     @Override
     public OutputSequenceIncrementing<Stack> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<NamedChannelsInput> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<NamedChannelsInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return OutputSequenceStackFactory.NO_RESTRICTIONS.incrementingByOneCurrentDirectory(

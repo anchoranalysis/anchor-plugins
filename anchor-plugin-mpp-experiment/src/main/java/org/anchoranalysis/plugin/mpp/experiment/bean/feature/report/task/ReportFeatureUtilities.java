@@ -39,8 +39,7 @@ import org.anchoranalysis.io.output.bean.ReportFeature;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ReportFeatureUtilities {
 
-    public static <T> List<String> headerNames(
-            List<? extends ReportFeature<T>> list) {
+    public static <T> List<String> headerNames(List<? extends ReportFeature<T>> list) {
         return FunctionalList.mapToList(list, ReportFeature::title);
     }
 

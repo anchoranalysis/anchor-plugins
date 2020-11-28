@@ -92,9 +92,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesIndex,
-            Progress progress)
+            NamedProviderStore<TimeSequence> stackCollection, int seriesIndex, Progress progress)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }

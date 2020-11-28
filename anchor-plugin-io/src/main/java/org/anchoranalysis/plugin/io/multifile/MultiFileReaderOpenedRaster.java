@@ -56,8 +56,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress)
-            throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
 
         try {
             progress.open();
@@ -117,8 +116,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
         throw new ImageIOException("MultiFileReader doesn't support this operation");
     }
 
-    private void addDetailsFromBag(
-            MultiFile multiFile, int seriesIndex, Progress progress)
+    private void addDetailsFromBag(MultiFile multiFile, int seriesIndex, Progress progress)
             throws ImageIOException {
 
         for (FileDetails fd : fileBag) {

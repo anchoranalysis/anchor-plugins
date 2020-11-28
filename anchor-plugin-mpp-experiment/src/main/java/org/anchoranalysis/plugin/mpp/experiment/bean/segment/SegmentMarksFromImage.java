@@ -65,7 +65,7 @@ import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
 
 /**
  * Segments an image into a collection of {@link Mark}s.
- * 
+ *
  * <p>The following outputs are produced:
  *
  * <table>
@@ -81,7 +81,7 @@ import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
- * 
+ *
  * @author Owen Feehan
  */
 public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
@@ -124,7 +124,10 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
     @Override
     public ExperimentState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<MultiInput> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<MultiInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         ExperimentState experimentState = segment.createExperimentState();
         experimentState.outputBeforeAnyTasksAreExecuted(outputter);
@@ -146,7 +149,11 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
             MarkCollection marks =
                     segment.duplicateBean()
-                            .segment(stackCollection, objects, paramsCreated, inputBound.getContextJob());
+                            .segment(
+                                    stackCollection,
+                                    objects,
+                                    paramsCreated,
+                                    inputBound.getContextJob());
             writeVisualization(
                     marks, inputBound.getOutputter(), stackCollection, inputBound.getLogger());
 

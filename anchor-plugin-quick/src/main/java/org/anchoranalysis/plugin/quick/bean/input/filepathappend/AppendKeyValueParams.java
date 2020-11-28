@@ -40,7 +40,7 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 public class AppendKeyValueParams extends FilePathBaseAppendToManager {
 
     private static final String PARAMS_FILENAME_WITHOUT_EXTENSION = "keyValueParams";
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean includeFileName = false;
 

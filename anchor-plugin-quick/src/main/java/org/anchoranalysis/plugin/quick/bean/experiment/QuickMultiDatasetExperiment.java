@@ -82,7 +82,8 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     // debug-mode and uses this instead.
     @BeanField @AllowEmpty @Getter @Setter private String datasetSpecific = "";
 
-    @BeanField @Getter @Setter private String beanExtension = NonImageFileFormat.XML.extensionWithPeriod();
+    @BeanField @Getter @Setter
+    private String beanExtension = NonImageFileFormat.XML.extensionWithPeriod();
 
     /** Relative path to a logger for the experiment in gneeral */
     @BeanField @Getter @Setter private String logExperimentPath = "";

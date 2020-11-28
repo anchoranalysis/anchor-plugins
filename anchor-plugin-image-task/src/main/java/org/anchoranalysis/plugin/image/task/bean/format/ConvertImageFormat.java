@@ -119,7 +119,10 @@ public class ConvertImageFormat
 
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<NamedChannelsInput> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<NamedChannelsInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }

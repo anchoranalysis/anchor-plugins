@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.image.task.grouped;
 
+import lombok.Getter;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import lombok.Getter;
 
 /**
  * Checks that the histograms created from channels all have the same data type, res, max-value etc.
@@ -60,7 +60,7 @@ public class ConsistentChannelChecker {
     private boolean isMaxValueSet() {
         return maxValue != 0;
     }
-    
+
     private void setMaxValue(long histogramMaxValue) throws SetOperationFailedException {
 
         if (histogramMaxValue > UnsignedShortVoxelType.MAX_VALUE) {

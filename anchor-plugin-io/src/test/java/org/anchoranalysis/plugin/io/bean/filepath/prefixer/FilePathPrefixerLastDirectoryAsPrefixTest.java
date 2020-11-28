@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.junit.Test;
 
 public class FilePathPrefixerLastDirectoryAsPrefixTest {
-    
+
     @Test
     public void test() throws PathPrefixerException {
 

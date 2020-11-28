@@ -36,22 +36,20 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.CSVRow;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * A column (or portion of a column) in a CSV file, with each row describing a point for a unique voxel that lies within an object.
- * 
- * @author Owen Feehan
+ * A column (or portion of a column) in a CSV file, with each row describing a point for a unique
+ * voxel that lies within an object.
  *
+ * @author Owen Feehan
  */
 @Value
 class ObjectInCsvColumn {
 
-    /**
-     * The index of a column describing a unique-pixel within an object.
-     */
+    /** The index of a column describing a unique-pixel within an object. */
     @Getter private final int indexColumnUniqueVoxel;
-    
+
     /**
-     * If there are two points encoded in the <i>unique-pixel</i> column, rather than one,
-     * then whether to select the first or the second. 
+     * If there are two points encoded in the <i>unique-pixel</i> column, rather than one, then
+     * whether to select the first or the second.
      */
     @Getter private final boolean first;
 
@@ -62,7 +60,8 @@ class ObjectInCsvColumn {
      * @return a string describing the object's point (as above) and its exact number-of-voxels
      */
     public String describeObject(CSVRow csvRow) {
-        return ArrayExtracter.getAsPoint(csvRow.getLine(), indexColumnUniqueVoxel, first).toString();
+        return ArrayExtracter.getAsPoint(csvRow.getLine(), indexColumnUniqueVoxel, first)
+                .toString();
     }
 
     /**
@@ -78,8 +77,7 @@ class ObjectInCsvColumn {
             throws OperationFailedException {
         return findObjectThatMatches(
                 allObjects,
-                ArrayExtracter.getAsPoint(csvRow.getLine(), indexColumnUniqueVoxel, first)
-        );
+                ArrayExtracter.getAsPoint(csvRow.getLine(), indexColumnUniqueVoxel, first));
     }
 
     /**
@@ -88,25 +86,23 @@ class ObjectInCsvColumn {
      * @param objectsToSearch the objects to search for a particular object
      * @param point a point the particular object must contain
      * @return the object that contains the point
-     * @throws OperationFailedException if no matching object can be found, or more than one is found
+     * @throws OperationFailedException if no matching object can be found, or more than one is
+     *     found
      */
     private static ObjectMask findObjectThatMatches(
-            ObjectCollectionRTree objectsToSearch, Point3i point)
-            throws OperationFailedException {
+            ObjectCollectionRTree objectsToSearch, Point3i point) throws OperationFailedException {
 
         ObjectCollection objects = objectsToSearch.contains(point);
 
-        if (objects.size()>1) {
+        if (objects.size() > 1) {
             throw new OperationFailedException("More than object lies on point: " + point);
         }
 
-        if (objects.size()==0) {
+        if (objects.size() == 0) {
             throw new OperationFailedException(
-                    String.format(
-                            "Cannot find matching object for %s",
-                            point.toString()));
+                    String.format("Cannot find matching object for %s", point.toString()));
         }
-        
+
         return objects.get(0);
     }
 }

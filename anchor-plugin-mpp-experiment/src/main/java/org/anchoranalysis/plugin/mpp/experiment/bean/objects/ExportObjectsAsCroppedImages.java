@@ -135,7 +135,10 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
 
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<MultiInput> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<MultiInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }

@@ -75,10 +75,7 @@ class InputManagerFactory {
      */
     private static InputManager<FileInput> createFiles(
             String rootName, FilesProviderWithDirectory files, FileNamer namer) {
-        return new NamedFiles(
-           createMaybeRootedFileProvider(rootName, files),
-           namer
-        );
+        return new NamedFiles(createMaybeRootedFileProvider(rootName, files), namer);
     }
 
     private static FilesProvider createMaybeRootedFileProvider(

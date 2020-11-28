@@ -45,9 +45,9 @@ import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
-
 /**
- * Creates a report of feature values from a {@link DeserializedManifest} and a {@link ManifestCouplingDefinition}.
+ * Creates a report of feature values from a {@link DeserializedManifest} and a {@link
+ * ManifestCouplingDefinition}.
  *
  * <p>The following outputs are produced:
  *
@@ -60,11 +60,12 @@ import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
  * <tr><td rowspan="3"><i>inherited from {@link ExportReportFeatures}</i></td></tr>
  * </tbody>
  * </table>
- * 
+ *
  * @author Owen Feehan
  */
 public class ExportReportFeaturesFromManifest
-        extends ExportReportFeatures<ManifestCouplingDefinition,NoSharedState,DeserializedManifest> {
+        extends ExportReportFeatures<
+                ManifestCouplingDefinition, NoSharedState, DeserializedManifest> {
 
     @Override
     public InputTypesExpected inputTypesExpected() {
@@ -72,12 +73,15 @@ public class ExportReportFeaturesFromManifest
     }
 
     @Override
-    public NoSharedState beforeAnyJobIsExecuted(Outputter outputter,
-            ConcurrencyPlan concurrencyPlan, List<ManifestCouplingDefinition> inputs,
-            ParametersExperiment params) throws ExperimentExecutionException {
+    public NoSharedState beforeAnyJobIsExecuted(
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<ManifestCouplingDefinition> inputs,
+            ParametersExperiment params)
+            throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
-    
+
     @Override
     public void doJobOnInput(InputBound<ManifestCouplingDefinition, NoSharedState> params)
             throws JobExecutionException {
@@ -98,16 +102,17 @@ public class ExportReportFeaturesFromManifest
             throws ExperimentExecutionException {
         // NOTHING TO DO
     }
-    
+
     private void writeCSV(CSVWriter writer, ManifestCouplingDefinition input, Logger logger)
             throws JobExecutionException {
         try {
-            writer.writeHeaders( headerNames(Optional.empty()) );
+            writer.writeHeaders(headerNames(Optional.empty()));
 
             Iterator<CoupledManifests> iterator = input.iteratorCoupledManifests();
             while (iterator.hasNext()) {
                 try {
-                    writeFeaturesIntoReporter(iterator.next().getJobManifest(), writer, Optional.empty(), logger);
+                    writeFeaturesIntoReporter(
+                            iterator.next().getJobManifest(), writer, Optional.empty(), logger);
                 } catch (NumberFormatException e) {
                     throw new JobExecutionException(e);
                 }

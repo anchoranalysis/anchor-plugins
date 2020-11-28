@@ -44,7 +44,8 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 public class AppendStack extends FilePathBaseAppendToManagerWithFileID {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String extension = ImageFileFormat.TIFF.getDefaultExtension();
+    @BeanField @Getter @Setter
+    private String extension = ImageFileFormat.TIFF.getDefaultExtension();
     // END BEAN PROPERTIES
 
     @Override

@@ -34,14 +34,14 @@ import org.anchoranalysis.core.exception.CreateException;
 
 /**
  * A method used for copying files (e.g. bytewise or activating compression etc.).
- * 
+ *
  * @author Owen Feehan
-  */
+ */
 public abstract class CopyFilesMethod extends AnchorBean<CopyFilesMethod> {
 
     /**
      * Makes a copy of the file at {@code source} at {@code destination}.
-     * 
+     *
      * @param source the path of the file to copy from
      * @param destination the path to create a copy at
      * @throws CreateException if anything goes wrong
@@ -56,11 +56,13 @@ public abstract class CopyFilesMethod extends AnchorBean<CopyFilesMethod> {
     }
 
     /**
-     * Like {@link #makeCopy(Path,Path)} but after any necessary directories are created so {@code destination} can be written.
+     * Like {@link #makeCopy(Path,Path)} but after any necessary directories are created so {@code
+     * destination} can be written.
      *
      * @param source
      * @param destination
      * @throws CreateException
      */
-    protected abstract void makeCopyWithDirectory(Path source, Path destination) throws CreateException;
+    protected abstract void makeCopyWithDirectory(Path source, Path destination)
+            throws CreateException;
 }

@@ -180,7 +180,10 @@ public class SegmentInstanceWithModel<T>
 
     @Override
     public SharedStateSegmentInstance<T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan plan, List<StackSequenceInput> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan plan,
+            List<StackSequenceInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             initializeBeans(params.getContext());
@@ -209,7 +212,10 @@ public class SegmentInstanceWithModel<T>
 
             if (!segments.isEmpty() || !ignoreNoObjects) {
                 writeOutputsForImage(
-                        stack, segments.asObjects(), background, input.getContextJob().getOutputter());
+                        stack,
+                        segments.asObjects(),
+                        background,
+                        input.getContextJob().getOutputter());
 
                 calculateFeaturesForImage(input, stack, segments.asList());
             }
@@ -268,7 +274,8 @@ public class SegmentInstanceWithModel<T>
                         new InitParamsWithEnergyStack(energyStack, input.getContextJob()),
                         true,
                         input.getSharedState()
-                                .createInputProcessContext(Optional.empty(), input.getContextJob()));
+                                .createInputProcessContext(
+                                        Optional.empty(), input.getContextJob()));
         calculator.calculateFeaturesForObjects(
                 deriveObjects(segments),
                 energyStack,
@@ -332,9 +339,7 @@ public class SegmentInstanceWithModel<T>
             throws OperationFailedException {
         try {
             TimeSequence sequence =
-                    input.getInput()
-                            .createStackSequenceForSeries(0)
-                            .get(ProgressIgnore.get());
+                    input.getInput().createStackSequenceForSeries(0).get(ProgressIgnore.get());
             return sequence.get(0);
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);

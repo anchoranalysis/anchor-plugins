@@ -152,7 +152,11 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
 
         List<NamedChannelsInput> result = new ArrayList<>();
         while (iterator1.hasNext() && iterator2.hasNext()) {
-            result.add(new GroupingInput(iterator1.next().getFile().toPath(), iterator2.next(), imgChannelMapCreator));
+            result.add(
+                    new GroupingInput(
+                            iterator1.next().getFile().toPath(),
+                            iterator2.next(),
+                            imgChannelMapCreator));
         }
         return result;
     }

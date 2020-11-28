@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -46,12 +47,11 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueIndexRangeDownhill;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
-import lombok.AllArgsConstructor;
 
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
 
     private static final byte OUT_ON = BinaryValuesByte.getDefault().getOnByte();
-    
+
     @Override
     public VoxelsWrapper reconstruction(
             VoxelsWrapper mask, VoxelsWrapper marker, Optional<ObjectMask> containingMask) {
@@ -61,14 +61,16 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         marker.subtractFromMaxValue();
         mask.subtractFromMaxValue();
 
-        VoxelsWrapper reconstructed = new VoxelsWrapper(reconstructionByDilation(mask, marker.any(), containingMask));
+        VoxelsWrapper reconstructed =
+                new VoxelsWrapper(reconstructionByDilation(mask, marker.any(), containingMask));
         reconstructed.subtractFromMaxValue();
         return reconstructed;
     }
 
     /**
-     * markerForReconstruction is now in the same condition as the 'strong' condition in the Robinson paper.
-     * 
+     * markerForReconstruction is now in the same condition as the 'strong' condition in the
+     * Robinson paper.
+     *
      * <p>All pixels are either 0 or their final value (from channel).
      */
     private <T> Voxels<?> reconstructionByDilation(
@@ -90,11 +92,12 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         // We put all non-zero pixels in our queue (these correspond to our seeds from our marker,
         // but let's iterate the image again
         //  for sake of keeping modularity
-        
+
         VoxelProcessor<T> processor = new VoxelProcessor<>(queue, OUT_ON);
-        
+
         if (containingMask.isPresent()) {
-            IterateVoxelsObjectMask.withTwoMixedBuffers(containingMask.get(), marker, voxelsFinalized, processor);
+            IterateVoxelsObjectMask.withTwoMixedBuffers(
+                    containingMask.get(), marker, voxelsFinalized, processor);
         } else {
             IterateVoxelsAll.withTwoMixedBuffers(marker, voxelsFinalized, processor);
         }
@@ -123,7 +126,12 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
                 ProcessVoxelNeighborFactory.within(
                         containingMask,
                         extent,
-                        new PointProcessor(bufferMarker, bufferMask, bufferFinalized, queue, binaryValuesFinalized));
+                        new PointProcessor(
+                                bufferMarker,
+                                bufferMask,
+                                bufferFinalized,
+                                queue,
+                                binaryValuesFinalized));
 
         Neighborhood neighborhood = NeighborhoodFactory.of(false);
         boolean do3D = extent.z() > 1;
@@ -143,17 +151,18 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
                     point, neighborhood, do3D, process, nextVal, extent.offsetSlice(point));
         }
     }
-    
+
     @AllArgsConstructor
-    private static class VoxelProcessor<T> implements ProcessVoxelBufferBinaryMixed<T, UnsignedByteBuffer> {
-        
+    private static class VoxelProcessor<T>
+            implements ProcessVoxelBufferBinaryMixed<T, UnsignedByteBuffer> {
+
         private final PriorityQueueIndexRangeDownhill<Point3i> queue;
-        
+
         private final byte maskOn;
 
         @Override
-        public void process(Point3i point, VoxelBuffer<T> buffer1, UnsignedByteBuffer buffer2,
-                int offset) {
+        public void process(
+                Point3i point, VoxelBuffer<T> buffer1, UnsignedByteBuffer buffer2, int offset) {
             int value = buffer1.getInt(offset);
             if (value != 0) {
                 queue.put(point, value);

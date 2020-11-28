@@ -168,10 +168,11 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         File file = input.getFile();
 
         if (NonImageFileFormat.CSV.matchesEnd(file.getName())) {
-            return HistogramCSVReader.readHistogramFromFile(file.toPath());    
+            return HistogramCSVReader.readHistogramFromFile(file.toPath());
         } else {
             throw new CSVReaderException(
-                    "This task expects a CSV file encoding a histogram as input. The file path must end with " + NonImageFileFormat.CSV.extensionWithPeriod());
+                    "This task expects a CSV file encoding a histogram as input. The file path must end with "
+                            + NonImageFileFormat.CSV.extensionWithPeriod());
         }
     }
 }

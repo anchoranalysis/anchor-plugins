@@ -54,7 +54,7 @@ import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 public class Autoname extends ChannelMap {
 
     private static final String[] RGB_CHANNEL_NAMES = RGBChannelNames.rgbArray();
-    
+
     @Override
     public NamedEntries createMap(OpenedRaster openedRaster) throws CreateException {
 
@@ -62,13 +62,13 @@ public class Autoname extends ChannelMap {
 
         try {
             Optional<List<String>> names = openedRaster.channelNames();
-            
+
             boolean rgb = openedRaster.isRGB() && openedRaster.numberChannels() == 3;
 
             // The insertion order is critical here to remember R, G, B
-            FunctionalIterate.repeatWithIndex(openedRaster.numberChannels(), channelIndex ->
-                addEntryToMap(map, names, rgb, channelIndex)
-            );
+            FunctionalIterate.repeatWithIndex(
+                    openedRaster.numberChannels(),
+                    channelIndex -> addEntryToMap(map, names, rgb, channelIndex));
 
         } catch (ImageIOException e) {
             throw new CreateException(e);
@@ -76,8 +76,9 @@ public class Autoname extends ChannelMap {
 
         return map;
     }
-    
-    private static void addEntryToMap(NamedEntries map, Optional<List<String>> names, boolean rgb, int channelIndex) {
+
+    private static void addEntryToMap(
+            NamedEntries map, Optional<List<String>> names, boolean rgb, int channelIndex) {
         String entryName = nameFor(channelIndex, names, rgb);
         map.add(new ChannelEntry(entryName, channelIndex));
     }

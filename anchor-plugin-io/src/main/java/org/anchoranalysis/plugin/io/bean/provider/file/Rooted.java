@@ -85,7 +85,10 @@ public class Rooted extends FilesProvider {
 
             Path directoryNew =
                     RootedFilePathUtilities.deriveRootedPath(
-                            directoryOriginal, rootName, params.isDebugModeActivated(), disableDebugMode);
+                            directoryOriginal,
+                            rootName,
+                            params.isDebugModeActivated(),
+                            disableDebugMode);
 
             boolean directoryNewExists = directoryNew.toFile().exists();
 
@@ -99,7 +102,8 @@ public class Rooted extends FilesProvider {
             }
 
             if (!directoryNewExists) {
-                throw new FilesProviderException(String.format("Path %s' does not exist", directoryNew));
+                throw new FilesProviderException(
+                        String.format("Path %s' does not exist", directoryNew));
             }
 
             log.debug(String.format("Setting new directory '%s'%n", directoryNew));

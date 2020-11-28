@@ -69,7 +69,8 @@ public class CoupledManifests implements InputFromManager {
                     getExperimentManifest().get().getRootDirectory().calculatePath();
 
             PathDifference difference =
-                    PathDifference.differenceFrom(experimentRootDirectory, jobManifest.getRootPath());
+                    PathDifference.differenceFrom(
+                            experimentRootDirectory, jobManifest.getRootPath());
             return difference.combined().toString();
 
         } else {

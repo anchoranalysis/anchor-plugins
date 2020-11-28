@@ -37,11 +37,9 @@ import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
 /**
- * 
- * <p>No outputs are produced.
- * 
- * @author Owen Feehan
+ * No outputs are produced.
  *
+ * @author Owen Feehan
  */
 public class MaskIntersectionAssigner
         extends AnnotationComparisonAssigner<AssignmentMaskIntersection> {
@@ -68,17 +66,19 @@ public class MaskIntersectionAssigner
     public boolean moreThanOneObject() {
         return false;
     }
-    
+
     @Override
     public void addDefaultOutputs(OutputEnabledMutable outputs) {
         // NO OUTPUTS TO ADD
     }
-    
+
     private static ObjectMask extractSingleObject(String description, ObjectCollection objects)
             throws CreateException {
         if (objects.size() == 0) {
             throw new CreateException(
-                    String.format("%s object-collection contains no objects. Exactly one must exist.", description));
+                    String.format(
+                            "%s object-collection contains no objects. Exactly one must exist.",
+                            description));
         } else if (objects.size() > 1) {
             throw new CreateException(
                     String.format(

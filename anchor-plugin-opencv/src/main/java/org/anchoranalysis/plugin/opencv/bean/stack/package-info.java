@@ -24,6 +24,7 @@
  * #L%
  */
 /**
- * Implementations of {@link org.anchoranalysis.image.io.bean.stack.writer.StackWriter} and {@link org.anchoranalysis.image.io.bean.stack.reader.StackReader} that involve OpenCV.
+ * Implementations of {@link org.anchoranalysis.image.io.bean.stack.writer.StackWriter} and {@link
+ * org.anchoranalysis.image.io.bean.stack.reader.StackReader} that involve OpenCV.
  */
 package org.anchoranalysis.plugin.opencv.bean.stack;

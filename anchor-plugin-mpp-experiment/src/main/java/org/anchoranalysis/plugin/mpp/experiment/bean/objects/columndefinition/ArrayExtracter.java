@@ -35,25 +35,27 @@ class ArrayExtracter {
 
     /**
      * Extracts a point encoded within a string in a CSV file.
-     * 
+     *
      * <p>The point is encoded either as:
+     *
      * <ul>
-     * <li>{@code 10_20_30} for x, y and z (integer) coordinates of a single points.
-     * <li>{@code 10_20_30_and_40_50_60} or for coordinates of two points.
+     *   <li>{@code 10_20_30} for x, y and z (integer) coordinates of a single points.
+     *   <li>{@code 10_20_30_and_40_50_60} or for coordinates of two points.
      * </ul>
      *
      * @param array the array to extract from
-     * @param indexColumnUniquePixel the index of a column describing a unique-pixel within an object.
-     * @param first if there are two points encoded in the <i>unique-pixel</i> column, rather than one,
-     * then whether to select the first or the second. 
+     * @param indexColumnUniquePixel the index of a column describing a unique-pixel within an
+     *     object.
+     * @param first if there are two points encoded in the <i>unique-pixel</i> column, rather than
+     *     one, then whether to select the first or the second.
      * @return a point constructed from converting the elements for X, Y, Z into integers
      */
     public static Point3i getAsPoint(String[] array, int indexColumnUniquePixel, boolean first) {
 
         String content = array[indexColumnUniquePixel];
-            
+
         String[] components = content.split("_");
-        
+
         if (first) {
             return pointFromComponents(components, 0);
         } else {
@@ -63,9 +65,8 @@ class ArrayExtracter {
 
     private static Point3i pointFromComponents(String[] components, int startIndex) {
         return new Point3i(
-            Integer.parseInt(components[startIndex]),
-            Integer.parseInt(components[startIndex+1]),
-            Integer.parseInt(components[startIndex+2])
-        );
+                Integer.parseInt(components[startIndex]),
+                Integer.parseInt(components[startIndex + 1]),
+                Integer.parseInt(components[startIndex + 2]));
     }
 }

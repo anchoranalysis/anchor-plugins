@@ -37,7 +37,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Invert the {@link ScaleFactor} calculated by the {@code scaleCalculator} delegate.
- * 
+ *
  * @author Owen Feehan
  */
 public class Invert extends ScaleCalculator {

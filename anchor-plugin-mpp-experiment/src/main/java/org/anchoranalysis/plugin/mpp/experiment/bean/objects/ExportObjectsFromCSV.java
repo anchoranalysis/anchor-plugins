@@ -68,12 +68,12 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.IndexedCSVRows;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.MapGroupToRow;
 
 /**
- * Given a CSV with a point representing one or more object-masks, these object-masks are extracted from a
- * segmentation.
+ * Given a CSV with a point representing one or more object-masks, these object-masks are extracted
+ * from a segmentation.
  *
  * <p>The CSV file-path should be the same for all rasters passed as input. It gets cached between
  * the threads.
- * 
+ *
  * <p>The following outputs are produced:
  *
  * <table>
@@ -91,12 +91,13 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.MapGroupToRow;
  * @author Owen Feehan
  */
 public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCSVSharedState> {
-    
+
     private static final String GROUP_SUBDIRECTORY = "groups";
-    
-    private static final ManifestDirectoryDescription GROUP_MANIFEST_DESCRIPTION = new ManifestDirectoryDescription(
-            "groupedDirectory", "groupedOutline", new StringsWithoutOrder());
-    
+
+    private static final ManifestDirectoryDescription GROUP_MANIFEST_DESCRIPTION =
+            new ManifestDirectoryDescription(
+                    "groupedDirectory", "groupedOutline", new StringsWithoutOrder());
+
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter
     private DerivePath idGenerator; // Translates an input file name to a unique ID
@@ -115,7 +116,10 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
 
     @Override
     public FromCSVSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<FromCSVInput> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<FromCSVInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return new FromCSVSharedState();
     }
@@ -124,17 +128,21 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
+
     @Override
     public void doJobOnInput(InputBound<FromCSVInput, FromCSVSharedState> inputBound)
             throws JobExecutionException {
 
-        if (!OutlineOutputHelper.anyOutputEnabled(inputBound.getContextJob().getOutputter().outputsEnabled())) {
+        if (!OutlineOutputHelper.anyOutputEnabled(
+                inputBound.getContextJob().getOutputter().outputsEnabled())) {
             // If no outputs are enabled, there's nothing to do, so exit early
         }
-        
-        FromCSVInput input = inputBound.getInput();        
-        InputOutputContext groupContext = inputBound.getContextJob().subdirectory(GROUP_SUBDIRECTORY, GROUP_MANIFEST_DESCRIPTION, false);
+
+        FromCSVInput input = inputBound.getInput();
+        InputOutputContext groupContext =
+                inputBound
+                        .getContextJob()
+                        .subdirectory(GROUP_SUBDIRECTORY, GROUP_MANIFEST_DESCRIPTION, false);
         try {
             IndexedCSVRows groupedRows =
                     inputBound
@@ -142,25 +150,29 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                             .getIndexedRowsOrCreate(input.getCsvFilePath(), columnDefinition);
 
             // We look for rows that match our File ID
-            String fileIdentifier = IdentifierHelper.identifierForPathAsString(
-                    idGenerator,
-                    input.pathForBinding(),
-                    groupContext.isDebugEnabled());
+            String fileIdentifier =
+                    IdentifierHelper.identifierForPathAsString(
+                            idGenerator, input.pathForBinding(), groupContext.isDebugEnabled());
             MapGroupToRow mapGroup = groupedRows.get(fileIdentifier);
 
             if (mapGroup != null) {
                 processFileWithMap(
-                        MPPInitParamsFactory.create(groupContext, Optional.empty(), Optional.of(input))
+                        MPPInitParamsFactory.create(
+                                        groupContext, Optional.empty(), Optional.of(input))
                                 .getImage(),
                         mapGroup,
                         groupedRows.groupNameSet(),
                         groupContext,
                         inputBound.getContextJob().getOutputter().outputsEnabled());
             } else {
-                groupContext.getMessageReporter()
-                    .logFormatted(
-                        "No matching rows in CSV file for id '%s' from %s",
-                        fileIdentifier, input.pathForBinding().map( path -> "'" + path.toString() + "'").orElse("<no binding path>"));
+                groupContext
+                        .getMessageReporter()
+                        .logFormatted(
+                                "No matching rows in CSV file for id '%s' from %s",
+                                fileIdentifier,
+                                input.pathForBinding()
+                                        .map(path -> "'" + path.toString() + "'")
+                                        .orElse("<no binding path>"));
             }
 
         } catch (AnchorFriendlyCheckedException e) {
@@ -191,14 +203,18 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
             ObjectCollectionRTree objects =
                     new ObjectCollectionRTree(inputs(imageInit, groupContext.getLogger()));
 
-            // Create a writer with output-naming rules not from the group-context, but the top-level experiment context.
-            ElementWriterSupplier<Collection<CSVRow>> writer = () -> OutlineOutputHelper.createGenerator(
-                   objects,
-                   () -> createBackgroundStack(imageInit, groupContext.getLogger()),
-                   getPadding(),
-                   outputRules
-             );
-            
+            // Create a writer with output-naming rules not from the group-context, but the
+            // top-level experiment context.
+            ElementWriterSupplier<Collection<CSVRow>> writer =
+                    () ->
+                            OutlineOutputHelper.createGenerator(
+                                    objects,
+                                    () ->
+                                            createBackgroundStack(
+                                                    imageInit, groupContext.getLogger()),
+                                    getPadding(),
+                                    outputRules);
+
             // Loop through each group, and output a series of TIFFs, where set of objects is shown
             // on a successive image, cropped appropriately
             for (String groupName : groupNameSet) {
@@ -215,22 +231,18 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
             Collection<CSVRow> rows,
             String groupName,
             ElementWriterSupplier<Collection<CSVRow>> writer,
-            InputOutputContext groupContext
-    ) {
+            InputOutputContext groupContext) {
         if (rows != null && !rows.isEmpty()) {
-            
-            groupContext.getOutputter()
-                .writerPermissive()
-                .write(
-                        groupName,
-                        writer,
-                        () -> rows);
+
+            groupContext.getOutputter().writerPermissive().write(groupName, writer, () -> rows);
 
         } else {
-            groupContext.getMessageReporter().logFormatted("No matching rows for group '%s'", groupName);
+            groupContext
+                    .getMessageReporter()
+                    .logFormatted("No matching rows for group '%s'", groupName);
         }
     }
-    
+
     private DisplayStack createBackgroundStack(ImageInitParams params, Logger logger)
             throws OutputWriteFailedException {
         // Get our background-stack and objects. We duplicate to avoid threading issues

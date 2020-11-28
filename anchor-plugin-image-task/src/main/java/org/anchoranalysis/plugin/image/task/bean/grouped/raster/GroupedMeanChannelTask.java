@@ -49,7 +49,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 /**
  * Creates a an aggregated-image for each group, where each voxel-value is the mean voxel-value
  * across the group.
- * 
+ *
  * <p>The following outputs are produced:
  *
  * <table>
@@ -62,12 +62,13 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
+ *
  * @author Owen Feehan
  */
 public class GroupedMeanChannelTask extends GroupedStackBase<Channel, RunningSumChannel> {
 
     private static final String OUTPUT_MEAN = "mean";
-    
+
     // START BEAN PROPERTIES
     /**
      * If set, each channel is scaled to a specific size before the mean is calculated (useful for

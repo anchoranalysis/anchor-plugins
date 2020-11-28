@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.opencv.bean.stack;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.progress.Progress;
@@ -40,24 +41,23 @@ import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
-import lombok.RequiredArgsConstructor;
 
 /**
  * An implementation of {@link OpenedRaster} for reading using OpenCV.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@RequiredArgsConstructor class OpenedRasterOpenCV implements OpenedRaster {
-    
+@RequiredArgsConstructor
+class OpenedRasterOpenCV implements OpenedRaster {
+
     // START REQUIRED ARGUMENTS
     /** The path to open. */
     private final Path path;
     // END REQUIRED ARGUMENTS
-    
+
     /** Lazily opened stack. */
     private Stack stack;
-    
+
     @Override
     public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
         openStackIfNecessary();
@@ -90,7 +90,8 @@ import lombok.RequiredArgsConstructor;
     public int bitDepth() throws ImageIOException {
         openStackIfNecessary();
         if (!stack.allChannelsHaveIdenticalType()) {
-            throw new ImageIOException("Not all channels have identical channel type, so not calculating bit-depth.");
+            throw new ImageIOException(
+                    "Not all channels have identical channel type, so not calculating bit-depth.");
         }
         return stack.getChannel(0).getVoxelDataType().numberBits();
     }
@@ -111,11 +112,11 @@ import lombok.RequiredArgsConstructor;
         openStackIfNecessary();
         return stack.dimensions();
     }
-    
+
     /** Opens the stack if has not already been opened. */
     private void openStackIfNecessary() throws ImageIOException {
         Mat image = Imgcodecs.imread(path.toString());
-        
+
         try {
             stack = ConvertFromMat.toStack(image);
         } catch (OperationFailedException e) {

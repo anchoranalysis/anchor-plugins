@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 import org.anchoranalysis.spatial.point.Point3i;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Writes all points in a particular connected-component using the same ID

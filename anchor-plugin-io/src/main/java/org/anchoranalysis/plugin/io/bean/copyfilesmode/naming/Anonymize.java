@@ -49,40 +49,52 @@ import org.apache.commons.io.FilenameUtils;
  * @author feehano
  */
 public class Anonymize extends CopyFilesNaming<AnonymizeSharedState> {
-    
+
     @Override
     public AnonymizeSharedState beforeCopying(Path destinationDirectory, int totalNumberFiles) {
         return new AnonymizeSharedState(
-            new NumberToStringConverter(totalNumberFiles),
-            createMappingToShuffledIndices(totalNumberFiles)
-        );
+                new NumberToStringConverter(totalNumberFiles),
+                createMappingToShuffledIndices(totalNumberFiles));
     }
 
     @Override
-    public Optional<Path> destinationPathRelative(Path sourceDirectory, Path destinationDirectory, File file, int iter, AnonymizeSharedState sharedState)
+    public Optional<Path> destinationPathRelative(
+            Path sourceDirectory,
+            Path destinationDirectory,
+            File file,
+            int iter,
+            AnonymizeSharedState sharedState)
             throws OutputWriteFailedException {
         Integer mappedIteration = sharedState.getMapping().get(iter);
-        if (mappedIteration==null) {
-            throw new OutputWriteFailedException("An unexpected value was passed as iteration, and no mapping is available: " + iter);
+        if (mappedIteration == null) {
+            throw new OutputWriteFailedException(
+                    "An unexpected value was passed as iteration, and no mapping is available: "
+                            + iter);
         }
-        String filenameToCopyTo = sharedState.getNumberConverter().convert(mappedIteration) + "." + FilenameUtils.getExtension(file.toString());
+        String filenameToCopyTo =
+                sharedState.getNumberConverter().convert(mappedIteration)
+                        + "."
+                        + FilenameUtils.getExtension(file.toString());
         return Optional.of(Paths.get(filenameToCopyTo));
     }
-    
-    private static Map<Integer,Integer> createMappingToShuffledIndices( int totalNumberFiles ) {
+
+    private static Map<Integer, Integer> createMappingToShuffledIndices(int totalNumberFiles) {
         List<Integer> indices = createSequence(totalNumberFiles);
         Collections.shuffle(indices);
         return mapIndexToElement(indices);
     }
-    
-    /** Creates a list with a sequence of Integers from 0 to {@code maxNumberExclusive - 1} (inclusive). */
+
+    /**
+     * Creates a list with a sequence of Integers from 0 to {@code maxNumberExclusive - 1}
+     * (inclusive).
+     */
     private static List<Integer> createSequence(int maxNumberExclusive) {
-        return IntStream.range(0, maxNumberExclusive).boxed().collect( Collectors.toList() );
+        return IntStream.range(0, maxNumberExclusive).boxed().collect(Collectors.toList());
     }
-    
-    private static <T> Map<Integer,T> mapIndexToElement(List<T> list) {
-        Map<Integer,T> map = new HashMap<>();
-        for( int i=0; i<list.size(); i++) {
+
+    private static <T> Map<Integer, T> mapIndexToElement(List<T> list) {
+        Map<Integer, T> map = new HashMap<>();
+        for (int i = 0; i < list.size(); i++) {
             map.put(i, list.get(i));
         }
         return map;

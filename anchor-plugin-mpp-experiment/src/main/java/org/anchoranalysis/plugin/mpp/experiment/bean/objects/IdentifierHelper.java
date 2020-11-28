@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,21 +27,23 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class IdentifierHelper {
 
-    public static String identifierForPathAsString(DerivePath deriver, Optional<Path> path, boolean debugMode) throws DerivePathException {
-        return FilePathToUnixStyleConverter.toStringUnixStyle( identifierForPath(deriver, path, debugMode) );
+    public static String identifierForPathAsString(
+            DerivePath deriver, Optional<Path> path, boolean debugMode) throws DerivePathException {
+        return FilePathToUnixStyleConverter.toStringUnixStyle(
+                identifierForPath(deriver, path, debugMode));
     }
-    
-    private static Path identifierForPath(DerivePath deriver, Optional<Path> path, boolean debugMode)
-            throws DerivePathException {
+
+    private static Path identifierForPath(
+            DerivePath deriver, Optional<Path> path, boolean debugMode) throws DerivePathException {
         if (!path.isPresent()) {
             throw new DerivePathException(
                     "A binding-path is not present for the input, but is required");

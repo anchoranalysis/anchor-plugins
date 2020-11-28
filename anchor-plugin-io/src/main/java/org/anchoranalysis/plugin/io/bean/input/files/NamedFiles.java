@@ -53,7 +53,7 @@ public class NamedFiles extends NamedFilesBase<FileInput> {
     public NamedFiles(FilesProvider files) {
         this.files = files;
     }
-    
+
     public NamedFiles(FilesProvider files, FileNamer namer) {
         super(namer);
         this.files = files;
