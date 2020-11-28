@@ -55,8 +55,7 @@ public abstract class OMETestBase extends RasterWriterTestBase {
      * @param format the format to be tested and written.
      * @param comparisonPlan what kind of comparisons to execute on the tests.
      */
-    public OMETestBase(
-            ImageFileFormat format, ComparisonPlan comparisonPlan) {
+    public OMETestBase(ImageFileFormat format, ComparisonPlan comparisonPlan) {
         super(format, true, comparisonPlan);
     }
 

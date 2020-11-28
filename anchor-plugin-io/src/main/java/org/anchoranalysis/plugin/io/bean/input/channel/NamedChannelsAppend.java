@@ -54,7 +54,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<NamedChannelsInputPart> input;
-    
+
     @BeanField @OptionalBean @Getter @Setter private List<NamedBean<DerivePath>> listAppend;
 
     @BeanField @Getter @Setter private boolean forceEagerEvaluation = false;
@@ -68,8 +68,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     public List<NamedChannelsInputPart> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
-        try (ProgressMultiple progressMultiple =
-                new ProgressMultiple(params.getProgress(), 2)) {
+        try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
 
             Iterator<NamedChannelsInputPart> iterator = input.inputs(params).iterator();
 
@@ -93,9 +92,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     }
 
     private List<NamedChannelsInputPart> createOutList(
-            List<NamedChannelsInputPart> listTemp,
-            Progress progress,
-            boolean debugMode)
+            List<NamedChannelsInputPart> listTemp, Progress progress, boolean debugMode)
             throws InputReadFailedException {
         try {
             return FunctionalProgress.mapListOptional(

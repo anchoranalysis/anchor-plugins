@@ -48,7 +48,7 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
 
     /** Name of CSV column used to group results (the same values, are outputted together) */
     @BeanField @Getter @Setter private String columnGroup;
-    
+
     /** Name of CSV column with X coordinate of point for the first Object */
     @BeanField @Getter @Setter private String columnUniquePixel = "unique_pixel_in_object";
     // END BEAN PROPERTIES
@@ -76,7 +76,7 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
             CSVRow csvRow, ObjectCollectionRTree allObjects) throws OperationFailedException;
 
     public abstract void writeToXML(CSVRow csvRow, Element xmlElement, Document doc);
-    
+
     /**
      * Finds the index of a particular column from the headers of a CSV file
      *

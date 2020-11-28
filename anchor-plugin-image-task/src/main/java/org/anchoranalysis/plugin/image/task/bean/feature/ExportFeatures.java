@@ -127,7 +127,10 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     @Override
     public SharedStateExportFeatures<S> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<T> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<T> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return source.createSharedState(
@@ -150,7 +153,8 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
                             input.getContextJob().isDebugEnabled());
 
             InputProcessContext<S> inputProcessContext =
-                    input.getSharedState().createInputProcessContext(groupName, input.getContextJob());
+                    input.getSharedState()
+                            .createInputProcessContext(groupName, input.getContextJob());
 
             source.processInput(input.getInput(), inputProcessContext);
 

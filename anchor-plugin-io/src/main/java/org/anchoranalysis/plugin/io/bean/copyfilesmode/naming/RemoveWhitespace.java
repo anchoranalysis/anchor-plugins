@@ -39,8 +39,7 @@ public class RemoveWhitespace extends CopyFilesNamingOne {
 
     @Override
     public Optional<Path> destinationPathRelative(Path path) {
-        String pathMinusWhiteSpace =
-                NamingUtilities.convertToString(path).replaceAll("\\s", "");
+        String pathMinusWhiteSpace = NamingUtilities.convertToString(path).replaceAll("\\s", "");
 
         return Optional.of(Paths.get(pathMinusWhiteSpace));
     }

@@ -29,9 +29,6 @@ package org.anchoranalysis.plugin.io.bean.input.channel;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 
-/**
- * Parent for all the {@code NamedChannels} classes
- */
-public abstract class NamedChannelsBase extends InputManagerWithStackReader<NamedChannelsInputPart> {
-
-}
+/** Parent for all the {@code NamedChannels} classes */
+public abstract class NamedChannelsBase
+        extends InputManagerWithStackReader<NamedChannelsInputPart> {}

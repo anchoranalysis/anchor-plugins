@@ -42,7 +42,12 @@ public class PreserveName extends CopyFilesNaming<NoSharedState> {
     }
 
     @Override
-    public Optional<Path> destinationPathRelative(Path sourceDirectory, Path destinationDirectory, File file, int iter, NoSharedState sharedState)
+    public Optional<Path> destinationPathRelative(
+            Path sourceDirectory,
+            Path destinationDirectory,
+            File file,
+            int iter,
+            NoSharedState sharedState)
             throws OutputWriteFailedException {
         try {
             return Optional.of(NamingUtilities.filePathDifference(sourceDirectory, file.toPath()));

@@ -45,7 +45,7 @@ public class FromMetadata extends ChannelMap {
             if (!names.isPresent()) {
                 throw new CreateException("No channels names are associated with the openedRaster");
             }
-    
+
             NamedEntries map = new NamedEntries();
             for (int index = 0; index < names.get().size(); index++) {
                 map.add(new ChannelEntry(names.get().get(index), index));

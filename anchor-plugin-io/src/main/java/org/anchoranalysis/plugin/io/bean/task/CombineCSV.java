@@ -51,9 +51,9 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Combines multiple CSV files into a single CSV file.
- * 
+ *
  * <p>No check occurs that the same number of rows/columns exist in the files being combined.
- * 
+ *
  * <p>The following outputs are produced:
  *
  * <table>
@@ -66,12 +66,13 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
+ *
  * @author Owen Feehan
  */
 public class CombineCSV extends Task<FileInput, CSVWriter> {
 
     private static final String OUTPUT_COMBINED = "combined";
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String seperator = ",";
 
@@ -84,7 +85,10 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<FileInput> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<FileInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {

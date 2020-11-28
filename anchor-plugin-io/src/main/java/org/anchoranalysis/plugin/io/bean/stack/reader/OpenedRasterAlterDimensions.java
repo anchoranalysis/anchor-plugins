@@ -63,8 +63,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress)
-            throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
         TimeSequence sequence = delegate.open(seriesIndex, progress);
 
         for (Stack stack : sequence) {

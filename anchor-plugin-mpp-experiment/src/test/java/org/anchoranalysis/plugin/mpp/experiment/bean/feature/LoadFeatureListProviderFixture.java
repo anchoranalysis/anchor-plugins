@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
@@ -38,7 +39,6 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Loads a feature-list to be used in tests.
@@ -57,7 +57,7 @@ class LoadFeatureListProviderFixture<T extends FeatureInput> {
     // START REQUIRED ARGUMENTS
     /** A loader for finding XML files. */
     private final TestLoader loader;
-    
+
     /** The features in this XML file are used if no other option is set. */
     private final String defaultPathToXML;
     // END REQUIRED ARGUMENTS

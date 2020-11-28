@@ -76,7 +76,7 @@ public class ThreeWayBranchXYResolution extends StackReader {
                     "No image-resolution is present, so cannot perform this check.");
         }
     }
-    
+
     private Dimensions dimensionsForPath(Path path) throws ImageIOException {
         try (OpenedRaster openedRaster = stackReaderInput.openFile(path)) {
             return openedRaster.dimensionsForSeries(0);

@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.bean.groupfiles;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
@@ -39,7 +40,6 @@ import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
 import org.anchoranalysis.image.io.stack.input.OpenedRaster;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 class GroupingInput extends NamedChannelsInput {
@@ -47,7 +47,7 @@ class GroupingInput extends NamedChannelsInput {
     // START REQUIRED ARGUMENTS
     /** A virtual path uniquely representing this particular file. */
     private final Path virtualPath;
-    
+
     /** The opened raster with multiple files. */
     private final OpenedRaster openedRaster;
 
@@ -69,8 +69,8 @@ class GroupingInput extends NamedChannelsInput {
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, Progress progress) throws ImageIOException {
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
+            throws ImageIOException {
         ensureChannelMapExists();
         return new NamedChannelsForSeriesMap(openedRaster, channelMap, seriesIndex);
     }

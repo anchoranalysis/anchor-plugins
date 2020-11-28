@@ -32,10 +32,10 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.ImageFileFormat;
 
 /**
- * Create a voxelwise <b>compressed copy</b> of any TIFF file being copied, and otherwise do a {@link Bytewise} copy.
- *  
- * @author Owen Feehan
+ * Create a voxelwise <b>compressed copy</b> of any TIFF file being copied, and otherwise do a
+ * {@link Bytewise} copy.
  *
+ * @author Owen Feehan
  */
 public class CompressAnyTIFF extends CopyFilesMethod {
 

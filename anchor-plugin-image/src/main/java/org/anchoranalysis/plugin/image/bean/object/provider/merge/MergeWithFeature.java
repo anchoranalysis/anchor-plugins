@@ -75,8 +75,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
                 .logFormatted("There are %d input objects", objectsSource.size());
 
         try {
-            ObjectCollection merged =
-                    mergeMultiplex(objectsSource, this::mergeConnectedComponents);
+            ObjectCollection merged = mergeMultiplex(objectsSource, this::mergeConnectedComponents);
 
             getLogger().messageLogger().logFormatted("There are %d final objects", merged.size());
 
@@ -103,7 +102,8 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
      * @return
      * @throws OperationFailedException
      */
-    private ObjectCollection mergeConnectedComponents(ObjectCollection objects) throws OperationFailedException {
+    private ObjectCollection mergeConnectedComponents(ObjectCollection objects)
+            throws OperationFailedException {
 
         MessageLogger logger = getLogger().messageLogger();
 
@@ -134,8 +134,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
      * @return
      * @throws OperationFailedException
      */
-    private boolean tryMerge(MergeGraph graph)
-            throws OperationFailedException {
+    private boolean tryMerge(MergeGraph graph) throws OperationFailedException {
 
         // Find the edge with the best improvement
         TypedEdge<ObjectVertex, PrioritisedVertex> edgeToMerge = graph.findMaxPriority();

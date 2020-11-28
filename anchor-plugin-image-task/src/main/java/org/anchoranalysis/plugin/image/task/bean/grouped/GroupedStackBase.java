@@ -93,7 +93,10 @@ public abstract class GroupedStackBase<S, T>
 
     @Override
     public GroupedSharedState<S, T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<ProvidesStackInput> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<ProvidesStackInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return new GroupedSharedState<>(this::createGroupMap);
     }
@@ -139,16 +142,16 @@ public abstract class GroupedStackBase<S, T>
         }
     }
 
-    /** 
+    /**
      * The first-level output-name used for determining if groups are written.
-     * 
-     * <p>Second-level matches against this, will determine which specific groups
-     * may or may not be written.
-     * 
+     *
+     * <p>Second-level matches against this, will determine which specific groups may or may not be
+     * written.
+     *
      * @return
      */
     protected abstract String outputNameForGroups();
-    
+
     /** An optional subdirectory where the group outputs are placed. */
     protected abstract Optional<String> subdirectoryForGroupOutputs();
 

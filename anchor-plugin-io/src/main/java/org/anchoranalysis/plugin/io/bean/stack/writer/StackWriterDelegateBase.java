@@ -65,5 +65,6 @@ public abstract class StackWriterDelegateBase extends StackWriter {
      * @param writeOptions options that specify what kind of rasters will be written.
      * @return the selected {@link StackWriter}
      */
-    protected abstract StackWriter selectDelegate(StackWriteOptions writeOptions) throws ImageIOException;
+    protected abstract StackWriter selectDelegate(StackWriteOptions writeOptions)
+            throws ImageIOException;
 }

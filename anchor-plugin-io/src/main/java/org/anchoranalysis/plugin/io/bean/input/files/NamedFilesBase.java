@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,6 +29,10 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -41,34 +45,35 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 import org.anchoranalysis.io.input.files.NamedFile;
 import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * Base class for an input-manager that produces inputs that are created from a {@link NamedFile}.
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> input-type
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class NamedFilesBase<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private FileNamer namer = new RemoveExtensions(new PatternSpan());
     // END BEAN PROPERTIES
-    
+
     /**
-     * Creates a list of inputs from a {@link FilesProvider} which together with the {@code namer} can create the inputs.
-     * 
+     * Creates a list of inputs from a {@link FilesProvider} which together with the {@code namer}
+     * can create the inputs.
+     *
      * @param files the files-provider
      * @param params parameters for the input-manager
-     * @param mapToInput a function that maps a created {@link NamedFile} to the eventual input-type. 
+     * @param mapToInput a function that maps a created {@link NamedFile} to the eventual
+     *     input-type.
      * @return a newly created list of inputs
      * @throws InputReadFailedException
      */
-    protected List<T> createInputsFromFiles(FilesProvider files, InputManagerParams params, Function<NamedFile,T> mapToInput) throws InputReadFailedException {
+    protected List<T> createInputsFromFiles(
+            FilesProvider files, InputManagerParams params, Function<NamedFile, T> mapToInput)
+            throws InputReadFailedException {
         try {
             Collection<File> filesCreated = files.create(params);
 

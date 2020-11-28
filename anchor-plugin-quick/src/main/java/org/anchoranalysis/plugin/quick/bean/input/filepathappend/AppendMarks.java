@@ -43,6 +43,7 @@ public class AppendMarks extends FilePathBaseAppendToManagerWithFileID {
 
     @Override
     protected String createOutPathString() throws BeanMisconfiguredException {
-        return NonImageFileFormat.SERIALIZED_XML.buildPath(firstPartWithFilename(), "marks", getFileId());
+        return NonImageFileFormat.SERIALIZED_XML.buildPath(
+                firstPartWithFilename(), "marks", getFileId());
     }
 }

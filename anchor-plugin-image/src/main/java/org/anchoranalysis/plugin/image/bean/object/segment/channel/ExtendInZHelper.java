@@ -63,7 +63,8 @@ class ExtendInZHelper {
 
         BoundingBox newBBox = createBoundingBoxForAllZ(obj2D.boundingBox(), mask3D.extent().z());
 
-        BoundedVoxels<UnsignedByteBuffer> newMask = VoxelsFactory.getUnsignedByte().createBounded(newBBox);
+        BoundedVoxels<UnsignedByteBuffer> newMask =
+                VoxelsFactory.getUnsignedByte().createBounded(newBBox);
 
         ReadableTuple3i max = newBBox.calculateCornerMax();
         Point3i point = new Point3i();
@@ -90,7 +91,7 @@ class ExtendInZHelper {
                                 offset,
                                 bufferMask3D.getRaw(indexGlobal) == binaryValues.getOnByte()
                                         ? binaryValues.getOnByte()
-                                        : binaryValues.getOffByte());    
+                                        : binaryValues.getOffByte());
                     }
                 }
             }

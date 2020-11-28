@@ -34,9 +34,8 @@ import org.anchoranalysis.core.exception.CreateException;
 
 /**
  * Makes a simple bytewise copy of a file, where no byte is changed.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Bytewise extends CopyFilesMethod {
 

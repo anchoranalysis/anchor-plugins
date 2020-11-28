@@ -62,8 +62,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress)
-            throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
         // We open each-series, verify assumptions, and combine the channels
 
         try {

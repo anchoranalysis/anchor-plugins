@@ -32,17 +32,17 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.input.csv.CSVReaderByLine;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.ReadByLine;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * @author feehano
  * @param <T> key-type
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileLabelMap<T> {
 
     private Map<T, String> map = new HashMap<>();
@@ -57,7 +57,7 @@ public class FileLabelMap<T> {
 
         return map;
     }
-    
+
     public void add(T fileId, String label) {
         map.put(fileId, label);
     }

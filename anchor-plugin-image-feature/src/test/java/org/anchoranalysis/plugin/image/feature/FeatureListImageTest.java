@@ -184,11 +184,15 @@ public class FeatureListImageTest {
     private static FeatureInputHistogram createParams(Histogram histogram) throws CreateException {
         return new FeatureInputHistogram(histogram, ENERGY_STACK.resolution());
     }
-    
-    private static void assertCalculateObject(FeatureCalculatorMulti<FeatureInputSingleObject> session,
-            ObjectMask objectMaskToCalculate, Object... expectedVals) throws NamedFeatureCalculateException, CreateException {
+
+    private static void assertCalculateObject(
+            FeatureCalculatorMulti<FeatureInputSingleObject> session,
+            ObjectMask objectMaskToCalculate,
+            Object... expectedVals)
+            throws NamedFeatureCalculateException, CreateException {
         assertCalc(
-                session.calculate(new FeatureInputSingleObject(objectMaskToCalculate, ENERGY_STACK)),
+                session.calculate(
+                        new FeatureInputSingleObject(objectMaskToCalculate, ENERGY_STACK)),
                 expectedVals);
     }
 }

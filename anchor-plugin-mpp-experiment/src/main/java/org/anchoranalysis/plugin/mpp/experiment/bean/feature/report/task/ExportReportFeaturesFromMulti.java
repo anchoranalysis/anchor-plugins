@@ -61,18 +61,22 @@ import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
  * <tr><td rowspan="3"><i>inherited from {@link ExportReportFeatures}</i></td></tr>
  * </tbody>
  * </table>
- * 
+ *
  * @author Owen Feehan
  */
-public class ExportReportFeaturesFromMulti extends ExportReportFeatures<MultiInput, CSVWriter, MPPInitParams> {
-    
+public class ExportReportFeaturesFromMulti
+        extends ExportReportFeatures<MultiInput, CSVWriter, MPPInitParams> {
+
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private DefineOutputterMPP define;
     // END BEAN PROPERTIES
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<MultiInput> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<MultiInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
 
         Optional<CSVWriter> writer;
@@ -86,7 +90,7 @@ public class ExportReportFeaturesFromMulti extends ExportReportFeatures<MultiInp
             throw new ExperimentExecutionException(
                     "'featureReport' output not enabled, as is required");
         }
-        
+
         writer.get().writeHeaders(headerNames(Optional.of("id")));
 
         return writer.get();
@@ -112,7 +116,10 @@ public class ExportReportFeaturesFromMulti extends ExportReportFeatures<MultiInp
                     input.getContextJob(),
                     soMPP ->
                             writeFeaturesIntoReporter(
-                                    soMPP, writer, Optional.of(input.getInput().name()), input.getLogger()));
+                                    soMPP,
+                                    writer,
+                                    Optional.of(input.getInput().name()),
+                                    input.getLogger()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);

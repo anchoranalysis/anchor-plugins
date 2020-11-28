@@ -49,16 +49,18 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.math.arithmetic.Counter;
-import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.Bytewise;
+import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.naming.CopyFilesNaming;
 import org.anchoranalysis.plugin.io.shared.RecordingCounter;
 
 /**
- * Copy files to the output-directory, possibly changing the name or performing other operations like compression in the process.
- * 
- * <p>Unusually this task does not use the {@link InputOutputContext} for each job, but rather for the experiment as a whole
- * when determining the destination path for files. Similarly the message-log of the experiment is used for non-error messages.
+ * Copy files to the output-directory, possibly changing the name or performing other operations
+ * like compression in the process.
+ *
+ * <p>Unusually this task does not use the {@link InputOutputContext} for each job, but rather for
+ * the experiment as a whole when determining the destination path for files. Similarly the
+ * message-log of the experiment is used for non-error messages.
  *
  * <p>The following outputs are produced:
  *
@@ -73,20 +75,22 @@ import org.anchoranalysis.plugin.io.shared.RecordingCounter;
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
- * 
+ *
  * @param <T> shared-state of {@code naming}
  * @author Owen Feehan
- *
  */
-public class CopyFiles<T> extends Task<FileWithDirectoryInput,RecordingCounter<T>> {
+public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<T>> {
 
-    /** 
-     * Writes copy (according to {@code copyFilesMethod} of the file in the output directory with naming {@code copyFilesNaming}.
-     * 
-     * <p>If this output is disabled, a "dummy mode" occurs where files aren't copied, but instead a line is written into the experiment log with what would be the destination-path if a copy occurs.
+    /**
+     * Writes copy (according to {@code copyFilesMethod} of the file in the output directory with
+     * naming {@code copyFilesNaming}.
+     *
+     * <p>If this output is disabled, a "dummy mode" occurs where files aren't copied, but instead a
+     * line is written into the experiment log with what would be the destination-path if a copy
+     * occurs.
      */
     private static final String OUTPUT_COPY = "copy";
-       
+
     // START BEAN PROPERTIES
     /** How the copying occurs (e.g. with or without compression). */
     @BeanField @Getter @Setter private CopyFilesMethod method = new Bytewise();
@@ -94,39 +98,46 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput,RecordingCounter<T
     /** How an output name (and path) is selected for an input file. */
     @BeanField @Getter @Setter private CopyFilesNaming<T> naming;
     // END BEAN PROPERTIES
-    
+
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
+
     @Override
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(FileWithDirectoryInput.class);
     }
 
     @Override
-    public RecordingCounter<T> beforeAnyJobIsExecuted(Outputter outputter,
-            ConcurrencyPlan concurrencyPlan, List<FileWithDirectoryInput> inputs, ParametersExperiment params)
+    public RecordingCounter<T> beforeAnyJobIsExecuted(
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<FileWithDirectoryInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
-        T namingSharedState = naming.beforeCopying(params.getOutputter().getOutputDirectory(), inputs.size());
-        
+        T namingSharedState =
+                naming.beforeCopying(params.getOutputter().getOutputDirectory(), inputs.size());
+
         return new RecordingCounter<>(new Counter(), outputter, namingSharedState);
     }
-    
+
     @Override
     public void doJobOnInput(InputBound<FileWithDirectoryInput, RecordingCounter<T>> input)
             throws JobExecutionException {
         // Determine a destination for the output, and create a corresponding logger
         Path destination = input.getContextExperiment().getOutputter().getOutputDirectory();
-                
+
         try {
-            copyFile(input.getInput().getDirectory(),
-                destination,
-                input.getInput().pathForBindingRequired().toFile(),
-                input.getContextExperiment().getOutputter().outputsEnabled().isOutputEnabled(OUTPUT_COPY),
-                input.getSharedState()
-            );
+            copyFile(
+                    input.getInput().getDirectory(),
+                    destination,
+                    input.getInput().pathForBindingRequired().toFile(),
+                    input.getContextExperiment()
+                            .getOutputter()
+                            .outputsEnabled()
+                            .isOutputEnabled(OUTPUT_COPY),
+                    input.getSharedState());
         } catch (OperationFailedException | InputReadFailedException e) {
             throw new JobExecutionException(e);
         }
@@ -137,32 +148,38 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput,RecordingCounter<T
             throws ExperimentExecutionException {
         sharedState.closeLogger();
     }
-    
+
     @Override
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_COPY);
     }
-    
+
     private void copyFile(
             Path source,
             Path destinationDirectory,
             File file,
             boolean copyEnabled,
-            RecordingCounter<T> recordingCounter
-    ) throws OperationFailedException {
+            RecordingCounter<T> recordingCounter)
+            throws OperationFailedException {
 
         try {
             int index = recordingCounter.incrementCounter();
-            
+
             Optional<Path> destinationFile =
-                    naming.destinationPath(source, destinationDirectory, file, index, recordingCounter.getNamingSharedState());
-            
+                    naming.destinationPath(
+                            source,
+                            destinationDirectory,
+                            file,
+                            index,
+                            recordingCounter.getNamingSharedState());
+
             if (destinationFile.isPresent() && copyEnabled) {
                 method.makeCopy(file.toPath(), destinationFile.get());
             }
-            
-            recordingCounter.recordCopiedOutput(file.toPath().toAbsolutePath().normalize(), destinationFile, index);
-            
+
+            recordingCounter.recordCopiedOutput(
+                    file.toPath().toAbsolutePath().normalize(), destinationFile, index);
+
         } catch (OutputWriteFailedException | CreateException e) {
             throw new OperationFailedException(e);
         }

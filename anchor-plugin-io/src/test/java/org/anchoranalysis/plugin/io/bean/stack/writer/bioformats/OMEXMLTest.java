@@ -37,21 +37,23 @@ import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
 import org.junit.Test;
 
 /**
- * Creates <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-xml/">OME-XML</a> files of various types, and checks they are identical to previously-saved copies in resources.
- * 
- * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be used to quickly created the saved copies in the resources.
- * 
- * @author Owen Feehan
+ * Creates <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-xml/">OME-XML</a> files of
+ * various types, and checks they are identical to previously-saved copies in resources.
  *
+ * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be
+ * used to quickly created the saved copies in the resources.
+ *
+ * @author Owen Feehan
  */
-public class OMEXMLTest extends OMETestBase {   // NOSONAR
+public class OMEXMLTest extends OMETestBase { // NOSONAR
 
-    private static final ComparisonPlan COMPARISON_PLAN = new ComparisonPlan(false, Optional.of(ImageFileFormat.OME_TIFF), false);
-    
+    private static final ComparisonPlan COMPARISON_PLAN =
+            new ComparisonPlan(false, Optional.of(ImageFileFormat.OME_TIFF), false);
+
     public OMEXMLTest() {
         super(ImageFileFormat.OME_XML, COMPARISON_PLAN);
     }
-    
+
     @Test(expected = ImageIOException.class)
     public void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);

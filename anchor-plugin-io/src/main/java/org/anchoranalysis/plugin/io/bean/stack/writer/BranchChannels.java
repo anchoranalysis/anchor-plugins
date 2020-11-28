@@ -25,9 +25,9 @@
  */
 package org.anchoranalysis.plugin.io.bean.stack.writer;
 
+import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.function.Supplier;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
@@ -38,10 +38,11 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
  * Uses different raster-writers depending on the number/type of channels.
  *
  * <p>If any optional condition does not have a writer, then {@code writer} is used in this case. An
- * exception is {@code whenBinaryChannel}, which instead falls back to {@code whenSingleChannel} if unspecified.
+ * exception is {@code whenBinaryChannel}, which instead falls back to {@code whenSingleChannel} if
+ * unspecified.
  *
  * <p>{@code whenBinaryChannel} is given precedence over {@code whenSingleChannel}.
- * 
+ *
  * @author Owen Feehan
  */
 public class BranchChannels extends StackWriterDelegateBase {
@@ -50,24 +51,16 @@ public class BranchChannels extends StackWriterDelegateBase {
     /** Default writer, if a more specific writer is not specified for a condition. */
     @BeanField @Getter @Setter private StackWriter writer;
 
-    /**
-     * Writer employed if a stack is a single-channeled image, not guaranteed to be binary.
-     */
+    /** Writer employed if a stack is a single-channeled image, not guaranteed to be binary. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenSingleChannel;
-    
-    /**
-     * Writer employed if a stack is a <b>three-channeled non-RGB</b> image.
-     */
+
+    /** Writer employed if a stack is a <b>three-channeled non-RGB</b> image. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenThreeChannels;
 
-    /** 
-     * Writer employed if a stack is a <b>three-channeled RGB</b> image.
-     */
+    /** Writer employed if a stack is a <b>three-channeled RGB</b> image. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGB;
-    
-    /** 
-     * Writer employed if a stack is a <b>single-channeled binary</b> image.
-     */
+
+    /** Writer employed if a stack is a <b>single-channeled binary</b> image. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenBinaryChannel;
     // END BEAN PROPERTIES
 
@@ -84,7 +77,7 @@ public class BranchChannels extends StackWriterDelegateBase {
             return writer;
         }
     }
-    
+
     private StackWriter singleChannel(StackWriteOptions writeOptions) {
         if (writeOptions.getAttributes().isBinary()) {
             return writerOrFallback(whenBinaryChannel, this::singleNonBinaryChannel);
@@ -92,7 +85,7 @@ public class BranchChannels extends StackWriterDelegateBase {
             return singleNonBinaryChannel();
         }
     }
-    
+
     private StackWriter singleNonBinaryChannel() {
         return writerOrDefault(whenSingleChannel);
     }
@@ -100,8 +93,9 @@ public class BranchChannels extends StackWriterDelegateBase {
     private StackWriter writerOrDefault(StackWriter writerMaybeNull) {
         return writerOrFallback(writerMaybeNull, () -> writer);
     }
-    
-    private static StackWriter writerOrFallback(StackWriter writerMaybeNull, Supplier<StackWriter> writerFallback) {
+
+    private static StackWriter writerOrFallback(
+            StackWriter writerMaybeNull, Supplier<StackWriter> writerFallback) {
         if (writerMaybeNull != null) {
             return writerMaybeNull;
         } else {

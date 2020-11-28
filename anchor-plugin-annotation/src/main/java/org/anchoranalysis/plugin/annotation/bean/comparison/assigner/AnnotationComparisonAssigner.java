@@ -49,11 +49,11 @@ public abstract class AnnotationComparisonAssigner<T extends Assignment>
 
     /** Can more than one object exist? */
     public abstract boolean moreThanOneObject();
-    
+
     /**
      * Adds any default outputs that should occur from the assigner.
-     * 
+     *
      * @param outputs
      */
-    public abstract void addDefaultOutputs( OutputEnabledMutable outputs );
+    public abstract void addDefaultOutputs(OutputEnabledMutable outputs);
 }

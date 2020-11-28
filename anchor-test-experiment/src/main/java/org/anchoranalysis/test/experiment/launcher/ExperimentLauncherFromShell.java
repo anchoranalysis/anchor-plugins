@@ -170,7 +170,8 @@ public class ExperimentLauncherFromShell {
      * @param subdirectories if non-null, specific subdirectories to copy. if null, everything is
      *     copied.
      */
-    private void copyToTemporaryDirectory(TemporaryFolder temporaryDirectory, String[] subdirectories) {
+    private void copyToTemporaryDirectory(
+            TemporaryFolder temporaryDirectory, String[] subdirectories) {
         try {
             temporaryDirectory.create();
         } catch (IOException e) {

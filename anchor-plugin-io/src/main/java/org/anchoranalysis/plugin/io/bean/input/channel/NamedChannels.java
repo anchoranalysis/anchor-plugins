@@ -48,7 +48,7 @@ public class NamedChannels extends NamedChannelsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<FileInput> fileInput;
-    
+
     @BeanField @Getter @Setter private ChannelMap channelMap = new Autoname();
 
     @BeanField @Getter @Setter private boolean useLastSeriesIndexOnly = false;

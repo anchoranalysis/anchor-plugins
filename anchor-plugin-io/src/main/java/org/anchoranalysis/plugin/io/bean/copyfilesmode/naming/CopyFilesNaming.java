@@ -34,15 +34,16 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * How an output name (and path) is selected for an input file when copying.
- * 
+ *
  * @author Owen Feehan
  * @param <T> shared-state
-  */
+ */
 public abstract class CopyFilesNaming<T> extends AnchorBean<CopyFilesNaming<T>> {
 
     /**
-     * To be called <i>once</i> before any calls to {@link #destinationPath(Path, Path, File, int, Object)}.
-     * 
+     * To be called <i>once</i> before any calls to {@link #destinationPath(Path, Path, File, int,
+     * Object)}.
+     *
      * @param destinationDirectory the directory to which files are copied.
      * @param totalNumberFiles the total number of files to copy.
      */
@@ -58,10 +59,13 @@ public abstract class CopyFilesNaming<T> extends AnchorBean<CopyFilesNaming<T>> 
      * @return the absolute-path. if empty, the file should be skipped.
      * @throws OutputWriteFailedException
      */
-    public Optional<Path> destinationPath(Path sourceDirectory, Path destinationDirectory, File file, int index, T sharedState)
+    public Optional<Path> destinationPath(
+            Path sourceDirectory, Path destinationDirectory, File file, int index, T sharedState)
             throws OutputWriteFailedException {
 
-        Optional<Path> remainder = destinationPathRelative(sourceDirectory, destinationDirectory, file, index, sharedState);
+        Optional<Path> remainder =
+                destinationPathRelative(
+                        sourceDirectory, destinationDirectory, file, index, sharedState);
         return remainder.map(destinationDirectory::resolve);
     }
 
@@ -76,6 +80,7 @@ public abstract class CopyFilesNaming<T> extends AnchorBean<CopyFilesNaming<T>> 
      * @return the relative-path. if empty, the file should be skipped.
      * @throws OutputWriteFailedException
      */
-    public abstract Optional<Path> destinationPathRelative(Path sourceDirectory, Path destinationDirectory, File file, int index, T sharedState)
+    public abstract Optional<Path> destinationPathRelative(
+            Path sourceDirectory, Path destinationDirectory, File file, int index, T sharedState)
             throws OutputWriteFailedException;
 }

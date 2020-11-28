@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report.task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.TypedValue;
@@ -38,12 +40,10 @@ import org.anchoranalysis.io.output.bean.ReportFeature;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * A base class for tasks that calculate and export {@link ReportFeature}s.
- * 
+ *
  * <p>The following outputs are produced:
  *
  * <table>
@@ -56,38 +56,37 @@ import lombok.Setter;
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
- * 
+ *
  * @author Owen Feehan
- * 
  * @param <T> input-object type
  * @param <S> shared-state type
  * @param <U> feature-type
  */
-public abstract class ExportReportFeatures<T extends InputFromManager,S,U> extends Task<T,S> {
+public abstract class ExportReportFeatures<T extends InputFromManager, S, U> extends Task<T, S> {
 
     private static final String OUTPUT_REPORT = "featureReport";
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
     private List<ReportFeature<U>> listReportFeatures = new ArrayList<>();
     // END BEAN PROPERTIES
-    
+
     @Override
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_REPORT);
     }
-    
+
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
+
     protected List<String> headerNames(Optional<String> prefixColumnName) {
         List<String> headerNames = ReportFeatureUtilities.headerNames(listReportFeatures);
         prefixColumnName.ifPresent(headerNames::add);
         return headerNames;
     }
-    
+
     protected void writeFeaturesIntoReporter(
             U featureParam, CSVWriter writer, Optional<String> prefixValue, Logger logger) {
         List<TypedValue> rowElements =
@@ -99,9 +98,9 @@ public abstract class ExportReportFeatures<T extends InputFromManager,S,U> exten
 
         writer.writeRow(rowElements);
     }
-    
-    protected Optional<CSVWriter> createWriter(OutputterChecked outputter) throws OutputWriteFailedException {
-        return CSVWriter.createFromOutputter(
-                OUTPUT_REPORT, outputter);
+
+    protected Optional<CSVWriter> createWriter(OutputterChecked outputter)
+            throws OutputWriteFailedException {
+        return CSVWriter.createFromOutputter(OUTPUT_REPORT, outputter);
     }
 }

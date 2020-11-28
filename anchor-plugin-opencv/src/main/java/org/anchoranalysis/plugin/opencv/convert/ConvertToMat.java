@@ -89,8 +89,7 @@ public class ConvertToMat {
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return fromRGBByte(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
         } else {
-            throw new CreateException(
-                    "Only unsigned 8-bit channels are supported for RGB");
+            throw new CreateException("Only unsigned 8-bit channels are supported for RGB");
         }
     }
 

@@ -78,7 +78,7 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
- * 
+ *
  * @author Owen Feehan
  * @param <T>
  */
@@ -88,9 +88,9 @@ public class CompareAnnotations<T extends Assignment>
     private static final String OUTPUT_BY_IMAGE = "byImage";
 
     public static final String OUTPUT_BY_GROUP = "byGroup";
-    
+
     private static final String OUTPUT_OUTLINE = "outline";
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String backgroundChannelName = "Image";
 
@@ -114,14 +114,17 @@ public class CompareAnnotations<T extends Assignment>
 
     @Override
     public SharedState<T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<AnnotationComparisonInput<ProvidesStackInput>> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<AnnotationComparisonInput<ProvidesStackInput>> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {
             CSVAssignment assignmentCSV =
-                    new CSVAssignment(outputter, OUTPUT_BY_IMAGE, hasDescriptiveSplit(), maxSplitGroups);
-            return new SharedState<>(
-                    assignmentCSV, numberLevelsGrouping, assigner::groupForKey);
+                    new CSVAssignment(
+                            outputter, OUTPUT_BY_IMAGE, hasDescriptiveSplit(), maxSplitGroups);
+            return new SharedState<>(assignmentCSV, numberLevelsGrouping, assigner::groupForKey);
         } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -150,8 +153,7 @@ public class CompareAnnotations<T extends Assignment>
                         params.getSharedState());
 
         if (assignment.isPresent()) {
-            writeOutlineStack(
-                    params.getOutputter(), input, assignment.get(), background);
+            writeOutlineStack(params.getOutputter(), input, assignment.get(), background);
         }
     }
 
@@ -182,8 +184,8 @@ public class CompareAnnotations<T extends Assignment>
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        return super.defaultOutputs().addEnabledOutputFirst(
-                OUTPUT_BY_IMAGE, OUTPUT_BY_GROUP, OUTPUT_OUTLINE);
+        return super.defaultOutputs()
+                .addEnabledOutputFirst(OUTPUT_BY_IMAGE, OUTPUT_BY_GROUP, OUTPUT_OUTLINE);
     }
 
     private Optional<Assignment> compareAndUpdate(

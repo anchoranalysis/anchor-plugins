@@ -46,18 +46,20 @@ public class ConvertFromMat {
         if (mat.type() == CvType.CV_8UC3) {
             return toRGB(mat);
         } else {
-            return toGrayscale(mat); 
+            return toGrayscale(mat);
         }
     }
 
     private static Stack toGrayscale(Mat mat) throws OperationFailedException {
-        Voxels<?> voxels = VoxelsSingleChannelFromMat.createVoxelBuffer(mat, dimensionsFrom(mat).extent());
+        Voxels<?> voxels =
+                VoxelsSingleChannelFromMat.createVoxelBuffer(mat, dimensionsFrom(mat).extent());
         return new Stack(ChannelFactory.instance().create(voxels));
     }
-    
+
     private static Stack toRGB(Mat mat) {
         Stack stack = createEmptyStack(dimensionsFrom(mat), 3, true);
-        VoxelsRGBFromMat.matToRGB(mat, stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
+        VoxelsRGBFromMat.matToRGB(
+                mat, stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
         return stack;
     }
 

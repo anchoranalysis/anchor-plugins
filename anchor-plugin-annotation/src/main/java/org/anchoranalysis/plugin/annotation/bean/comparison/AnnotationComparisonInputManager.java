@@ -65,8 +65,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
     public List<AnnotationComparisonInput<T>> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
-        try (ProgressMultiple progressMultiple =
-                new ProgressMultiple(params.getProgress(), 2)) {
+        try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
 
             Iterator<T> iterator = input.inputs(params).iterator();
 

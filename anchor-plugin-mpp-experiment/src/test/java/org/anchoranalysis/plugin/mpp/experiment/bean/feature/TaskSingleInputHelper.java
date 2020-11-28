@@ -134,7 +134,8 @@ class TaskSingleInputHelper {
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);
             S sharedState =
-                    task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, Arrays.asList(input), paramsExperiment);
+                    task.beforeAnyJobIsExecuted(
+                            outputter, concurrencyPlan, Arrays.asList(input), paramsExperiment);
 
             boolean successful =
                     task.executeJob(

@@ -42,7 +42,7 @@ public class FilterWithRegularExpression extends RegularExpressionBase {
     // START BEAN PROPERTIES
     /**
      * Iff true, then a file is rejected if the regular-expression matches and vice-versa.
-     * 
+     *
      * <p>This is the <b>opposite</b> to normal behaviour.
      */
     @BeanField @Getter @Setter private boolean invert = false;

@@ -46,7 +46,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 /**
  * Aggregates many per-image annotations together in form of a CSV file.
  *
-   <p>The following outputs are produced:
+ * <p>The following outputs are produced:
  *
  * <table>
  * <caption></caption>
@@ -58,17 +58,20 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
- * 
+ *
  * @author Owen Feehan
  */
 public class AggregateAnnotations<S extends AnnotatorStrategy>
         extends Task<AnnotationWithStrategy<S>, AggregateSharedState> {
 
     private static final String OUTPUT_AGGREGATED = "aggregated";
-    
+
     @Override
     public AggregateSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<AnnotationWithStrategy<S>> inputs, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<AnnotationWithStrategy<S>> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new AggregateSharedState();

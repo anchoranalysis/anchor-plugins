@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,26 +25,30 @@
  */
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
-import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
 
 /**
- * Named-collection of stacks, remembering either or both of a stack and it's maximum-intensity projection.
- * 
+ * Named-collection of stacks, remembering either or both of a stack and it's maximum-intensity
+ * projection.
+ *
  * @author Owen Feehan
  */
-@Value @Accessors(fluent=true) class DualNamedStacks {
+@Value
+@Accessors(fluent = true)
+class DualNamedStacks {
     /** Named-collection of non-flattened stacks. */
     private NamedStacks nonFlattened = new NamedStacks();
-    
+
     /** Named-collection of flattened stacks. */
     private NamedStacks flattened = new NamedStacks();
-    
+
     /**
-     * Adds a stack and/or it's maximum-intensity projection to the collection based on {@code dualEnabled}.
-     * 
+     * Adds a stack and/or it's maximum-intensity projection to the collection based on {@code
+     * dualEnabled}.
+     *
      * @param name name of the stack
      * @param stack the stack to add
      * @param dualEnabled whether non-flattend and flattened outputs are enabled.

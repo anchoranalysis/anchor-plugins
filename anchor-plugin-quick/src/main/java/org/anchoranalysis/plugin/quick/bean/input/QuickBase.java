@@ -47,9 +47,10 @@ import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCs
  *
  * <p>This provides a quicker means to specify certain projects.
  *
- * <p>Note that {@code stackReader} is used for reading the main input-raster and {@code stackReaderAppend}
- * is used for reading any appended files. Both are initialized to a default reader if not specified.
- * 
+ * <p>Note that {@code stackReader} is used for reading the main input-raster and {@code
+ * stackReaderAppend} is used for reading any appended files. Both are initialized to a default
+ * reader if not specified.
+ *
  * @author Owen Feehan
  * @param <T> input-type
  */
@@ -81,7 +82,6 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
     // END BEAN PROPERTIES
 
     protected InputManager<FileInput> fileInputManager() throws BeanMisconfiguredException {
-        return InputManagerFactory.createFiles(
-                rootName, files, namer, regex, filterFilesCsv);
+        return InputManagerFactory.createFiles(rootName, files, namer, regex, filterFilesCsv);
     }
 }

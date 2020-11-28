@@ -83,12 +83,13 @@ public class ScaleXY extends ChannelProviderUnary {
             throw new CreateException(e);
         }
     }
-    
+
     private static void logResolution(String prefix, Channel channel, MessageLogger logger) {
-        logger.logFormatted("%s image resolution: %s", prefix, describeResolution(channel.resolution()) );
+        logger.logFormatted(
+                "%s image resolution: %s", prefix, describeResolution(channel.resolution()));
     }
-    
-    private static String describeResolution( Optional<Resolution> resolution ) {
+
+    private static String describeResolution(Optional<Resolution> resolution) {
         return resolution.map(Resolution::toString).orElse("undefined");
     }
 }

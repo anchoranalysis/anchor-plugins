@@ -94,7 +94,8 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
             case 4:
                 return "objid";
             default:
-                throw new AnchorFriendlyRuntimeException("groupNum must be between 0 and 4 inclusive");
+                throw new AnchorFriendlyRuntimeException(
+                        "groupNum must be between 0 and 4 inclusive");
         }
     }
 

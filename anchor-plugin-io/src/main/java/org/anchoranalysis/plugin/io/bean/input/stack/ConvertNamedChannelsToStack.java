@@ -65,6 +65,7 @@ public class ConvertNamedChannelsToStack extends InputManager<StackSequenceInput
     }
 
     private StackSequenceInput convert(NamedChannelsInput input) {
-        return new ConvertNamedChannelsInputToStack(input, timeIndex, OptionalFactory.create(channelName));
+        return new ConvertNamedChannelsInputToStack(
+                input, timeIndex, OptionalFactory.create(channelName));
     }
 }

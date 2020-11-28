@@ -180,7 +180,7 @@ public class QuickExperiment<S> extends Experiment {
 
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
-        outputManager.setOutputsEnabled( new IgnoreUnderscorePrefixUnless() );
+        outputManager.setOutputsEnabled(new IgnoreUnderscorePrefixUnless());
 
         try {
             outputManager.localise(getLocalPath());

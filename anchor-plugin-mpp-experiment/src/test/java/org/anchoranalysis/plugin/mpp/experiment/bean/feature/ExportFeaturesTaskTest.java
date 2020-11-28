@@ -231,8 +231,8 @@ public class ExportFeaturesTaskTest {
     /**
      * Runs a test to check if the results of {@link ExportFeatures} correspond to saved-values
      *
-     * @param suffixPathDirectorySaved a suffix to identify where to find the saved-output to compare
-     *     against
+     * @param suffixPathDirectorySaved a suffix to identify where to find the saved-output to
+     *     compare against
      * @throws OperationFailedException
      */
     private void testOnTask(String suffixPathDirectorySaved) throws OperationFailedException {

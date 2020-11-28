@@ -40,16 +40,17 @@ public class BackgroundSubtractor extends WithRadiusBase {
         ImagePlus image = ConvertToImagePlus.from(channel);
 
         BackgroundSubtracter plugin = new BackgroundSubtracter();
-        channel.extent().iterateOverZ( z ->
-            plugin.rollingBallBackground(
-                    image.getStack().getProcessor(z + 1),
-                    radius,
-                    false,
-                    false,
-                    false,
-                    true,
-                    true)
-        );
+        channel.extent()
+                .iterateOverZ(
+                        z ->
+                                plugin.rollingBallBackground(
+                                        image.getStack().getProcessor(z + 1),
+                                        radius,
+                                        false,
+                                        false,
+                                        false,
+                                        true,
+                                        true));
         return ConvertFromImagePlus.toChannel(image, channel.resolution());
     }
 }

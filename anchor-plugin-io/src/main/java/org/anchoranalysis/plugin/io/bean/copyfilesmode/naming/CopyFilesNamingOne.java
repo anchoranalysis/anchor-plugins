@@ -49,10 +49,16 @@ public abstract class CopyFilesNamingOne extends CopyFilesNaming<NoSharedState> 
     }
 
     @Override
-    public Optional<Path> destinationPathRelative(Path sourceDirectory, Path destinationDirectory, File file, int iter, NoSharedState sharedState)
+    public Optional<Path> destinationPathRelative(
+            Path sourceDirectory,
+            Path destinationDirectory,
+            File file,
+            int iter,
+            NoSharedState sharedState)
             throws OutputWriteFailedException {
         Optional<Path> pathDelegate =
-                copyFilesNaming.destinationPathRelative(sourceDirectory, destinationDirectory, file, iter, sharedState);
+                copyFilesNaming.destinationPathRelative(
+                        sourceDirectory, destinationDirectory, file, iter, sharedState);
         return OptionalUtilities.flatMap(pathDelegate, this::destinationPathRelative);
     }
 

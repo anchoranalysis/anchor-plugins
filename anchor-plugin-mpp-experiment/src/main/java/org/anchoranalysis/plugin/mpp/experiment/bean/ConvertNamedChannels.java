@@ -64,7 +64,7 @@ import org.anchoranalysis.plugin.mpp.experiment.SharedStateRememberConverted;
  * @param <U> the named-channels-input the delegate task contains
  */
 public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends InputFromManager>
-        extends Task<T, SharedStateRememberConverted<U,S>> implements ReplaceTask<U, S> {
+        extends Task<T, SharedStateRememberConverted<U, S>> implements ReplaceTask<U, S> {
 
     // START BEAN PROPERTIES
     /** The underlying task that will be called, perhaps with a different input-type. */
@@ -72,34 +72,41 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
     // END BEAN PROPERTIES
 
     @Override
-    public SharedStateRememberConverted<U,S> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, List<T> inputs, ParametersExperiment params)
+    public SharedStateRememberConverted<U, S> beforeAnyJobIsExecuted(
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<T> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
-       
-        // If a directory is associated with the inputs, as needed for conversion to {@link FileWithDirectoryInput}.
+
+        // If a directory is associated with the inputs, as needed for conversion to {@link
+        // FileWithDirectoryInput}.
         Optional<Path> directory = Optional.empty();
-        
+
         // Derive a directory if needed
         InputTypesExpected expectedFromDelegate = task.inputTypesExpected();
         if (expectedFromDelegate.doesClassInheritFromAny(FileWithDirectoryInput.class)) {
             directory = Optional.of(CommonRootHelper.findCommonPathRoot(inputs));
         }
-        
-        SharedStateRememberConverted<U,S> sharedState = new SharedStateRememberConverted<>();
+
+        SharedStateRememberConverted<U, S> sharedState = new SharedStateRememberConverted<>();
         List<U> convertedInputs = convertListAndPopulateMap(inputs, sharedState, directory);
         sharedState.setSharedState(
-                task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, convertedInputs, params)
-        );
+                task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, convertedInputs, params));
         return sharedState;
     }
 
     @Override
-    public void doJobOnInput(InputBound<T,  SharedStateRememberConverted<U,S>> inputBound) throws JobExecutionException {
+    public void doJobOnInput(InputBound<T, SharedStateRememberConverted<U, S>> inputBound)
+            throws JobExecutionException {
 
-        Optional<U> inputConverted = inputBound.getSharedState().findConvertedInputFor( inputBound.getInput() );
-        
+        Optional<U> inputConverted =
+                inputBound.getSharedState().findConvertedInputFor(inputBound.getInput());
+
         if (inputConverted.isPresent()) {
-            task.doJobOnInput( inputBound.changeInputAndSharedState(inputConverted.get(), inputBound.getSharedState().getSharedState()) );    
+            task.doJobOnInput(
+                    inputBound.changeInputAndSharedState(
+                            inputConverted.get(), inputBound.getSharedState().getSharedState()));
         } else {
             throw new JobExecutionException("No converted-input can be found in the map");
         }
@@ -114,7 +121,8 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
     }
 
     @Override
-    public void afterAllJobsAreExecuted( SharedStateRememberConverted<U,S> sharedState, InputOutputContext context)
+    public void afterAllJobsAreExecuted(
+            SharedStateRememberConverted<U, S> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         sharedState.forgetAll();
         task.afterAllJobsAreExecuted(sharedState.getSharedState(), context);
@@ -137,12 +145,16 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
 
     /** Convert all inputs, placing them into the map. */
     @SuppressWarnings("unchecked")
-    private List<U> convertListAndPopulateMap(List<T> inputs, SharedStateRememberConverted<U,S> sharedState, Optional<Path> directory) throws ExperimentExecutionException {
+    private List<U> convertListAndPopulateMap(
+            List<T> inputs,
+            SharedStateRememberConverted<U, S> sharedState,
+            Optional<Path> directory)
+            throws ExperimentExecutionException {
         List<U> out = new ArrayList<>();
-        
+
         InputTypesExpected inputTypesExpected = task.inputTypesExpected();
-        
-        for(T input : inputs) {
+
+        for (T input : inputs) {
             // Convert and put in both the map and the list
             U converted = (U) ConvertInputHelper.convert(input, inputTypesExpected, directory);
             sharedState.rememberConverted(input, converted);
