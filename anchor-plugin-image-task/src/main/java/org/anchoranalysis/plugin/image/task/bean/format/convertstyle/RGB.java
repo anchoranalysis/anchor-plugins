@@ -98,7 +98,7 @@ public class RGB extends ChannelConvertStyle {
     private static Stack createRGBStack(
             ChannelGetterForTimepoint channelGetter, MessageLogger logger) throws CreateException {
 
-        Stack stackRearranged = new Stack();
+        Stack stackRearranged = new Stack(true);
         addChannelOrBlank(RGBChannelNames.RED, channelGetter, stackRearranged, logger);
         addChannelOrBlank(RGBChannelNames.GREEN, channelGetter, stackRearranged, logger);
         addChannelOrBlank(RGBChannelNames.BLUE, channelGetter, stackRearranged, logger);
