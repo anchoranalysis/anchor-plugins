@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -61,8 +62,8 @@ public class WriteResolutionXml extends StackWriter {
     // END BEAN PROPERTIES
 
     @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return writer.fileExtension(writeOptions);
+    public ImageFileFormat fileFormat(StackWriteOptions writeOptions) throws ImageIOException {
+        return writer.fileFormat(writeOptions);
     }
 
     @Override

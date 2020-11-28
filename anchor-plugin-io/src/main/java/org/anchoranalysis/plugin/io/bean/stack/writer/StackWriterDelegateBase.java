@@ -26,6 +26,7 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import java.nio.file.Path;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
@@ -42,8 +43,8 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 public abstract class StackWriterDelegateBase extends StackWriter {
 
     @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return selectDelegate(writeOptions).fileExtension(writeOptions);
+    public ImageFileFormat fileFormat(StackWriteOptions writeOptions) throws ImageIOException {
+        return selectDelegate(writeOptions).fileFormat(writeOptions);
     }
 
     @Override
@@ -64,5 +65,5 @@ public abstract class StackWriterDelegateBase extends StackWriter {
      * @param writeOptions options that specify what kind of rasters will be written.
      * @return the selected {@link StackWriter}
      */
-    protected abstract StackWriter selectDelegate(StackWriteOptions writeOptions);
+    protected abstract StackWriter selectDelegate(StackWriteOptions writeOptions) throws ImageIOException;
 }
