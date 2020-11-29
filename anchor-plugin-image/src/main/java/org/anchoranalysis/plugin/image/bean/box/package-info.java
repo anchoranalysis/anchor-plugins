@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Beans pertaining to bounding-boxes. */
+/** Bounding box manipulation. */
 package org.anchoranalysis.plugin.image.bean.box;
