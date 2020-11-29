@@ -61,7 +61,7 @@ import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
 /**
- * Task to compare a set of annotations to a segmentation or other set of annotations.
+ * Task to compare a set of annotations to a segmentation or another set of annotations.
  *
  * <p>The following outputs are produced:
  *
