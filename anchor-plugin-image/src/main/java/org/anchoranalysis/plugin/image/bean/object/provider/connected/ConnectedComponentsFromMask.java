@@ -119,10 +119,10 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
     private ObjectCollection createForSlice(
             ObjectsFromConnectedComponentsFactory objectCreator,
-            BinaryVoxels<UnsignedByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> binaryValues,
             int z) {
         // respecify the z
-        return objectCreator.createConnectedComponents(bvb).stream()
+        return objectCreator.createConnectedComponents(binaryValues).stream()
                 .mapBoundingBoxPreserveExtent(box -> box.shiftToZ(z));
     }
 }

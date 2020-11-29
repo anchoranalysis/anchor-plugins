@@ -34,8 +34,8 @@ import org.anchoranalysis.spatial.Extent;
 
 public class SliceThresholderWithoutMask extends SliceThresholder {
 
-    public SliceThresholderWithoutMask(BinaryValuesByte bvb) {
-        super(bvb);
+    public SliceThresholderWithoutMask(BinaryValuesByte binaryValues) {
+        super(binaryValues);
     }
 
     @Override

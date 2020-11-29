@@ -97,14 +97,14 @@ class CalculateGradientFromChannels
     private void putGradientValue(
             ObjectMask object, List<Point3d> points, int axisIndex, Channel channel) {
 
-        BinaryVoxels<UnsignedByteBuffer> bvb = object.binaryVoxels();
+        BinaryVoxels<UnsignedByteBuffer> binaryValues = object.binaryVoxels();
         Voxels<?> voxels = channel.voxels().any();
         BoundingBox box = object.boundingBox();
 
         Extent extent = voxels.extent();
         Extent extentMask = box.extent();
 
-        BinaryValuesByte bvbMask = bvb.binaryValues().createByte();
+        BinaryValuesByte binaryValuesMask = binaryValues.binaryValues().createByte();
 
         // Tracks where are writing to on the output list.
         int pointIndex = 0;
@@ -112,14 +112,14 @@ class CalculateGradientFromChannels
         for (int z = 0; z < extentMask.z(); z++) {
 
             VoxelBuffer<?> buffer = voxels.slice(z + box.cornerMin().z());
-            VoxelBuffer<UnsignedByteBuffer> bufferMask = bvb.voxels().slice(z);
+            VoxelBuffer<UnsignedByteBuffer> bufferMask = binaryValues.voxels().slice(z);
 
             for (int y = 0; y < extentMask.y(); y++) {
                 for (int x = 0; x < extentMask.x(); x++) {
 
                     int offsetMask = extentMask.offset(x, y);
 
-                    if (bufferMask.buffer().getRaw(offsetMask) == bvbMask.getOnByte()) {
+                    if (bufferMask.buffer().getRaw(offsetMask) == binaryValuesMask.getOnByte()) {
 
                         int offset =
                                 extent.offset(x + box.cornerMin().x(), y + box.cornerMin().y());

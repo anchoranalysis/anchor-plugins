@@ -71,12 +71,12 @@ public class BinarySegmentByObject extends UnaryWithChannelBase {
             throws SegmentationFailedException {
         Voxels<?> voxels = channelSource.extract().region(object.boundingBox(), true);
 
-        BinaryVoxels<UnsignedByteBuffer> bvb =
+        BinaryVoxels<UnsignedByteBuffer> binaryValues =
                 binarySgmn.segment(
                         new VoxelsWrapper(voxels),
                         new BinarySegmentationParameters(),
                         Optional.of(new ObjectMask(object.voxels())));
 
-        return new ObjectMask(object.boundingBox(), bvb);
+        return new ObjectMask(object.boundingBox(), binaryValues);
     }
 }
