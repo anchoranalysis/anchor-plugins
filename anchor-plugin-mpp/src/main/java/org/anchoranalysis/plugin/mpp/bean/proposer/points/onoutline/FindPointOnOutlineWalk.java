@@ -87,7 +87,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
     private Optional<Point3i> pointOnOutline( // NOSONAR
             Point3d centerPoint, Point3d step, boolean useZ) throws OperationFailedException {
 
-        BinaryValuesByte bvb = maskCreated.binaryValues().createByte();
+        BinaryValuesByte binaryValues = maskCreated.binaryValues().createByte();
 
         Point3d pointDouble = new Point3d(centerPoint);
         while (true) {
@@ -105,32 +105,32 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
                 return Optional.empty();
             }
 
-            if (pointIsOutlineVal(point, dimensions, bvb)) {
+            if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                 return Optional.of(point);
             }
 
             point.incrementX();
 
-            if (pointIsOutlineVal(point, dimensions, bvb)) {
+            if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                 return Optional.of(point);
             }
 
             point.decrementX(2);
 
-            if (pointIsOutlineVal(point, dimensions, bvb)) {
+            if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                 return Optional.of(point);
             }
 
             point.incrementX();
             point.decrementY();
 
-            if (pointIsOutlineVal(point, dimensions, bvb)) {
+            if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                 return Optional.of(point);
             }
 
             point.incrementY(2);
 
-            if (pointIsOutlineVal(point, dimensions, bvb)) {
+            if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                 return Optional.of(point);
             }
 
@@ -138,26 +138,26 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 
             if (useZ) {
                 point.decrementZ();
-                if (pointIsOutlineVal(point, dimensions, bvb)) {
+                if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                     return Optional.of(point);
                 }
 
                 point.incrementZ(2);
-                if (pointIsOutlineVal(point, dimensions, bvb)) {
+                if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                     return Optional.of(point);
                 }
             }
         }
     }
 
-    private boolean pointIsOutlineVal(Point3i point, Dimensions dimensions, BinaryValuesByte bvb) {
+    private boolean pointIsOutlineVal(Point3i point, Dimensions dimensions, BinaryValuesByte binaryValues) {
 
         if (!dimensions.contains(point)) {
             return false;
         }
 
         UnsignedByteBuffer buffer = channel.voxels().asByte().sliceBuffer(point.z());
-        return buffer.getRaw(dimensions.offsetSlice(point)) == bvb.getOnByte();
+        return buffer.getRaw(dimensions.offsetSlice(point)) == binaryValues.getOnByte();
     }
 
     private static Point3d marginalStepFrom(RotationMatrix matrix, boolean is3d) {

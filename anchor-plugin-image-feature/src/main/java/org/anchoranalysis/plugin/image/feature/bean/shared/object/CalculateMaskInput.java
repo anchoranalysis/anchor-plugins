@@ -50,9 +50,9 @@ class CalculateMaskInput<T extends FeatureInputEnergy>
     @Override
     protected FeatureInputSingleObject execute(T input) throws FeatureCalculationException {
 
-        BinaryVoxels<UnsignedByteBuffer> bvb = binaryVoxels(mask);
+        BinaryVoxels<UnsignedByteBuffer> binaryValues = binaryVoxels(mask);
 
-        return new FeatureInputSingleObject(new ObjectMask(bvb), input.getEnergyStackOptional());
+        return new FeatureInputSingleObject(new ObjectMask(binaryValues), input.getEnergyStackOptional());
     }
 
     private static BinaryVoxels<UnsignedByteBuffer> binaryVoxels(Mask mask)

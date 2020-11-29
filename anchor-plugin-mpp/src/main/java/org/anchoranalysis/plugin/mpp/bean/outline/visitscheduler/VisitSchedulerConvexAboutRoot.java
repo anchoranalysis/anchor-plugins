@@ -76,8 +76,8 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     }
 
     public static boolean isPointConvexTo(
-            Point3i root, Point3i point, BinaryVoxels<UnsignedByteBuffer> bvb) {
-        return isPointConvexTo(root, point, bvb, false);
+            Point3i root, Point3i point, BinaryVoxels<UnsignedByteBuffer> binaryValues) {
+        return isPointConvexTo(root, point, binaryValues, false);
     }
 
     public static boolean isPointConvexTo(
@@ -134,7 +134,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
             Point3d point,
             VoxelsExtracter<UnsignedByteBuffer> extracter,
             Extent extent,
-            BinaryValues bv) {
+            BinaryValues binaryValues) {
 
         Point3i pointInt = PointConverter.intFromDoubleFloor(point);
 
@@ -142,6 +142,6 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
             return false;
         }
 
-        return extracter.voxel(pointInt) == bv.getOnInt();
+        return extracter.voxel(pointInt) == binaryValues.getOnInt();
     }
 }

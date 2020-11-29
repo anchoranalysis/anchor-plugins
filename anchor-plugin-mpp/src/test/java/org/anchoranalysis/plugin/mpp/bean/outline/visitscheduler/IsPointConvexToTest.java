@@ -51,17 +51,17 @@ public class IsPointConvexToTest {
 
         Mask mask = new Mask(stack.getChannel(0));
 
-        BinaryVoxels<UnsignedByteBuffer> bvb = mask.binaryVoxels();
+        BinaryVoxels<UnsignedByteBuffer> binaryValues = mask.binaryVoxels();
 
         Point3i pointRoot = new Point3i(62, 84, 15);
 
         Point3i pointCheck0 = new Point3i(57, 77, 15);
-        assertTrue(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck0, bvb));
+        assertTrue(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck0, binaryValues));
 
         Point3i pointCheck1 = new Point3i(69, 89, 17);
-        assertTrue(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck1, bvb));
+        assertTrue(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck1, binaryValues));
 
         Point3i pointCheck2 = new Point3i(81, 84, 16);
-        assertFalse(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck2, bvb));
+        assertFalse(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck2, binaryValues));
     }
 }

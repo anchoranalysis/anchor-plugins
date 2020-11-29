@@ -66,19 +66,19 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
         BinarySegmentationParameters params =
                 new BinarySegmentationParameters(channel.resolution());
 
-        BinaryVoxels<UnsignedByteBuffer> bvb =
+        BinaryVoxels<UnsignedByteBuffer> binaryValues =
                 segment.segment(channel.voxels(), params, objectMask);
         return createFromVoxels(
-                bvb,
+                binaryValues,
                 channel.resolution(),
                 objectMask.map(object -> object.boundingBox().cornerMin()));
     }
 
     private ObjectCollection createFromVoxels(
-            BinaryVoxels<UnsignedByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> binaryValues,
             Optional<Resolution> resolution,
             Optional<ReadableTuple3i> maskShiftBy) {
-        Mask mask = new Mask(bvb, resolution);
+        Mask mask = new Mask(binaryValues, resolution);
 
         ObjectsFromConnectedComponentsFactory creator =
                 new ObjectsFromConnectedComponentsFactory(minNumberVoxels);

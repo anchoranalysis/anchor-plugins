@@ -114,9 +114,9 @@ class ExtendObjectsInZHelper {
     }
 
     private static void setBufferLow(
-            int numVoxels, UnsignedByteBuffer buffer, BinaryValuesByte bvb) {
+            int numVoxels, UnsignedByteBuffer buffer, BinaryValuesByte binaryValues) {
         for (int i = 0; i < numVoxels; i++) {
-            buffer.putRaw(i, bvb.getOffByte());
+            buffer.putRaw(i, binaryValues.getOffByte());
         }
     }
 
@@ -128,8 +128,8 @@ class ExtendObjectsInZHelper {
             int numberVoxels,
             UnsignedByteBuffer buffer,
             UnsignedByteBuffer receive,
-            BinaryValuesByte bvb,
-            BinaryValuesByte bvbReceive) {
+            BinaryValuesByte binaryValues,
+            BinaryValuesByte binaryValuesReceive) {
 
         boolean atLeastOneHigh = false;
 
@@ -138,11 +138,11 @@ class ExtendObjectsInZHelper {
             byte byteBuffer = buffer.getRaw(i);
             byte byteReceive = receive.getRaw(i);
 
-            if (byteBuffer == bvb.getOnByte() && byteReceive == bvbReceive.getOnByte()) {
+            if (byteBuffer == binaryValues.getOnByte() && byteReceive == binaryValuesReceive.getOnByte()) {
                 // No need to change buffer, as byte is already HIGH
                 atLeastOneHigh = true;
             } else {
-                buffer.putRaw(i, bvb.getOffByte());
+                buffer.putRaw(i, binaryValues.getOffByte());
             }
         }
 

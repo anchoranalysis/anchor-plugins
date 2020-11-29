@@ -127,14 +127,14 @@ class WalkShortestPath {
     private static void drawLineOnVoxelBuffer(
             VoxelBuffer<UnsignedByteBuffer> plane,
             Extent extent,
-            BinaryValuesByte bvb,
+            BinaryValuesByte binaryValues,
             Point3i point1,
             Point3i point2,
             ReadableTuple3i cornerMin) {
         drawLine4(
                 plane,
                 extent,
-                bvb,
+                binaryValues,
                 point1.x() - cornerMin.x(),
                 point1.y() - cornerMin.y(),
                 point2.x() - cornerMin.x(),
@@ -151,7 +151,7 @@ class WalkShortestPath {
     private static void drawLine4(
             VoxelBuffer<UnsignedByteBuffer> plane,
             Extent extent,
-            BinaryValuesByte bvb,
+            BinaryValuesByte binaryValues,
             int x1,
             int y1,
             int x2,
@@ -163,7 +163,7 @@ class WalkShortestPath {
         int sgnY = sgn(y1, y2);
         int e = 0;
         for (int i = 0; i < dx + dy; i++) {
-            drawPoint(plane, extent, bvb, x1, y1);
+            drawPoint(plane, extent, binaryValues, x1, y1);
 
             int e1 = e + dy;
             int e2 = e - dx;
@@ -175,7 +175,7 @@ class WalkShortestPath {
                 e = e2;
             }
         }
-        drawPoint(plane, extent, bvb, x2, y2);
+        drawPoint(plane, extent, binaryValues, x2, y2);
     }
 
     private static int sgn(int x1, int x2) {
@@ -185,9 +185,9 @@ class WalkShortestPath {
     private static void drawPoint(
             VoxelBuffer<UnsignedByteBuffer> plane,
             Extent extent,
-            BinaryValuesByte bvb,
+            BinaryValuesByte binaryValues,
             int x,
             int y) {
-        plane.putByte(extent.offset(x, y), bvb.getOnByte());
+        plane.putByte(extent.offset(x, y), binaryValues.getOnByte());
     }
 }

@@ -101,7 +101,7 @@ class PointsFromInsideHelper {
             int successiveEmptySlices,
             int skipAfterSuccessiveEmptySlices,
             Consumer<Point3i> processPoint) {
-        BinaryValuesByte bvb = mask.binaryValues().createByte();
+        BinaryValuesByte binaryValues = mask.binaryValues().createByte();
 
         Voxels<UnsignedByteBuffer> voxels = mask.channel().voxels().asByte();
         Extent extent = voxels.extent();
@@ -112,7 +112,7 @@ class PointsFromInsideHelper {
 
             UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
 
-            if (!addPointsToSlice(extent, buffer, bvb, z, processPoint)) {
+            if (!addPointsToSlice(extent, buffer, binaryValues, z, processPoint)) {
                 successiveEmptySlices = 0;
             } else if (successiveEmptySlices != -1) {
                 // We don't increase the counter until we've been inside a non-empty slice
@@ -129,14 +129,14 @@ class PointsFromInsideHelper {
     private boolean addPointsToSlice(
             Extent extent,
             UnsignedByteBuffer buffer,
-            BinaryValuesByte bvb,
+            BinaryValuesByte binaryValues,
             int z,
             Consumer<Point3i> processPoint) {
         boolean addedToSlice = false;
         for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
             for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
                 int offset = extent.offset(x, y);
-                if (buffer.getRaw(offset) == bvb.getOnByte()) {
+                if (buffer.getRaw(offset) == binaryValues.getOnByte()) {
 
                     Point3i point = new Point3i(x, y, z);
                     if (pointsConvexRoot.convexWithAtLeastOnePoint(point, voxelsFilled)) {
