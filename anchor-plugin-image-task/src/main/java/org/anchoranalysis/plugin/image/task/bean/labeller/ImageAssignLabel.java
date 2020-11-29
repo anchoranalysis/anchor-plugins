@@ -26,16 +26,17 @@
 
 package org.anchoranalysis.plugin.image.task.bean.labeller;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -44,24 +45,46 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.StackInputInitParamsCreator;
+import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.labeller.SharedStateFilteredImageOutput;
 
 /**
- * Assigns a label to each image and optionally 1. copies each image into directory corresponding to
- * the label (e.g. "positive", "negative) 2. creates a single CSV file where each row is an
- * image-label correspondence
+ * Assigns a label to each image and copies into subdirectories for each label, and creates a
+ * labelling CSV.
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>images</td><td>yes</td><td>a directory where copies of input images are placed in subdirectories corresponding to their label.</td></tr>
+ * <tr><td>mapping</td><td>yes</td><td>a single CSV file where each row is an image-label correspondence.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
  *
  * @author Owen Feehan
  * @param <T> type of init-params associated with the filter
  */
 public class ImageAssignLabel<T>
         extends Task<ProvidesStackInput, SharedStateFilteredImageOutput<T>> {
+
+    /** Output-name for a single CSV file where each row is an image-label correspondence. */
+    private static final String OUTPUT_MAPPING = "mapping";
+
+    /**
+     * Output-name (and directory) for where copies of the input images are placed in
+     * sub-directories corresponding to their label.
+     */
+    private static final String OUTPUT_IMAGES = "images";
 
     // START BEAN PROPERTIES
     /** Maps a label to an image */
@@ -76,10 +99,14 @@ public class ImageAssignLabel<T>
 
     @Override
     public SharedStateFilteredImageOutput<T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<ProvidesStackInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            return new SharedStateFilteredImageOutput<>(outputter, imageLabeller);
+            return new SharedStateFilteredImageOutput<>(
+                    outputter, imageLabeller, OUTPUT_MAPPING, OUTPUT_IMAGES);
         } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -87,8 +114,7 @@ public class ImageAssignLabel<T>
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_MAPPING, OUTPUT_IMAGES);
     }
 
     @Override
@@ -98,22 +124,22 @@ public class ImageAssignLabel<T>
 
     @Override
     public void doJobOnInput(
-            InputBound<ProvidesStackInput, SharedStateFilteredImageOutput<T>> params)
+            InputBound<ProvidesStackInput, SharedStateFilteredImageOutput<T>> input)
             throws JobExecutionException {
 
         try {
             String groupIdentifier =
-                    params.getSharedState().labelFor(params.getInput(), params.context());
+                    input.getSharedState().labelFor(input.getInput(), input.getContextJob());
 
-            params.getSharedState().writeRow(params.getInput().name(), groupIdentifier);
+            input.getSharedState().writeRow(input.getInput().name(), groupIdentifier);
 
             if (outputStackProvider != null) {
                 outputStack(
                         groupIdentifier,
                         createFromProviderWith(
-                                outputStackProvider, params.getInput(), params.context()),
-                        params.getInput().name(),
-                        params.getSharedState());
+                                outputStackProvider, input.getInput(), input.getContextJob()),
+                        input.getInput().name(),
+                        input.getSharedState());
             }
         } catch (OperationFailedException | CreateException e) {
             throw new JobExecutionException(e);
@@ -151,10 +177,16 @@ public class ImageAssignLabel<T>
             String outputName,
             SharedStateFilteredImageOutput<T> sharedState) {
 
+        Optional<Outputter> outputter = sharedState.getOutputterFor(groupIdentifier);
         // Copies the file into the output
-        sharedState
-                .getOutputterFor(groupIdentifier)
-                .writerPermissive()
-                .write(outputName, () -> new StackGenerator(true, Optional.of("raster"), false), () -> stack);
+        if (outputter.isPresent()) {
+            outputter
+                    .get()
+                    .writerSelective()
+                    .write(
+                            outputName,
+                            () -> new StackGenerator(true, Optional.of("raster"), false),
+                            () -> stack);
+        }
     }
 }

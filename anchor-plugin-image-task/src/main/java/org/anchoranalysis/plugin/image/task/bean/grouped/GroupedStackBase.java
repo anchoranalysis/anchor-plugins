@@ -28,21 +28,22 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.image.core.stack.NamedStacks;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
@@ -65,15 +66,9 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 public abstract class GroupedStackBase<S, T>
         extends Task<ProvidesStackInput, GroupedSharedState<S, T>> {
 
-    /**
-     * A fallback output-name for the grouped directory if nothing else is specified.
-     *
-     * <p>This is specified by {@link #subdirectoryForGroupOutputs()}.
-     */
-    private static final String OUTPUT_FALLBACK_GROUPED = "grouped";
-
     private static final ManifestDirectoryDescription MANIFEST_DESCRIPTION_GROUP_FOLDER =
-            new ManifestDirectoryDescription("groupedFolder", "groupedStack", new StringsWithoutOrder());
+            new ManifestDirectoryDescription(
+                    "groupedDirectory", "groupedStack", new StringsWithoutOrder());
 
     // START BEAN PROPERTIES
     /**
@@ -98,7 +93,10 @@ public abstract class GroupedStackBase<S, T>
 
     @Override
     public GroupedSharedState<S, T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<ProvidesStackInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return new GroupedSharedState<>(this::createGroupMap);
     }
@@ -108,14 +106,17 @@ public abstract class GroupedStackBase<S, T>
             throws JobExecutionException {
 
         ProvidesStackInput input = params.getInput();
-        InputOutputContext context = params.context();
+        InputOutputContext context = params.getContextJob();
 
         // Extract a group name
         Optional<String> groupName =
                 extractGroupName(input.pathForBinding(), context.isDebugEnabled());
 
-        processStacks(GroupedStackBase.extractInputStacks(input), groupName,
-                params.getSharedState(), context);
+        processStacks(
+                GroupedStackBase.extractInputStacks(input),
+                groupName,
+                params.getSharedState(),
+                context);
     }
 
     @Override
@@ -125,8 +126,7 @@ public abstract class GroupedStackBase<S, T>
 
         try {
             Optional<String> subdirectoryName = subdirectoryForGroupOutputs();
-            String groupedOutputName = subdirectoryName.orElse(OUTPUT_FALLBACK_GROUPED);
-            if (context.getOutputter().outputsEnabled().isOutputEnabled(groupedOutputName)) {
+            if (context.getOutputter().outputsEnabled().isOutputEnabled(outputNameForGroups())) {
                 sharedState
                         .getGroupMap()
                         .outputGroupedData(
@@ -141,6 +141,16 @@ public abstract class GroupedStackBase<S, T>
             throw new ExperimentExecutionException(e);
         }
     }
+
+    /**
+     * The first-level output-name used for determining if groups are written.
+     *
+     * <p>Second-level matches against this, will determine which specific groups may or may not be
+     * written.
+     *
+     * @return
+     */
+    protected abstract String outputNameForGroups();
 
     /** An optional subdirectory where the group outputs are placed. */
     protected abstract Optional<String> subdirectoryForGroupOutputs();

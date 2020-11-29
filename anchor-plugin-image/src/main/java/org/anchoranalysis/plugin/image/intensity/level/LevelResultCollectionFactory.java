@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.intensity.level;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -73,7 +73,8 @@ public class LevelResultCollectionFactory {
                 objectForCalculateLevel = objectMask;
             }
 
-            Histogram histogram = HistogramFromObjectsFactory.create(channel, objectForCalculateLevel);
+            Histogram histogram =
+                    HistogramFromObjectsFactory.create(channel, objectForCalculateLevel);
             int level;
             try {
                 level = calculateLevel.calculateLevel(histogram);

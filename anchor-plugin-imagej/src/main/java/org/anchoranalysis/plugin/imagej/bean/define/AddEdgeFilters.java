@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderWithPrefixBean;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;

@@ -47,7 +47,7 @@ class CSVRowXMLGenerator extends XMLGenerator<CSVRow> {
     public void writeToFile(CSVRow element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
         try {
-            XMLWriter.writeXmlToFile( csvRowAsXml(element), filePath);
+            XMLWriter.writeXmlToFile(csvRowAsXml(element), filePath);
         } catch (OutputWriteFailedException | IOException e) {
             throw new OutputWriteFailedException(e);
         }
@@ -57,21 +57,21 @@ class CSVRowXMLGenerator extends XMLGenerator<CSVRow> {
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(new ManifestDescription("xml", "objectPairsClass"));
     }
-    
+
     private static Document csvRowAsXml(CSVRow element) throws OutputWriteFailedException {
         try {
             DocumentBuilder db = XmlUtilities.createDocumentBuilder();
             Document document = db.newDocument();
-    
+
             // create the root element and add it to the document
             Element root = document.createElement("identify");
             document.appendChild(root);
-    
+
             element.writeToXML(root, document);
-            
+
             return document;
         } catch (ParserConfigurationException e) {
             throw new OutputWriteFailedException(e);
-        }            
+        }
     }
 }

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 public class NumberIntersectingObjects extends FeatureIntersectingObjects {

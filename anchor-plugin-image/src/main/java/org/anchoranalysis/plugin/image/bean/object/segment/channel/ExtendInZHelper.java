@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
-import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -63,12 +63,13 @@ class ExtendInZHelper {
 
         BoundingBox newBBox = createBoundingBoxForAllZ(obj2D.boundingBox(), mask3D.extent().z());
 
-        BoundedVoxels<UnsignedByteBuffer> newMask = BoundedVoxelsFactory.createByte(newBBox);
+        BoundedVoxels<UnsignedByteBuffer> newMask =
+                VoxelsFactory.getUnsignedByte().createBounded(newBBox);
 
         ReadableTuple3i max = newBBox.calculateCornerMax();
         Point3i point = new Point3i();
 
-        BinaryValuesByte bv = mask3D.binaryValues().createByte();
+        BinaryValuesByte binaryValues = mask3D.binaryValues().createByte();
 
         UnsignedByteBuffer bufferIn2D = obj2D.voxels().sliceBuffer(0);
 
@@ -77,24 +78,21 @@ class ExtendInZHelper {
             UnsignedByteBuffer bufferMask3D = mask3D.voxels().sliceBuffer(point.z());
             UnsignedByteBuffer bufferOut3D = newMask.voxels().sliceBuffer(point.z());
 
-            int ind = 0;
+            int offset = 0;
 
             for (point.setY(newBBox.cornerMin().y()); point.y() <= max.y(); point.incrementY()) {
-
                 for (point.setX(newBBox.cornerMin().x());
                         point.x() <= max.x();
-                        point.incrementX(), ind++) {
+                        point.incrementX(), offset++) {
 
-                    if (bufferIn2D.getRaw(ind) != bv.getOnByte()) {
-                        continue;
+                    if (bufferIn2D.getRaw(offset) == binaryValues.getOnByte()) {
+                        int indexGlobal = mask3D.extent().offset(point.x(), point.y());
+                        bufferOut3D.putRaw(
+                                offset,
+                                bufferMask3D.getRaw(indexGlobal) == binaryValues.getOnByte()
+                                        ? binaryValues.getOnByte()
+                                        : binaryValues.getOffByte());
                     }
-
-                    int indexGlobal = mask3D.extent().offset(point.x(), point.y());
-                    bufferOut3D.putRaw(
-                            ind,
-                            bufferMask3D.getRaw(indexGlobal) == bv.getOnByte()
-                                    ? bv.getOnByte()
-                                    : bv.getOffByte());
                 }
             }
         }

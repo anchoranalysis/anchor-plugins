@@ -31,8 +31,8 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.GeneratorBridge;
-import org.anchoranalysis.spatial.extent.box.BoundedList;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundedList;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Exposes an iterable generator that accepts other kinds of objects as one that accepts a {@link

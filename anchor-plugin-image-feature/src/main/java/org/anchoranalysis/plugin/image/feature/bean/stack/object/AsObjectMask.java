@@ -33,9 +33,9 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.bean.FeatureStack;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputStack;
 
 /**
  * Treats a channel as an object-mask, assuming binary values of 0 and 255 and calls an object-mask

@@ -30,17 +30,17 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesConcatenate;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesConcatenate;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.input.path.PathSupplier;
 
@@ -51,9 +51,9 @@ import org.anchoranalysis.io.input.path.PathSupplier;
  */
 class AppendPart extends NamedChannelsInputPart {
 
-    private NamedChannelsInputPart delegate;
-    private AdditionalChannel additionalChannel;
-    private StackReader stackReader;
+    private final NamedChannelsInputPart delegate;
+    private final AdditionalChannel additionalChannel;
+    private final StackReader stackReader;
 
     private OpenedRaster openedRasterMemo;
 
@@ -63,7 +63,6 @@ class AppendPart extends NamedChannelsInputPart {
             int channelIndex,
             PathSupplier filePath,
             StackReader stackReader) {
-        super();
         this.delegate = delegate;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
         this.stackReader = stackReader;
@@ -89,15 +88,15 @@ class AppendPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException {
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
+            throws ImageIOException {
 
-        NamedChannelsForSeries exst = delegate.createChannelsForSeries(seriesIndex, progressReporter);
+        NamedChannelsForSeries existing = delegate.createChannelsForSeries(seriesIndex, progress);
 
         openRasterIfNecessary();
 
         NamedChannelsForSeriesConcatenate out = new NamedChannelsForSeriesConcatenate();
-        out.add(exst);
+        out.add(existing);
         out.add(
                 new NamedChannelsForSeriesMap(
                         openedRasterMemo, additionalChannel.createChannelMap(), seriesIndex));

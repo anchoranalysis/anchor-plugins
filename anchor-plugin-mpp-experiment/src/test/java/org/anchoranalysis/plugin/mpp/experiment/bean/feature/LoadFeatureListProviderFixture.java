@@ -29,9 +29,10 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.Define;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -48,27 +49,21 @@ import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
  * @param <T> feature-input-type returned by the list
  * @author Owen Feehan
  */
+@RequiredArgsConstructor
 class LoadFeatureListProviderFixture<T extends FeatureInput> {
 
     private static final String SINGLE_FEATURE_NAME = "someFeature";
 
-    private TestLoader loader;
-    private String defaultPath;
+    // START REQUIRED ARGUMENTS
+    /** A loader for finding XML files. */
+    private final TestLoader loader;
+
+    /** The features in this XML file are used if no other option is set. */
+    private final String defaultPathToXML;
+    // END REQUIRED ARGUMENTS
 
     /** The to use, if set. If empty, the default is used instead. */
     private Optional<List<NamedBean<FeatureListProvider<T>>>> features = Optional.empty();
-
-    /**
-     * Constructor
-     *
-     * @param loader a loader for finding XML files
-     * @param defaultPathToXml the features in this XML file are used if no other option is set
-     */
-    public LoadFeatureListProviderFixture(TestLoader loader, String defaultPathToXml) {
-        super();
-        this.loader = loader;
-        this.defaultPath = defaultPathToXml;
-    }
 
     /**
      * Additionally include a shell feature in the "single" features
@@ -99,7 +94,7 @@ class LoadFeatureListProviderFixture<T extends FeatureInput> {
         if (features.isPresent()) {
             return features.get();
         } else {
-            return loadFeatures(loader, defaultPath);
+            return loadFeatures(loader, defaultPathToXML);
         }
     }
 

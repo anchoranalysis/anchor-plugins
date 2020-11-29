@@ -49,8 +49,7 @@ import org.apache.commons.io.IOCase;
 public class PatternSpan extends FileNamer {
 
     @Override
-    public List<NamedFile> deriveName(
-            Collection<File> files, String elseName, Logger logger) {
+    public List<NamedFile> deriveName(Collection<File> files, String elseName, Logger logger) {
 
         // Convert to list
         List<Path> paths = listConvertToPath(files);
@@ -62,7 +61,7 @@ public class PatternSpan extends FileNamer {
 
         // For now, hard-coded case-insensitivity here, and in ExtractVariableSpan
         // TODO consider making it optional in both places
-        Pattern pattern = PathPatternFinder.findPatternPath(paths, IOCase.INSENSITIVE);
+        Pattern pattern = PathPatternFinder.findPatternPaths(paths, IOCase.INSENSITIVE);
 
         assert hasAtLeastOneVariableElement(pattern);
 

@@ -1,6 +1,6 @@
 # anchor-test-mpp
 
-Reusable test classes involving data-objects from the `anchor-mpp` module. 
+Reusable test classes involving data-objects from the `anchor-mpp` module.
 
 ## What is Anchor?
 

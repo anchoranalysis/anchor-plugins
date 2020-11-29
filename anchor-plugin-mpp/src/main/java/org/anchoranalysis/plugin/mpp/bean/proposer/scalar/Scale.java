@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.scalar;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
@@ -44,7 +44,8 @@ public class Scale extends ScalarProposer {
     // END BEAN PROPERTIES
 
     @Override
-    public double propose(RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
+    public double propose(
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws OperationFailedException {
         return scalarProposer.propose(randomNumberGenerator, resolution) * factor;
     }

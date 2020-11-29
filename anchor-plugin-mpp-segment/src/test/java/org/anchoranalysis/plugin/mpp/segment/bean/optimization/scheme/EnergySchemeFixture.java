@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;

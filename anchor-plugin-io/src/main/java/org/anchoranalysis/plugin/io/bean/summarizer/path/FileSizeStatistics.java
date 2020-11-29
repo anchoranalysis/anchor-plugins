@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.io.bean.summarizer.path;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.anchoranalysis.core.arithmetic.RunningSum;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.math.arithmetic.RunningSum;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.apache.commons.io.FileUtils;
 

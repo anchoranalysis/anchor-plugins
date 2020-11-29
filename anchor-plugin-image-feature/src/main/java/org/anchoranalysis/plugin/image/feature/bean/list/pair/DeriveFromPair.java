@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -39,8 +39,8 @@ import org.anchoranalysis.image.feature.bean.object.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.bean.object.pair.Merged;
 import org.anchoranalysis.image.feature.bean.object.pair.Second;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
  * Embeds each feature in a {@link FeatureDeriveFromPair} feature (<i>first</i>, <i>second</i> or

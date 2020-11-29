@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
@@ -45,8 +45,7 @@ public abstract class SinglePathStrategy extends AnnotatorStrategy {
     @Override
     public Path annotationPathFor(ProvidesStackInput item) throws InputReadFailedException {
         try {
-            return PathFromGenerator.derivePath(
-                    pathAnnotation, item.pathForBindingRequired());
+            return PathFromGenerator.derivePath(pathAnnotation, item.pathForBindingRequired());
         } catch (DerivePathException e) {
             throw new InputReadFailedException(e);
         }

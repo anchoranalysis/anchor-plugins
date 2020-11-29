@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.quick.bean.input.filepathappend;
 
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 

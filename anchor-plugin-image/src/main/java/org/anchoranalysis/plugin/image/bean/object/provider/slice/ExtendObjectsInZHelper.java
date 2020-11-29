@@ -30,12 +30,12 @@ import java.util.Iterator;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtendObjectsInZHelper {
@@ -114,9 +114,9 @@ class ExtendObjectsInZHelper {
     }
 
     private static void setBufferLow(
-            int numVoxels, UnsignedByteBuffer buffer, BinaryValuesByte bvb) {
+            int numVoxels, UnsignedByteBuffer buffer, BinaryValuesByte binaryValues) {
         for (int i = 0; i < numVoxels; i++) {
-            buffer.putRaw(i, bvb.getOffByte());
+            buffer.putRaw(i, binaryValues.getOffByte());
         }
     }
 
@@ -128,8 +128,8 @@ class ExtendObjectsInZHelper {
             int numberVoxels,
             UnsignedByteBuffer buffer,
             UnsignedByteBuffer receive,
-            BinaryValuesByte bvb,
-            BinaryValuesByte bvbReceive) {
+            BinaryValuesByte binaryValues,
+            BinaryValuesByte binaryValuesReceive) {
 
         boolean atLeastOneHigh = false;
 
@@ -138,11 +138,11 @@ class ExtendObjectsInZHelper {
             byte byteBuffer = buffer.getRaw(i);
             byte byteReceive = receive.getRaw(i);
 
-            if (byteBuffer == bvb.getOnByte() && byteReceive == bvbReceive.getOnByte()) {
+            if (byteBuffer == binaryValues.getOnByte() && byteReceive == binaryValuesReceive.getOnByte()) {
                 // No need to change buffer, as byte is already HIGH
                 atLeastOneHigh = true;
             } else {
-                buffer.putRaw(i, bvb.getOffByte());
+                buffer.putRaw(i, binaryValues.getOffByte());
             }
         }
 

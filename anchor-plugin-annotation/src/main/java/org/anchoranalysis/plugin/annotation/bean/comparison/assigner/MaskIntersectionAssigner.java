@@ -27,14 +27,20 @@
 package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
 
 import org.anchoranalysis.annotation.io.assignment.AssignmentMaskIntersection;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
+/**
+ * No outputs are produced.
+ *
+ * @author Owen Feehan
+ */
 public class MaskIntersectionAssigner
         extends AnnotationComparisonAssigner<AssignmentMaskIntersection> {
 
@@ -47,23 +53,8 @@ public class MaskIntersectionAssigner
             throws CreateException {
 
         return new AssignmentMaskIntersection(
-                extractSingleObj("left", objectsToCompare.getLeft()),
-                extractSingleObj("right", objectsToCompare.getRight()));
-    }
-
-    private static ObjectMask extractSingleObj(String dscr, ObjectCollection objects)
-            throws CreateException {
-        if (objects.size() == 0) {
-            throw new CreateException(
-                    String.format("%s obj contains no objects. Exactly one must exist.", dscr));
-        } else if (objects.size() > 1) {
-            throw new CreateException(
-                    String.format(
-                            "%s obj contains %d objects. Only one is allowed.",
-                            dscr, objects.size()));
-        } else {
-            return objects.get(0);
-        }
+                extractSingleObject("left", objectsToCompare.getLeft()),
+                extractSingleObject("right", objectsToCompare.getRight()));
     }
 
     @Override
@@ -72,7 +63,29 @@ public class MaskIntersectionAssigner
     }
 
     @Override
-    public boolean moreThanOneObj() {
+    public boolean moreThanOneObject() {
         return false;
+    }
+
+    @Override
+    public void addDefaultOutputs(OutputEnabledMutable outputs) {
+        // NO OUTPUTS TO ADD
+    }
+
+    private static ObjectMask extractSingleObject(String description, ObjectCollection objects)
+            throws CreateException {
+        if (objects.size() == 0) {
+            throw new CreateException(
+                    String.format(
+                            "%s object-collection contains no objects. Exactly one must exist.",
+                            description));
+        } else if (objects.size() > 1) {
+            throw new CreateException(
+                    String.format(
+                            "%s object-collection contains %d objects. Only one is allowed.",
+                            description, objects.size()));
+        } else {
+            return objects.get(0);
+        }
     }
 }

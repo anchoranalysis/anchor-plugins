@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.object;
 
 import static org.junit.Assert.assertEquals;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.scale.ScaledElements;
 import org.anchoranalysis.image.core.object.scale.Scaler;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -61,7 +61,7 @@ public class ObjectCollectionTest {
     @Test
     public void testScaleUpMany() throws OperationFailedException {
         testNumberCircles(300, 0.02);
-        //testNumberCircles(300, 0.0);
+        // testNumberCircles(300, 0.0);
     }
 
     /**
@@ -83,7 +83,7 @@ public class ObjectCollectionTest {
 
         ScaledElements<ObjectMask> scaled = Scaler.scaleObjects(unscaled, checker.factor());
 
-        //checker.assertExpectedArea(unscaled, scaled);
+        // checker.assertExpectedArea(unscaled, scaled);
         assertEquals(unscaled.size(), scaled.size());
     }
 }

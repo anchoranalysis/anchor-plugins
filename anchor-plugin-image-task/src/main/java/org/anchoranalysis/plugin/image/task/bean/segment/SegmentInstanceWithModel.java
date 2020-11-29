@@ -37,10 +37,10 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -51,21 +51,22 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
+import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsMergedAsMaskGenerator;
-import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.object.output.grayscale.ObjectsMergedAsMaskGenerator;
+import org.anchoranalysis.image.io.object.output.hdf5.HDF5ObjectsGenerator;
+import org.anchoranalysis.image.io.object.output.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
+import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
@@ -80,7 +81,6 @@ import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.segment.SharedStateSegmentInstance;
-import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
 
 /**
  * Using a model-pool, performs instance segmentation on an image producing zero, one or more
@@ -180,7 +180,10 @@ public class SegmentInstanceWithModel<T>
 
     @Override
     public SharedStateSegmentInstance<T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan plan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan plan,
+            List<StackSequenceInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             initializeBeans(params.getContext());
@@ -198,7 +201,7 @@ public class SegmentInstanceWithModel<T>
     public void doJobOnInput(InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input)
             throws JobExecutionException {
         try {
-            initializeBeans(input.context());
+            initializeBeans(input.getContextJob());
 
             Stack stack = inputStack(input);
 
@@ -209,7 +212,10 @@ public class SegmentInstanceWithModel<T>
 
             if (!segments.isEmpty() || !ignoreNoObjects) {
                 writeOutputsForImage(
-                        stack, segments.asObjects(), background, input.context().getOutputter());
+                        stack,
+                        segments.asObjects(),
+                        background,
+                        input.getContextJob().getOutputter());
 
                 calculateFeaturesForImage(input, stack, segments.asList());
             }
@@ -265,10 +271,11 @@ public class SegmentInstanceWithModel<T>
         CalculateFeaturesForObjects<FeatureInputSingleObject> calculator =
                 new CalculateFeaturesForObjects<>(
                         COMBINE_OBJECTS,
-                        new InitParamsWithEnergyStack(energyStack, input.context()),
+                        new InitParamsWithEnergyStack(energyStack, input.getContextJob()),
                         true,
                         input.getSharedState()
-                                .createInputProcessContext(Optional.empty(), input.context()));
+                                .createInputProcessContext(
+                                        Optional.empty(), input.getContextJob()));
         calculator.calculateFeaturesForObjects(
                 deriveObjects(segments),
                 energyStack,
@@ -307,13 +314,16 @@ public class SegmentInstanceWithModel<T>
         writer.write(OUTPUT_H5, HDF5ObjectsGenerator::new, () -> objects);
         writer.write(
                 OUTPUT_MERGED_AS_MASK,
-                () -> new ObjectsMergedAsMaskGenerator(stack.dimensions()), () -> objects);
+                () -> new ObjectsMergedAsMaskGenerator(stack.dimensions()),
+                () -> objects);
 
-        writer.write(OUTPUT_OUTLINE, () -> outlineGenerator(objects.size(), background), () -> new ObjectCollectionWithProperties(objects) );
+        writer.write(
+                OUTPUT_OUTLINE,
+                () -> outlineGenerator(objects.size(), background),
+                () -> new ObjectCollectionWithProperties(objects));
     }
 
-    private DrawObjectsGenerator outlineGenerator(
-            int objectsSize, DisplayStack background) {
+    private DrawObjectsGenerator outlineGenerator(int objectsSize, DisplayStack background) {
         if (varyColors) {
             return DrawObjectsGenerator.outlineVariedColors(objectsSize, outlineWidth, background);
         } else {
@@ -329,9 +339,7 @@ public class SegmentInstanceWithModel<T>
             throws OperationFailedException {
         try {
             TimeSequence sequence =
-                    input.getInput()
-                            .createStackSequenceForSeries(0)
-                            .get(ProgressReporterNull.get());
+                    input.getInput().createStackSequenceForSeries(0).get(ProgressIgnore.get());
             return sequence.get(0);
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);

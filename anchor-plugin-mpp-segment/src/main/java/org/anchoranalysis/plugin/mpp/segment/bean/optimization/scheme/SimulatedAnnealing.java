@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
 import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;

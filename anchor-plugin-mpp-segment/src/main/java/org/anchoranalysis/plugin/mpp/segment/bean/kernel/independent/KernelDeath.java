@@ -82,7 +82,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
     @Override
     public String describeLast() {
         if (markRmv.isPresent()) {
-            return String.format("death(%d)", markRmv.get().getId());
+            return String.format("death(%d)", markRmv.get().getIdentifier());
         } else {
             return "death";
         }
@@ -91,7 +91,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
     @Override
     public int[] changedMarkIDArray() {
         if (markRmv.isPresent()) {
-            return new int[] {this.markRmv.get().getId()};
+            return new int[] {this.markRmv.get().getIdentifier()};
         } else {
             return new int[] {};
         }

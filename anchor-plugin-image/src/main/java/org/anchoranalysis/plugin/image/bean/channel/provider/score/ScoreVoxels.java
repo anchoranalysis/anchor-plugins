@@ -35,22 +35,22 @@ import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.feature.bean.score.VoxelScore;
+import org.anchoranalysis.image.feature.bean.VoxelScore;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.VoxelsWrapperList;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Assigns a <i>score</i> (a value indicating how probable something is) to each voxel

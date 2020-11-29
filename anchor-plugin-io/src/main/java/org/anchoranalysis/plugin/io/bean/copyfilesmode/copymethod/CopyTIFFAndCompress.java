@@ -39,7 +39,7 @@ import loci.formats.out.TiffWriter;
 import loci.formats.services.OMEXMLService;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CopyTIFFAndCompress {

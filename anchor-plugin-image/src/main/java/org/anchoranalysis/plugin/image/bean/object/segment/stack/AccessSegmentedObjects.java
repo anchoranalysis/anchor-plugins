@@ -32,7 +32,7 @@ import org.anchoranalysis.image.core.object.scale.AccessObjectMask;
 import org.anchoranalysis.image.core.object.scale.Scaler;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**

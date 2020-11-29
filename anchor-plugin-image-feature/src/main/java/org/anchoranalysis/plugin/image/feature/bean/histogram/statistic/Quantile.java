@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
+import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
 public class Quantile extends FeatureHistogramStatistic {

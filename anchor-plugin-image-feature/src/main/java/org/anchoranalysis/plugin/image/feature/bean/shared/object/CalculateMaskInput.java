@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
@@ -50,9 +50,9 @@ class CalculateMaskInput<T extends FeatureInputEnergy>
     @Override
     protected FeatureInputSingleObject execute(T input) throws FeatureCalculationException {
 
-        BinaryVoxels<UnsignedByteBuffer> bvb = binaryVoxels(mask);
+        BinaryVoxels<UnsignedByteBuffer> binaryValues = binaryVoxels(mask);
 
-        return new FeatureInputSingleObject(new ObjectMask(bvb), input.getEnergyStackOptional());
+        return new FeatureInputSingleObject(new ObjectMask(binaryValues), input.getEnergyStackOptional());
     }
 
     private static BinaryVoxels<UnsignedByteBuffer> binaryVoxels(Mask mask)

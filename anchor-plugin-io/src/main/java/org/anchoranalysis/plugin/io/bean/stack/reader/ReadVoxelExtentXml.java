@@ -32,10 +32,11 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
 
 public class ReadVoxelExtentXml extends StackReader {
@@ -52,36 +53,35 @@ public class ReadVoxelExtentXml extends StackReader {
      * <p>Given an existing image filepath, the filePath.xml is checked e.g. given
      * /somePath/stackReader.tif it will look for /somePath/RasterRader.tif.xml
      *
-     * @param filepath the filepath of the image
+     * @param filePath the filepath of the image
      * @param acceptNoResolution
      * @return the scene res if the metadata file exists and was parsed. null otherwise.
      * @throws ImageIOException
      */
-    public static Optional<Resolution> readMetadata(Path filepath, boolean acceptNoResolution)
+    public static Optional<Resolution> readMetadata(Path filePath, boolean acceptNoResolution)
             throws ImageIOException {
 
         // How we try to open the metadata
-        Optional<Resolution> res = null;
-        File fileMeta = new File(filepath.toString() + ".xml");
+        File fileMetadata = NonImageFileFormat.XML.buildPath(filePath).toFile();
 
-        if (fileMeta.exists()) {
-            res = Optional.of(ResolutionAsXml.readResolutionXml(fileMeta));
+        if (fileMetadata.exists()) {
+            return Optional.of(ResolutionAsXml.readResolutionXml(fileMetadata));
         } else {
             if (!acceptNoResolution) {
                 throw new ImageIOException(
-                        String.format("Resolution metadata is required for '%s'", filepath));
+                        String.format("Resolution metadata is required for '%s'", filePath));
             }
+            return Optional.empty();
         }
-        return res;
     }
 
     @Override
     public OpenedRaster openFile(Path path) throws ImageIOException {
 
-        OpenedRaster delegate = stackReader.openFile(path);
+        OpenedRaster delegate = stackReader.openFile(path); // NOSONAR
 
-        Optional<Resolution> sr = readMetadata(path, acceptNoResolution);
+        Optional<Resolution> resolutionToAssign = readMetadata(path, acceptNoResolution);
 
-        return new OpenedRasterAlterDimensions(delegate, res -> sr);
+        return new OpenedRasterAlterDimensions(delegate, existingResolution -> resolutionToAssign);
     }
 }

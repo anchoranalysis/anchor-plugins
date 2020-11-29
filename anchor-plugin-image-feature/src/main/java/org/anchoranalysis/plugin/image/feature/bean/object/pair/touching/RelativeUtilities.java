@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Calculates objects/bounding boxes relative to others
@@ -50,7 +50,7 @@ class RelativeUtilities {
         BoundingBox boxIntersectRel =
                 new BoundingBox(
                         box.relativePositionTo(objectRelativeBase.boundingBox()), box.extent());
-        return boxIntersectRel.clipTo(objectRelativeBase.boundingBox().extent());
+        return boxIntersectRel.clampTo(objectRelativeBase.boundingBox().extent());
     }
 
     /**

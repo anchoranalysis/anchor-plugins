@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.image.thumbnail;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 
 /**

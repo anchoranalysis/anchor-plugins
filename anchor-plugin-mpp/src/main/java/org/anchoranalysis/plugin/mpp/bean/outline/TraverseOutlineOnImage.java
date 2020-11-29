@@ -32,9 +32,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
@@ -42,8 +42,8 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.outline.traverser.OutlineTraverser;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler.VisitScheduler;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.Tuple3i;
 
@@ -112,7 +112,8 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private void callBefore(Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
+    private void callBefore(
+            Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         try {
             visitScheduler.beforeCreateObject(randomNumberGenerator, resolution);
@@ -128,7 +129,9 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
     }
 
     private void callAfter(
-            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root,
+            Optional<Resolution> resolution,
+            RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         Point3i rootRelToMask =
                 BoundingBox.relativePositionTo(root, objectOutline.boundingBox().cornerMin());
@@ -182,13 +185,13 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private static BoundingBox createBoxAroundPoint(Point3i point, Tuple3i width, Extent clipTo) {
+    private static BoundingBox createBoxAroundPoint(Point3i point, Tuple3i width, Extent clampTo) {
         // We create a raster around the point, maxDistance*2 in both directions, so long as it
         // doesn't escape the region
         BoundingBox box =
                 new BoundingBox(
                         Point3i.immutableSubtract(point, width),
                         Point3i.immutableAdd(point, width));
-        return box.clipTo(clipTo);
+        return box.clampTo(clampTo);
     }
 }

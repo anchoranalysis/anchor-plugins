@@ -33,7 +33,7 @@ import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.image.core.orientation.OrientationRotationMatrix;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 

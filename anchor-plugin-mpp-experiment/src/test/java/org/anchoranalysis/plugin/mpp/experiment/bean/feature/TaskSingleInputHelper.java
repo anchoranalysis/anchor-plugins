@@ -34,16 +34,17 @@ import static org.mockito.Mockito.when;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
@@ -52,11 +53,11 @@ import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.PathPrefixer;
-import org.anchoranalysis.test.image.io.OutputManagerFixture;
+import org.anchoranalysis.test.image.io.OutputManagerForImagesFixture;
 import org.anchoranalysis.test.image.io.OutputterFixture;
 
 /**
@@ -117,7 +118,8 @@ class TaskSingleInputHelper {
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
-            OutputManager outputManager = OutputManagerFixture.createOutputManager(pathForOutputs);
+            OutputManager outputManager =
+                    OutputManagerForImagesFixture.createOutputManager(Optional.of(pathForOutputs));
 
             Outputter outputter = OutputterFixture.outputter(outputManager);
 
@@ -132,7 +134,8 @@ class TaskSingleInputHelper {
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);
             S sharedState =
-                    task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, paramsExperiment);
+                    task.beforeAnyJobIsExecuted(
+                            outputter, concurrencyPlan, Arrays.asList(input), paramsExperiment);
 
             boolean successful =
                     task.executeJob(
@@ -151,14 +154,14 @@ class TaskSingleInputHelper {
     }
 
     private static ParametersExperiment createParametersExperiment(
-            Path pathTempFolder,
+            Path pathTemporaryDirectory,
             OutputterChecked outputter,
             PathPrefixer prefixer,
             StatefulMessageLogger logger)
             throws InputReadFailedException {
         ParametersExperiment params =
                 new ParametersExperiment(
-                        new ExperimentExecutionArguments(Paths.get(".")),
+                        new ExecutionArguments(Paths.get(".")),
                         "arbitraryExperimentName",
                         Optional.empty(),
                         outputter,

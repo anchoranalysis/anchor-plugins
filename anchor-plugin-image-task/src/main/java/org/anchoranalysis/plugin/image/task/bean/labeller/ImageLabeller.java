@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
 import java.nio.file.Path;
 import java.util.Set;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**

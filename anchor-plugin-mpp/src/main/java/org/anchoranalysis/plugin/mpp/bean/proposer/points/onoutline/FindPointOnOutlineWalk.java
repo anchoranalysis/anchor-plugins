@@ -32,8 +32,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -67,7 +67,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 
         RotationMatrix rotationMatrix = orientation.createRotationMatrix();
 
-        boolean is3D = rotationMatrix.getNumDim() >= 3;
+        boolean is3D = rotationMatrix.getNumberDimensions() >= 3;
 
         return pointOnOutline(centerPoint, marginalStepFrom(rotationMatrix, is3D), is3D);
     }
@@ -87,7 +87,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
     private Optional<Point3i> pointOnOutline( // NOSONAR
             Point3d centerPoint, Point3d step, boolean useZ) throws OperationFailedException {
 
-        BinaryValuesByte bvb = maskCreated.binaryValues().createByte();
+        BinaryValuesByte binaryValues = maskCreated.binaryValues().createByte();
 
         Point3d pointDouble = new Point3d(centerPoint);
         while (true) {
@@ -105,32 +105,32 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
                 return Optional.empty();
             }
 
-            if (pointIsOutlineVal(point, dimensions, bvb)) {
+            if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                 return Optional.of(point);
             }
 
             point.incrementX();
 
-            if (pointIsOutlineVal(point, dimensions, bvb)) {
+            if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                 return Optional.of(point);
             }
 
             point.decrementX(2);
 
-            if (pointIsOutlineVal(point, dimensions, bvb)) {
+            if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                 return Optional.of(point);
             }
 
             point.incrementX();
             point.decrementY();
 
-            if (pointIsOutlineVal(point, dimensions, bvb)) {
+            if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                 return Optional.of(point);
             }
 
             point.incrementY(2);
 
-            if (pointIsOutlineVal(point, dimensions, bvb)) {
+            if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                 return Optional.of(point);
             }
 
@@ -138,26 +138,26 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 
             if (useZ) {
                 point.decrementZ();
-                if (pointIsOutlineVal(point, dimensions, bvb)) {
+                if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                     return Optional.of(point);
                 }
 
                 point.incrementZ(2);
-                if (pointIsOutlineVal(point, dimensions, bvb)) {
+                if (pointIsOutlineVal(point, dimensions, binaryValues)) {
                     return Optional.of(point);
                 }
             }
         }
     }
 
-    private boolean pointIsOutlineVal(Point3i point, Dimensions dimensions, BinaryValuesByte bvb) {
+    private boolean pointIsOutlineVal(Point3i point, Dimensions dimensions, BinaryValuesByte binaryValues) {
 
         if (!dimensions.contains(point)) {
             return false;
         }
 
         UnsignedByteBuffer buffer = channel.voxels().asByte().sliceBuffer(point.z());
-        return buffer.getRaw(dimensions.offsetSlice(point)) == bvb.getOnByte();
+        return buffer.getRaw(dimensions.offsetSlice(point)) == binaryValues.getOnByte();
     }
 
     private static Point3d marginalStepFrom(RotationMatrix matrix, boolean is3d) {
@@ -171,7 +171,8 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             throws OperationFailedException {
         // We do check
         if (maxDistance != null) {
-            double distance = distanceZBetweenPoints(centerPoint, pointDouble, maskCreated.resolution());
+            double distance =
+                    distanceZBetweenPoints(centerPoint, pointDouble, maskCreated.resolution());
             double maxDistanceResolved =
                     maxDistance.resolve(
                             maskCreated.dimensions().resolution().map(Resolution::unitConvert),
@@ -182,8 +183,9 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             return false;
         }
     }
-    
-    private static double distanceZBetweenPoints(Point3d centerPoint, Point3d pointDouble, Optional<Resolution> resolution) {
+
+    private static double distanceZBetweenPoints(
+            Point3d centerPoint, Point3d pointDouble, Optional<Resolution> resolution) {
         if (resolution.isPresent()) {
             return resolution.get().distanceZRelative(centerPoint, pointDouble);
         } else {

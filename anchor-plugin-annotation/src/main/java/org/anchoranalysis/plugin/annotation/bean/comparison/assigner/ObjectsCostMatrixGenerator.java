@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.annotation.io.assignment.CostMatrix;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
@@ -41,7 +41,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * Generates a CSV-file that is a table of costs between objects.
  *
  * <p>Note that costs are often distances (symmetric) but not necessarily.
- * 
+ *
  * <p>The distance is between objects is provided via a {@link CostMatrix}.
  *
  * @author Owen Feehan
@@ -51,7 +51,7 @@ class ObjectsCostMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
     private static final String MANIFEST_FUNCTION = "objectsCostMatrix";
 
     private final int numberDecimalPlaces;
-    
+
     /**
      * Creates the generator.
      *
@@ -63,7 +63,8 @@ class ObjectsCostMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
     }
 
     @Override
-    public void writeToFile(CostMatrix<ObjectMask> element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(
+            CostMatrix<ObjectMask> element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         try (CSVWriter writer = CSVWriter.create(filePath)) {
@@ -95,14 +96,11 @@ class ObjectsCostMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
     }
 
     /** A row excluding a description as first-column */
-    private List<TypedValue> rowWithoutDescription(
-            int index1, CostMatrix<ObjectMask> element) {
+    private List<TypedValue> rowWithoutDescription(int index1, CostMatrix<ObjectMask> element) {
         return FunctionalList.mapRangeToList(
                 0,
                 element.sizeSecond(),
-                index2 ->
-                        new TypedValue(
-                                element.getCost(index1, index2), numberDecimalPlaces));
+                index2 -> new TypedValue(element.getCost(index1, index2), numberDecimalPlaces));
     }
 
     /** A sensible header string, bearing in the mind the first column has object descriptions. */
@@ -114,6 +112,7 @@ class ObjectsCostMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
 
     /** A description of each object in a collection. */
     private static List<String> descriptionFromObjects(List<ObjectMask> objects) {
-        return FunctionalList.mapToList(objects, objectMask -> objectMask.centerOfGravity().toString());
+        return FunctionalList.mapToList(
+                objects, objectMask -> objectMask.centerOfGravity().toString());
     }
 }

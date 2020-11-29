@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -34,18 +35,22 @@ import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.image.voxel.iterator.neighbor.IterateVoxelsNeighbors;
 import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
 import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborFactory;
+import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueIndexRangeDownhill;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
+
+    private static final byte OUT_ON = BinaryValuesByte.getDefault().getOnByte();
 
     @Override
     public VoxelsWrapper reconstruction(
@@ -56,20 +61,24 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         marker.subtractFromMaxValue();
         mask.subtractFromMaxValue();
 
-        VoxelsWrapper reconstructed = reconstructionByDilation(mask, marker, containingMask);
+        VoxelsWrapper reconstructed =
+                new VoxelsWrapper(reconstructionByDilation(mask, marker.any(), containingMask));
         reconstructed.subtractFromMaxValue();
         return reconstructed;
     }
 
-    // we now have a markerForReconstruction in the same condition as the 'strong' condition in the
-    // Robison paper
-    // all pixels are either 0 or their final value (from channel)
-    private VoxelsWrapper reconstructionByDilation(
-            VoxelsWrapper mask, VoxelsWrapper marker, Optional<ObjectMask> containingMask) {
+    /**
+     * markerForReconstruction is now in the same condition as the 'strong' condition in the
+     * Robinson paper.
+     *
+     * <p>All pixels are either 0 or their final value (from channel).
+     */
+    private <T> Voxels<?> reconstructionByDilation(
+            VoxelsWrapper mask, Voxels<T> marker, Optional<ObjectMask> containingMask) {
 
         // We use this to track if something has been finalized or not
         Voxels<UnsignedByteBuffer> voxelsFinalized =
-                VoxelsFactory.getUnsignedByte().createInitialized(marker.any().extent());
+                VoxelsFactory.getUnsignedByte().createInitialized(marker.extent());
 
         // TODO make more efficient
         // Find maximum value of markerVb.... we can probably get this elsewhere without having to
@@ -83,38 +92,46 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         // We put all non-zero pixels in our queue (these correspond to our seeds from our marker,
         // but let's iterate the image again
         //  for sake of keeping modularity
+
+        VoxelProcessor<T> processor = new VoxelProcessor<>(queue, OUT_ON);
+
         if (containingMask.isPresent()) {
-            populateQueueFromNonZeroPixelsMask(
-                    queue, marker.any(), voxelsFinalized, containingMask.get());
+            IterateVoxelsObjectMask.withTwoMixedBuffers(
+                    containingMask.get(), marker, voxelsFinalized, processor);
         } else {
-            populateQueueFromNonZeroPixels(queue, marker.any(), voxelsFinalized);
+            IterateVoxelsAll.withTwoMixedBuffers(marker, voxelsFinalized, processor);
         }
 
-        readFromQueueUntilEmpty(queue, marker.any(), mask.any(), voxelsFinalized, containingMask);
+        readFromQueueUntilEmpty(queue, marker, mask.any(), voxelsFinalized, containingMask);
 
         return marker;
     }
 
     private void readFromQueueUntilEmpty(
             PriorityQueueIndexRangeDownhill<Point3i> queue,
-            Voxels<?> markerVb,
-            Voxels<?> maskVb,
+            Voxels<?> voxelsMarker,
+            Voxels<?> voxelsMask,
             Voxels<UnsignedByteBuffer> voxelsFinalized,
             Optional<ObjectMask> containingMask) {
 
-        Extent extent = markerVb.extent();
+        Extent extent = voxelsMarker.extent();
 
-        SlidingBuffer<?> sbMarker = new SlidingBuffer<>(markerVb);
-        SlidingBuffer<?> sbMask = new SlidingBuffer<>(maskVb);
-        SlidingBuffer<UnsignedByteBuffer> sbFinalized = new SlidingBuffer<>(voxelsFinalized);
+        SlidingBuffer<?> bufferMarker = new SlidingBuffer<>(voxelsMarker);
+        SlidingBuffer<?> bufferMask = new SlidingBuffer<>(voxelsMask);
+        SlidingBuffer<UnsignedByteBuffer> bufferFinalized = new SlidingBuffer<>(voxelsFinalized);
 
-        BinaryValuesByte bvFinalized = BinaryValuesByte.getDefault();
+        BinaryValuesByte binaryValuesFinalized = BinaryValuesByte.getDefault();
 
         ProcessVoxelNeighbor<?> process =
                 ProcessVoxelNeighborFactory.within(
                         containingMask,
                         extent,
-                        new PointProcessor(sbMarker, sbMask, sbFinalized, queue, bvFinalized));
+                        new PointProcessor(
+                                bufferMarker,
+                                bufferMask,
+                                bufferFinalized,
+                                queue,
+                                binaryValuesFinalized));
 
         Neighborhood neighborhood = NeighborhoodFactory.of(false);
         boolean do3D = extent.z() > 1;
@@ -123,9 +140,9 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 
             Point3i point = queue.get();
 
-            sbMarker.seek(point.z());
-            sbMask.seek(point.z());
-            sbFinalized.seek(point.z());
+            bufferMarker.seek(point.z());
+            bufferMask.seek(point.z());
+            bufferFinalized.seek(point.z());
 
             // We have a point, and a value
             // Now we iterate through the neighbors (but only if they haven't been finalised)
@@ -135,73 +152,21 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         }
     }
 
-    private void populateQueueFromNonZeroPixels(
-            PriorityQueueIndexRangeDownhill<Point3i> queue,
-            Voxels<?> voxels,
-            Voxels<UnsignedByteBuffer> voxelsFinalized) {
+    @AllArgsConstructor
+    private static class VoxelProcessor<T>
+            implements ProcessVoxelBufferBinaryMixed<T, UnsignedByteBuffer> {
 
-        byte maskOn = BinaryValuesByte.getDefault().getOnByte();
+        private final PriorityQueueIndexRangeDownhill<Point3i> queue;
 
-        Extent extent = voxels.extent();
-        for (int z = 0; z < extent.z(); z++) {
+        private final byte maskOn;
 
-            VoxelBuffer<?> buffer = voxels.slice(z);
-            UnsignedByteBuffer bufferFinalized = voxelsFinalized.sliceBuffer(z);
-
-            int offset = 0;
-            for (int y = 0; y < extent.y(); y++) {
-                for (int x = 0; x < extent.x(); x++) {
-
-                    {
-                        int val = buffer.getInt(offset);
-                        if (val != 0) {
-                            queue.put(new Point3i(x, y, z), val);
-                            bufferFinalized.putRaw(offset, maskOn);
-                        }
-                    }
-
-                    offset++;
-                }
-            }
-        }
-    }
-
-    private void populateQueueFromNonZeroPixelsMask(
-            PriorityQueueIndexRangeDownhill<Point3i> queue,
-            Voxels<?> voxels,
-            Voxels<UnsignedByteBuffer> voxelsFinalized,
-            ObjectMask containingMask) {
-
-        ReadableTuple3i cornerMin = containingMask.boundingBox().cornerMin();
-        ReadableTuple3i cornerMax = containingMask.boundingBox().calculateCornerMax();
-
-        byte maskOn = containingMask.binaryValuesByte().getOnByte();
-
-        Extent e = voxels.extent();
-        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
-
-            VoxelBuffer<?> buffer = voxels.slice(z);
-            UnsignedByteBuffer bufferFinalized = voxelsFinalized.sliceBuffer(z);
-            UnsignedByteBuffer bufferMask = containingMask.sliceBufferGlobal(z);
-
-            int offset = 0;
-            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
-                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
-                    if (bufferMask.getRaw(offset) == maskOn) {
-
-                        int offsetGlobal = e.offset(x, y);
-
-                        {
-                            int val = buffer.getInt(offsetGlobal);
-                            if (val != 0) {
-                                queue.put(new Point3i(x, y, z), val);
-                                bufferFinalized.putRaw(offsetGlobal, maskOn);
-                            }
-                        }
-                    }
-
-                    offset++;
-                }
+        @Override
+        public void process(
+                Point3i point, VoxelBuffer<T> buffer1, UnsignedByteBuffer buffer2, int offset) {
+            int value = buffer1.getInt(offset);
+            if (value != 0) {
+                queue.put(point, value);
+                buffer2.putRaw(offset, maskOn);
             }
         }
     }

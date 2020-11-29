@@ -32,8 +32,8 @@ import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
@@ -43,23 +43,24 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Represents a set of files, with a different root depending on the operating-system and conditions.
- * 
- * <p>The following determines which root is used, and prepended to a copy of the FileSet:
- * 
- * <p>If the operating system is windows:
- * <ul>
- * <li>If the fileSet directory exists in localWindowsRootPath we use that
- * <li>Otherwise, TODO
- * </ul>
- * 
- * @author Owen Feehan
+ * Represents a set of files, with a different root depending on the operating-system and
+ * conditions.
  *
+ * <p>The following determines which root is used, and prepended to a copy of the FileSet:
+ *
+ * <p>If the operating system is windows:
+ *
+ * <ul>
+ *   <li>If the fileSet directory exists in localWindowsRootPath we use that
+ *   <li>Otherwise, TODO
+ * </ul>
+ *
+ * @author Owen Feehan
  */
 public class Rooted extends FilesProvider {
 
     // START BEAN PARAMETERS
-    @BeanField @Getter @Setter private FilesProviderWithDirectory filesProvider;
+    @BeanField @Getter @Setter private FilesProviderWithDirectory files;
 
     // The name of the root-path to associate with this fileset
     @BeanField @Getter @Setter private String rootName;
@@ -78,32 +79,36 @@ public class Rooted extends FilesProvider {
             log.debug(
                     String.format(
                             "matchingFiles() old directory '%s'%n",
-                            filesProvider.getDirectoryAsPath(params.getInputContext())));
+                            files.getDirectoryAsPath(params.getInputContext())));
 
-            Path dirOrig = filesProvider.getDirectoryAsPath(params.getInputContext());
+            Path directoryOriginal = files.getDirectoryAsPath(params.getInputContext());
 
-            Path dirNew =
+            Path directoryNew =
                     RootedFilePathUtilities.deriveRootedPath(
-                            dirOrig, rootName, params.isDebugModeActivated(), disableDebugMode);
+                            directoryOriginal,
+                            rootName,
+                            params.isDebugModeActivated(),
+                            disableDebugMode);
 
-            boolean dirNewExists = dirNew.toFile().exists();
+            boolean directoryNewExists = directoryNew.toFile().exists();
 
             // As a special behaviour, if the debug folder doesn't exist
             // we try and again with the non-debug folder
-            if (params.isDebugModeActivated() && !dirNewExists) {
-                dirNew =
+            if (params.isDebugModeActivated() && !directoryNewExists) {
+                directoryNew =
                         RootedFilePathUtilities.deriveRootedPath(
-                                dirOrig, rootName, false, disableDebugMode);
-                dirNewExists = dirNew.toFile().exists();
+                                directoryOriginal, rootName, false, disableDebugMode);
+                directoryNewExists = directoryNew.toFile().exists();
             }
 
-            if (!dirNewExists) {
-                throw new FilesProviderException(String.format("Path %s' does not exist", dirNew));
+            if (!directoryNewExists) {
+                throw new FilesProviderException(
+                        String.format("Path %s' does not exist", directoryNew));
             }
 
-            log.debug(String.format("Setting new directory '%s'%n", dirNew));
+            log.debug(String.format("Setting new directory '%s'%n", directoryNew));
 
-            return filesProvider.matchingFilesForDirectory(dirNew, params);
+            return files.matchingFilesForDirectory(directoryNew, params);
 
         } catch (BeanDuplicateException | PathDifferenceException e) {
             throw new FilesProviderException(e);

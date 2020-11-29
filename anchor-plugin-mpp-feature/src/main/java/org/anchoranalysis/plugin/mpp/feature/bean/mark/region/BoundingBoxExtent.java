@@ -30,9 +30,6 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.axis.AxisTypeConverter;
-import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -40,7 +37,10 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.orientation.DirectionVector;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.AxisTypeConverter;
+import org.anchoranalysis.spatial.axis.AxisTypeException;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 public class BoundingBoxExtent extends FeatureMarkRegion {
 
@@ -60,9 +60,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
 
         try {
             return resolveDistance(
-                    box,
-                    dimensions.resolution(),
-                    AxisTypeConverter.createFromString(axis));
+                    box, dimensions.resolution(), AxisTypeConverter.createFromString(axis));
         } catch (AxisTypeException e) {
             throw new FeatureCalculationException(e);
         }

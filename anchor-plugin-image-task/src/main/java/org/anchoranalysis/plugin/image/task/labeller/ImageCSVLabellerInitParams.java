@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.task.labeller;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.image.experiment.label.FileLabelMap;
 
 @AllArgsConstructor
 @Value

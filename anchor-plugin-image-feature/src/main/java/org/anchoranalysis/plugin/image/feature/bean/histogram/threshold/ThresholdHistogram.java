@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 
 /**
  * Thresholds the histogram (using a weightedOtsu) and then applies a feature to the thresholded

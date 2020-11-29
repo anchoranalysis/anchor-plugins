@@ -33,9 +33,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -45,10 +45,10 @@ import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.SimpleName;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
+import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -188,8 +188,7 @@ public class FromObjects<T extends FeatureInput>
 
         CalculateFeaturesFromProvider<T> fromProviderCalculator =
                 new CalculateFeaturesFromProvider<>(objectsCalculator, initParams);
-        processAllProviders(
-                inputName, context.getGroupGeneratorName(), fromProviderCalculator);
+        processAllProviders(inputName, context.getGroupGeneratorName(), fromProviderCalculator);
 
         // Arbitrary, we need a return-type
         return 0;

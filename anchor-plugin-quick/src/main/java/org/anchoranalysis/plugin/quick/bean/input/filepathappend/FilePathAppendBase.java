@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.regex.RegExSimple;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.plugin.io.bean.path.derive.InsertRegExGroups;
@@ -99,8 +99,8 @@ public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> 
      * correspond to the unique name of the dataset. The third group should correspond to the unique
      * name of the experiment.
      *
-     * @param rootName if non-empty (and non-null) a rooted derivePath is created instead of
-     *     a non rooted
+     * @param rootName if non-empty (and non-null) a rooted derivePath is created instead of a non
+     *     rooted
      * @param regEx
      * @return
      * @throws BeanMisconfiguredException
@@ -149,6 +149,6 @@ public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> 
     }
 
     private DerivePath createRegEx(String regEx) throws BeanMisconfiguredException {
-        return new InsertRegExGroups( new RegExSimple(regEx), createOutPathString() );
+        return new InsertRegExGroups(new RegExSimple(regEx), createOutPathString());
     }
 }

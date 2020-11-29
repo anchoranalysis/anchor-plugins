@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.object.filter;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -54,7 +54,8 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
         start(dimensions, objectsToFilter);
 
         ObjectCollection dup =
-                objectsToFilter.stream().filter(object -> match(object, dimensions), objectsRejected);
+                objectsToFilter.stream()
+                        .filter(object -> match(object, dimensions), objectsRejected);
 
         end();
 

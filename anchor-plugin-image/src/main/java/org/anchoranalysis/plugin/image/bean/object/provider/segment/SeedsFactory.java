@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.image.bean.object.provider.segment;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.core.object.seed.SeedObjectMask;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

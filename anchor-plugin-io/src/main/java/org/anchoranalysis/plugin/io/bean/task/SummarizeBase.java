@@ -26,15 +26,16 @@
 
 package org.anchoranalysis.plugin.io.bean.task;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -52,7 +53,10 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
 
     @Override
     public Summarizer<S> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<T> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
 
         if (params.isDetailedLogging()) {
@@ -89,15 +93,18 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
         return true;
     }
 
-    // Extract object for summary
+    /** Extract object for summary. */
     protected abstract S extractObjectForSummary(T input);
 
-    private void summarizeExperimentArguments(MessageLogger log, ExperimentExecutionArguments eea) {
-
-        eea.getInputDirectory()
+    private void summarizeExperimentArguments(MessageLogger log, ExecutionArguments arguments) {
+        arguments
+                .input()
+                .getInputDirectory()
                 .ifPresent(dir -> log.logFormatted("An input-directory has been set as %s", dir));
 
-        eea.getOutputDirectory()
+        arguments
+                .output()
+                .getOutputDirectory()
                 .ifPresent(dir -> log.logFormatted("An output-directory has been set as %s", dir));
     }
 }

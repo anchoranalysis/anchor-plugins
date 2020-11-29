@@ -31,10 +31,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
-import org.anchoranalysis.image.core.stack.NamedStacks;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -164,5 +164,10 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
 
     private GroupedHistogramWriter createWriter() {
         return new GroupedHistogramWriter(OUTPUT_HISTOGRAMS, csvIgnoreZeros);
+    }
+
+    @Override
+    protected String outputNameForGroups() {
+        return OUTPUT_SUM;
     }
 }

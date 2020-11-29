@@ -31,8 +31,9 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
@@ -46,21 +47,24 @@ import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCs
  *
  * <p>This provides a quicker means to specify certain projects.
  *
+ * <p>Note that {@code stackReader} is used for reading the main input-raster and {@code
+ * stackReaderAppend} is used for reading any appended files. Both are initialized to a default
+ * reader if not specified.
+ *
  * @author Owen Feehan
  * @param <T> input-type
  */
-public abstract class QuickBase<T extends InputFromManager> extends InputManager<T> {
+public abstract class QuickBase<T extends InputFromManager> extends InputManagerWithStackReader<T> {
 
     // START BEAN PROPERTIES
     /** If non-empty then a rooted filesystem is used with this root */
     @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
 
     /** A path to the main channel of each file */
-    @BeanField @Getter @Setter private FilesProviderWithDirectory filesProvider;
+    @BeanField @Getter @Setter private FilesProviderWithDirectory files;
 
     /** Assigns each input a unique compact name. */
-    @BeanField @Getter @Setter
-    private FileNamer namer = new LastDirectories();
+    @BeanField @Getter @Setter private FileNamer namer = new LastDirectories();
 
     /** If set, a CSV is read with two columns: the names of images and a */
     @BeanField @OptionalBean @Getter @Setter private MatchedAppendCsv filterFilesCsv;
@@ -73,15 +77,11 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
      */
     @BeanField @OptionalBean @Getter @Setter private String regex;
 
-    /** The raster-reader for reading the main file */
-    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
-
     /** The raster-reader for reading any appended files */
     @BeanField @DefaultInstance @Getter @Setter private StackReader stackReaderAppend;
     // END BEAN PROPERTIES
 
     protected InputManager<FileInput> fileInputManager() throws BeanMisconfiguredException {
-        return InputManagerFactory.createFiles(
-                rootName, filesProvider, namer, regex, filterFilesCsv);
+        return InputManagerFactory.createFiles(rootName, files, namer, regex, filterFilesCsv);
     }
 }

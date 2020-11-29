@@ -31,21 +31,20 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.stack.NamedStacks;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**
  * Converts each channel independently and creates a single-channeled stack from the conversion.
- * 
- * <p>An identical channel-name is used to identify it among the outputted stacks.
- * 
- * @author Owen Feehan
  *
+ * <p>An identical channel-name is used to identify it among the outputted stacks.
+ *
+ * @author Owen Feehan
  */
 public class IndependentChannels extends ChannelConvertStyle {
 
@@ -56,34 +55,33 @@ public class IndependentChannels extends ChannelConvertStyle {
 
     @Override
     public NamedStacks convert(
-            Set<String> channelNames,
-            ChannelGetterForTimepoint channelGetter,
-            Logger logger)
+            Set<String> channelNames, ChannelGetterForTimepoint channelGetter, Logger logger)
             throws OperationFailedException {
 
         NamedStacks out = new NamedStacks();
-        
+
         for (String key : channelNames) {
-            convertChannel(key, channelGetter, logger).ifPresent( stack ->
-                out.add(key,  stack)
-            );
+            convertChannel(key, channelGetter, logger).ifPresent(stack -> out.add(key, stack));
         }
-        
+
         return out;
     }
-    
-    private Optional<Stack> convertChannel(String key, ChannelGetterForTimepoint channelGetter, Logger logger) throws OperationFailedException {
+
+    private Optional<Stack> convertChannel(
+            String key, ChannelGetterForTimepoint channelGetter, Logger logger)
+            throws OperationFailedException {
         try {
             Channel channel = channelGetter.getChannel(key);
-            return Optional.of( new Stack(channel) );
-            
+            return Optional.of(new Stack(channel));
+
         } catch (GetOperationFailedException e) {
             if (ignoreMissingChannel) {
                 logger.messageLogger().logFormatted("Cannot open channel '%s'. Ignoring.", key);
                 return Optional.empty();
             } else {
-                throw new OperationFailedException(String.format("Cannot open channel '%s'.", key), e);
+                throw new OperationFailedException(
+                        String.format("Cannot open channel '%s'.", key), e);
             }
-        } 
+        }
     }
 }

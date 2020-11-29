@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.orientation.Orientation2D;
 import org.anchoranalysis.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.mpp.mark.Mark;

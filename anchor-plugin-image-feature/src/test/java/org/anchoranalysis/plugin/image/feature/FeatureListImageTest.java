@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.feature;
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
@@ -38,9 +38,9 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
+import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.test.LoggingFixture;
@@ -122,33 +122,36 @@ public class FeatureListImageTest {
 
         ObjectMaskFixture objectFixture = new ObjectMaskFixture(ENERGY_STACK.dimensions());
 
-        assertCalc(
-                session.calculate(createInput(objectFixture.create1())),
+        assertCalculateObject(
+                session,
+                objectFixture.create1(),
                 31.5,
                 29.0,
                 3.0,
                 59.0,
-                225.02857142857144,
+                0.07142857142857142,
                 2744.0,
                 560.0);
 
-        assertCalc(
-                session.calculate(createInput(objectFixture.create2())),
+        assertCalculateObject(
+                session,
+                objectFixture.create2(),
                 7.5,
                 21.0,
                 7.0,
                 28.5,
-                195.93956043956044,
+                0.32142857142857145,
                 108.0,
                 66.0);
 
-        assertCalc(
-                session.calculate(createInput(objectFixture.create3())),
+        assertCalculateObject(
+                session,
+                objectFixture.create3(),
                 21.5,
                 35.0,
                 2.0,
                 55.5,
-                159.37306501547988,
+                1.6996904024767803,
                 612.0,
                 162.0);
     }
@@ -182,7 +185,14 @@ public class FeatureListImageTest {
         return new FeatureInputHistogram(histogram, ENERGY_STACK.resolution());
     }
 
-    private static FeatureInputSingleObject createInput(ObjectMask object) throws CreateException {
-        return new FeatureInputSingleObject(object, ENERGY_STACK);
+    private static void assertCalculateObject(
+            FeatureCalculatorMulti<FeatureInputSingleObject> session,
+            ObjectMask objectMaskToCalculate,
+            Object... expectedVals)
+            throws NamedFeatureCalculateException, CreateException {
+        assertCalc(
+                session.calculate(
+                        new FeatureInputSingleObject(objectMaskToCalculate, ENERGY_STACK)),
+                expectedVals);
     }
 }

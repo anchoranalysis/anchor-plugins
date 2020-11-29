@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.overlap;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
 /**
  * Expresses the number of intersecting pixels between two objects as a ratio to something else

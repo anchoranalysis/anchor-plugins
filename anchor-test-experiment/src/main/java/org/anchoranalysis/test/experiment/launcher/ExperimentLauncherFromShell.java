@@ -166,22 +166,23 @@ public class ExperimentLauncherFromShell {
     /**
      * Copy files to the temporary-folder
      *
-     * @param temporaryFolder the destination temporary-folder to copy files to
+     * @param temporaryDirectory the destination temporary-folder to copy files to
      * @param subdirectories if non-null, specific subdirectories to copy. if null, everything is
      *     copied.
      */
-    private void copyToTemporaryFolder(TemporaryFolder temporaryFolder, String[] subdirectories) {
+    private void copyToTemporaryDirectory(
+            TemporaryFolder temporaryDirectory, String[] subdirectories) {
         try {
-            temporaryFolder.create();
+            temporaryDirectory.create();
         } catch (IOException e) {
             throw new TestDataInitException(e);
         }
 
         try {
             if (subdirectories != null) {
-                loader.copyToDirectory(subdirectories, temporaryFolder.getRoot());
+                loader.copyToDirectory(subdirectories, temporaryDirectory.getRoot());
             } else {
-                loader.copyToDirectory(temporaryFolder.getRoot());
+                loader.copyToDirectory(temporaryDirectory.getRoot());
             }
         } catch (IOException e) {
             throw new TestDataInitException(e);
@@ -193,13 +194,13 @@ public class ExperimentLauncherFromShell {
      * experiment
      *
      * @param testPathToExperiment path to the resources where the experiment XML is found
-     * @param temporaryFolder the temporary folder to copy files to
+     * @param temporaryDirectory the temporary folder to copy files to
      * @return a test-loader bounded to the temporary folder
      */
     public TestLoader runExperimentInTemporaryFolder(
-            String testPathToExperiment, TemporaryFolder temporaryFolder) {
-        return runExperimentInTemporaryFolder(
-                testPathToExperiment, null, null, temporaryFolder, null);
+            String testPathToExperiment, TemporaryFolder temporaryDirectory) {
+        return runExperimentInTemporaryDirectory(
+                testPathToExperiment, null, null, temporaryDirectory, null);
     }
 
     /**
@@ -211,28 +212,28 @@ public class ExperimentLauncherFromShell {
      *     ignored.
      * @param testPathToOutput if defined, the path to a replacement output-manager. if empty(),
      *     ignored.
-     * @param temporaryFolder the temporary folder to copy files to
-     * @param specificSubdirs if non-null, specific subdirectories to copy. if null, ignored.
+     * @param temporaryDirectory the temporary folder to copy files to
+     * @param specificSubdirectories if non-null, specific subdirectories to copy. if null, ignored.
      * @return a test-loader bounded to the temporary folder
      */
-    public TestLoader runExperimentInTemporaryFolder(
+    public TestLoader runExperimentInTemporaryDirectory(
             String testPathToExperiment,
             Optional<String> testPathToInput,
             Optional<String> testPathToOutput,
-            TemporaryFolder temporaryFolder,
-            String[] specificSubdirs) {
+            TemporaryFolder temporaryDirectory,
+            String[] specificSubdirectories) {
 
-        copyToTemporaryFolder(temporaryFolder, specificSubdirs);
+        copyToTemporaryDirectory(temporaryDirectory, specificSubdirectories);
 
-        TestLoader loaderTemporaryFolder =
-                TestLoader.createFromExplicitDirectory(temporaryFolder.getRoot().toPath());
+        TestLoader loaderTemporaryDirectory =
+                TestLoader.createFromExplicitDirectory(temporaryDirectory.getRoot().toPath());
 
-        ExperimentLauncherFromShell launcherTemporaryFolder =
-                new ExperimentLauncherFromShell(loaderTemporaryFolder);
-        launcherTemporaryFolder.runExperiment(
+        ExperimentLauncherFromShell launcherTemporaryDirectory =
+                new ExperimentLauncherFromShell(loaderTemporaryDirectory);
+        launcherTemporaryDirectory.runExperiment(
                 testPathToExperiment, testPathToInput, testPathToOutput);
 
-        return TestLoader.createFromExplicitDirectory(temporaryFolder.getRoot().toPath());
+        return TestLoader.createFromExplicitDirectory(temporaryDirectory.getRoot().toPath());
     }
 
     /**

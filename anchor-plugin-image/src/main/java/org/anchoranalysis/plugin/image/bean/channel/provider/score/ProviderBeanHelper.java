@@ -31,7 +31,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ProviderBeanHelper {

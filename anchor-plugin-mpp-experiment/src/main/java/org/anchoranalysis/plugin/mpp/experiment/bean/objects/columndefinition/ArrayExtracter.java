@@ -26,38 +26,47 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition;
 
-import org.anchoranalysis.spatial.point.Point3i;
-import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ArrayExtracter {
 
     /**
-     * Extracts a point from three indices in string-array
+     * Extracts a point encoded within a string in a CSV file.
+     *
+     * <p>The point is encoded either as:
+     *
+     * <ul>
+     *   <li>{@code 10_20_30} for x, y and z (integer) coordinates of a single points.
+     *   <li>{@code 10_20_30_and_40_50_60} or for coordinates of two points.
+     * </ul>
      *
      * @param array the array to extract from
-     * @param indices a three element array with the indices for X, Y, Z component of the point
-     *     respectively
+     * @param indexColumnUniquePixel the index of a column describing a unique-pixel within an
+     *     object.
+     * @param first if there are two points encoded in the <i>unique-pixel</i> column, rather than
+     *     one, then whether to select the first or the second.
      * @return a point constructed from converting the elements for X, Y, Z into integers
      */
-    public static Point3i getAsPoint(String[] array, int[] indices) {
-        Preconditions.checkArgument(indices.length == 3);
-        return new Point3i(
-                getAsInt(array, indices[0]),
-                getAsInt(array, indices[1]),
-                getAsInt(array, indices[2]));
+    public static Point3i getAsPoint(String[] array, int indexColumnUniquePixel, boolean first) {
+
+        String content = array[indexColumnUniquePixel];
+
+        String[] components = content.split("_");
+
+        if (first) {
+            return pointFromComponents(components, 0);
+        } else {
+            return pointFromComponents(components, 4);
+        }
     }
 
-    /**
-     * Gets a particular index in a string-array, and converts it to an integer
-     *
-     * @param array the array to extract from
-     * @param index the particular index to extract
-     * @return the element at that index converted into an {@code int}
-     */
-    public static int getAsInt(String[] array, int index) {
-        return Integer.parseInt(array[index]);
+    private static Point3i pointFromComponents(String[] components, int startIndex) {
+        return new Point3i(
+                Integer.parseInt(components[startIndex]),
+                Integer.parseInt(components[startIndex + 1]),
+                Integer.parseInt(components[startIndex + 2]));
     }
 }

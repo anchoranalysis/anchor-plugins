@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.blur;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
@@ -47,12 +47,10 @@ public class BlurGaussian3D extends BlurStrategy {
         double sigma = calculateSigma(dimensions, logger);
 
         double divideZBy = dimensions.resolution().map(Resolution::zRelative).orElse(1.0);
-        
+
         GaussianBlurUtilities.applyBlur(
                 ConvertToImg.from(voxels),
-                new double[] {
-                    sigma, sigma, sigma / divideZBy
-                } // Sigma-array
+                new double[] {sigma, sigma, sigma / divideZBy} // Sigma-array
                 );
     }
 }

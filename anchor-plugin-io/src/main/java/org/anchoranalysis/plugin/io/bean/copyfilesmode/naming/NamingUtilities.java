@@ -29,15 +29,16 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
-import org.anchoranalysis.core.path.PathDifference;
-import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.core.system.path.PathDifference;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class NamingUtilities {
 
-    public static Path filePathDifference(Path baseFolderPath, Path filePath) throws PathDifferenceException {
-        PathDifference filePathDiff = PathDifference.differenceFrom(baseFolderPath, filePath);
+    public static Path filePathDifference(Path baseDirectoryPath, Path filePath)
+            throws PathDifferenceException {
+        PathDifference filePathDiff = PathDifference.differenceFrom(baseDirectoryPath, filePath);
         return filePathDiff.combined();
     }
 

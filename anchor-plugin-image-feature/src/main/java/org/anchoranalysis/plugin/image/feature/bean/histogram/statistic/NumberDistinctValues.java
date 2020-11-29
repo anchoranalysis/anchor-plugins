@@ -26,11 +26,10 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 
-import org.anchoranalysis.bean.shared.relation.EqualToBean;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
+import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
+import org.anchoranalysis.math.relation.EqualTo;
 
 // Number of unique values in histogram i.e. how many non-zero bins
 public class NumberDistinctValues extends FeatureHistogramStatistic {
@@ -41,7 +40,7 @@ public class NumberDistinctValues extends FeatureHistogramStatistic {
         int numUniqueValues = 0;
 
         for (int v = 0; v < 255; v++) {
-            long cnt = histogram.countThreshold(new RelationToConstant(new EqualToBean(), v));
+            long cnt = histogram.countThreshold(new EqualTo(), v);
 
             if (cnt != 0) {
                 numUniqueValues++;

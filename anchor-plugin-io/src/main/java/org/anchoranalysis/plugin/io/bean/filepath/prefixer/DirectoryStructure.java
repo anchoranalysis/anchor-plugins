@@ -32,11 +32,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.path.PathDifference;
-import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.core.system.path.PathDifference;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -60,13 +61,13 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
 
     // START BEAN PROPERTIES
     /** If false, the folders are ignored, and only the file-name is used in the output */
-    @BeanField @Getter @Setter private boolean includeFolders = true;
+    @BeanField @Getter @Setter private boolean includeDirectories = true;
 
     @BeanField @AllowEmpty @Getter @Setter private String inPathPrefix = "";
     // END BEAN PROPERTIES
 
     @Override
-    protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
+    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
             throws PathPrefixerException {
 
         PathDifference difference = differenceToPrefix(removeExtension(path.getPath()));
@@ -88,7 +89,7 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
     }
 
     private Path buildOutPath(Path root, PathDifference ff) {
-        if (includeFolders) {
+        if (includeDirectories) {
             return root.resolve(ff.combined());
         } else {
             return root.resolve(ff.getFilename());

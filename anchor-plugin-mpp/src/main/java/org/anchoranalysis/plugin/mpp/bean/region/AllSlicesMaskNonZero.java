@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.region;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 

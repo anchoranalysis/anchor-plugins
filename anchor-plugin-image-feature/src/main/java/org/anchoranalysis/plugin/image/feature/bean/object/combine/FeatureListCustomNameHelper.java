@@ -28,15 +28,15 @@ package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.store.NamedFeatureStore;
+import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 
 /**
  * Duplicates and sets a custom-name on a list of features.

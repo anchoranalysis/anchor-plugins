@@ -30,9 +30,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -43,7 +42,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.axis.AxisType;
 
 /**
  * Only keep objects where at least one voxel (on a particular channel) has intensity greater or
@@ -122,7 +122,8 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
     private int threshold(Optional<Dimensions> dim) throws OperationFailedException {
         return (int)
-                Math.ceil(threshold.resolveForAxis(dim.flatMap(Dimensions::unitConvert), AxisType.X));
+                Math.ceil(
+                        threshold.resolveForAxis(dim.flatMap(Dimensions::unitConvert), AxisType.X));
     }
 
     @Override

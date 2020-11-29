@@ -33,13 +33,14 @@ import java.nio.file.Paths;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.path.NamedPath;
-import org.anchoranalysis.io.output.path.PathPrefixer;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.io.output.bean.path.prefixer.FilePathCounter;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 //
 public class HomeSubdirectory extends PathPrefixer {
@@ -81,14 +82,14 @@ public class HomeSubdirectory extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
+    public DirectoryWithPrefix rootDirectoryPrefix(String expName, FilePathPrefixerContext context)
             throws PathPrefixerException {
         try {
             initIfPossible();
         } catch (InitException e) {
             throw new PathPrefixerException(e);
         }
-        return delegate.rootFolderPrefix(expName, context);
+        return delegate.rootDirectoryPrefix(expName, context);
     }
 
     private Path homeDir() throws InitException {

@@ -26,14 +26,15 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -47,12 +48,12 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.core.stack.NamedStacks;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.stack.NamedStacksOutputter;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
+import org.anchoranalysis.image.feature.input.FeatureInputStack;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.stack.output.NamedStacksOutputter;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -71,7 +72,7 @@ import org.anchoranalysis.plugin.image.task.slice.SharedStateSelectedSlice;
 public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSlice> {
 
     private static final String OUTPUT_SLICES = "slices";
-    
+
     // START BEAN PROPERTIES
     @BeanField @SkipInit @Getter @Setter
     private FeatureListProvider<FeatureInputStack> scoreProvider;
@@ -84,7 +85,10 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
     @Override
     public SharedStateSelectedSlice beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<NamedChannelsInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new SharedStateSelectedSlice(outputter);
@@ -106,7 +110,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
             // Create an energy stack
             EnergyStack energyStack =
                     FeatureCalculatorRepeated.extractStack(
-                            params.getInput(), stackEnergy, params.context());
+                            params.getInput(), stackEnergy, params.getContextJob());
 
             int optimaSliceIndex =
                     selectSlice(
@@ -116,7 +120,10 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                             params.getSharedState());
 
             deriveSlicesAndOutput(
-                    params.getInput(), energyStack, optimaSliceIndex, params.getOutputter().getChecked());
+                    params.getInput(),
+                    energyStack,
+                    optimaSliceIndex,
+                    params.getOutputter().getChecked());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -178,8 +185,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                         energyStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
         try {
-            NamedStacksOutputter.output(slices, OUTPUT_SLICES,
-                    false, outputter);
+            NamedStacksOutputter.output(slices, OUTPUT_SLICES, false, outputter);
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }

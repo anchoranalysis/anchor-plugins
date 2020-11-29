@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.intensity;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -84,11 +84,11 @@ public class QuantileStretch extends ChannelProviderUnary {
         double rangeMult = 255 / (rangeMax - rangeMin);
 
         IterateVoxelsAll.changeIntensity(
-                voxels, value -> roundAndClip((value - rangeMin) * rangeMult));
+                voxels, value -> roundAndClamp((value - rangeMin) * rangeMult));
     }
 
-    /** Rounds a value up or down, and clips to ensure its in the range 0..255 inclusive */
-    private static int roundAndClip(double value) {
+    /** Rounds a value up or down, and clamps to ensure its in the range 0..255 inclusive */
+    private static int roundAndClamp(double value) {
 
         int rounded = (int) Math.round(value);
 

@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 
 /**
  * Takes the XY-resolution determined by stackReaderInput. Partitions this into three ranges, based
@@ -67,18 +67,24 @@ public class ThreeWayBranchXYResolution extends StackReader {
     @Override
     public OpenedRaster openFile(Path path) throws ImageIOException {
 
-        OpenedRaster orInput = stackReaderInput.openFile(path);
-
-        Dimensions dimensions = orInput.dimensionsForSeries(0);
+        Dimensions dimensions = dimensionsForPath(path);
 
         if (dimensions.resolution().isPresent()) {
             return openWithResolution(path, dimensions.resolution().get()); // NOSONAR
         } else {
-            throw new ImageIOException("No image-resolution is present, so cannot perform this check.");
+            throw new ImageIOException(
+                    "No image-resolution is present, so cannot perform this check.");
         }
     }
-    
-    private OpenedRaster openWithResolution(Path path, Resolution resolution) throws ImageIOException {
+
+    private Dimensions dimensionsForPath(Path path) throws ImageIOException {
+        try (OpenedRaster openedRaster = stackReaderInput.openFile(path)) {
+            return openedRaster.dimensionsForSeries(0);
+        }
+    }
+
+    private OpenedRaster openWithResolution(Path path, Resolution resolution)
+            throws ImageIOException {
         if (Math.abs(resolution.x() - resolution.y()) > 1e-12) {
             throw new ImageIOException(
                     String.format(

@@ -31,10 +31,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 ///
 
@@ -53,7 +54,7 @@ public class PathRegEx extends PathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
+    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
             throws PathPrefixerException {
         String[] components = componentsFromPath(path.getPath());
         return createPrefix(root, components);
@@ -75,13 +76,13 @@ public class PathRegEx extends PathPrefixerAvoidResolve {
     /**
      * Creates a FilePathPrefix based upon an ordered array of string components
      *
-     * @param outFolderPath the base folder of the prefixer
+     * @param outDirectoryPath the base folder of the prefixer
      * @param components ordered array of string components
      * @return the file-path-prefix
      */
-    private static DirectoryWithPrefix createPrefix(Path outFolderPath, String[] components) {
+    private static DirectoryWithPrefix createPrefix(Path outDirectoryPath, String[] components) {
 
-        Path path = outFolderPath;
+        Path path = outDirectoryPath;
 
         for (int g = 0; g < components.length; g++) {
             path = path.resolve(components[g]);

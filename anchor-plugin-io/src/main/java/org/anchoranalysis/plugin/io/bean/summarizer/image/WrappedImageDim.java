@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 
 // Wrap with a nicer toString() representation
 @AllArgsConstructor

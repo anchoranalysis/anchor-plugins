@@ -30,14 +30,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.path.NamedPath;
-import org.anchoranalysis.io.output.path.PathPrefixer;
-import org.anchoranalysis.plugin.io.bean.filepath.prefixer.PathPrefixerAvoidResolve;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.PathRegEx;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.Rooted;
 
@@ -81,13 +81,13 @@ public class ExperimentStructure extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootFolderPrefix(
+    public DirectoryWithPrefix rootDirectoryPrefix(
             String experimentIdentifier, FilePathPrefixerContext context)
             throws PathPrefixerException {
 
         createDelegateIfNeeded();
 
-        return delegate.rootFolderPrefix(experimentIdentifier, context);
+        return delegate.rootDirectoryPrefix(experimentIdentifier, context);
     }
 
     private void createDelegateIfNeeded() throws PathPrefixerException {

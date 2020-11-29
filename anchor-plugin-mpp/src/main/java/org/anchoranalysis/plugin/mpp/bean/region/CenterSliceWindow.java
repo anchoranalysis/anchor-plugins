@@ -34,7 +34,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Like {#link org.anchoranalysis.plugin.mpp.bean.region.CenterSlice} but considers more than one

@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.name.SimpleName;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
@@ -87,8 +87,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             ResultsVectorWithThumbnail results = calculateResultsForInput(input, context);
 
             context.addResultsFor(
-                    identifierFor(input.name(), context.getGroupGeneratorName()),
-                    results);
+                    identifierFor(input.name(), context.getGroupGeneratorName()), results);
 
         } catch (BeanDuplicateException | NamedFeatureCalculateException e) {
             throw new OperationFailedException(e);
@@ -99,11 +98,9 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             T input, InputProcessContext<FeatureList<S>> context)
             throws NamedFeatureCalculateException;
 
-    private static RowLabels identifierFor(
-            String inputName, Optional<String> groupGeneratorName)
+    private static RowLabels identifierFor(String inputName, Optional<String> groupGeneratorName)
             throws OperationFailedException {
         return new RowLabels(
-                Optional.of(new String[] {inputName}),
-                groupGeneratorName.map(SimpleName::new));
+                Optional.of(new String[] {inputName}), groupGeneratorName.map(SimpleName::new));
     }
 }

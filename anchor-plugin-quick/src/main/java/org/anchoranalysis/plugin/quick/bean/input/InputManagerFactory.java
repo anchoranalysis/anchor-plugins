@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.quick.bean.input;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
@@ -45,21 +45,20 @@ class InputManagerFactory {
     // Like createFiles, but maybe also wraps it in a filter
     public static InputManager<FileInput> createFiles(
             String rootName,
-            FilesProviderWithDirectory filesProvider,
+            FilesProviderWithDirectory files,
             FileNamer namer,
             String regex,
             MatchedAppendCsv filterFilesCsv)
             throws BeanMisconfiguredException {
 
-        InputManager<FileInput> files =
-                createFiles(rootName, filesProvider, namer);
+        InputManager<FileInput> filesCreated = createFiles(rootName, files, namer);
 
         if (filterFilesCsv == null) {
-            return files;
+            return filesCreated;
         }
 
         FilterCsvColumn<FileInput> filterManager = new FilterCsvColumn<>();
-        filterManager.setInput(files);
+        filterManager.setInput(filesCreated);
         filterManager.setMatch(filterFilesCsv.getMatch());
         filterManager.setCsvFilePath(
                 filterFilesCsv.getAppendCsv().createPathDeriver(rootName, regex).getItem());
@@ -70,23 +69,18 @@ class InputManagerFactory {
      * Creates an input-manager of type {@link FileInput}.
      *
      * @param rootName if non-empty a {@link Rooted} is used
-     * @param filesProvider provider of files
+     * @param files provider of files
      * @param namer assigns each file a unique compact name
      * @return
      */
     private static InputManager<FileInput> createFiles(
-            String rootName,
-            FilesProviderWithDirectory filesProvider,
-            FileNamer namer) {
-        NamedFiles files = new NamedFiles();
-        files.setFilesProvider(createMaybeRootedFileProvider(rootName, filesProvider));
-        files.setNamer(namer);
-        return files;
+            String rootName, FilesProviderWithDirectory files, FileNamer namer) {
+        return new NamedFiles(createMaybeRootedFileProvider(rootName, files), namer);
     }
 
     private static FilesProvider createMaybeRootedFileProvider(
             String rootName, FilesProviderWithDirectory provider) {
-        if (rootName != null && !rootName.isEmpty()) {
+        if (!rootName.isEmpty()) {
             return createRootedFileProvider(rootName, provider);
         } else {
             return provider;
@@ -97,7 +91,7 @@ class InputManagerFactory {
             String rootName, FilesProviderWithDirectory provider) {
         Rooted fileSet = new Rooted();
         fileSet.setRootName(rootName);
-        fileSet.setFilesProvider(provider);
+        fileSet.setFiles(provider);
         fileSet.setDisableDebugMode(true);
         return fileSet;
     }

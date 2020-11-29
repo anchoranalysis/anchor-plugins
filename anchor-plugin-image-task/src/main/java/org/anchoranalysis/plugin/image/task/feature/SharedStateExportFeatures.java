@@ -32,8 +32,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.Getter;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -43,13 +43,13 @@ import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.io.results.ResultsWriter;
 import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
 import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.feature.store.NamedFeatureStore;
+import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.io.stack.OutputSequenceStackFactory;
+import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
+import org.anchoranalysis.image.io.stack.output.OutputSequenceStackFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -231,7 +231,8 @@ public class SharedStateExportFeatures<S> {
                 // Write thumbnail, or empty image
                 if (results.getThumbnail().isPresent()) {
                     try {
-                        addThumbnail(results.getThumbnail().get(), context.getOutputter().getChecked());
+                        addThumbnail(
+                                results.getThumbnail().get(), context.getOutputter().getChecked());
                     } catch (OutputWriteFailedException e) {
                         throw new OperationFailedException(e);
                     }
@@ -240,9 +241,11 @@ public class SharedStateExportFeatures<S> {
         };
     }
 
-    private void addThumbnail(DisplayStack thumbnail, OutputterChecked outputter) throws OutputWriteFailedException {
+    private void addThumbnail(DisplayStack thumbnail, OutputterChecked outputter)
+            throws OutputWriteFailedException {
         if (thumbnailOutputSequence == null) {
-            OutputSequenceStackFactory factory = OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
+            OutputSequenceStackFactory factory =
+                    OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
             thumbnailOutputSequence = factory.incrementingByOne(OUTPUT_THUMBNAILS, outputter);
         }
         thumbnailOutputSequence.add(thumbnail.deriveStack(false));

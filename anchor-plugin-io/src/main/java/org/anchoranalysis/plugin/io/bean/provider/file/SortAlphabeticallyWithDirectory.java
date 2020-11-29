@@ -34,8 +34,7 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 public class SortAlphabeticallyWithDirectory extends FilesProviderWithDirectoryUnary {
 
     @Override
-    protected Collection<File> transform(Collection<File> source)
-            throws FilesProviderException {
+    protected Collection<File> transform(Collection<File> source) throws FilesProviderException {
         return SortUtilities.sortFiles(source);
     }
 }

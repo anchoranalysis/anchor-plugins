@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.grouped;
 
+import lombok.Getter;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -37,8 +38,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  */
 public class ConsistentChannelChecker {
 
-    private long maxValue = 0; // Unset
-    private VoxelDataType channelType;
+    @Getter private long maxValue = 0; // Unset
+    @Getter private VoxelDataType channelType;
 
     /** Checks that a channel has the same type (max value) as the others */
     public void checkChannelType(VoxelDataType channelType) throws SetOperationFailedException {
@@ -60,10 +61,6 @@ public class ConsistentChannelChecker {
         return maxValue != 0;
     }
 
-    public long getMaxValue() {
-        return maxValue;
-    }
-
     private void setMaxValue(long histogramMaxValue) throws SetOperationFailedException {
 
         if (histogramMaxValue > UnsignedShortVoxelType.MAX_VALUE) {
@@ -74,9 +71,5 @@ public class ConsistentChannelChecker {
         }
 
         this.maxValue = histogramMaxValue;
-    }
-
-    public VoxelDataType getChannelType() {
-        return channelType;
     }
 }

@@ -30,14 +30,14 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.scale.ScaledElements;
 import org.anchoranalysis.image.core.object.scale.Scaler;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Objects that are a result of an instance-segmentation.

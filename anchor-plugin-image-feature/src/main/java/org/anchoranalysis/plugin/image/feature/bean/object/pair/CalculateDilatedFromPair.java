@@ -35,10 +35,10 @@ import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
 import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair;
-import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair;
+import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair.Extract;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilation;
 

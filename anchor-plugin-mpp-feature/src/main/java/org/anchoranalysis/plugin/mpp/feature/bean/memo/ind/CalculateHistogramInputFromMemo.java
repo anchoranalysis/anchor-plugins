@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.bean.mark.MarkRegion;

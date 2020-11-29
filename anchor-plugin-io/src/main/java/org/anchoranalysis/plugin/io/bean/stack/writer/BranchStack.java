@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,32 +25,33 @@
  */
 package org.anchoranalysis.plugin.io.bean.stack.writer;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
- * Uses different raster-writers depending on whether it is always 2D (not a z-stack) or possibly 3D.
+ * Uses different raster-writers depending on whether it is always 2D (not a z-stack) or possibly
+ * 3D.
  *
  * <p>If any optional condition does not have a writer, then {@code writer} is used in this case.
  *
  * @author Owen Feehan
  */
-public class BranchStack extends RasterWriterDelegateBase {
+public class BranchStack extends StackWriterDelegateBase {
 
     // START BEAN PROPERTIES
     /** Writer to use if it is guaranteed that the image will always be 2D. */
     @BeanField @Getter @Setter private StackWriter writerAlways2D;
-    
+
     /** Otherwise the writer to use. */
     @BeanField @Getter @Setter private StackWriter writerElse;
     // END BEAN PROPERTIES
-    
+
     @Override
     protected StackWriter selectDelegate(StackWriteOptions writeOptions) {
-        if (writeOptions.isAlways2D()) {
+        if (writeOptions.getAttributes().isAlways2D()) {
             return writerAlways2D;
         } else {
             return writerElse;

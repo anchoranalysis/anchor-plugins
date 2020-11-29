@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactorUtilities;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 
 /**
  * Finds largest multiple of an Extent without being larger than another extent
@@ -80,7 +80,7 @@ class FindLargestMultipleWithin {
     }
 
     /**
-     * The minimum scale factor from X and Y resolution, clipped at the a maximum of maxScaleFactor
+     * The minimum scale factor from X and Y resolution, clamped at the a maximum of maxScaleFactor
      */
     private static int minScaleFactorUnder(ScaleFactor sf, int maxScaleFactor) {
         int min = minScaleFactor(sf);

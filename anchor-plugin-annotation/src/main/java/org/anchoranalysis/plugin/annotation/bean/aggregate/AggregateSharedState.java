@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.annotation.bean.aggregate;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 class AggregateSharedState {
 

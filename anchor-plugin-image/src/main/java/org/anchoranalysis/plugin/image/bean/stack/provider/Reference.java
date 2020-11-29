@@ -26,15 +26,30 @@
 
 package org.anchoranalysis.plugin.image.bean.stack.provider;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.Stack;
 
+/**
+ * Retrieves an existing stack.
+ *
+ * <p>The following types of objects are searched for a matching id, in this order:
+ *
+ * <ul>
+ *   <li>stacks
+ *   <li>channels
+ *   <li>masks
+ * </ul>
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 public class Reference extends StackProvider {
 
@@ -51,12 +66,38 @@ public class Reference extends StackProvider {
     @Override
     public Stack create() throws CreateException {
         if (stack == null) {
-            try {
-                this.stack = getInitializationParameters().stacks().getException(id);
-            } catch (NamedProviderGetException e) {
-                throw new CreateException(e);
-            }
+            this.stack =
+                    findMatchingStack()
+                            .orElseThrow(
+                                    () ->
+                                            new CreateException(
+                                                    "Cannot find a stack with id: " + id));
         }
         return stack;
+    }
+
+    private Optional<Stack> findMatchingStack() throws CreateException {
+        try {
+            return OptionalUtilities.orElseGetFlat(
+                    OptionalUtilities.orElseGetFlat(fromStacks(), this::fromChannels),
+                    this::fromMasks);
+        } catch (NamedProviderGetException e) {
+            throw new CreateException(e);
+        }
+    }
+
+    private Optional<Stack> fromStacks() throws NamedProviderGetException {
+        return getInitializationParameters().stacks().getOptional(id);
+    }
+
+    private Optional<Stack> fromChannels() throws NamedProviderGetException {
+        return getInitializationParameters().channels().getOptional(id).map(Stack::new);
+    }
+
+    private Optional<Stack> fromMasks() throws NamedProviderGetException {
+        return getInitializationParameters()
+                .masks()
+                .getOptional(id)
+                .map(mask -> new Stack(mask.channel()));
     }
 }

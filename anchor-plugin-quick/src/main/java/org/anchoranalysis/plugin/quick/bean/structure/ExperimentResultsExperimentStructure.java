@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
@@ -121,7 +121,7 @@ public class ExperimentResultsExperimentStructure extends FilesProvider {
         Rooted out = new Rooted();
         out.setDisableDebugMode(true);
         out.setRootName(rootName);
-        out.setFilesProvider(createFiles());
+        out.setFiles(createFiles());
         return out;
     }
 

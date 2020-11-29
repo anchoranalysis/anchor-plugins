@@ -34,10 +34,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.shared.path.RootPath;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.core.path.SplitPath;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
+import org.anchoranalysis.core.system.path.SplitPath;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
@@ -142,7 +142,8 @@ public class RootPathMap {
 
         // We check both, as the behaviour is implementation-dependent in the multimap
         if (exst == null || exst.isEmpty()) {
-            throw new PathDifferenceException(String.format("Cannot find a root-path for '%s'", name));
+            throw new PathDifferenceException(
+                    String.format("Cannot find a root-path for '%s'", name));
         }
 
         // With the currently implementation there can be a maximum of two items with the same name

@@ -29,19 +29,15 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.spatial.Padding;
-import org.anchoranalysis.image.core.stack.DisplayStack;
-import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawCroppedObjectsGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.overlay.bean.DrawObject;
 
 public abstract class ExportObjectsBase<T extends InputFromManager, S> extends Task<T, S> {
 
@@ -57,13 +53,5 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
         ObjectCollectionProvider objectsDuplicated = objects.duplicateBean();
         objectsDuplicated.initRecursive(so, logger);
         return objectsDuplicated.create();
-    }
-
-    protected DrawCroppedObjectsGenerator createRGBMaskGenerator(
-            DrawObject drawObject, DisplayStack background, ColorList colorList) {
-        DrawCroppedObjectsGenerator delegate =
-                new DrawCroppedObjectsGenerator(drawObject, background, colorList);
-        delegate.setPadding(padding);
-        return delegate;
     }
 }

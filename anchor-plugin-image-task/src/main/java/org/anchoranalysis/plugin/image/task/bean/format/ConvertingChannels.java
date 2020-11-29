@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.image.task.bean.format;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
-import org.anchoranalysis.image.io.channel.ChannelGetter;
+import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 
 @AllArgsConstructor
 class ConvertingChannels implements ChannelGetter {
@@ -47,10 +47,10 @@ class ConvertingChannels implements ChannelGetter {
     }
 
     @Override
-    public Channel getChannel(String channelName, int timeIndex, ProgressReporter progressReporter)
+    public Channel getChannel(String channelName, int timeIndex, Progress progress)
             throws GetOperationFailedException {
 
-        Channel channel = source.getChannel(channelName, timeIndex, progressReporter);
+        Channel channel = source.getChannel(channelName, timeIndex, progress);
         return converter.convert(channel, conversionPolicy);
     }
 }

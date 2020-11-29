@@ -29,7 +29,8 @@ package org.anchoranalysis.plugin.mpp.segment.bean.marks;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.format.NonImageFileFormat;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -38,7 +39,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 class GroupParamsGenerator extends OneStageGenerator<KeyValueParams> {
 
     @Override
-    public void writeToFile(KeyValueParams element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(
+            KeyValueParams element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
         try {
             element.writeToFile(filePath);
@@ -48,8 +50,8 @@ class GroupParamsGenerator extends OneStageGenerator<KeyValueParams> {
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-        return "properties.xml";
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
+        return NonImageFileFormat.PROPERTIES_XML.extensionWithoutPeriod();
     }
 
     @Override

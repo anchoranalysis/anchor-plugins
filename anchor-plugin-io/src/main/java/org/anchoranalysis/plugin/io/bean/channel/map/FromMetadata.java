@@ -28,26 +28,31 @@ package org.anchoranalysis.plugin.io.bean.channel.map;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
+import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 
 public class FromMetadata extends ChannelMap {
 
     @Override
     public NamedEntries createMap(OpenedRaster openedRaster) throws CreateException {
 
-        Optional<List<String>> names = openedRaster.channelNames();
-        if (!names.isPresent()) {
-            throw new CreateException("No channels names are associated with the openedRaster");
-        }
+        try {
+            Optional<List<String>> names = openedRaster.channelNames();
+            if (!names.isPresent()) {
+                throw new CreateException("No channels names are associated with the openedRaster");
+            }
 
-        NamedEntries map = new NamedEntries();
-        for (int index = 0; index < names.get().size(); index++) {
-            map.add(new ChannelEntry(names.get().get(index), index));
+            NamedEntries map = new NamedEntries();
+            for (int index = 0; index < names.get().size(); index++) {
+                map.add(new ChannelEntry(names.get().get(index), index));
+            }
+            return map;
+        } catch (ImageIOException e) {
+            throw new CreateException(e);
         }
-        return map;
     }
 }

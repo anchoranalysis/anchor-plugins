@@ -31,11 +31,11 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 
 public class ImposeResolution extends StackReader {
 
@@ -55,10 +55,9 @@ public class ImposeResolution extends StackReader {
     @Override
     public OpenedRaster openFile(Path path) throws ImageIOException {
         return new OpenedRasterAlterDimensions(
-                stackReader.openFile(path),
-                existing -> Optional.of(resolutionToAssign(existing)));
+                stackReader.openFile(path), existing -> Optional.of(resolutionToAssign(existing)));
     }
-    
+
     private Resolution resolutionToAssign(Optional<Resolution> existing) throws ImageIOException {
         double z = keepZ && existing.isPresent() ? existing.get().z() : resZ;
         try {

@@ -27,10 +27,14 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
+import org.anchoranalysis.image.io.stack.output.box.ScaleableBackground;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Selects a background from an optional stack with an unknown number of channels, and assigns a
@@ -45,17 +49,28 @@ class BackgroundSelector {
     private ScaleFactor scaleFactor;
     private Interpolator interpolator;
 
-    public Optional<ScaleableBackground> determineBackground(Optional<Stack> backgroundSource) {
-        return backgroundSource.flatMap(this::determineScaledBackground);
+    public Optional<ScaleableBackground> determineBackground(Optional<Stack> backgroundSource)
+            throws OperationFailedException {
+        return OptionalUtilities.flatMap(backgroundSource, this::determineScaledBackground);
     }
 
-    private Optional<ScaleableBackground> determineScaledBackground(Stack backgroundSource) {
-        return determineBackground(backgroundSource)
-                .map(stack -> ScaleableBackground.scaleBy(stack, scaleFactor, interpolator));
+    private Optional<ScaleableBackground> determineScaledBackground(Stack backgroundSource)
+            throws OperationFailedException {
+        try {
+            return determineBackground(backgroundSource)
+                    .map(stack -> ScaleableBackground.scaleBy(stack, scaleFactor, interpolator));
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
-    /** Derives a background-stack from a stack that is a source of possible backgrounds */
-    private Optional<Stack> determineBackground(Stack backgroundSource) {
+    /**
+     * Derives a background-stack from a stack that is a source of possible backgrounds
+     *
+     * @throws CreateException
+     */
+    private Optional<DisplayStack> determineBackground(Stack backgroundSource)
+            throws CreateException {
 
         if (backgroundChannelIndex > -1) {
             return Optional.of(extractChannelAsStack(backgroundSource, backgroundChannelIndex));
@@ -65,13 +80,14 @@ class BackgroundSelector {
         if (numberChannels == 0) {
             return Optional.empty();
         } else if (numberChannels == 3 || numberChannels == 1) {
-            return Optional.of(backgroundSource);
+            return Optional.of(DisplayStack.create(backgroundSource));
         } else {
             return Optional.of(extractChannelAsStack(backgroundSource, 0));
         }
     }
 
-    private static Stack extractChannelAsStack(Stack stack, int index) {
-        return new Stack(stack.getChannel(index));
+    private static DisplayStack extractChannelAsStack(Stack stack, int index)
+            throws CreateException {
+        return DisplayStack.create(stack.getChannel(index));
     }
 }

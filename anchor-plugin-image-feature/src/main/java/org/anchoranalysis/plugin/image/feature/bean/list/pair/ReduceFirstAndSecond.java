@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.list.pair;
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
 /**
  * Calculates the aggregate of a feature applied to both the first and second objects in a {@link

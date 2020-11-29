@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gra
 import java.util.List;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.spatial.point.Point3d;
 
 /**

@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.opencv.convert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
@@ -51,21 +51,20 @@ public class ConvertTest {
 
     @Test
     public void testGrayScale8Bit() throws OperationFailedException {
-        testConversion(loader.carGrayscale8Bit(), true);
+        testConversion(loader.carGrayscale8Bit());
     }
 
     @Test
     public void testGrayScale16Bit() throws OperationFailedException {
-        testConversion(loader.carGrayscale16Bit(), true);
+        testConversion(loader.carGrayscale16Bit());
     }
 
     @Test
     public void testRGB() throws OperationFailedException {
-        testConversion(loader.carRGB(), false);
+        testConversion(loader.carRGB());
     }
 
-    private void testConversion(Stack stack, boolean expectFinalStackDirect)
-            throws OperationFailedException {
+    private void testConversion(Stack stack) throws OperationFailedException {
         try {
             CVInit.blockUntilLoaded();
 
@@ -82,10 +81,7 @@ public class ConvertTest {
             //   internally by Anchor or whether it came from JavaCPP's OpenCV wrapper
             // This gives an indication if we are reusing buffers as opposed to creating new memory
             // and copying.
-            assertEquals(
-                    "buffer backed by array",
-                    expectFinalStackDirect,
-                    isBufferDirect(stackCopiedBack));
+            assertEquals("buffer backed by array", false, isBufferDirect(stackCopiedBack));
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);

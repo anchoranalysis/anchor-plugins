@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
+import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
 public class RatioThreshold extends FeatureHistogramStatistic {
@@ -49,7 +49,7 @@ public class RatioThreshold extends FeatureHistogramStatistic {
 
         assert (histogram.size() > 0);
 
-        long count = histogram.countThreshold(threshold);
+        long count = histogram.countThreshold(threshold.relation(), threshold.threshold());
         return (((double) count) / histogram.size());
     }
 

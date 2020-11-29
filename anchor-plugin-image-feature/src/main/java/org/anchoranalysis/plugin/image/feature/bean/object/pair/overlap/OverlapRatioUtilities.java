@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.overlap;
 import java.util.function.IntSupplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
 /**
  * Calculates overlap-ratios or the denominator used for that ratio

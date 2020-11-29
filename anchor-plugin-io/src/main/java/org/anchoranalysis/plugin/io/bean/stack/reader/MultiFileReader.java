@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
@@ -87,8 +87,8 @@ public class MultiFileReader extends StackReader {
                 bag.add(
                         new FileDetails(
                                 f.toPath().toAbsolutePath(),
-                                filePathParser.getChannelNum(),
-                                filePathParser.getZSliceNum(),
+                                filePathParser.getChannelIndex(),
+                                filePathParser.getZSliceIndex(),
                                 filePathParser.getTimeIndex()));
             }
         }

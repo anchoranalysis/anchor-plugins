@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -70,7 +70,9 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 
     @Override
     public void afterCreateObject(
-            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root,
+            Optional<Resolution> resolution,
+            RandomNumberGenerator randomNumberGenerator)
             throws InitException {
         // NOTHING TO DO
     }

@@ -30,8 +30,8 @@ import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Supplier;
-import org.anchoranalysis.core.collection.MapCreate;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.name.MapCreate;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
@@ -53,11 +53,11 @@ import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCach
  */
 public abstract class GroupMapByName<S, T> {
 
-    private MapCreate<MultiName, T> map;
+    private final MapCreate<MultiName, T> map;
 
-    private String nounT;
+    private final String nounT;
 
-    private final ManifestDirectoryDescription manifestFolderDescription;
+    private final ManifestDirectoryDescription manifestDirectoryDescription;
 
     /**
      * Creates a group-map.
@@ -68,7 +68,7 @@ public abstract class GroupMapByName<S, T> {
     public GroupMapByName(String nounT, String manifestFunction, Supplier<T> createEmpty) {
         this.map = new MapCreate<>(createEmpty);
         this.nounT = nounT;
-        this.manifestFolderDescription =
+        this.manifestDirectoryDescription =
                 new ManifestDirectoryDescription(
                         "groupedFolder", manifestFunction, new StringsWithoutOrder());
     }
@@ -111,7 +111,8 @@ public abstract class GroupMapByName<S, T> {
         // We wish to create a new output-manager only once for each primary key, so we store them
         // in a hashmap
         InputOutputContextSubdirectoryCache subdirectoryCache =
-                new InputOutputContextSubdirectoryCache(context, manifestFolderDescription, false);
+                new InputOutputContextSubdirectoryCache(
+                        context, manifestDirectoryDescription, false);
 
         // If there is one part-only, it is assumed that there is no group (for all items) and it is
         // written without a subdirectory
@@ -132,7 +133,7 @@ public abstract class GroupMapByName<S, T> {
     protected abstract void addTo(S ind, T agg) throws OperationFailedException;
 
     protected abstract void writeGroupOutputInSubdirectory(
-            String outputName,
+            String partName,
             T agg,
             ConsistentChannelChecker channelChecker,
             InputOutputContext context)

@@ -33,31 +33,34 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public abstract class CopyFilesNamingOne implements CopyFilesNaming {
+public abstract class CopyFilesNamingOne extends CopyFilesNaming<NoSharedState> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private CopyFilesNaming copyFilesNaming;
+    @BeanField @Getter @Setter private CopyFilesNaming<NoSharedState> copyFilesNaming;
     // END BEAN PROPERTIES
 
     @Override
-    public void beforeCopying(Path destDir, int totalNumFiles) {
-        copyFilesNaming.beforeCopying(destDir, totalNumFiles);
+    public NoSharedState beforeCopying(Path destinationDirectory, int totalNumberFiles) {
+        copyFilesNaming.beforeCopying(destinationDirectory, totalNumberFiles);
+        return NoSharedState.INSTANCE;
     }
 
     @Override
-    public Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter)
+    public Optional<Path> destinationPathRelative(
+            Path sourceDirectory,
+            Path destinationDirectory,
+            File file,
+            int iter,
+            NoSharedState sharedState)
             throws OutputWriteFailedException {
         Optional<Path> pathDelegate =
-                copyFilesNaming.destinationPathRelative(sourceDir, destDir, file, iter);
+                copyFilesNaming.destinationPathRelative(
+                        sourceDirectory, destinationDirectory, file, iter, sharedState);
         return OptionalUtilities.flatMap(pathDelegate, this::destinationPathRelative);
     }
 
-    protected abstract Optional<Path> destinationPathRelative(Path pathDelegate);
-
-    @Override
-    public void afterCopying(Path destDir, boolean dummyMode) throws OutputWriteFailedException {
-        copyFilesNaming.afterCopying(destDir, dummyMode);
-    }
+    protected abstract Optional<Path> destinationPathRelative(Path path);
 }

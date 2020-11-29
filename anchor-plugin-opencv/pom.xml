@@ -73,43 +73,13 @@
     
 
 	<!--  START: OpenCV dependencies -->
-	
-  	
-	<dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>javacv</artifactId>
-      <version>1.5.4</version>
-    </dependency>
     
-    <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
-   	<dependency>
-        <groupId>org.bytedeco</groupId>
-        <artifactId>opencv-platform-gpu</artifactId>
-        <version>4.4.0-${JavaCPP.version}</version>
-    </dependency>
-    
-      <dependency>
-    <groupId>org.bytedeco</groupId>
-    <artifactId>opencv-platform</artifactId>
-    <version>${opencv-platform.version}</version>
-  </dependency>
-
+    <!-- https://github.com/openpnp/opencv -->
     <dependency>
-        <groupId>org.bytedeco</groupId>
-        <artifactId>tensorflow-platform-gpu</artifactId>
-        <version>1.15.3-${JavaCPP.version}</version>
-    </dependency>
-    
-    <dependency>
-        <groupId>org.bytedeco</groupId>
-        <artifactId>cuda-platform-redist</artifactId>
-        <version>11.0-8.0-${JavaCPP.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>org.bytedeco</groupId>
-        <artifactId>tensorrt-platform-redist</artifactId>
-        <version>7.1-${JavaCPP.version}</version>
-    </dependency>
+	    <groupId>org.openpnp</groupId>
+	    <artifactId>opencv</artifactId>
+	    <version>4.3.0-2</version>
+	</dependency>
     
     <!--  END: OpenCV dependencies -->
 

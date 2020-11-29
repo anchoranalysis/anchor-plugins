@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
 import java.io.IOException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
+import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -40,8 +40,14 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
 
     private static final String MANIFEST_FUNCTION = "channelMean";
 
-    public GroupedMeanChannelMap() {
+    private final String outputName;
+    /**
+     * @param outputName the first-level output-name used to determine whether mean channels will be
+     *     written or not
+     */
+    public GroupedMeanChannelMap(String outputName) {
         super("channel", MANIFEST_FUNCTION, RunningSumChannel::new);
+        this.outputName = outputName;
     }
 
     @Override
@@ -51,7 +57,7 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
 
     @Override
     protected void writeGroupOutputInSubdirectory(
-            String outputName,
+            String partName,
             RunningSumChannel agg,
             ConsistentChannelChecker channelChecker,
             InputOutputContext context)
@@ -59,8 +65,11 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
         // TODO change always2D
         VoxelDataType outputType = channelChecker.getChannelType();
         context.getOutputter()
-                .writerPermissive()
-                .write(outputName, () -> new ChannelGenerator(MANIFEST_FUNCTION), () -> generatorWithMean(agg, outputType, outputName, context));
+                .writerSecondLevel(outputName)
+                .write(
+                        partName,
+                        () -> new ChannelGenerator(MANIFEST_FUNCTION),
+                        () -> generatorWithMean(agg, outputType, partName, context));
     }
 
     private static Channel generatorWithMean(

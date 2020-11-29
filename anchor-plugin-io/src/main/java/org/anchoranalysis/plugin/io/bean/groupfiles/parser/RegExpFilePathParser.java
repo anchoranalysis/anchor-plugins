@@ -88,12 +88,12 @@ public class RegExpFilePathParser extends FilePathParser {
     }
 
     @Override
-    public Optional<Integer> getChannelNum() {
+    public Optional<Integer> getChannelIndex() {
         return asOptional(channelGroupID, channelNum);
     }
 
     @Override
-    public Optional<Integer> getZSliceNum() {
+    public Optional<Integer> getZSliceIndex() {
         return asOptional(zSliceGroupID, zSliceNum);
     }
 

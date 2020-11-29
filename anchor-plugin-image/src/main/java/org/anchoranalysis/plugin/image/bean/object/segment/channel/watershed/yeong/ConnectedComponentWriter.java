@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -35,19 +36,16 @@ import org.anchoranalysis.spatial.point.Point3i;
  *
  * @author Owen Feehan
  */
+@RequiredArgsConstructor
 final class ConnectedComponentWriter {
 
+    // START REQUIRED ARGUMENTS
     private final EncodedVoxels matS;
     private final Optional<MinimaStore> minimaStore;
+    // END REQUIRED ARGUMENTS
 
     /** Keeps track of the IDs used */
     private int id = -1;
-
-    public ConnectedComponentWriter(EncodedVoxels matS, Optional<MinimaStore> minimaStore) {
-        super();
-        this.matS = matS;
-        this.minimaStore = minimaStore;
-    }
 
     /** @param point a point that is treated immutably */
     public void writePoint(Point3i point) {

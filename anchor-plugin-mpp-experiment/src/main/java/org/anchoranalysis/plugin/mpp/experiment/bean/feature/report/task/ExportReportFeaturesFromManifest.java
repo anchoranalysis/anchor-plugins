@@ -26,41 +26,46 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report.task;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
-import org.anchoranalysis.io.output.bean.ReportFeature;
-import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
+/**
+ * Creates a report of feature values from a {@link DeserializedManifest} and a {@link
+ * ManifestCouplingDefinition}.
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td rowspan="3"><i>inherited from {@link ExportReportFeatures}</i></td></tr>
+ * </tbody>
+ * </table>
+ *
+ * @author Owen Feehan
+ */
 public class ExportReportFeaturesFromManifest
-        extends TaskWithoutSharedState<ManifestCouplingDefinition> {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter
-    private List<ReportFeature<DeserializedManifest>> listReportFeatures = new ArrayList<>();
-    // END BEAN PROPERTIES
-
-    @Override
-    public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
-    }
+        extends ExportReportFeatures<
+                ManifestCouplingDefinition, NoSharedState, DeserializedManifest> {
 
     @Override
     public InputTypesExpected inputTypesExpected() {
@@ -68,36 +73,46 @@ public class ExportReportFeaturesFromManifest
     }
 
     @Override
+    public NoSharedState beforeAnyJobIsExecuted(
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<ManifestCouplingDefinition> inputs,
+            ParametersExperiment params)
+            throws ExperimentExecutionException {
+        return NoSharedState.INSTANCE;
+    }
+
+    @Override
     public void doJobOnInput(InputBound<ManifestCouplingDefinition, NoSharedState> params)
             throws JobExecutionException {
 
         try {
-            Optional<CSVWriter> writer = CSVWriter.createFromOutputter("featureReport", params.getOutputter().getChecked());
-
+            Optional<CSVWriter> writer = createWriter(params.getOutputter().getChecked());
             if (writer.isPresent()) {
                 writeCSV(writer.get(), params.getInput(), params.getLogger());
             }
-            
+
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }
     }
-    
-    private void writeCSV(CSVWriter writer, ManifestCouplingDefinition input, Logger logger) throws JobExecutionException {
+
+    @Override
+    public void afterAllJobsAreExecuted(NoSharedState sharedState, InputOutputContext context)
+            throws ExperimentExecutionException {
+        // NOTHING TO DO
+    }
+
+    private void writeCSV(CSVWriter writer, ManifestCouplingDefinition input, Logger logger)
+            throws JobExecutionException {
         try {
-            writer.writeHeaders(ReportFeatureUtilities.headerNames(listReportFeatures, logger));
+            writer.writeHeaders(headerNames(Optional.empty()));
 
-            Iterator<CoupledManifests> itr = input.iteratorCoupledManifests();
-            while (itr.hasNext()) {
-
-                CoupledManifests coupledManifests = itr.next();
-
-                List<TypedValue> rowElements =
-                        ReportFeatureUtilities.elementList(
-                                listReportFeatures, coupledManifests.getJobManifest(), logger);
-
+            Iterator<CoupledManifests> iterator = input.iteratorCoupledManifests();
+            while (iterator.hasNext()) {
                 try {
-                    writer.writeRow(rowElements);
+                    writeFeaturesIntoReporter(
+                            iterator.next().getJobManifest(), writer, Optional.empty(), logger);
                 } catch (NumberFormatException e) {
                     throw new JobExecutionException(e);
                 }
@@ -105,11 +120,6 @@ public class ExportReportFeaturesFromManifest
 
         } finally {
             writer.close();
-        }        
-    }
-
-    @Override
-    public boolean hasVeryQuickPerInputExecution() {
-        return false;
+        }
     }
 }

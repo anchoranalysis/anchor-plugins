@@ -29,41 +29,58 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
+import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public interface CopyFilesNaming {
-
-    void beforeCopying(Path destDir, int totalNumFiles);
+/**
+ * How an output name (and path) is selected for an input file when copying.
+ *
+ * @author Owen Feehan
+ * @param <T> shared-state
+ */
+public abstract class CopyFilesNaming<T> extends AnchorBean<CopyFilesNaming<T>> {
 
     /**
-     * Returns the output path (destination to to be copied to) for a given single file
+     * To be called <i>once</i> before any calls to {@link #destinationPath(Path, Path, File, int,
+     * Object)}.
      *
-     * @param sourceDir source-directory
-     * @param destDir destination-directory
+     * @param destinationDirectory the directory to which files are copied.
+     * @param totalNumberFiles the total number of files to copy.
+     */
+    public abstract T beforeCopying(Path destinationDirectory, int totalNumberFiles);
+
+    /**
+     * Returns the output path (destination to to be copied to) for a given single file.
+     *
+     * @param sourceDirectory source-directory
+     * @param destinationDirectory destination-directory
      * @param file file to be copied
      * @param index an increasing sequence of numbers for each file beginning at 0
      * @return the absolute-path. if empty, the file should be skipped.
      * @throws OutputWriteFailedException
      */
-    default Optional<Path> destinationPath(Path sourceDir, Path destDir, File file, int index)
+    public Optional<Path> destinationPath(
+            Path sourceDirectory, Path destinationDirectory, File file, int index, T sharedState)
             throws OutputWriteFailedException {
 
-        Optional<Path> remainder = destinationPathRelative(sourceDir, destDir, file, index);
-        return remainder.map(destDir::resolve);
+        Optional<Path> remainder =
+                destinationPathRelative(
+                        sourceDirectory, destinationDirectory, file, index, sharedState);
+        return remainder.map(destinationDirectory::resolve);
     }
 
     /**
      * Calculates the relative-output path (to be appended to destDir)
      *
-     * @param sourceDir source-directory
-     * @param destDir destination-directory
+     * @param sourceDirectory source-directory
+     * @param destinationDirectory destination-directory
      * @param file file to be copied
      * @param index an increasing sequence of numbers for each file beginning at 0
+     * @param sharedState TODO
      * @return the relative-path. if empty, the file should be skipped.
      * @throws OutputWriteFailedException
      */
-    Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int index)
+    public abstract Optional<Path> destinationPathRelative(
+            Path sourceDirectory, Path destinationDirectory, File file, int index, T sharedState)
             throws OutputWriteFailedException;
-
-    void afterCopying(Path destDir, boolean dummyMode) throws OutputWriteFailedException;
 }

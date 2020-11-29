@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 import java.io.IOException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
@@ -49,11 +49,11 @@ class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
 
     @Override
     protected void writeGroupOutputInSubdirectory(
-            String outputName,
+            String partName,
             Histogram agg,
             ConsistentChannelChecker channelChecker,
             InputOutputContext context)
             throws IOException {
-        writer.writeHistogramToFile(agg, outputName, context);
+        writer.writeHistogramToFile(agg, partName, context);
     }
 }

@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.objects;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.input.csv.CSVReaderByLine;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
@@ -46,7 +46,7 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.IndexedCSVRows;
 public class FromCSVSharedState {
 
     /** An index of the rows in the CSV file, that is cached between different threads */
-    private IndexedCSVRows indexedRows = null;
+    private IndexedCSVRows indexedRows;
 
     /**
      * We record the csvFilePath just to check to make sure it's always the same, or otherwise throw

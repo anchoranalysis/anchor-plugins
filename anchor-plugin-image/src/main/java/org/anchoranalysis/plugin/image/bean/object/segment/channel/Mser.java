@@ -36,7 +36,7 @@ import net.imglib2.algorithm.componenttree.mser.MserTree;
 import net.imglib2.img.Img;
 import net.imglib2.type.Type;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -44,8 +44,8 @@ import org.anchoranalysis.image.core.object.factory.SingleObjectFromPointsFactor
 import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**

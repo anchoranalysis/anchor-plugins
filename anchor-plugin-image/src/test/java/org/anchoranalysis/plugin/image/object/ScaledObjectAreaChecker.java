@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.object.scale.ScaledElements;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 @RequiredArgsConstructor
 class ScaledObjectAreaChecker {

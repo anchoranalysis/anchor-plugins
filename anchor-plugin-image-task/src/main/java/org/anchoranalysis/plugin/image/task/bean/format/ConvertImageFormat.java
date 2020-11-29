@@ -26,18 +26,19 @@
 
 package org.anchoranalysis.plugin.image.task.bean.format;
 
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.name.store.StoreSupplier;
-import org.anchoranalysis.core.progress.ProgressReporterConsole;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressConsole;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -46,20 +47,20 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
-import org.anchoranalysis.image.core.stack.NamedStacks;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.experiment.bean.task.RasterTask;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelFilter;
-import org.anchoranalysis.image.io.channel.ChannelGetter;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.stack.OutputSequenceStackFactory;
+import org.anchoranalysis.image.io.channel.input.ChannelGetter;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.stack.output.OutputSequenceStackFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.plugin.image.task.bean.RasterTask;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
@@ -86,7 +87,8 @@ import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
  *
  * @author Owen Feehan
  */
-public class ConvertImageFormat extends RasterTask<NoSharedState,OutputSequenceIndexed<Stack,String>> {
+public class ConvertImageFormat
+        extends RasterTask<NoSharedState, OutputSequenceIndexed<Stack, String>> {
 
     private static final String OUTPUT_COPY = "converted";
 
@@ -101,7 +103,7 @@ public class ConvertImageFormat extends RasterTask<NoSharedState,OutputSequenceI
     /** Optionally, includes only certain channels when converting. */
     @BeanField @OptionalBean @Getter @Setter private ChannelFilter channelFilter = null;
 
-    /** Optionally, how to convert from one bit-depth to another (scaling, clipping etc.) */
+    /** Optionally, how to convert from one bit-depth to another (scaling, clamping etc.) */
     @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo channelConverter = null;
     // END BEAN PROPERTIES
 
@@ -114,46 +116,57 @@ public class ConvertImageFormat extends RasterTask<NoSharedState,OutputSequenceI
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
+
     @Override
-    public NoSharedState beforeAnyJobIsExecuted(Outputter outputter,
-            ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+    public NoSharedState beforeAnyJobIsExecuted(
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<NamedChannelsInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
-    
+
     /**
      * Sets a new output-sequence for the series
-     * 
-     * <p>It's important to do this here rather than in {@link #beforeAnyJobIsExecuted(Outputter, ConcurrencyPlan, ParametersExperiment)}
-     * as {@code context} is now bound with the directory/prefix related to the input.
+     *
+     * <p>It's important to do this here rather than in {@link #beforeAnyJobIsExecuted(Outputter,
+     * ConcurrencyPlan, List, ParametersExperiment)} as {@code context} is now bound with the
+     * directory/prefix related to the input.
      */
     @Override
     protected OutputSequenceIndexed<Stack, String> createSharedStateJob(InputOutputContext context)
             throws JobExecutionException {
         try {
-            return OutputSequenceStackFactory.NO_RESTRICTIONS.withoutOrderCurrentDirectory(OUTPUT_COPY, context.getOutputter().getChecked());
+            return OutputSequenceStackFactory.NO_RESTRICTIONS.withoutOrderCurrentDirectory(
+                    OUTPUT_COPY, context.getOutputter().getChecked());
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }
     }
 
     @Override
-    public void startSeries(NoSharedState sharedStateTask,
-            OutputSequenceIndexed<Stack, String> sharedStateJob, InputOutputContext context)
+    public void startSeries(
+            NoSharedState sharedStateTask,
+            OutputSequenceIndexed<Stack, String> sharedStateJob,
+            InputOutputContext context)
             throws JobExecutionException {
         // NOTHING TO DO
     }
-    
+
     @Override
-    public void doStack(InputBound<NamedChannelsInput, NoSharedState> input,
-            OutputSequenceIndexed<Stack, String> sharedStateJob, int seriesIndex, int numberSeries,
-            InputOutputContext context) throws JobExecutionException {
+    public void doStack(
+            InputBound<NamedChannelsInput, NoSharedState> input,
+            OutputSequenceIndexed<Stack, String> sharedStateJob,
+            int seriesIndex,
+            int numberSeries,
+            InputOutputContext context)
+            throws JobExecutionException {
 
         try {
             NamedChannelsForSeries channels =
                     createChannelCollection(input.getInput(), seriesIndex);
-            
+
             ChannelGetter channelGetter = maybeAddFilter(channels, context);
 
             if (channelConverter != null) {
@@ -164,7 +177,7 @@ public class ConvertImageFormat extends RasterTask<NoSharedState,OutputSequenceI
                     seriesIndex,
                     channels.channelNames(),
                     numberSeries,
-                    channels.sizeT(ProgressReporterNull.get()),
+                    channels.sizeT(ProgressIgnore.get()),
                     channelGetter,
                     sharedStateJob,
                     context.getLogger());
@@ -173,12 +186,14 @@ public class ConvertImageFormat extends RasterTask<NoSharedState,OutputSequenceI
             throw new JobExecutionException(e);
         }
     }
-    
+
     @Override
-    public void endSeries(NoSharedState sharedStateTask,
-            OutputSequenceIndexed<Stack, String> sharedStateJob, InputOutputContext context)
+    public void endSeries(
+            NoSharedState sharedStateTask,
+            OutputSequenceIndexed<Stack, String> sharedStateJob,
+            InputOutputContext context)
             throws JobExecutionException {
-        // NOTHING TO DO        
+        // NOTHING TO DO
     }
 
     @Override
@@ -193,7 +208,7 @@ public class ConvertImageFormat extends RasterTask<NoSharedState,OutputSequenceI
             int numSeries,
             int sizeT,
             ChannelGetter channelGetter,
-            OutputSequenceIndexed<Stack,String> outputSequence,
+            OutputSequenceIndexed<Stack, String> outputSequence,
             Logger logger)
             throws JobExecutionException {
 
@@ -205,12 +220,15 @@ public class ConvertImageFormat extends RasterTask<NoSharedState,OutputSequenceI
             logger.messageLogger().logFormatted("Starting time-point: %d", t);
 
             try {
-                NamedStacks stacks = channelConversionStyle.convert(
-                        channelNames,
-                        new ChannelGetterForTimepoint(channelGetter, t),
-                        logger);
-            
-                stacks.forEach( (stackName,stack) -> addStackToOutput(outputSequence, stackName, stack, namer) );
+                NamedStacks stacks =
+                        channelConversionStyle.convert(
+                                channelNames,
+                                new ChannelGetterForTimepoint(channelGetter, t),
+                                logger);
+
+                stacks.forEach(
+                        (stackName, stack) ->
+                                addStackToOutput(outputSequence, stackName, stack, namer));
             } catch (OperationFailedException e) {
                 throw new JobExecutionException(e);
             }
@@ -221,11 +239,15 @@ public class ConvertImageFormat extends RasterTask<NoSharedState,OutputSequenceI
 
     private NamedChannelsForSeries createChannelCollection(
             NamedChannelsInput input, int seriesIndex) throws ImageIOException {
-        return input.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
+        return input.createChannelsForSeries(seriesIndex, new ProgressConsole(1));
     }
-    
+
     private void addStackToOutput(
-            OutputSequenceIndexed<Stack,String> outputSequence, String name, StoreSupplier<Stack> stack, CalculateOutputName calculateOutputName) throws OperationFailedException {
+            OutputSequenceIndexed<Stack, String> outputSequence,
+            String name,
+            StoreSupplier<Stack> stack,
+            CalculateOutputName calculateOutputName)
+            throws OperationFailedException {
         try {
             outputSequence.add(stack.get(), calculateOutputName.outputName(name));
         } catch (OutputWriteFailedException e) {

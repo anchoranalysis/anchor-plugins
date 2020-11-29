@@ -38,10 +38,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -52,8 +52,8 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.store.NamedFeatureStore;
+import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
@@ -127,7 +127,10 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     @Override
     public SharedStateExportFeatures<S> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<T> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return source.createSharedState(
@@ -147,10 +150,11 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
             Optional<String> groupName =
                     extractGroupNameFromGenerator(
                             input.getInput().pathForBindingRequired(),
-                            input.context().isDebugEnabled());
+                            input.getContextJob().isDebugEnabled());
 
             InputProcessContext<S> inputProcessContext =
-                    input.getSharedState().createInputProcessContext(groupName, input.context());
+                    input.getSharedState()
+                            .createInputProcessContext(groupName, input.getContextJob());
 
             source.processInput(input.getInput(), inputProcessContext);
 
@@ -209,7 +213,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     private Optional<String> extractGroupNameFromGenerator(Path inputPath, boolean debugMode)
             throws DerivePathException {
         return filePathAsIdentifier(Optional.ofNullable(group), inputPath, debugMode);
-    }    
+    }
 
     private static Optional<String> filePathAsIdentifier(
             Optional<DerivePath> generator, Path path, boolean debugMode)

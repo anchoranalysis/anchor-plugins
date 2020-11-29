@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
@@ -70,7 +70,8 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
         try {
             for (ObjectMask object : objects) {
 
-                Histogram histogram = HistogramFromObjectsFactory.create(lookup.voxels(), Optional.of(object));
+                Histogram histogram =
+                        HistogramFromObjectsFactory.create(lookup.voxels(), Optional.of(object));
                 adjustObject(object, channel, lookup, (int) Math.round(histogram.mean()));
             }
 
@@ -90,7 +91,7 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
                 channelLookup.voxels().asByte(),
                 (point, buffer, bufferLookup, offset, offsetLookup) -> {
                     int valueToAssign =
-                            clipValue(
+                            clampValue(
                                     buffer.getUnsigned(offset)
                                             - medianFromObject
                                             + bufferLookup.getUnsigned(offsetLookup));
@@ -99,7 +100,7 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
                 });
     }
 
-    private static int clipValue(int value) {
+    private static int clampValue(int value) {
         if (value < 0) {
             return 0;
         } else if (value > 255) {

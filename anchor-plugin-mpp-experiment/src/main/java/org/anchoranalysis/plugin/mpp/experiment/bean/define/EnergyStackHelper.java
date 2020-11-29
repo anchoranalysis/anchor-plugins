@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -60,7 +60,8 @@ class EnergyStackHelper {
                                                         .getOptional(paramsName))
                                 .orElseGet(KeyValueParams::new);
 
-                EnergyStack energyStack = new EnergyStack(soImage.stacks().getException("energyStack"), params); 
+                EnergyStack energyStack =
+                        new EnergyStack(soImage.stacks().getException("energyStack"), params);
                 new EnergyStackWriter(energyStack, context.getOutputter()).writeEnergyStack();
             }
         } catch (NamedProviderGetException e) {

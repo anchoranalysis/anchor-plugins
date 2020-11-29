@@ -28,29 +28,31 @@ package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.math.relation.RelationToValue;
 
 /**
- * If the XY resolution of an opened-image meets a certain condition then the resolution is scaled by a factor.
- * 
- * <p>This is useful for correcting situations where there has been a unit mixup by the {@link StackReader}.
- * 
- * <p>It assumes the X and Y resolution are equal. Throws an error otherwise.
- * 
- * <p>If no image-resolution is known, an error will be thrown.
- * 
- * @author Owen Feehan
+ * If the XY resolution of an opened-image meets a certain condition then the resolution is scaled
+ * by a factor.
  *
+ * <p>This is useful for correcting situations where there has been a unit mixup by the {@link
+ * StackReader}.
+ *
+ * <p>It assumes the X and Y resolution are equal. Throws an error otherwise.
+ *
+ * <p>If no image-resolution is known, an error will be thrown.
+ *
+ * @author Owen Feehan
  */
 public class RejectIfConditionXYResolution extends StackReader {
 
@@ -62,34 +64,28 @@ public class RejectIfConditionXYResolution extends StackReader {
     @BeanField @NonNegative @Getter @Setter private double value;
     // END BEAN PROPERTIES
 
+    @AllArgsConstructor
     private static class MaybeRejectProcessor
             implements OpenedRasterAlterDimensions.ConsiderUpdatedImageResolution {
 
         private RelationToValue relation;
         private double value;
 
-        public MaybeRejectProcessor(RelationToValue relation, double value) {
-            super();
-            this.relation = relation;
-            this.value = value;
-        }
-
         @Override
         public Optional<Resolution> maybeUpdatedResolution(Optional<Resolution> resolution)
                 throws ImageIOException {
 
             if (!resolution.isPresent()) {
-                throw new ImageIOException("No image-resolution is present, so cannot perform this check.");
-            }
-            
-            if (!resolution.get().hasEqualXAndY()) {
                 throw new ImageIOException(
-                        "X and Y pixel-sizes are different. They must be equal");
+                        "No image-resolution is present, so cannot perform this check.");
+            }
+
+            if (!resolution.get().hasEqualXAndY()) {
+                throw new ImageIOException("X and Y pixel-sizes are different. They must be equal");
             }
 
             if (relation.isRelationToValueTrue(resolution.get().x(), value)) {
-                throw new ImageIOException(
-                        "XY-resolution fufills condition, and is thus rejected");
+                throw new ImageIOException("XY-resolution fufills condition, and is thus rejected");
             } else {
                 return Optional.empty();
             }

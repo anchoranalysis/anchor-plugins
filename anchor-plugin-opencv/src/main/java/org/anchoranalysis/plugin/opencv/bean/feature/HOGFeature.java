@@ -34,12 +34,12 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
-import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.bean.FeatureStack;
+import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 
 /**

@@ -35,7 +35,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
+import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

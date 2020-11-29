@@ -31,7 +31,7 @@ import java.util.List;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.NonMaximaSuppression;
 import org.anchoranalysis.plugin.image.box.IntersectionOverUnion;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Non-maxima suppression for axis-aligned bounding-boxes using an <a
