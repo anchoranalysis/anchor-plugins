@@ -29,13 +29,13 @@ package org.anchoranalysis.plugin.io.bean.stack.reader;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 
 @AllArgsConstructor
 class OpenedRasterAlterDimensions implements OpenedRaster {
@@ -50,7 +50,8 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
          * @return a new image resolution or empty if no change should occur
          * @throws ImageIOException
          */
-        Optional<Resolution> maybeUpdatedResolution(Optional<Resolution> resolution) throws ImageIOException;
+        Optional<Resolution> maybeUpdatedResolution(Optional<Resolution> resolution)
+                throws ImageIOException;
     }
 
     private OpenedRaster delegate;
@@ -62,9 +63,8 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
-            throws ImageIOException {
-        TimeSequence sequence = delegate.open(seriesIndex, progressReporter);
+    public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
+        TimeSequence sequence = delegate.open(seriesIndex, progress);
 
         for (Stack stack : sequence) {
             Optional<Resolution> res = processor.maybeUpdatedResolution(stack.resolution());
@@ -74,7 +74,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
     }
 
     @Override
-    public Optional<List<String>> channelNames() {
+    public Optional<List<String>> channelNames() throws ImageIOException {
         return delegate.channelNames();
     }
 

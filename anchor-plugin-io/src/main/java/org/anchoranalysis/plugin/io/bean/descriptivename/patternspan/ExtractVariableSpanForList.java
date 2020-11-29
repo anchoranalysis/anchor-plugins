@@ -33,7 +33,7 @@ import java.util.function.BiFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.files.NamedFile;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -63,17 +63,15 @@ class ExtractVariableSpanForList {
         }
     }
 
-    private static List<NamedFile> listPrepend(
-            String prefix, List<NamedFile> list) {
-        return mapNamesOnList(list, (name,file) -> prependName(prefix, name) ); 
+    private static List<NamedFile> listPrepend(String prefix, List<NamedFile> list) {
+        return mapNamesOnList(list, (name, file) -> prependName(prefix, name));
     }
-    
-    private static List<NamedFile> mapNamesOnList(Collection<NamedFile> collection, BiFunction<String,File,String> changeName ) {
-        return FunctionalList.mapToList(
-                collection,
-                df -> df.mapName(changeName)); 
+
+    private static List<NamedFile> mapNamesOnList(
+            Collection<NamedFile> collection, BiFunction<String, File, String> changeName) {
+        return FunctionalList.mapToList(collection, df -> df.mapName(changeName));
     }
-    
+
     private static String prependName(String prefix, String name) {
         return FilePathToUnixStyleConverter.toStringUnixStyle(prefix + name).trim();
     }
@@ -84,10 +82,10 @@ class ExtractVariableSpanForList {
 
     private static List<NamedFile> listExtractMaybeEmpty(
             Collection<File> files, ExtractVariableSpan extractVariableSpan) {
-        
+
         return FunctionalList.mapToList(
                 files,
-                file -> new NamedFile(extractVariableSpan.extractSpanPortionFor(file), file) );
+                file -> new NamedFile(extractVariableSpan.extractSpanPortionFor(file), file));
     }
 
     private static String extractLastComponent(String str) {

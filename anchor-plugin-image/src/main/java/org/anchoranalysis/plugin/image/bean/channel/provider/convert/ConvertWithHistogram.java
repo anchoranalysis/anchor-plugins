@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelToWithHistogram;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
@@ -77,6 +77,7 @@ public class ConvertWithHistogram extends ConvertBase {
 
     private Histogram createHistogram(Channel channel) throws CreateException {
         return OptionalUtilities.orElseGet(
-                OptionalFactory.create(histogram), () -> HistogramFromObjectsFactory.create(channel));
+                OptionalFactory.create(histogram),
+                () -> HistogramFromObjectsFactory.create(channel));
     }
 }

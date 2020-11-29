@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.stack.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;

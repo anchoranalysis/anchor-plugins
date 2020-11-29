@@ -54,13 +54,13 @@ public class WatershedYeongTest {
             new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory("watershed01/"));
 
     @Test
-    public void test_noMasks_noSeeds()
+    public void testNoMasksNoSeeds()
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
         segment(PATH_EXPECTED_NO_MASKS_NO_SEEDS, Optional.empty());
     }
 
     @Test
-    public void test_masks_noSeeds()
+    public void testMasksNoSeeds()
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
         segment(PATH_EXPECTED_MASKS_NO_SEEDS, Optional.of(PATH_MASK));
     }

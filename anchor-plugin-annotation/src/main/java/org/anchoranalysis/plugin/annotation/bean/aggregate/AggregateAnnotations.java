@@ -26,11 +26,12 @@
 
 package org.anchoranalysis.plugin.annotation.bean.aggregate;
 
+import java.util.List;
 import java.util.Optional;
+import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
-import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -45,14 +46,32 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 /**
  * Aggregates many per-image annotations together in form of a CSV file.
  *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>aggregated</td><td>yes</td><td>a CSV file with each image and corresponding image-label.</td></tr>
+ * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
+ *
  * @author Owen Feehan
  */
 public class AggregateAnnotations<S extends AnnotatorStrategy>
         extends Task<AnnotationWithStrategy<S>, AggregateSharedState> {
 
+    private static final String OUTPUT_AGGREGATED = "aggregated";
+
     @Override
     public AggregateSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<AnnotationWithStrategy<S>> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new AggregateSharedState();
@@ -76,7 +95,10 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
 
         context.getOutputter()
                 .writerSelective()
-                .write("annotationsAgg", AnnotationAggregateCSVGenerator::new, sharedState::getAnnotations);
+                .write(
+                        OUTPUT_AGGREGATED,
+                        AnnotationAggregateCSVGenerator::new,
+                        sharedState::getAnnotations);
     }
 
     private Optional<ImageAnnotation> createFromInput(AnnotationWithStrategy<S> input)
@@ -101,7 +123,6 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_AGGREGATED);
     }
 }

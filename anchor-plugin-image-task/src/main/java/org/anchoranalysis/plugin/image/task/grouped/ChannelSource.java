@@ -27,14 +27,15 @@
 package org.anchoranalysis.plugin.image.task.grouped;
 
 import java.util.Optional;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.stack.NamedStacks;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
 
 /**
  * Source of channels for aggregating.
@@ -45,7 +46,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 public class ChannelSource {
 
     // START REQUIRED ARGUMENTS
-    private final NamedStacks stackStore;
+    @Getter private final NamedStacks stackStore;
     private final ConsistentChannelChecker channelChecker;
     // END REQUIRED ARGUMENTS
 
@@ -108,9 +109,5 @@ public class ChannelSource {
         } else {
             return channel;
         }
-    }
-
-    public NamedStacks getStackStore() {
-        return stackStore;
     }
 }

@@ -40,7 +40,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.files.NamedFile;
 import org.apache.commons.io.FilenameUtils;
@@ -74,8 +74,7 @@ public class RemoveExtensions extends FileNamer {
     }
 
     @Override
-    public List<NamedFile> deriveName(
-            Collection<File> files, String elseName, Logger logger) {
+    public List<NamedFile> deriveName(Collection<File> files, String elseName, Logger logger) {
 
         List<NamedFile> df = namer.deriveName(files, elseName, logger);
 
@@ -86,17 +85,13 @@ public class RemoveExtensions extends FileNamer {
         }
     }
 
-    private static List<NamedFile> considerDuplicates(
-            List<NamedFile> df, String elseName) {
+    private static List<NamedFile> considerDuplicates(List<NamedFile> df, String elseName) {
         List<NamedFile> dfWithoutExt = removeExtension(df, elseName);
 
         // A count for each file, based upon the uniqueness of the description
         Map<String, Long> countedWithoutExt =
                 dfWithoutExt.stream()
-                        .collect(
-                                Collectors.groupingBy(
-                                        NamedFile::getName,
-                                        Collectors.counting()));
+                        .collect(Collectors.groupingBy(NamedFile::getName, Collectors.counting()));
 
         return listMaybeWithExtension(df, dfWithoutExt, countedWithoutExt);
     }
@@ -112,9 +107,7 @@ public class RemoveExtensions extends FileNamer {
      *     listWithout depending on the count value
      */
     private static List<NamedFile> listMaybeWithExtension(
-            List<NamedFile> listWith,
-            List<NamedFile> listWithout,
-            Map<String, Long> countWithout) {
+            List<NamedFile> listWith, List<NamedFile> listWithout, Map<String, Long> countWithout) {
 
         List<NamedFile> out = new ArrayList<>();
 
@@ -130,8 +123,7 @@ public class RemoveExtensions extends FileNamer {
     }
 
     private static List<NamedFile> removeExtension(List<NamedFile> files, String elseName) {
-        return FunctionalList.mapToList(
-                files, file -> maybeRemoveExtension(file, elseName));
+        return FunctionalList.mapToList(files, file -> maybeRemoveExtension(file, elseName));
     }
 
     private static NamedFile maybeRemoveExtension(NamedFile file, String elseName) {

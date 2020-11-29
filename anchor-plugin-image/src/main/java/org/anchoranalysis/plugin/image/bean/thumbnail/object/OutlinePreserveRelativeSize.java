@@ -32,25 +32,25 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
-import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
+import org.anchoranalysis.image.io.stack.output.box.DrawObjectOnStackGenerator;
+import org.anchoranalysis.image.io.stack.output.box.ScaleableBackground;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundedList;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundedList;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Create a thumbnail by drawing an outline of an object at a particular-scale, and placing it
@@ -154,7 +154,9 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
                 assert centeredBox.extent().equals(size.asExtent());
                 assert sceneExtentScaled.contains(centeredBox);
 
-                Stack transformed = generator.transform(determineObjectsForGenerator(objectsScaled, centeredBox));
+                Stack transformed =
+                        generator.transform(
+                                determineObjectsForGenerator(objectsScaled, centeredBox));
                 return DisplayStack.create(transformed);
 
             } catch (OutputWriteFailedException | OperationFailedException e) {
@@ -219,7 +221,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     }
 
     private Optional<ScaleableBackground> determineBackgroundMaybeOutlined(
-            Optional<Stack> backgroundSource, FlattenAndScaler scaler, Interpolator interpolator) {
+            Optional<Stack> backgroundSource, FlattenAndScaler scaler, Interpolator interpolator)
+            throws OperationFailedException {
         BackgroundSelector backgroundHelper =
                 new BackgroundSelector(
                         backgroundChannelIndex, scaler.getScaleFactor(), interpolator);

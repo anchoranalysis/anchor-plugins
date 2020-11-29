@@ -26,21 +26,22 @@
 
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
+import io.vavr.Tuple2;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
-import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
 import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.VeryBright;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -48,8 +49,8 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.core.stack.DisplayStack;
-import org.anchoranalysis.image.core.stack.NamedStacks;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -58,16 +59,37 @@ import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationC
 import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
-import io.vavr.Tuple2;
 
 /**
- * Task to compare a set of annotations to a segmentation or other set of annotations.
+ * Task to compare a set of annotations to a segmentation or another set of annotations.
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>byImage</td><td>yes</td><td>a single CSV file showing summary statistics of matching <i>for all images</i>.</td></tr>
+ * <tr><td>byGroup</td><td>yes</td><td>a single CSV file showing summary statistics of matching <i>for all groups group of images</i>.</td></tr>
+ * <tr><td>outline</td><td>yes</td><td>a file per image showing a colored representation of which annotations matched (or didn't) <i>for each image</i>.</td></tr>
+ * <tr><td rowspan="3"><i>outputs from the {@link AnnotationComparisonAssigner} in {@code assign}</i></td></tr>
+ * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
  *
  * @author Owen Feehan
  * @param <T>
  */
 public class CompareAnnotations<T extends Assignment>
         extends Task<AnnotationComparisonInput<ProvidesStackInput>, SharedState<T>> {
+
+    private static final String OUTPUT_BY_IMAGE = "byImage";
+
+    public static final String OUTPUT_BY_GROUP = "byGroup";
+
+    private static final String OUTPUT_OUTLINE = "outline";
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String backgroundChannelName = "Image";
@@ -77,7 +99,7 @@ public class CompareAnnotations<T extends Assignment>
 
     @BeanField @Getter @Setter private int maxSplitGroups = 5;
 
-    @BeanField @Getter @Setter private int numLevelsGrouping = 0;
+    @BeanField @Getter @Setter private int numberLevelsGrouping = 0;
 
     @BeanField @Getter @Setter private boolean useMIP = false;
 
@@ -86,20 +108,23 @@ public class CompareAnnotations<T extends Assignment>
     @BeanField @Getter @Setter private AnnotationComparisonAssigner<T> assigner;
 
     @BeanField @Getter @Setter private boolean replaceMatchesWithSolids = true;
-    
+
     @BeanField @Getter @Setter private ColorScheme colorsUnpaired = new VeryBright();
     // END BEAN PROPERTIES
 
     @Override
     public SharedState<T> beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<AnnotationComparisonInput<ProvidesStackInput>> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {
             CSVAssignment assignmentCSV =
-                    new CSVAssignment(outputter, "byImage", hasDescriptiveSplit(), maxSplitGroups);
-            return new SharedState<>(
-                    assignmentCSV, numLevelsGrouping, key -> assigner.groupForKey(key));
+                    new CSVAssignment(
+                            outputter, OUTPUT_BY_IMAGE, hasDescriptiveSplit(), maxSplitGroups);
+            return new SharedState<>(assignmentCSV, numberLevelsGrouping, assigner::groupForKey);
         } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -112,29 +137,25 @@ public class CompareAnnotations<T extends Assignment>
 
         AnnotationComparisonInput<ProvidesStackInput> input = params.getInput();
 
-        // Create the background
+        // Create the background.
         DisplayStack background = createBackground(input);
 
-        // We only do a descriptive split if it's allowed
+        // We only do a descriptive split if it's allowed.
         SplitString descriptiveSplit = createSplitString(input);
 
-        // Now do whatever comparison is necessary to update the assignment
+        // Now do whatever comparison is necessary to update the assignment.
         Optional<Assignment> assignment =
                 compareAndUpdate(
                         input,
                         background,
                         descriptiveSplit,
-                        params.context(),
+                        params.getContextJob(),
                         params.getSharedState());
 
-        if (!assignment.isPresent()) {
-            return;
+        if (assignment.isPresent()) {
+            writeOutlineStack(params.getOutputter(), input, assignment.get(), background);
         }
-
-        writeRGBOutlineStack(
-                "rgbOutline", params.getOutputter(), input, assignment.get(), background);
     }
-
 
     @Override
     public InputTypesExpected inputTypesExpected() {
@@ -145,14 +166,11 @@ public class CompareAnnotations<T extends Assignment>
     public void afterAllJobsAreExecuted(SharedState<T> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
 
-        @SuppressWarnings("unchecked")
-        SharedState<AssignmentOverlapFromPairs> sharedStateC =
-                (SharedState<AssignmentOverlapFromPairs>) sharedState;
-        sharedStateC.getAssignmentCSV().end();
+        sharedState.getAssignmentCSV().end();
 
         // Write group statistics
         try {
-            new CSVComparisonGroup<>(sharedStateC.allGroups())
+            new CSVComparisonGroup<>(sharedState.allGroups(), OUTPUT_BY_GROUP)
                     .writeGroupStats(context.getOutputter());
         } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
@@ -166,10 +184,10 @@ public class CompareAnnotations<T extends Assignment>
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+        return super.defaultOutputs()
+                .addEnabledOutputFirst(OUTPUT_BY_IMAGE, OUTPUT_BY_GROUP, OUTPUT_OUTLINE);
     }
-    
+
     private Optional<Assignment> compareAndUpdate(
             AnnotationComparisonInput<ProvidesStackInput> input,
             DisplayStack background,
@@ -253,43 +271,39 @@ public class CompareAnnotations<T extends Assignment>
         return splitDescriptiveNameRegex != null && !splitDescriptiveNameRegex.isEmpty();
     }
 
-    private void writeRGBOutlineStack(
-            String outputName,
+    private void writeOutlineStack(
             Outputter outputter,
             AnnotationComparisonInput<ProvidesStackInput> input,
             Assignment assignment,
             DisplayStack background) {
 
-        if (!outputter.outputsEnabled().isOutputEnabled(outputName)) {
-            return;
-        }
-
         outputter
                 .writerSelective()
                 .write(
-                        "rgbOutline",
-                        () -> createAssignmentGenerator(
+                        OUTPUT_OUTLINE,
+                        () ->
+                                createAssignmentGenerator(
                                         background,
                                         outputter.getSettings().getDefaultColors(),
                                         input.getNames()),
                         () -> assignment);
     }
-    
-    private AssignmentGenerator createAssignmentGenerator(DisplayStack background, ColorScheme colorSchemeFromSettings, Tuple2<String, String> names) {
+
+    private AssignmentGenerator createAssignmentGenerator(
+            DisplayStack background,
+            ColorScheme colorSchemeFromSettings,
+            Tuple2<String, String> names) {
         return new AssignmentGenerator(
                 background,
                 numberPaired -> createColorPool(numberPaired, colorSchemeFromSettings),
                 useMIP,
                 names,
-                assigner.moreThanOneObj(),
+                assigner.moreThanOneObject(),
                 outlineWidth);
     }
-    
+
     private ColorPool createColorPool(int numberPaired, ColorScheme colorSchemeFromSettings) {
         return new ColorPool(
-                numberPaired,
-                colorSchemeFromSettings,
-                colorsUnpaired,
-                replaceMatchesWithSolids);
+                numberPaired, colorSchemeFromSettings, colorsUnpaired, replaceMatchesWithSolids);
     }
 }

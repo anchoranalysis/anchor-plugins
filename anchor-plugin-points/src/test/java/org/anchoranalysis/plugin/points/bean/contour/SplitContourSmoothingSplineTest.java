@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.points.bean.contour;
 
 import static org.junit.Assert.assertEquals;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.points.contour.ContourList;
@@ -39,8 +39,8 @@ import org.junit.Test;
 
 public class SplitContourSmoothingSplineTest {
 
-    private TestLoaderObjects loader = new TestLoaderObjects(
-            TestLoader.createFromMavenWorkingDirectory());
+    private TestLoaderObjects loader =
+            new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
     public void test()

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.grouped;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Adds an individual-item to an aggregate-item
@@ -38,5 +38,5 @@ import org.anchoranalysis.core.error.OperationFailedException;
 @FunctionalInterface
 public interface AddToAggregateItem<S, T> {
 
-    void add(S ind, T agg) throws OperationFailedException;
+    void add(S individual, T aggregate) throws OperationFailedException;
 }

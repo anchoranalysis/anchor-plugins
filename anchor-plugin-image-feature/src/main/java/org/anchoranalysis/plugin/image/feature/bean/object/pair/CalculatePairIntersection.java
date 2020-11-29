@@ -29,18 +29,18 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair.Extract;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * Procedure to calculate an area of intersection between two objects (termed first and second)

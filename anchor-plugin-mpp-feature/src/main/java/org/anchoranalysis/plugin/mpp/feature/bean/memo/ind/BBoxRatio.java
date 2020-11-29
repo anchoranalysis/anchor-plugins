@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureSingleMemo;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.conic.ConicBase;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 public class BBoxRatio extends FeatureSingleMemo {
 
@@ -62,7 +62,7 @@ public class BBoxRatio extends FeatureSingleMemo {
 
         return extent;
     }
-    
+
     private static int zExtent(int zVoxelExtent, Optional<Resolution> resolution) {
         if (resolution.isPresent()) {
             return (int) (zVoxelExtent * resolution.get().zRelative());

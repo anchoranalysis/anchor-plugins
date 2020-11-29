@@ -31,11 +31,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.stack.NamedStacks;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
@@ -49,9 +50,24 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
  * Creates a an aggregated-image for each group, where each voxel-value is the mean voxel-value
  * across the group.
  *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>mean</td><td>yes</td><td>An image with the mean pixel value across all images, for each channel.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
+ *
  * @author Owen Feehan
  */
 public class GroupedMeanChannelTask extends GroupedStackBase<Channel, RunningSumChannel> {
+
+    private static final String OUTPUT_MEAN = "mean";
 
     // START BEAN PROPERTIES
     /**
@@ -63,14 +79,13 @@ public class GroupedMeanChannelTask extends GroupedStackBase<Channel, RunningSum
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_MEAN);
     }
 
     @Override
     protected GroupMapByName<Channel, RunningSumChannel> createGroupMap(
             ConsistentChannelChecker channelChecker) {
-        return new GroupedMeanChannelMap();
+        return new GroupedMeanChannelMap(outputNameForGroups());
     }
 
     @Override
@@ -98,5 +113,10 @@ public class GroupedMeanChannelTask extends GroupedStackBase<Channel, RunningSum
     @Override
     protected Optional<String> subdirectoryForGroupOutputs() {
         return Optional.empty();
+    }
+
+    @Override
+    protected String outputNameForGroups() {
+        return OUTPUT_MEAN;
     }
 }

@@ -34,14 +34,12 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.files.FileInput;
@@ -73,21 +71,18 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
  *
  * @author Owen Feehan
  */
-public class GroupFiles extends InputManager<NamedChannelsInput> {
+public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private NamedFiles fileInput;
 
-    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
-
-    @BeanField @Getter @Setter private FilePathParser filePathParser;
+    @BeanField @Getter @Setter private FilePathParser pathParser;
 
     @BeanField @Getter @Setter private boolean requireAllFilesMatch = false;
 
     @BeanField @Getter @Setter private ChannelMap imgChannelMapCreator;
 
-    @BeanField @Getter @Setter
-    private FileNamer namer = new LastDirectories(2);
+    @BeanField @Getter @Setter private FileNamer namer = new LastDirectories(2);
 
     /**
      * Imposes a condition on each parsedFilePathBag which must be-fulfilled if a file is to be
@@ -97,27 +92,28 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInput> inputs(InputManagerParams params) throws InputReadFailedException {
+    public List<NamedChannelsInput> inputs(InputManagerParams params)
+            throws InputReadFailedException {
 
         GroupFilesMap map = new GroupFilesMap();
 
         // Iterate through each file, match against the reg-exp and populate a hash-map
-        Iterator<FileInput> itrFiles = fileInput.inputs(params).iterator();
-        while (itrFiles.hasNext()) {
+        Iterator<FileInput> iterator = fileInput.inputs(params).iterator();
+        while (iterator.hasNext()) {
 
-            FileInput f = itrFiles.next();
+            FileInput input = iterator.next();
 
-            String path = f.getFile().getAbsolutePath();
+            String path = input.getFile().getAbsolutePath();
             path = path.replaceAll("\\\\", "/");
 
-            if (filePathParser.setPath(path)) {
-                FileDetails fd =
+            if (pathParser.setPath(path)) {
+                FileDetails details =
                         new FileDetails(
                                 Paths.get(path),
-                                filePathParser.getChannelNum(),
-                                filePathParser.getZSliceNum(),
-                                filePathParser.getTimeIndex());
-                map.add(filePathParser.getKey(), fd);
+                                pathParser.getChannelIndex(),
+                                pathParser.getZSliceIndex(),
+                                pathParser.getTimeIndex());
+                map.add(pathParser.getKey(), details);
             } else {
                 if (requireAllFilesMatch) {
                     throw new InputReadFailedException(
@@ -137,32 +133,30 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
         // Process the hash-map by key
         for (String key : map.keySet()) {
             ParsedFilePathBag bag = map.get(key);
-            assert (bag != null);
 
             // If we have a condition to check against
-            if (checkParsedFilePathBag != null && !checkParsedFilePathBag.accept(bag)) {
-                continue;
+            if (checkParsedFilePathBag == null || checkParsedFilePathBag.accept(bag)) {
+                files.add(Paths.get(key).toFile());
+                openedRasters.add(new MultiFileReaderOpenedRaster(getStackReader(), bag));
             }
-
-            files.add(Paths.get(key).toFile());
-            openedRasters.add(new MultiFileReaderOpenedRaster(stackReader, bag));
         }
 
-        return zipIntoGrouping(
-                namer.deriveNameUnique(files, logger),
-                openedRasters);
+        return zipIntoGrouping(namer.deriveNameUnique(files, logger), openedRasters);
     }
 
     private List<NamedChannelsInput> zipIntoGrouping(
-            List<NamedFile> df, List<MultiFileReaderOpenedRaster> or) {
+            List<NamedFile> files, List<MultiFileReaderOpenedRaster> openedRasters) {
 
-        Iterator<NamedFile> it1 = df.iterator();
-        Iterator<MultiFileReaderOpenedRaster> it2 = or.iterator();
+        Iterator<NamedFile> iterator1 = files.iterator();
+        Iterator<MultiFileReaderOpenedRaster> iterator2 = openedRasters.iterator();
 
         List<NamedChannelsInput> result = new ArrayList<>();
-        while (it1.hasNext() && it2.hasNext()) {
-            NamedFile d = it1.next();
-            result.add(new GroupingInput(d.getFile().toPath(), it2.next(), imgChannelMapCreator));
+        while (iterator1.hasNext() && iterator2.hasNext()) {
+            result.add(
+                    new GroupingInput(
+                            iterator1.next().getFile().toPath(),
+                            iterator2.next(),
+                            imgChannelMapCreator));
         }
         return result;
     }

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
-import org.anchoranalysis.image.voxel.object.ObjectMask;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Calculates overlap between object-masks

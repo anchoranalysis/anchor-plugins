@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.IterateVoxelsMask;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -88,7 +88,7 @@ public class SubtractMean extends UnaryWithMaskBase {
 
         int intensitySubtracted = intensity - mean;
 
-        // Clip so it never falls below 0
+        // Clamp so it never falls below 0
         if (intensitySubtracted < 0) {
             intensitySubtracted = 0;
         }

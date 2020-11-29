@@ -33,9 +33,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -43,8 +43,8 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.CVInit;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
@@ -130,7 +130,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
 
     private static Stack grayscaleToRGB(Channel channel) {
         try {
-            return new Stack(channel, channel.duplicate(), channel.duplicate());
+            return new Stack(true, channel, channel.duplicate(), channel.duplicate());
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }

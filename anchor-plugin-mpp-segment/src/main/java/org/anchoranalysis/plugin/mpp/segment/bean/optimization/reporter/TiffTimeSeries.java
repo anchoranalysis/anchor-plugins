@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.idgetter.IDGetterIter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.io.generator.Generator;
@@ -52,7 +52,7 @@ import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubdire
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
-import org.anchoranalysis.overlay.id.IDGetterOverlayID;
+import org.anchoranalysis.overlay.identifier.IdentifierFromOverlay;
 
 public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergyBreakdown> {
 
@@ -73,7 +73,7 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
         }
 
         Generator<ColoredMarksWithDisplayStack> iterableRaster =
-                new MarksGenerator(new Outline(), new IDGetterOverlayID());
+                new MarksGenerator(new Outline(), new IdentifierFromOverlay());
 
         // This no longer needs to be combined, it's a legacy of when a HTML reporter was attached
         //   cleaning up woould be nice
@@ -106,7 +106,8 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
     private ColoredMarksWithDisplayStack addColor(
             MarkCollection marks, FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
         DisplayStack stack = initParams.getInitContext().getDualStack().getBackground();
-        ColoredMarks coloredMarks = new ColoredMarks(marks, colorIndex, new IDGetterIter<Mark>());
+        ColoredMarks coloredMarks =
+                new ColoredMarks(marks, colorIndex, new IdentifyByIteration<Mark>());
         return new ColoredMarksWithDisplayStack(coloredMarks, stack);
     }
 }

@@ -26,24 +26,22 @@
 
 package org.anchoranalysis.plugin.mpp.bean.region;
 
-import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.math.histogram.Histogram;
+import org.anchoranalysis.math.relation.GreaterThan;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 public class MaxNonZero extends IndexedRegionBase {
 
+    private static final GreaterThan RELATION = new GreaterThan();
+
     @Override
     protected VoxelStatistics createStatisticsFor(
             VoxelizedMark voxelizedMark, Mark mark, Dimensions dimensions) throws CreateException {
-
-        RelationToThreshold nonZero = new RelationToConstant(new GreaterThanBean(), 0);
 
         long maxNonZero = -1;
         VoxelStatistics maxStats = null;
@@ -58,7 +56,7 @@ public class MaxNonZero extends IndexedRegionBase {
                 throw new CreateException(e);
             }
 
-            long num = h.countThreshold(nonZero);
+            long num = h.countThreshold(RELATION, 0);
 
             if (num > maxNonZero) {
                 maxNonZero = num;

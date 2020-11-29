@@ -37,12 +37,13 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
@@ -73,7 +74,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
         implements ReplaceInputManager, ReplaceOutputManager {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String folderDataset;
+    @BeanField @Getter @Setter private String directoryDataset;
 
     @BeanField @Getter @Setter private StringSet datasets;
 
@@ -81,7 +82,8 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     // debug-mode and uses this instead.
     @BeanField @AllowEmpty @Getter @Setter private String datasetSpecific = "";
 
-    @BeanField @Getter @Setter private String beanExtension = ".xml";
+    @BeanField @Getter @Setter
+    private String beanExtension = NonImageFileFormat.XML.extensionWithPeriod();
 
     /** Relative path to a logger for the experiment in gneeral */
     @BeanField @Getter @Setter private String logExperimentPath = "";
@@ -146,11 +148,11 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     }
 
     @Override
-    public void executeExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         delegate.secondInitBeforeExecution(
-                getXMLConfiguration(), folderDataset, beanExtension, createProcessor());
+                getXMLConfiguration(), directoryDataset, beanExtension, createProcessor());
 
         // If there's a replacement manager run it on this
         if (replacementInputManager != null) {
@@ -167,7 +169,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
         return true;
     }
 
-    private void executeAllDatasets(ExperimentExecutionArguments expArgs) {
+    private void executeAllDatasets(ExecutionArguments expArgs) {
         Logger reporter = new Logger(new ConsoleMessageLogger());
 
         MonitoredSequentialExecutor<String> serialExecutor =
@@ -182,7 +184,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     }
 
     private boolean executeSingleDataset(
-            String name, ExperimentExecutionArguments expArgs, ErrorReporter errorReporter) {
+            String name, ExecutionArguments expArgs, ErrorReporter errorReporter) {
 
         // Set the name of the experiment
         experimentIdentifier.setName(name + identifierSuffix);

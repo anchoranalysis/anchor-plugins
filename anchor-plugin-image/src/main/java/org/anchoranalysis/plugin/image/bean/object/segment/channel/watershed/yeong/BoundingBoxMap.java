@@ -30,12 +30,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.spatial.extent.box.PointRange;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
+import org.anchoranalysis.spatial.box.PointRange;
 import org.anchoranalysis.spatial.point.Point3i;
 
 final class BoundingBoxMap {

@@ -35,7 +35,7 @@ import org.anchoranalysis.annotation.io.bean.comparer.MultipleComparer;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
@@ -45,25 +45,19 @@ import org.anchoranalysis.mpp.feature.bean.mark.MarkEvaluator;
 public class MarkProposerStrategy extends SinglePathStrategy {
 
     // START BEAN PROPERTIES
-    /**
-     * Name of the {@link MarkProposer} to use.
-     */
+    /** Name of the {@link MarkProposer} to use. */
     @BeanField @Getter @Setter private String markProposer;
 
-    /**
-     * Name of the {@link PointsFitter} to use.
-     */
+    /** Name of the {@link PointsFitter} to use. */
     @BeanField @Getter @Setter private String pointsFitter;
 
-    @BeanField @OptionalBean @Getter @Setter
-    private DerivePath pathDefaultMarks;
+    @BeanField @OptionalBean @Getter @Setter private DerivePath pathDefaultMarks;
 
-    @BeanField @OptionalBean @Getter @Setter
-    private DerivePath pathParams;
+    @BeanField @OptionalBean @Getter @Setter private DerivePath pathParams;
 
     /**
      * Additional background-stacks that are possible to use while annotating.
-     * 
+     *
      * <p>These must have the same dimensions as the energy-stack.
      */
     @BeanField @OptionalBean @Getter @Setter

@@ -41,6 +41,6 @@ public class FromOutputName extends FileNamerIndependent {
 
     @Override
     protected String deriveName(File file, int index) {
-        return outputNameStyle.getFilenameWithoutExtension(index);
+        return outputNameStyle.filenameWithoutExtension(index);
     }
 }

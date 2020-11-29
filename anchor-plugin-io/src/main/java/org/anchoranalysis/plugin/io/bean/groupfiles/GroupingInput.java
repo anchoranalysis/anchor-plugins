@@ -28,42 +28,35 @@ package org.anchoranalysis.plugin.io.bean.groupfiles;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
-import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
+import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 
+@RequiredArgsConstructor
 class GroupingInput extends NamedChannelsInput {
 
-    // The opened raster with multiple files
-    private OpenedRaster openedRaster = null;
+    // START REQUIRED ARGUMENTS
+    /** A virtual path uniquely representing this particular file. */
+    private final Path virtualPath;
 
-    // A virtual path uniquely representing this particular file
-    private Path virtualPath;
+    /** The opened raster with multiple files. */
+    private final OpenedRaster openedRaster;
 
-    private ChannelMap channelMapCreator;
+    private final ChannelMap channelMapCreator;
+    // END REQUIRED ARGUMENTS
 
-    private NamedEntries channelMap = null;
+    private NamedEntries channelMap;
 
     private String inputName;
-
-    // The root object that is used to provide the inputName and pathForBinding
-    //
-    public GroupingInput(
-            Path virtualPath, MultiFileReaderOpenedRaster mfor, ChannelMap channelMapCreator) {
-        super();
-        this.virtualPath = virtualPath;
-        this.openedRaster = mfor;
-        this.channelMapCreator = channelMapCreator;
-    }
 
     @Override
     public int numberSeries() throws ImageIOException {
@@ -76,8 +69,8 @@ class GroupingInput extends NamedChannelsInput {
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException {
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
+            throws ImageIOException {
         ensureChannelMapExists();
         return new NamedChannelsForSeriesMap(openedRaster, channelMap, seriesIndex);
     }
@@ -107,6 +100,11 @@ class GroupingInput extends NamedChannelsInput {
         }
     }
 
+    @Override
+    public int bitDepth() throws ImageIOException {
+        return openedRaster.bitDepth();
+    }
+
     private void ensureChannelMapExists() throws ImageIOException {
         // Lazy creation
         if (channelMap == null) {
@@ -116,10 +114,5 @@ class GroupingInput extends NamedChannelsInput {
                 throw new ImageIOException(e);
             }
         }
-    }
-
-    @Override
-    public int bitDepth() throws ImageIOException {
-        return openedRaster.bitDepth();
     }
 }

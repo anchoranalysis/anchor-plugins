@@ -30,8 +30,8 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.path.PathDifference;
-import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.core.system.path.PathDifference;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastDirectories;
@@ -62,15 +62,15 @@ public class CoupledManifests implements InputFromManager {
         name = generateName(logger);
     }
 
-
     private String generateName(Logger logger) throws PathDifferenceException {
 
         if (experimentManifest.isPresent()) {
-            Path experimentRootFolder =
-                    getExperimentManifest().get().getRootFolder().calculatePath();
+            Path experimentRootDirectory =
+                    getExperimentManifest().get().getRootDirectory().calculatePath();
 
             PathDifference difference =
-                    PathDifference.differenceFrom(experimentRootFolder, jobManifest.getRootPath());
+                    PathDifference.differenceFrom(
+                            experimentRootDirectory, jobManifest.getRootPath());
             return difference.combined().toString();
 
         } else {
@@ -81,7 +81,8 @@ public class CoupledManifests implements InputFromManager {
     private String generateNameFromDirectories(int numberDirectoriesInDescription, Logger logger) {
         LastDirectories lastDirectories = new LastDirectories(numberDirectoriesInDescription);
         lastDirectories.setRemoveExtensionInDescription(false);
-        return lastDirectories.deriveName(jobManifest.getRootPath().toFile(), "<unknown>", logger)
+        return lastDirectories
+                .deriveName(jobManifest.getRootPath().toFile(), "<unknown>", logger)
                 .getName();
     }
 

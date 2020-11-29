@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.box.IntersectionOverUnion;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExpectedBoxesChecker {

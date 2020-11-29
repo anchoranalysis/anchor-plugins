@@ -93,8 +93,7 @@ public class MinimalExecutionTimeStatsReporter
                 .writerSelective()
                 .write(
                         outputName,
-                        () ->
-                                new XStreamGenerator<>(
-                                        Optional.of("minimalExecutionTimeStats")), () -> stats);
+                        () -> new XStreamGenerator<>(Optional.of("minimalExecutionTimeStats")),
+                        () -> stats);
     }
 }

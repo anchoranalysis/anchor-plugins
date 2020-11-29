@@ -30,12 +30,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 
 @AllArgsConstructor
 class StackAsProviderFixture implements ProvidesStackInput {
@@ -55,11 +55,9 @@ class StackAsProviderFixture implements ProvidesStackInput {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesIndex,
-            ProgressReporter progressReporter)
+            NamedProviderStore<TimeSequence> stackCollection, int seriesIndex, Progress progress)
             throws OperationFailedException {
-        addToStoreWithName(name, stackCollection, 0, progressReporter);
+        addToStoreWithName(name, stackCollection, 0, progress);
     }
 
     @Override
@@ -67,7 +65,7 @@ class StackAsProviderFixture implements ProvidesStackInput {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progressReporter)
+            Progress progress)
             throws OperationFailedException {
         stacks.add(name, () -> new TimeSequence(stack));
     }

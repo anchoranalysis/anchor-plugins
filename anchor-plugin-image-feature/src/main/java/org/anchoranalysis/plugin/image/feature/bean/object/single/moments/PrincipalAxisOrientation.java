@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.axis.AxisTypeConverter;
-import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.math.moment.EigenvalueAndVector;
+import org.anchoranalysis.math.statistics.moment.EigenvalueAndVector;
+import org.anchoranalysis.spatial.axis.AxisTypeConverter;
+import org.anchoranalysis.spatial.axis.AxisTypeException;
 
 /**
  * An element from orientation of a principal-axis (as defined by Image Moments).

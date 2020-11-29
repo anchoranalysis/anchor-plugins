@@ -27,12 +27,12 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.object.output.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -59,7 +59,7 @@ class DrawOutlineHelper {
             DrawObjectsGenerator drawOthers =
                     DrawObjectsGenerator.outlineSingleColor(
                             outlineWidth, displayStack, color.rgbColor());
-            return drawOthers.transform( new ObjectCollectionWithProperties(objects) );
+            return drawOthers.transform(new ObjectCollectionWithProperties(objects));
         } catch (OutputWriteFailedException | CreateException e) {
             throw new OperationFailedException(e);
         }

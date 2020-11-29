@@ -28,8 +28,9 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 
 /**
  * The prefixer uses a combination of a out-path-prefix and the descriptive-name of inputs to create
@@ -40,7 +41,7 @@ import org.anchoranalysis.io.output.path.NamedPath;
 public class FromDescriptiveName extends PathPrefixerAvoidResolve {
 
     @Override
-    protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root) {
+    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root) {
         Path combined = root.resolve(Paths.get(path.getName()));
         return new DirectoryWithPrefix(combined);
     }

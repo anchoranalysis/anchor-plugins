@@ -27,28 +27,31 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.format.ImageFileFormat;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
-import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.image.io.stack.StackSeries;
+import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
 
 /**
- * When writing a stack, an additional file is written to indicate the physical voxel sizes, if this information is known.
+ * When writing a stack, an additional file is written to indicate the physical voxel sizes, if this
+ * information is known.
  *
  * <p>The path of this file is the raster-path with .xml appended, e.g. {@code
  * rasterFilename.tif.xml}.
  *
  * <p>It contains physical extents of a single voxel (the resolution).
- * 
- * <p>This file will only be present if the physical voxel sizes are known, otherwise no file is written.
+ *
+ * <p>This file will only be present if the physical voxel sizes are known, otherwise no file is
+ * written.
  *
  * @author Owen Feehan
  */
@@ -59,35 +62,31 @@ public class WriteResolutionXml extends StackWriter {
     // END BEAN PROPERTIES
 
     @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return writer.fileExtension(writeOptions);
+    public ImageFileFormat fileFormat(StackWriteOptions writeOptions) throws ImageIOException {
+        return writer.fileFormat(writeOptions);
     }
 
     @Override
-    public void writeStack(
-            Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
+    public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
-        writer.writeStack(stack, filePath, makeRGB, writeOptions);
+        writer.writeStack(stack, filePath, options);
         writeResolutionXml(filePath, stack.resolution());
     }
 
     @Override
-    public void writeStackSeries(
-            StackSeries stackSeries,
-            Path filePath,
-            boolean makeRGB,
-            StackWriteOptions writeOptions)
+    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
-        writer.writeStackSeries(stackSeries, filePath, makeRGB, writeOptions);
+        writer.writeStackSeries(stackSeries, filePath, options);
 
         // We assume all the stacks in the series have the same dimension, and write only one
         // metadata file
         writeResolutionXml(filePath, stackSeries.get(0).resolution());
     }
 
-    private void writeResolutionXml(Path filePath, Optional<Resolution> resolution) throws ImageIOException {
+    private void writeResolutionXml(Path filePath, Optional<Resolution> resolution)
+            throws ImageIOException {
         if (resolution.isPresent()) {
-            Path pathOut = Paths.get(filePath.toString() + ".xml");
+            Path pathOut = NonImageFileFormat.XML.buildPath(filePath);
             ResolutionAsXml.writeResolutionXml(resolution.get(), pathOut);
         }
     }

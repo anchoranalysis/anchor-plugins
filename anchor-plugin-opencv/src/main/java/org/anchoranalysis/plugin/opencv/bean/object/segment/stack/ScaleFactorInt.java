@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point2i;
 
 @AllArgsConstructor

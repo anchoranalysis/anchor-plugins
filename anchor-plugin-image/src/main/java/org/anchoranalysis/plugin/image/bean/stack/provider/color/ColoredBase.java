@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.core.stack.ProviderAsStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.object.draw.Filled;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
-import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.object.output.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -134,10 +134,8 @@ public abstract class ColoredBase extends StackProvider {
 
             DrawObjectsGenerator generator =
                     DrawObjectsGenerator.withBackgroundAndColors(
-                            createDrawer(),
-                            background,
-                            colors);
-            return generator.transform( new ObjectCollectionWithProperties(objects) );
+                            createDrawer(), background, colors);
+            return generator.transform(new ObjectCollectionWithProperties(objects));
 
         } catch (OutputWriteFailedException | OperationFailedException e) {
             throw new CreateException(e);
@@ -146,7 +144,7 @@ public abstract class ColoredBase extends StackProvider {
 
     private DisplayStack maybeFlatten(DisplayStack stack) {
         if (flatten) {
-            return stack.maximumIntensityProjection();
+            return stack.projectMax();
         } else {
             return stack;
         }

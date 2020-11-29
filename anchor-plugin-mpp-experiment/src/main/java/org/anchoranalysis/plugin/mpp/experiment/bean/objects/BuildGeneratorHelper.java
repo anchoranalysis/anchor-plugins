@@ -29,19 +29,20 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 import java.awt.Color;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.identifier.name.SimpleNameValue;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.stack.NamedStacks;
-import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
-import org.anchoranalysis.image.io.generator.raster.boundingbox.ExtractBoundingBoxAreaFromStackGenerator;
-import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
-import org.anchoranalysis.image.io.generator.raster.object.ObjectWithBoundingBoxGenerator;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
+import org.anchoranalysis.image.io.object.output.mask.ObjectWithBoundingBoxGenerator;
+import org.anchoranalysis.image.io.stack.output.box.DrawObjectOnStackGenerator;
+import org.anchoranalysis.image.io.stack.output.box.ExtractBoundingBoxAreaFromStackGenerator;
+import org.anchoranalysis.image.io.stack.output.box.ScaleableBackground;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
-import org.anchoranalysis.spatial.extent.box.BoundedList;
+import org.anchoranalysis.spatial.box.BoundedList;
 
 /**
  * Builds a generator for all relevant stacks that combines several generators
@@ -106,7 +107,7 @@ class BuildGeneratorHelper {
             // TODO does the first generator get added twice for both flattened and non-flattened
             // stacks?
             ScaleableBackground background =
-                    ScaleableBackground.noScaling(stacks.getException(key));
+                    ScaleableBackground.noScaling(extractBackground(stacks, key));
 
             // Bounding box-generator
             ExtractBoundingBoxAreaFromStackGenerator generator =
@@ -118,6 +119,15 @@ class BuildGeneratorHelper {
                     outlineOutputName(key, flatten),
                     DrawObjectOnStackGenerator.createFromGenerator(
                             generator, outlineWidth, OUTLINE_COLOR));
+        }
+    }
+
+    private DisplayStack extractBackground(NamedStacks stacks, String key)
+            throws NamedProviderGetException {
+        try {
+            return DisplayStack.create(stacks.getException(key));
+        } catch (CreateException e) {
+            throw new NamedProviderGetException(key, e);
         }
     }
 

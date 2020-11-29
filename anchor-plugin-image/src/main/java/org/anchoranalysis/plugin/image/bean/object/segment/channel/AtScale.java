@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedUnaryOperator;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
@@ -43,10 +43,10 @@ import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Perform a segmentation at a different scale, and then fit the results back to the original scale.

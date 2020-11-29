@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.points.bean.mask.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.outline.FindOutline;

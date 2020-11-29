@@ -38,7 +38,6 @@ public class ExtractDescriptiveNameAndPath<T extends InputFromManager>
         return Optional.of(
                 String.format(
                         "%s\t -> %s",
-                        input.name(),
-                        input.pathForBinding().map(Path::toString).orElse("")));
+                        input.name(), input.pathForBinding().map(Path::toString).orElse("")));
     }
 }

@@ -23,7 +23,6 @@
  * THE SOFTWARE.
  * #L%
  */
-
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report.task;
 
 import java.util.ArrayList;
@@ -32,95 +31,49 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.experiment.ExperimentExecutionException;
-import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.experiment.bean.task.Task;
-import org.anchoranalysis.experiment.task.InputBound;
-import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
+import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.bean.ReportFeature;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.mpp.io.bean.report.feature.ReportFeatureForSharedObjects;
-import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
-public class ExportReportFeatures extends Task<MultiInput, CSVWriter> {
+/**
+ * A base class for tasks that calculate and export {@link ReportFeature}s.
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>featureReport</td><td>yes</td><td>A CSV file with the report-features as columns (and an ID column), one for each input.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
+ *
+ * @author Owen Feehan
+ * @param <T> input-object type
+ * @param <S> shared-state type
+ * @param <U> feature-type
+ */
+public abstract class ExportReportFeatures<T extends InputFromManager, S, U> extends Task<T, S> {
+
+    private static final String OUTPUT_REPORT = "featureReport";
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
-    private List<ReportFeatureForSharedObjects> listReportFeatures = new ArrayList<>();
-
-    @BeanField @OptionalBean @Getter @Setter private DefineOutputterMPP define;
+    private List<ReportFeature<U>> listReportFeatures = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
-    public CSVWriter beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
-            throws ExperimentExecutionException {
-
-        Optional<CSVWriter> writer;
-        try {
-            writer = CSVWriter.createFromOutputter("featureReport", outputter.getChecked());
-        } catch (OutputWriteFailedException e) {
-            throw new ExperimentExecutionException(e);
-        }
-
-        if (!writer.isPresent()) {
-            throw new ExperimentExecutionException(
-                    "'featureReport' output not enabled, as is required");
-        }
-
-        List<String> headerNames = ReportFeatureUtilities.headerNames(listReportFeatures, null);
-
-        headerNames.add(0, "id");
-        writer.get().writeHeaders(headerNames);
-
-        return writer.get();
-    }
-
-    @Override
-    public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(MultiInput.class);
-    }
-
-    @Override
-    public void doJobOnInput(InputBound<MultiInput, CSVWriter> input) throws JobExecutionException {
-
-        CSVWriter writer = input.getSharedState();
-
-        if (!writer.isOutputEnabled()) {
-            return;
-        }
-
-        try {
-            define.processInputMPP(
-                    input.getInput(),
-                    input.context(),
-                    soMPP ->
-                            writeFeaturesIntoReporter(
-                                    soMPP,
-                                    writer,
-                                    input.getInput().name(),
-                                    input.getLogger()));
-
-        } catch (OperationFailedException e) {
-            throw new JobExecutionException(e);
-        }
-    }
-
-    @Override
-    public void afterAllJobsAreExecuted(CSVWriter writer, InputOutputContext context)
-            throws ExperimentExecutionException {
-        writer.close();
+    public OutputEnabledMutable defaultOutputs() {
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_REPORT);
     }
 
     @Override
@@ -128,19 +81,26 @@ public class ExportReportFeatures extends Task<MultiInput, CSVWriter> {
         return false;
     }
 
-    @Override
-    public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+    protected List<String> headerNames(Optional<String> prefixColumnName) {
+        List<String> headerNames = ReportFeatureUtilities.headerNames(listReportFeatures);
+        prefixColumnName.ifPresent(headerNames::add);
+        return headerNames;
     }
 
-    private void writeFeaturesIntoReporter(
-            MPPInitParams soMPP, CSVWriter writer, String inputDescriptiveName, Logger logger) {
+    protected void writeFeaturesIntoReporter(
+            U featureParam, CSVWriter writer, Optional<String> prefixValue, Logger logger) {
         List<TypedValue> rowElements =
-                ReportFeatureUtilities.elementList(listReportFeatures, soMPP, logger);
+                ReportFeatureUtilities.elementList(listReportFeatures, featureParam, logger);
 
-        rowElements.add(0, new TypedValue(inputDescriptiveName, false));
+        if (prefixValue.isPresent()) {
+            rowElements.add(0, new TypedValue(prefixValue.get(), false));
+        }
 
         writer.writeRow(rowElements);
+    }
+
+    protected Optional<CSVWriter> createWriter(OutputterChecked outputter)
+            throws OutputWriteFailedException {
+        return CSVWriter.createFromOutputter(OUTPUT_REPORT, outputter);
     }
 }

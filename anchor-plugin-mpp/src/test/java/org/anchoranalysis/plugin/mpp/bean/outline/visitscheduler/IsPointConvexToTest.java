@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 import static org.junit.Assert.*;
 
 import java.net.URISyntaxException;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -44,25 +44,24 @@ public class IsPointConvexToTest {
     @Test
     public void test() throws ImageIOException, CreateException, URISyntaxException {
 
-        TestLoaderImage loader =
-                new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
+        TestLoaderImage loader = new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
 
         String testPath = "testData/binaryImage/000_zstack_nuclei.tif";
         Stack stack = loader.openStackFromTestPath(testPath);
 
         Mask mask = new Mask(stack.getChannel(0));
 
-        BinaryVoxels<UnsignedByteBuffer> bvb = mask.binaryVoxels();
+        BinaryVoxels<UnsignedByteBuffer> binaryValues = mask.binaryVoxels();
 
         Point3i pointRoot = new Point3i(62, 84, 15);
 
         Point3i pointCheck0 = new Point3i(57, 77, 15);
-        assertTrue(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck0, bvb));
+        assertTrue(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck0, binaryValues));
 
         Point3i pointCheck1 = new Point3i(69, 89, 17);
-        assertTrue(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck1, bvb));
+        assertTrue(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck1, binaryValues));
 
         Point3i pointCheck2 = new Point3i(81, 84, 16);
-        assertFalse(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck2, bvb));
+        assertFalse(VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck2, binaryValues));
     }
 }

@@ -31,13 +31,13 @@ import static org.mockito.Mockito.*;
 
 import java.util.function.Consumer;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.plugin.image.feature.bean.dimensions.Extent;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
 import org.anchoranalysis.test.TestLoader;
@@ -65,7 +65,7 @@ public class ExportFeaturesTaskTest {
     private static final String RELATIVE_PATH_SAVED_RESULTS =
             "expectedOutput/exportFeaturesObject/";
 
-    @Rule public TemporaryFolder folder = new TemporaryFolder();
+    @Rule public TemporaryFolder directory = new TemporaryFolder();
 
     @BeforeClass
     public static void setup() {
@@ -87,7 +87,7 @@ public class ExportFeaturesTaskTest {
     @Test
     public void testSimpleLarge() throws OperationFailedException {
         testOnTask(
-                OUTPUT_DIR_SIMPLE_1, fixture -> {} // Change nothing
+                OUTPUT_DIRECTORY_SIMPLE_1, fixture -> {} // Change nothing
                 );
     }
 
@@ -104,13 +104,13 @@ public class ExportFeaturesTaskTest {
 
     @Test
     public void testMergedLarge() throws OperationFailedException, CreateException {
-        testOnTask(OUTPUT_DIR_MERGED_1, fixture -> fixture.changeToMergedPairs(false, false));
+        testOnTask(OUTPUT_DIRECTORY_MERGED_1, fixture -> fixture.changeToMergedPairs(false, false));
     }
 
     @Test
     public void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
         testOnTask(
-                OUTPUT_DIR_MERGED_2,
+                OUTPUT_DIRECTORY_MERGED_2,
                 fixture -> {
                     fixture.featureLoader().changeSingleToShellFeatures();
                     fixture.changeToMergedPairs(true, false);
@@ -119,7 +119,7 @@ public class ExportFeaturesTaskTest {
 
     @Test
     public void testMergedLargeWithImage() throws OperationFailedException, CreateException {
-        testOnTask(OUTPUT_DIR_MERGED_3, fixture -> fixture.changeToMergedPairs(false, true));
+        testOnTask(OUTPUT_DIRECTORY_MERGED_3, fixture -> fixture.changeToMergedPairs(false, true));
     }
 
     /**
@@ -140,7 +140,7 @@ public class ExportFeaturesTaskTest {
         when(feature.duplicateBean()).thenReturn(feature);
 
         testOnTask(
-                OUTPUT_DIR_IMAGE_CACHE,
+                OUTPUT_DIRECTORY_IMAGE_CACHE,
                 fixture -> {
                     fixture.featureLoader().changeImageTo(feature);
                     fixture.changeToMergedPairs(false, true);
@@ -209,7 +209,7 @@ public class ExportFeaturesTaskTest {
     public void testSimpleLargeWithIncludedReference()
             throws OperationFailedException, CreateException {
         testOnTask(
-                OUTPUT_DIR_SIMPLE_WITH_REFERENCE,
+                OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE,
                 fixture -> fixture.featureLoader().changeSingleToReferenceWithInclude());
     }
 
@@ -218,31 +218,31 @@ public class ExportFeaturesTaskTest {
     public void testSimpleLargeWithSharedReference()
             throws OperationFailedException, CreateException {
         testOnTask(
-                OUTPUT_DIR_SIMPLE_WITH_REFERENCE,
+                OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE,
                 fixture -> fixture.featureLoader().changeSingleToReferenceShared());
     }
 
-    private void testOnTask(String outputDir, Consumer<TaskFixture> changeFixture)
+    private void testOnTask(String outputDirectory, Consumer<TaskFixture> changeFixture)
             throws OperationFailedException {
         changeFixture.accept(taskFixture);
-        testOnTask(outputDir);
+        testOnTask(outputDirectory);
     }
 
     /**
      * Runs a test to check if the results of {@link ExportFeatures} correspond to saved-values
      *
-     * @param suffixPathDirSaved a suffix to identify where to find the saved-output to compare
-     *     against
+     * @param suffixPathDirectorySaved a suffix to identify where to find the saved-output to
+     *     compare against
      * @throws OperationFailedException
      */
-    private void testOnTask(String suffixPathDirSaved) throws OperationFailedException {
+    private void testOnTask(String suffixPathDirectorySaved) throws OperationFailedException {
 
         try {
             TaskSingleInputHelper.runTaskAndCompareOutputs(
                     MultiInputFixture.createInput(taskFixture.energyStack()),
                     taskFixture.createTask(),
-                    folder.getRoot().toPath(),
-                    RELATIVE_PATH_SAVED_RESULTS + suffixPathDirSaved,
+                    directory.getRoot().toPath(),
+                    RELATIVE_PATH_SAVED_RESULTS + suffixPathDirectorySaved,
                     OUTPUTS_TO_COMPARE);
         } catch (CreateException e) {
             throw new OperationFailedException(e);

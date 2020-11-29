@@ -35,7 +35,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.XmlUtilities;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.output.xml.XMLWriter;
@@ -48,9 +48,8 @@ import org.xml.sax.SAXException;
 
 /**
  * Reads and writes a metadata XML file specifying the image-resolution.
- * 
- * <p>If a particualar dimension is missing from the XML file, 1 is supplied
- * as a replacement value.
+ *
+ * <p>If a particualar dimension is missing from the XML file, 1 is supplied as a replacement value.
  *
  * @author Owen Feehan
  */

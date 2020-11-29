@@ -27,14 +27,14 @@
 package org.anchoranalysis.plugin.image.bean.dimensions.provider;
 
 import java.util.Set;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
+import org.anchoranalysis.image.core.stack.StackIdentifiers;
 
 /**
  * Guesses dimensions from the input-image if it exists.

@@ -33,10 +33,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -44,13 +45,13 @@ import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
+import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.histogram.input.HistogramCSVReader;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.files.FileInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -166,11 +167,12 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     private static Histogram readHistogramFromCsv(FileInput input) throws CSVReaderException {
         File file = input.getFile();
 
-        if (!file.getName().toLowerCase().endsWith(".csv")) {
+        if (NonImageFileFormat.CSV.matchesEnd(file.getName())) {
+            return HistogramCSVReader.readHistogramFromFile(file.toPath());
+        } else {
             throw new CSVReaderException(
-                    "This task expects a CSV fule encoding a histogram as input. The file path must end with .csv");
+                    "This task expects a CSV file encoding a histogram as input. The file path must end with "
+                            + NonImageFileFormat.CSV.extensionWithPeriod());
         }
-
-        return HistogramCSVReader.readHistogramFromFile(file.toPath());
     }
 }

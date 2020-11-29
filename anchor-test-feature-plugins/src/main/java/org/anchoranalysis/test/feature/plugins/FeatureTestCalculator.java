@@ -31,14 +31,14 @@ import static org.junit.Assert.assertEquals;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.name.store.SharedObjects;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.test.LoggingFixture;
 

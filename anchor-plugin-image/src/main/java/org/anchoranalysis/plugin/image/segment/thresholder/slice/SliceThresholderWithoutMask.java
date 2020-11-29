@@ -30,12 +30,12 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 public class SliceThresholderWithoutMask extends SliceThresholder {
 
-    public SliceThresholderWithoutMask(BinaryValuesByte bvb) {
-        super(bvb);
+    public SliceThresholderWithoutMask(BinaryValuesByte binaryValues) {
+        super(binaryValues);
     }
 
     @Override

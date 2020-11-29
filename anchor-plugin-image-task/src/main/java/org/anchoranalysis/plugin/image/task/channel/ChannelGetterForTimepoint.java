@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.image.task.channel;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.io.channel.ChannelGetter;
+import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 
 @AllArgsConstructor
 public class ChannelGetterForTimepoint {
@@ -43,6 +43,6 @@ public class ChannelGetterForTimepoint {
     }
 
     public Channel getChannel(String channelName) throws GetOperationFailedException {
-        return getter.getChannel(channelName, t, ProgressReporterNull.get());
+        return getter.getChannel(channelName, t, ProgressIgnore.get());
     }
 }

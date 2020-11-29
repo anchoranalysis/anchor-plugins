@@ -33,8 +33,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -43,7 +43,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
+import org.anchoranalysis.image.io.bean.object.feature.OutputFeatureTable;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -91,9 +91,9 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
         try {
             define.processInputImage(
                     params.getInput(),
-                    params.context(),
+                    params.getContextJob(),
                     imageInitParams ->
-                            outputFeaturesAndEnergyStack(imageInitParams, params.context()));
+                            outputFeaturesAndEnergyStack(imageInitParams, params.getContextJob()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);

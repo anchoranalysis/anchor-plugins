@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.kernel.updater;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;

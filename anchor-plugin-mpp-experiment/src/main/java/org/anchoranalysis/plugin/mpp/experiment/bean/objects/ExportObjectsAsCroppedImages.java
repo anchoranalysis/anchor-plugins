@@ -36,9 +36,9 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -49,8 +49,8 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.stack.NamedStacks;
-import org.anchoranalysis.image.core.stack.NamedStacksUniformSize;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
+import org.anchoranalysis.image.core.stack.named.NamedStacksUniformSize;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.Generator;
@@ -63,7 +63,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
-import org.anchoranalysis.spatial.extent.box.BoundedList;
+import org.anchoranalysis.spatial.box.BoundedList;
 
 /**
  * Exports a cropped image for each object-mask showing its context within an image
@@ -74,11 +74,11 @@ import org.anchoranalysis.spatial.extent.box.BoundedList;
  * @author Owen Feehan
  */
 public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, NoSharedState> {
-    
+
     private static final String OUTPUT_EXTRACTED_OBJECTS = "extractedObjects";
-    
+
     private static final String FILE_PREFIX_EXTRACTED_OBJECTS = "object";
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
@@ -115,8 +115,8 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
         try {
             define.processInputImage(
                     params.getInput(),
-                    params.context(),
-                    paramsInit -> outputObjects(paramsInit, params.context()));
+                    params.getContextJob(),
+                    paramsInit -> outputObjects(paramsInit, params.getContextJob()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -135,7 +135,10 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
 
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<MultiInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
@@ -155,17 +158,18 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
     private void outputGeneratorSequence(
             Generator<BoundedList<ObjectMask>> generator,
             ObjectCollection objects,
-            OutputterChecked outputter) throws OutputWriteFailedException {
+            OutputterChecked outputter)
+            throws OutputWriteFailedException {
 
-        Stream<BoundedList<ObjectMask>> sequence = objects.streamStandardJava()
-                .map(
-                        object -> BoundedList.createSingle(object, ObjectMask::boundingBox)
-                        );
-        
-        new OutputSequenceFactory<>(generator, outputter).incrementingByOneStream(
-               new OutputPatternIntegerSuffix(OUTPUT_EXTRACTED_OBJECTS, FILE_PREFIX_EXTRACTED_OBJECTS),
-               sequence
-        );
+        Stream<BoundedList<ObjectMask>> sequence =
+                objects.streamStandardJava()
+                        .map(object -> BoundedList.createSingle(object, ObjectMask::boundingBox));
+
+        new OutputSequenceFactory<>(generator, outputter)
+                .incrementingByOneStream(
+                        new OutputPatternIntegerSuffix(
+                                OUTPUT_EXTRACTED_OBJECTS, FILE_PREFIX_EXTRACTED_OBJECTS),
+                        sequence);
     }
 
     private void outputObjects(ImageInitParams paramsInit, InputOutputContext context)

@@ -78,7 +78,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
                             in.get(0).pathForBindingRequired(),
                             params.isDebugModeActivated(),
                             in.size());
-    
+
             applyFilter(in, matching);
             return in;
         } catch (DerivePathException e) {
@@ -98,7 +98,9 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
         }
     }
 
-    /** Removes all items from the inputList whose input-name is NOT found in {@code mustContain}. */
+    /**
+     * Removes all items from the inputList whose input-name is NOT found in {@code mustContain}.
+     */
     private void applyFilter(List<T> in, Set<String> mustContain) {
 
         ListIterator<T> itr = in.listIterator();

@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.quick.bean.experiment;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.error.BeanStrangeException;
+import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
@@ -52,7 +52,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
     private String beanExtension;
 
     /** Resolved path to the folder containing datasets */
-    private Path pathDatasetFolder;
+    private Path pathDatasetDirectory;
 
     /** Path to bean this helper is used from */
     private Path beanLocalPath;
@@ -83,7 +83,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
         delegate.init(xmlConfiguration, taskProcessor);
 
         // The folder where the datasets are stored
-        pathDatasetFolder = getCombinedPath(folderDataset);
+        pathDatasetDirectory = getCombinedPath(folderDataset);
 
         this.beanExtension = beanExtension;
     }
@@ -95,20 +95,19 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
      * @throws ExperimentExecutionException
      */
     public void executeForManagerFromXml(
-            String datasetName,
-            ExperimentExecutionArguments expArgs,
-            BeanInstanceMap defaultInstances)
+            String datasetName, ExecutionArguments expArgs, BeanInstanceMap defaultInstances)
             throws ExperimentExecutionException {
 
         // Create a bean for the dataset and execute
-        InputManager<T> input = createInputManager(datasetName, pathDatasetFolder, beanExtension);
+        InputManager<T> input =
+                createInputManager(datasetName, pathDatasetDirectory, beanExtension);
 
         delegate.executeForManager(input, expArgs, defaultInstances);
     }
 
     public void executeForManager(
             InputManager<T> inputManager,
-            ExperimentExecutionArguments expArgs,
+            ExecutionArguments expArgs,
             BeanInstanceMap defaultInstances)
             throws ExperimentExecutionException {
         delegate.executeForManager(inputManager, expArgs, defaultInstances);
@@ -138,9 +137,9 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
 
     /*** Creates an input-manager for a dataset located in BeanXML in a particular folder. Maybe adds a filter in debug-mode */
     private InputManager<T> createInputManager(
-            String datasetName, Path pathFolder, String beanExtension)
+            String datasetName, Path pathDirectory, String beanExtension)
             throws ExperimentExecutionException {
-        InputManager<T> input = loadInputManagerFromXml(datasetName, pathFolder, beanExtension);
+        InputManager<T> input = loadInputManagerFromXml(datasetName, pathDirectory, beanExtension);
         return filterIfDebug(input);
     }
 
@@ -152,10 +151,10 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
 
     /*** Loads a bean from the filesystem */
     private InputManager<T> loadInputManagerFromXml(
-            String datasetName, Path pathFolder, String beanExtension)
+            String datasetName, Path pathDirectory, String beanExtension)
             throws ExperimentExecutionException {
 
-        Path pathDataset = pathFolder.resolve(datasetName.concat(beanExtension));
+        Path pathDataset = pathDirectory.resolve(datasetName.concat(beanExtension));
         try {
             return BeanXmlLoader.loadBean(pathDataset);
         } catch (BeanXmlException e) {

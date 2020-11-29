@@ -30,7 +30,7 @@ import com.github.quickhull3d.Point3d;
 import com.github.quickhull3d.QuickHull3D;
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -90,8 +90,8 @@ public class ConvexHull3D extends ConvexHullBase {
     // We use it here as it uses the quickHull3D Point3d primitive
     private static List<Point3d> pointsFromMask(Mask mask) {
         List<Point3d> listOut = new ArrayList<>();
-        BinaryValuesByte bvb = mask.binaryValues().createByte();
-        IterateVoxelsEqualTo.equalToPrimitive(mask.voxels(), bvb.getOnByte(), Point3d::new);
+        BinaryValuesByte binaryValues = mask.binaryValues().createByte();
+        IterateVoxelsEqualTo.equalToPrimitive(mask.voxels(), binaryValues.getOnByte(), Point3d::new);
         return listOut;
     }
 }

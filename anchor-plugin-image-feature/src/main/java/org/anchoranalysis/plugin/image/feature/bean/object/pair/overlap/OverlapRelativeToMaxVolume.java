@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.pair.overlap;
 
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
 /**
  * Overlap ratio to the maximum number of pixels

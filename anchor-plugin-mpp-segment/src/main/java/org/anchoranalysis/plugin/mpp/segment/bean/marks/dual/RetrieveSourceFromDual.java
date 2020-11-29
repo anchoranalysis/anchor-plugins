@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.marks.dual;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;

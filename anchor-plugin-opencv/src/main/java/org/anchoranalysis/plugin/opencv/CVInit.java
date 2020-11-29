@@ -29,8 +29,6 @@ package org.anchoranalysis.plugin.opencv;
 import java.util.concurrent.CompletableFuture;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.opencv.opencv_java;
 
 /**
  * Provides for initialization of the JavaCPP bridge to OpenCV.
@@ -75,7 +73,11 @@ public class CVInit {
                 CompletableFuture.runAsync(
                         () -> {
                             synchronized (LOCK_LOADED) {
-                                Loader.load(opencv_java.class);
+                                // When run on the command-line with the EXE bootrapping then
+                                // nu.pattern.OpenCV.loadShared( seems to stall so, using
+                                //  loadLocally instead as per the suggestion in:
+                                // https://github.com/openpnp/opencv#api
+                                nu.pattern.OpenCV.loadLocally();
                                 loaded = true;
                                 LOCK_LOADED.notifyAll();
                             }

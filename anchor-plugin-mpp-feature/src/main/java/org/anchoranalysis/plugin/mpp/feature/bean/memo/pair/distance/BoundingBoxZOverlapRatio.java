@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Measures the amount of bounding box overlap in the Z dimension

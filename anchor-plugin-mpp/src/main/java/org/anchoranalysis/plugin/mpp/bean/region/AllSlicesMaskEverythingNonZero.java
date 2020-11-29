@@ -27,13 +27,12 @@
 package org.anchoranalysis.plugin.mpp.bean.region;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 import org.anchoranalysis.math.histogram.Histogram;
+import org.anchoranalysis.math.relation.GreaterThan;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 /**
@@ -51,7 +50,7 @@ public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
         Histogram index = histogramForAllSlices(mark, false);
         Histogram nonZero = histogramForAllSlices(mark, true);
 
-        long numNonZero = nonZero.countThreshold(new RelationToConstant(new GreaterThanBean(), 0));
+        long numNonZero = nonZero.countThreshold(new GreaterThan(), 0);
 
         return new VoxelStatisticsFromHistogram(histogramExtractedFromRight(index, numNonZero));
     }

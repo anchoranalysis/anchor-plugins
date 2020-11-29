@@ -30,22 +30,21 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.anchoranalysis.core.cache.CachedSupplier;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 
 /**
  * A manifest after being deserialized from the file-system.
- * 
- * <p>It performs caching and providers other utility functions.
- * 
- * <p>It is <b>not</b> the main data object-used in writing the manifest,
- * rather see {@link Manifest}.
- * 
- * @author Owen Feehan
  *
+ * <p>It performs caching and providers other utility functions.
+ *
+ * <p>It is <b>not</b> the main data object-used in writing the manifest, rather see {@link
+ * Manifest}.
+ *
+ * @author Owen Feehan
  */
 public class DeserializedManifest {
 

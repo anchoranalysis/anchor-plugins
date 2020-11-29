@@ -33,11 +33,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodMask;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Base class for features that calculate touching with a dilated bounding box intersection

@@ -29,7 +29,7 @@ package org.anchoranalysis.test.feature.plugins.objects;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.spatial.point.Point2i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

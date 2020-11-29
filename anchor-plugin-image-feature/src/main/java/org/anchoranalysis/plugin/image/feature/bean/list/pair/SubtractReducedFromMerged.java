@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.list.pair;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Sum;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 
 /**

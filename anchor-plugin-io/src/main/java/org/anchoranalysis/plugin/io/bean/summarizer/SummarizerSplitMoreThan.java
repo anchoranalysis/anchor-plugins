@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.summarizer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Multiplexes between two summarizers depending on the total number of count

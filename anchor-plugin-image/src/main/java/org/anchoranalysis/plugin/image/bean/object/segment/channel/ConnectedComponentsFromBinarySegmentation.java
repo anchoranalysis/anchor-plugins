@@ -39,10 +39,10 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
@@ -66,23 +66,24 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
         BinarySegmentationParameters params =
                 new BinarySegmentationParameters(channel.resolution());
 
-        BinaryVoxels<UnsignedByteBuffer> bvb =
+        BinaryVoxels<UnsignedByteBuffer> binaryValues =
                 segment.segment(channel.voxels(), params, objectMask);
         return createFromVoxels(
-                bvb,
+                binaryValues,
                 channel.resolution(),
                 objectMask.map(object -> object.boundingBox().cornerMin()));
     }
 
     private ObjectCollection createFromVoxels(
-            BinaryVoxels<UnsignedByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> binaryValues,
             Optional<Resolution> resolution,
             Optional<ReadableTuple3i> maskShiftBy) {
-        Mask mask = new Mask(bvb, resolution);
+        Mask mask = new Mask(binaryValues, resolution);
 
         ObjectsFromConnectedComponentsFactory creator =
                 new ObjectsFromConnectedComponentsFactory(minNumberVoxels);
-        return maybeShiftObjects(creator.createConnectedComponents(mask.binaryVoxels()), maskShiftBy);
+        return maybeShiftObjects(
+                creator.createConnectedComponents(mask.binaryVoxels()), maskShiftBy);
     }
 
     private static ObjectCollection maybeShiftObjects(

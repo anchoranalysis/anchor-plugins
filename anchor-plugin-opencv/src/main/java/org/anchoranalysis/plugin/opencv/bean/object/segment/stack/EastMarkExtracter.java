@@ -37,7 +37,7 @@ import org.anchoranalysis.core.concurrency.ConcurrentModelException;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;

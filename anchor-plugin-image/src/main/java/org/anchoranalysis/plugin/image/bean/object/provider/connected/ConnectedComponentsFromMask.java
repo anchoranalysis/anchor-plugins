@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
@@ -38,12 +38,12 @@ import org.anchoranalysis.image.bean.unitvalue.extent.volume.VolumeVoxels;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
+import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -119,10 +119,10 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
     private ObjectCollection createForSlice(
             ObjectsFromConnectedComponentsFactory objectCreator,
-            BinaryVoxels<UnsignedByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> binaryValues,
             int z) {
         // respecify the z
-        return objectCreator.createConnectedComponents(bvb).stream()
+        return objectCreator.createConnectedComponents(binaryValues).stream()
                 .mapBoundingBoxPreserveExtent(box -> box.shiftToZ(z));
     }
 }

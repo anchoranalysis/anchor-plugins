@@ -31,7 +31,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 public class SliceThresholderMask extends SliceThresholder {
@@ -41,8 +41,8 @@ public class SliceThresholderMask extends SliceThresholder {
     private final ReadableTuple3i cornerMin;
     private final ReadableTuple3i cornerMax;
 
-    public SliceThresholderMask(boolean clearOutsideMask, ObjectMask object, BinaryValuesByte bvb) {
-        super(bvb);
+    public SliceThresholderMask(boolean clearOutsideMask, ObjectMask object, BinaryValuesByte binaryValues) {
+        super(binaryValues);
         this.clearOutsideMask = clearOutsideMask;
         this.object = object;
         this.cornerMin = object.boundingBox().cornerMin();
@@ -72,7 +72,7 @@ public class SliceThresholderMask extends SliceThresholder {
             VoxelBuffer<?> voxelsThrshld,
             VoxelBuffer<UnsignedByteBuffer> voxelsOut,
             VoxelBuffer<UnsignedByteBuffer> voxelsMask,
-            BinaryValuesByte bvbMask) {
+            BinaryValuesByte binaryValuesMask) {
         int offsetMask = 0;
         UnsignedByteBuffer out = voxelsOut.buffer();
 
@@ -81,7 +81,7 @@ public class SliceThresholderMask extends SliceThresholder {
 
                 int offset = extent.offset(x, y);
 
-                if (voxelsMask.buffer().getRaw(offsetMask++) == bvbMask.getOffByte()) {
+                if (voxelsMask.buffer().getRaw(offsetMask++) == binaryValuesMask.getOffByte()) {
 
                     if (clearOutsideMask) {
                         writeOffByte(offset, out);

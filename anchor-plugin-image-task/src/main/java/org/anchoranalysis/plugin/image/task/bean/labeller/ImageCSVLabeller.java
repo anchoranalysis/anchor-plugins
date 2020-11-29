@@ -31,14 +31,14 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.experiment.label.FileLabelMap;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.plugin.image.task.labeller.FileLabelMap;
 import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
 
 public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> {
@@ -47,8 +47,8 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
     /**
      * Path to a CSV label file (comma-separated, with header, no quotes)
      *
-     * <p>The CSV file should have two columns: first column = image id (to match the
-     * input-name of an image) second column = a label string
+     * <p>The CSV file should have two columns: first column = image id (to match the input-name of
+     * an image) second column = a label string
      */
     @BeanField @Getter @Setter private DerivePath pathLabel;
     // END BEAN PROPERTIES
@@ -81,9 +81,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
 
         if (label == null) {
             throw new OperationFailedException(
-                    String.format(
-                            "No label can be found for the name: %s",
-                            input.name()));
+                    String.format("No label can be found for the name: %s", input.name()));
         }
 
         return label;

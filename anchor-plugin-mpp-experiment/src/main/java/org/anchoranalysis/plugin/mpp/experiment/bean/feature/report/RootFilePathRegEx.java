@@ -33,7 +33,8 @@ import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 
@@ -44,11 +45,11 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
     // END BEAN PROPERTIES
 
     @Override
-    public String featureDescription(DeserializedManifest object, Logger logger)
+    public String featureDescription(DeserializedManifest param, Logger logger)
             throws OperationFailedException {
 
         // We get the last three
-        Path path = object.getRootPath();
+        Path path = param.getRootPath();
 
         String sep = File.separatorChar == '\\' ? "\\\\" : "/";
 
@@ -80,7 +81,7 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
     }
 
     @Override
-    public String title() throws OperationFailedException {
+    public String title() {
         switch (groupNum) {
             case 0:
                 return "id";
@@ -93,7 +94,8 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
             case 4:
                 return "objid";
             default:
-                throw new OperationFailedException("groupNum must be between 0 and 4 inclusive");
+                throw new AnchorFriendlyRuntimeException(
+                        "groupNum must be between 0 and 4 inclusive");
         }
     }
 

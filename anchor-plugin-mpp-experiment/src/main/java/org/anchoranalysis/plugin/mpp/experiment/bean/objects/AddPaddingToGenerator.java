@@ -27,14 +27,14 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.Padding;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.GeneratorBridge;
-import org.anchoranalysis.spatial.extent.box.BoundedList;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundedList;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Adds optional padding to objects before being passed into another generator

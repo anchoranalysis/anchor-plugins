@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.mpp.experiment.objects.csv;
 
 import java.util.Set;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.ReadByLine;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;

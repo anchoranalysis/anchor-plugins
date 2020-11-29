@@ -29,6 +29,7 @@ package org.anchoranalysis.test.experiment.launcher;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
@@ -52,15 +53,15 @@ public class UnitTestCompareUtilities {
     public static DualComparer execExperiment(
             String experimentName, String experimentIdentifierOutput) {
 
-        String pathTestDataFolder = createPathTestDataFolder(experimentName);
+        String pathTestDataDirectory = createPathTestDataDirectory(experimentName);
 
         TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
         ExperimentLauncherFromShell launcher = new ExperimentLauncherFromShell(loader);
 
         launcher.runExperiment(
                 createPathExperiment(experimentName),
-                Optional.of(createPathReplacementInput(pathTestDataFolder)),
-                Optional.of(createPathReplacementOutput(pathTestDataFolder)));
+                Optional.of(createPathReplacementInput(pathTestDataDirectory)),
+                Optional.of(createPathReplacementOutput(pathTestDataDirectory)));
 
         return DualComparerFactory.compareTwoSubdirectoriesInLoader(
                 loader,
@@ -80,50 +81,51 @@ public class UnitTestCompareUtilities {
      * @param experimentIdentifierOutput how the experiment is identified in the output folder
      * @param includeShared includes the shared folder that is assumed to exist alongside this
      *     repository
-     * @param folderTemp the temporary-folder to copy into
+     * @param directoryTemporary the temporary-folder to copy into
      * @return the DualComparer describe aboved
      */
     public static DualComparer execExperimentInTemporary(
             String experimentName,
             String experimentIdentifierOutput,
             boolean includeShared,
-            TemporaryFolder folderTemp) {
+            TemporaryFolder directoryTemporary) {
         TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
-        String pathTestDataFolder = createPathTestDataFolder(experimentName);
+        String pathTestDataDirectory = createPathTestDataDirectory(experimentName);
 
         ExperimentLauncherFromShell launcher = new ExperimentLauncherFromShell(loader);
 
-        String[] subdirectories = selectSubdirectories(pathTestDataFolder, includeShared);
+        String[] subdirectories = selectSubdirectories(pathTestDataDirectory, includeShared);
 
-        TestLoader loaderTemp =
-                launcher.runExperimentInTemporaryFolder(
+        TestLoader loaderTemporary =
+                launcher.runExperimentInTemporaryDirectory(
                         createPathExperiment(experimentName),
-                        Optional.of(createPathReplacementInput(pathTestDataFolder)),
-                        Optional.of(createPathReplacementOutput(pathTestDataFolder)),
-                        folderTemp,
+                        Optional.of(createPathReplacementInput(pathTestDataDirectory)),
+                        Optional.of(createPathReplacementOutput(pathTestDataDirectory)),
+                        directoryTemporary,
                         subdirectories);
 
         String pathOutput = createPathOutput(experimentIdentifierOutput);
         String pathSavedOutput = createPathSavedOutput(experimentName);
 
         return DualComparerFactory.compareTwoSubdirectoriesInLoader(
-                loader, pathSavedOutput, loaderTemp, pathOutput);
+                loader, pathSavedOutput, loaderTemporary, pathOutput);
     }
 
     private static String createPathExperiment(String experimentName) {
-        return String.format("anchorConfig/Experiments/DNAPipeline/%s.xml", experimentName);
+        return NonImageFileFormat.XML.buildPath(
+                "anchorConfig/Experiments/DNAPipeline/", experimentName);
     }
 
-    private static String createPathReplacementInput(String pathTestDataFolder) {
-        return String.format("%s/input.xml", pathTestDataFolder);
+    private static String createPathReplacementInput(String pathTestDataDirectory) {
+        return NonImageFileFormat.XML.buildPath(pathTestDataDirectory, "input");
     }
 
-    private static String createPathReplacementOutput(String pathTestDataFolder) {
-        return String.format("%s/outputManager.xml", pathTestDataFolder);
+    private static String createPathReplacementOutput(String pathTestDataDirectory) {
+        return NonImageFileFormat.XML.buildPath(pathTestDataDirectory, "outputManager");
     }
 
-    private static String createPathTestDataFolder(String experimentName) {
+    private static String createPathTestDataDirectory(String experimentName) {
         return String.format("testData/input/%s", experimentName);
     }
 
@@ -138,21 +140,22 @@ public class UnitTestCompareUtilities {
     /**
      * Creates an array indicating which subdirectories to copy into the temporary folder
      *
-     * @param pathTestDataFolder the path to our test data (relative to our test root)
+     * @param pathTestDataDirectory the path to our test data (relative to our test root)
      * @param includeShared whether to include the shared folder or not (assumed to exist at the
      *     location ../../shared relative to the rest root)
      * @return an array of subdirectory paths (relative to the rest root)
      */
-    private static String[] selectSubdirectories(String pathTestDataFolder, boolean includeShared) {
+    private static String[] selectSubdirectories(
+            String pathTestDataDirectory, boolean includeShared) {
         if (includeShared) {
             return new String[] {
                 "anchorConfig",
-                pathTestDataFolder,
+                pathTestDataDirectory,
                 "shared/anchorConfig" // Assumes that the folder shared exists in correct location
             };
         } else {
             return new String[] {
-                "anchorConfig", pathTestDataFolder,
+                "anchorConfig", pathTestDataDirectory,
             };
         }
     }

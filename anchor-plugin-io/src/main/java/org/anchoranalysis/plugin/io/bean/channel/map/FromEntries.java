@@ -31,10 +31,10 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
+import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 
 public class FromEntries extends ChannelMap {
 

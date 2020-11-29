@@ -30,9 +30,10 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 /**
  * Looks for the last directory-name, and removes it in favour of using it as a prefix on a filename
@@ -56,26 +57,21 @@ public class LastDirectoryAsPrefix extends PathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
+    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
             throws PathPrefixerException {
 
         DirectoryWithPrefix prefix = filePathPrefixer.outFilePrefixFromPath(path, root);
 
-        Path dir = prefix.getDirectory();
+        Path directory = prefix.getDirectory();
 
-        if (dir.getNameCount() > 0) {
+        if (directory.getNameCount() > 0) {
 
-            String finalDirName = dir.getName(dir.getNameCount() - 1).toString();
+            String finalDirectoryName = directory.getName(directory.getNameCount() - 1).toString();
 
             // Remove the final directory from the output
             prefix.setDirectory(prefix.getDirectory().resolve("..").normalize());
-
-            if (prefix.getFilenamePrefix() != null) {
-                prefix.setFilenamePrefix(finalDirName + delimiter + prefix.getFilenamePrefix());
-            } else {
-                prefix.setFilenamePrefix(finalDirName);
-            }
-
+            prefix.setPrefix(finalDirectoryName);
+            prefix.setDelimiter(delimiter);
             return prefix;
 
         } else {

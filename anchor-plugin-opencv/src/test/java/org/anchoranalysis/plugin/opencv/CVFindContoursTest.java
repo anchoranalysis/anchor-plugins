@@ -29,21 +29,21 @@ package org.anchoranalysis.plugin.opencv;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.core.points.PointsNeighborChecker;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.Contour;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.anchoranalysis.spatial.point.contour.Contour;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.object.TestLoaderObjects;
 import org.junit.Test;
 
 public class CVFindContoursTest {
 
-    private TestLoaderObjects loader = new TestLoaderObjects(
-            TestLoader.createFromMavenWorkingDirectory());
+    private TestLoaderObjects loader =
+            new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
     public void test01()

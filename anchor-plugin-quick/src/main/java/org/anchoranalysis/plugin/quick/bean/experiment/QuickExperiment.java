@@ -32,12 +32,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
@@ -48,14 +50,12 @@ import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.files.SearchDirectory;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bean.enabled.All;
-import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.IgnoreUnderscorePrefixUnless;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.DirectoryStructure;
 import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
-import org.anchoranalysis.plugin.mpp.experiment.bean.output.LegacyOutputEnabled;
 
 /**
  * A quick way of defining an InputOutputExperiment where several assumptions are made.
@@ -63,7 +63,6 @@ import org.anchoranalysis.plugin.mpp.experiment.bean.output.LegacyOutputEnabled;
  * @author Owen Feehan
  * @param <S> shared-state
  */
-@SuppressWarnings("deprecation")
 public class QuickExperiment<S> extends Experiment {
 
     // START BEAN PROPERTIES
@@ -76,17 +75,11 @@ public class QuickExperiment<S> extends Experiment {
      */
     @BeanField @Getter @Setter private String fileInput;
 
-    @BeanField @Getter @Setter private String folderOutput;
+    @BeanField @Getter @Setter private String directoryOutput;
 
     @BeanField @Getter @Setter private Task<MultiInput, S> task;
 
     @BeanField @Getter @Setter private String inputName = "stackInput";
-
-    @BeanField @Getter @Setter private OutputEnabled outputEnabled = All.INSTANCE;
-
-    @BeanField @Getter @Setter private OutputEnabled objects = All.INSTANCE;
-
-    @BeanField @Getter @Setter private OutputEnabled stacksOutputEnabled = All.INSTANCE;
 
     @BeanField @Getter @Setter
     private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
@@ -114,13 +107,13 @@ public class QuickExperiment<S> extends Experiment {
     }
 
     @Override
-    public void executeExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
         delegate.associateXml(getXMLConfiguration());
 
         Path combinedFileFilter = BeanPathUtilities.pathRelativeToBean(this, fileInput);
 
-        if (combinedFileFilter.endsWith(".xml") || combinedFileFilter.endsWith(".XML")) {
+        if (NonImageFileFormat.XML.matches(combinedFileFilter)) {
 
             // Creates from an XML bean
             delegate.setInput(createInputManagerBean(combinedFileFilter));
@@ -183,38 +176,30 @@ public class QuickExperiment<S> extends Experiment {
 
     private OutputManager createOutputManager(Path inPathBaseDir) {
 
-        Path pathFolderOut = BeanPathUtilities.pathRelativeToBean(this, folderOutput);
+        Path pathDirectoryOut = BeanPathUtilities.pathRelativeToBean(this, directoryOutput);
 
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
-        outputManager.setOutputsEnabled(outputRules());
+        outputManager.setOutputsEnabled(new IgnoreUnderscorePrefixUnless());
 
         try {
             outputManager.localise(getLocalPath());
         } catch (BeanMisconfiguredException e) {
             // Should never arise, as getLocalPath() should always be absolute
-            assert (false);
+            throw new AnchorFriendlyRuntimeException(e);
         }
 
         DirectoryStructure filePathResolver = new DirectoryStructure();
         filePathResolver.setInPathPrefix(inPathBaseDir.toString());
-        filePathResolver.setOutPathPrefix(pathFolderOut.toString());
+        filePathResolver.setOutPathPrefix(pathDirectoryOut.toString());
         try {
             filePathResolver.localise(getLocalPath());
         } catch (BeanMisconfiguredException e) {
             // Should never arise, as getLocalPath() should always be absolute
-            assert (false);
+            throw new AnchorFriendlyRuntimeException(e);
         }
         outputManager.setFilePathPrefixer(filePathResolver);
         outputManager.setOutputWriteSettings(outputWriteSettings);
         return outputManager;
-    }
-
-    private LegacyOutputEnabled outputRules() {
-        LegacyOutputEnabled rules = new LegacyOutputEnabled();
-        rules.setOutputEnabled(outputEnabled);
-        rules.setObjects(objects);
-        rules.setStacksOutputEnabled(stacksOutputEnabled);
-        return rules;
     }
 }

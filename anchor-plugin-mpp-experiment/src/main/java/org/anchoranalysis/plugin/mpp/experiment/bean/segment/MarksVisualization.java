@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.segment;
 
-import lombok.AllArgsConstructor;
 import java.util.function.Supplier;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.idgetter.IDGetterIter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.io.bean.object.draw.Filled;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
@@ -56,26 +56,27 @@ class MarksVisualization {
 
     public static final String OUTPUT_VISUALIZE_MARKS_SOLID = "solid";
     public static final String OUTPUT_VISUALIZE_MARKS_OUTLINE = "outline";
-    
+
     private final MarkCollection marks;
     private final Outputter outputter;
     private final DisplayStack backgroundStack;
-    
+
     public void write() {
 
         // Cache the creation of colored-marks
-        CachedSupplier<ColoredMarksWithDisplayStack,OutputWriteFailedException> cachedMarksWithStack = CachedSupplier.cache(this::createMarksWithStack);
+        CachedSupplier<ColoredMarksWithDisplayStack, OutputWriteFailedException>
+                cachedMarksWithStack = CachedSupplier.cache(this::createMarksWithStack);
 
         writeColoredMarks(OUTPUT_VISUALIZE_MARKS_SOLID, Filled::new, cachedMarksWithStack::get);
         writeColoredMarks(OUTPUT_VISUALIZE_MARKS_OUTLINE, Outline::new, cachedMarksWithStack::get);
     }
-    
+
     private ColoredMarksWithDisplayStack createMarksWithStack() throws OutputWriteFailedException {
         try {
             ColorIndex colorIndex = outputter.getSettings().defaultColorIndexFor(marks.size());
-            
+
             return new ColoredMarksWithDisplayStack(
-                    new ColoredMarks(marks, colorIndex, new IDGetterIter<Mark>()),
+                    new ColoredMarks(marks, colorIndex, new IdentifyByIteration<Mark>()),
                     backgroundStack);
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
@@ -86,12 +87,12 @@ class MarksVisualization {
             String outputName,
             Supplier<DrawObject> drawObject,
             ElementSupplier<ColoredMarksWithDisplayStack> marksWithStack) {
-        outputter.writerSelective().write(
-                outputName,
-                () -> createMarksGenerator(drawObject.get()), marksWithStack);
+        outputter
+                .writerSelective()
+                .write(outputName, () -> createMarksGenerator(drawObject.get()), marksWithStack);
     }
-    
+
     private static MarksGenerator createMarksGenerator(DrawObject drawObject) {
-        return new MarksGenerator(drawObject, new IDGetterIter<Overlay>());
+        return new MarksGenerator(drawObject, new IdentifyByIteration<Overlay>());
     }
 }

@@ -30,10 +30,11 @@ import com.google.api.client.repackaged.com.google.common.base.Preconditions;
 import com.owenfeehan.pathpatternfinder.Pattern;
 import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
 import java.io.File;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.apache.commons.io.IOCase;
 
 /**
@@ -119,14 +120,18 @@ class ExtractVariableSpan {
 
     private String trimConstantElementsFromBothSides(String str, IOCase ioCase)
             throws OperationFailedException {
-        String[] fittedElements = pattern.fitAgainst(str, ioCase);
+        Optional<String[]> fittedElements = pattern.fitAgainst(str, ioCase);
 
-        if (fittedElements == null) {
+        if (fittedElements.isPresent()) {
+            return extractFromFittedElements(fittedElements.get());
+        } else {
             throw new OperationFailedException(
                     String.format("Cannot match pattern %s against %s", pattern, str));
         }
+    }
 
-        assert (fittedElements.length == pattern.size());
+    private String extractFromFittedElements(String[] fittedElements) {
+        Preconditions.checkArgument(fittedElements.length == pattern.size());
 
         // Replace any constants from the left-hand-side with empty strings
         for (int i = 0; i < indexSpanStart; i++) {
@@ -140,14 +145,6 @@ class ExtractVariableSpan {
         }
 
         // Combine all strings to form the name
-        return combineStr(fittedElements);
-    }
-
-    private static String combineStr(String[] arr) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(arr[i]);
-        }
-        return sb.toString();
+        return String.join("", fittedElements);
     }
 }

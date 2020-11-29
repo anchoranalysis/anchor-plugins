@@ -31,15 +31,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.object.morphological.DilationKernelFactory;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
 import org.anchoranalysis.image.voxel.object.morphological.SelectDimensionsFactory;
 
@@ -75,7 +75,10 @@ public class Dilate extends MorphologicalOperatorBase {
                             background(),
                             getMinIntensityValue(),
                             Optional.empty(),
-                            new DilationKernelFactory(SelectDimensionsFactory.of(do3D, zOnly), false, bigNeighborhood));
+                            new DilationKernelFactory(
+                                    SelectDimensionsFactory.of(do3D, zOnly),
+                                    false,
+                                    bigNeighborhood));
 
             source.replaceBy(out);
         } catch (IncorrectImageSizeException e) {

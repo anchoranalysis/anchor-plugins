@@ -32,10 +32,10 @@ import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -85,7 +85,7 @@ public class FromChannelOrMask extends StackProvider {
     private Stack createStackFromChannel(Channel channel) {
         if (rgb) {
             try {
-                return new Stack(channel, channel.duplicate(), channel.duplicate());
+                return new Stack(true, channel, channel.duplicate(), channel.duplicate());
             } catch (IncorrectImageSizeException e) {
                 throw new AnchorImpossibleSituationException();
             }

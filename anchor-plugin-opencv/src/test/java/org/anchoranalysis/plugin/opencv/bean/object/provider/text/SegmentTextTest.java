@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
 import java.util.List;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyMergeOverlappingObjects;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
@@ -38,9 +38,9 @@ import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObject
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentText;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SuppressNonMaxima;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.test.image.InputOutputContextFixture;
-import org.anchoranalysis.test.image.WriteIntoFolder;
+import org.anchoranalysis.test.image.WriteIntoDirectory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class SegmentTextTest {
 
     private SegmentStackIntoObjectsPooled<?> segmenter;
 
-    @Rule public WriteIntoFolder writer = new WriteIntoFolder(false);
+    @Rule public WriteIntoDirectory writer = new WriteIntoDirectory(false);
 
     @Before
     public void setUp() throws InitException {
@@ -72,17 +72,17 @@ public class SegmentTextTest {
 
     @Test
     public void testRGB() throws SegmentationFailedException {
-        segmentStack(loader.carRGB(), SegmentTextResults.rgb());
+        assertExpectedSegmentation(loader.carRGB(), SegmentTextResults.rgb());
     }
 
     @Test
     public void testGrayscale8Bit() throws SegmentationFailedException {
-        segmentStack(loader.carGrayscale8Bit(), SegmentTextResults.grayscale());
+        assertExpectedSegmentation(loader.carGrayscale8Bit(), SegmentTextResults.grayscale());
     }
 
     private static int count = 0;
 
-    private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes)
+    private void assertExpectedSegmentation(Stack stack, List<BoundingBox> expectedBoxes)
             throws SegmentationFailedException {
         SegmentedObjects segmentResults = segmenter.segment(stack);
         writer.writeObjects("objects" + count++, segmentResults.asObjects(), loader.carRGB());

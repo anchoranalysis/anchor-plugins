@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.task;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,8 +49,29 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
-// At the moment, we don't check if the name number of rows/columns exist
+/**
+ * Combines multiple CSV files into a single CSV file.
+ *
+ * <p>No check occurs that the same number of rows/columns exist in the files being combined.
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>combined</td><td>yes</td><td>A CSV combining the input CSV files.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
+ *
+ * @author Owen Feehan
+ */
 public class CombineCSV extends Task<FileInput, CSVWriter> {
+
+    private static final String OUTPUT_COMBINED = "combined";
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String seperator = ",";
@@ -63,12 +85,15 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<FileInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {
             Optional<CSVWriter> writer =
-                    CSVWriter.createFromOutputter("featureReport", outputter.getChecked());
+                    CSVWriter.createFromOutputter(OUTPUT_COMBINED, outputter.getChecked());
 
             if (!writer.isPresent()) {
                 throw new ExperimentExecutionException(
@@ -129,7 +154,6 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_COMBINED);
     }
 }

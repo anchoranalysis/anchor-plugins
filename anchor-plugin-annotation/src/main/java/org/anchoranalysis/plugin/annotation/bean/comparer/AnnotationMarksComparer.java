@@ -37,7 +37,7 @@ import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;

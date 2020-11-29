@@ -30,11 +30,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.CSVRow;
+import org.apache.commons.lang.ArrayUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -47,15 +48,20 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
 
     /** Name of CSV column used to group results (the same values, are outputted together) */
     @BeanField @Getter @Setter private String columnGroup;
+
+    /** Name of CSV column with X coordinate of point for the first Object */
+    @BeanField @Getter @Setter private String columnUniquePixel = "unique_pixel_in_object";
     // END BEAN PROPERTIES
 
     private int indexFileID;
     private int indexGroup;
+    protected int indexUniquePixel;
 
     public void initHeaders(String[] headers) throws InitException {
         // We resolve each of our columnNames to an index
-        indexFileID = HeaderFinder.findHeaderIndex(headers, columnID);
-        indexGroup = HeaderFinder.findHeaderIndex(headers, columnGroup);
+        indexFileID = findHeaderIndex(headers, columnID);
+        indexGroup = findHeaderIndex(headers, columnGroup);
+        indexUniquePixel = findHeaderIndex(headers, columnUniquePixel);
     }
 
     public CSVRow createRow(String[] line) {
@@ -70,4 +76,21 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
             CSVRow csvRow, ObjectCollectionRTree allObjects) throws OperationFailedException;
 
     public abstract void writeToXML(CSVRow csvRow, Element xmlElement, Document doc);
+
+    /**
+     * Finds the index of a particular column from the headers of a CSV file
+     *
+     * @param headers the headers
+     * @param columnName the column whose index to find
+     * @return the index of the first column to be equal (case-sensitive) to {@code columnName}
+     * @throws InitException if the column-name does not exist in the headers
+     */
+    private static int findHeaderIndex(String[] headers, String columnName) throws InitException {
+        int index = ArrayUtils.indexOf(headers, columnName);
+        if (index == ArrayUtils.INDEX_NOT_FOUND) {
+            throw new InitException(
+                    String.format("Cannot find column '%s' among CSV file headers", columnName));
+        }
+        return index;
+    }
 }

@@ -29,20 +29,40 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.exception.CreateException;
 
-public abstract class CopyFilesMethod {
+/**
+ * A method used for copying files (e.g. bytewise or activating compression etc.).
+ *
+ * @author Owen Feehan
+ */
+public abstract class CopyFilesMethod extends AnchorBean<CopyFilesMethod> {
 
-    public void createDestinationFile(Path source, Path destination) throws CreateException {
-
+    /**
+     * Makes a copy of the file at {@code source} at {@code destination}.
+     *
+     * @param source the path of the file to copy from
+     * @param destination the path to create a copy at
+     * @throws CreateException if anything goes wrong
+     */
+    public void makeCopy(Path source, Path destination) throws CreateException {
         try {
             Files.createDirectories(destination.getParent());
         } catch (IOException e) {
             throw new CreateException(e);
         }
-
-        createWithDir(source, destination);
+        makeCopyWithDirectory(source, destination);
     }
 
-    protected abstract void createWithDir(Path source, Path destination) throws CreateException;
+    /**
+     * Like {@link #makeCopy(Path,Path)} but after any necessary directories are created so {@code
+     * destination} can be written.
+     *
+     * @param source
+     * @param destination
+     * @throws CreateException
+     */
+    protected abstract void makeCopyWithDirectory(Path source, Path destination)
+            throws CreateException;
 }

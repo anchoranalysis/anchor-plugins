@@ -31,8 +31,8 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.math.histogram.Histogram;
 
 @AllArgsConstructor

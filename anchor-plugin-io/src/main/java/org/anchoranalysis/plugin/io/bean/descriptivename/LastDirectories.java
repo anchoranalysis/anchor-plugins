@@ -32,66 +32,62 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.io.input.bean.descriptivename.FileNamerIndependent;
 import org.apache.commons.io.FilenameUtils;
 
 /**
  * Derives a name by taking the filename together with optionally several subdirectories names.
- * 
- * <p>The subdirectory names to use are limited by a certain number, working backwards from the filename to
- * the file-system root.
- * 
- * @author Owen Feehan
  *
+ * <p>The subdirectory names to use are limited by a certain number, working backwards from the
+ * filename to the file-system root.
+ *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class LastDirectories extends FileNamerIndependent {
 
     // START BEAN PROPERTIES
-    /** 
+    /**
      * How many directories to include in the name.
-     * 
+     *
      * <p>This refers to the last-most sub-directories i.e. working backwards from the filename to
      * the file-system root.
-     **/
+     */
     @BeanField @Getter @Setter private int numberSubdirectories = 0;
 
-    /**
-     * Whether to remove the file-extension from the filename.
-     */
+    /** Whether to remove the file-extension from the filename. */
     @BeanField @Getter @Setter private boolean removeExtensionInDescription = true;
 
-    /** 
+    /**
      * Initially skip this number of directories before including them in the description.
      *
-     * <p>This refers to the last-most directories i.e. working backwards from the filename to
-     * the file-system root.
+     * <p>This refers to the last-most directories i.e. working backwards from the filename to the
+     * file-system root.
      */
     @BeanField @Getter @Setter private int skipNumberSubdirectories = 0;
 
-    /**
-     * Iff true the filename is not considered, only the subdirectories.
-     */
+    /** Iff true the filename is not considered, only the subdirectories. */
     @BeanField @Getter @Setter private boolean skipFileName = false;
     // END BEAN PROPERTIES
 
     /**
      * Creates for a particular number of subdirectories.
-     * 
+     *
      * @param numberSubdirectories the number of subdirectories
      */
     public LastDirectories(int numberSubdirectories) {
         this.numberSubdirectories = numberSubdirectories;
     }
-    
+
     @Override
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
-        
-        if (skipFileName && numberSubdirectories<=0) {
-            throw new BeanMisconfiguredException("If skipFileName is true, numberSubdirectories must be greater than 0");
+
+        if (skipFileName && numberSubdirectories <= 0) {
+            throw new BeanMisconfiguredException(
+                    "If skipFileName is true, numberSubdirectories must be greater than 0");
         }
     }
 

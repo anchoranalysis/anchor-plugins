@@ -31,13 +31,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.axis.AxisTypeConverter;
-import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.AxisTypeConverter;
+import org.anchoranalysis.spatial.axis.AxisTypeException;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**

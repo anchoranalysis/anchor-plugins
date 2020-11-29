@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
@@ -59,7 +59,9 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 
     @Override
     public void afterCreateObject(
-            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root,
+            Optional<Resolution> resolution,
+            RandomNumberGenerator randomNumberGenerator)
             throws InitException {
         this.root = root;
     }
@@ -74,8 +76,8 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     }
 
     public static boolean isPointConvexTo(
-            Point3i root, Point3i point, BinaryVoxels<UnsignedByteBuffer> bvb) {
-        return isPointConvexTo(root, point, bvb, false);
+            Point3i root, Point3i point, BinaryVoxels<UnsignedByteBuffer> binaryValues) {
+        return isPointConvexTo(root, point, binaryValues, false);
     }
 
     public static boolean isPointConvexTo(
@@ -132,7 +134,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
             Point3d point,
             VoxelsExtracter<UnsignedByteBuffer> extracter,
             Extent extent,
-            BinaryValues bv) {
+            BinaryValues binaryValues) {
 
         Point3i pointInt = PointConverter.intFromDoubleFloor(point);
 
@@ -140,6 +142,6 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
             return false;
         }
 
-        return extracter.voxel(pointInt) == bv.getOnInt();
+        return extracter.voxel(pointInt) == binaryValues.getOnInt();
     }
 }

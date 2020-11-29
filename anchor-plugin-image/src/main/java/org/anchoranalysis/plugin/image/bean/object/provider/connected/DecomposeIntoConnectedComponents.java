@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.image.bean.object.provider.connected;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
+import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 
 /**
  * Ensures each object in a collection is a connected-component, decomposing it if necessary into

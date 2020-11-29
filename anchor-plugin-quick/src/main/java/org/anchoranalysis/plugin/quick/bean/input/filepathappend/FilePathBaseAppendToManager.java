@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.quick.bean.input.filepathappend;
 
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 
@@ -36,8 +36,8 @@ public abstract class FilePathBaseAppendToManager extends FilePathAppendBase {
 
     /**
      * @param inputManager
-     * @param rootName if non-empty (and non-null) a rooted derivePath is created instead of
-     *     a non rooted
+     * @param rootName if non-empty (and non-null) a rooted derivePath is created instead of a non
+     *     rooted
      * @param regex a regular-expression that returns two groups, the first is the dataset name, the
      *     second is the file-name
      * @throws BeanMisconfiguredException

@@ -35,15 +35,15 @@ import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.MaskReader;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.stack.input.MaskReader;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 
@@ -68,8 +68,7 @@ public class MaskComparer extends Comparer {
                 return new NotFound<>(maskPath, "No mask exists");
             }
 
-            Mask mask =
-                    MaskReader.openMask(stackReader, maskPath, createBinaryValues());
+            Mask mask = MaskReader.openMask(stackReader, maskPath, createBinaryValues());
 
             return new Found<>(convertToObjects(mask));
 

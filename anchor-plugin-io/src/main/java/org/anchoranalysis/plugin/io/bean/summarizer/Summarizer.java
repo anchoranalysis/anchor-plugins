@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.summarizer;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Summarizes a set of elements by outputting a descriptive string

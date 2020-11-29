@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -48,7 +48,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.thresholder.slice.SliceThresholder;
 import org.anchoranalysis.plugin.image.segment.thresholder.slice.SliceThresholderMask;
 import org.anchoranalysis.plugin.image.segment.thresholder.slice.SliceThresholderWithoutMask;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * Thresholds each voxels by comparing against another channel that has per-voxel thresholds
@@ -74,23 +74,23 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
         Voxels<?> voxelsIn = voxels.any();
         Voxels<UnsignedByteBuffer> voxelsOut = createOutputVoxels(voxels);
 
-        BinaryValuesByte bvb = BinaryValuesByte.getDefault();
+        BinaryValuesByte binaryValues = BinaryValuesByte.getDefault();
 
-        SliceThresholder sliceThresholder = createThresholder(object, bvb);
+        SliceThresholder sliceThresholder = createThresholder(object, binaryValues);
         sliceThresholder.segmentAll(
                 voxelsIn,
                 createThresholdedVoxels(voxels.any().extent()),
                 createOutputVoxels(voxels));
 
-        return BinaryVoxelsFactory.reuseByte(voxelsOut, bvb.createInt());
+        return BinaryVoxelsFactory.reuseByte(voxelsOut, binaryValues.createInt());
     }
 
-    private SliceThresholder createThresholder(Optional<ObjectMask> object, BinaryValuesByte bvb) {
+    private SliceThresholder createThresholder(Optional<ObjectMask> object, BinaryValuesByte binaryValues) {
         return object.map(
                         objectMask ->
                                 (SliceThresholder)
-                                        new SliceThresholderMask(clearOutsideMask, objectMask, bvb))
-                .orElseGet(() -> new SliceThresholderWithoutMask(bvb));
+                                        new SliceThresholderMask(clearOutsideMask, objectMask, binaryValues))
+                .orElseGet(() -> new SliceThresholderWithoutMask(binaryValues));
     }
 
     private Voxels<?> createThresholdedVoxels(Extent voxelsExtent)

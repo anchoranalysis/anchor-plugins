@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class AnnotationGroupObject extends AnnotationGroup<AssignmentOverlapFromPairs> {

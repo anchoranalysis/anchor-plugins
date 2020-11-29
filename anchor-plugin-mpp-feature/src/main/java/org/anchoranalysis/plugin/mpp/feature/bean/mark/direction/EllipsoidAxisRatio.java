@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.direction;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.math.equation.QuadraticEquationSolver;

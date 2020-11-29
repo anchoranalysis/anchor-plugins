@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.marks;
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;

@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public abstract class SpecificEnergyChannelBase extends FeatureSingleObject {

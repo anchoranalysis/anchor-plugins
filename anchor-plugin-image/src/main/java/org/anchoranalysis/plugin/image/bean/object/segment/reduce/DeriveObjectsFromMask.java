@@ -30,13 +30,13 @@ import java.util.List;
 import java.util.function.DoubleUnaryOperator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
+import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
@@ -105,7 +105,8 @@ class DeriveObjectsFromMask {
     private static double confidenceForObject(
             ObjectMask object, Channel channel, DoubleUnaryOperator unscale)
             throws OperationFailedException {
-        Histogram histogram = HistogramFromObjectsFactory.createHistogramIgnoreZero(channel, object, false);
+        Histogram histogram =
+                HistogramFromObjectsFactory.createHistogramIgnoreZero(channel, object, false);
         return unscale.applyAsDouble(histogram.mean());
     }
 }

@@ -30,9 +30,9 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -67,7 +67,8 @@ public class LineBoundCalculator extends BoundCalculator {
                     getInitializationParameters()
                             .getMarkBounds()
                             .calculateMinMax(
-                                    outlineChannel.resolution(), rotMatrix.getNumDim() >= 3);
+                                    outlineChannel.resolution(),
+                                    rotMatrix.getNumberDimensions() >= 3);
 
             int maxPossiblePoint = (int) Math.ceil(minMax.getMax());
 
@@ -75,7 +76,9 @@ public class LineBoundCalculator extends BoundCalculator {
                     new Point3d(
                             rotMatrix.getMatrix().get(0, 0),
                             rotMatrix.getMatrix().get(1, 0),
-                            rotMatrix.getNumDim() >= 3 ? rotMatrix.getMatrix().get(2, 0) : 0);
+                            rotMatrix.getNumberDimensions() >= 3
+                                    ? rotMatrix.getMatrix().get(2, 0)
+                                    : 0);
             Point3d margInverse = Point3d.immutableScale(marg, -1);
 
             // This is 2D Type of code
@@ -148,14 +151,16 @@ public class LineBoundCalculator extends BoundCalculator {
         }
         return -1;
     }
-    
+
     /**
      * Calculates the resolution of z relative to xy and resolutions.
-     * 
-     * <p>If there is no resolution defined, an isotropic assumption occurs that z dimension has equal resolution to XY.
-     * 
+     *
+     * <p>If there is no resolution defined, an isotropic assumption occurs that z dimension has
+     * equal resolution to XY.
+     *
      * @param resolution
-     * @return z as a ratio to the xy resolution (assumed identical) or 1.0 if resolution is not defined
+     * @return z as a ratio to the xy resolution (assumed identical) or 1.0 if resolution is not
+     *     defined
      */
     private double zRelative(Optional<Resolution> resolution) {
         return resolution.map(Resolution::zRelative).orElse(1.0);

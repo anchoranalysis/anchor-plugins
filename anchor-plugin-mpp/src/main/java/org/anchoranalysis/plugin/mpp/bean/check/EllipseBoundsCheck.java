@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.bean.check;
 
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.bean.mark.CheckMark;

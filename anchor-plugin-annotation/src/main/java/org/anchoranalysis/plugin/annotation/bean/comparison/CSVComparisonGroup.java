@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -34,24 +35,22 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupList;
 
+@AllArgsConstructor
 class CSVComparisonGroup<T extends Assignment> {
 
-    private AnnotationGroupList<T> annotationGroupList;
+    private final AnnotationGroupList<T> annotationGroupList;
 
-    public CSVComparisonGroup(AnnotationGroupList<T> annotationGroupList) {
-        super();
-        this.annotationGroupList = annotationGroupList;
-    }
+    /** What output-name to use for the CSV written. */
+    private final String outputName;
 
     private void writeGroupStatsForGroup(AnnotationGroup<T> annotationGroup, CSVWriter writer) {
-
         writer.writeRow(annotationGroup.createValues());
     }
 
     public void writeGroupStats(Outputter outputter) throws OutputWriteFailedException {
 
         Optional<CSVWriter> writer =
-                CSVWriter.createFromOutputter("byGroup", outputter.getChecked());
+                CSVWriter.createFromOutputter(outputName, outputter.getChecked());
 
         if (!writer.isPresent()) {
             return;

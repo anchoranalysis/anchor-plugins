@@ -27,12 +27,12 @@
 package org.anchoranalysis.plugin.image.object.merge.priority;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
+import org.anchoranalysis.plugin.image.object.merge.PayloadCalculator;
 
 /**
  * Allows merges if there is an increase in the payload i.e.
@@ -70,7 +70,7 @@ public class AssignPriorityFromImprovement extends AssignPriority {
     private double calculatePayload(PayloadCalculator payloadCalculator, ObjectMask object)
             throws OperationFailedException {
         try {
-            return payloadCalculator.calc(object);
+            return payloadCalculator.calculate(object);
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }

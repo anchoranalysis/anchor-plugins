@@ -32,10 +32,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.io.ReplaceInputManager;
@@ -114,7 +115,7 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
 
     private void populateDelegateIfNeeded() {
         if (!populatedDelegate) {
-            delegate.setFolderDataset(folderDataset());
+            delegate.setDirectoryDataset(directoryDataset());
             delegate.setOutput(output());
             delegate.setLogExperimentPath(loggerPath("Experiment"));
             delegate.setLogTaskPath(loggerPath("Task"));
@@ -123,18 +124,20 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
         }
     }
 
-    private String folderDataset() {
+    private String directoryDataset() {
         return String.format(
                 "%s../Filesets/For%s/", pathPrefix(), StringUtils.capitalize(experimentType));
     }
 
     private String output() {
-        return String.format("%s../IO/OutputManager/%s.xml", pathPrefix(), experimentType);
+        String directory = pathPrefix() + "../IO/OutputManager";
+        return NonImageFileFormat.XML.buildPath(directory, experimentType);
     }
 
     private String loggerPath(String suffix) {
-        return String.format(
-                "%s/include/logger%s.xml", pathPrefix(), StringUtils.capitalize(suffix));
+        String directory = pathPrefix() + "include/";
+        String filename = "logger" + StringUtils.capitalize(suffix);
+        return NonImageFileFormat.XML.buildPath(directory, filename);
     }
 
     private String pathPrefix() {
@@ -168,7 +171,7 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
     }
 
     @Override
-    public void executeExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
         populateDelegateIfNeeded();
         delegate.executeExperiment(arguments);

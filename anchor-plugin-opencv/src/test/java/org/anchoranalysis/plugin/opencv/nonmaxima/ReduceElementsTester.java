@@ -30,8 +30,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -40,7 +40,7 @@ import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ReduceElements
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.spatial.point.Point2d;
-import org.anchoranalysis.test.image.WriteIntoFolder;
+import org.anchoranalysis.test.image.WriteIntoDirectory;
 import org.anchoranalysis.test.image.object.CircleObjectFixture;
 
 /**
@@ -52,14 +52,14 @@ class ReduceElementsTester {
 
     private static final int NUMBER_CIRCLES = 7;
 
-    private final Optional<WriteIntoFolder> writeIntoFolder;
+    private final Optional<WriteIntoDirectory> writeIntoDirectory;
 
     public ReduceElementsTester() {
-        this.writeIntoFolder = Optional.empty();
+        this.writeIntoDirectory = Optional.empty();
     }
 
-    public ReduceElementsTester(WriteIntoFolder writeIntoFolder) {
-        this.writeIntoFolder = Optional.of(writeIntoFolder);
+    public ReduceElementsTester(WriteIntoDirectory writeIntoDirectory) {
+        this.writeIntoDirectory = Optional.of(writeIntoDirectory);
     }
 
     public void test(
@@ -73,7 +73,7 @@ class ReduceElementsTester {
 
         SegmentedObjects reduced = new SegmentedObjects(reduce.reduce(segments.asList()));
 
-        writeIntoFolder.ifPresent(folder -> writeRasters(folder, segments, reduced));
+        writeIntoDirectory.ifPresent(folder -> writeRasters(folder, segments, reduced));
 
         assertEquals(
                 "identical number of voxels",
@@ -94,7 +94,7 @@ class ReduceElementsTester {
 
     /** Writes raster-images (for debugging) to the filesystem of before and after the reduction. */
     private static void writeRasters(
-            WriteIntoFolder write, SegmentedObjects segments, SegmentedObjects reduced) {
+            WriteIntoDirectory write, SegmentedObjects segments, SegmentedObjects reduced) {
         write.writeObjects("before", segments.asObjects());
         write.writeObjects("after", reduced.asObjects());
     }

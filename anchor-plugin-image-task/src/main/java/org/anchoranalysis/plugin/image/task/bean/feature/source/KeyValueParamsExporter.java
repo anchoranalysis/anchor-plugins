@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
@@ -44,13 +44,18 @@ class KeyValueParamsExporter {
 
     public static void export(
             FeatureNameList featureNames, ResultsVector rv, InputOutputContext context) {
-        writeKeyValueParams( () -> convert(featureNames, rv, context.getLogger()), context.getOutputter());
+        writeKeyValueParams(
+                () -> convert(featureNames, rv, context.getLogger()), context.getOutputter());
     }
 
-    private static void writeKeyValueParams(ElementSupplier<KeyValueParams> params, Outputter outputter) {
+    private static void writeKeyValueParams(
+            ElementSupplier<KeyValueParams> params, Outputter outputter) {
         outputter
                 .writerSelective()
-                .write("keyValueParams", () -> new KeyValueParamsGenerator("keyValueParams"), params);
+                .write(
+                        "keyValueParams",
+                        () -> new KeyValueParamsGenerator("keyValueParams"),
+                        params);
     }
 
     private static KeyValueParams convert(

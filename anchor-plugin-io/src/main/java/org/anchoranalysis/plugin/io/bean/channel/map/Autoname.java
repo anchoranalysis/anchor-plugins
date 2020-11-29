@@ -28,12 +28,15 @@ package org.anchoranalysis.plugin.io.bean.channel.map;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.functional.FunctionalIterate;
+import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
+import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 
 /**
  * Names of the channels from the metadata if it exists, or after RGB, or by index
@@ -50,23 +53,22 @@ import org.anchoranalysis.image.io.stack.OpenedRaster;
  */
 public class Autoname extends ChannelMap {
 
-    private static final String[] RGB_CHANNEL_NAMES = {"red", "green", "blue"};
-    
+    private static final String[] RGB_CHANNEL_NAMES = RGBChannelNames.rgbArray();
+
     @Override
     public NamedEntries createMap(OpenedRaster openedRaster) throws CreateException {
 
         NamedEntries map = new NamedEntries();
 
-        // null indicates that there are no names
-        Optional<List<String>> names = openedRaster.channelNames();
-
         try {
+            Optional<List<String>> names = openedRaster.channelNames();
+
             boolean rgb = openedRaster.isRGB() && openedRaster.numberChannels() == 3;
 
             // The insertion order is critical here to remember R, G, B
-            for (int c = 0; c < openedRaster.numberChannels(); c++) {
-                map.add(new ChannelEntry(nameFor(c, names, rgb), c));
-            }
+            FunctionalIterate.repeatWithIndex(
+                    openedRaster.numberChannels(),
+                    channelIndex -> addEntryToMap(map, names, rgb, channelIndex));
 
         } catch (ImageIOException e) {
             throw new CreateException(e);
@@ -75,22 +77,27 @@ public class Autoname extends ChannelMap {
         return map;
     }
 
-    private String nameFor(int c, Optional<List<String>> names, boolean rgb) {
+    private static void addEntryToMap(
+            NamedEntries map, Optional<List<String>> names, boolean rgb, int channelIndex) {
+        String entryName = nameFor(channelIndex, names, rgb);
+        map.add(new ChannelEntry(entryName, channelIndex));
+    }
+
+    private static String nameFor(int channelIndex, Optional<List<String>> names, boolean rgb) {
         if (names.isPresent()) {
-            return names.get().get(c);
+            return names.get().get(channelIndex);
         } else if (rgb) {
-            return rgbNameFor(c);
+            return rgbNameFor(channelIndex);
         } else {
-            return String.format("channel-%d", c);
+            return String.format("channel-%d", channelIndex);
         }
     }
 
-    private String rgbNameFor(int c) {
-        if (c < 3) {
-            return RGB_CHANNEL_NAMES[c];
+    private static String rgbNameFor(int channelIndex) {
+        if (channelIndex < 3) {
+            return RGB_CHANNEL_NAMES[channelIndex];
         } else {
-            assert (false);
-            return "name-should-never-occur";
+            throw new AnchorImpossibleSituationException();
         }
     }
 }

@@ -35,11 +35,11 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
+import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
@@ -64,8 +64,7 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
      * This needs to be set if there is at least one adjacentChannel.
      *
      * <p>This should be a regex (with a single group that is replaced) that is searched for among
-     * the input-paths. This only needs to be set if at least one adjacentChannel is.
-     * specified
+     * the input-paths. This only needs to be set if at least one adjacentChannel is. specified
      */
     @BeanField @AllowEmpty @Getter @Setter private String regexAdjacent = "";
 
@@ -122,7 +121,8 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
     }
 
     @Override
-    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws InputReadFailedException {
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params)
+            throws InputReadFailedException {
         createAppendedChannelsIfNecessary();
         return append.inputs(params);
     }
@@ -149,11 +149,9 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
                         additionalChannels,
                         getStackReader());
 
-        channels =
-                appendChannels(channels, pathsAdjacent(), stackReaderAdjacent);
+        channels = appendChannels(channels, pathsAdjacent(), stackReaderAdjacent);
 
-        channels =
-                appendChannels(channels, pathsAppend(), getStackReaderAppend());
+        channels = appendChannels(channels, pathsAppend(), getStackReaderAppend());
 
         return channels;
     }
@@ -175,8 +173,7 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
         return FunctionalList.mapToList(adjacentChannels, this::convertAdjacentFile);
     }
 
-    private List<NamedBean<DerivePath>> pathsAppend()
-            throws BeanMisconfiguredException {
+    private List<NamedBean<DerivePath>> pathsAppend() throws BeanMisconfiguredException {
 
         List<NamedBean<DerivePath>> out = new ArrayList<>();
 

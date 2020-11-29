@@ -26,7 +26,7 @@
 package org.anchoranalysis.plugin.image.bean.thumbnail.stack;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 

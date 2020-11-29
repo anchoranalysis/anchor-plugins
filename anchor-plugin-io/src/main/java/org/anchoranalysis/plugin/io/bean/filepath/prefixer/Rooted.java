@@ -30,13 +30,14 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.plugin.io.input.path.RootPathMap;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.path.NamedPath;
-import org.anchoranalysis.io.output.path.PathPrefixer;
 
 /**
  * Prepend a 'root' before the file-path-prefix obtained from a delegate
@@ -69,8 +70,7 @@ public class Rooted extends PathPrefixer {
         return fpp;
     }
 
-    private NamedPath removeRoot(NamedPath path, boolean debugMode)
-            throws PathPrefixerException {
+    private NamedPath removeRoot(NamedPath path, boolean debugMode) throws PathPrefixerException {
         try {
             Path pathWithoutRoot =
                     RootPathMap.instance()
@@ -83,9 +83,9 @@ public class Rooted extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
+    public DirectoryWithPrefix rootDirectoryPrefix(String expName, FilePathPrefixerContext context)
             throws PathPrefixerException {
-        DirectoryWithPrefix fpp = filePathPrefixer.rootFolderPrefixAvoidResolve(expName);
+        DirectoryWithPrefix fpp = filePathPrefixer.rootDirectoryPrefixAvoidResolve(expName);
         fpp.setDirectory(folderPathOut(fpp.getDirectory(), context.isDebugMode()));
         return fpp;
     }

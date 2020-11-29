@@ -32,19 +32,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesConcatenate;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
+import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.io.input.files.FileInput;
 
 /**
@@ -95,17 +94,15 @@ class MapPart extends NamedChannelsInputPart {
 
     // Where most of our time is being taken up when opening a raster
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException {
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
+            throws ImageIOException {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
             seriesIndex = openedRaster().numberSeries() - 1;
         }
 
-        NamedChannelsForSeriesConcatenate out = new NamedChannelsForSeriesConcatenate();
-        out.add(new NamedChannelsForSeriesMap(openedRaster(), channelMap(), seriesIndex));
-        return out;
+        return new NamedChannelsForSeriesMap(openedRaster(), channelMap(), seriesIndex);
     }
 
     @Override

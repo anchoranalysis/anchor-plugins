@@ -26,20 +26,21 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.segment;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.core.identifier.provider.store.LazyEvaluationStore;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.store.LazyEvaluationStore;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -48,8 +49,8 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
-import org.anchoranalysis.image.core.stack.NamedStacks;
-import org.anchoranalysis.image.core.stack.wrap.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
+import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
@@ -65,28 +66,47 @@ import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
 /**
  * Segments an image into a collection of {@link Mark}s.
  *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>marks</td><td>yes</td><td>The segmented outcome as serialized XML using <a href="https://x-stream.github.io/">XStream</a>.</td></tr>
+ * <tr><td>outline</td><td>yes</td><td>A RGB image showing <i>outline-colored</i> segmented marks on a background.</td></tr>
+ * <tr><td>solid</td><td>no</td><td>A RGB image showing <i>solidly-colored</i> segmented marks on a background.</td></tr>
+ * <tr><td rowspan="3"><i>any outputs produced by {@link SegmentIntoMarks}</i> in {@code segment}.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
+ *
  * @author Owen Feehan
  */
 public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
     private static final String OUTPUT_MARKS = "marks";
-    
-    private static final Optional<String> MANIFEST_FUNCTION_SERIALIZED_MARKS = Optional.of(OUTPUT_MARKS);
-    
+
+    private static final Optional<String> MANIFEST_FUNCTION_SERIALIZED_MARKS =
+            Optional.of(OUTPUT_MARKS);
+
     // START BEAN PROPERTIES
     /** How to perform the segmentation. */
     @BeanField @Getter @Setter private SegmentIntoMarks segment;
 
-    /** If non-empty, the identifier of a key-value-params collection that is passed to the segmentation procedure. */
+    /**
+     * If non-empty, the identifier of a key-value-params collection that is passed to the
+     * segmentation procedure.
+     */
     @BeanField @AllowEmpty @Getter @Setter private String keyValueParamsID = "";
     // END BEAN PROPERTIES
-
 
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
+
     @Override
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(MultiInput.class);
@@ -94,21 +114,26 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        OutputEnabledMutable outputs = super.defaultOutputs().addEnabledOutputFirst(OUTPUT_MARKS,
-                MarksVisualization.OUTPUT_VISUALIZE_MARKS_OUTLINE);
+        OutputEnabledMutable outputs =
+                super.defaultOutputs()
+                        .addEnabledOutputFirst(
+                                OUTPUT_MARKS, MarksVisualization.OUTPUT_VISUALIZE_MARKS_OUTLINE);
         outputs.addEnabledOutputs(segment.defaultOutputs());
         return outputs;
     }
-    
+
     @Override
     public ExperimentState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<MultiInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         ExperimentState experimentState = segment.createExperimentState();
         experimentState.outputBeforeAnyTasksAreExecuted(outputter);
         return experimentState;
     }
-    
+
     @Override
     public void doJobOnInput(InputBound<MultiInput, ExperimentState> inputBound)
             throws JobExecutionException {
@@ -124,7 +149,11 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
             MarkCollection marks =
                     segment.duplicateBean()
-                            .segment(stackCollection, objects, paramsCreated, inputBound.context());
+                            .segment(
+                                    stackCollection,
+                                    objects,
+                                    paramsCreated,
+                                    inputBound.getContextJob());
             writeVisualization(
                     marks, inputBound.getOutputter(), stackCollection, inputBound.getLogger());
 
@@ -184,7 +213,10 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
             MarkCollection marks, Outputter outputter, NamedStacks stackCollection, Logger logger) {
         outputter
                 .writerSelective()
-                .write(OUTPUT_MARKS, () -> new XStreamGenerator<Object>(MANIFEST_FUNCTION_SERIALIZED_MARKS), () -> marks);
+                .write(
+                        OUTPUT_MARKS,
+                        () -> new XStreamGenerator<Object>(MANIFEST_FUNCTION_SERIALIZED_MARKS),
+                        () -> marks);
 
         try {
             DisplayStack backgroundStack =

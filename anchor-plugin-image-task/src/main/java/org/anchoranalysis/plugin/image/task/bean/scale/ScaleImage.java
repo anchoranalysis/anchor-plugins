@@ -26,112 +26,114 @@
 
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
+import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.core.stack.NamedStacks;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.wrap.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.image.experiment.bean.task.RasterTask;
-import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.stack.NamedStacksOutputter;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 
 /**
- * Task to scale an image.
+ * Creates a scaled copy of images.
  *
- * <p>Expects a second-level output "scaled" and "scaledFlattened" to determine which stacks get outputted or not.
+ * <p>An RGB image is treated as a single-stack, otherwise each channel is scaled and outputted
+ * separately.
+ *
+ * <p>Second-level output keys for <i>scaled</i> and/or <i>scaledFlattened</i> additionally
+ * determine which stacks get outputted or not.
+ *
+ * <p>Any z-dimension present is unaffected by the scaling in {@code scaled}.
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>scaled</td><td>yes</td><td>A scaled copy of the input image.</td></tr>
+ * <tr><td>scaledFlattened</td><td>no</td><td>A scaled copy of the maximum-intensity-projection of the input image.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
  *
  * @author Owen Feehan
  */
-public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
+public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
 
+    /** Output-name for a scaled copy of the input image. */
     private static final String OUTPUT_SCALED = "scaled";
-    private static final String OUTPUT_SCALED_FLATTENED = "scaledFlattened";
+
+    /** Output-name for a scaled copy the maximum-intensity-projection of the input image. */
+    private static final String OUTPUT_SCALED_FLATTENED = "scaled_flattened";
 
     // START BEAN PROPERTIES
+    /** Calculates what scale-factor to apply on the image. */
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
 
-    @BeanField @Getter @Setter private boolean forceBinary = false;
+    /**
+     * Iff true the image to be scaled is treated as a binary-mask, and interpolation during scaling
+     * ensures only two binary-values are ouputted.
+     */
+    @BeanField @Getter @Setter private boolean binary = false;
     // END BEAN PROPERTIES
 
     @Override
-    public NoSharedState beforeAnyJobIsExecuted(Outputter outputter,
-            ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+    public InputTypesExpected inputTypesExpected() {
+        return new InputTypesExpected(StackSequenceInput.class);
+    }
+
+    @Override
+    public NoSharedState beforeAnyJobIsExecuted(
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<StackSequenceInput> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
-    
+
     @Override
-    protected NoSharedState createSharedStateJob(InputOutputContext context)
+    public void doJobOnInput(InputBound<StackSequenceInput, NoSharedState> input)
             throws JobExecutionException {
-        return NoSharedState.INSTANCE;
-    }
-
-    @Override
-    public void startSeries(NoSharedState sharedStateTask, NoSharedState sharedStateJob,
-            InputOutputContext context) throws JobExecutionException {
-        // NOTHING TO DO
-    }
-
-    @Override
-    public void doStack(
-            InputBound<NamedChannelsInput, NoSharedState> input, NoSharedState sharedStateJob, int seriesIndex, int numberSeries, InputOutputContext context)
-            throws JobExecutionException {
-
-        // Input
-        NamedChannelsForSeries namedChannels;
         try {
-            namedChannels = input.getInput().createChannelsForSeries(0, ProgressReporterNull.get());
-        } catch (ImageIOException e) {
-            throw new JobExecutionException(e);
-        }
+            NamedStacks stacks = input.getInput().asSet(ProgressIgnore.get());
 
-        ImageInitParams soImage = ImageInitParamsFactory.create(context);
-
-        try {
+            ImageInitParams soImage = ImageInitParamsFactory.create(input.getContextJob());
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
-            namedChannels.addAsSeparateChannels(
-                    new WrapStackAsTimeSequenceStore(soImage.stacks()), 0);
-            scaleCalculator.initRecursive(context.getLogger());
-        } catch (InitException | OperationFailedException e) {
+            soImage.copyStacksFrom(stacks);
+
+            populateAndOutput(soImage, input.getContextJob());
+        } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
         }
-
-        populateAndOutputCollections(soImage, context);
-    }
-
-    @Override
-    public void endSeries(NoSharedState sharedStateTask, NoSharedState sharedStateJob,
-            InputOutputContext context) throws JobExecutionException {
-        // NOTHING TO DO        
     }
 
     @Override
@@ -147,101 +149,92 @@ public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_SCALED);
     }
 
-    private void populateAndOutputCollections(ImageInitParams soImage, InputOutputContext context)
+    private void populateAndOutput(ImageInitParams soImage, InputOutputContext context)
             throws JobExecutionException {
-        // Our output collections
-        NamedStacks stackCollection = new NamedStacks();
-        NamedStacks stackCollectionMIP = new NamedStacks();
 
-        populateOutputCollectionsFromSharedObjects(
-                soImage, stackCollection, stackCollectionMIP, context);
+        // Output collections
+        DualNamedStacks stacks = new DualNamedStacks();
 
-        outputStacks(
-                stackCollection, OUTPUT_SCALED, context.getOutputter().getChecked());
-        outputStacks(
-                stackCollectionMIP, OUTPUT_SCALED_FLATTENED, context.getOutputter().getChecked());
-    }
-
-    private static void outputStacks(
-            NamedProvider<Stack> stacks,
-            String outputName,
-            OutputterChecked outputter) throws JobExecutionException {
-        try {
-            NamedStacksOutputter.output(stacks, outputName, false, outputter);
-        } catch (OutputWriteFailedException e) {
-            throw new JobExecutionException(
-               "Failed to write a particular stack in: " + outputName, e);
+        DualEnabled dualEnabled =
+                new DualEnabled(
+                        OutputterHelper.isFirstLevelOutputEnabled(OUTPUT_SCALED, context),
+                        OutputterHelper.isFirstLevelOutputEnabled(
+                                OUTPUT_SCALED_FLATTENED, context));
+        if (dualEnabled.isEitherEnabled()) {
+            populateStacksFromSharedObjects(soImage, stacks, dualEnabled, context);
+            OutputterHelper.outputStacks(
+                    stacks,
+                    dualEnabled,
+                    OUTPUT_SCALED,
+                    OUTPUT_SCALED_FLATTENED,
+                    context.getOutputter().getChecked());
         }
     }
 
-    private void populateOutputCollectionsFromSharedObjects(
+    private void populateStacksFromSharedObjects(
             ImageInitParams params,
-            NamedStacks stacksNotFlattened,
-            NamedStacks stacksFlattened,
+            DualNamedStacks stacksToAddTo,
+            DualEnabled dualEnabled,
             InputOutputContext context)
             throws JobExecutionException {
+        Set<String> inputKeys = params.stacks().keys();
+        for (String key : inputKeys) {
 
-        for (String key : params.stacks().keys()) {
+            DualEnabled enabledForKey =
+                    dualEnabled.and(
+                            () ->
+                                    OutputterHelper.isSecondLevelOutputEnabled(
+                                            OUTPUT_SCALED, key, context),
+                            () ->
+                                    OutputterHelper.isSecondLevelOutputEnabled(
+                                            OUTPUT_SCALED_FLATTENED, key, context));
 
-            // If neither output is allowed for this channel, we skip
-            if (!isEitherOutputEnabled(context, key)) {
-                continue;
+            if (enabledForKey.isEitherEnabled()) {
+                try {
+                    Stack stackIn = params.stacks().getException(key);
+
+                    Stack stackOut = scaleStack(stackIn, context.getLogger().messageLogger());
+
+                    stacksToAddTo.addStack(key, stackOut, enabledForKey);
+
+                } catch (OperationFailedException e) {
+                    throw new JobExecutionException(e);
+                } catch (NamedProviderGetException e) {
+                    throw new JobExecutionException(e.summarize());
+                }
             }
-            
-            try {
-                Channel channelIn = params.stacks().getException(key).getChannel(0);
-
-                Channel channelOut = scaleChannel(channelIn, context.getLogger().messageLogger());
-                
-                if (isNonFlattenedEnabled(context,key)) {
-                    stacksNotFlattened.add(key, new Stack(channelOut));
-                }
-                
-                if (isFlattenedEnabled(context,key)) {
-                    stacksFlattened.add(key, new Stack(channelOut.projectMax()));
-                }
-
-            } catch (CreateException e) {
-                throw new JobExecutionException(e);
-            } catch (NamedProviderGetException e) {
-                throw new JobExecutionException(e.summarize());
-            }    
         }
     }
-    
-    private boolean isEitherOutputEnabled(InputOutputContext context, String key) {
-        return isFlattenedEnabled(context, key) || isNonFlattenedEnabled(context, key); 
+
+    private Stack scaleStack(Stack stack, MessageLogger logger) throws OperationFailedException {
+        return stack.mapChannel(channel -> scaleChannel(channel, logger));
     }
-    
-    private boolean isNonFlattenedEnabled(InputOutputContext context, String key) {
-        return isOutputEnabled(context, OUTPUT_SCALED, key);
-    }
-    
-    private boolean isFlattenedEnabled(InputOutputContext context, String key) {
-        return isOutputEnabled(context, OUTPUT_SCALED_FLATTENED, key);
-    }
-    
-    private Channel scaleChannel(Channel channelIn, MessageLogger logger) throws CreateException {
-        if (forceBinary) {
-            Mask mask = new Mask(channelIn);
-            Mask maskScaled =
-                    org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(
-                            mask, scaleCalculator);
-            return maskScaled.channel();
-        } else {
-            return ScaleXY.scale(
-                            channelIn,
-                            scaleCalculator,
-                            InterpolatorFactory.getInstance().rasterResizing(),
-                            logger);
+
+    private Channel scaleChannel(Channel channel, MessageLogger logger)
+            throws OperationFailedException {
+        try {
+            if (binary) {
+                return scaleChannelAsMask(channel);
+            } else {
+                return ScaleXY.scale(
+                        channel,
+                        scaleCalculator,
+                        InterpolatorFactory.getInstance().rasterResizing(),
+                        logger);
+            }
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
         }
     }
-    
-    private static boolean isOutputEnabled(InputOutputContext context, String outputName, String key) {
-        return context.getOutputter().outputsEnabled().second(outputName).isOutputEnabled(key);
+
+    private Channel scaleChannelAsMask(Channel channel) throws CreateException {
+        Mask mask = new Mask(channel);
+        Mask maskScaled =
+                org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(
+                        mask, scaleCalculator);
+        return maskScaled.channel();
     }
 }

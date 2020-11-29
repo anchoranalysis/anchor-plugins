@@ -38,17 +38,17 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
 /**
- * Outputs a CSV with statistics on the configuration/energy <b>only</b> the <i>best configuration</i> state changes.
- * 
- * @author Owen Feehan
+ * Outputs a CSV with statistics on the configuration/energy <b>only</b> the <i>best
+ * configuration</i> state changes.
  *
+ * @author Owen Feehan
  */
 public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEnergy> {
 
     public static final String MANIFEST_FUNCTION = "event_aggregate_stats";
-    
+
     private static final String OUTPUT_CSV_STATISTICS = "statisticsBest";
-    
+
     private Optional<TextFileOutput> csvOutput;
 
     @Override

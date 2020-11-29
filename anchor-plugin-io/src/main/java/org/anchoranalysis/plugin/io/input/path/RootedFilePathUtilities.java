@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.shared.path.RootPath;
-import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RootedFilePathUtilities {

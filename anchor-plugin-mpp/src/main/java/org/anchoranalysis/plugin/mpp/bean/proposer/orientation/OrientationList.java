@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.bound.BoundCalculator;

@@ -33,7 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.apache.commons.io.IOCase;
 
@@ -84,7 +84,7 @@ public class FilePathPattern extends Summarizer<Path> {
             return paths.get(0).toString();
         }
 
-        Pattern pattern = PathPatternFinder.findPatternPath(paths, selectIOCase());
+        Pattern pattern = PathPatternFinder.findPatternPaths(paths, selectIOCase());
         return pattern.describeDetailed();
     }
 

@@ -32,8 +32,8 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 
 @Value

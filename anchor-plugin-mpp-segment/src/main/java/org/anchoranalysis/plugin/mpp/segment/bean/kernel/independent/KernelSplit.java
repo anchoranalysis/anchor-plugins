@@ -158,9 +158,9 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
             return String.format(
                     "%s %d into %d into %d",
                     getBeanName(),
-                    markExst.get().getId(), // NOSONAR
-                    pairNew.get().getSource().getMark().getId(), // NOSONAR
-                    pairNew.get().getDestination().getMark().getId()); // NOSONAR
+                    markExst.get().getIdentifier(), // NOSONAR
+                    pairNew.get().getSource().getMark().getIdentifier(), // NOSONAR
+                    pairNew.get().getDestination().getMark().getIdentifier()); // NOSONAR
         } else {
             return getBeanName();
         }
@@ -201,6 +201,8 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
                         markExst,
                         pairNew.map(pmm -> pmm.getSource().getMark()),
                         pairNew.map(pmm -> pmm.getDestination().getMark()));
-        return stream.filter(Optional::isPresent).mapToInt(opt -> opt.get().getId()).toArray();
+        return stream.filter(Optional::isPresent)
+                .mapToInt(opt -> opt.get().getIdentifier())
+                .toArray();
     }
 }

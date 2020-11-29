@@ -30,8 +30,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.OperationFailedRuntimeException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedRuntimeException;
+import org.anchoranalysis.core.format.ImageFileFormat;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
@@ -39,21 +41,21 @@ import org.anchoranalysis.test.image.csv.CSVComparer;
 
 class CompareHelper {
 
-    /** 
-     * <p>Toggles a behaviour that replaces reference files with newly created onces in certain circumstances.
-     * 
-     * <p>If true, and an {@link #assertIdentical} fails, the first path in the comparer
-     * (the newly created file) will be copied on top of the second path in the comparer
-     * (the reference file).
-     * 
+    /**
+     * Toggles a behaviour that replaces reference files with newly created onces in certain
+     * circumstances.
+     *
+     * <p>If true, and an {@link #assertIdentical} fails, the first path in the comparer (the newly
+     * created file) will be copied on top of the second path in the comparer (the reference file).
+     *
      * <p>If false, no copying occurs.
-     * 
-     * <p>This is a powerful tool to update resources when they are out of sync with
-     * the tests, but should be used very <b>carefully</b> as it overrides existing
-     * files in the source-code directory.
+     *
+     * <p>This is a powerful tool to update resources when they are out of sync with the tests, but
+     * should be used very <b>carefully</b> as it overrides existing files in the source-code
+     * directory.
      */
     private static final boolean COPY_NOT_IDENTICAL = false;
-    
+
     private static final CSVComparer CSV_COMPARER = new CSVComparer(",", true, 0, true, false);
 
     public static void compareOutputWithSaved(
@@ -61,7 +63,7 @@ class CompareHelper {
             throws OperationFailedException {
 
         DualComparer comparer =
-                DualComparerFactory.compareExplicitFolderToTest(
+                DualComparerFactory.compareExplicitDirectoryToTest(
                         pathAbsoluteOutput, pathRelativeSaved);
 
         for (String path : relativePaths) {
@@ -72,29 +74,40 @@ class CompareHelper {
     @SuppressWarnings("unused")
     private static void assertIdentical(DualComparer comparer, String relativePath)
             throws OperationFailedException {
+
+        if (COPY_NOT_IDENTICAL && !comparer.getLoader2().doesPathExist(relativePath)) {
+            copyFromTemporaryToResources(comparer, relativePath);
+            return; // Exit early
+        }
+
         boolean identical = compareForExtra(comparer, relativePath);
-        
+
         if (COPY_NOT_IDENTICAL && !identical) {
-            try {
-                comparer.copyFromPath1ToPath2(relativePath);
-            } catch (IOException e) {
-                throw new OperationFailedException(e);
-            }
+            copyFromTemporaryToResources(comparer, relativePath);
         } else {
             assertTrue(relativePath + " is not identical", identical);
+        }
+    }
+
+    private static void copyFromTemporaryToResources(DualComparer comparer, String relativePath)
+            throws OperationFailedException {
+        try {
+            comparer.copyFromPath1ToPath2(relativePath);
+        } catch (IOException e) {
+            throw new OperationFailedException(e);
         }
     }
 
     private static boolean compareForExtra(DualComparer comparer, String relativePath)
             throws OperationFailedException {
         try {
-            if (hasExtension(relativePath, ".tif")) {
+            if (ImageFileFormat.TIFF.matchesEnd(relativePath)) {
                 return comparer.compareTwoImages(relativePath);
-            } else if (hasExtension(relativePath, ".csv")) {
+            } else if (NonImageFileFormat.CSV.matchesEnd(relativePath)) {
                 return comparer.compareTwoCsvFiles(relativePath, CSV_COMPARER, System.out);
-            } else if (hasExtension(relativePath, ".xml")) {
+            } else if (NonImageFileFormat.XML.matchesEnd(relativePath)) {
                 return comparer.compareTwoXmlDocuments(relativePath);
-            } else if (hasExtension(relativePath, ".h5")) {
+            } else if (NonImageFileFormat.HDF5.matchesEnd(relativePath)) {
                 return comparer.compareTwoObjectCollections(relativePath);
             } else {
                 throw new OperationFailedRuntimeException("Extension not supported");
@@ -102,10 +115,5 @@ class CompareHelper {
         } catch (IOException | CSVReaderException e) {
             throw new OperationFailedException(e);
         }
-    }
-
-    /** Does a string end in an extension, ignoring case? */
-    private static boolean hasExtension(String str, String endsWith) {
-        return str.toLowerCase().endsWith(endsWith);
     }
 }
