@@ -33,17 +33,17 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedEntries;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 public class FromMetadata extends ChannelMap {
 
     @Override
-    public NamedEntries createMap(OpenedRaster openedRaster) throws CreateException {
+    public NamedEntries createMap(OpenedImageFile openedFile) throws CreateException {
 
         try {
-            Optional<List<String>> names = openedRaster.channelNames();
+            Optional<List<String>> names = openedFile.channelNames();
             if (!names.isPresent()) {
-                throw new CreateException("No channels names are associated with the openedRaster");
+                throw new CreateException("No channels names are associated with the opened image-file");
             }
 
             NamedEntries map = new NamedEntries();

@@ -37,18 +37,18 @@ import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
- * An implementation of {@link OpenedRaster} for reading using OpenCV.
+ * An implementation of {@link OpenedImageFile} for reading using OpenCV.
  *
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-class OpenedRasterOpenCV implements OpenedRaster {
+class OpenedRasterOpenCV implements OpenedImageFile {
 
     // START REQUIRED ARGUMENTS
     /** The path to open. */

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedEntries;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
  * Names of the channels from the metadata if it exists, or after RGB, or by index
@@ -56,18 +56,18 @@ public class Autoname extends ChannelMap {
     private static final String[] RGB_CHANNEL_NAMES = RGBChannelNames.rgbArray();
 
     @Override
-    public NamedEntries createMap(OpenedRaster openedRaster) throws CreateException {
+    public NamedEntries createMap(OpenedImageFile openedFile) throws CreateException {
 
         NamedEntries map = new NamedEntries();
 
         try {
-            Optional<List<String>> names = openedRaster.channelNames();
+            Optional<List<String>> names = openedFile.channelNames();
 
-            boolean rgb = openedRaster.isRGB() && openedRaster.numberChannels() == 3;
+            boolean rgb = openedFile.isRGB() && openedFile.numberChannels() == 3;
 
             // The insertion order is critical here to remember R, G, B
             FunctionalIterate.repeatWithIndex(
-                    openedRaster.numberChannels(),
+                    openedFile.numberChannels(),
                     channelIndex -> addEntryToMap(map, names, rgb, channelIndex));
 
         } catch (ImageIOException e) {
