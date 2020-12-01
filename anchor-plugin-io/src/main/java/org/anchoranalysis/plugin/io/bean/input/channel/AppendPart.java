@@ -40,7 +40,7 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesConcatenate;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.input.path.PathSupplier;
 
@@ -55,7 +55,7 @@ class AppendPart extends NamedChannelsInputPart {
     private final AdditionalChannel additionalChannel;
     private final StackReader stackReader;
 
-    private OpenedRaster openedRasterMemo;
+    private OpenedImageFile openedFileMemo;
 
     public AppendPart(
             NamedChannelsInputPart delegate,
@@ -99,7 +99,7 @@ class AppendPart extends NamedChannelsInputPart {
         out.add(existing);
         out.add(
                 new NamedChannelsForSeriesMap(
-                        openedRasterMemo, additionalChannel.createChannelMap(), seriesIndex));
+                        openedFileMemo, additionalChannel.createChannelMap(), seriesIndex));
         return out;
     }
 
@@ -107,8 +107,8 @@ class AppendPart extends NamedChannelsInputPart {
         try {
             Path filePathAdditional = additionalChannel.getFilePath();
 
-            if (openedRasterMemo == null) {
-                openedRasterMemo = stackReader.openFile(filePathAdditional);
+            if (openedFileMemo == null) {
+                openedFileMemo = stackReader.openFile(filePathAdditional);
             }
 
         } catch (DerivePathException e) {
@@ -155,9 +155,9 @@ class AppendPart extends NamedChannelsInputPart {
 
     @Override
     public void close(ErrorReporter errorReporter) {
-        if (openedRasterMemo != null) {
+        if (openedFileMemo != null) {
             try {
-                openedRasterMemo.close();
+                openedFileMemo.close();
             } catch (ImageIOException e) {
                 errorReporter.recordError(AppendPart.class, e);
             }

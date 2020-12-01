@@ -43,7 +43,7 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.input.files.FileInput;
 
 /**
@@ -70,12 +70,12 @@ class MapPart extends NamedChannelsInputPart {
     // END REQUIRED ARGUMENTS
 
     // We cache a certain amount of stacks read for particular series
-    private OpenedRaster openedRasterMemo = null;
+    private OpenedImageFile openedFileMemo = null;
     private NamedEntries channelMap = null;
 
     @Override
     public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
-        return openedRaster().dimensionsForSeries(stackIndexInSeries);
+        return openedFiles().dimensionsForSeries(stackIndexInSeries);
     }
 
     @Override
@@ -83,7 +83,7 @@ class MapPart extends NamedChannelsInputPart {
         if (useLastSeriesIndexOnly) {
             return 1;
         } else {
-            return openedRaster().numberSeries();
+            return openedFiles().numberSeries();
         }
     }
 
@@ -99,10 +99,10 @@ class MapPart extends NamedChannelsInputPart {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
-            seriesIndex = openedRaster().numberSeries() - 1;
+            seriesIndex = openedFiles().numberSeries() - 1;
         }
 
-        return new NamedChannelsForSeriesMap(openedRaster(), channelMap(), seriesIndex);
+        return new NamedChannelsForSeriesMap(openedFiles(), channelMap(), seriesIndex);
     }
 
     @Override
@@ -129,22 +129,22 @@ class MapPart extends NamedChannelsInputPart {
 
     @Override
     public int numberChannels() throws ImageIOException {
-        return openedRaster().numberChannels();
+        return openedFiles().numberChannels();
     }
 
     @Override
     public int bitDepth() throws ImageIOException {
-        return openedRaster().bitDepth();
+        return openedFiles().bitDepth();
     }
 
     private NamedEntries channelMap() throws ImageIOException {
-        openedRaster();
+        openedFiles();
         return channelMap;
     }
 
-    private OpenedRaster openedRaster() throws ImageIOException {
-        if (openedRasterMemo == null) {
-            openedRasterMemo =
+    private OpenedImageFile openedFiles() throws ImageIOException {
+        if (openedFileMemo == null) {
+            openedFileMemo =
                     stackReader.openFile(
                             delegate.pathForBinding()
                                     .orElseThrow(
@@ -152,20 +152,20 @@ class MapPart extends NamedChannelsInputPart {
                                                     new ImageIOException(
                                                             "A binding-path is needed in the delegate.")));
             try {
-                channelMap = channelMapCreator.createMap(openedRasterMemo);
+                channelMap = channelMapCreator.createMap(openedFileMemo);
             } catch (CreateException e) {
                 throw new ImageIOException(e);
             }
         }
-        return openedRasterMemo;
+        return openedFileMemo;
     }
 
     @Override
     public void close(ErrorReporter errorReporter) {
 
-        if (openedRasterMemo != null) {
+        if (openedFileMemo != null) {
             try {
-                openedRasterMemo.close();
+                openedFileMemo.close();
             } catch (ImageIOException e) {
                 errorReporter.recordError(MapPart.class, e);
             }

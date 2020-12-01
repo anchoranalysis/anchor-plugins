@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
@@ -37,7 +38,7 @@ import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.image.io.stack.input.TimeSequenceSupplier;
 import org.anchoranalysis.io.input.files.FileInput;
@@ -48,6 +49,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     /** The root object that is used to provide the input-name and pathForBinding */
     private final FileInput delegate;
 
+    @Getter
     private final StackReader stackReader;
 
     /**
@@ -60,7 +62,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     private final boolean useLastSeriesIndexOnly;
 
     // We cache a certain amount of stacks read for particular series
-    private OpenedRaster openedRasterMemo = null;
+    private OpenedImageFile openedFileMemo = null;
 
     public int numberSeries() throws ImageIOException {
         if (useLastSeriesIndexOnly) {
@@ -117,10 +119,10 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     }
 
     private static TimeSequenceSupplier openRasterAsOperation(
-            final OpenedRaster openedRaster, final int seriesNum) {
+            final OpenedImageFile openedFile, final int seriesNum) {
         return progress -> {
             try {
-                return openedRaster.open(seriesNum, progress);
+                return openedFile.open(seriesNum, progress);
             } catch (ImageIOException e) {
                 throw new OperationFailedException(e);
             }
@@ -137,17 +139,13 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         return delegate.pathForBinding();
     }
 
-    public StackReader getStackReader() {
-        return stackReader;
-    }
-
     public File getFile() {
         return delegate.getFile();
     }
 
-    private OpenedRaster getOpenedRaster() throws ImageIOException {
-        if (openedRasterMemo == null) {
-            openedRasterMemo =
+    private OpenedImageFile getOpenedRaster() throws ImageIOException {
+        if (openedFileMemo == null) {
+            openedFileMemo =
                     stackReader.openFile(
                             delegate.pathForBinding()
                                     .orElseThrow(
@@ -155,14 +153,14 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                                                     new ImageIOException(
                                                             "A binding-path must be associated with this file")));
         }
-        return openedRasterMemo;
+        return openedFileMemo;
     }
 
     @Override
     public void close(ErrorReporter errorReporter) {
-        if (openedRasterMemo != null) {
+        if (openedFileMemo != null) {
             try {
-                openedRasterMemo.close();
+                openedFileMemo.close();
             } catch (ImageIOException e) {
                 errorReporter.recordError(StackSequenceInput.class, e);
             }

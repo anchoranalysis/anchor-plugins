@@ -35,11 +35,11 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 // Ignores multiple series
 @RequiredArgsConstructor
-public class MultiFileReaderOpenedRaster implements OpenedRaster {
+public class MultiFileReaderOpenedRaster implements OpenedImageFile {
 
     // START REQUIRED ARGUMENTS
     private final StackReader stackReader;
@@ -121,7 +121,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
 
         for (FileDetails fd : fileBag) {
 
-            OpenedRaster or = stackReader.openFile(fd.getFilePath());
+            OpenedImageFile or = stackReader.openFile(fd.getFilePath());
             try {
                 TimeSequence ts = or.open(seriesIndex, progress);
                 multiFile.add(
