@@ -28,38 +28,46 @@ package org.anchoranalysis.plugin.image.task.bean.format;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 
+/**
+ * Calculates an output-name based upon the number of series and timepoints.
+ *  
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
 class CalculateOutputName {
 
     private int seriesIndex;
-    private int numSeries;
+    private int numberSeries;
 
     private int t;
     private int sizeT;
 
     private boolean suppressSeries;
 
-    public String outputName(String existingName) {
-        String outputName = maybePrependTimeSeries(existingName);
-
-        // Catch the case where a string is empty (a single stack, with numSeries=1 and sizeT=1) and
-        // give it a constant name
-        if (!outputName.isEmpty()) {
-            return outputName;
-        } else {
-            return "converted";
-        }
-    }
-
-    private String maybePrependTimeSeries(String existingName) {
-
+    /**
+     * Calculates an output-name.
+     * 
+     * <p>The output-name is unique across seriesIndex and timepoint, but drops either variable
+     * if there is a single element only. So an empty-string is returned if it's single series, single time-point.
+     * 
+     * @param existingName any existing name that may exist.
+     * @return a unique outputName 
+     */
+    public Optional<String> calculateOutputName(String existingName) {
         List<String> components = new ArrayList<>();
         addToListIfNonEmpty(calculateSeriesComponent(), components);
         addToListIfNonEmpty(calculateTimeComponent(), components);
         addToListIfNonEmpty(existingName, components);
-        return String.join("_", components);
+        if (!components.isEmpty()) {
+            return Optional.of( String.join("_", components) );
+        } else {
+            return Optional.empty();
+        }
+
     }
 
     private static void addToListIfNonEmpty(String str, List<String> list) {
@@ -69,7 +77,7 @@ class CalculateOutputName {
     }
 
     private String calculateSeriesComponent() {
-        if (suppressSeries || numSeries <= 1) {
+        if (suppressSeries || numberSeries <= 1) {
             return "";
         } else {
             return String.format("%03d", seriesIndex);
