@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.bean.format;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -205,7 +206,7 @@ public class ConvertImageFormat
     private void convertEachTimepoint(
             int seriesIndex,
             Set<String> channelNames,
-            int numSeries,
+            int numberSeries,
             int sizeT,
             ChannelGetter channelGetter,
             OutputSequenceIndexed<Stack, String> outputSequence,
@@ -215,7 +216,7 @@ public class ConvertImageFormat
         for (int t = 0; t < sizeT; t++) {
 
             CalculateOutputName namer =
-                    new CalculateOutputName(seriesIndex, numSeries, t, sizeT, suppressSeries);
+                    new CalculateOutputName(seriesIndex, numberSeries, t, sizeT, suppressSeries);
 
             logger.messageLogger().logFormatted("Starting time-point: %d", t);
 
@@ -249,7 +250,8 @@ public class ConvertImageFormat
             CalculateOutputName calculateOutputName)
             throws OperationFailedException {
         try {
-            outputSequence.add(stack.get(), calculateOutputName.outputName(name));
+            Optional<String> outputName = calculateOutputName.calculateOutputName(name);
+            outputSequence.add(stack.get(), outputName);
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
