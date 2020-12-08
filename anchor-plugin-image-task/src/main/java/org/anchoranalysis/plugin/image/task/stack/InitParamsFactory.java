@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image-task
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,25 +24,27 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.channel;
+package org.anchoranalysis.plugin.image.task.stack;
 
-import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.progress.ProgressIgnore;
-import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.io.channel.input.ChannelGetter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 
-@AllArgsConstructor
-public class ChannelGetterForTimepoint {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class InitParamsFactory {
 
-    private ChannelGetter getter;
-    private int t;
-
-    public boolean hasChannel(String channelName) {
-        return getter.hasChannel(channelName);
+    public static ImageInitParams createWithStacks(
+            ProvidesStackInput input, InitParamsContext context) throws OperationFailedException {
+        ImageInitParams params = createWithoutStacks(context);
+        input.addToStoreInferNames(params.stacks());
+        return params;
     }
-
-    public Channel getChannel(String channelName) throws GetOperationFailedException {
-        return getter.getChannel(channelName, t, ProgressIgnore.get());
+        
+    public static ImageInitParams createWithoutStacks(InitParamsContext context) {
+        return ImageInitParamsFactory.create(context.getInputOutput(), context.getSuggestedResize());
     }
 }

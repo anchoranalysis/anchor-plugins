@@ -63,7 +63,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.RasterTask;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
-import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
+import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
 
 /**
  * Converts each input-image to the default output format, optionally changing the bit depth.

@@ -43,6 +43,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -155,10 +156,12 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                             idGenerator, input.pathForBinding(), groupContext.isDebugEnabled());
             MapGroupToRow mapGroup = groupedRows.get(fileIdentifier);
 
+            
             if (mapGroup != null) {
+                InitParamsContext initContext = new InitParamsContext(groupContext, inputBound.getTaskArguments().getResize());
                 processFileWithMap(
                         MPPInitParamsFactory.create(
-                                        groupContext, Optional.empty(), Optional.of(input))
+                                initContext, Optional.empty(), Optional.of(input))
                                 .getImage(),
                         mapGroup,
                         groupedRows.groupNameSet(),

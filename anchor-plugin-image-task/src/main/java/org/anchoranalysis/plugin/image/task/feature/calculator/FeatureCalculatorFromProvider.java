@@ -34,6 +34,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -52,8 +53,8 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
-import org.anchoranalysis.image.io.stack.input.StackInputInitParamsCreator;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
 
 /**
  * Calculates feature or feature values.
@@ -76,8 +77,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
             Optional<StackProvider> stackEnergy,
             InputOutputContext context)
             throws OperationFailedException {
-        super();
-        this.initParams = StackInputInitParamsCreator.createInitParams(stackInput, context);
+        this.initParams = InitParamsFactory.createWithStacks(stackInput, new InitParamsContext(context) );
         this.energyStack =
                 energyStackFromProviderOrElse(
                         stackEnergy,

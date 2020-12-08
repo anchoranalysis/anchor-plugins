@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.provider;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;

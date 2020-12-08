@@ -39,6 +39,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.core.system.MemoryUtilities;
 import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -149,7 +150,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             MemoryUtilities.logMemoryUsage("Start of segment", context.getMessageReporter());
 
             return define.processInput(
-                    context,
+                    new InitParamsContext(context),
                     Optional.of(stacks),
                     Optional.of(objects),
                     keyValueParams,

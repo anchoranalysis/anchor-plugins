@@ -37,6 +37,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
@@ -86,7 +87,7 @@ public class ToDimensions extends ScaleCalculator {
     }
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled)
+    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled, Optional<ImageResizeSuggestion> suggestedResize)
             throws OperationFailedException {
 
         Optional<Dimensions> dimensionsCombined =

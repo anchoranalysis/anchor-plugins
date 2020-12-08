@@ -44,6 +44,7 @@ import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -61,7 +62,6 @@ import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.object.output.grayscale.ObjectsMergedAsMaskGenerator;
 import org.anchoranalysis.image.io.object.output.hdf5.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.io.object.output.rgb.DrawObjectsGenerator;
@@ -81,6 +81,7 @@ import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.segment.SharedStateSegmentInstance;
+import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
 
 /**
  * Using a model-pool, performs instance segmentation on an image producing zero, one or more
@@ -186,7 +187,7 @@ public class SegmentInstanceWithModel<T>
             ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            initializeBeans(params.getContext());
+            initializeBeans( params.createInitParamsContext() );
             ConcurrentModelPool<T> modelPool = segment.createModelPool(plan);
 
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);
@@ -201,7 +202,7 @@ public class SegmentInstanceWithModel<T>
     public void doJobOnInput(InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input)
             throws JobExecutionException {
         try {
-            initializeBeans(input.getContextJob());
+            initializeBeans(input.createInitParamsContext());
 
             Stack stack = inputStack(input);
 
@@ -271,7 +272,7 @@ public class SegmentInstanceWithModel<T>
         CalculateFeaturesForObjects<FeatureInputSingleObject> calculator =
                 new CalculateFeaturesForObjects<>(
                         COMBINE_OBJECTS,
-                        new InitParamsWithEnergyStack(energyStack, input.getContextJob()),
+                        new InitParamsWithEnergyStack(energyStack, input.createInitParamsContext()),
                         true,
                         input.getSharedState()
                                 .createInputProcessContext(
@@ -346,8 +347,8 @@ public class SegmentInstanceWithModel<T>
         }
     }
 
-    private void initializeBeans(InputOutputContext context) throws InitException {
-        ImageInitParams params = ImageInitParamsFactory.create(context);
+    private void initializeBeans(InitParamsContext context) throws InitException {
+        ImageInitParams params = InitParamsFactory.createWithoutStacks(context);
         segment.initRecursive(params, context.getLogger());
     }
 

@@ -39,6 +39,7 @@ import org.anchoranalysis.image.core.object.scale.Scaler;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -59,16 +60,22 @@ public class Scale extends WithDimensionsBase {
 
         Dimensions dimensions = createDimensions();
 
-        ScaleFactor scaleFactor;
+        ScaleFactor factor = calculateFactor(dimensions);
+        return scaleObjects(objects, factor, dimensions.extent());
+    }
+    
+    private ScaleFactor calculateFactor(Dimensions dimensions) throws CreateException {
         try {
-            scaleFactor = scaleCalculator.calculate(Optional.of(dimensions));
+            return scaleCalculator.calculate(Optional.of(dimensions), getInitializationParameters().getSuggestedResize());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
-
+    }
+    
+    private ObjectCollection scaleObjects(ObjectCollection objects, ScaleFactor factor, Extent extent) throws CreateException {
         try {
             ScaledElements<ObjectMask> scaledObjects =
-                    Scaler.scaleObjects(objects, scaleFactor, dimensions.extent());
+                    Scaler.scaleObjects(objects, factor, extent);
             return ObjectCollectionFactory.of(scaledObjects.asCollectionOrderNotPreserved());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
