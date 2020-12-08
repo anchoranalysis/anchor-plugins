@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.slice;
+package org.anchoranalysis.plugin.image.task.stack;
 
 import java.util.Arrays;
 import java.util.List;

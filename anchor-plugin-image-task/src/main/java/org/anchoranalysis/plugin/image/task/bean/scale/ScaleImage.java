@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,16 +48,17 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
-import org.anchoranalysis.image.io.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
+import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
 
 /**
  * Creates a scaled copy of images.
@@ -125,7 +127,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         try {
             NamedStacks stacks = input.getInput().asSet(ProgressIgnore.get());
 
-            ImageInitParams soImage = ImageInitParamsFactory.create(input.getContextJob());
+            ImageInitParams soImage = InitParamsFactory.createWithoutStacks(input.createInitParamsContext());
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
             soImage.copyStacksFrom(stacks);
@@ -196,7 +198,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
                 try {
                     Stack stackIn = params.stacks().getException(key);
 
-                    Stack stackOut = scaleStack(stackIn, context.getLogger().messageLogger());
+                    Stack stackOut = scaleStack(stackIn, params.getSuggestedResize(), context.getLogger().messageLogger());
 
                     stacksToAddTo.addStack(key, stackOut, enabledForKey);
 
@@ -209,20 +211,21 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         }
     }
 
-    private Stack scaleStack(Stack stack, MessageLogger logger) throws OperationFailedException {
-        return stack.mapChannel(channel -> scaleChannel(channel, logger));
+    private Stack scaleStack(Stack stack, Optional<ImageResizeSuggestion> suggestedResize, MessageLogger logger) throws OperationFailedException {
+        return stack.mapChannel(channel -> scaleChannel(channel, suggestedResize, logger));
     }
 
-    private Channel scaleChannel(Channel channel, MessageLogger logger)
+    private Channel scaleChannel(Channel channel, Optional<ImageResizeSuggestion> suggestedResize, MessageLogger logger)
             throws OperationFailedException {
         try {
             if (binary) {
-                return scaleChannelAsMask(channel);
+                return scaleChannelAsMask(channel, suggestedResize);
             } else {
                 return ScaleXY.scale(
                         channel,
                         scaleCalculator,
                         InterpolatorFactory.getInstance().rasterResizing(),
+                        suggestedResize,
                         logger);
             }
         } catch (CreateException e) {
@@ -230,11 +233,11 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         }
     }
 
-    private Channel scaleChannelAsMask(Channel channel) throws CreateException {
+    private Channel scaleChannelAsMask(Channel channel, Optional<ImageResizeSuggestion> suggestedResize) throws CreateException {
         Mask mask = new Mask(channel);
         Mask maskScaled =
                 org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(
-                        mask, scaleCalculator);
+                        mask, scaleCalculator, suggestedResize);
         return maskScaled.channel();
     }
 }

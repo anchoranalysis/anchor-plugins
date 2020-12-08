@@ -23,8 +23,26 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * Non-bean classes pertaining to {@link org.anchoranalysis.image.core.channel.Channel}s as used in
- * tasks.
- */
-package org.anchoranalysis.plugin.image.task.channel;
+
+package org.anchoranalysis.plugin.image.task.stack;
+
+import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.progress.ProgressIgnore;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.io.channel.input.ChannelGetter;
+
+@AllArgsConstructor
+public class ChannelGetterForTimepoint {
+
+    private ChannelGetter getter;
+    private int t;
+
+    public boolean hasChannel(String channelName) {
+        return getter.hasChannel(channelName);
+    }
+
+    public Channel getChannel(String channelName) throws GetOperationFailedException {
+        return getter.getChannel(channelName, t, ProgressIgnore.get());
+    }
+}

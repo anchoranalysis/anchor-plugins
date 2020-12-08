@@ -29,6 +29,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -39,7 +40,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 public class FitDimensionsPreserveAspectRatio extends ScaleCalculator {
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled)
+    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled, Optional<ImageResizeSuggestion> suggestedResize)
             throws OperationFailedException {
         // TODO Auto-generated method stub
         return null;

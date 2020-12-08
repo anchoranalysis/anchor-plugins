@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
-import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
+import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
 
 /**
  * Converts a channel(s) at a particular timepoint into a stack(s).

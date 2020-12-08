@@ -33,6 +33,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -75,21 +76,21 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
 
     public <S> S processInput(
             InputForMPPBean input,
-            InputOutputContext context,
+            InitParamsContext context,
             OperationWithEnergyStack<ImageInitParams, S> operation)
             throws OperationFailedException {
 
         try {
             MPPInitParams initParams = super.createInitParams(input, context);
             return processWithEnergyStack(
-                    initParams.getImage(), initParams.getImage(), initParams, operation, context);
+                    initParams.getImage(), initParams.getImage(), initParams, operation, context.getInputOutput());
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
     public <S> S processInput(
-            InputOutputContext context,
+            InitParamsContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
             Optional<KeyValueParams> keyValueParams,
@@ -99,7 +100,7 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
             MPPInitParams initParams =
                     super.createInitParams(context, stacks, objects, keyValueParams);
             return processWithEnergyStack(
-                    initParams, initParams.getImage(), initParams, operation, context);
+                    initParams, initParams.getImage(), initParams, operation, context.getInputOutput());
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);

@@ -85,15 +85,16 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
     // END BEAN PROPERTIES
 
     @Override
-    public void doJobOnInput(InputBound<MultiInput, NoSharedState> params)
+    public void doJobOnInput(InputBound<MultiInput, NoSharedState> input)
             throws JobExecutionException {
 
         try {
             define.processInputImage(
-                    params.getInput(),
-                    params.getContextJob(),
+                    input.getInput(),
+                    input.createInitParamsContext(),
                     imageInitParams ->
-                            outputFeaturesAndEnergyStack(imageInitParams, params.getContextJob()));
+                            outputFeaturesAndEnergyStack(imageInitParams, input.getContextJob())
+                    );
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
