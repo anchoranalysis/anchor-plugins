@@ -30,10 +30,10 @@ import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.StreamableCollection;
+import org.anchoranalysis.image.core.dimensions.resize.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 
 /**
  * Helpers determine a scaling-factor for objects to fit in a certain-sized scene.
@@ -62,7 +62,7 @@ class ScaleFactorCalculator {
                 new Extent(
                         extractMaxDimension(boundingBoxes.stream(), Extent::x),
                         extractMaxDimension(boundingBoxes.stream(), Extent::y));
-        return ScaleFactorUtilities.relativeScale(maxInEachDimension, targetSize);
+        return ResizeExtentUtilities.relativeScale(maxInEachDimension, targetSize);
     }
 
     private static int extractMaxDimension(
