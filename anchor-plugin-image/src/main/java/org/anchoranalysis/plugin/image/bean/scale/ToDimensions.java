@@ -37,10 +37,9 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.resize.ResizeExtentUtilities;
 import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 
 /**
  * Calculates a scaling-factor to make the source image have identical dimensions as {@code
@@ -94,22 +93,13 @@ public class ToDimensions extends ScaleCalculator {
                 maybeReplaceSourceDimensions(dimensionsToBeScaled);
 
         if (dimensionsCombined.isPresent()) {
-            return calculateScaleFactor(dimensionsCombined.get().extent());
+            try {
+                return ResizeExtentUtilities.relativeScale(dimensionsCombined.get().extent(), dimensions.create().extent(), preserveAspectRatio);
+            } catch (CreateException e) {
+                throw new OperationFailedException(e);
+            }
         } else {
             throw new OperationFailedException("No source dimensions can be found");
-        }
-    }
-
-    private ScaleFactor calculateScaleFactor(Extent source) throws OperationFailedException {
-        try {
-            Extent target = dimensions.create().extent();
-            if (preserveAspectRatio) {
-                return ScaleFactorUtilities.relativeScalePreserveAspectRatio(source, target);
-            } else {
-                return ScaleFactorUtilities.relativeScale(source, target);
-            }
-        } catch (CreateException e) {
-            throw new OperationFailedException(e);
         }
     }
 
