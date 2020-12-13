@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -51,7 +51,7 @@ public class Invert extends ScaleCalculator {
     @Override
     public ScaleFactor calculate(
             Optional<Dimensions> dimensionsToBeScaled,
-            Optional<ImageResizeSuggestion> suggestedResize)
+            Optional<ImageSizeSuggestion> suggestedResize)
             throws OperationFailedException {
         return scaleCalculator.calculate(dimensionsToBeScaled, suggestedResize).invert();
     }

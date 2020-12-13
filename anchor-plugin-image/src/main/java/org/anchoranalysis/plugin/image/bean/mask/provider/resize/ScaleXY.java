@@ -34,7 +34,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
@@ -53,7 +53,7 @@ public class ScaleXY extends MaskProviderUnary {
     public static Mask scale(
             Mask mask,
             ScaleCalculator scaleCalculator,
-            Optional<ImageResizeSuggestion> suggestedResize)
+            Optional<ImageSizeSuggestion> suggestedResize)
             throws CreateException {
 
         ScaleFactor scaleFactor;

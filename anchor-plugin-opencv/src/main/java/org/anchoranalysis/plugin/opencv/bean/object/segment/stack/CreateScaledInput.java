@@ -31,7 +31,7 @@ import io.vavr.Tuple2;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.image.core.dimensions.resize.ResizeExtentUtilities;
+import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.anchoranalysis.spatial.Extent;

@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.dimensions.resize.ResizeExtentUtilities;
+import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
