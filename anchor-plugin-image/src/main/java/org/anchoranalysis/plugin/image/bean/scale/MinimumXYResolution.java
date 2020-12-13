@@ -34,7 +34,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class MinimumXYResolution extends ScaleCalculator {
@@ -46,7 +46,7 @@ public class MinimumXYResolution extends ScaleCalculator {
     @Override
     public ScaleFactor calculate(
             Optional<Dimensions> dimensionsToBeScaled,
-            Optional<ImageResizeSuggestion> suggestedResize)
+            Optional<ImageSizeSuggestion> suggestedResize)
             throws OperationFailedException {
 
         Resolution resolution =

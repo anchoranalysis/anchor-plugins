@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUna
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.object.scale.Scaler;
 import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
@@ -117,7 +117,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     }
 
     private ScaleFactor determineScaleFactor(
-            Dimensions dimensions, Optional<ImageResizeSuggestion> suggestedResize)
+            Dimensions dimensions, Optional<ImageSizeSuggestion> suggestedResize)
             throws SegmentationFailedException {
         try {
             return scaleCalculator.calculate(Optional.of(dimensions), suggestedResize);

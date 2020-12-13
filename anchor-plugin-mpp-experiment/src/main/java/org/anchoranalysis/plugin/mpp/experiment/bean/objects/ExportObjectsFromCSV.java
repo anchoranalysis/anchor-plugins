@@ -159,7 +159,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
             if (mapGroup != null) {
                 InitParamsContext initContext =
                         new InitParamsContext(
-                                groupContext, inputBound.getTaskArguments().getResize());
+                                groupContext, inputBound.getTaskArguments().getSize());
                 processFileWithMap(
                         MPPInitParamsFactory.create(
                                         initContext, Optional.empty(), Optional.of(input))

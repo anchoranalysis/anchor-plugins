@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
@@ -70,7 +70,7 @@ public class ScaleXY extends ChannelProviderUnary {
             Channel channel,
             ScaleCalculator scaleCalculator,
             Interpolator interpolator,
-            Optional<ImageResizeSuggestion> suggestedResize,
+            Optional<ImageSizeSuggestion> suggestedResize,
             MessageLogger logger)
             throws CreateException {
         try {

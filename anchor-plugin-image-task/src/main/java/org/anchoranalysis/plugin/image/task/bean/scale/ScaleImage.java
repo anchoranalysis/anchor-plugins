@@ -48,7 +48,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
@@ -217,13 +217,13 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     }
 
     private Stack scaleStack(
-            Stack stack, Optional<ImageResizeSuggestion> suggestedResize, MessageLogger logger)
+            Stack stack, Optional<ImageSizeSuggestion> suggestedResize, MessageLogger logger)
             throws OperationFailedException {
         return stack.mapChannel(channel -> scaleChannel(channel, suggestedResize, logger));
     }
 
     private Channel scaleChannel(
-            Channel channel, Optional<ImageResizeSuggestion> suggestedResize, MessageLogger logger)
+            Channel channel, Optional<ImageSizeSuggestion> suggestedResize, MessageLogger logger)
             throws OperationFailedException {
         try {
             if (binary) {
@@ -242,7 +242,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     }
 
     private Channel scaleChannelAsMask(
-            Channel channel, Optional<ImageResizeSuggestion> suggestedResize)
+            Channel channel, Optional<ImageSizeSuggestion> suggestedResize)
             throws CreateException {
         Mask mask = new Mask(channel);
         Mask maskScaled =
