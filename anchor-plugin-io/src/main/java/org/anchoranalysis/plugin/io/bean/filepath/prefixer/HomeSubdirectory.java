@@ -35,11 +35,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.io.output.bean.path.prefixer.FilePathCounter;
+import org.anchoranalysis.io.output.bean.path.prefixer.IncrementingNumber;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 //
@@ -50,28 +50,12 @@ public class HomeSubdirectory extends PathPrefixer {
     @BeanField @Getter @Setter private String directory = "anchorData";
     // END PROPERTIES
 
-    // If delegate is null, it means it hasn't been initialised yet
-    private FilePathCounter delegate;
-
-    private void initIfPossible() throws InitException {
-        if (delegate == null) {
-
-            Path pathAnchorDir = createSubdirectoryIfNecessary(homeDir(), directory);
-
-            delegate = new FilePathCounter(pathAnchorDir.toString());
-
-            // We localize instead to the home subdirectory, not to the current bean location
-            try {
-                delegate.localise(pathAnchorDir);
-            } catch (BeanMisconfiguredException e) {
-                throw new InitException(e);
-            }
-        }
-    }
+    // If delegate is null, it means it hasn't been initialized yet.
+    private IncrementingNumber delegate;
 
     @Override
     public DirectoryWithPrefix outFilePrefix(
-            NamedPath path, String expName, FilePathPrefixerContext context)
+            NamedPath path, String expName, PathPrefixerContext context)
             throws PathPrefixerException {
         try {
             initIfPossible();
@@ -82,7 +66,7 @@ public class HomeSubdirectory extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootDirectoryPrefix(String expName, FilePathPrefixerContext context)
+    public DirectoryWithPrefix rootDirectoryPrefix(String expName, PathPrefixerContext context)
             throws PathPrefixerException {
         try {
             initIfPossible();
@@ -92,20 +76,37 @@ public class HomeSubdirectory extends PathPrefixer {
         return delegate.rootDirectoryPrefix(expName, context);
     }
 
-    private Path homeDir() throws InitException {
-        String strHomeDir = System.getProperty("user.home");
+    private void initIfPossible() throws InitException {
+        if (delegate == null) {
 
-        if (strHomeDir == null || strHomeDir.isEmpty()) {
+            Path pathAnchorDirectory = createSubdirectoryIfNecessary(homeDirectory(), directory);
+
+            delegate = new IncrementingNumber(pathAnchorDirectory.toString());
+
+            // We localize instead to the home subdirectory, not to the current bean location
+            try {
+                delegate.localise(pathAnchorDirectory);
+            } catch (BeanMisconfiguredException e) {
+                throw new InitException(e);
+            }
+        }
+    }
+
+    private Path homeDirectory() throws InitException {
+        String string = System.getProperty("user.home");
+
+        if (string == null || string.isEmpty()) {
             throw new InitException("No user.home environmental variable");
         }
 
-        Path pathHomeDir = Paths.get(strHomeDir);
+        Path path = Paths.get(string);
 
-        if (!pathHomeDir.toFile().exists()) {
-            throw new InitException(String.format("User home dir '%s' does not exist", strHomeDir));
+        if (path.toFile().exists()) {
+            return path;
+        } else {
+            throw new InitException(
+                    String.format("User home directory '%s' does not exist", string));
         }
-
-        return pathHomeDir;
     }
 
     private Path createSubdirectoryIfNecessary(Path pathHomeDir, String relativePathSubdirectory)

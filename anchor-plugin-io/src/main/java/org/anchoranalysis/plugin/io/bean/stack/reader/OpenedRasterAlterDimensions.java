@@ -35,10 +35,10 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 @AllArgsConstructor
-class OpenedRasterAlterDimensions implements OpenedRaster {
+class OpenedRasterAlterDimensions implements OpenedImageFile {
 
     @FunctionalInterface
     public static interface ConsiderUpdatedImageResolution {
@@ -54,7 +54,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
                 throws ImageIOException;
     }
 
-    private OpenedRaster delegate;
+    private OpenedImageFile delegate;
     private ConsiderUpdatedImageResolution processor;
 
     @Override

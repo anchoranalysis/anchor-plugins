@@ -138,7 +138,8 @@ class ExtendObjectsInZHelper {
             byte byteBuffer = buffer.getRaw(i);
             byte byteReceive = receive.getRaw(i);
 
-            if (byteBuffer == binaryValues.getOnByte() && byteReceive == binaryValuesReceive.getOnByte()) {
+            if (byteBuffer == binaryValues.getOnByte()
+                    && byteReceive == binaryValuesReceive.getOnByte()) {
                 // No need to change buffer, as byte is already HIGH
                 atLeastOneHigh = true;
             } else {

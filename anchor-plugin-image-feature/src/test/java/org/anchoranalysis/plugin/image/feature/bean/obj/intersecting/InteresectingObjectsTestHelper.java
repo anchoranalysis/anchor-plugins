@@ -149,15 +149,15 @@ class InteresectingObjectsTestHelper {
     private static ImageInitParams createInitParams(ObjectCollection others)
             throws OperationFailedException {
 
-        SharedObjects so =
+        SharedObjects sharedObjects =
                 new SharedObjects(
                         new CommonContext(
                                 LoggingFixture.suppressedLogErrorReporter(),
                                 Mockito.mock(Path.class)));
 
-        so.getOrCreate(ObjectCollection.class).add(ID, () -> others);
+        sharedObjects.getOrCreate(ObjectCollection.class).add(ID, () -> others);
 
-        return new ImageInitParams(so);
+        return new ImageInitParams(sharedObjects);
     }
 
     private static FeatureIntersectingObjects addId(FeatureIntersectingObjects feature) {

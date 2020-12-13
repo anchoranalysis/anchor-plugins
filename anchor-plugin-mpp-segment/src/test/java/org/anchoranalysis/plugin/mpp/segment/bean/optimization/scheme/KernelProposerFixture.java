@@ -31,6 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
@@ -62,7 +63,8 @@ class KernelProposerFixture {
         InputOutputContext context = InputOutputContextFixture.withSuppressedLogger();
 
         MPPInitParams initParams =
-                MPPInitParamsFactory.create(context, Optional.empty(), Optional.empty());
+                MPPInitParamsFactory.create(
+                        new InitParamsContext(context), Optional.empty(), Optional.empty());
 
         KernelProposer<VoxelizedMarksWithEnergy> kernelProposer =
                 createProposerTwoEqual(

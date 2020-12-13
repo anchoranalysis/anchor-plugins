@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class ConstantScaleFactor extends ScaleCalculator {
@@ -42,7 +43,9 @@ public class ConstantScaleFactor extends ScaleCalculator {
     // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled)
+    public ScaleFactor calculate(
+            Optional<Dimensions> dimensionsToBeScaled,
+            Optional<ImageSizeSuggestion> suggestedResize)
             throws OperationFailedException {
         return new ScaleFactor(value);
     }

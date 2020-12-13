@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -149,7 +150,7 @@ public class FromObjects<T extends FeatureInput>
             throws OperationFailedException {
         define.processInput(
                 input,
-                context.getContext(),
+                new InitParamsContext(context.getContext()),
                 (initParams, energyStack) ->
                         calculateFeaturesForImage(
                                 input.name(),

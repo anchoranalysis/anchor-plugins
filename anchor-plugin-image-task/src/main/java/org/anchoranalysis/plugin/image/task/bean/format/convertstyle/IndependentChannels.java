@@ -37,7 +37,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
-import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
+import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
 
 /**
  * Converts each channel independently and creates a single-channeled stack from the conversion.

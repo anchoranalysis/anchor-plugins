@@ -31,11 +31,11 @@ import io.vavr.Tuple2;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -63,7 +63,7 @@ class CreateScaledInput {
     }
 
     private static ScaleFactor relativeScale(Mat original, Mat resized) {
-        return ScaleFactorUtilities.relativeScale(extentFromMat(resized), extentFromMat(original));
+        return ResizeExtentUtilities.relativeScale(extentFromMat(resized), extentFromMat(original));
     }
 
     private static Extent extentFromMat(Mat mat) {

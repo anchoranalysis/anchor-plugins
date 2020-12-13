@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
@@ -69,7 +69,7 @@ public class MultiFileReader extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedRaster openFile(Path filePath) throws ImageIOException {
+    public OpenedImageFile openFile(Path filePath) throws ImageIOException {
 
         // We look at all other files in the same folder as our filepath to match our expression
 

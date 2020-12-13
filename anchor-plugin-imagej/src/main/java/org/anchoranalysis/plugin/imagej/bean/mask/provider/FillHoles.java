@@ -127,8 +127,12 @@ public class FillHoles extends MaskProviderUnary {
     }
 
     private static Mask fillHoles(
-            ObjectCollection filled, Mask source, Dimensions dimensions, BinaryValues binaryValuesOut) {
-        Mask maskFromObjects = MaskFromObjects.createFromObjects(filled, dimensions, binaryValuesOut);
+            ObjectCollection filled,
+            Mask source,
+            Dimensions dimensions,
+            BinaryValues binaryValuesOut) {
+        Mask maskFromObjects =
+                MaskFromObjects.createFromObjects(filled, dimensions, binaryValuesOut);
         MaskOr.apply(maskFromObjects, source);
         return maskFromObjects;
     }

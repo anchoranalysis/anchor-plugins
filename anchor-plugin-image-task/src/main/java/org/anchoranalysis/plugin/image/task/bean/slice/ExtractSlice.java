@@ -60,7 +60,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculatorRepeated;
-import org.anchoranalysis.plugin.image.task.slice.SharedStateSelectedSlice;
+import org.anchoranalysis.plugin.image.task.stack.SharedStateSelectedSlice;
 
 /**
  * Reduces a z-stack to a single-slice by taking the optima of a feature calculated for each slice

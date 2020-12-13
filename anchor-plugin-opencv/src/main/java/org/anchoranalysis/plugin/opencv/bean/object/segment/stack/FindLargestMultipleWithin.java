@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 
 /**
  * Finds largest multiple of an Extent without being larger than another extent
@@ -69,9 +69,9 @@ class FindLargestMultipleWithin {
         }
 
         // Non-integral scale factors
-        ScaleFactor sf = ScaleFactorUtilities.relativeScale(small, stayWithin);
+        ScaleFactor scaleFactor = ResizeExtentUtilities.relativeScale(small, stayWithin);
 
-        int minFactor = minScaleFactorUnder(sf, maxScaleFactor);
+        int minFactor = minScaleFactorUnder(scaleFactor, maxScaleFactor);
 
         // The integral floor of each
         ScaleFactorInt sfInt = new ScaleFactorInt(minFactor, minFactor);

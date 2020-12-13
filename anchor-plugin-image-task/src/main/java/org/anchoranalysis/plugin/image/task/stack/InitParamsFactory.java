@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image-task
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,9 +23,29 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * Non-bean cleasses pertaining to tasks that process on one or more slices from a z-stack.
- *
- * <p>These closely relate to the beans in {@code org.anchoranalysis.plugin.image.task.bean.slice}.
- */
-package org.anchoranalysis.plugin.image.task.slice;
+
+package org.anchoranalysis.plugin.image.task.stack;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class InitParamsFactory {
+
+    public static ImageInitParams createWithStacks(
+            ProvidesStackInput input, InitParamsContext context) throws OperationFailedException {
+        ImageInitParams params = createWithoutStacks(context);
+        input.addToStoreInferNames(params.stacks());
+        return params;
+    }
+
+    public static ImageInitParams createWithoutStacks(InitParamsContext context) {
+        return ImageInitParamsFactory.create(
+                context.getInputOutput(), context.getSuggestedResize());
+    }
+}

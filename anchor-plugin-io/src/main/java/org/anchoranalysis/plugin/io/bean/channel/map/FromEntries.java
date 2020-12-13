@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedEntries;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 public class FromEntries extends ChannelMap {
 
@@ -43,7 +43,7 @@ public class FromEntries extends ChannelMap {
     // END BEAN PROPERTIES
 
     @Override
-    public NamedEntries createMap(OpenedRaster openedRaster) {
+    public NamedEntries createMap(OpenedImageFile openedFile) {
         NamedEntries out = new NamedEntries();
         list.stream().forEach(out::add);
         return out;

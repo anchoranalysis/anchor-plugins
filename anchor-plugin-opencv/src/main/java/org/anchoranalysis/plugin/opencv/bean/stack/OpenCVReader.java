@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.opencv.bean.stack;
 import java.nio.file.Path;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.plugin.opencv.CVInit;
 
 /**
@@ -43,7 +43,7 @@ public class OpenCVReader extends StackReader {
     }
 
     @Override
-    public OpenedRaster openFile(Path path) throws ImageIOException {
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
         CVInit.blockUntilLoaded();
         return new OpenedRasterOpenCV(path);
     }

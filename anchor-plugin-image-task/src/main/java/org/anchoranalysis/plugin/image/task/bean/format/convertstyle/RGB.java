@@ -40,7 +40,7 @@ import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
-import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
+import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
 
 /**
  * Converts a set of channels to a single RGB-stack.

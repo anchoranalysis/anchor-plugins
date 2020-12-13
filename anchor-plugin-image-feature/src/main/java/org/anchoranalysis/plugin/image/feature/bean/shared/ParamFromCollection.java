@@ -56,7 +56,7 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
     @BeanField @Getter @Setter private String key = "";
     // END BEAN PROPERTIES
 
-    private double val;
+    private double value;
 
     @Override
     protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
@@ -64,12 +64,12 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
 
         ImageInitParams imageInit = new ImageInitParams(paramsInit.sharedObjectsRequired());
         try {
-            KeyValueParams kpv =
+            KeyValueParams keyValueParams =
                     imageInit
                             .params()
                             .getNamedKeyValueParamsCollection()
                             .getException(collectionID);
-            this.val = kpv.getPropertyAsDouble(key);
+            this.value = keyValueParams.getPropertyAsDouble(key);
 
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
@@ -78,6 +78,6 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-        return val;
+        return value;
     }
 }

@@ -33,12 +33,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.bean.shared.relation.RelationBean;
+import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.math.relation.RelationToValue;
 
 /**
@@ -57,11 +56,11 @@ import org.anchoranalysis.math.relation.RelationToValue;
 public class RejectIfConditionXYResolution extends StackReader {
 
     // START BEAN PROPERTIES
+    /** Reads an image before a resolution is imposed. */
     @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
-    @BeanField @Getter @Setter private RelationBean relation;
-
-    @BeanField @NonNegative @Getter @Setter private double value;
+    /** A predicate defined by the relationship of the XY-resolution to a constant threshold. */
+    @BeanField @Getter @Setter private RelationToThreshold relation;
     // END BEAN PROPERTIES
 
     @AllArgsConstructor
@@ -93,9 +92,9 @@ public class RejectIfConditionXYResolution extends StackReader {
     }
 
     @Override
-    public OpenedRaster openFile(Path path) throws ImageIOException {
-        OpenedRaster or = stackReader.openFile(path);
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
+        OpenedImageFile openedFile = stackReader.openFile(path);
         return new OpenedRasterAlterDimensions(
-                or, new MaybeRejectProcessor(relation.create(), value));
+                openedFile, new MaybeRejectProcessor(relation.relation(), relation.threshold()));
     }
 }

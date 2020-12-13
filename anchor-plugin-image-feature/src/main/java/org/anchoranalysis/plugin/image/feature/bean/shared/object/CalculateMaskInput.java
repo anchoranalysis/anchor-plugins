@@ -52,7 +52,8 @@ class CalculateMaskInput<T extends FeatureInputEnergy>
 
         BinaryVoxels<UnsignedByteBuffer> binaryValues = binaryVoxels(mask);
 
-        return new FeatureInputSingleObject(new ObjectMask(binaryValues), input.getEnergyStackOptional());
+        return new FeatureInputSingleObject(
+                new ObjectMask(binaryValues), input.getEnergyStackOptional());
     }
 
     private static BinaryVoxels<UnsignedByteBuffer> binaryVoxels(Mask mask)

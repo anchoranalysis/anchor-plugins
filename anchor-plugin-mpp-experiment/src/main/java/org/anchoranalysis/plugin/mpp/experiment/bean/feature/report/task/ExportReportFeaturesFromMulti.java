@@ -113,7 +113,7 @@ public class ExportReportFeaturesFromMulti
         try {
             define.processInputMPP(
                     input.getInput(),
-                    input.getContextJob(),
+                    input.createInitParamsContext(),
                     soMPP ->
                             writeFeaturesIntoReporter(
                                     soMPP,

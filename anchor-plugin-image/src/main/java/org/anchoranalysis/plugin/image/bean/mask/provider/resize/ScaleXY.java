@@ -34,6 +34,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
@@ -49,11 +50,16 @@ public class ScaleXY extends MaskProviderUnary {
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
     // END BEAN PROPERTIES
 
-    public static Mask scale(Mask mask, ScaleCalculator scaleCalculator) throws CreateException {
+    public static Mask scale(
+            Mask mask,
+            ScaleCalculator scaleCalculator,
+            Optional<ImageSizeSuggestion> suggestedResize)
+            throws CreateException {
 
         ScaleFactor scaleFactor;
         try {
-            scaleFactor = scaleCalculator.calculate(Optional.of(mask.dimensions()));
+            scaleFactor =
+                    scaleCalculator.calculate(Optional.of(mask.dimensions()), suggestedResize);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
@@ -68,6 +74,6 @@ public class ScaleXY extends MaskProviderUnary {
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
-        return scale(mask, scaleCalculator);
+        return scale(mask, scaleCalculator, getInitializationParameters().getSuggestedResize());
     }
 }
