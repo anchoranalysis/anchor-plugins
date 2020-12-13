@@ -35,6 +35,7 @@ import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 ///
@@ -54,7 +55,7 @@ public class PathRegEx extends PathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
+    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root, PathPrefixerContext context)
             throws PathPrefixerException {
         String[] components = componentsFromPath(path.getPath());
         return createPrefix(root, components);
