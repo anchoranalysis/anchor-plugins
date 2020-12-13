@@ -60,12 +60,12 @@ public class Rooted extends PathPrefixer {
 
     @Override
     public DirectoryWithPrefix outFilePrefix(
-            NamedPath path, String expName, PathPrefixerContext context)
+            NamedPath path, String experimentName, PathPrefixerContext context)
             throws PathPrefixerException {
 
         DirectoryWithPrefix directoryWithPrefix =
                 prefixer.outFilePrefixAvoidResolve(
-                        removeRoot(path, context.isDebugMode()), expName);
+                        removeRoot(path, context.isDebugMode()), experimentName, context);
 
         Path pathOut = folderPathOut(directoryWithPrefix.getDirectory(), context.isDebugMode());
         directoryWithPrefix.setDirectory(pathOut);
