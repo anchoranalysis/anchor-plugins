@@ -47,7 +47,7 @@ public class FilePathPrefixerLastDirectoryAsPrefixTest {
         NamedPath path = new NamedPath("somefile", Paths.get("/a/b/c/d/e/somefile.tif"));
 
         LastDirectoryAsPrefix prefixer = new LastDirectoryAsPrefix();
-        prefixer.setFilePathPrefixer(createDelegate(path, root));
+        prefixer.setPrefixer(createDelegate(path, root));
 
         DirectoryWithPrefix out = prefixer.outFilePrefixFromPath(path, root);
 

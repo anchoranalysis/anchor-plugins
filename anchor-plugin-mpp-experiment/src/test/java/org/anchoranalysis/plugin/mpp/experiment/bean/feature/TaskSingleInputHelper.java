@@ -129,7 +129,7 @@ class TaskSingleInputHelper {
                     createParametersExperiment(
                             pathForOutputs,
                             outputter.getChecked(),
-                            outputManager.getFilePathPrefixer(),
+                            outputManager.getPrefixer(),
                             logger);
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);

@@ -198,7 +198,7 @@ public class QuickExperiment<S> extends Experiment {
             // Should never arise, as getLocalPath() should always be absolute
             throw new AnchorFriendlyRuntimeException(e);
         }
-        outputManager.setFilePathPrefixer(filePathResolver);
+        outputManager.setPrefixer(filePathResolver);
         outputManager.setOutputWriteSettings(outputWriteSettings);
         return outputManager;
     }

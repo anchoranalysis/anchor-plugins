@@ -51,7 +51,7 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 public class LastDirectoryAsPrefix extends PathPrefixerAvoidResolve {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private PathPrefixerAvoidResolve filePathPrefixer;
+    @BeanField @Getter @Setter private PathPrefixerAvoidResolve prefixer;
 
     @BeanField @Getter @Setter private String delimiter = "_";
     // END BEAN PROPERTIES
@@ -60,7 +60,7 @@ public class LastDirectoryAsPrefix extends PathPrefixerAvoidResolve {
     public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
             throws PathPrefixerException {
 
-        DirectoryWithPrefix prefix = filePathPrefixer.outFilePrefixFromPath(path, root);
+        DirectoryWithPrefix prefix = prefixer.outFilePrefixFromPath(path, root);
 
         Path directory = prefix.getDirectory();
 
