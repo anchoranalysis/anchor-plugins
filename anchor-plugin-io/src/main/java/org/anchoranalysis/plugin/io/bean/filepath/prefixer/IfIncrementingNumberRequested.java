@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +26,8 @@
 package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
@@ -33,12 +35,11 @@ import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
- * Multiplexes between two {@link PathPrefixer}s depending on whether an <i>incrementing number sequence was output</i> was requested.
- * 
+ * Multiplexes between two {@link PathPrefixer}s depending on whether an <i>incrementing number
+ * sequence was output</i> was requested.
+ *
  * @author Owen Feehan
  */
 public class IfIncrementingNumberRequested extends PathPrefixerAvoidResolve {
@@ -52,11 +53,11 @@ public class IfIncrementingNumberRequested extends PathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root, PathPrefixerContext context)
-            throws PathPrefixerException {
+    public DirectoryWithPrefix outFilePrefixFromPath(
+            NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException {
         return multiplex(context).outFilePrefixFromPath(path, root, context);
     }
-        
+
     private PathPrefixerAvoidResolve multiplex(PathPrefixerContext context) {
         if (context.isOutputIncrementingNumberSequence()) {
             return prefixerIncrementingNumber;

@@ -93,8 +93,7 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
                     input.getInput(),
                     input.createInitParamsContext(),
                     imageInitParams ->
-                            outputFeaturesAndEnergyStack(imageInitParams, input.getContextJob())
-                    );
+                            outputFeaturesAndEnergyStack(imageInitParams, input.getContextJob()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);

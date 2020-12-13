@@ -63,7 +63,8 @@ class KernelProposerFixture {
         InputOutputContext context = InputOutputContextFixture.withSuppressedLogger();
 
         MPPInitParams initParams =
-                MPPInitParamsFactory.create( new InitParamsContext(context), Optional.empty(), Optional.empty());
+                MPPInitParamsFactory.create(
+                        new InitParamsContext(context), Optional.empty(), Optional.empty());
 
         KernelProposer<VoxelizedMarksWithEnergy> kernelProposer =
                 createProposerTwoEqual(

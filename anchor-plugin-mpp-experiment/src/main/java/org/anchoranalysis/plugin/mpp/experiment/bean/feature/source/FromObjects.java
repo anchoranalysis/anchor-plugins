@@ -155,8 +155,7 @@ public class FromObjects<T extends FeatureInput>
                         calculateFeaturesForImage(
                                 input.name(),
                                 new InitParamsWithEnergyStack(initParams, energyStack),
-                                context)
-                );
+                                context));
     }
 
     @Override

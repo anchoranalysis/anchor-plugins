@@ -41,7 +41,8 @@ public class SliceThresholderMask extends SliceThresholder {
     private final ReadableTuple3i cornerMin;
     private final ReadableTuple3i cornerMax;
 
-    public SliceThresholderMask(boolean clearOutsideMask, ObjectMask object, BinaryValuesByte binaryValues) {
+    public SliceThresholderMask(
+            boolean clearOutsideMask, ObjectMask object, BinaryValuesByte binaryValues) {
         super(binaryValues);
         this.clearOutsideMask = clearOutsideMask;
         this.object = object;

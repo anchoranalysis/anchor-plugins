@@ -33,9 +33,8 @@ import lombok.AllArgsConstructor;
 
 /**
  * Calculates an output-name based upon the number of series and timepoints.
- *  
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 class CalculateOutputName {
@@ -50,12 +49,13 @@ class CalculateOutputName {
 
     /**
      * Calculates an output-name.
-     * 
-     * <p>The output-name is unique across seriesIndex and timepoint, but drops either variable
-     * if there is a single element only. So an empty-string is returned if it's single series, single time-point.
-     * 
+     *
+     * <p>The output-name is unique across seriesIndex and timepoint, but drops either variable if
+     * there is a single element only. So an empty-string is returned if it's single series, single
+     * time-point.
+     *
      * @param existingName any existing name that may exist.
-     * @return a unique outputName 
+     * @return a unique outputName
      */
     public Optional<String> calculateOutputName(String existingName) {
         List<String> components = new ArrayList<>();
@@ -63,11 +63,10 @@ class CalculateOutputName {
         addToListIfNonEmpty(calculateTimeComponent(), components);
         addToListIfNonEmpty(existingName, components);
         if (!components.isEmpty()) {
-            return Optional.of( String.join("_", components) );
+            return Optional.of(String.join("_", components));
         } else {
             return Optional.empty();
         }
-
     }
 
     private static void addToListIfNonEmpty(String str, List<String> list) {

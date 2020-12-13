@@ -127,7 +127,8 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         try {
             NamedStacks stacks = input.getInput().asSet(ProgressIgnore.get());
 
-            ImageInitParams soImage = InitParamsFactory.createWithoutStacks(input.createInitParamsContext());
+            ImageInitParams soImage =
+                    InitParamsFactory.createWithoutStacks(input.createInitParamsContext());
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
             soImage.copyStacksFrom(stacks);
@@ -198,7 +199,11 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
                 try {
                     Stack stackIn = params.stacks().getException(key);
 
-                    Stack stackOut = scaleStack(stackIn, params.getSuggestedResize(), context.getLogger().messageLogger());
+                    Stack stackOut =
+                            scaleStack(
+                                    stackIn,
+                                    params.getSuggestedResize(),
+                                    context.getLogger().messageLogger());
 
                     stacksToAddTo.addStack(key, stackOut, enabledForKey);
 
@@ -211,11 +216,14 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         }
     }
 
-    private Stack scaleStack(Stack stack, Optional<ImageResizeSuggestion> suggestedResize, MessageLogger logger) throws OperationFailedException {
+    private Stack scaleStack(
+            Stack stack, Optional<ImageResizeSuggestion> suggestedResize, MessageLogger logger)
+            throws OperationFailedException {
         return stack.mapChannel(channel -> scaleChannel(channel, suggestedResize, logger));
     }
 
-    private Channel scaleChannel(Channel channel, Optional<ImageResizeSuggestion> suggestedResize, MessageLogger logger)
+    private Channel scaleChannel(
+            Channel channel, Optional<ImageResizeSuggestion> suggestedResize, MessageLogger logger)
             throws OperationFailedException {
         try {
             if (binary) {
@@ -233,7 +241,9 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         }
     }
 
-    private Channel scaleChannelAsMask(Channel channel, Optional<ImageResizeSuggestion> suggestedResize) throws CreateException {
+    private Channel scaleChannelAsMask(
+            Channel channel, Optional<ImageResizeSuggestion> suggestedResize)
+            throws CreateException {
         Mask mask = new Mask(channel);
         Mask maskScaled =
                 org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(

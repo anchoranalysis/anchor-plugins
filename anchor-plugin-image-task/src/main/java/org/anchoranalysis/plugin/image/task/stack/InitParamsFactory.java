@@ -43,8 +43,9 @@ public class InitParamsFactory {
         input.addToStoreInferNames(params.stacks());
         return params;
     }
-        
+
     public static ImageInitParams createWithoutStacks(InitParamsContext context) {
-        return ImageInitParamsFactory.create(context.getInputOutput(), context.getSuggestedResize());
+        return ImageInitParamsFactory.create(
+                context.getInputOutput(), context.getSuggestedResize());
     }
 }

@@ -50,11 +50,16 @@ public class ScaleXY extends MaskProviderUnary {
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
     // END BEAN PROPERTIES
 
-    public static Mask scale(Mask mask, ScaleCalculator scaleCalculator, Optional<ImageResizeSuggestion> suggestedResize) throws CreateException {
+    public static Mask scale(
+            Mask mask,
+            ScaleCalculator scaleCalculator,
+            Optional<ImageResizeSuggestion> suggestedResize)
+            throws CreateException {
 
         ScaleFactor scaleFactor;
         try {
-            scaleFactor = scaleCalculator.calculate(Optional.of(mask.dimensions()), suggestedResize);
+            scaleFactor =
+                    scaleCalculator.calculate(Optional.of(mask.dimensions()), suggestedResize);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

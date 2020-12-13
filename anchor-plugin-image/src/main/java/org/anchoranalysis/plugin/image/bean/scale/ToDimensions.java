@@ -86,7 +86,9 @@ public class ToDimensions extends ScaleCalculator {
     }
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled, Optional<ImageResizeSuggestion> suggestedResize)
+    public ScaleFactor calculate(
+            Optional<Dimensions> dimensionsToBeScaled,
+            Optional<ImageResizeSuggestion> suggestedResize)
             throws OperationFailedException {
 
         Optional<Dimensions> dimensionsCombined =
@@ -94,7 +96,10 @@ public class ToDimensions extends ScaleCalculator {
 
         if (dimensionsCombined.isPresent()) {
             try {
-                return ResizeExtentUtilities.relativeScale(dimensionsCombined.get().extent(), dimensions.create().extent(), preserveAspectRatio);
+                return ResizeExtentUtilities.relativeScale(
+                        dimensionsCombined.get().extent(),
+                        dimensions.create().extent(),
+                        preserveAspectRatio);
             } catch (CreateException e) {
                 throw new OperationFailedException(e);
             }

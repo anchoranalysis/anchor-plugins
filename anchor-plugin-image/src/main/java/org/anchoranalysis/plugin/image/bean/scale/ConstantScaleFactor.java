@@ -43,7 +43,9 @@ public class ConstantScaleFactor extends ScaleCalculator {
     // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled, Optional<ImageResizeSuggestion> suggestedResize)
+    public ScaleFactor calculate(
+            Optional<Dimensions> dimensionsToBeScaled,
+            Optional<ImageResizeSuggestion> suggestedResize)
             throws OperationFailedException {
         return new ScaleFactor(value);
     }

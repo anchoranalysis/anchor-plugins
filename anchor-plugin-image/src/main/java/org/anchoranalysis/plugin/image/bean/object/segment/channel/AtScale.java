@@ -74,7 +74,9 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
         Interpolator interpolator = createInterpolator();
 
-        ScaleFactor scaleFactor = determineScaleFactor(channel.dimensions(), getInitializationParameters().getSuggestedResize());
+        ScaleFactor scaleFactor =
+                determineScaleFactor(
+                        channel.dimensions(), getInitializationParameters().getSuggestedResize());
 
         Extent extent = channel.extent();
 
@@ -114,7 +116,8 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
                 seeds, seedCollection -> scaleSeeds(seedCollection, scaleFactor, extent), "seeds");
     }
 
-    private ScaleFactor determineScaleFactor(Dimensions dimensions, Optional<ImageResizeSuggestion> suggestedResize)
+    private ScaleFactor determineScaleFactor(
+            Dimensions dimensions, Optional<ImageResizeSuggestion> suggestedResize)
             throws SegmentationFailedException {
         try {
             return scaleCalculator.calculate(Optional.of(dimensions), suggestedResize);

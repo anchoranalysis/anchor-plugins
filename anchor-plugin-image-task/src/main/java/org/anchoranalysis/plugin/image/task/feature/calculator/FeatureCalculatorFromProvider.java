@@ -77,7 +77,8 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
             Optional<StackProvider> stackEnergy,
             InputOutputContext context)
             throws OperationFailedException {
-        this.initParams = InitParamsFactory.createWithStacks(stackInput, new InitParamsContext(context) );
+        this.initParams =
+                InitParamsFactory.createWithStacks(stackInput, new InitParamsContext(context));
         this.energyStack =
                 energyStackFromProviderOrElse(
                         stackEnergy,

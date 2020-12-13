@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.PathRegEx;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.Rooted;
@@ -82,8 +82,7 @@ public class ExperimentStructure extends PathPrefixer {
 
     @Override
     public DirectoryWithPrefix rootDirectoryPrefix(
-            String experimentIdentifier, PathPrefixerContext context)
-            throws PathPrefixerException {
+            String experimentIdentifier, PathPrefixerContext context) throws PathPrefixerException {
 
         createDelegateIfNeeded();
 

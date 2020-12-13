@@ -58,7 +58,12 @@ public class ScaleXY extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        return scale(channel, scaleCalculator, interpolator.create(), getInitializationParameters().getSuggestedResize(), getLogger().messageLogger());
+        return scale(
+                channel,
+                scaleCalculator,
+                interpolator.create(),
+                getInitializationParameters().getSuggestedResize(),
+                getLogger().messageLogger());
     }
 
     public static Channel scale(
@@ -71,7 +76,8 @@ public class ScaleXY extends ChannelProviderUnary {
         try {
             logResolution("Incoming", channel, logger);
 
-            ScaleFactor scaleFactor = scaleCalculator.calculate(Optional.of(channel.dimensions()), suggestedResize);
+            ScaleFactor scaleFactor =
+                    scaleCalculator.calculate(Optional.of(channel.dimensions()), suggestedResize);
 
             logger.logFormatted("Scale Factor: %s", scaleFactor.toString());
 

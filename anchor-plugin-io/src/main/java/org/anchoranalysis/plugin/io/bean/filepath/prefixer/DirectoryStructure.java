@@ -68,8 +68,8 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root, PathPrefixerContext context)
-            throws PathPrefixerException {
+    public DirectoryWithPrefix outFilePrefixFromPath(
+            NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException {
 
         PathDifference difference = differenceToPrefix(removeExtension(path.getPath()));
 

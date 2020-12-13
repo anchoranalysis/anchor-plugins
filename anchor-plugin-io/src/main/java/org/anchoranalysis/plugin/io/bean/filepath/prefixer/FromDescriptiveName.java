@@ -42,7 +42,8 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 public class FromDescriptiveName extends PathPrefixerAvoidResolve {
 
     @Override
-    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root, PathPrefixerContext context) {
+    public DirectoryWithPrefix outFilePrefixFromPath(
+            NamedPath path, Path root, PathPrefixerContext context) {
         Path combined = root.resolve(Paths.get(path.getName()));
         return new DirectoryWithPrefix(combined);
     }
