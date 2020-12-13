@@ -38,6 +38,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import com.google.common.base.Preconditions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertFromMat {
@@ -80,6 +81,10 @@ public class ConvertFromMat {
     }
 
     private static Dimensions dimensionsFrom(Mat mat) {
-        return new Dimensions(mat.size(1), mat.size(0), 1);
+        int width = mat.size(1);
+        int height = mat.size(0);
+        Preconditions.checkArgument(width > 0);
+        Preconditions.checkArgument(height > 0);
+        return new Dimensions(width, height, 1);
     }
 }
