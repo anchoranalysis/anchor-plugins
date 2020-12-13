@@ -27,10 +27,10 @@ package org.anchoranalysis.plugin.image.task.feature;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.io.ImageInitParamsFactory;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
 
 @Value
 @AllArgsConstructor
@@ -39,8 +39,8 @@ public class InitParamsWithEnergyStack {
     ImageInitParams imageInit;
     EnergyStack energyStack;
 
-    public InitParamsWithEnergyStack(EnergyStack energyStack, InputOutputContext context) {
+    public InitParamsWithEnergyStack(EnergyStack energyStack, InitParamsContext context) {
         this.energyStack = energyStack;
-        this.imageInit = ImageInitParamsFactory.create(context);
+        this.imageInit = InitParamsFactory.createWithoutStacks(context);
     }
 }

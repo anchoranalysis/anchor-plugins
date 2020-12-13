@@ -35,33 +35,44 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
+/**
+ * Adds an explicit {@link Resolution} to an image after it has been read.
+ *
+ * <p>Any existing {@link Resolution} associated with the image is replaced.
+ *
+ * @author Owen Feehan
+ */
 public class ImposeResolution extends StackReader {
 
     // START BEAN PROPERTIES
+    /** Reads an image before a resolution is imposed. */
     @BeanField @Getter @Setter private StackReader stackReader;
 
-    @BeanField @Getter @Setter private double resX;
+    /** Physical pixel size of a voxel in x-dimension. */
+    @BeanField @Getter @Setter private double width;
 
-    @BeanField @Getter @Setter private double resY;
+    /** Physical pixel size of a voxel in y-dimension. */
+    @BeanField @Getter @Setter private double height;
 
-    @BeanField @Getter @Setter private double resZ = 0.0;
+    /** Physical pixel size of a voxel in z-dimension. */
+    @BeanField @Getter @Setter private double depth = 0.0;
 
     /** Keep the z-resolution if it is already defined */
     @BeanField @Getter @Setter private boolean keepZ = false;
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedRaster openFile(Path path) throws ImageIOException {
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
         return new OpenedRasterAlterDimensions(
                 stackReader.openFile(path), existing -> Optional.of(resolutionToAssign(existing)));
     }
 
     private Resolution resolutionToAssign(Optional<Resolution> existing) throws ImageIOException {
-        double z = keepZ && existing.isPresent() ? existing.get().z() : resZ;
+        double z = keepZ && existing.isPresent() ? existing.get().z() : depth;
         try {
-            return new Resolution(resX, resY, z);
+            return new Resolution(width, height, z);
         } catch (CreateException e) {
             throw new ImageIOException(e);
         }

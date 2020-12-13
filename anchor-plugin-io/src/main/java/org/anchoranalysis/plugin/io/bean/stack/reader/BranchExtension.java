@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
  * If the extension(s) of a path matches a particular value, then use a particular reader, otherwise
@@ -59,7 +59,7 @@ public class BranchExtension extends StackReader {
     private Set<String> extensionsLowercase;
 
     @Override
-    public OpenedRaster openFile(Path path) throws ImageIOException {
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
         if (doesPathHaveExtension(path)) {
             return readerMatching.openFile(path);
         } else {

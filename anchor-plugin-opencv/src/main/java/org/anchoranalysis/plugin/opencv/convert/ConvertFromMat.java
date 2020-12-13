@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.plugin.opencv.convert;
 
+import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -80,6 +81,10 @@ public class ConvertFromMat {
     }
 
     private static Dimensions dimensionsFrom(Mat mat) {
-        return new Dimensions(mat.size(1), mat.size(0), 1);
+        int width = mat.size(1);
+        int height = mat.size(0);
+        Preconditions.checkArgument(width > 0);
+        Preconditions.checkArgument(height > 0);
+        return new Dimensions(width, height, 1);
     }
 }

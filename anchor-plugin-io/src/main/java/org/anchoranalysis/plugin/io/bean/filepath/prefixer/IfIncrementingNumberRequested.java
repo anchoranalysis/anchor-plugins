@@ -23,72 +23,46 @@
  * THE SOFTWARE.
  * #L%
  */
-
 package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
-///
-
 /**
- * Matches a regex against incoming file-paths to form a prefix for output
- *
- * <p>Groups (i.e. parentheses) in the regular expression each form a directory in the output
+ * Multiplexes between two {@link PathPrefixer}s depending on whether an <i>incrementing number
+ * sequence was output</i> was requested.
  *
  * @author Owen Feehan
  */
-public class PathRegEx extends PathPrefixerAvoidResolve {
+public class IfIncrementingNumberRequested extends PathPrefixerAvoidResolve {
 
     // START BEAN PROPERTIES
-    /** Regular expression to use to match path with at least one group in it. */
-    @BeanField @Getter @Setter private RegEx regEx;
+    /** Called if an incrementing-number sequence <b>was</b> requested as output. */
+    @Getter @Setter @BeanField PathPrefixerAvoidResolve prefixerIncrementingNumber;
+
+    /** Called if an incrementing-number sequence <b>was not</b> requested as output. */
+    @Getter @Setter @BeanField PathPrefixerAvoidResolve prefixerElse;
     // END BEAN PROPERTIES
 
     @Override
     public DirectoryWithPrefix outFilePrefixFromPath(
             NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException {
-        String[] components = componentsFromPath(path.getPath());
-        return createPrefix(root, components);
+        return multiplex(context).outFilePrefixFromPath(path, root, context);
     }
 
-    private String[] componentsFromPath(Path pathIn) throws PathPrefixerException {
-
-        String pathInForwardSlashes = FilePathToUnixStyleConverter.toStringUnixStyle(pathIn);
-
-        return regEx.match(pathInForwardSlashes)
-                .orElseThrow(
-                        () ->
-                                new PathPrefixerException(
-                                        String.format(
-                                                "Cannot successfully match the %s against '%s'",
-                                                regEx, pathInForwardSlashes)));
-    }
-
-    /**
-     * Creates a FilePathPrefix based upon an ordered array of string components
-     *
-     * @param outDirectoryPath the base folder of the prefixer
-     * @param components ordered array of string components
-     * @return the file-path-prefix
-     */
-    private static DirectoryWithPrefix createPrefix(Path outDirectoryPath, String[] components) {
-
-        Path path = outDirectoryPath;
-
-        for (int g = 0; g < components.length; g++) {
-            path = path.resolve(components[g]);
+    private PathPrefixerAvoidResolve multiplex(PathPrefixerContext context) {
+        if (context.isOutputIncrementingNumberSequence()) {
+            return prefixerIncrementingNumber;
+        } else {
+            return prefixerElse;
         }
-
-        return new DirectoryWithPrefix(path);
     }
 }

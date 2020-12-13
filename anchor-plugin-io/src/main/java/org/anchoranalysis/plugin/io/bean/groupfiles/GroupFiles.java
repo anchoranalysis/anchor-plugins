@@ -128,7 +128,7 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
             throws InputReadFailedException {
 
         List<File> files = new ArrayList<>();
-        List<MultiFileReaderOpenedRaster> openedRasters = new ArrayList<>();
+        List<MultiFileReaderOpenedRaster> openedFiles = new ArrayList<>();
 
         // Process the hash-map by key
         for (String key : map.keySet()) {
@@ -137,18 +137,18 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
             // If we have a condition to check against
             if (checkParsedFilePathBag == null || checkParsedFilePathBag.accept(bag)) {
                 files.add(Paths.get(key).toFile());
-                openedRasters.add(new MultiFileReaderOpenedRaster(getStackReader(), bag));
+                openedFiles.add(new MultiFileReaderOpenedRaster(getStackReader(), bag));
             }
         }
 
-        return zipIntoGrouping(namer.deriveNameUnique(files, logger), openedRasters);
+        return zipIntoGrouping(namer.deriveNameUnique(files, logger), openedFiles);
     }
 
     private List<NamedChannelsInput> zipIntoGrouping(
-            List<NamedFile> files, List<MultiFileReaderOpenedRaster> openedRasters) {
+            List<NamedFile> files, List<MultiFileReaderOpenedRaster> openedFiles) {
 
         Iterator<NamedFile> iterator1 = files.iterator();
-        Iterator<MultiFileReaderOpenedRaster> iterator2 = openedRasters.iterator();
+        Iterator<MultiFileReaderOpenedRaster> iterator2 = openedFiles.iterator();
 
         List<NamedChannelsInput> result = new ArrayList<>();
         while (iterator1.hasNext() && iterator2.hasNext()) {

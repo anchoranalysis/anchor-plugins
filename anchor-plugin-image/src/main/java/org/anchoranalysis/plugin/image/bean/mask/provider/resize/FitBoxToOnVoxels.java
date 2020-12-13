@@ -79,7 +79,8 @@ public class FitBoxToOnVoxels extends MaskProviderUnary {
         PointRange pointRange = new PointRange();
 
         BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
-        IterateVoxelsEqualTo.equalToReusePoint(voxels.voxels(), binaryValues.getOnByte(), pointRange::add);
+        IterateVoxelsEqualTo.equalToReusePoint(
+                voxels.voxels(), binaryValues.getOnByte(), pointRange::add);
 
         try {
             return pointRange.deriveBoundingBox();

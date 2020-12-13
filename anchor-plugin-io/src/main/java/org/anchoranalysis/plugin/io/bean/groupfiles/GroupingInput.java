@@ -39,7 +39,7 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 @RequiredArgsConstructor
 class GroupingInput extends NamedChannelsInput {
@@ -49,7 +49,7 @@ class GroupingInput extends NamedChannelsInput {
     private final Path virtualPath;
 
     /** The opened raster with multiple files. */
-    private final OpenedRaster openedRaster;
+    private final OpenedImageFile openedFile;
 
     private final ChannelMap channelMapCreator;
     // END REQUIRED ARGUMENTS
@@ -60,19 +60,19 @@ class GroupingInput extends NamedChannelsInput {
 
     @Override
     public int numberSeries() throws ImageIOException {
-        return openedRaster.numberSeries();
+        return openedFile.numberSeries();
     }
 
     @Override
     public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
-        return openedRaster.dimensionsForSeries(stackIndexInSeries);
+        return openedFile.dimensionsForSeries(stackIndexInSeries);
     }
 
     @Override
     public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
             throws ImageIOException {
         ensureChannelMapExists();
-        return new NamedChannelsForSeriesMap(openedRaster, channelMap, seriesIndex);
+        return new NamedChannelsForSeriesMap(openedFile, channelMap, seriesIndex);
     }
 
     @Override
@@ -94,7 +94,7 @@ class GroupingInput extends NamedChannelsInput {
     @Override
     public void close(ErrorReporter errorReporter) {
         try {
-            openedRaster.close();
+            openedFile.close();
         } catch (ImageIOException e) {
             errorReporter.recordError(GroupingInput.class, e);
         }
@@ -102,14 +102,14 @@ class GroupingInput extends NamedChannelsInput {
 
     @Override
     public int bitDepth() throws ImageIOException {
-        return openedRaster.bitDepth();
+        return openedFile.bitDepth();
     }
 
     private void ensureChannelMapExists() throws ImageIOException {
         // Lazy creation
         if (channelMap == null) {
             try {
-                channelMap = channelMapCreator.createMap(openedRaster);
+                channelMap = channelMapCreator.createMap(openedFile);
             } catch (CreateException e) {
                 throw new ImageIOException(e);
             }

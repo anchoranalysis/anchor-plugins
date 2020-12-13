@@ -39,6 +39,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
@@ -57,19 +58,26 @@ public class ScaleXY extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        return scale(channel, scaleCalculator, interpolator.create(), getLogger().messageLogger());
+        return scale(
+                channel,
+                scaleCalculator,
+                interpolator.create(),
+                getInitializationParameters().getSuggestedResize(),
+                getLogger().messageLogger());
     }
 
     public static Channel scale(
             Channel channel,
             ScaleCalculator scaleCalculator,
             Interpolator interpolator,
+            Optional<ImageSizeSuggestion> suggestedResize,
             MessageLogger logger)
             throws CreateException {
         try {
             logResolution("Incoming", channel, logger);
 
-            ScaleFactor scaleFactor = scaleCalculator.calculate(Optional.of(channel.dimensions()));
+            ScaleFactor scaleFactor =
+                    scaleCalculator.calculate(Optional.of(channel.dimensions()), suggestedResize);
 
             logger.logFormatted("Scale Factor: %s", scaleFactor.toString());
 

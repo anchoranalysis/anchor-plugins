@@ -85,11 +85,13 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
         return BinaryVoxelsFactory.reuseByte(voxelsOut, binaryValues.createInt());
     }
 
-    private SliceThresholder createThresholder(Optional<ObjectMask> object, BinaryValuesByte binaryValues) {
+    private SliceThresholder createThresholder(
+            Optional<ObjectMask> object, BinaryValuesByte binaryValues) {
         return object.map(
                         objectMask ->
                                 (SliceThresholder)
-                                        new SliceThresholderMask(clearOutsideMask, objectMask, binaryValues))
+                                        new SliceThresholderMask(
+                                                clearOutsideMask, objectMask, binaryValues))
                 .orElseGet(() -> new SliceThresholderWithoutMask(binaryValues));
     }
 

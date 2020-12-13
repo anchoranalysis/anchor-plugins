@@ -34,6 +34,7 @@ import java.nio.file.Paths;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.junit.Test;
 
@@ -46,19 +47,21 @@ public class FilePathPrefixerLastDirectoryAsPrefixTest {
 
         NamedPath path = new NamedPath("somefile", Paths.get("/a/b/c/d/e/somefile.tif"));
 
-        LastDirectoryAsPrefix prefixer = new LastDirectoryAsPrefix();
-        prefixer.setFilePathPrefixer(createDelegate(path, root));
+        PathPrefixerContext context = new PathPrefixerContext();
 
-        DirectoryWithPrefix out = prefixer.outFilePrefixFromPath(path, root);
+        LastDirectoryAsPrefix prefixer = new LastDirectoryAsPrefix();
+        prefixer.setPrefixer(createDelegate(path, root, context));
+
+        DirectoryWithPrefix out = prefixer.outFilePrefixFromPath(path, root, context);
 
         assertEquals(Paths.get("/g/h"), out.getDirectory());
         assertEquals("i_", out.prefixWithDelimeter());
     }
 
-    private PathPrefixerAvoidResolve createDelegate(NamedPath path, Path root)
-            throws PathPrefixerException {
+    private PathPrefixerAvoidResolve createDelegate(
+            NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException {
         PathPrefixerAvoidResolve prefixer = mock(PathPrefixerAvoidResolve.class);
-        when(prefixer.outFilePrefixFromPath(path, root))
+        when(prefixer.outFilePrefixFromPath(path, root, context))
                 .thenReturn(new DirectoryWithPrefix(Paths.get("/g/h/i/"), "", "_"));
         return prefixer;
     }

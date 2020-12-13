@@ -27,15 +27,17 @@
 package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.plugin.io.input.path.RootPathMap;
 
@@ -46,28 +48,30 @@ import org.anchoranalysis.plugin.io.input.path.RootPathMap;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
+@AllArgsConstructor
 public class Rooted extends PathPrefixer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private PathPrefixerAvoidResolve filePathPrefixer;
+    @BeanField @Getter @Setter private PathPrefixerAvoidResolve prefixer;
 
-    // The name of the root-path to associate with this fileset
+    /** The name of the root-path to associate with this fileset. */
     @BeanField @Getter @Setter private String rootName;
     // END BEAN PROPERTIES
 
     @Override
     public DirectoryWithPrefix outFilePrefix(
-            NamedPath path, String expName, FilePathPrefixerContext context)
+            NamedPath path, String experimentName, PathPrefixerContext context)
             throws PathPrefixerException {
 
-        DirectoryWithPrefix fpp =
-                filePathPrefixer.outFilePrefixAvoidResolve(
-                        removeRoot(path, context.isDebugMode()), expName);
+        DirectoryWithPrefix directoryWithPrefix =
+                prefixer.outFilePrefixAvoidResolve(
+                        removeRoot(path, context.isDebugMode()), experimentName, context);
 
-        Path pathOut = folderPathOut(fpp.getDirectory(), context.isDebugMode());
-        fpp.setDirectory(pathOut);
+        Path pathOut = folderPathOut(directoryWithPrefix.getDirectory(), context.isDebugMode());
+        directoryWithPrefix.setDirectory(pathOut);
 
-        return fpp;
+        return directoryWithPrefix;
     }
 
     private NamedPath removeRoot(NamedPath path, boolean debugMode) throws PathPrefixerException {
@@ -83,9 +87,9 @@ public class Rooted extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootDirectoryPrefix(String expName, FilePathPrefixerContext context)
+    public DirectoryWithPrefix rootDirectoryPrefix(String expName, PathPrefixerContext context)
             throws PathPrefixerException {
-        DirectoryWithPrefix fpp = filePathPrefixer.rootDirectoryPrefixAvoidResolve(expName);
+        DirectoryWithPrefix fpp = prefixer.rootDirectoryPrefixAvoidResolve(expName);
         fpp.setDirectory(folderPathOut(fpp.getDirectory(), context.isDebugMode()));
         return fpp;
     }

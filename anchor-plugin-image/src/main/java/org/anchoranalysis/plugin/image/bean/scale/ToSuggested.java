@@ -26,22 +26,39 @@
 package org.anchoranalysis.plugin.image.bean.scale;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * Scales to maximally fit-inside another {@link Dimensions} while preserving the XY aspect-ratio.
+ * Scales to the suggested-size if one is provided, otherwise calls {@code fallback}.
  *
  * @author Owen Feehan
  */
-public class FitDimensionsPreserveAspectRatio extends ScaleCalculator {
+public class ToSuggested extends ScaleCalculator {
+
+    // START BEAN PROPERTIES
+    /**
+     * Used as a delegate to calculate the scale if {@code suggestedResize} is empty when passed to
+     * {@link #calculate}.
+     */
+    @BeanField @Getter @Setter private ScaleCalculator fallback;
+    // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled)
+    public ScaleFactor calculate(
+            Optional<Dimensions> dimensionsToBeScaled,
+            Optional<ImageSizeSuggestion> suggestedResize)
             throws OperationFailedException {
-        // TODO Auto-generated method stub
-        return null;
+        if (suggestedResize.isPresent()) {
+            return suggestedResize.get().calculateScaleFactor(dimensionsToBeScaled);
+        } else {
+            return fallback.calculate(dimensionsToBeScaled, suggestedResize);
+        }
     }
 }

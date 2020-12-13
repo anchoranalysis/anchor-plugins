@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.PathRegEx;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.Rooted;
@@ -72,7 +72,7 @@ public class ExperimentStructure extends PathPrefixer {
 
     @Override
     public DirectoryWithPrefix outFilePrefix(
-            NamedPath path, String experimentIdentifier, FilePathPrefixerContext context)
+            NamedPath path, String experimentIdentifier, PathPrefixerContext context)
             throws PathPrefixerException {
 
         createDelegateIfNeeded();
@@ -82,8 +82,7 @@ public class ExperimentStructure extends PathPrefixer {
 
     @Override
     public DirectoryWithPrefix rootDirectoryPrefix(
-            String experimentIdentifier, FilePathPrefixerContext context)
-            throws PathPrefixerException {
+            String experimentIdentifier, PathPrefixerContext context) throws PathPrefixerException {
 
         createDelegateIfNeeded();
 
@@ -92,17 +91,14 @@ public class ExperimentStructure extends PathPrefixer {
 
     private void createDelegateIfNeeded() throws PathPrefixerException {
 
-        if (delegate != null) {
-            // Nothing to do
-            return;
-        }
+        if (delegate == null) {
+            delegate = new Rooted(createResolver(), rootName);
 
-        this.delegate = wrapWithRoot(createResolver());
-
-        try {
-            this.delegate.checkMisconfigured(defaultInstances);
-        } catch (BeanMisconfiguredException e) {
-            throw new PathPrefixerException(e);
+            try {
+                delegate.checkMisconfigured(defaultInstances);
+            } catch (BeanMisconfiguredException e) {
+                throw new PathPrefixerException(e);
+            }
         }
     }
 
@@ -111,12 +107,5 @@ public class ExperimentStructure extends PathPrefixer {
         resolver.setOutPathPrefix(prefix + experimentType);
         resolver.setRegEx(regEx);
         return resolver;
-    }
-
-    private Rooted wrapWithRoot(PathPrefixerAvoidResolve in) {
-        Rooted out = new Rooted();
-        out.setRootName(rootName);
-        out.setFilePathPrefixer(in);
-        return out;
     }
 }

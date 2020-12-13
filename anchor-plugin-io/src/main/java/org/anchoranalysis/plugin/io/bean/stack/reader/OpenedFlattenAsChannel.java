@@ -35,20 +35,19 @@ import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
-class FlattenAsChannelOpenedRaster implements OpenedRaster {
+class OpenedFlattenAsChannel implements OpenedImageFile {
 
-    private OpenedRaster delegate;
-    private int numSeries;
-    private int expectedNumberChannels;
-    private int expectedNumberFrames;
+    private final OpenedImageFile delegate;
+    private final int numberSeries;
+    private final int expectedNumberChannels;
+    private final int expectedNumberFrames;
 
-    public FlattenAsChannelOpenedRaster(OpenedRaster delegate) throws ImageIOException {
-        super();
+    public OpenedFlattenAsChannel(OpenedImageFile delegate) throws ImageIOException {
         this.delegate = delegate;
 
-        numSeries = delegate.numberSeries();
+        numberSeries = delegate.numberSeries();
 
         expectedNumberChannels = delegate.numberChannels();
 
@@ -68,7 +67,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
         try {
             Stack out = new Stack();
 
-            for (int i = 0; i < numSeries; i++) {
+            for (int i = 0; i < numberSeries; i++) {
 
                 TimeSequence ts = delegate.open(seriesIndex, progress);
 
@@ -95,7 +94,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
 
     @Override
     public int numberChannels() {
-        return expectedNumberChannels * numSeries * expectedNumberFrames;
+        return expectedNumberChannels * numberSeries * expectedNumberFrames;
     }
 
     @Override

@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
  * Combines all series and frames returned by a reader by converting them into multiple channels in
@@ -46,11 +46,12 @@ import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 public class FlattenAsChannel extends StackReader {
 
     // START BEAN PROPERTIES
+    /** Reads the image that is subsequently flattened. */
     @BeanField @Getter @Setter private StackReader stackReader;
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedRaster openFile(Path path) throws ImageIOException {
-        return new FlattenAsChannelOpenedRaster(stackReader.openFile(path));
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
+        return new OpenedFlattenAsChannel(stackReader.openFile(path));
     }
 }
