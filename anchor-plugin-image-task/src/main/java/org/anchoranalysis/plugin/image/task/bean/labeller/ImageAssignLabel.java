@@ -138,7 +138,9 @@ public class ImageAssignLabel<T>
                 outputStack(
                         groupIdentifier,
                         createFromProviderWith(
-                                outputStackProvider, input.getInput(), input.createInitParamsContext()),
+                                outputStackProvider,
+                                input.getInput(),
+                                input.createInitParamsContext()),
                         input.getInput().name(),
                         input.getSharedState());
             }
@@ -152,8 +154,7 @@ public class ImageAssignLabel<T>
             throws CreateException {
         try {
             provider.initRecursive(
-                    InitParamsFactory.createWithStacks(stack, context),
-                    context.getLogger());
+                    InitParamsFactory.createWithStacks(stack, context), context.getLogger());
             return provider.create();
         } catch (InitException | OperationFailedException e) {
             throw new CreateException(e);

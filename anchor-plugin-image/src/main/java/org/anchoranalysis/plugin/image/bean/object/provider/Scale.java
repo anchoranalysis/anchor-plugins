@@ -63,19 +63,20 @@ public class Scale extends WithDimensionsBase {
         ScaleFactor factor = calculateFactor(dimensions);
         return scaleObjects(objects, factor, dimensions.extent());
     }
-    
+
     private ScaleFactor calculateFactor(Dimensions dimensions) throws CreateException {
         try {
-            return scaleCalculator.calculate(Optional.of(dimensions), getInitializationParameters().getSuggestedResize());
+            return scaleCalculator.calculate(
+                    Optional.of(dimensions), getInitializationParameters().getSuggestedResize());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
     }
-    
-    private ObjectCollection scaleObjects(ObjectCollection objects, ScaleFactor factor, Extent extent) throws CreateException {
+
+    private ObjectCollection scaleObjects(
+            ObjectCollection objects, ScaleFactor factor, Extent extent) throws CreateException {
         try {
-            ScaledElements<ObjectMask> scaledObjects =
-                    Scaler.scaleObjects(objects, factor, extent);
+            ScaledElements<ObjectMask> scaledObjects = Scaler.scaleObjects(objects, factor, extent);
             return ObjectCollectionFactory.of(scaledObjects.asCollectionOrderNotPreserved());
         } catch (OperationFailedException e) {
             throw new CreateException(e);

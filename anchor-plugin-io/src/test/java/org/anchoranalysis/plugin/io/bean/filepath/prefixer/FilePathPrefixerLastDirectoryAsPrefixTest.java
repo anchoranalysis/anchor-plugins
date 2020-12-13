@@ -48,7 +48,7 @@ public class FilePathPrefixerLastDirectoryAsPrefixTest {
         NamedPath path = new NamedPath("somefile", Paths.get("/a/b/c/d/e/somefile.tif"));
 
         PathPrefixerContext context = new PathPrefixerContext();
-        
+
         LastDirectoryAsPrefix prefixer = new LastDirectoryAsPrefix();
         prefixer.setPrefixer(createDelegate(path, root, context));
 
@@ -58,8 +58,8 @@ public class FilePathPrefixerLastDirectoryAsPrefixTest {
         assertEquals("i_", out.prefixWithDelimeter());
     }
 
-    private PathPrefixerAvoidResolve createDelegate(NamedPath path, Path root, PathPrefixerContext context)
-            throws PathPrefixerException {
+    private PathPrefixerAvoidResolve createDelegate(
+            NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException {
         PathPrefixerAvoidResolve prefixer = mock(PathPrefixerAvoidResolve.class);
         when(prefixer.outFilePrefixFromPath(path, root, context))
                 .thenReturn(new DirectoryWithPrefix(Paths.get("/g/h/i/"), "", "_"));

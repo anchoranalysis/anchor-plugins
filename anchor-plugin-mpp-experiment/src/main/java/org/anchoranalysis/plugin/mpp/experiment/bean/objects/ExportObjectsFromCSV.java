@@ -156,12 +156,13 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                             idGenerator, input.pathForBinding(), groupContext.isDebugEnabled());
             MapGroupToRow mapGroup = groupedRows.get(fileIdentifier);
 
-            
             if (mapGroup != null) {
-                InitParamsContext initContext = new InitParamsContext(groupContext, inputBound.getTaskArguments().getResize());
+                InitParamsContext initContext =
+                        new InitParamsContext(
+                                groupContext, inputBound.getTaskArguments().getResize());
                 processFileWithMap(
                         MPPInitParamsFactory.create(
-                                initContext, Optional.empty(), Optional.of(input))
+                                        initContext, Optional.empty(), Optional.of(input))
                                 .getImage(),
                         mapGroup,
                         groupedRows.groupNameSet(),

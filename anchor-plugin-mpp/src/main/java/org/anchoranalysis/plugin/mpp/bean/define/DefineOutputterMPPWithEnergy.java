@@ -83,7 +83,11 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
         try {
             MPPInitParams initParams = super.createInitParams(input, context);
             return processWithEnergyStack(
-                    initParams.getImage(), initParams.getImage(), initParams, operation, context.getInputOutput());
+                    initParams.getImage(),
+                    initParams.getImage(),
+                    initParams,
+                    operation,
+                    context.getInputOutput());
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
@@ -100,7 +104,11 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
             MPPInitParams initParams =
                     super.createInitParams(context, stacks, objects, keyValueParams);
             return processWithEnergyStack(
-                    initParams, initParams.getImage(), initParams, operation, context.getInputOutput());
+                    initParams,
+                    initParams.getImage(),
+                    initParams,
+                    operation,
+                    context.getInputOutput());
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);

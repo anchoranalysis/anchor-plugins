@@ -36,8 +36,8 @@ import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.plugin.io.input.path.RootPathMap;
 
@@ -48,7 +48,8 @@ import org.anchoranalysis.plugin.io.input.path.RootPathMap;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Rooted extends PathPrefixer {
 
     // START BEAN PROPERTIES

@@ -51,10 +51,12 @@ import org.xml.sax.SAXException;
  *
  * <p>If a particular dimension is missing from the XML file, 1 is supplied as a replacement value.
  *
- * <p>The XML file specifies the physical pixel sizes (in meters) of an individual voxel, as follows:
- * 
- * {@code <metadata><resolution><width>0.12</width><height>0.12</height><depth>0.12</depth></resolution></metadata>}
- * 
+ * <p>The XML file specifies the physical pixel sizes (in meters) of an individual voxel, as
+ * follows:
+ *
+ * <p>{@code
+ * <metadata><resolution><width>0.12</width><height>0.12</height><depth>0.12</depth></resolution></metadata>}
+ *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -62,7 +64,7 @@ public class ResolutionAsXml {
 
     private static final String ELEMENT_NAME_ROOT = "metadata";
     private static final String ELEMENT_NAME_RESOLUTION = "resolution";
-    
+
     private static final String ELEMENT_NAME_X = "width";
     private static final String ELEMENT_NAME_Y = "height";
     private static final String ELEMENT_NAME_Z = "depth";

@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.plugin.opencv.bean.stack;
 
+import com.google.common.base.CharMatcher;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,6 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
-import com.google.common.base.CharMatcher;
 
 /**
  * An implementation of {@link OpenedImageFile} for reading using OpenCV.
@@ -50,10 +50,12 @@ import com.google.common.base.CharMatcher;
 class OpenedRasterOpenCV implements OpenedImageFile {
 
     // START REQUIRED ARGUMENTS
-    /** 
+    /**
      * The path to open.
-     * 
-     * <p>Note that only ascii paths are supported by OpenCV, <a href="https://stackoverflow.com/questions/24769623/opencv-imread-on-windows-for-non-ascii-file-names">unicode paths are not supported</a>.
+     *
+     * <p>Note that only ascii paths are supported by OpenCV, <a
+     * href="https://stackoverflow.com/questions/24769623/opencv-imread-on-windows-for-non-ascii-file-names">unicode
+     * paths are not supported</a>.
      */
     private final Path path;
     // END REQUIRED ARGUMENTS
@@ -63,18 +65,21 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     /**
      * Create with a specific path.
-     * 
+     *
      * @param path the path to open
-     * @throws ImageIOException if the path contains non-ASCII characters (e.g. unicode, which is unsupported by OpenCV).
+     * @throws ImageIOException if the path contains non-ASCII characters (e.g. unicode, which is
+     *     unsupported by OpenCV).
      */
     public OpenedRasterOpenCV(Path path) throws ImageIOException {
         if (CharMatcher.ascii().matchesAllOf(path.toString())) {
-            this.path = path;    
+            this.path = path;
         } else {
-            throw new ImageIOException("Path contains non-ASCII characters, which is currently unsupported by OpenCV: " + path);
+            throw new ImageIOException(
+                    "Path contains non-ASCII characters, which is currently unsupported by OpenCV: "
+                            + path);
         }
     }
-    
+
     @Override
     public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
         openStackIfNecessary();

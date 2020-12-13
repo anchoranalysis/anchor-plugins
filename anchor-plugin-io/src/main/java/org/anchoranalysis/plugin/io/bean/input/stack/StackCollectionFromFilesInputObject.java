@@ -49,8 +49,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     /** The root object that is used to provide the input-name and pathForBinding */
     private final FileInput delegate;
 
-    @Getter
-    private final StackReader stackReader;
+    @Getter private final StackReader stackReader;
 
     /**
      * Uses the last series (from all series) only, and ignores any other series-numbers

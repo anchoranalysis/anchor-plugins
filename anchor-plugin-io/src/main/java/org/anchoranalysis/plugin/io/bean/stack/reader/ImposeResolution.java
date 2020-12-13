@@ -39,11 +39,10 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
  * Adds an explicit {@link Resolution} to an image after it has been read.
- * 
- * <p>Any existing {@link Resolution} associated with the image is replaced.
- * 
- * @author Owen Feehan
  *
+ * <p>Any existing {@link Resolution} associated with the image is replaced.
+ *
+ * @author Owen Feehan
  */
 public class ImposeResolution extends StackReader {
 

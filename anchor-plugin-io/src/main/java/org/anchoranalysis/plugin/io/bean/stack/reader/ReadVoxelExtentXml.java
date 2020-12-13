@@ -41,16 +41,15 @@ import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
 
 /**
  * Reads {@link Resolution} from an XML file associated an image.
- * 
+ *
  * <p>Any existing {@link Resolution} is replaced.
- * 
+ *
  * <p>The XML file is expected at the file path of the image, with {@code .xml} appended. e.g.
  * {@code someImage.tif would have metadata at someImage.tif.xml }
- * 
- * <p>The format of the XML is described in {@link ResolutionAsXml}.
- *  
- * @author Owen Feehan
  *
+ * <p>The format of the XML is described in {@link ResolutionAsXml}.
+ *
+ * @author Owen Feehan
  */
 public class ReadVoxelExtentXml extends StackReader {
 
@@ -58,7 +57,9 @@ public class ReadVoxelExtentXml extends StackReader {
     /** Reads an image before a resolution is imposed. */
     @BeanField @Getter @Setter private StackReader stackReader;
 
-    /** If false, an exception is thrown if the resolution file is missing for a particular image. */
+    /**
+     * If false, an exception is thrown if the resolution file is missing for a particular image.
+     */
     @BeanField @Getter @Setter private boolean acceptNoResolution = true;
     // END BEAN PROPERTIES
 
@@ -69,7 +70,8 @@ public class ReadVoxelExtentXml extends StackReader {
      * /somePath/stackReader.tif it will look for /somePath/RasterRader.tif.xml
      *
      * @param filePath the filepath of the image
-     * @param acceptNoResolution if false, an exception is thrown if the resolution file is missing for a particular image.
+     * @param acceptNoResolution if false, an exception is thrown if the resolution file is missing
+     *     for a particular image.
      * @return the scene res if the metadata file exists and was parsed. null otherwise.
      * @throws ImageIOException
      */

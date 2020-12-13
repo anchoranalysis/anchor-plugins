@@ -43,7 +43,8 @@ public class FromMetadata extends ChannelMap {
         try {
             Optional<List<String>> names = openedFile.channelNames();
             if (!names.isPresent()) {
-                throw new CreateException("No channels names are associated with the opened image-file");
+                throw new CreateException(
+                        "No channels names are associated with the opened image-file");
             }
 
             NamedEntries map = new NamedEntries();

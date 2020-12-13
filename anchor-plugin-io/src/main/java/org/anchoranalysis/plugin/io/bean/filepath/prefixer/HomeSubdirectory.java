@@ -38,8 +38,8 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.io.output.bean.path.prefixer.IncrementingNumber;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 //
@@ -91,7 +91,7 @@ public class HomeSubdirectory extends PathPrefixer {
             }
         }
     }
-    
+
     private Path homeDirectory() throws InitException {
         String string = System.getProperty("user.home");
 
@@ -102,9 +102,10 @@ public class HomeSubdirectory extends PathPrefixer {
         Path path = Paths.get(string);
 
         if (path.toFile().exists()) {
-            return path;    
+            return path;
         } else {
-            throw new InitException(String.format("User home directory '%s' does not exist", string));
+            throw new InitException(
+                    String.format("User home directory '%s' does not exist", string));
         }
     }
 

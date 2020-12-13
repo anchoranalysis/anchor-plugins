@@ -49,7 +49,9 @@ public class Invert extends ScaleCalculator {
     // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled, Optional<ImageResizeSuggestion> suggestedResize)
+    public ScaleFactor calculate(
+            Optional<Dimensions> dimensionsToBeScaled,
+            Optional<ImageResizeSuggestion> suggestedResize)
             throws OperationFailedException {
         return scaleCalculator.calculate(dimensionsToBeScaled, suggestedResize).invert();
     }

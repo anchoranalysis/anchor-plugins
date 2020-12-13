@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.plugin.opencv.convert;
 
+import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -38,7 +39,6 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import com.google.common.base.Preconditions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertFromMat {

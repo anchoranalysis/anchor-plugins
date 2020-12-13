@@ -55,8 +55,8 @@ public class PathRegEx extends PathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root, PathPrefixerContext context)
-            throws PathPrefixerException {
+    public DirectoryWithPrefix outFilePrefixFromPath(
+            NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException {
         String[] components = componentsFromPath(path.getPath());
         return createPrefix(root, components);
     }

@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * Non-bean classes pertaining to stacks and channels as used in tasks.
- */
+/** Non-bean classes pertaining to stacks and channels as used in tasks. */
 package org.anchoranalysis.plugin.image.task.stack;

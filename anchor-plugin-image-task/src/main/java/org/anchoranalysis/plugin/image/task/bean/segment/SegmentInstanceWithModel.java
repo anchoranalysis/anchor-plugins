@@ -187,7 +187,7 @@ public class SegmentInstanceWithModel<T>
             ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            initializeBeans( params.createInitParamsContext() );
+            initializeBeans(params.createInitParamsContext());
             ConcurrentModelPool<T> modelPool = segment.createModelPool(plan);
 
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);

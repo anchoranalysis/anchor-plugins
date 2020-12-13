@@ -44,7 +44,9 @@ public class MinimumXYResolution extends ScaleCalculator {
     // STOP BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled, Optional<ImageResizeSuggestion> suggestedResize)
+    public ScaleFactor calculate(
+            Optional<Dimensions> dimensionsToBeScaled,
+            Optional<ImageResizeSuggestion> suggestedResize)
             throws OperationFailedException {
 
         Resolution resolution =

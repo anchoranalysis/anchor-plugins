@@ -43,7 +43,8 @@ public class FeatureCalculatorRepeated {
     public static EnergyStack extractStack(
             ProvidesStackInput input, StackProvider stackEnergy, InputOutputContext context)
             throws OperationFailedException {
-        ImageInitParams paramsInit = InitParamsFactory.createWithStacks(input, new InitParamsContext(context) );
+        ImageInitParams paramsInit =
+                InitParamsFactory.createWithStacks(input, new InitParamsContext(context));
         return ExtractFromProvider.extractStack(stackEnergy, paramsInit, context.getLogger());
     }
 }

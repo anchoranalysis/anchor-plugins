@@ -150,7 +150,8 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         }
     }
 
-    private boolean pointIsOutlineVal(Point3i point, Dimensions dimensions, BinaryValuesByte binaryValues) {
+    private boolean pointIsOutlineVal(
+            Point3i point, Dimensions dimensions, BinaryValuesByte binaryValues) {
 
         if (!dimensions.contains(point)) {
             return false;
