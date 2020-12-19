@@ -39,6 +39,7 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.rules.TemporaryFolder;
+import lombok.AllArgsConstructor;
 
 /**
  * Launches an experiment by calling the application 'anchor' via the shell.
@@ -46,6 +47,7 @@ import org.junit.rules.TemporaryFolder;
  * <p>This is particularly useful for unit-tests that call experiments, but want to do it with all
  * the libraries and plugins instantiated, as they would be from the shell.
  */
+@AllArgsConstructor
 public class ExperimentLauncherFromShell {
 
     /** Command for calling anchor */
@@ -54,12 +56,7 @@ public class ExperimentLauncherFromShell {
     /** System-property key for the path to directory that contains the anchor distribution */
     private static final String PATH_PROPERTY_IDENTIFIER = "anchor.distribution.path.test";
 
-    private TestLoader loader;
-
-    public ExperimentLauncherFromShell(TestLoader loader) {
-        super();
-        this.loader = loader;
-    }
+    private final TestLoader loader;
 
     /**
      * The path we use for calling the anchor-executable
@@ -243,6 +240,6 @@ public class ExperimentLauncherFromShell {
      * @return resolved path or null
      */
     private Optional<Path> resolve(Optional<String> testPath) {
-        return testPath.map(path -> loader.resolveTestPath(path));
+        return testPath.map(loader::resolveTestPath);
     }
 }
