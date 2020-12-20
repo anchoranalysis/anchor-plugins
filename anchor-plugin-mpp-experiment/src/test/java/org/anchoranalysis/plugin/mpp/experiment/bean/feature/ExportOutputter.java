@@ -55,7 +55,6 @@ class ExportOutputter {
         "energyStack/energyStack_00.tif",
         "energyStack/energyStack_01.tif",
         "energyStack/energyStack_02.tif",
-        "grouped/arbitraryGroup/featuresAggregatedGroup.xml",
         NonImageFileFormat.HDF5.buildPath("objects", MultiInputFixture.OBJECTS_NAME),
         "job_manifest.ser.xml"
     };
