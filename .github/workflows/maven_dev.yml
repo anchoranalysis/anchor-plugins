@@ -15,7 +15,7 @@ on:
     branches: [ dev ]
 
 jobs:
-  - test-linux-8:
+  test-linux-8:
 
     runs-on: ubuntu-latest
 
@@ -50,7 +50,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_test_failures: true
  
-  - test-windows-8:
+  test-windows-8:
 
     runs-on: windows-latest
 
@@ -85,7 +85,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_test_failures: true
    
-  - test-macos-8:
+  test-macos-8:
 
     runs-on: macos-latest
 
