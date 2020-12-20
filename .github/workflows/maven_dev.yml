@@ -49,6 +49,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_test_failures: true
+        check_name: Test Report - Linux JDK 8
  
   test-windows-8:
 
@@ -84,6 +85,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_test_failures: true
+        check_name: Test Report - Windows JDK 8
    
   test-macos-8:
 
@@ -118,4 +120,5 @@ jobs:
       uses: scacap/action-surefire-report@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        fail_on_test_failures: true        
+        fail_on_test_failures: true 
+        check_name: Test Report - MacOS JDK 8        
