@@ -84,8 +84,8 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_test_failures: true
-        
- - test-macos-8:
+   
+  - test-macos-8:
 
     runs-on: macos-latest
 
