@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.bean.xml.BeanXmlLoader;
+import org.anchoranalysis.bean.xml.BeanXMLLoader;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
@@ -164,7 +164,7 @@ public class QuickExperiment<S> extends Experiment {
     private InputManager<MultiInput> createInputManagerBean(Path beanPath)
             throws ExperimentExecutionException {
         try {
-            return BeanXmlLoader.loadBean(beanPath);
+            return BeanXMLLoader.loadBean(beanPath);
         } catch (BeanXmlException e) {
             throw new ExperimentExecutionException(e);
         }

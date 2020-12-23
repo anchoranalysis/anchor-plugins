@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.exception.BeanStrangeException;
-import org.anchoranalysis.bean.xml.BeanXmlLoader;
+import org.anchoranalysis.bean.xml.BeanXMLLoader;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -124,7 +124,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
     private <U> U extractBean(String relativePath, String friendlyName) {
         Path path = getCombinedPath(relativePath);
         try {
-            U bean = BeanXmlLoader.loadBean(path); // NOSONAR
+            U bean = BeanXMLLoader.loadBean(path); // NOSONAR
             return bean;
         } catch (BeanXmlException e) {
             throw new BeanStrangeException(
@@ -156,7 +156,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
 
         Path pathDataset = pathDirectory.resolve(datasetName.concat(beanExtension));
         try {
-            return BeanXmlLoader.loadBean(pathDataset);
+            return BeanXMLLoader.loadBean(pathDataset);
         } catch (BeanXmlException e) {
             throw new ExperimentExecutionException(
                     String.format("Cannot create bean for dataset '%s'", pathDataset), e);

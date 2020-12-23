@@ -30,12 +30,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.ToDoubleFunction;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.xml.XmlUtilities;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.serialize.XMLUtilities;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.output.xml.XMLWriter;
@@ -80,8 +79,7 @@ public class ResolutionAsXml {
     public static Resolution readResolutionXml(File file) throws ImageIOException {
 
         try {
-            DocumentBuilder builder = XmlUtilities.createDocumentBuilder();
-            Document document = builder.parse(file);
+            Document document = XMLUtilities.parse(file);
             document.getDocumentElement().normalize();
 
             NodeList allResolutionElements = document.getElementsByTagName(ELEMENT_NAME_RESOLUTION);
@@ -108,8 +106,7 @@ public class ResolutionAsXml {
             throws ImageIOException {
 
         try {
-            DocumentBuilder builder = XmlUtilities.createDocumentBuilder();
-            Document document = builder.newDocument();
+            Document document = XMLUtilities.createNewDocument();
 
             // create the root element and add it to the document
             Element root = document.createElement(ELEMENT_NAME_ROOT);
