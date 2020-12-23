@@ -29,9 +29,8 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
-import org.anchoranalysis.bean.xml.XmlUtilities;
+import org.anchoranalysis.core.serialize.XMLUtilities;
 import org.anchoranalysis.io.generator.xml.XMLGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -60,8 +59,7 @@ class CSVRowXMLGenerator extends XMLGenerator<CSVRow> {
 
     private static Document csvRowAsXml(CSVRow element) throws OutputWriteFailedException {
         try {
-            DocumentBuilder db = XmlUtilities.createDocumentBuilder();
-            Document document = db.newDocument();
+            Document document = XMLUtilities.createNewDocument();
 
             // create the root element and add it to the document
             Element root = document.createElement("identify");
