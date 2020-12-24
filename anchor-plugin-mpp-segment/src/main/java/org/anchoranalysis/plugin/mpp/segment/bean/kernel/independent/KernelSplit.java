@@ -37,8 +37,8 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.proposer.MarkFromCollectionProposer;
 import org.anchoranalysis.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
@@ -49,7 +49,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy,UpdatableMarksList> {
+public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy, UpdatableMarksList> {
 
     // START BEAN
     @BeanField @Getter @Setter private MarkSplitProposer splitProposer = null;

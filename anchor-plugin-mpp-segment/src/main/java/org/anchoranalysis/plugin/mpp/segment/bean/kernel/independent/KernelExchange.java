@@ -44,7 +44,8 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public class KernelExchange extends KernelIndependent<VoxelizedMarksWithEnergy,UpdatableMarksList> {
+public class KernelExchange
+        extends KernelIndependent<VoxelizedMarksWithEnergy, UpdatableMarksList> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MarkProposer markProposer = null;

@@ -80,11 +80,13 @@ public class SimulatedAnnealingTest {
             boolean use3D, int expectedSize, double expectedEnergy, boolean logToConsole)
             throws OptimizationTerminatedEarlyException, CreateException, InitException {
 
-        OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy, UpdatableMarksList> scheme =
-                OptimizationSchemeFixture.simulatedAnnealing(
-                        new FromVoxelizedMarksWithEnergy(),
-                        50 // A low number of iterations so that the test runs relatively quickly
-                        );
+        OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy, UpdatableMarksList>
+                scheme =
+                        OptimizationSchemeFixture.simulatedAnnealing(
+                                new FromVoxelizedMarksWithEnergy(),
+                                50 // A low number of iterations so that the test runs relatively
+                                // quickly
+                                );
 
         MarkFactory factory = use3D ? new MarkEllipsoidFactory() : new MarkEllipseFactory();
 

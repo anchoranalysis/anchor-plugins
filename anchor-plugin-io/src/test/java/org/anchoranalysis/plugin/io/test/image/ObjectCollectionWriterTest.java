@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.test.image;
 
 import static org.anchoranalysis.plugin.io.test.image.HelperReadWriteObjects.*;
 import static org.junit.Assert.assertEquals;
+
 import java.nio.file.Path;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.index.SetOperationFailedException;
@@ -80,10 +81,10 @@ public class ObjectCollectionWriterTest {
 
         ObjectCollection objectsRead = readObjects(outputPathExpected(hdf5, path));
 
-        assertEquals("Objects size",  objects.size(), objectsRead.size());
-        // TODO fix this test after code is compiling to be object independent 
-        //assertTrue("Objects first object",  objects.get(0).equals(objectsRead.get(0)) );
-        //assertTrue(objects.equalsDeep(objectsRead));
+        assertEquals("Objects size", objects.size(), objectsRead.size());
+        // TODO fix this test after code is compiling to be object independent
+        // assertTrue("Objects first object",  objects.get(0).equals(objectsRead.get(0)) );
+        // assertTrue(objects.equalsDeep(objectsRead));
     }
 
     private static Path outputPathExpected(boolean hdf5, Path path) {

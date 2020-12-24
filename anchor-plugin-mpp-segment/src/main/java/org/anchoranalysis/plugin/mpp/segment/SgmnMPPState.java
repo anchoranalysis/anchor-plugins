@@ -44,7 +44,7 @@ public class SgmnMPPState implements ExperimentState {
 
     private static final String MANIFEST_FUNCTION = OUTPUT_SERIALIZED;
 
-    private KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> kernelProposer;
+    private KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer;
     private Define define;
 
     @Override

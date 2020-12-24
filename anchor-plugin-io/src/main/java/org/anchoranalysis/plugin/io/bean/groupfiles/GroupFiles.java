@@ -36,6 +36,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
@@ -103,8 +104,9 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
 
             FileInput input = iterator.next();
 
-            String path = input.getFile().getAbsolutePath();
-            path = path.replaceAll("\\\\", "/");
+            String path =
+                    FilePathToUnixStyleConverter.toStringUnixStyle(
+                            input.getFile().getAbsolutePath());
 
             if (pathParser.setPath(path)) {
                 FileDetails details =

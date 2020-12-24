@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
  * @author Owen Feehan
  * @param <T> proposal-type
  */
-public abstract class KernelBirth<T> extends KernelPosNeg<T,UpdatableMarksList> {
+public abstract class KernelBirth<T> extends KernelPosNeg<T, UpdatableMarksList> {
 
     private Optional<Set<Mark>> setMarksNew = Optional.empty();
 
