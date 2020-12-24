@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 
 public class RegExpFilePathParser extends FilePathParser {
 
@@ -61,9 +62,7 @@ public class RegExpFilePathParser extends FilePathParser {
     public boolean setPath(String path) {
 
         // Replace backslashes with forward slashes
-        path = path.replaceAll("\\\\", "/");
-
-        Matcher matcher = pattern.matcher(path);
+        Matcher matcher = pattern.matcher(FilePathToUnixStyleConverter.toStringUnixStyle(path));
 
         if (!matcher.matches()) {
             return false;

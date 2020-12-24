@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public abstract class KernelDeath<T> extends KernelPosNeg<T,UpdatableMarksList> {
+public abstract class KernelDeath<T> extends KernelPosNeg<T, UpdatableMarksList> {
 
     private Optional<Mark> markRmv = Optional.empty();
 

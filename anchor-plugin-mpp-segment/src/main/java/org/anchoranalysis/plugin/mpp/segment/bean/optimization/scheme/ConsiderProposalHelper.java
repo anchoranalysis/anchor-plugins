@@ -52,7 +52,7 @@ class ConsiderProposalHelper {
         if (optStep.getProposal().isPresent()) {
             considerProposal(
                     optStep,
-                    optStep.getProposal().get(),
+                    optStep.getProposal().get(), // MOSONAR
                     iter,
                     accptProbCalculator,
                     kernelUpdater,

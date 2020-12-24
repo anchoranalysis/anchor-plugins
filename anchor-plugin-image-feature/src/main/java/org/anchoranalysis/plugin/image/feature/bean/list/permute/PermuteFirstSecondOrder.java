@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -39,6 +40,7 @@ import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByCons
 import org.anchoranalysis.plugin.operator.feature.bean.range.IfOutsideRange;
 import org.anchoranalysis.plugin.operator.feature.bean.score.StatisticalScoreBase;
 
+@RequiredArgsConstructor
 public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
         extends PermuteFeatureSequenceInteger<T> {
 
@@ -47,21 +49,17 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
     @BeanField @Getter @Setter private boolean paramPrefixAppendNumber = true;
     // END BEAN PROPERTIES
 
-    private CreateFirstSecondOrder<T> factory;
-    private double minRange;
-    private double maxRange;
+    // START REQUIRED ARGUMENTS
+    private final CreateFirstSecondOrder<T> factory;
+    
+    private final double minRange;
+    
+    private final double maxRange;
+    // END REQUIRED ARGUMENTS
 
     @FunctionalInterface
     public static interface CreateFirstSecondOrder<T extends FeatureInput> {
         StatisticalScoreBase<T> create();
-    }
-
-    public PermuteFirstSecondOrder(
-            CreateFirstSecondOrder<T> factory, double minRange, double maxRange) {
-        super();
-        this.factory = factory;
-        this.minRange = minRange;
-        this.maxRange = maxRange;
     }
 
     @Override

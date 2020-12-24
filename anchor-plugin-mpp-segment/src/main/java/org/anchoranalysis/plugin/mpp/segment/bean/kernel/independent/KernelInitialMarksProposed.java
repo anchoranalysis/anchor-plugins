@@ -40,7 +40,8 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public class KernelInitialMarksProposed extends KernelIndependent<MarkCollection,UpdatableMarksList> {
+public class KernelInitialMarksProposed
+        extends KernelIndependent<MarkCollection, UpdatableMarksList> {
 
     // START BEAN LIST
     @BeanField @Getter @Setter private MarkCollectionProposer marksProposer;
@@ -80,9 +81,7 @@ public class KernelInitialMarksProposed extends KernelIndependent<MarkCollection
 
     @Override
     public void updateAfterAcceptance(
-            UpdatableMarksList updatableState,
-            MarkCollection exst,
-            MarkCollection accptd)
+            UpdatableMarksList updatableState, MarkCollection exst, MarkCollection accptd)
             throws UpdateMarkSetException {
         // NOTHING TO DO
     }

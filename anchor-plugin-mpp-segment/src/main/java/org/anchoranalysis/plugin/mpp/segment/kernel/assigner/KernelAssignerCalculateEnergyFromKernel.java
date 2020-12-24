@@ -44,7 +44,8 @@ import org.anchoranalysis.plugin.mpp.segment.bean.optimization.kernelbridge.Kern
  * @param <T> Knerel type
  */
 @AllArgsConstructor
-public class KernelAssignerCalculateEnergyFromKernel<S, T> implements KernelAssigner<S, T, UpdatableMarksList> {
+public class KernelAssignerCalculateEnergyFromKernel<S, T>
+        implements KernelAssigner<S, T, UpdatableMarksList> {
 
     private final KernelStateBridge<S, T> kernelStateBridge;
 
@@ -52,7 +53,7 @@ public class KernelAssignerCalculateEnergyFromKernel<S, T> implements KernelAssi
     public void assignProposal(
             OptimizationStep<S, T, UpdatableMarksList> optStep,
             TransformationContext context,
-            KernelWithIdentifier<S,UpdatableMarksList> kernel)
+            KernelWithIdentifier<S, UpdatableMarksList> kernel)
             throws KernelCalculateEnergyException {
 
         try {
@@ -73,7 +74,7 @@ public class KernelAssignerCalculateEnergyFromKernel<S, T> implements KernelAssi
 
     private Optional<S> proposal(
             OptimizationStep<S, T, UpdatableMarksList> optStep,
-            KernelWithIdentifier<S,UpdatableMarksList> kernel,
+            KernelWithIdentifier<S, UpdatableMarksList> kernel,
             TransformationContext context)
             throws KernelCalculateEnergyException, OperationFailedException {
         return kernel.getKernel()

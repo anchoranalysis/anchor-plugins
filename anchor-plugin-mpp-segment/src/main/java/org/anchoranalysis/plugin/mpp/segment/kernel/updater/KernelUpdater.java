@@ -48,6 +48,6 @@ public interface KernelUpdater<S, T, U> {
      * @throws UpdateMarkSetException
      */
     void kernelAccepted(
-            Kernel<S,U> kernel, Optional<T> current, T proposed, TransformationContext context)
+            Kernel<S, U> kernel, Optional<T> current, T proposed, TransformationContext context)
             throws UpdateMarkSetException;
 }

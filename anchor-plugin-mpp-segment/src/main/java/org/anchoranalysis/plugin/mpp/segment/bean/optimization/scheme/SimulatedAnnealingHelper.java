@@ -178,9 +178,7 @@ class SimulatedAnnealingHelper {
 
             KernelUpdater<S, T, UpdatableMarksList> kernelUpdater =
                     new KernelUpdaterSimple<>(
-                            marks,
-                            kernelProposer.getAllKernelFactories(),
-                            funcExtractForUpdate);
+                            marks, kernelProposer.getAllKernelFactories(), funcExtractForUpdate);
 
             assignToOptStepForKernel(
                     optStep, iter, kid, context, accptProbCalc, kernelUpdater, kernelAssigner);

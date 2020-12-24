@@ -42,7 +42,7 @@ class FeedbackHelper {
     public static <T> FeedbackGenerator<T> createInitFeedbackGenerator(
             FeedbackReceiver<T> feedbackReceiver,
             OptimizationContext initContext,
-            WeightedKernelList<?,?> allKernelFactories,
+            WeightedKernelList<?, ?> allKernelFactories,
             ExtractScoreSize<T> extractScoreSize) {
 
         FeedbackGenerator<T> feedbackGenerator =
@@ -62,7 +62,7 @@ class FeedbackHelper {
     }
 
     private static <T> FeedbackBeginParameters<T> feedbackBeginParams(
-            OptimizationContext initContext, WeightedKernelList<?,?> allKernelFactories) {
+            OptimizationContext initContext, WeightedKernelList<?, ?> allKernelFactories) {
         FeedbackBeginParameters<T> feedbackParams = new FeedbackBeginParameters<>();
         feedbackParams.setInitContext(initContext);
         feedbackParams.setKernelFactoryList(allKernelFactories);

@@ -49,7 +49,8 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 import org.anchoranalysis.plugin.mpp.segment.optimization.VoxelizedMarksWithEnergyFactory;
 
 @NoArgsConstructor
-public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMarksWithEnergy,UpdatableMarksList> {
+public class KernelInitialMarksVoxelized
+        extends KernelIndependent<VoxelizedMarksWithEnergy, UpdatableMarksList> {
 
     // START BEAN LIST
     @BeanField @Getter @Setter private MarkCollectionProposer marksProposer;

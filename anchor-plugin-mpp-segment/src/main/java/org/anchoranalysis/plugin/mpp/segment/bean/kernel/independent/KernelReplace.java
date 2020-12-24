@@ -40,7 +40,7 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 import org.apache.commons.lang.ArrayUtils;
 
-public abstract class KernelReplace<T> extends KernelPosNeg<T,UpdatableMarksList> {
+public abstract class KernelReplace<T> extends KernelPosNeg<T, UpdatableMarksList> {
 
     private KernelBirth<T> kernelBirth;
     private KernelDeath<T> kernelDeath;
@@ -94,16 +94,13 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T,UpdatableMarksList
 
     @Override
     public void updateAfterAcceptance(
-            UpdatableMarksList updatableState,
-            T energyExisting,
-            T energyNew)
+            UpdatableMarksList updatableState, T energyExisting, T energyNew)
             throws UpdateMarkSetException {
 
         OptionalUtilities.ifPresent(
                 afterDeathProp,
                 prop -> {
-                    kernelDeath.updateAfterAcceptance(
-                            updatableState, energyExisting, prop);
+                    kernelDeath.updateAfterAcceptance(updatableState, energyExisting, prop);
                     kernelBirth.updateAfterAcceptance(updatableState, prop, energyNew);
                 });
     }
@@ -113,7 +110,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T,UpdatableMarksList
         return makeArray(kernelBirth.changedMarkIDArray(), kernelDeath.changedMarkIDArray());
     }
 
-    private static <S,T> String changedID(Kernel<S,T> kernel) {
+    private static <S, T> String changedID(Kernel<S, T> kernel) {
         int[] arr = kernel.changedMarkIDArray();
 
         StringBuilder sb = new StringBuilder();
