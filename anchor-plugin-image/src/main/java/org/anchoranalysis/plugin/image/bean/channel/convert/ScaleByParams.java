@@ -35,13 +35,14 @@ import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ToUnsignedByteScaleByMinMaxValue;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
  *
  * @author Owen Feehan
  */
-public class ScaleByParams extends ConvertChannelTo {
+public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private KeyValueParamsProvider params;
@@ -56,7 +57,7 @@ public class ScaleByParams extends ConvertChannelTo {
     // END BEAN PROPERTIES
 
     @Override
-    public ChannelConverter<?> createConverter() throws CreateException {
+    public ChannelConverter<UnsignedByteBuffer> createConverter() throws CreateException {
 
         KeyValueParams kvp = params.create();
 

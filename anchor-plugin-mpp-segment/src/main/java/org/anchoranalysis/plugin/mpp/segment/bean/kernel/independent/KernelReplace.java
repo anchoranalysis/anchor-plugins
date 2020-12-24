@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
@@ -40,7 +40,7 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 import org.apache.commons.lang.ArrayUtils;
 
-public abstract class KernelReplace<T> extends KernelPosNeg<T> {
+public abstract class KernelReplace<T> extends KernelPosNeg<T,UpdatableMarksList> {
 
     private KernelBirth<T> kernelBirth;
     private KernelDeath<T> kernelDeath;
@@ -94,7 +94,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableState,
             T energyExisting,
             T energyNew)
             throws UpdateMarkSetException {
@@ -103,8 +103,8 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
                 afterDeathProp,
                 prop -> {
                     kernelDeath.updateAfterAcceptance(
-                            updatableMarkSetCollection, energyExisting, prop);
-                    kernelBirth.updateAfterAcceptance(updatableMarkSetCollection, prop, energyNew);
+                            updatableState, energyExisting, prop);
+                    kernelBirth.updateAfterAcceptance(updatableState, prop, energyNew);
                 });
     }
 
@@ -113,7 +113,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
         return makeArray(kernelBirth.changedMarkIDArray(), kernelDeath.changedMarkIDArray());
     }
 
-    private static <S> String changedID(Kernel<S> kernel) {
+    private static <S,T> String changedID(Kernel<S,T> kernel) {
         int[] arr = kernel.changedMarkIDArray();
 
         StringBuilder sb = new StringBuilder();

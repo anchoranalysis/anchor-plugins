@@ -36,6 +36,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
@@ -57,7 +58,7 @@ class KernelProposerFixture {
      * @throws CreateException
      * @throws InitException
      */
-    public static KernelProposer<VoxelizedMarksWithEnergy> createBirthAndDeath(
+    public static KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> createBirthAndDeath(
             MarkProposer markProposer) throws CreateException, InitException {
 
         InputOutputContext context = InputOutputContextFixture.withSuppressedLogger();
@@ -66,7 +67,7 @@ class KernelProposerFixture {
                 MPPInitParamsFactory.create(
                         new InitParamsContext(context), Optional.empty(), Optional.empty());
 
-        KernelProposer<VoxelizedMarksWithEnergy> kernelProposer =
+        KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> kernelProposer =
                 createProposerTwoEqual(
                         createInitialKernel(initParams, context.getLogger()),
                         createBirthKernel(markProposer, initParams, context.getLogger()),
@@ -76,9 +77,9 @@ class KernelProposerFixture {
     }
 
     /** create a proposer with two equal options */
-    private static <T> KernelProposer<T> createProposerTwoEqual(
-            Kernel<T> initialKernel, Kernel<T> kernel1, Kernel<T> kernel2) {
-        KernelProposer<T> proposer = new KernelProposer<>();
+    private static <T,S> KernelProposer<T,S> createProposerTwoEqual(
+            Kernel<T,S> initialKernel, Kernel<T,S> kernel1, Kernel<T,S> kernel2) {
+        KernelProposer<T,S> proposer = new KernelProposer<>();
         proposer.setInitialKernel(initialKernel);
         proposer.setOptionList(
                 Arrays.asList(

@@ -98,7 +98,7 @@ class RotatableBoundingBoxFromArrays {
     private static RotatableBoundingBox createMarkFor(
             Point3d midpoint, float width, float height, Orientation2D orientation) {
         RotatableBoundingBox mark = new RotatableBoundingBox();
-        mark.setPos(midpoint);
+        mark.setPosition(midpoint);
         mark.update(
                 new Point2d(-width / 2, -height / 2),
                 new Point2d(width / 2, height / 2),

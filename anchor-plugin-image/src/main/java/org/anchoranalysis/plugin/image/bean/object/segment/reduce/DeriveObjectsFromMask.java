@@ -79,7 +79,7 @@ class DeriveObjectsFromMask {
                 new ObjectsFromConnectedComponentsFactory(minNumberVoxels);
 
         // All the objects
-        ObjectCollection objects = creator.createConnectedComponents(mask.binaryVoxels());
+        ObjectCollection objects = creator.createUnsignedByte(mask.binaryVoxels());
 
         // Associate a confidence value, by the mean-intensity of all confidence voxels in the mask
         return objects.stream()

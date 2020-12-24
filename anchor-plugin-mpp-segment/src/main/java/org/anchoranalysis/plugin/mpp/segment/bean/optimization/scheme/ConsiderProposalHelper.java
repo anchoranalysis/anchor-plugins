@@ -39,11 +39,11 @@ import org.anchoranalysis.plugin.mpp.segment.optimization.AccptProbCalculator;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ConsiderProposalHelper {
 
-    public static <S, T> void maybeAcceptProposal(
-            OptimizationStep<S, T> optStep,
+    public static <S, T, U> void maybeAcceptProposal(
+            OptimizationStep<S, T, U> optStep,
             int iter,
             AccptProbCalculator<T> accptProbCalculator,
-            KernelUpdater<S, T> kernelUpdater,
+            KernelUpdater<S, T, U> kernelUpdater,
             ProposerFailureDescription error,
             TransformationContext context)
             throws UpdateMarkSetException {
@@ -62,12 +62,12 @@ class ConsiderProposalHelper {
         }
     }
 
-    private static <S, T> void considerProposal(
-            OptimizationStep<S, T> optStep,
+    private static <S, T, U> void considerProposal(
+            OptimizationStep<S, T, U> optStep,
             T proposal,
             int iter,
             AccptProbCalculator<T> accptProbCalculator,
-            KernelUpdater<S, T> kernelUpdater,
+            KernelUpdater<S, T, U> kernelUpdater,
             TransformationContext context)
             throws UpdateMarkSetException {
 

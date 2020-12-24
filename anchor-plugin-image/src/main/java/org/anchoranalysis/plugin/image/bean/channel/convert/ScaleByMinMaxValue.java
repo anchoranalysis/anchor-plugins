@@ -33,20 +33,21 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ToUnsignedByteScaleByMinMaxValue;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
  *
  * @author Owen Feehan
  */
-public class ScaleByMinMaxValue extends ConvertChannelTo {
+public class ScaleByMinMaxValue extends ConvertChannelTo<UnsignedByteBuffer> {
 
     @BeanField @NonNegative @Getter @Setter private int min = -1;
 
     @BeanField @NonNegative @Getter @Setter private int max = -1;
 
     @Override
-    public ChannelConverter<?> createConverter() {
+    public ChannelConverter<UnsignedByteBuffer> createConverter() {
         return new ToUnsignedByteScaleByMinMaxValue(min, max);
     }
 }

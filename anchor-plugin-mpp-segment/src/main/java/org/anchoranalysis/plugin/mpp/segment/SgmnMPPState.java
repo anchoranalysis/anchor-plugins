@@ -32,6 +32,7 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.segment.bean.ExperimentState;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 
@@ -43,7 +44,7 @@ public class SgmnMPPState implements ExperimentState {
 
     private static final String MANIFEST_FUNCTION = OUTPUT_SERIALIZED;
 
-    private KernelProposer<VoxelizedMarksWithEnergy> kernelProposer;
+    private KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> kernelProposer;
     private Define define;
 
     @Override

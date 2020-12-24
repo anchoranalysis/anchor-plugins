@@ -66,7 +66,7 @@ import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConv
 import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
 
 /**
- * Converts each input-image to the default output format, optionally changing the bit depth.
+ * Converts each input-image to an output format, optionally changing the bit depth.
  *
  * <p>Stacks containing multiple series (i.e. multiple images in a single file) are supported.
  *
@@ -105,7 +105,7 @@ public class ConvertImageFormat
     @BeanField @OptionalBean @Getter @Setter private ChannelFilter channelFilter = null;
 
     /** Optionally, how to convert from one bit-depth to another (scaling, clamping etc.) */
-    @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo channelConverter = null;
+    @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo<?> channelConverter = null;
     // END BEAN PROPERTIES
 
     @Override

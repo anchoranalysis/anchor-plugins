@@ -51,6 +51,6 @@ public class MarkDistanceAbstractPosition extends MarkDistance {
 
         MarkWithPosition mark1Cast = (MarkWithPosition) mark1;
         MarkWithPosition mark2Cast = (MarkWithPosition) mark2;
-        return mark1Cast.getPos().distance(mark2Cast.getPos());
+        return mark1Cast.getPosition().distance(mark2Cast.getPosition());
     }
 }

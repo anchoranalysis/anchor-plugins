@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
-import org.anchoranalysis.mpp.feature.mark.MemoCollection;
+import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 import org.anchoranalysis.mpp.mark.Mark;
 
 @AllArgsConstructor
@@ -44,7 +44,7 @@ public class CalculateDeriveMarkInput
     protected FeatureInputMark execute(FeatureInputAllMemo params)
             throws FeatureCalculationException {
 
-        MemoCollection list = params.getPxlPartMemo();
+        EnergyMemoList list = params.getPxlPartMemo();
 
         if (list.size() == 0) {
             throw new FeatureCalculationException("No mark exists in the list");

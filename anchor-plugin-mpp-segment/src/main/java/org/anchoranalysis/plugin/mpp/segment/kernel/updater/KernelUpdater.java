@@ -36,18 +36,18 @@ import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
  * @param <S> kernel type
  * @param <T> state-type
  */
-public interface KernelUpdater<S, T> {
+public interface KernelUpdater<S, T, U> {
 
     /**
      * Informs that a proposal from a particular kernel has been accepted
      *
      * @param kernel the kernel whose proposal was accepted
-     * @param crnt the existing state
+     * @param current the existing state
      * @param proposed the new state that was accepted
      * @param context
      * @throws UpdateMarkSetException
      */
     void kernelAccepted(
-            Kernel<S> kernel, Optional<T> crnt, T proposed, TransformationContext context)
+            Kernel<S,U> kernel, Optional<T> current, T proposed, TransformationContext context)
             throws UpdateMarkSetException;
 }

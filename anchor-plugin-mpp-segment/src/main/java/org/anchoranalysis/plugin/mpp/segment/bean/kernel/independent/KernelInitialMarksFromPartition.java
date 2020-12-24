@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.proposer.MarkCollectionProposer;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
@@ -44,7 +44,7 @@ import org.anchoranalysis.plugin.mpp.segment.bean.marks.weight.ExtractWeightFrom
 import org.anchoranalysis.plugin.mpp.segment.optimization.MarksFromPartition;
 import org.anchoranalysis.plugin.mpp.segment.optimization.PartitionedMarks;
 
-public class KernelInitialMarksFromPartition extends KernelIndependent<MarksFromPartition> {
+public class KernelInitialMarksFromPartition extends KernelIndependent<MarksFromPartition,UpdatableMarksList> {
 
     // START BEAN LIST
     @BeanField @Getter @Setter private MarkCollectionProposer marksProposer;
@@ -89,7 +89,7 @@ public class KernelInitialMarksFromPartition extends KernelIndependent<MarksFrom
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableState,
             MarksFromPartition exst,
             MarksFromPartition accptd)
             throws UpdateMarkSetException {

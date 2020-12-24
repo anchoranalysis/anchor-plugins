@@ -48,11 +48,12 @@ import org.anchoranalysis.math.histogram.Histogram;
  * <p>The histogram can be either provided, or it will be derived from the image anew.
  *
  * @author Owen Feehan
+ * @param <T> the buffer-type to convert the channel to
  */
-public class ConvertWithHistogram extends ConvertBase {
+public class ConvertWithHistogram<T> extends ConvertBase {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ConvertChannelToWithHistogram convert;
+    @BeanField @Getter @Setter private ConvertChannelToWithHistogram<T> convert;
 
     /**
      * If set, a histogram used in conversion to describe input intensities (across perhaps multiple
@@ -64,7 +65,7 @@ public class ConvertWithHistogram extends ConvertBase {
     @Override
     public Channel createFromChannel(final Channel channel) throws CreateException {
 
-        ChannelConverterAttached<Histogram, ?> converter = convert.createConverter();
+        ChannelConverterAttached<Histogram, T> converter = convert.createConverter();
 
         try {
             converter.attachObject(createHistogram(channel));

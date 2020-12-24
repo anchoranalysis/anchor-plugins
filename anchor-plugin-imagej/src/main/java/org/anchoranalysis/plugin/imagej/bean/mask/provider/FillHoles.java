@@ -90,7 +90,7 @@ public class FillHoles extends MaskProviderUnary {
                 new ObjectsFromConnectedComponentsFactory();
 
         return filterObjects(
-                objectCreator.createConnectedComponents(mask.binaryVoxels()), mask.dimensions());
+                objectCreator.createUnsignedByte(mask.binaryVoxels()), mask.dimensions());
     }
 
     private ObjectCollection filterObjects(ObjectCollection objects, Dimensions dimensions)

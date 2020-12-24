@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
@@ -44,7 +44,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public class KernelExchange extends KernelIndependent<VoxelizedMarksWithEnergy> {
+public class KernelExchange extends KernelIndependent<VoxelizedMarksWithEnergy,UpdatableMarksList> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MarkProposer markProposer = null;
@@ -74,13 +74,13 @@ public class KernelExchange extends KernelIndependent<VoxelizedMarksWithEnergy> 
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
-            VoxelizedMarksWithEnergy exst,
-            VoxelizedMarksWithEnergy accptd)
+            UpdatableMarksList updatableState,
+            VoxelizedMarksWithEnergy existing,
+            VoxelizedMarksWithEnergy accpted)
             throws UpdateMarkSetException {
 
-        VoxelizedMarkMemo memoNew = accptd.getMemoForMark(markNew);
-        exst.exchangeOnUpdatablePairList(updatableMarkSetCollection, markExst, memoNew);
+        VoxelizedMarkMemo memoNew = accpted.getMemoForMark(markNew);
+        existing.exchangeOnUpdatablePairList(updatableState, markExst, memoNew);
     }
 
     @Override

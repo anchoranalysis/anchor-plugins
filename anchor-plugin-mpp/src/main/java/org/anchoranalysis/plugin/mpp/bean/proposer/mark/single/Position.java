@@ -61,7 +61,7 @@ public class Position extends MarkProposer {
             return false;
         }
 
-        inputMarkPos.setPos(pos.get());
+        inputMarkPos.setPosition(pos.get());
 
         return true;
     }

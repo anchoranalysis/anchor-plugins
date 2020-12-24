@@ -28,8 +28,6 @@ package org.anchoranalysis.plugin.io.test.image;
 
 import static org.anchoranalysis.plugin.io.test.image.HelperReadWriteObjects.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.nio.file.Path;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.index.SetOperationFailedException;

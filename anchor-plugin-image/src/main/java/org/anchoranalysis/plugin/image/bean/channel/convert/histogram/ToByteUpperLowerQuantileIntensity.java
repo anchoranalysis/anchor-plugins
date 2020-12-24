@@ -32,9 +32,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelToWithHistogram;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.core.channel.convert.attached.histogram.UpperLowerQuantileIntensityFromHistogram;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.math.histogram.Histogram;
 
-public class ToByteUpperLowerQuantileIntensity extends ConvertChannelToWithHistogram {
+public class ToByteUpperLowerQuantileIntensity extends ConvertChannelToWithHistogram<UnsignedByteBuffer> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private double quantileLower = 0.0;
@@ -49,7 +50,7 @@ public class ToByteUpperLowerQuantileIntensity extends ConvertChannelToWithHisto
     // END BEAN PROPERTIES
 
     @Override
-    public ChannelConverterAttached<Histogram, ?> createConverter() {
+    public ChannelConverterAttached<Histogram, UnsignedByteBuffer> createConverter() {
         return new UpperLowerQuantileIntensityFromHistogram(
                 quantileLower, quantileUpper, scaleLower, scaleUpper);
     }

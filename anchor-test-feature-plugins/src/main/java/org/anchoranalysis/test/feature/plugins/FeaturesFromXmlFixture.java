@@ -33,7 +33,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.xml.BeanXmlLoader;
+import org.anchoranalysis.bean.xml.BeanXMLLoader;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -48,7 +48,7 @@ public class FeaturesFromXmlFixture {
             String xmlPath, TestLoader loader) throws CreateException {
         Path pathStatic = loader.resolveTestPath(xmlPath);
         try {
-            FeatureListProvider<T> provider = BeanXmlLoader.loadBean(pathStatic);
+            FeatureListProvider<T> provider = BeanXMLLoader.loadBean(pathStatic);
             FeatureList<T> features = provider.create();
             assertTrue(!features.isEmpty());
             return features;
@@ -62,7 +62,7 @@ public class FeaturesFromXmlFixture {
                     String xmlPath, TestLoader loader) throws CreateException {
         Path pathStatic = loader.resolveTestPath(xmlPath);
         try {
-            List<NamedBean<FeatureListProvider<T>>> list = BeanXmlLoader.loadBean(pathStatic);
+            List<NamedBean<FeatureListProvider<T>>> list = BeanXMLLoader.loadBean(pathStatic);
             assertTrue(!list.isEmpty());
             return list;
         } catch (BeanXmlException e) {

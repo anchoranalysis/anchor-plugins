@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureAllMemo;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.mpp.feature.mark.MemoCollection;
+import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 
 public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
@@ -48,7 +48,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
     public double calculate(SessionInput<FeatureInputAllMemo> input)
             throws FeatureCalculationException {
 
-        MemoCollection memoMarks = input.get().getPxlPartMemo();
+        EnergyMemoList memoMarks = input.get().getPxlPartMemo();
 
         if (memoMarks.size() == 0) {
             return 0.0;
@@ -58,7 +58,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
     }
 
     private double calculateStatistic(
-            SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks)
+            SessionInput<FeatureInputAllMemo> input, EnergyMemoList memoMarks)
             throws FeatureCalculationException {
 
         double[] vals = new double[memoMarks.size()];
@@ -74,7 +74,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
     /** Calculates the feature on each mark separately, populating vals, and returns the mean */
     private double calculateForEachItem(
-            SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks, double[] vals)
+            SessionInput<FeatureInputAllMemo> input, EnergyMemoList memoMarks, double[] vals)
             throws FeatureCalculationException {
 
         double sum = 0.0;

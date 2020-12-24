@@ -204,13 +204,13 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 
         Point3d point1 =
                 new Point3d(
-                        pointArr1[0] + markExst.getPos().x(),
-                        pointArr1[1] + markExst.getPos().y(),
+                        pointArr1[0] + markExst.getPosition().x(),
+                        pointArr1[1] + markExst.getPosition().y(),
                         0);
         Point3d point2 =
                 new Point3d(
-                        pointArr2[0] + markExst.getPos().x(),
-                        pointArr2[1] + markExst.getPos().y(),
+                        pointArr2[0] + markExst.getPosition().x(),
+                        pointArr2[1] + markExst.getPosition().y(),
                         0);
 
         if (wigglePos) {

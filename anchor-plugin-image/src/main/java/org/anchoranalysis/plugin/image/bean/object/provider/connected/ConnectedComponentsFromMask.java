@@ -95,7 +95,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     }
 
     private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels) {
-        return createFactory(minNumberVoxels).createConnectedComponents(mask.binaryVoxels());
+        return createFactory(minNumberVoxels).createUnsignedByte(mask.binaryVoxels());
     }
 
     private ObjectCollection createObjectsBySlice(Mask mask, int minNumberVoxels)
@@ -122,7 +122,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
             BinaryVoxels<UnsignedByteBuffer> binaryValues,
             int z) {
         // respecify the z
-        return objectCreator.createConnectedComponents(binaryValues).stream()
+        return objectCreator.createUnsignedByte(binaryValues).stream()
                 .mapBoundingBoxPreserveExtent(box -> box.shiftToZ(z));
     }
 }
