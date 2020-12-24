@@ -165,7 +165,7 @@ jobs:
       run: mvn --batch-mode --update-snapshots verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
       
       
-javadoc:
+ javadoc:
 
     runs-on: ubuntu-latest
 
