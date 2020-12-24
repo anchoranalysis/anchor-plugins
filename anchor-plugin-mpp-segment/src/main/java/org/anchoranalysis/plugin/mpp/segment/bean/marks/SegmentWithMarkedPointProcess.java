@@ -187,9 +187,6 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
 
             new EnergyStackWriter(energyStack, context.getOutputter()).writeEnergyStack();
 
-            context.getMessageReporter()
-                    .log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap());
-
             // We initialize the feedback receiver
             feedbackReceiver.initRecursive(mppInit, context.getLogger());
 
