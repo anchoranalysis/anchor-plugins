@@ -39,6 +39,7 @@ import org.anchoranalysis.mpp.bean.mark.factory.MarkEllipsoidFactory;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkFactory;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.segment.bean.optimization.OptimizationScheme;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationTerminatedEarlyException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.mark.single.OrientationAndRadiiProposer;
@@ -79,7 +80,7 @@ public class SimulatedAnnealingTest {
             boolean use3D, int expectedSize, double expectedEnergy, boolean logToConsole)
             throws OptimizationTerminatedEarlyException, CreateException, InitException {
 
-        OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy> scheme =
+        OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy, UpdatableMarksList> scheme =
                 OptimizationSchemeFixture.simulatedAnnealing(
                         new FromVoxelizedMarksWithEnergy(),
                         50 // A low number of iterations so that the test runs relatively quickly

@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
@@ -53,7 +53,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
+public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy,UpdatableMarksList> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MarkMergeProposer mergeMarkProposer;
@@ -189,7 +189,7 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableState,
             VoxelizedMarksWithEnergy existing,
             VoxelizedMarksWithEnergy accpted)
             throws UpdateMarkSetException {
@@ -204,16 +204,16 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
 
         // We need to delete in the correct order
         if (rmvIndex2 > rmvIndex1) {
-            updatableMarkSetCollection.remove(memoList, memoDest);
+            updatableState.remove(memoList, memoDest);
             memoList.remove(rmvIndex2);
 
-            updatableMarkSetCollection.remove(memoList, memoSource);
+            updatableState.remove(memoList, memoSource);
             memoList.remove(rmvIndex1);
         } else {
-            updatableMarkSetCollection.remove(memoList, memoSource);
+            updatableState.remove(memoList, memoSource);
             memoList.remove(rmvIndex1);
 
-            updatableMarkSetCollection.remove(memoList, memoDest);
+            updatableState.remove(memoList, memoDest);
             memoList.remove(rmvIndex2);
         }
 
@@ -222,7 +222,7 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
         // Should always find one
         assert memoAdded != null;
 
-        updatableMarkSetCollection.add(memoList, memoAdded);
+        updatableState.add(memoList, memoAdded);
     }
 
     @Override

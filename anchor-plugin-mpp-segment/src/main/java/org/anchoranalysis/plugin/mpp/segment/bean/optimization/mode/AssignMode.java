@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.StateReporter;
 import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
@@ -47,7 +48,7 @@ public abstract class AssignMode<S, T, U> extends AnchorBean<AssignMode<S, T, U>
 
     public abstract AccptProbCalculator<T> probCalculator(AnnealScheme annealScheme);
 
-    public KernelAssigner<U, T> kernelAssigner() {
+    public KernelAssigner<U, T, UpdatableMarksList> kernelAssigner() {
         return new KernelAssignerCalculateEnergyFromKernel<>(kernelStateBridge());
     }
 

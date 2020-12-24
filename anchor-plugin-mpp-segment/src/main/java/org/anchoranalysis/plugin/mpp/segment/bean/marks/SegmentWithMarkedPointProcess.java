@@ -57,7 +57,7 @@ import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithTotalEnergy;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -99,7 +99,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
      * iteration to the next.
      */
     @BeanField @Getter @Setter
-    private OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy> optimization;
+    private OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy, UpdatableMarksList> optimization;
 
     /** Creates a new mark, before perhaps further manipulations by a kernel. */
     @BeanField @Getter @Setter private MarkWithIdentifierFactory markFactory;
@@ -108,7 +108,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     @BeanField @Getter @Setter private EnergySchemeCreator energySchemeCreator;
 
     /** Proposes kernel-changes during iterations of hte marked-point-processes. */
-    @BeanField @Getter @Setter private KernelProposer<VoxelizedMarksWithEnergy> kernelProposer;
+    @BeanField @Getter @Setter private KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> kernelProposer;
 
     /** Processes feedback from the segmentation algorithm for outputting / debugging. */
     @BeanField @Getter @Setter
@@ -143,8 +143,8 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             Optional<KeyValueParams> keyValueParams,
             InputOutputContext context)
             throws SegmentationFailedException {
-        ListUpdatableMarkSetCollection updatableMarkSetCollection =
-                new ListUpdatableMarkSetCollection();
+        UpdatableMarksList updatableMarkSetCollection =
+                new UpdatableMarksList();
 
         try {
             MemoryUtilities.logMemoryUsage("Start of segment", context.getMessageReporter());
@@ -178,7 +178,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     private MarkCollection segmentAndWrite(
             MPPInitParams mppInit,
             EnergyStack energyStack,
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableMarkSetCollection,
             Optional<KeyValueParams> keyValueParams,
             InputOutputContext context)
             throws OperationFailedException {
@@ -238,7 +238,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     }
 
     private MarksWithTotalEnergy findOptimum(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection, OptimizationContext context)
+            UpdatableMarksList updatableMarkSetCollection, OptimizationContext context)
             throws SegmentationFailedException {
         try {
             MarksWithEnergyBreakdown marks =

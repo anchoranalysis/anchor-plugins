@@ -37,9 +37,9 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class BufferUtilities {
 
-    public static void putScoreForOffset(
+    public static <T> void putScoreForOffset(
             VoxelScore pixelScore,
-            List<VoxelBuffer<?>> bufferList,
+            List<VoxelBuffer<T>> bufferList,
             UnsignedByteBuffer bufferOut,
             int offset)
             throws FeatureCalculationException {
@@ -47,7 +47,7 @@ class BufferUtilities {
         bufferOut.putUnsigned(offset, (int) Math.round(score * 255));
     }
 
-    private static int[] createParams(List<VoxelBuffer<?>> list, int offset) {
+    private static <T> int[] createParams(List<VoxelBuffer<T>> list, int offset) {
 
         int[] vals = new int[list.size()];
 

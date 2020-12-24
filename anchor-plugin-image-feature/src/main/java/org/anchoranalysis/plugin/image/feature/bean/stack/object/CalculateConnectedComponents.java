@@ -47,6 +47,6 @@ class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, 
         Mask mask = new Mask(input.getEnergyStackRequired().getChannel(energyChannelIndex));
 
         ObjectsFromConnectedComponentsFactory creator = new ObjectsFromConnectedComponentsFactory();
-        return creator.createConnectedComponents(mask.binaryVoxels());
+        return creator.createUnsignedByte(mask.binaryVoxels());
     }
 }

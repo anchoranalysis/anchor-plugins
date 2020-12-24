@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.proposer.MarkCollectionProposer;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
@@ -40,7 +40,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public class KernelInitialMarksProposed extends KernelIndependent<MarkCollection> {
+public class KernelInitialMarksProposed extends KernelIndependent<MarkCollection,UpdatableMarksList> {
 
     // START BEAN LIST
     @BeanField @Getter @Setter private MarkCollectionProposer marksProposer;
@@ -80,7 +80,7 @@ public class KernelInitialMarksProposed extends KernelIndependent<MarkCollection
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableState,
             MarkCollection exst,
             MarkCollection accptd)
             throws UpdateMarkSetException {

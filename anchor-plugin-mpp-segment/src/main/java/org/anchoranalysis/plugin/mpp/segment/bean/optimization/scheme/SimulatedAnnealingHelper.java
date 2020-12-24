@@ -34,7 +34,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
@@ -65,7 +65,7 @@ class SimulatedAnnealingHelper {
      *
      * @param assignMode
      * @param annealScheme
-     * @param updatableMarkSetCollection
+     * @param marks
      * @param feedbackGenerator
      * @param kernelProposer
      * @param termConditionAll
@@ -79,9 +79,9 @@ class SimulatedAnnealingHelper {
     public static <S, T, U> T doOptimization(
             AssignMode<S, T, U> assignMode,
             AnnealScheme annealScheme,
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList marks,
             FeedbackGenerator<S> feedbackGenerator,
-            KernelProposer<U> kernelProposer,
+            KernelProposer<U, UpdatableMarksList> kernelProposer,
             TerminationCondition termConditionAll,
             TransformationContext context)
             throws OptimizationTerminatedEarlyException {
@@ -92,7 +92,7 @@ class SimulatedAnnealingHelper {
             throw new OptimizationTerminatedEarlyException("Init failed", e);
         }
 
-        OptimizationStep<U, T> optStep = new OptimizationStep<>();
+        OptimizationStep<U, T, UpdatableMarksList> optStep = new OptimizationStep<>();
 
         int iter = 0;
         do {
@@ -103,7 +103,7 @@ class SimulatedAnnealingHelper {
                     iter,
                     context,
                     kernelProposer,
-                    updatableMarkSetCollection,
+                    marks,
                     assignMode.probCalculator(annealScheme),
                     assignMode.kernelAssigner(),
                     assignMode.kernelStateBridge().stateToKernel());
@@ -159,26 +159,26 @@ class SimulatedAnnealingHelper {
     }
 
     private static <S, T> void applyKernelToOptStep(
-            OptimizationStep<S, T> optStep,
+            OptimizationStep<S, T, UpdatableMarksList> optStep,
             int iter,
             TransformationContext context,
-            KernelProposer<S> kernelProposer,
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            KernelProposer<S, UpdatableMarksList> kernelProposer,
+            UpdatableMarksList marks,
             AccptProbCalculator<T> accptProbCalc,
-            KernelAssigner<S, T> kernelAssigner,
+            KernelAssigner<S, T, UpdatableMarksList> kernelAssigner,
             StateTransformer<Optional<T>, Optional<S>> funcExtractForUpdate)
             throws OptimizationTerminatedEarlyException {
         try {
             // Propose a kernel
-            KernelWithIdentifier<S> kid =
+            KernelWithIdentifier<S, UpdatableMarksList> kid =
                     proposeKernel(
                             kernelProposer,
                             context.getKernelCalcContext().proposer().getRandomNumberGenerator(),
                             iter == 0);
 
-            KernelUpdater<S, T> kernelUpdater =
+            KernelUpdater<S, T, UpdatableMarksList> kernelUpdater =
                     new KernelUpdaterSimple<>(
-                            updatableMarkSetCollection,
+                            marks,
                             kernelProposer.getAllKernelFactories(),
                             funcExtractForUpdate);
 
@@ -193,8 +193,8 @@ class SimulatedAnnealingHelper {
         }
     }
 
-    private static <S> KernelWithIdentifier<S> proposeKernel(
-            KernelProposer<S> kernelProposer,
+    private static <S, U> KernelWithIdentifier<S, U> proposeKernel(
+            KernelProposer<S, U> kernelProposer,
             RandomNumberGenerator randomNumberGenerator,
             boolean firstStep) {
         if (firstStep) {
@@ -205,13 +205,13 @@ class SimulatedAnnealingHelper {
     }
 
     private static <S, T> void assignToOptStepForKernel(
-            OptimizationStep<S, T> optStep,
+            OptimizationStep<S, T, UpdatableMarksList> optStep,
             int iter,
-            KernelWithIdentifier<S> kid,
+            KernelWithIdentifier<S, UpdatableMarksList> kid,
             TransformationContext context,
             AccptProbCalculator<T> accptProbCalc,
-            KernelUpdater<S, T> kernelUpdater,
-            KernelAssigner<S, T> kernelAssigner)
+            KernelUpdater<S, T, UpdatableMarksList> kernelUpdater,
+            KernelAssigner<S, T, UpdatableMarksList> kernelAssigner)
             throws KernelCalculateEnergyException, UpdateMarkSetException {
 
         StopWatch timer = new StopWatch();
@@ -229,12 +229,12 @@ class SimulatedAnnealingHelper {
         assignExecutionTime(optStep, timer);
     }
 
-    private static <S, T> KernelAssigner<S, T> createAssigner(
-            KernelAssigner<S, T> kernelAssigner, ErrorNode error) {
+    private static <S, T, U> KernelAssigner<S, T, U> createAssigner(
+            KernelAssigner<S, T, U> kernelAssigner, ErrorNode error) {
         return new KernelAssignerAddErrorLevel<>(kernelAssigner, error);
     }
 
-    private static void assignExecutionTime(OptimizationStep<?, ?> optStep, StopWatch timer) {
+    private static void assignExecutionTime(OptimizationStep<?, ?, ?> optStep, StopWatch timer) {
         long time = timer.getTime();
         timer.reset();
         optStep.setExecutionTime(time);

@@ -105,7 +105,7 @@ class VoxelsFromScoreCreator {
 
         for (int z = 0; z < extent.z(); z++) {
 
-            List<VoxelBuffer<?>> bufferList = listVoxels.bufferListForSlice(z);
+            List<VoxelBuffer<Object>> bufferList = listVoxels.bufferListForSlice(z);
 
             UnsignedByteBuffer bufferOut = voxelsOut.sliceBuffer(z);
 
@@ -132,7 +132,7 @@ class VoxelsFromScoreCreator {
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            List<VoxelBuffer<?>> bufferList = listVoxels.bufferListForSlice(z);
+            List<VoxelBuffer<Object>> bufferList = listVoxels.bufferListForSlice(z);
 
             int zRel = z - cornerMin.z();
 

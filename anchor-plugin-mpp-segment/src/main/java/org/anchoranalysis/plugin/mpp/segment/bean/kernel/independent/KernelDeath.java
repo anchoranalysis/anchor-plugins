@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
@@ -37,7 +38,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public abstract class KernelDeath<T> extends KernelPosNeg<T> {
+public abstract class KernelDeath<T> extends KernelPosNeg<T,UpdatableMarksList> {
 
     private Optional<Mark> markRmv = Optional.empty();
 

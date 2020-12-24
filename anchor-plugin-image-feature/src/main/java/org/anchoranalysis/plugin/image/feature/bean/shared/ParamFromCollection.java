@@ -67,7 +67,7 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
             KeyValueParams keyValueParams =
                     imageInit
                             .params()
-                            .getNamedKeyValueParamsCollection()
+                            .getNamedKeyValueParams()
                             .getException(collectionID);
             this.value = keyValueParams.getPropertyAsDouble(key);
 

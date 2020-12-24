@@ -32,24 +32,19 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.segment.optimization.step.OptimizationStep;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
+import lombok.AllArgsConstructor;
 
-public class KernelAssignerAddErrorLevel<S, T> implements KernelAssigner<S, T> {
+@AllArgsConstructor
+public class KernelAssignerAddErrorLevel<S, T, U> implements KernelAssigner<S, T, U> {
 
-    private KernelAssigner<S, T> kernelAssigner;
+    private KernelAssigner<S, T, U> kernelAssigner;
     private ErrorNode parentErrorNode;
-
-    public KernelAssignerAddErrorLevel(
-            KernelAssigner<S, T> kernelAssigner, ErrorNode parentErrorNode) {
-        super();
-        this.kernelAssigner = kernelAssigner;
-        this.parentErrorNode = parentErrorNode;
-    }
 
     @Override
     public void assignProposal(
-            OptimizationStep<S, T> optStep,
+            OptimizationStep<S, T, U> optStep,
             TransformationContext context,
-            KernelWithIdentifier<S> kernel)
+            KernelWithIdentifier<S,U> kernel)
             throws KernelCalculateEnergyException {
 
         // Add a sub-level with the Kernel name in the proposer-failure-description
