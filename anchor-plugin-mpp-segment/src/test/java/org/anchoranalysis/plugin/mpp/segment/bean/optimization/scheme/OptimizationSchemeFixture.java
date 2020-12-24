@@ -37,7 +37,7 @@ import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkFactory;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.OptimizationScheme;
@@ -57,7 +57,7 @@ import org.anchoranalysis.test.image.InputOutputContextFixture;
 class OptimizationSchemeFixture {
 
     /** A simulated annealing scheme using direct-assign mode. */
-    public static <T> OptimizationScheme<T, T> simulatedAnnealing(
+    public static <T> OptimizationScheme<T, T, UpdatableMarksList> simulatedAnnealing(
             ExtractScoreSize<T> extractScoreSize, int numberOfIterations) {
         SimulatedAnnealing<T, T, T> optimization = new SimulatedAnnealing<>();
         optimization.setAnnealScheme(new Geometry(1e-20, 0.99995));
@@ -81,8 +81,8 @@ class OptimizationSchemeFixture {
      * @throws CreateException
      */
     public static VoxelizedMarksWithEnergy findOptimum(
-            OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy> optimization,
-            KernelProposer<VoxelizedMarksWithEnergy> kernelProposer,
+            OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy, UpdatableMarksList> optimization,
+            KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> kernelProposer,
             MarkFactory markFactory,
             EnergySchemeWithSharedFeatures energyScheme,
             EnergyStack energyStack,
@@ -91,7 +91,7 @@ class OptimizationSchemeFixture {
 
         return optimization.findOptimum(
                 kernelProposer,
-                new ListUpdatableMarkSetCollection(),
+                new UpdatableMarksList(),
                 logToConsole ? new ConsoleAggregatedReporter(2) : new NullReporter<>(),
                 createContext(
                         markFactory,

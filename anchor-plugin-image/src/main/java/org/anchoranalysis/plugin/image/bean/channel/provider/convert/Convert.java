@@ -38,17 +38,17 @@ import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
  * Converts a channel by applying a converter (no histogram is involved in the conversion).
  *
  * @author Owen Feehan
+ * @param <T> destination voxel type to convert to
  */
-public class Convert extends ConvertBase {
+public class Convert<T> extends ConvertBase {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ConvertChannelTo channelConverter;
+    @BeanField @Getter @Setter private ConvertChannelTo<T> channelConverter;
     // END BEAN PROPERTIES
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
         ChannelConverter<?> converter = channelConverter.createConverter();
-
         channel = converter.convert(channel, createPolicy());
         return channel;
     }

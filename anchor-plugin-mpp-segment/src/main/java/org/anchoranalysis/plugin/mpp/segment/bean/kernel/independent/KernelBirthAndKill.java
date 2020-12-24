@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -50,7 +50,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy> {
+public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy,UpdatableMarksList> {
 
     // START BEANS
     @BeanField @Getter @Setter private double overlapRatioThreshold = 0.1;
@@ -141,13 +141,13 @@ public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy> {
             Dimensions dimensions,
             double densityRatio) {
 
-        double num = getProbNeg() * dimensions.calculateVolume() * poissonIntensity;
-        double dem = getProbPos() * proposalSize;
+        double numerator = getProbNeg() * dimensions.calculateVolume() * poissonIntensity;
+        double denominator = getProbPos() * proposalSize;
 
-        assert num > 0;
-        assert dem > 0;
+        assert numerator > 0;
+        assert denominator > 0;
 
-        double d = (densityRatio * num) / dem;
+        double d = (densityRatio * numerator) / denominator;
 
         assert !Double.isNaN(d);
 
@@ -161,25 +161,25 @@ public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy> {
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableState,
             VoxelizedMarksWithEnergy exst,
             VoxelizedMarksWithEnergy accptd)
             throws UpdateMarkSetException {
 
         MemoList memoList = exst.createDuplicatePxlMarkMemoList();
 
-        addNewMark(this.markNew, updatableMarkSetCollection, exst, accptd, memoList);
+        addNewMark(this.markNew, updatableState, exst, accptd, memoList);
 
-        removeMarks(toKill, updatableMarkSetCollection, memoList);
+        removeMarks(toKill, updatableState, memoList);
 
         if (markNewAdditional != null) {
-            addAdditionalMark(markNewAdditional, updatableMarkSetCollection, memoList, accptd);
+            addAdditionalMark(markNewAdditional, updatableState, memoList, accptd);
         }
     }
 
     private static void addNewMark(
             Mark mark,
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableMarkSetCollection,
             VoxelizedMarksWithEnergy exst,
             VoxelizedMarksWithEnergy accptd,
             MemoList memoList)
@@ -192,23 +192,22 @@ public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy> {
 
     private static void removeMarks(
             List<VoxelizedMarkMemo> marks,
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableMarks,
             MemoList memoList)
             throws UpdateMarkSetException {
-        for (VoxelizedMarkMemo memoRmv : marks) {
-            updatableMarkSetCollection.remove(memoList, memoRmv);
-            memoList.remove(memoRmv);
-            // TODO come up with a better system other than these memoLists
+        for (VoxelizedMarkMemo memoRemove : marks) {
+            updatableMarks.remove(memoList, memoRemove);
+            memoList.remove(memoRemove);
         }
     }
 
     private static void addAdditionalMark(
             Mark markAdditional,
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableMarkSetCollection,
             MemoList memoList,
-            VoxelizedMarksWithEnergy accptd)
+            VoxelizedMarksWithEnergy accpted)
             throws UpdateMarkSetException {
-        VoxelizedMarkMemo memoNewAdditional = accptd.getMemoForMark(markAdditional);
+        VoxelizedMarkMemo memoNewAdditional = accpted.getMemoForMark(markAdditional);
         updatableMarkSetCollection.add(memoList, memoNewAdditional);
         memoList.add(memoNewAdditional);
     }

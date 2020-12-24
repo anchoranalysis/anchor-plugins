@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernel;
@@ -39,47 +38,49 @@ import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 
 @AllArgsConstructor
-public class KernelUpdaterSimple<S, T> implements KernelUpdater<S, T> {
+public class KernelUpdaterSimple<S, T, U> implements KernelUpdater<S, T, U> {
 
-    private ListUpdatableMarkSetCollection updatableMarkSetCollection;
-    private WeightedKernelList<S> allKernels;
-    private StateTransformer<Optional<T>, Optional<S>> funcExtractMarks;
+    private U marks;
+    private WeightedKernelList<S,U> allKernels;
+    private StateTransformer<Optional<T>, Optional<S>> transformer;
 
     @Override
     public void kernelAccepted(
-            Kernel<S> kernel, Optional<T> crnt, T proposed, TransformationContext context)
+            Kernel<S,U> kernel, Optional<T> current, T proposed, TransformationContext context)
             throws UpdateMarkSetException {
         try {
-            Optional<S> crntConv =
-                    OptionalUtilities.flatMap(crnt, c -> funcExtractMarks.transform(crnt, context));
-            S proposedConv =
-                    funcExtractMarks
-                            .transform(Optional.of(proposed), context)
+            Optional<S> currentTransformed = transform(current, context);
+
+            S proposedTransformed = transform(Optional.of(proposed), context)
                             .orElseThrow(
                                     () ->
                                             new UpdateMarkSetException(
                                                     "Transform returned empty, which is not allowed"));
 
-            updateAfterAccept(kernel, crntConv, proposedConv);
+            updateAfterAccept(kernel, currentTransformed, proposedTransformed);
 
-            informAllKernelsAfterAccept(proposedConv);
+            informAllKernelsAfterAccept(proposedTransformed);
 
         } catch (OperationFailedException e) {
             throw new UpdateMarkSetException(e);
         }
     }
-
-    private void updateAfterAccept(Kernel<S> kernel, Optional<S> crnt, S proposed)
-            throws UpdateMarkSetException {
-        OptionalUtilities.ifPresent(
-                crnt, c -> kernel.updateAfterAcceptance(updatableMarkSetCollection, c, proposed));
+    
+    private Optional<S> transform( Optional<T> stateOptional, TransformationContext context ) throws OperationFailedException {
+        return OptionalUtilities.flatMap(stateOptional, state -> transformer.transform(stateOptional, context));
     }
 
-    private void informAllKernelsAfterAccept(S marks) {
+    private void updateAfterAccept(Kernel<S,U> kernel, Optional<S> current, S proposed)
+            throws UpdateMarkSetException {
+        OptionalUtilities.ifPresent(
+                current, currentInternal -> kernel.updateAfterAcceptance(marks, currentInternal, proposed));
+    }
+
+    private void informAllKernelsAfterAccept(S state) {
         // We inform ALL kernels of the new Energy
-        for (WeightedKernel<S> weighted : allKernels) {
+        for (WeightedKernel<S,U> weighted : allKernels) {
             // INFORM KERNEL
-            weighted.getKernel().informLatestState(marks);
+            weighted.getKernel().informLatestState(state);
         }
     }
 }

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.proposer.MarkFromCollectionProposer;
 import org.anchoranalysis.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
@@ -49,7 +49,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
+public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy,UpdatableMarksList> {
 
     // START BEAN
     @BeanField @Getter @Setter private MarkSplitProposer splitProposer = null;
@@ -168,7 +168,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableState,
             VoxelizedMarksWithEnergy exst,
             VoxelizedMarksWithEnergy accptd)
             throws UpdateMarkSetException {
@@ -177,21 +177,21 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
 
         VoxelizedMarkMemo memoExst = exst.getMemoForMark(this.markExst.get()); // NOSONAR
 
-        updatableMarkSetCollection.remove(memoList, memoExst);
+        updatableState.remove(memoList, memoExst);
         memoList.remove(memoExst);
 
         VoxelizedMarkMemo memoAdded1 = pairNew.get().getSource(); // NOSONAR
 
         // Should always find one
         assert memoAdded1 != null;
-        updatableMarkSetCollection.add(memoList, memoAdded1);
+        updatableState.add(memoList, memoAdded1);
 
         memoList.add(memoAdded1);
 
         VoxelizedMarkMemo memoAdded2 = pairNew.get().getDestination();
         assert memoAdded2 != null;
 
-        updatableMarkSetCollection.add(memoList, memoAdded2);
+        updatableState.add(memoList, memoAdded2);
     }
 
     @Override

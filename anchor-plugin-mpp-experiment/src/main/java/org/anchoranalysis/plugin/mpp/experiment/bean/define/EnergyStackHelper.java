@@ -56,7 +56,7 @@ class EnergyStackHelper {
                                         energyParamsName,
                                         paramsName ->
                                                 soImage.params()
-                                                        .getNamedKeyValueParamsCollection()
+                                                        .getNamedKeyValueParams()
                                                         .getOptional(paramsName))
                                 .orElseGet(KeyValueParams::new);
 

@@ -38,10 +38,10 @@ import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernel;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class KernelProposerOptionSingle<T> extends KernelProposerOption<T> {
+public class KernelProposerOptionSingle<T,S> extends KernelProposerOption<T,S> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private Kernel<T> kernel = null;
+    @BeanField @Getter @Setter private Kernel<T,S> kernel = null;
 
     @BeanField @Getter @Setter private double weight = 0;
     // END BEAN PROPERTIES
@@ -56,10 +56,10 @@ public class KernelProposerOptionSingle<T> extends KernelProposerOption<T> {
         return getWeight();
     }
 
-    @Override
     // Add weighted kernel factories to a list, and returns the total weight
-    public double addWeightedKernelFactories(List<WeightedKernel<T>> lst) {
-        lst.add(new WeightedKernel<T>(kernel, getWeight()));
+    @Override
+    public double addWeightedKernelFactories(List<WeightedKernel<T,S>> list) {
+        list.add(new WeightedKernel<>(kernel, getWeight()));
         return getWeight();
     }
 }

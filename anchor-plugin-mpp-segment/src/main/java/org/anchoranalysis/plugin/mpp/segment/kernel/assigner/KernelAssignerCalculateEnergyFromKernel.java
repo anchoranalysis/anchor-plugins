@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
@@ -43,15 +44,15 @@ import org.anchoranalysis.plugin.mpp.segment.bean.optimization.kernelbridge.Kern
  * @param <T> Knerel type
  */
 @AllArgsConstructor
-public class KernelAssignerCalculateEnergyFromKernel<S, T> implements KernelAssigner<S, T> {
+public class KernelAssignerCalculateEnergyFromKernel<S, T> implements KernelAssigner<S, T, UpdatableMarksList> {
 
     private final KernelStateBridge<S, T> kernelStateBridge;
 
     @Override
     public void assignProposal(
-            OptimizationStep<S, T> optStep,
+            OptimizationStep<S, T, UpdatableMarksList> optStep,
             TransformationContext context,
-            KernelWithIdentifier<S> kernel)
+            KernelWithIdentifier<S,UpdatableMarksList> kernel)
             throws KernelCalculateEnergyException {
 
         try {
@@ -71,8 +72,8 @@ public class KernelAssignerCalculateEnergyFromKernel<S, T> implements KernelAssi
     }
 
     private Optional<S> proposal(
-            OptimizationStep<S, T> optStep,
-            KernelWithIdentifier<S> kernel,
+            OptimizationStep<S, T, UpdatableMarksList> optStep,
+            KernelWithIdentifier<S,UpdatableMarksList> kernel,
             TransformationContext context)
             throws KernelCalculateEnergyException, OperationFailedException {
         return kernel.getKernel()

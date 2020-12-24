@@ -45,7 +45,7 @@ public class CircleObjectFixture {
 
     public static ObjectMask circleAt(Point2i center, double radius) {
         Circle mark = new Circle();
-        mark.setPos(PointConverter.doubleFromInt(center));
+        mark.setPosition(PointConverter.doubleFromInt(center));
         mark.setRadius(radius);
         return mark.deriveObject(
                         DIMS,
