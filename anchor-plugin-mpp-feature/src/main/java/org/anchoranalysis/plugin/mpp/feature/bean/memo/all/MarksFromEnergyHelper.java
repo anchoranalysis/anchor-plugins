@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.all;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.mpp.feature.mark.MemoCollection;
+import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarksFromEnergyHelper {
 
-    public static MarkCollection marksFromMemo(MemoCollection list) {
+    public static MarkCollection marksFromMemo(EnergyMemoList list) {
         MarkCollection marks = new MarkCollection();
         for (int i = 0; i < list.size(); i++) {
             marks.add(list.getMemoForIndex(i).getMark());

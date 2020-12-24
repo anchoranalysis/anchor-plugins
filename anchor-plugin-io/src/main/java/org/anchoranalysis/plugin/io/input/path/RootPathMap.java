@@ -33,7 +33,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.shared.path.RootPath;
-import org.anchoranalysis.bean.xml.BeanXmlLoader;
+import org.anchoranalysis.bean.xml.BeanXMLLoader;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
@@ -104,7 +104,7 @@ public class RootPathMap {
     public void addFromXmlFile(Path path) throws OperationFailedException {
 
         try {
-            List<RootPath> listRootPaths = BeanXmlLoader.loadBean(path, "bean");
+            List<RootPath> listRootPaths = BeanXMLLoader.loadBean(path, "bean");
 
             for (RootPath rp : listRootPaths) {
                 assert (!contains(rp));

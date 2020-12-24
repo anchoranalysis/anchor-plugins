@@ -60,6 +60,6 @@ public abstract class CenterSliceBase extends IndexedRegionBase {
 
         MarkWithPosition mark = (MarkWithPosition) markUncasted;
 
-        return (int) Math.round(mark.getPos().z()) - box.cornerMin().z();
+        return (int) Math.round(mark.getPosition().z()) - box.cornerMin().z();
     }
 }

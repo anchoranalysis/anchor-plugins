@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.segment.bean.optimization.OptimizationScheme;
 import org.anchoranalysis.mpp.segment.bean.optimization.termination.TerminationCondition;
@@ -51,7 +51,7 @@ import org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode.AssignMode;
  * @param <T> state used internally during optimization
  * @param <U> type of kernel proposer
  */
-public class SimulatedAnnealing<S, T, U> extends OptimizationScheme<S, U> {
+public class SimulatedAnnealing<S, T, U> extends OptimizationScheme<S, U, UpdatableMarksList> {
 
     // START BEAN PARAMETERS
     @BeanField @Getter @Setter private TerminationCondition termination;
@@ -69,9 +69,9 @@ public class SimulatedAnnealing<S, T, U> extends OptimizationScheme<S, U> {
     // Finds an optimum by generating a certain number of configurations
     @Override
     public S findOptimum(
-            KernelProposer<U> kernelProposer,
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
-            FeedbackReceiver<S> feedbackReceiver,
+            KernelProposer<U,UpdatableMarksList> proposer,
+            UpdatableMarksList marks,
+            FeedbackReceiver<S> feedback,
             OptimizationContext initContext)
             throws OptimizationTerminatedEarlyException {
 
@@ -79,9 +79,9 @@ public class SimulatedAnnealing<S, T, U> extends OptimizationScheme<S, U> {
 
         FeedbackGenerator<S> feedbackGenerator =
                 FeedbackHelper.createInitFeedbackGenerator(
-                        feedbackReceiver,
+                        feedback,
                         initContext,
-                        kernelProposer.getAllKernelFactories(),
+                        proposer.getAllKernelFactories(),
                         assignMode.extractScoreSizeReport());
 
         TransformationContext transformationContext =
@@ -94,9 +94,9 @@ public class SimulatedAnnealing<S, T, U> extends OptimizationScheme<S, U> {
                 SimulatedAnnealingHelper.doOptimization(
                         assignMode,
                         annealScheme,
-                        updatableMarkSetCollection,
+                        marks,
                         feedbackGenerator,
-                        kernelProposer,
+                        proposer,
                         createTermCondition(initContext),
                         transformationContext);
 

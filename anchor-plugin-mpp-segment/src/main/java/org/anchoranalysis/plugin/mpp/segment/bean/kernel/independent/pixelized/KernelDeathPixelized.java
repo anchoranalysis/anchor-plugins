@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
@@ -48,7 +48,7 @@ public class KernelDeathPixelized extends KernelDeath<VoxelizedMarksWithEnergy> 
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableMarkSetCollection,
             VoxelizedMarksWithEnergy energyExisting,
             VoxelizedMarksWithEnergy energyNew)
             throws UpdateMarkSetException {

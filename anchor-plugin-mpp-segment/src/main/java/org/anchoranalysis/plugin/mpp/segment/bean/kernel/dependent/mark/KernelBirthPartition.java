@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.kernel.dependent.mark;
 
 import java.util.Optional;
 import java.util.Set;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
@@ -73,7 +73,7 @@ public class KernelBirthPartition extends KernelBirth<MarksFromPartition> {
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableMarkSetCollection,
             MarksFromPartition energyExisting,
             MarksFromPartition energyNew)
             throws UpdateMarkSetException {

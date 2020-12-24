@@ -32,7 +32,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.OptimizationScheme;
@@ -49,9 +48,10 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
  *
  * @author Owen Feehan
  * @param <S>
+ * @param <V> updatable state
  */
 @NoArgsConstructor
-public class UniformProposal<S> extends OptimizationScheme<S, S> {
+public class UniformProposal<S, V> extends OptimizationScheme<S, S, V> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int iterations = -1;
@@ -62,9 +62,9 @@ public class UniformProposal<S> extends OptimizationScheme<S, S> {
     // Finds an optimum by generating a certain number of configurations
     @Override
     public S findOptimum(
-            KernelProposer<S> kernelProposer,
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
-            FeedbackReceiver<S> feedbackReceiver,
+            KernelProposer<S,V> proposer,
+            V updatableState,
+            FeedbackReceiver<S> feedback,
             OptimizationContext initContext)
             throws OptimizationTerminatedEarlyException {
 
@@ -74,11 +74,11 @@ public class UniformProposal<S> extends OptimizationScheme<S, S> {
                 initContext.calculateContext(initContext.markFactoryContext());
 
         try {
-            kernelProposer.initBeforeCalc(context);
+            proposer.initBeforeCalc(context);
 
             for (int i = 0; i < iterations; i++) {
                 Optional<S> proposal =
-                        kernelProposer.getInitialKernel().makeProposal(Optional.empty(), context);
+                        proposer.getInitialKernel().makeProposal(Optional.empty(), context);
 
                 if (proposal.isPresent() && isSuperior(proposal.get(), best)) {
                     best = proposal.get();

@@ -67,7 +67,7 @@ public class EllipsoidOrientationRadii extends MarkProposer {
                         context.dimensions().resolution(),
                         true);
 
-        mark.setMarksExplicit(mark.getPos(), orientation, radii);
+        mark.setMarksExplicit(mark.getPosition(), orientation, radii);
 
         return true;
     }

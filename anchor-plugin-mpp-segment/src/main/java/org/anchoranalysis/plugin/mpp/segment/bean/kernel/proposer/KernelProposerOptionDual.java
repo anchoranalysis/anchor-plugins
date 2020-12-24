@@ -35,12 +35,12 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposerOption;
 import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernel;
 
-public class KernelProposerOptionDual<T> extends KernelProposerOption<T> {
+public class KernelProposerOptionDual<T,S> extends KernelProposerOption<T,S> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KernelPosNeg<T> kernelPositive;
+    @BeanField @Getter @Setter private KernelPosNeg<T,S> kernelPositive;
 
-    @BeanField @Getter @Setter private KernelPosNeg<T> kernelNegative;
+    @BeanField @Getter @Setter private KernelPosNeg<T,S> kernelNegative;
 
     @BeanField @NonNegative @Getter @Setter private double weightPositive = -1;
 
@@ -49,7 +49,7 @@ public class KernelProposerOptionDual<T> extends KernelProposerOption<T> {
 
     @Override
     // Add weighted kernel factories to a list, and returns the total weight
-    public double addWeightedKernelFactories(List<WeightedKernel<T>> lst) {
+    public double addWeightedKernelFactories(List<WeightedKernel<T,S>> list) {
 
         kernelPositive.setProbPos(weightPositive);
         kernelPositive.setProbNeg(weightNegative);
@@ -57,8 +57,8 @@ public class KernelProposerOptionDual<T> extends KernelProposerOption<T> {
         kernelNegative.setProbPos(weightNegative);
         kernelNegative.setProbNeg(weightPositive);
 
-        lst.add(new WeightedKernel<T>(kernelPositive, weightPositive));
-        lst.add(new WeightedKernel<T>(kernelNegative, weightNegative));
+        list.add(new WeightedKernel<>(kernelPositive, weightPositive));
+        list.add(new WeightedKernel<>(kernelNegative, weightNegative));
         return getWeightPositive() + getWeightNegative();
     }
 }

@@ -38,7 +38,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
@@ -91,7 +91,7 @@ public class KernelBirthPixelized extends KernelBirth<VoxelizedMarksWithEnergy> 
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableMarkSetCollection,
             VoxelizedMarksWithEnergy exst,
             VoxelizedMarksWithEnergy accepted)
             throws UpdateMarkSetException {

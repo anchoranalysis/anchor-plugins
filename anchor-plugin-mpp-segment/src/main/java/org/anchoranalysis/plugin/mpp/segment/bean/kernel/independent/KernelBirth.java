@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
@@ -45,7 +46,7 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
  * @author Owen Feehan
  * @param <T> proposal-type
  */
-public abstract class KernelBirth<T> extends KernelPosNeg<T> {
+public abstract class KernelBirth<T> extends KernelPosNeg<T,UpdatableMarksList> {
 
     private Optional<Set<Mark>> setMarksNew = Optional.empty();
 

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
@@ -49,7 +49,7 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 import org.anchoranalysis.plugin.mpp.segment.optimization.VoxelizedMarksWithEnergyFactory;
 
 @NoArgsConstructor
-public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMarksWithEnergy> {
+public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMarksWithEnergy,UpdatableMarksList> {
 
     // START BEAN LIST
     @BeanField @Getter @Setter private MarkCollectionProposer marksProposer;
@@ -122,11 +122,11 @@ public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMark
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            UpdatableMarksList updatableState,
             VoxelizedMarksWithEnergy exst,
             VoxelizedMarksWithEnergy accptd)
             throws UpdateMarkSetException {
-        accptd.addAllToUpdatablePairList(updatableMarkSetCollection);
+        accptd.addAllToUpdatablePairList(updatableState);
     }
 
     @Override
