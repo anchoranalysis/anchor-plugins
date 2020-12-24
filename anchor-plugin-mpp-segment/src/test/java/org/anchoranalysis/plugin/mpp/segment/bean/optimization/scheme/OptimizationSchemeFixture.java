@@ -81,8 +81,10 @@ class OptimizationSchemeFixture {
      * @throws CreateException
      */
     public static VoxelizedMarksWithEnergy findOptimum(
-            OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy, UpdatableMarksList> optimization,
-            KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> kernelProposer,
+            OptimizationScheme<
+                            VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy, UpdatableMarksList>
+                    optimization,
+            KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer,
             MarkFactory markFactory,
             EnergySchemeWithSharedFeatures energyScheme,
             EnergyStack energyStack,

@@ -78,10 +78,15 @@ class CopyTIFFAndCompress {
         }
     }
 
+    /**
+     * Created an opens a reader for TIFF files.
+     *
+     * <p>It is the responsibility of the calling function to close the {@link TiffReader}.
+     */
     private static TiffReader createReader(String source)
             throws DependencyException, ServiceException, FormatException, IOException {
 
-        TiffReader reader = new TiffReader();
+        TiffReader reader = new TiffReader(); // NOSONAR
         reader.setMetadataFiltered(true);
         reader.setOriginalMetadataPopulated(true);
 
@@ -94,10 +99,15 @@ class CopyTIFFAndCompress {
         return reader;
     }
 
+    /**
+     * Created an opens a writer for TIFF files.
+     *
+     * <p>It is the responsibility of the calling function to close the {@link TiffWriter}.
+     */
     private static TiffWriter createWriter(TiffReader reader, String destination)
             throws FormatException, IOException {
 
-        TiffWriter writer = new TiffWriter();
+        TiffWriter writer = new TiffWriter(); // NOSONAR
 
         writer.setCompression("LZW");
         writer.setWriteSequentially(true);

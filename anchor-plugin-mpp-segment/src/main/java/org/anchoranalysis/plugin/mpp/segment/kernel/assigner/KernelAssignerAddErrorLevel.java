@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.mpp.segment.kernel.assigner;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.segment.optimization.step.OptimizationStep;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class KernelAssignerAddErrorLevel<S, T, U> implements KernelAssigner<S, T, U> {
@@ -44,7 +44,7 @@ public class KernelAssignerAddErrorLevel<S, T, U> implements KernelAssigner<S, T
     public void assignProposal(
             OptimizationStep<S, T, U> optStep,
             TransformationContext context,
-            KernelWithIdentifier<S,U> kernel)
+            KernelWithIdentifier<S, U> kernel)
             throws KernelCalculateEnergyException {
 
         // Add a sub-level with the Kernel name in the proposer-failure-description

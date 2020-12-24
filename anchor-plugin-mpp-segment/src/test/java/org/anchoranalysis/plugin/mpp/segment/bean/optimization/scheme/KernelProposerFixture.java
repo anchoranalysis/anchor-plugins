@@ -58,7 +58,7 @@ class KernelProposerFixture {
      * @throws CreateException
      * @throws InitException
      */
-    public static KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> createBirthAndDeath(
+    public static KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> createBirthAndDeath(
             MarkProposer markProposer) throws CreateException, InitException {
 
         InputOutputContext context = InputOutputContextFixture.withSuppressedLogger();
@@ -67,7 +67,7 @@ class KernelProposerFixture {
                 MPPInitParamsFactory.create(
                         new InitParamsContext(context), Optional.empty(), Optional.empty());
 
-        KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> kernelProposer =
+        KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer =
                 createProposerTwoEqual(
                         createInitialKernel(initParams, context.getLogger()),
                         createBirthKernel(markProposer, initParams, context.getLogger()),
@@ -77,9 +77,9 @@ class KernelProposerFixture {
     }
 
     /** create a proposer with two equal options */
-    private static <T,S> KernelProposer<T,S> createProposerTwoEqual(
-            Kernel<T,S> initialKernel, Kernel<T,S> kernel1, Kernel<T,S> kernel2) {
-        KernelProposer<T,S> proposer = new KernelProposer<>();
+    private static <T, S> KernelProposer<T, S> createProposerTwoEqual(
+            Kernel<T, S> initialKernel, Kernel<T, S> kernel1, Kernel<T, S> kernel2) {
+        KernelProposer<T, S> proposer = new KernelProposer<>();
         proposer.setInitialKernel(initialKernel);
         proposer.setOptionList(
                 Arrays.asList(

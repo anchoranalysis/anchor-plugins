@@ -44,7 +44,8 @@ import org.anchoranalysis.plugin.mpp.segment.bean.marks.weight.ExtractWeightFrom
 import org.anchoranalysis.plugin.mpp.segment.optimization.MarksFromPartition;
 import org.anchoranalysis.plugin.mpp.segment.optimization.PartitionedMarks;
 
-public class KernelInitialMarksFromPartition extends KernelIndependent<MarksFromPartition,UpdatableMarksList> {
+public class KernelInitialMarksFromPartition
+        extends KernelIndependent<MarksFromPartition, UpdatableMarksList> {
 
     // START BEAN LIST
     @BeanField @Getter @Setter private MarkCollectionProposer marksProposer;
@@ -89,9 +90,7 @@ public class KernelInitialMarksFromPartition extends KernelIndependent<MarksFrom
 
     @Override
     public void updateAfterAcceptance(
-            UpdatableMarksList updatableState,
-            MarksFromPartition exst,
-            MarksFromPartition accptd)
+            UpdatableMarksList updatableState, MarksFromPartition exst, MarksFromPartition accptd)
             throws UpdateMarkSetException {
         // NOTHING TO DO
     }

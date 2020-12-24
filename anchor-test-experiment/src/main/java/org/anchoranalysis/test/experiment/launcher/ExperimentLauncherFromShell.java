@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.test.TestDataInitException;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
@@ -39,7 +40,6 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.rules.TemporaryFolder;
-import lombok.AllArgsConstructor;
 
 /**
  * Launches an experiment by calling the application 'anchor' via the shell.

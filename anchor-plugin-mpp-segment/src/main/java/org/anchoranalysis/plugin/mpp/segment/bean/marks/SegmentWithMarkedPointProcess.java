@@ -99,7 +99,9 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
      * iteration to the next.
      */
     @BeanField @Getter @Setter
-    private OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy, UpdatableMarksList> optimization;
+    private OptimizationScheme<
+                    VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy, UpdatableMarksList>
+            optimization;
 
     /** Creates a new mark, before perhaps further manipulations by a kernel. */
     @BeanField @Getter @Setter private MarkWithIdentifierFactory markFactory;
@@ -108,7 +110,8 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     @BeanField @Getter @Setter private EnergySchemeCreator energySchemeCreator;
 
     /** Proposes kernel-changes during iterations of hte marked-point-processes. */
-    @BeanField @Getter @Setter private KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> kernelProposer;
+    @BeanField @Getter @Setter
+    private KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer;
 
     /** Processes feedback from the segmentation algorithm for outputting / debugging. */
     @BeanField @Getter @Setter
@@ -143,8 +146,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             Optional<KeyValueParams> keyValueParams,
             InputOutputContext context)
             throws SegmentationFailedException {
-        UpdatableMarksList updatableMarkSetCollection =
-                new UpdatableMarksList();
+        UpdatableMarksList updatableMarkSetCollection = new UpdatableMarksList();
 
         try {
             MemoryUtilities.logMemoryUsage("Start of segment", context.getMessageReporter());

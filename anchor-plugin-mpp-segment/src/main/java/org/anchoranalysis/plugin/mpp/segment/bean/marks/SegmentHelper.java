@@ -82,7 +82,7 @@ class SegmentHelper {
     }
 
     public static void initKernelProposers(
-            KernelProposer<VoxelizedMarksWithEnergy,UpdatableMarksList> kernelProposer,
+            KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer,
             MarkWithIdentifierFactory markFactory,
             MPPInitParams soMPP,
             Logger logger)
