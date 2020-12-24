@@ -38,8 +38,8 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
@@ -50,7 +50,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy,UpdatableMarksList> {
+public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy, UpdatableMarksList> {
 
     // START BEANS
     @BeanField @Getter @Setter private double overlapRatioThreshold = 0.1;
@@ -191,9 +191,7 @@ public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy,Up
     }
 
     private static void removeMarks(
-            List<VoxelizedMarkMemo> marks,
-            UpdatableMarksList updatableMarks,
-            MemoList memoList)
+            List<VoxelizedMarkMemo> marks, UpdatableMarksList updatableMarks, MemoList memoList)
             throws UpdateMarkSetException {
         for (VoxelizedMarkMemo memoRemove : marks) {
             updatableMarks.remove(memoList, memoRemove);

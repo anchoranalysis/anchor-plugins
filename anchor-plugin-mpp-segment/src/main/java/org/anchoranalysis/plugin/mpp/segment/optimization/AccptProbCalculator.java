@@ -43,7 +43,7 @@ public class AccptProbCalculator<T> {
     // END REQUIRED ARGUMENTS
 
     public double calculateAcceptanceProb(
-            Kernel<?,?> kernel,
+            Kernel<?, ?> kernel,
             Optional<T> crnt,
             T proposal,
             int iter,

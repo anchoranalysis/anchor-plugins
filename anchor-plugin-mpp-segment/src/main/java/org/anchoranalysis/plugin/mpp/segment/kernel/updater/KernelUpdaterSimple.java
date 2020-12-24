@@ -41,17 +41,18 @@ import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 public class KernelUpdaterSimple<S, T, U> implements KernelUpdater<S, T, U> {
 
     private U marks;
-    private WeightedKernelList<S,U> allKernels;
+    private WeightedKernelList<S, U> allKernels;
     private StateTransformer<Optional<T>, Optional<S>> transformer;
 
     @Override
     public void kernelAccepted(
-            Kernel<S,U> kernel, Optional<T> current, T proposed, TransformationContext context)
+            Kernel<S, U> kernel, Optional<T> current, T proposed, TransformationContext context)
             throws UpdateMarkSetException {
         try {
             Optional<S> currentTransformed = transform(current, context);
 
-            S proposedTransformed = transform(Optional.of(proposed), context)
+            S proposedTransformed =
+                    transform(Optional.of(proposed), context)
                             .orElseThrow(
                                     () ->
                                             new UpdateMarkSetException(
@@ -65,20 +66,23 @@ public class KernelUpdaterSimple<S, T, U> implements KernelUpdater<S, T, U> {
             throw new UpdateMarkSetException(e);
         }
     }
-    
-    private Optional<S> transform( Optional<T> stateOptional, TransformationContext context ) throws OperationFailedException {
-        return OptionalUtilities.flatMap(stateOptional, state -> transformer.transform(stateOptional, context));
+
+    private Optional<S> transform(Optional<T> stateOptional, TransformationContext context)
+            throws OperationFailedException {
+        return OptionalUtilities.flatMap(
+                stateOptional, state -> transformer.transform(stateOptional, context));
     }
 
-    private void updateAfterAccept(Kernel<S,U> kernel, Optional<S> current, S proposed)
+    private void updateAfterAccept(Kernel<S, U> kernel, Optional<S> current, S proposed)
             throws UpdateMarkSetException {
         OptionalUtilities.ifPresent(
-                current, currentInternal -> kernel.updateAfterAcceptance(marks, currentInternal, proposed));
+                current,
+                currentInternal -> kernel.updateAfterAcceptance(marks, currentInternal, proposed));
     }
 
     private void informAllKernelsAfterAccept(S state) {
         // We inform ALL kernels of the new Energy
-        for (WeightedKernel<S,U> weighted : allKernels) {
+        for (WeightedKernel<S, U> weighted : allKernels) {
             // INFORM KERNEL
             weighted.getKernel().informLatestState(state);
         }

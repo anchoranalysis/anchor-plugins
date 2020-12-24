@@ -62,7 +62,7 @@ public class UniformProposal<S, V> extends OptimizationScheme<S, S, V> {
     // Finds an optimum by generating a certain number of configurations
     @Override
     public S findOptimum(
-            KernelProposer<S,V> proposer,
+            KernelProposer<S, V> proposer,
             V updatableState,
             FeedbackReceiver<S> feedback,
             OptimizationContext initContext)

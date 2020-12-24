@@ -120,6 +120,8 @@ public class SplitByObjects extends WithDimensionsBase {
 
         // for every object we add the objToSplit Bounding Box corner, to restore it to global
         // coordinates
-        return CONNECTED_COMPONENTS_CREATOR.createUnsignedInt(binaryVoxels).shiftBy(voxels.cornerMin());
+        return CONNECTED_COMPONENTS_CREATOR
+                .createUnsignedInt(binaryVoxels)
+                .shiftBy(voxels.cornerMin());
     }
 }

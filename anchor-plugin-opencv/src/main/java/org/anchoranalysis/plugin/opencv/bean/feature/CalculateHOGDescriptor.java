@@ -33,6 +33,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -62,20 +63,23 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     @Override
     protected float[] execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
-            Stack stack = extractStack(input);
-            Extent extent = stack.extent();
+            Stack stack = extractStack(input.getEnergyStackRequired());
+            checkSize(stack.extent());
+            return extractHOGDescriptor(stack);
 
-            checkSize(extent);
-
-            Mat img = ConvertToMat.makeRGBStack(stack);
-
-            MatOfFloat descriptorValues = new MatOfFloat();
-            params.createDescriptor(extent).compute(img, descriptorValues);
-
-            return convertToArray(descriptorValues);
-
-        } catch (CreateException | OperationFailedException e) {
+        } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
+        }
+    }
+
+    private float[] extractHOGDescriptor(Stack stack) throws OperationFailedException {
+        try {
+            Mat img = ConvertToMat.makeRGBStack(stack);
+            MatOfFloat descriptorValues = new MatOfFloat();
+            params.createDescriptor(stack.extent()).compute(img, descriptorValues);
+            return convertToArray(descriptorValues);
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
         }
     }
 
@@ -84,10 +88,10 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
      *
      * @throws OperationFailedException
      */
-    private Stack extractStack(FeatureInputStack input) throws OperationFailedException {
+    private Stack extractStack(EnergyStack energyStack) throws OperationFailedException {
 
         // We can rely that an energy stack always exists
-        Stack stack = input.getEnergyStackOptional().get().withoutParams().asStack();
+        Stack stack = energyStack.withoutParams().asStack();
 
         if (resizeTo.isPresent()) {
             SizeXY size = resizeTo.get();

@@ -39,8 +39,8 @@ import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
@@ -53,7 +53,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
-public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy,UpdatableMarksList> {
+public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy, UpdatableMarksList> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MarkMergeProposer mergeMarkProposer;

@@ -61,8 +61,7 @@ public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUn
     private ObjectCollection createObjects3D(
             ObjectMask unconnected, ObjectsFromConnectedComponentsFactory createObjectMasks) {
 
-        ObjectCollection objects =
-                createObjectMasks.createUnsignedByte(unconnected.binaryVoxels());
+        ObjectCollection objects = createObjectMasks.createUnsignedByte(unconnected.binaryVoxels());
 
         // Adjust the crnr of each object, by adding on the original starting point of our
         // object-mask

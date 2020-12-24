@@ -69,7 +69,7 @@ public class SimulatedAnnealing<S, T, U> extends OptimizationScheme<S, U, Updata
     // Finds an optimum by generating a certain number of configurations
     @Override
     public S findOptimum(
-            KernelProposer<U,UpdatableMarksList> proposer,
+            KernelProposer<U, UpdatableMarksList> proposer,
             UpdatableMarksList marks,
             FeedbackReceiver<S> feedback,
             OptimizationContext initContext)
