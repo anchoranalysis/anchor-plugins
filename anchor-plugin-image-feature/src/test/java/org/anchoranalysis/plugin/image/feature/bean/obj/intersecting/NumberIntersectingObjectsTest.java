@@ -30,9 +30,9 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.NumberIntersectingObjects;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class NumberIntersectingObjectsTest {
+class NumberIntersectingObjectsTest {
 
     static final int EXPECTED_FIRST = 1;
     static final int EXPECTED_SECOND = 2;
@@ -40,13 +40,13 @@ public class NumberIntersectingObjectsTest {
     static final int EXPECTED_NO_INTERSECTION = 0;
 
     @Test
-    public void testSameSizes()
+    void testSameSizes()
             throws FeatureCalculationException, InitException, OperationFailedException {
         testForSpecificExpectedValues("sameSize", true);
     }
 
     @Test
-    public void testDifferentSizes()
+    void testDifferentSizes()
             throws FeatureCalculationException, InitException, OperationFailedException {
         testForSpecificExpectedValues("differentSize", false);
     }

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.test.experiment.launcher;
 
+import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,6 @@ import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
-import org.junit.rules.TemporaryFolder;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UnitTestCompareUtilities {
@@ -88,7 +88,7 @@ public class UnitTestCompareUtilities {
             String experimentName,
             String experimentIdentifierOutput,
             boolean includeShared,
-            TemporaryFolder directoryTemporary) {
+            Path directoryTemporary) {
         TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
         String pathTestDataDirectory = createPathTestDataDirectory(experimentName);

@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.io.bean.descriptivename;
 
-import static org.junit.Assert.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -35,14 +35,14 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.files.NamedFile;
 import org.anchoranalysis.test.LoggingFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RemoveExtensionsTest {
+class RemoveExtensionsTest {
 
     private static final Logger LOGGER = LoggingFixture.suppressedLogErrorReporter();
 
     @Test
-    public void testPreserveExt() throws InputReadFailedException {
+    void testPreserveExt() throws InputReadFailedException {
 
         List<NamedFile> df = applyTest(true, listOfFiles());
 
@@ -51,22 +51,24 @@ public class RemoveExtensionsTest {
         assertEquals("a/b/c/e.csv", nameFor(df, 2));
     }
 
-    @Test(expected = InputReadFailedException.class)
-    public void testNonUnique() throws InputReadFailedException {
-        applyTest(false, listOfFiles());
+    @Test
+    void testNonUnique() throws InputReadFailedException {
+        assertThrows(InputReadFailedException.class, () ->
+            applyTest(false, listOfFiles())
+        );
     }
 
     @Test
-    public void testDoubleExt() throws InputReadFailedException {
+    void testDoubleExtension() throws InputReadFailedException {
 
-        List<NamedFile> df = applyTest(true, listOfFilesDoubleExt());
+        List<NamedFile> df = applyTest(true, listOfFilesDoubleExtension());
 
         assertEquals(".picasaoriginals/2010-01-28 04.41.38", nameFor(df, 0));
         assertEquals(".picasaoriginals/2010-01-28 04.41.38.1", nameFor(df, 1));
     }
 
     @Test
-    public void testOneEmpty() throws InputReadFailedException {
+    void testOneEmpty() throws InputReadFailedException {
 
         List<NamedFile> df = applyTest(true, listOfFilesOneEmpty());
 
@@ -95,7 +97,7 @@ public class RemoveExtensionsTest {
         return Arrays.asList(file1, file2, file3);
     }
 
-    private static List<File> listOfFilesDoubleExt() {
+    private static List<File> listOfFilesDoubleExtension() {
         File file1 = new File(".picasaoriginals/2010-01-28 04.41.38.jpg");
         File file2 = new File(".picasaoriginals/2010-01-28 04.41.38.1.jpg");
 

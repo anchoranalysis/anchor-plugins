@@ -26,7 +26,7 @@
 package org.anchoranalysis.plugin.image.object;
 
 import static org.anchoranalysis.plugin.image.object.CheckVolumeBeforeAfter.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.test.image.object.CircleObjectFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests methods on {@link ObjectMask}.
@@ -43,7 +43,7 @@ import org.junit.Test;
  *
  * @author Owen Feehan
  */
-public class ObjectMaskTest {
+class ObjectMaskTest {
 
     /** Expected number of voxels in the intersection of the two circular objects */
     private static final int EXPECTED_NUMBER_VOXELS_INTERSECTION = 241;
@@ -57,7 +57,7 @@ public class ObjectMaskTest {
      * @throws OperationFailedException
      */
     @Test
-    public void testScaleUp() throws OperationFailedException {
+    void testScaleUp() throws OperationFailedException {
 
         ScaledObjectAreaChecker checker = new ScaledObjectAreaChecker(SCALE_FACTOR);
 
@@ -72,7 +72,7 @@ public class ObjectMaskTest {
     }
 
     @Test
-    public void testIntersect() throws OperationFailedException {
+    void testIntersect() throws OperationFailedException {
 
         ObjectCollection objects = TwoIntersectingCirclesFixture.create();
 
@@ -87,7 +87,7 @@ public class ObjectMaskTest {
         // Check the circular objects have the same volume as before
         TwoIntersectingCirclesFixture.checkVolumesOnCircles(objects, "");
 
-        assertTrue("intersection is defined", intersection.isPresent());
+        assertTrue(intersection.isPresent(), "intersection is defined");
         assertDiscreteVolume(
                 "intersection", EXPECTED_NUMBER_VOXELS_INTERSECTION, intersection.get());
     }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.object.calculation.single;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -36,11 +36,11 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.object.ObjectMaskFixture;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
 
-public class CalculateIncrementalOperationMapTest {
+class CalculateIncrementalOperationMapTest {
 
     @Spy
     private CalculateIncrementalOperationMap mockMap =
@@ -51,15 +51,15 @@ public class CalculateIncrementalOperationMapTest {
     private FeatureInputSingleObject input =
             new FeatureInputSingleObject(mock(ObjectMask.class), energyStack);
 
-    @Before
-    public void setup() throws OperationFailedException {
+    @BeforeEach
+    void setup() throws OperationFailedException {
         // An arbitrary object
         when(mockMap.applyOperation(any(), any(), anyBoolean()))
                 .thenReturn(new ObjectMaskFixture(energyStack.dimensions()).create1());
     }
 
     @Test
-    public void testInsertingAndAppending()
+    void testInsertingAndAppending()
             throws OperationFailedException, FeatureCalculationException {
 
         int NUM_FIRST = 8;
@@ -77,7 +77,7 @@ public class CalculateIncrementalOperationMapTest {
     }
 
     @Test
-    public void testInvalidate() throws FeatureCalculationException {
+    void testInvalidate() throws FeatureCalculationException {
         // Grow to an initial number
         int NUM_INITIAL = 6;
         mockMap.getOrCalculate(input, NUM_INITIAL);

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.stack.writer;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -39,24 +39,23 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
 import org.anchoranalysis.test.TestLoader;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-public class AnchorMetadataXmlTest {
+class AnchorMetadataXmlTest {
 
-    @Rule public TemporaryFolder directory = new TemporaryFolder();
+    @TempDir Path directory;
 
     @Test
-    public void test()
+    void test()
             throws ImageIOException, ParserConfigurationException, SAXException, IOException,
                     URISyntaxException {
 
         Resolution resolution = createMockResolution();
 
-        Path pathOut = directory.newFile("mockRes01.xml").toPath();
+        Path pathOut = directory.resolve("mockRes01.xml");
 
         ResolutionAsXml.writeResolutionXml(resolution, pathOut);
 

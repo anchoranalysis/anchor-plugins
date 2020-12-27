@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -35,31 +35,31 @@ import org.anchoranalysis.test.image.rasterwriter.ChannelSpecification;
 import org.anchoranalysis.test.image.rasterwriter.IdentifierHelper;
 import org.anchoranalysis.test.image.rasterwriter.SavedFiles;
 import org.anchoranalysis.test.image.rasterwriter.StackTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests that the RGB flag is set as expected after loading from several different formats.
  *
  * @author Owen Feehan
  */
-public class RGBOnStackTest {
+class RGBOnStackTest {
 
     /** A 8-Bit RGB Stack. */
     private static ChannelSpecification CHANNEL_SPECIFICATION =
             new ChannelSpecification(UnsignedByteVoxelType.INSTANCE, 3, true);
 
     @Test
-    public void testOMETiff() {
+    void testOMETiff() {
         assertForFormat(ImageFileFormat.OME_TIFF.getDefaultExtension());
     }
 
     @Test
-    public void testTiff() {
+    void testTiff() {
         assertForFormat(ImageFileFormat.TIFF.getDefaultExtension());
     }
 
     @Test
-    public void testPNG() {
+    void testPNG() {
         assertForFormat(ImageFileFormat.PNG.getDefaultExtension());
     }
 

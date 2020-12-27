@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -95,9 +95,9 @@ class MergeTestHelper {
                     try {
                         ObjectCollection mergedObjects = provider.create();
                         assertEquals(
-                                "final number of merged-objects",
                                 expectedFinalMergeCount,
-                                mergedObjects.size());
+                                mergedObjects.size(),
+                                "final number of merged-objects");
                     } catch (CreateException e) {
                         throw new OperationFailedException(e);
                     }

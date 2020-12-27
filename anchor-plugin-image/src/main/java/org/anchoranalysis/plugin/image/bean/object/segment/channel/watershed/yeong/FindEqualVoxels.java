@@ -47,7 +47,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 @AllArgsConstructor
 final class FindEqualVoxels {
 
-    private static class PointTester
+    private static class PointEvaluator
             extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Optional<Integer>> {
 
         private Deque<Point3i> stack;
@@ -61,8 +61,8 @@ final class FindEqualVoxels {
         private EncodedIntBuffer bufS;
         private int z1;
 
-        public PointTester(Deque<Point3i> stack, SlidingBuffer<?> rbb, EncodedVoxels matS) {
-            super(rbb);
+        public PointEvaluator(Deque<Point3i> stack, SlidingBuffer<?> buffer, EncodedVoxels matS) {
+            super(buffer);
             this.stack = stack;
             this.matS = matS;
         }
@@ -169,7 +169,7 @@ final class FindEqualVoxels {
                 ProcessVoxelNeighborFactory.within(
                         objectMask,
                         slidingBuffer.extent(),
-                        new PointTester(stack, slidingBuffer, matS));
+                        new PointEvaluator(stack, slidingBuffer, matS));
 
         Neighborhood neighborhood = NeighborhoodFactory.of(true);
 

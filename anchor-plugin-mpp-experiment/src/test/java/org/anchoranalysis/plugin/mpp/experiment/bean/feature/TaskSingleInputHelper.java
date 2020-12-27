@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.mock;
@@ -94,7 +94,7 @@ class TaskSingleInputHelper {
 
         boolean successful = runTaskOnSingleInput(input, task, pathDirOutput);
         // Successful outcome
-        assertTrue("Sucessful execution of task", successful);
+        assertTrue(successful, "Sucessful execution of task");
 
         CompareHelper.compareOutputWithSaved(pathDirOutput, pathDirSaved, pathsFileToCompare);
     }
@@ -137,13 +137,13 @@ class TaskSingleInputHelper {
                     task.beforeAnyJobIsExecuted(
                             outputter, concurrencyPlan, Arrays.asList(input), paramsExperiment);
 
-            boolean successful =
-                    task.executeJob(
-                            new ParametersUnbound<>(paramsExperiment, input, sharedState, false));
+            try {
+                return task.executeJob(
+                                new ParametersUnbound<>(paramsExperiment, input, sharedState, false));
+            } finally {
+                task.afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
+            }
 
-            task.afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
-
-            return successful;
         } catch (InputReadFailedException
                 | ExperimentExecutionException
                 | JobExecutionException

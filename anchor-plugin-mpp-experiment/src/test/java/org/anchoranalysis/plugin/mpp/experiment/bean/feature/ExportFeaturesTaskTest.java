@@ -27,8 +27,9 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import static org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportOutputter.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-
+import java.nio.file.Path;
 import java.util.function.Consumer;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
@@ -42,11 +43,10 @@ import org.anchoranalysis.plugin.image.feature.bean.dimensions.Extent;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests running {#link ExportFeaturesTask} on objects (both single and pairs)
@@ -57,7 +57,7 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author Owen Feehan
  */
-public class ExportFeaturesTaskTest {
+class ExportFeaturesTaskTest {
 
     private static TestLoader loader;
     private TaskFixture taskFixture;
@@ -65,50 +65,54 @@ public class ExportFeaturesTaskTest {
     private static final String RELATIVE_PATH_SAVED_RESULTS =
             "expectedOutput/exportFeaturesObject/";
 
-    @Rule public TemporaryFolder directory = new TemporaryFolder();
+    @TempDir Path directory;
 
-    @BeforeClass
-    public static void setup() {
+    @BeforeAll
+    static void setup() {
         RegisterBeanFactories.registerAllPackageBeanFactories();
         loader = TestLoader.createFromMavenWorkingDirectory();
     }
 
-    @Before
-    public void setupTest() throws CreateException {
+    @BeforeEach
+    void setupTest() throws CreateException {
         taskFixture = new TaskFixture(loader);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void testSimpleSmall() throws OperationFailedException {
-        // The saved directory is irrelevant because an exception is thrown
-        testOnTask(OUTPUT_DIR_IRRELEVANT, TaskFixture::useSmallEnergyInstead);
+    @Test
+    void testSimpleSmall() throws OperationFailedException {
+        assertThrows(OperationFailedException.class, () ->
+            // The saved directory is irrelevant because an exception is thrown
+            testOnTask(OUTPUT_DIR_IRRELEVANT, TaskFixture::useSmallEnergyInstead)
+        );
     }
 
     @Test
-    public void testSimpleLarge() throws OperationFailedException {
+    void testSimpleLarge() throws OperationFailedException {
         testOnTask(
                 OUTPUT_DIRECTORY_SIMPLE_1, fixture -> {} // Change nothing
                 );
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void testMergedSmall() throws OperationFailedException, CreateException {
+    @Test
+    void testMergedSmall() {
         // The saved directory is irrelevant because an exception is thrown
-        testOnTask(
-                OUTPUT_DIR_IRRELEVANT,
-                fixture -> {
-                    fixture.useSmallEnergyInstead();
-                    fixture.changeToMergedPairs(false, false);
-                });
+        assertThrows(OperationFailedException.class, () ->
+            testOnTask(
+                    OUTPUT_DIR_IRRELEVANT,
+                    fixture -> {
+                        fixture.useSmallEnergyInstead();
+                        fixture.changeToMergedPairs(false, false);
+                    })
+        );
     }
 
     @Test
-    public void testMergedLarge() throws OperationFailedException, CreateException {
+    void testMergedLarge() throws OperationFailedException, CreateException {
         testOnTask(OUTPUT_DIRECTORY_MERGED_1, fixture -> fixture.changeToMergedPairs(false, false));
     }
 
     @Test
-    public void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
+    void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
         testOnTask(
                 OUTPUT_DIRECTORY_MERGED_2,
                 fixture -> {
@@ -118,7 +122,7 @@ public class ExportFeaturesTaskTest {
     }
 
     @Test
-    public void testMergedLargeWithImage() throws OperationFailedException, CreateException {
+    void testMergedLargeWithImage() throws OperationFailedException, CreateException {
         testOnTask(OUTPUT_DIRECTORY_MERGED_3, fixture -> fixture.changeToMergedPairs(false, true));
     }
 
@@ -130,7 +134,7 @@ public class ExportFeaturesTaskTest {
      * @throws FeatureCalculationException
      */
     @Test
-    public void testCachingImageFeatures()
+    void testCachingImageFeatures()
             throws OperationFailedException, CreateException, FeatureCalculationException {
 
         @SuppressWarnings("unchecked")
@@ -178,7 +182,7 @@ public class ExportFeaturesTaskTest {
      * @throws CreateException
      */
     @Test
-    public void testRepeatedCalculationInSingleAndPair()
+    void testRepeatedCalculationInSingleAndPair()
             throws OperationFailedException, CreateException {
 
         Feature<FeatureInputSingleObject> feature =
@@ -206,7 +210,7 @@ public class ExportFeaturesTaskTest {
 
     /** Calculate with a reference to another feature included in the list */
     @Test
-    public void testSimpleLargeWithIncludedReference()
+    void testSimpleLargeWithIncludedReference()
             throws OperationFailedException, CreateException {
         testOnTask(
                 OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE,
@@ -215,7 +219,7 @@ public class ExportFeaturesTaskTest {
 
     /** Calculate with a reference to a feature that exists among the shared features */
     @Test
-    public void testSimpleLargeWithSharedReference()
+    void testSimpleLargeWithSharedReference()
             throws OperationFailedException, CreateException {
         testOnTask(
                 OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE,
@@ -241,7 +245,7 @@ public class ExportFeaturesTaskTest {
             TaskSingleInputHelper.runTaskAndCompareOutputs(
                     MultiInputFixture.createInput(taskFixture.energyStack()),
                     taskFixture.createTask(),
-                    directory.getRoot().toPath(),
+                    directory,
                     RELATIVE_PATH_SAVED_RESULTS + suffixPathDirectorySaved,
                     OUTPUTS_TO_COMPARE);
         } catch (CreateException e) {

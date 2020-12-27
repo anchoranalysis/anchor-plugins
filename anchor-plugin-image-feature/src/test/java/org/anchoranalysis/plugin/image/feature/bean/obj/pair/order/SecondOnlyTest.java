@@ -30,12 +30,12 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.Second;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SecondOnlyTest {
+class SecondOnlyTest {
 
     @Test
-    public void testOverlapping() throws FeatureCalculationException, InitException {
+    void testOverlapping() throws FeatureCalculationException, InitException {
 
         ParamsFixtureHelper.testSimpleInt(OrderHelper.addFeatureToOrder(new Second()), 3409);
     }
