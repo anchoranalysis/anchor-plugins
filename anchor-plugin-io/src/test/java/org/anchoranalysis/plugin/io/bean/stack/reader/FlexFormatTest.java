@@ -56,11 +56,11 @@ class FlexFormatTest {
 
         Path path = loader.resolveTestPath("exampleFormats/001001007.flex");
 
-        BioformatsReader bf = new BioformatsReader();
-        OpenedImageFile or = bf.openFile(path);
+        BioformatsReader reader = new BioformatsReader();
+        OpenedImageFile openedFile = reader.openFile(path);
 
-        assertTrue(or.numberChannels() == 1);
-        assertTrue(or.numberSeries() == 1);
-        assertTrue(or.numberFrames() == 2);
+        assertEquals(1, openedFile.numberChannels());
+        assertEquals(1, openedFile.numberSeries());
+        assertEquals(2, openedFile.numberFrames());
     }
 }
