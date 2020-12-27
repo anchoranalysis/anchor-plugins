@@ -38,19 +38,18 @@ public class GroupedAnnotationLabels {
     private MultiMap map = new MultiValueMap();
 
     public GroupedAnnotationLabels(Collection<AnnotationLabel> labels) {
-
-        for (AnnotationLabel lab : labels) {
-            map.put(lab.getGroup(), lab);
-        }
+        labels.forEach( label ->
+            map.put(label.getGroup(), label)
+        );
     }
 
-    public int numGroups() {
+    public int numberGroups() {
         return map.keySet().size();
     }
 
     @SuppressWarnings("unchecked")
     public Set<String> keySet() {
-        return (Set<String>) map.keySet();
+        return map.keySet();
     }
 
     @SuppressWarnings("unchecked")
