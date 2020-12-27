@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
-import org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxelFaces;
-import org.junit.Test;
+import org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumberTouchingVoxelFaces;
+import org.junit.jupiter.api.Test;
 
-public class NumTouchingVoxelFacesTest {
+class NumTouchingVoxelFacesTest {
 
     @Test
-    public void testOverlapping() throws FeatureCalculationException, InitException {
+    void testOverlapping() throws FeatureCalculationException, InitException {
 
-        ParamsFixtureHelper.testTwoSizesOverlappingDouble(new NumTouchingVoxelFaces(), 131, 105);
+        ParamsFixtureHelper.testTwoSizesOverlappingDouble(new NumberTouchingVoxelFaces(), 131, 105);
     }
 }

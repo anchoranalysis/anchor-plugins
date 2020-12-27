@@ -44,10 +44,9 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 class MakePlateauLowerComplete {
 
-    private static class PointTester implements ProcessChangedPointAbsoluteMasked<List<Point3i>> {
+    private static class PointEvaluator implements ProcessChangedPointAbsoluteMasked<List<Point3i>> {
 
-        // STATIC
-        private EncodedVoxels matS;
+        private final EncodedVoxels matS;
 
         private final List<Point3i> foundPoints = new ArrayList<>();
 
@@ -56,10 +55,9 @@ class MakePlateauLowerComplete {
         private int z1;
         private final byte maskValueOff;
 
-        public PointTester(EncodedVoxels matS, BinaryValuesByte bv) {
-            super();
+        public PointEvaluator(EncodedVoxels matS, BinaryValuesByte binaryValues) {
             this.matS = matS;
-            this.maskValueOff = bv.getOffByte();
+            this.maskValueOff = binaryValues.getOffByte();
         }
 
         @Override
@@ -149,7 +147,7 @@ class MakePlateauLowerComplete {
 
             ProcessVoxelNeighbor<List<Point3i>> process =
                     ProcessVoxelNeighborFactory.withinMask(
-                            object, new PointTester(matS, object.binaryValuesByte()));
+                            object, new PointEvaluator(matS, object.binaryValuesByte()));
 
             while (!searchPoints.isEmpty()) {
                 searchPoints = findPointsFor(searchPoints, neighborhood, process);

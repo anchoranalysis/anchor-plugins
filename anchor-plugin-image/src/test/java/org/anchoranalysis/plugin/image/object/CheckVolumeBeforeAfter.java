@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.image.object;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -47,17 +47,17 @@ public class CheckVolumeBeforeAfter {
         // Allow % toelrance due to voxelization
         double tolerance = RATIO_TOLERANCE_FOR_VOXELIZATION * expectedNumberVoxels;
 
-        assertVolumeEquals(objectIdentifier, expectedNumberVoxels, object, tolerance);
+        assertVolumeEquals(expectedNumberVoxels, object, tolerance, objectIdentifier);
     }
 
     public static void assertDiscreteVolume(
             String objectIdentifier, int expectedNumberVoxels, ObjectMask object) {
-        assertVolumeEquals(objectIdentifier, expectedNumberVoxels, object, 0);
+        assertVolumeEquals(expectedNumberVoxels, object, 0, objectIdentifier);
     }
 
     private static void assertVolumeEquals(
-            String message, double expectedNumberVoxels, ObjectMask object, double tolerance) {
-        assertEquals(message, expectedNumberVoxels, object.numberVoxelsOn(), tolerance);
+            double expectedNumberVoxels, ObjectMask object, double tolerance, String message) {
+        assertEquals(expectedNumberVoxels, object.numberVoxelsOn(), tolerance, message);
     }
 
     private static double areaOfCircle(int radius) {

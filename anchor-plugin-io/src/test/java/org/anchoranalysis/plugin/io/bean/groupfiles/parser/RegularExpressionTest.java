@@ -26,31 +26,34 @@
 
 package org.anchoranalysis.plugin.io.bean.groupfiles.parser;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import java.nio.file.Paths;
+import java.util.Optional;
+import org.anchoranalysis.plugin.io.multifile.FileDetails;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
-
-public class RegExpFilePathParserTest {
+class RegularExpressionTest {
 
     @Test
-    public void testSetPath() {
+    void testSetPath() {
 
-        RegExpFilePathParser parser = new RegExpFilePathParser();
+        RegularExpression parser = new RegularExpression();
 
         // Always do expression first
         parser.setZSliceGroupID(1);
         parser.setChannelGroupID(2);
         parser.setExpression(".*hello_(\\d*)_(\\d*)_.*");
 
-        parser.setPath("hello_4_2_world");
+        Optional<FileDetails> details = parser.parsePath( Paths.get("hello_4_2_world") );
 
-        assertTrue(parser.getChannelIndex().get() == 2);
-        assertTrue(parser.getZSliceIndex().get() == 4);
+        assertTrue(details.isPresent());
+        assertTrue(details.get().getChannelIndex().get() == 2);
+        assertTrue(details.get().getSliceIndex().get() == 4);
 
         parser.setChannelGroupID(0);
 
-        parser.setPath("hello_5_7_world");
+        details = parser.parsePath( Paths.get("hello_5_7_world") );
 
-        assertTrue(parser.getZSliceIndex().get() == 5);
+        assertTrue(details.get().getSliceIndex().get() == 5);
     }
 }

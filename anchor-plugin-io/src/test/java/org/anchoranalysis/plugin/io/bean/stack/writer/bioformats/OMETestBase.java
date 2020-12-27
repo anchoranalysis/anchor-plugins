@@ -33,14 +33,14 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.test.image.rasterwriter.RasterWriterTestBase;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Base class for {@link StackWriter}s that output the OME file formats.
  *
  * @author Owen Feehan
  */
-public abstract class OMETestBase extends RasterWriterTestBase {
+abstract class OMETestBase extends RasterWriterTestBase {
 
     private static final VoxelDataType[] SUPPORTED_VOXEL_TYPES =
             RasterWriterTestBase.ALL_SUPPORTED_VOXEL_TYPES;
@@ -60,27 +60,27 @@ public abstract class OMETestBase extends RasterWriterTestBase {
     }
 
     @Test
-    public void testSingleChannel() throws ImageIOException, IOException {
+    void testSingleChannel() throws ImageIOException, IOException {
         tester.testSingleChannel(SUPPORTED_VOXEL_TYPES);
     }
 
     @Test
-    public void testTwoChannels() throws ImageIOException, IOException {
+    void testTwoChannels() throws ImageIOException, IOException {
         tester.testTwoChannels(SUPPORTED_VOXEL_TYPES);
     }
 
     @Test
-    public void testThreeChannelsSeparate() throws ImageIOException, IOException {
+    void testThreeChannelsSeparate() throws ImageIOException, IOException {
         tester.testThreeChannelsSeparate(SUPPORTED_VOXEL_TYPES);
     }
 
     @Test
-    public void testFourChannels() throws ImageIOException, IOException {
+    void testFourChannels() throws ImageIOException, IOException {
         tester.testFourChannels(SUPPORTED_VOXEL_TYPES);
     }
 
     @Test
-    public void testThreeChannelsHeterogeneous() throws ImageIOException, IOException {
+    void testThreeChannelsHeterogeneous() throws ImageIOException, IOException {
         tester.testThreeChannelsHeterogeneous();
     }
 }

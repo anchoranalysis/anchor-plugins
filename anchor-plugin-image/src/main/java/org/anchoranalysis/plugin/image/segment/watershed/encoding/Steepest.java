@@ -39,16 +39,16 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 public final class Steepest {
 
-    private static class PointTester
+    private static class PointEvaluator
             extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Integer> {
 
-        private WatershedEncoding encoder;
+        private final WatershedEncoding encoder;
 
         private int direction;
         private int value;
 
-        public PointTester(WatershedEncoding encoder, SlidingBuffer<?> rbb) {
-            super(rbb);
+        public PointEvaluator(WatershedEncoding encoder, SlidingBuffer<?> buffer) {
+            super(buffer);
             this.encoder = encoder;
         }
 
@@ -106,7 +106,7 @@ public final class Steepest {
         this.do3D = do3D;
         this.process =
                 ProcessVoxelNeighborFactory.within(
-                        objectMask, rbb.extent(), new PointTester(encoder, rbb));
+                        objectMask, rbb.extent(), new PointEvaluator(encoder, rbb));
         this.neighborhood = NeighborhoodFactory.of(bigNeighborhood);
     }
 

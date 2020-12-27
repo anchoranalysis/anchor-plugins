@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.image.object;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.scale.ScaledElements;
@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.test.image.object.CircleObjectFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests methods on {@link ObjectCollection}.
@@ -43,14 +43,14 @@ import org.junit.Test;
  *
  * @author Owen Feehan
  */
-public class ObjectCollectionTest {
+class ObjectCollectionTest {
 
     /** How much to scale the objects by (in each of the X and Y dimensions) */
     private static final int SCALE_FACTOR = 4;
 
     /** Tests scaling up on a small number of objects */
     @Test
-    public void testScaleUpFew() throws OperationFailedException {
+    void testScaleUpFew() throws OperationFailedException {
         testNumberCircles(5, 2);
     }
 
@@ -59,7 +59,7 @@ public class ObjectCollectionTest {
      * an unsigned byte type)
      */
     @Test
-    public void testScaleUpMany() throws OperationFailedException {
+    void testScaleUpMany() throws OperationFailedException {
         testNumberCircles(300, 0.02);
         // testNumberCircles(300, 0.0);
     }

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
+import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -41,9 +42,9 @@ import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.test.image.InputOutputContextFixture;
 import org.anchoranalysis.test.image.WriteIntoDirectory;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests {@link SegmentText}.
@@ -54,16 +55,18 @@ import org.junit.Test;
  *
  * @author Owen Feehan
  */
-public class SegmentTextTest {
+class SegmentTextTest {
 
     private ImageLoader loader = new ImageLoader();
 
     private SegmentStackIntoObjectsPooled<?> segmenter;
 
-    @Rule public WriteIntoDirectory writer = new WriteIntoDirectory(false);
+    @TempDir Path temporaryDirectory;
+    
+    private WriteIntoDirectory writer = new WriteIntoDirectory(temporaryDirectory, false);
 
-    @Before
-    public void setUp() throws InitException {
+    @BeforeEach
+    void setUp() throws InitException {
         segmenter =
                 new SuppressNonMaxima<>(
                         new SegmentText(), new ConditionallyMergeOverlappingObjects());
@@ -71,12 +74,12 @@ public class SegmentTextTest {
     }
 
     @Test
-    public void testRGB() throws SegmentationFailedException {
+    void testRGB() throws SegmentationFailedException {
         assertExpectedSegmentation(loader.carRGB(), SegmentTextResults.rgb());
     }
 
     @Test
-    public void testGrayscale8Bit() throws SegmentationFailedException {
+    void testGrayscale8Bit() throws SegmentationFailedException {
         assertExpectedSegmentation(loader.carGrayscale8Bit(), SegmentTextResults.grayscale());
     }
 

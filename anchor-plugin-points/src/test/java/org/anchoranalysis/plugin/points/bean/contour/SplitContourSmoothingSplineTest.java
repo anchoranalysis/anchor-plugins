@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.points.bean.contour;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -35,15 +35,15 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.points.contour.ContourList;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.object.TestLoaderObjects;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SplitContourSmoothingSplineTest {
+class SplitContourSmoothingSplineTest {
 
     private TestLoaderObjects loader =
             new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
-    public void test()
+    void test()
             throws CreateException, OperationFailedException, SetOperationFailedException {
 
         ObjectMask contourIn = loader.openLargestObjectFrom("01");

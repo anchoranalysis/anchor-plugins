@@ -28,54 +28,13 @@ package org.anchoranalysis.plugin.io.multifile;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
+@Value @AllArgsConstructor
 public class FileDetails {
-    private Path filePath;
-    private Optional<Integer> channelNum;
-    private Optional<Integer> sliceNum;
+    private Path path;
+    private Optional<Integer> channelIndex;
+    private Optional<Integer> sliceIndex;
     private Optional<Integer> timeIndex;
-
-    public FileDetails(
-            Path filePath,
-            Optional<Integer> channelNum,
-            Optional<Integer> sliceNum,
-            Optional<Integer> timeIndex) {
-        super();
-        this.filePath = filePath;
-        this.channelNum = channelNum;
-        this.sliceNum = sliceNum;
-        this.timeIndex = timeIndex;
-    }
-
-    public Path getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(Path filePath) {
-        this.filePath = filePath;
-    }
-
-    public Optional<Integer> getChannelNum() {
-        return channelNum;
-    }
-
-    public void setChannelNum(Optional<Integer> channelNum) {
-        this.channelNum = channelNum;
-    }
-
-    public Optional<Integer> getSliceNum() {
-        return sliceNum;
-    }
-
-    public void setSliceNum(Optional<Integer> sliceNum) {
-        this.sliceNum = sliceNum;
-    }
-
-    public Optional<Integer> getTimeIndex() {
-        return timeIndex;
-    }
-
-    public void setTimeIndex(Optional<Integer> timeIndex) {
-        this.timeIndex = timeIndex;
-    }
 }

@@ -26,26 +26,17 @@
 
 package org.anchoranalysis.plugin.io.bean.summarizer.path;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class FilePathPatternTest {
+class FilePathPatternTest {
 
     @Test
-    public void test() throws OperationFailedException {
-
-        Path path1 = Paths.get("a/b/c");
-        Path path2 = Paths.get("a/b/d");
-
-        FilePathPattern fpp = new FilePathPattern();
-        fpp.add(path1);
-        fpp.add(path2);
-
-        assertEquals("${0} = \"d\" (1) | \"c\" (1)", secondLineFrom(fpp.describe()));
+    void test() throws OperationFailedException {
+        FilePathPattern pattern = new FilePathPattern("a/b/c", "a/b/d");
+        assertEquals("${0} = \"d\" (1) | \"c\" (1)", secondLineFrom(pattern.describe()));
     }
 
     private static String secondLineFrom(String multilineStr) {

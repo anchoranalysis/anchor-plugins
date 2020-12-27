@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.stack.reader;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -80,16 +81,9 @@ public class MultiFileReader extends StackReader {
         ParsedFilePathBag bag = new ParsedFilePathBag();
 
         while (fileIterator.hasNext()) {
-            File f = fileIterator.next();
-
-            if (filePathParser.setPath(f.getAbsolutePath())) {
-
-                bag.add(
-                        new FileDetails(
-                                f.toPath().toAbsolutePath(),
-                                filePathParser.getChannelIndex(),
-                                filePathParser.getZSliceIndex(),
-                                filePathParser.getTimeIndex()));
+            Optional<FileDetails> details = filePathParser.parsePath(fileIterator.next().toPath()); 
+            if (details.isPresent()) {
+                bag.add(details.get());
             }
         }
 

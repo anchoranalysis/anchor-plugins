@@ -26,17 +26,17 @@
 
 package org.anchoranalysis.plugin.imagej.bean.object.provider;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class WalkShortestPathTest {
+class WalkShortestPathTest {
 
     @Test
-    public void test() throws OperationFailedException {
+    void test() throws OperationFailedException {
 
         Point3i point1 = new Point3i(4, 19, 0);
         Point3i point2 = new Point3i(11, 3, 0);
