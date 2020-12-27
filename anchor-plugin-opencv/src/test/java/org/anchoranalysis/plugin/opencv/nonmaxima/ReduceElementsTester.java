@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.plugin.opencv.nonmaxima;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
@@ -76,20 +76,18 @@ class ReduceElementsTester {
         writeIntoDirectory.ifPresent(folder -> writeRasters(folder, segments, reduced));
 
         assertEquals(
-                "identical number of voxels",
                 countTotalVoxels(segments),
-                countTotalVoxels(reduced));
-        assertEquals("number-objects-after", numberObjectsAfter, reduced.asList().size());
+                countTotalVoxels(reduced), "identical number of voxels");
+        assertEquals(numberObjectsAfter, reduced.asList().size(), "number-objects-after");
 
         assertTrue(
-                "highest confidence object unchanged",
                 segments.highestConfidence().equals(reduced.highestConfidence())
-                        == highestConfidenceObjectUnchanged);
+                        == highestConfidenceObjectUnchanged, "highest confidence object unchanged");
         assertEquals(
-                "highest confidence",
                 highestConfidence,
                 reduced.highestConfidence().get().getConfidence(),
-                1e-3);
+                1e-3,
+                "highest confidence");
     }
 
     /** Writes raster-images (for debugging) to the filesystem of before and after the reduction. */

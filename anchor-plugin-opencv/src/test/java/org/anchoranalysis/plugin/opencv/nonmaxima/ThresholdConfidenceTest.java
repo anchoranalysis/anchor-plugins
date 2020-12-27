@@ -27,14 +27,14 @@ package org.anchoranalysis.plugin.opencv.nonmaxima;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ThresholdConfidence;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ThresholdConfidenceTest {
+class ThresholdConfidenceTest {
 
     private ReduceElementsTester tester = new ReduceElementsTester();
 
     @Test
-    public void testReduce() throws OperationFailedException {
+    void testReduce() throws OperationFailedException {
         tester.test(new ThresholdConfidence(0), false, 1, 0.56827);
     }
 }

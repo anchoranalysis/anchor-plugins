@@ -28,12 +28,18 @@ package org.anchoranalysis.plugin.io.bean.summarizer.path;
 
 import com.owenfeehan.pathpatternfinder.PathPatternFinder;
 import com.owenfeehan.pathpatternfinder.Pattern;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.apache.commons.io.IOCase;
 
@@ -41,26 +47,41 @@ import org.apache.commons.io.IOCase;
  * Converts a list of file-paths into a form that tries to find a pattern in the naming style using
  * the path-pattern-finder library
  */
+@NoArgsConstructor
 public class FilePathPattern extends Summarizer<Path> {
 
     // START BEAN PROPERTIES
     /** Iff true, any hidden-path is not considered, and simply ignored */
-    private boolean ignoreHidden = true;
+    @Getter @Setter private boolean ignoreHidden = true;
 
     /**
      * if true, case is ignored in the pattern matching. Otherwise the system-default is used i.e.
      * Windows ingores case, Linux doesn't
      */
-    private boolean ignoreCase = false;
+    @Getter @Setter private boolean ignoreCase = false;
     // END BEAN PROPERTIES
 
-    private List<Path> paths = new ArrayList<>();
+    private List<Path> list = new ArrayList<>();
 
+    /**
+     * Create with one or more paths.
+     * 
+     * @param paths the paths
+     * @throws OperationFailedException
+     */
+    public FilePathPattern(String ... paths) throws OperationFailedException {
+        CheckedStream.forEach(Arrays.stream(paths), OperationFailedException.class, this::add);
+    }
+    
+    public void add(String element) throws OperationFailedException {
+        add(Paths.get(element));
+    }
+    
     @Override
     public synchronized void add(Path element) throws OperationFailedException {
         try {
             if (acceptPath(element)) {
-                paths.add(element);
+                list.add(element);
             }
         } catch (IOException e) {
             throw new OperationFailedException(e);
@@ -75,36 +96,20 @@ public class FilePathPattern extends Summarizer<Path> {
     @Override
     public synchronized String describe() throws OperationFailedException {
 
-        if (paths.isEmpty()) {
+        if (list.isEmpty()) {
             throw new OperationFailedException("There are no paths to summarize");
         }
 
-        if (paths.size() == 1) {
+        if (list.size() == 1) {
             // There is no pattern possible, so just return the path as is
-            return paths.get(0).toString();
+            return list.get(0).toString();
         }
 
-        Pattern pattern = PathPatternFinder.findPatternPaths(paths, selectIOCase());
+        Pattern pattern = PathPatternFinder.findPatternPaths(list, selectIOCase());
         return pattern.describeDetailed();
     }
 
     private IOCase selectIOCase() {
         return ignoreCase ? IOCase.INSENSITIVE : IOCase.SYSTEM;
-    }
-
-    public boolean isIgnoreHidden() {
-        return ignoreHidden;
-    }
-
-    public void setIgnoreHidden(boolean ignoreHidden) {
-        this.ignoreHidden = ignoreHidden;
-    }
-
-    public boolean isIgnoreCase() {
-        return ignoreCase;
-    }
-
-    public void setIgnoreCase(boolean ignoreCase) {
-        this.ignoreCase = ignoreCase;
     }
 }

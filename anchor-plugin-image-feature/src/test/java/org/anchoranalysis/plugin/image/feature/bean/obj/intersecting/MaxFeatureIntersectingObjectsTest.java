@@ -31,9 +31,9 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.MaxFeatureIntersectingObjects;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class MaxFeatureIntersectingObjectsTest {
+class MaxFeatureIntersectingObjectsTest {
 
     private static final FeatureIntersectingObjects FEATURE =
             FeatureHelper.createWithFeature(new MaxFeatureIntersectingObjects());
@@ -46,7 +46,7 @@ public class MaxFeatureIntersectingObjectsTest {
      * @throws OperationFailedException
      */
     @Test
-    public void testSameSizes()
+    void testSameSizes()
             throws FeatureCalculationException, InitException, OperationFailedException {
         InteresectingObjectsTestHelper.testPositions(
                 "sameSize",
@@ -66,7 +66,7 @@ public class MaxFeatureIntersectingObjectsTest {
      * @throws OperationFailedException
      */
     @Test
-    public void testDifferentSizes()
+    void testDifferentSizes()
             throws FeatureCalculationException, InitException, OperationFailedException {
         InteresectingObjectsTestHelper.testPositions(
                 "differentSize",

@@ -27,9 +27,9 @@ package org.anchoranalysis.plugin.image.object;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ObjectIntersectionRemoverTest {
+class ObjectIntersectionRemoverTest {
 
     /** Expected number of voxels for the <i>first</i> object after removal of intersection */
     private static final int EXPECTED_NUMBER_VOXELS_AFTER_REMOVAL_FIRST = 136;
@@ -43,7 +43,7 @@ public class ObjectIntersectionRemoverTest {
      * @throws OperationFailedException
      */
     @Test
-    public void testRemoveIntersection() throws OperationFailedException {
+    void testRemoveIntersection() throws OperationFailedException {
 
         // Create several small circles, some intersecting and some not intersecting
         ObjectCollection objectsBefore = TwoIntersectingCirclesFixture.create();

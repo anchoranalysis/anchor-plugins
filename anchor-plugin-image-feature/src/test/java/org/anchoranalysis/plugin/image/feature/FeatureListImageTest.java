@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature;
 
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
@@ -50,8 +50,8 @@ import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 import org.anchoranalysis.test.feature.plugins.HistogramFixture;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.object.ObjectMaskFixture;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * This test is located in this package, as it uses BeanXML in resources that depends on plugins in
@@ -59,34 +59,36 @@ import org.junit.Test;
  *
  * @author Owen Feehan
  */
-public class FeatureListImageTest {
+class FeatureListImageTest {
 
     private static TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
     private static EnergyStack ENERGY_STACK = EnergyStackFixture.create(true, true);
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 
-    @Test(expected = NamedFeatureCalculateException.class)
-    public void testNoParams()
+    @Test
+    void testNoParams()
             throws InitException, FeatureCalculationException, CreateException,
                     NamedFeatureCalculateException {
 
-        FeatureCalculatorMulti<FeatureInput> session =
-                createAndStart(ConstantsInListFixture.create());
-
-        ResultsVector rv1 = session.calculate((FeatureInput) null);
-        ConstantsInListFixture.checkResultVector(rv1);
-
-        ResultsVector rv2 = session.calculate((FeatureInput) null);
-        ConstantsInListFixture.checkResultVector(rv2);
+        assertThrows(NamedFeatureCalculateException.class, () -> {
+            FeatureCalculatorMulti<FeatureInput> session =
+                    createAndStart(ConstantsInListFixture.create());
+    
+            ResultsVector rv1 = session.calculate((FeatureInput) null);
+            ConstantsInListFixture.checkResultVector(rv1);
+    
+            ResultsVector rv2 = session.calculate((FeatureInput) null);
+            ConstantsInListFixture.checkResultVector(rv2);
+        });
     }
 
     @Test
-    public void testHistogram()
+    void testHistogram()
             throws InitException, FeatureCalculationException, CreateException,
                     NamedFeatureCalculateException {
 
@@ -113,7 +115,7 @@ public class FeatureListImageTest {
     }
 
     @Test
-    public void testImage()
+    void testImage()
             throws InitException, NamedFeatureCalculateException, CreateException,
                     FeatureCalculationException {
 

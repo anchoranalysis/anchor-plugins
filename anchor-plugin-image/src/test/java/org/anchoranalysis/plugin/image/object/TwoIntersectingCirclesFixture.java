@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.object;
 
 import static org.anchoranalysis.plugin.image.object.CheckVolumeBeforeAfter.assertCircularArea;
 import static org.anchoranalysis.plugin.image.object.CheckVolumeBeforeAfter.assertDiscreteVolume;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -85,7 +85,7 @@ public class TwoIntersectingCirclesFixture {
      * @param suffix added to the identifiers of each object for descriptive purposes
      */
     public static void checkVolumesOnCircles(ObjectCollection objects, String suffix) {
-        assertEquals("objects are correct size", 2, objects.size());
+        assertEquals(2, objects.size(), "objects are correct size");
         assertCircularArea(
                 IDENTIFIER_FIRST + suffix,
                 TwoIntersectingCirclesFixture.RADIUS_FIRST,
@@ -110,7 +110,7 @@ public class TwoIntersectingCirclesFixture {
             String suffix,
             int expectedVolumeFirst,
             int expectedVolumeSecond) {
-        assertEquals("objects are correct size", 2, objects.size());
+        assertEquals(2, objects.size(), "objects are correct size");
         assertDiscreteVolume(IDENTIFIER_FIRST + suffix, expectedVolumeFirst, objects.get(0));
         assertDiscreteVolume(IDENTIFIER_SECOND + suffix, expectedVolumeSecond, objects.get(1));
     }

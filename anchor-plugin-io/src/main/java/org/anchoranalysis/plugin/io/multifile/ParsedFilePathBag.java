@@ -49,11 +49,11 @@ public class ParsedFilePathBag implements Iterable<FileDetails> {
     }
 
     public Optional<IntegerRange> rangeChannelNum() {
-        return range(FileDetails::getChannelNum);
+        return range(FileDetails::getChannelIndex);
     }
 
     public Optional<IntegerRange> rangeSliceNum() {
-        return range(FileDetails::getSliceNum);
+        return range(FileDetails::getSliceIndex);
     }
 
     public Optional<IntegerRange> rangeTimeIndex() {

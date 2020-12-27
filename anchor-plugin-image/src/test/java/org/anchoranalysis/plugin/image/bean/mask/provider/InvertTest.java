@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.mask.provider;
 
 import static org.anchoranalysis.plugin.image.bean.mask.provider.MaskFixture.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
@@ -36,30 +36,30 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class InvertTest {
+class InvertTest {
 
     private static final Point3i CORNER_RECTANGLE = new Point3i(7, 14, 0);
     private static final Point3i CORNER_MASK = addHalfHeightInY(CORNER_RECTANGLE);
 
     @Test
-    public void testWithoutMask2d() throws CreateException {
+    void testWithoutMask2d() throws CreateException {
         testRectangle(false, false, expectedNumberVoxelsAfterWithoutRestriction(false));
     }
 
     @Test
-    public void testWithoutMask3d() throws CreateException {
+    void testWithoutMask3d() throws CreateException {
         testRectangle(true, false, expectedNumberVoxelsAfterWithoutRestriction(true));
     }
 
     @Test
-    public void testWithMask2d() throws CreateException {
+    void testWithMask2d() throws CreateException {
         testRectangle(false, true, 240);
     }
 
     @Test
-    public void testWithMask3d() throws CreateException {
+    void testWithMask3d() throws CreateException {
         testRectangle(true, true, 720);
     }
 
@@ -99,7 +99,7 @@ public class InvertTest {
     }
 
     private static void assertVoxelsOn(String messagePrefix, long expectedNumberVoxels, Mask mask) {
-        assertEquals(messagePrefix + "VoxelsOn", expectedNumberVoxels, mask.voxelsOn().count());
+        assertEquals(expectedNumberVoxels, mask.voxelsOn().count(), messagePrefix + "VoxelsOn");
     }
 
     private static Point3i addHalfHeightInY(Point3i in) {

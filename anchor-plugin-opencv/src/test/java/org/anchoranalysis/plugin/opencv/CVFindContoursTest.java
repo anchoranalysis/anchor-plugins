@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.opencv;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import org.anchoranalysis.core.exception.CreateException;
@@ -38,15 +38,15 @@ import org.anchoranalysis.spatial.Contour;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.object.TestLoaderObjects;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class CVFindContoursTest {
+class CVFindContoursTest {
 
     private TestLoaderObjects loader =
             new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
-    public void test01()
+    void test01()
             throws CreateException, OperationFailedException, SetOperationFailedException {
         testFor("01");
     }
