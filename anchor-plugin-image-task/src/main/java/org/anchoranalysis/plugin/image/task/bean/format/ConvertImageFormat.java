@@ -269,12 +269,12 @@ public class ConvertImageFormat
     }
 
     private ChannelGetter maybeAddFilter(
-            NamedChannelsForSeries channelCollection, InputOutputContext context) {
+            NamedChannelsForSeries channels, InputOutputContext context) {
         if (channelFilter != null) {
-            channelFilter.init((NamedChannelsForSeries) channelCollection, context);
+            channelFilter.init(channels, context);
             return channelFilter;
         } else {
-            return channelCollection;
+            return channels;
         }
     }
 }

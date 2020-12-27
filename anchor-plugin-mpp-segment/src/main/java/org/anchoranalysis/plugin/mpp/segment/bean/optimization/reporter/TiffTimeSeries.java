@@ -46,7 +46,6 @@ import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 import org.anchoranalysis.mpp.mark.ColoredMarks;
-import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubdirectoryReporter;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
@@ -107,7 +106,7 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
             MarkCollection marks, FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
         DisplayStack stack = initParams.getInitContext().getDualStack().getBackground();
         ColoredMarks coloredMarks =
-                new ColoredMarks(marks, colorIndex, new IdentifyByIteration<Mark>());
+                new ColoredMarks(marks, colorIndex, new IdentifyByIteration<>());
         return new ColoredMarksWithDisplayStack(coloredMarks, stack);
     }
 }

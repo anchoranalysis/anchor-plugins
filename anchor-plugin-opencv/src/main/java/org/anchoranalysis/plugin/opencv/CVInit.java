@@ -60,7 +60,7 @@ public class CVInit {
 
     private static boolean alreadyInit = false;
 
-    private static Boolean loaded = false;
+    private static boolean loaded = false;
 
     /**
      * This routine must always be executed at least once before calling any routines in the OpenCV

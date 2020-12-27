@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.opencv.nonmaxima;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
@@ -80,9 +79,9 @@ class ReduceElementsTester {
                 countTotalVoxels(reduced), "identical number of voxels");
         assertEquals(numberObjectsAfter, reduced.asList().size(), "number-objects-after");
 
-        assertTrue(
+        assertEquals(highestConfidenceObjectUnchanged,
                 segments.highestConfidence().equals(reduced.highestConfidence())
-                        == highestConfidenceObjectUnchanged, "highest confidence object unchanged");
+                        , "highest confidence object unchanged");
         assertEquals(
                 highestConfidence,
                 reduced.highestConfidence().get().getConfidence(),
