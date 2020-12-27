@@ -31,12 +31,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
@@ -49,6 +49,7 @@ import org.anchoranalysis.plugin.io.bean.descriptivename.LastDirectories;
 import org.anchoranalysis.plugin.io.bean.groupfiles.check.CheckParsedFilePathBag;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
 import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
+import org.anchoranalysis.plugin.io.bean.stack.reader.MultiFileReader;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
@@ -67,8 +68,8 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
  * <p>Integer numbers are simply loaded in ascending numerical order. So gaps are allowed, and
  * starting numbers are irrelevant.
  *
- * <p>It is more powerful than MultiFileReader, which expects only one image per folder. This class
- * allows multiple images per folder and only performs a single glob for filenames
+ * <p>It is more powerful than {@link MultiFileReader}, which expects only one image per folder. This class
+ * allows multiple images per folder and only performs a single glob for filenames.
  *
  * @author Owen Feehan
  */
@@ -86,8 +87,8 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
     @BeanField @Getter @Setter private FileNamer namer = new LastDirectories(2);
 
     /**
-     * Imposes a condition on each parsedFilePathBag which must be-fulfilled if a file is to be
-     * included
+     * Imposes a condition on each parsed-file-path-bag which must be-fulfilled if a file is to be
+     * included.
      */
     @BeanField @OptionalBean @Getter @Setter private CheckParsedFilePathBag checkParsedFilePathBag;
     // END BEAN PROPERTIES
@@ -104,22 +105,13 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
 
             FileInput input = iterator.next();
 
-            String path =
-                    FilePathToUnixStyleConverter.toStringUnixStyle(
-                            input.getFile().getAbsolutePath());
-
-            if (pathParser.setPath(path)) {
-                FileDetails details =
-                        new FileDetails(
-                                Paths.get(path),
-                                pathParser.getChannelIndex(),
-                                pathParser.getZSliceIndex(),
-                                pathParser.getTimeIndex());
-                map.add(pathParser.getKey(), details);
+            Optional<FileDetails> details = pathParser.parsePath(input.getFile().toPath());
+            if (details.isPresent()) {
+                map.add(pathParser.getKey(), details.get());
             } else {
                 if (requireAllFilesMatch) {
                     throw new InputReadFailedException(
-                            String.format("File %s did not match parser", path));
+                            String.format("File %s did not match parser", input.getFile().toPath()));
                 }
             }
         }

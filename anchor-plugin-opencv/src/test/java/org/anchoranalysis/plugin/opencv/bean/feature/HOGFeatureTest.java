@@ -26,7 +26,8 @@
 
 package org.anchoranalysis.plugin.opencv.bean.feature;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
@@ -35,22 +36,24 @@ import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.test.LoggingFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class HOGFeatureTest {
+class HOGFeatureTest {
 
     private ImageLoader loader = new ImageLoader();
 
     private EnergyStackWithoutParams stack = loader.carRGBAsEnergy();
 
     @Test
-    public void testWithinBounds() throws FeatureCalculationException {
+    void testWithinBounds() throws FeatureCalculationException {
         assertEquals(0.01632116, featureValForIndex(0), 10e-6);
     }
 
-    @Test(expected = FeatureCalculationException.class)
-    public void testOutsideBounds() throws FeatureCalculationException {
-        featureValForIndex(60000);
+    @Test
+    void testOutsideBounds() throws FeatureCalculationException {
+        assertThrows(FeatureCalculationException.class, () ->
+            featureValForIndex(60000)
+        );
     }
 
     private double featureValForIndex(int index) throws FeatureCalculationException {

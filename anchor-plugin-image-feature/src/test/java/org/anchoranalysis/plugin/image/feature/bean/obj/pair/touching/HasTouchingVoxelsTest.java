@@ -30,12 +30,12 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
 import org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.HasTouchingVoxels;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class HasTouchingVoxelsTest {
+class HasTouchingVoxelsTest {
 
     @Test
-    public void testOverlapping() throws FeatureCalculationException, InitException {
+    void testOverlapping() throws FeatureCalculationException, InitException {
 
         ParamsFixtureHelper.testTwoSizesOverlappingDouble(new HasTouchingVoxels(), 1, 1);
     }

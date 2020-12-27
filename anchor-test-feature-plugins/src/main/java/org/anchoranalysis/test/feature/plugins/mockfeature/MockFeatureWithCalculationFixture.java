@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.test.feature.plugins.mockfeature;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.ToDoubleFunction;
 import lombok.AccessLevel;
@@ -79,14 +79,14 @@ public class MockFeatureWithCalculationFixture {
             operation.run();
 
             assertEquals(
-                    "count of times execute() called on MockCalculation",
                     expectedCountExecute,
-                    MockCalculation.countExecuteCalled - beforeExecute);
+                    MockCalculation.countExecuteCalled - beforeExecute,
+                    "count of times execute() called on MockCalculation");
 
             assertEquals(
-                    "count of times calculate() called on MockFeature",
                     expectedCountCalc,
-                    MockFeatureWithCalculation.countCalculateCalled - beforeCalc);
+                    MockFeatureWithCalculation.countCalculateCalled - beforeCalc,
+                    "count of times calculate() called on MockFeature");
         }
     }
 

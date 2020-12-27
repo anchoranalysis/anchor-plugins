@@ -31,9 +31,9 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.NumberIntersectingObjectsAboveThreshold;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class NumIntersectingObjectsAboveThresholdTest {
+class NumberIntersectingObjectsAboveThresholdTest {
 
     private static final int EXPECTED_REJECTED_UNDER_THRESHOLD = 0;
 
@@ -41,7 +41,7 @@ public class NumIntersectingObjectsAboveThresholdTest {
             FeatureHelper.createWithThreshold(new NumberIntersectingObjectsAboveThreshold());
 
     @Test
-    public void testSameSizes()
+    void testSameSizes()
             throws FeatureCalculationException, InitException, OperationFailedException {
         InteresectingObjectsTestHelper.testPositions(
                 "sameSize",
@@ -54,7 +54,7 @@ public class NumIntersectingObjectsAboveThresholdTest {
     }
 
     @Test
-    public void testDifferentSizes()
+    void testDifferentSizes()
             throws FeatureCalculationException, InitException, OperationFailedException {
         InteresectingObjectsTestHelper.testPositions(
                 "differentSize",

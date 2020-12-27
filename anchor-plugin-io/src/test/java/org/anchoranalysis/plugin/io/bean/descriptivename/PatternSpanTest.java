@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.descriptivename;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.util.List;
@@ -36,14 +36,14 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.files.NamedFile;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
 import org.anchoranalysis.test.LoggingFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class PatternSpanTest {
+class PatternSpanTest {
 
     private static final Logger LOGGER = LoggingFixture.suppressedLogErrorReporter();
 
     @Test
-    public void testSimple() throws InputReadFailedException {
+    void testSimple() throws InputReadFailedException {
 
         String inputs[] = {"/a/b/c.txt", "/a/d/c.txt", "/a/e/c.txt"};
 
@@ -52,7 +52,7 @@ public class PatternSpanTest {
     }
 
     @Test
-    public void testPaths() throws InputReadFailedException {
+    void testPaths() throws InputReadFailedException {
         String inputs[] = {
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/Klosters (Feb 2020)/P1210904.JPG"
@@ -64,7 +64,7 @@ public class PatternSpanTest {
     }
 
     @Test
-    public void testEmptyStr() throws InputReadFailedException {
+    void testEmptyString() throws InputReadFailedException {
         String inputs[] = {
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG.TXT"
@@ -77,7 +77,7 @@ public class PatternSpanTest {
 
     // When there is no extension, the right-side should be kept
     @Test
-    public void testWithoutExtension() throws InputReadFailedException {
+    void testWithoutExtension() throws InputReadFailedException {
 
         String inputs[] = {"/a/b/c", "/a/d/c", "/a/e/c"};
 

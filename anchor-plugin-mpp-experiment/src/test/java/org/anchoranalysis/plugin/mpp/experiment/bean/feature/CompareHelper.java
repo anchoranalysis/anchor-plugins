@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -85,7 +85,7 @@ class CompareHelper {
         if (COPY_NOT_IDENTICAL && !identical) {
             copyFromTemporaryToResources(comparer, relativePath);
         } else {
-            assertTrue(relativePath + " is not identical", identical);
+            assertTrue(identical, () -> relativePath + " is not identical");
         }
     }
 

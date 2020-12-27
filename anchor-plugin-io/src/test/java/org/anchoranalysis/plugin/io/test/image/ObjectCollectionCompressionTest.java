@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.test.image;
 
 import static org.anchoranalysis.plugin.io.test.image.HelperReadWriteObjects.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.format.NonImageFileFormat;
@@ -37,11 +37,10 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-public class ObjectCollectionCompressionTest {
+class ObjectCollectionCompressionTest {
 
     // An uncompressed obj-mask-collection
     private static final String PATH_UNCOMPRESSED_OBJECTS = "objectsUncompressed/objects.h5";
@@ -49,17 +48,17 @@ public class ObjectCollectionCompressionTest {
     private TestLoaderImage loader =
             new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
 
-    @Rule public TemporaryFolder directory = new TemporaryFolder();
+    @TempDir Path directory;
 
     @Test
-    public void testCompression()
+    void testCompression()
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
 
         ObjectCollectionWithSize uncompressed = calculateUncompressed(PATH_UNCOMPRESSED_OBJECTS);
 
         ObjectCollectionWithSize compressed =
-                calculateCompressed(uncompressed.getObjects(), directory.getRoot().toPath());
+                calculateCompressed(uncompressed.getObjects(), directory);
 
         double relativeSize = uncompressed.relativeSize(compressed);
 

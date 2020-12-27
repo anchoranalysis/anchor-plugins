@@ -25,7 +25,7 @@ package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
  * #L%
  */
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URISyntaxException;
 import org.anchoranalysis.core.exception.CreateException;
@@ -37,12 +37,12 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class IsPointConvexToTest {
+class IsPointConvexToTest {
 
     @Test
-    public void test() throws ImageIOException, CreateException, URISyntaxException {
+    void test() throws ImageIOException, CreateException, URISyntaxException {
 
         TestLoaderImage loader = new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
 

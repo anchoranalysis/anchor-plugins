@@ -169,11 +169,11 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
             throws ExperimentExecutionException {
 
         try {
-            sharedState.closeAnyOpenIO();
             sharedState.writeGroupedResults(
                     featuresAggregateAsStore(),
                     source.includeGroupInExperiment(isGroupGeneratorDefined()),
                     context);
+            sharedState.closeAnyOpenIO();            
         } catch (OutputWriteFailedException | CreateException | IOException e) {
             throw new ExperimentExecutionException(e);
         }

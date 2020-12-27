@@ -25,15 +25,15 @@
  */
 package org.anchoranalysis.plugin.opencv.convert;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 
 /**
@@ -41,7 +41,7 @@ import org.opencv.core.Mat;
  *
  * @author Owen Feehan
  */
-public class ConvertTest {
+class ConvertTest {
 
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();
@@ -50,17 +50,17 @@ public class ConvertTest {
     private ImageLoader loader = new ImageLoader();
 
     @Test
-    public void testGrayScale8Bit() throws OperationFailedException {
+    void testGrayScale8Bit() throws OperationFailedException {
         testConversion(loader.carGrayscale8Bit());
     }
 
     @Test
-    public void testGrayScale16Bit() throws OperationFailedException {
+    void testGrayScale16Bit() throws OperationFailedException {
         testConversion(loader.carGrayscale16Bit());
     }
 
     @Test
-    public void testRGB() throws OperationFailedException {
+    void testRGB() throws OperationFailedException {
         testConversion(loader.carRGB());
     }
 
@@ -75,13 +75,13 @@ public class ConvertTest {
             Stack stackCopiedBack = ConvertFromMat.toStack(mat);
 
             // Image-resolution is permitted to be different
-            assertTrue("voxel by voxel equals", stack.equalsDeep(stackCopiedBack, false));
+            assertTrue(stack.equalsDeep(stackCopiedBack, false), "voxel by voxel equals");
 
             // We check if the buffer is backed by an array, as a proxy for whether it was created
             //   internally by Anchor or whether it came from JavaCPP's OpenCV wrapper
             // This gives an indication if we are reusing buffers as opposed to creating new memory
             // and copying.
-            assertEquals("buffer backed by array", false, isBufferDirect(stackCopiedBack));
+            assertEquals(false, isBufferDirect(stackCopiedBack), "buffer backed by array");
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);

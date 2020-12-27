@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.test.feature.plugins;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -92,8 +92,8 @@ public class FeatureTestCalculator {
             double expectedResult,
             double delta)
             throws FeatureCalculationException {
-        double res = FeatureTestCalculator.calculateSequentialSession(feature, params, initParams);
-        assertEquals(message, expectedResult, res, delta);
+        double result = FeatureTestCalculator.calculateSequentialSession(feature, params, initParams);
+        assertEquals(expectedResult, result, delta, message);
     }
 
     private static <T extends FeatureInput> double calculateSequentialSession(

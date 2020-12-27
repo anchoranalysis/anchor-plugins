@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.test.experiment.launcher;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +40,6 @@ import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.lang.SystemUtils;
-import org.junit.rules.TemporaryFolder;
 
 /**
  * Launches an experiment by calling the application 'anchor' via the shell.
@@ -168,18 +168,13 @@ public class ExperimentLauncherFromShell {
      *     copied.
      */
     private void copyToTemporaryDirectory(
-            TemporaryFolder temporaryDirectory, String[] subdirectories) {
-        try {
-            temporaryDirectory.create();
-        } catch (IOException e) {
-            throw new TestDataInitException(e);
-        }
+            File temporaryDirectory, String[] subdirectories) {
 
         try {
             if (subdirectories != null) {
-                loader.copyToDirectory(subdirectories, temporaryDirectory.getRoot());
+                loader.copyToDirectory(subdirectories, temporaryDirectory);
             } else {
-                loader.copyToDirectory(temporaryDirectory.getRoot());
+                loader.copyToDirectory(temporaryDirectory);
             }
         } catch (IOException e) {
             throw new TestDataInitException(e);
@@ -194,8 +189,8 @@ public class ExperimentLauncherFromShell {
      * @param temporaryDirectory the temporary folder to copy files to
      * @return a test-loader bounded to the temporary folder
      */
-    public TestLoader runExperimentInTemporaryFolder(
-            String testPathToExperiment, TemporaryFolder temporaryDirectory) {
+    public TestLoader runExperimentInTemporaryDirectory(
+            String testPathToExperiment, Path temporaryDirectory) {
         return runExperimentInTemporaryDirectory(
                 testPathToExperiment, null, null, temporaryDirectory, null);
     }
@@ -217,20 +212,20 @@ public class ExperimentLauncherFromShell {
             String testPathToExperiment,
             Optional<String> testPathToInput,
             Optional<String> testPathToOutput,
-            TemporaryFolder temporaryDirectory,
+            Path temporaryDirectory,
             String[] specificSubdirectories) {
 
-        copyToTemporaryDirectory(temporaryDirectory, specificSubdirectories);
+        copyToTemporaryDirectory(temporaryDirectory.toFile(), specificSubdirectories);
 
         TestLoader loaderTemporaryDirectory =
-                TestLoader.createFromExplicitDirectory(temporaryDirectory.getRoot().toPath());
+                TestLoader.createFromExplicitDirectory(temporaryDirectory);
 
         ExperimentLauncherFromShell launcherTemporaryDirectory =
                 new ExperimentLauncherFromShell(loaderTemporaryDirectory);
         launcherTemporaryDirectory.runExperiment(
                 testPathToExperiment, testPathToInput, testPathToOutput);
 
-        return TestLoader.createFromExplicitDirectory(temporaryDirectory.getRoot().toPath());
+        return TestLoader.createFromExplicitDirectory(temporaryDirectory);
     }
 
     /**
