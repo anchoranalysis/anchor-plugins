@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
@@ -34,7 +35,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.bioformats.bean.writer.OMEXML;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Creates <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-xml/">OME-XML</a> files of
@@ -45,7 +46,7 @@ import org.junit.Test;
  *
  * @author Owen Feehan
  */
-public class OMEXMLTest extends OMETestBase { // NOSONAR
+class OMEXMLTest extends OMETestBase { // NOSONAR
 
     private static final ComparisonPlan COMPARISON_PLAN =
             new ComparisonPlan(false, Optional.of(ImageFileFormat.OME_TIFF), false);
@@ -54,14 +55,18 @@ public class OMEXMLTest extends OMETestBase { // NOSONAR
         super(ImageFileFormat.OME_XML, COMPARISON_PLAN);
     }
 
-    @Test(expected = ImageIOException.class)
-    public void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
-        tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);
+    @Test
+    void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
+        assertThrows(ImageIOException.class, () ->
+            tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE)
+        );
     }
 
-    @Test(expected = ImageIOException.class)
-    public void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
-        tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
+    @Test
+    void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
+        assertThrows(ImageIOException.class, () ->
+            tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE)
+        );
     }
 
     @Override

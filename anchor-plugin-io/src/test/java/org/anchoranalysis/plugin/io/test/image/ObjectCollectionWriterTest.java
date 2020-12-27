@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.test.image;
 
 import static org.anchoranalysis.plugin.io.test.image.HelperReadWriteObjects.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
@@ -35,10 +35,9 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Writes an object-collection to the filesystem, then reads it back again, and makes sure it is
@@ -46,26 +45,26 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author feehano
  */
-public class ObjectCollectionWriterTest {
+class ObjectCollectionWriterTest {
 
-    @Rule public TemporaryFolder directory = new TemporaryFolder();
+    @TempDir Path directory;
 
     private ObjectCollectionFixture fixture = new ObjectCollectionFixture();
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 
     @Test
-    public void testHdf5()
+    void testHdf5()
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
         testWriteRead(true);
     }
 
     @Test
-    public void testTIFFDirectory()
+    void testTIFFDirectory()
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
         testWriteRead(false);
@@ -74,14 +73,13 @@ public class ObjectCollectionWriterTest {
     private void testWriteRead(boolean hdf5)
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
-        Path path = directory.getRoot().toPath();
-
+        
         ObjectCollection objects = fixture.createMockObjects(2, 7);
-        writeObjects(objects, path, generator(hdf5, false));
+        writeObjects(objects, directory, generator(hdf5, false));
 
-        ObjectCollection objectsRead = readObjects(outputPathExpected(hdf5, path));
+        ObjectCollection objectsRead = readObjects(outputPathExpected(hdf5, directory));
 
-        assertEquals("Objects size", objects.size(), objectsRead.size());
+        assertEquals(objects.size(), objectsRead.size(), "Objects size");
         // TODO fix this test after code is compiling to be object independent
         // assertTrue("Objects first object",  objects.get(0).equals(objectsRead.get(0)) );
         // assertTrue(objects.equalsDeep(objectsRead));

@@ -26,18 +26,14 @@
 
 package org.anchoranalysis.plugin.io.bean.groupfiles.parser;
 
+import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.plugin.io.multifile.FileDetails;
 
 public abstract class FilePathParser extends AnchorBean<FilePathParser> {
 
-    public abstract boolean setPath(String path);
-
-    public abstract Optional<Integer> getChannelIndex();
-
-    public abstract Optional<Integer> getZSliceIndex();
-
-    public abstract Optional<Integer> getTimeIndex();
+    public abstract Optional<FileDetails> parsePath(Path path);
 
     public abstract String getKey();
 }

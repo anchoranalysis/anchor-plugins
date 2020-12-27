@@ -39,10 +39,10 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class MergeToIncreaseObjectFeatureTest {
+class MergeToIncreaseObjectFeatureTest {
 
     static {
         RegisterBeanFactories.registerAllPackageBeanFactories();
@@ -56,7 +56,7 @@ public class MergeToIncreaseObjectFeatureTest {
      * @throws CreateException
      */
     @Test
-    public void testMaximalNumPixels()
+    void testMaximalNumPixels()
             throws BeanMisconfiguredException, InitException, OperationFailedException,
                     CreateException {
         testLinear(
@@ -75,7 +75,7 @@ public class MergeToIncreaseObjectFeatureTest {
      * @throws CreateException
      */
     @Test
-    public void testConvergeNumPixels()
+    void testConvergeNumPixels()
             throws BeanMisconfiguredException, InitException, OperationFailedException,
                     CreateException {
         testLinear(8, 23, MergeToIncreaseObjectFeatureTest::convergeTo900);

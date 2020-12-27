@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import lombok.AccessLevel;
@@ -42,14 +42,14 @@ class ExpectedBoxesChecker {
 
     public static void assertExpectedBoxes(
             ObjectCollection objects, List<BoundingBox> expectedBoxes) {
-        assertTrue("number of boxes", expectedBoxes.size() < 5);
+        assertTrue(expectedBoxes.size() < 5, "number of boxes");
         expectedBoxes.stream().forEach(box -> assertOverlap(objects, box));
     }
 
     private static void assertOverlap(ObjectCollection objects, BoundingBox box) {
         assertTrue(
-                "at least one object has box: " + box.toString(),
-                atLeastOneObjectOverlaps(objects, box));
+                atLeastOneObjectOverlaps(objects, box),
+                "at least one object has box: " + box.toString());
     }
 
     private static boolean atLeastOneObjectOverlaps(ObjectCollection objects, BoundingBox box) {

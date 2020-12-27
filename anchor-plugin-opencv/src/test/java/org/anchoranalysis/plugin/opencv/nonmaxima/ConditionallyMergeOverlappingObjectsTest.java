@@ -27,14 +27,14 @@ package org.anchoranalysis.plugin.opencv.nonmaxima;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyMergeOverlappingObjects;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ConditionallyMergeOverlappingObjectsTest {
+class ConditionallyMergeOverlappingObjectsTest {
 
     private ReduceElementsTester tester = new ReduceElementsTester();
 
     @Test
-    public void testReduce() throws OperationFailedException {
+    void testReduce() throws OperationFailedException {
         tester.test(new ConditionallyMergeOverlappingObjects(), true, 5, 0.8);
     }
 }

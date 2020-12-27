@@ -29,55 +29,42 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
-import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodMask;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * A scheme for counting touching voxels.
+ * A scheme for counting the touching voxels by intersection of object-masks
  *
- * <p>A voxel in the second object is deemed touching if it has 4-connectivity with a voxel on the
- * exterior of the first-object (source)
+ * <p>Specifically, one of the object-masks is dilated, and count the number of intersecting pixels
+ * with another object.
  *
- * <p>In practice, we do this only where the bounding-boxes (dilated by 1 pixels) intersection, so
- * as to reduce computation-time.
+ * <p>However, intersection(a*,b)!=intersection(a,b*) where * is the dilation operator. Different
+ * counts occur as a single-voxel can have multiple edges with the neighbor.
+ *
+ * <p>So it's better if we can iterate with a kernel over the edge pixels, and count the number of
+ * neighbors
+ *
+ * <p>We do this only where the bounding-boxes (dilated by 1 pixels) intersection. So as not to
+ * waste computation-time in useless areas.
  *
  * @author Owen Feehan
  */
-public class NumTouchingVoxels extends TouchingVoxels {
+public class NumberTouchingVoxelFaces extends TouchingVoxels {
 
     @Override
     protected double calculateWithIntersection(
             ObjectMask object1, ObjectMask object2, BoundingBox boxIntersect)
             throws FeatureCalculationException {
-        // As this means of measuring the touching pixels can differ slightly depending on om1->om2
-        // or om2->om1, it's done in both directions.
-        try {
-            return Math.max(
-                    numTouchingFrom(object1, object2, boxIntersect),
-                    numTouchingFrom(object2, object1, boxIntersect));
 
+        ObjectMask object2Relative = RelativeUtilities.createRelMask(object2, object1);
+
+        try {
+            return ApplyKernel.applyForCount(
+                    createCountKernelMask(object1, object2Relative),
+                    object1.voxels(),
+                    RelativeUtilities.createRelBBox(boxIntersect, object1));
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
-    }
-
-    private int numTouchingFrom(ObjectMask source, ObjectMask destination, BoundingBox boxIntersect)
-            throws OperationFailedException {
-        BoundingBox boxIntersectRelative = RelativeUtilities.createRelBBox(boxIntersect, source);
-        return calculateNeighborhoodTouchingPixels(source, destination, boxIntersectRelative);
-    }
-
-    private int calculateNeighborhoodTouchingPixels(
-            ObjectMask source, ObjectMask destination, BoundingBox boxIntersectRelative)
-            throws OperationFailedException {
-
-        CountKernelNeighborhoodMask kernelMatch =
-                new CountKernelNeighborhoodMask(
-                        isDo3D(),
-                        source.binaryValuesByte(),
-                        RelativeUtilities.createRelMask(destination, source),
-                        false);
-        return ApplyKernel.applyForCount(kernelMatch, source.voxels(), boxIntersectRelative);
     }
 }

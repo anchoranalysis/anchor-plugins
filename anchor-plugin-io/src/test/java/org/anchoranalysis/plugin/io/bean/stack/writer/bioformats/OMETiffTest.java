@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.bioformats.bean.writer.OMETiff;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Creates <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/">OME-TIFF</a> files of
@@ -45,7 +45,7 @@ import org.junit.Test;
  *
  * @author Owen Feehan
  */
-public class OMETiffTest extends OMETestBase {
+class OMETiffTest extends OMETestBase {
 
     /**
      * The plan on how to compare images.
@@ -61,12 +61,12 @@ public class OMETiffTest extends OMETestBase {
     }
 
     @Test
-    public void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
+    void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);
     }
 
     @Test
-    public void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
+    void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
     }
 

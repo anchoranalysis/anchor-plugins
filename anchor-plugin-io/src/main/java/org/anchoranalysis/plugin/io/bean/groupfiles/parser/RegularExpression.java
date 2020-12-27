@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.groupfiles.parser;
 
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,8 +34,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.plugin.io.multifile.FileDetails;
 
-public class RegExpFilePathParser extends FilePathParser {
+public class RegularExpression extends FilePathParser {
 
     // START BEAN PARAMETERS
     @BeanField @Getter private String expression;
@@ -50,55 +52,36 @@ public class RegExpFilePathParser extends FilePathParser {
     @BeanField @Getter @Setter private boolean keyRequired = false;
     // END BEAN PARAMETERS
 
-    private int channelNum = 0;
-    private int zSliceNum = 0;
-    private int timeIndex = 0;
-
     private String key;
 
     Pattern pattern = null;
 
     @Override
-    public boolean setPath(String path) {
+    public Optional<FileDetails> parsePath(Path path) {
 
         // Replace backslashes with forward slashes
-        Matcher matcher = pattern.matcher(FilePathToUnixStyleConverter.toStringUnixStyle(path));
+        Matcher matcher = pattern.matcher(FilePathToUnixStyleConverter.toStringUnixStyle(path.toAbsolutePath()));
 
         if (!matcher.matches()) {
-            return false;
+            return Optional.empty();
         }
 
-        channelNum = ExtractGroup.maybeExtractInt(channelGroupID, matcher);
-        zSliceNum = ExtractGroup.maybeExtractInt(zSliceGroupID, matcher);
-        timeIndex = ExtractGroup.maybeExtractInt(timeIndexGroupID, matcher);
+        int channelNum = ExtractGroup.maybeExtractInt(channelGroupID, matcher);
+        int zSliceNum = ExtractGroup.maybeExtractInt(zSliceGroupID, matcher);
+        int timeIndex = ExtractGroup.maybeExtractInt(timeIndexGroupID, matcher);
 
         if (channelNum == -1 || zSliceNum == -1 || timeIndex == -1) {
-            return false;
+            return Optional.empty();
         }
 
         if (keyGroupID > 0) {
             Optional<String> extractedKey = ExtractGroup.extractString(keyGroupID, matcher);
             if (!extractedKey.isPresent() || (extractedKey.get().isEmpty() && keyRequired)) {
-                return false;
+                return Optional.empty();
             }
             key = extractedKey.get();
         }
-        return true;
-    }
-
-    @Override
-    public Optional<Integer> getChannelIndex() {
-        return asOptional(channelGroupID, channelNum);
-    }
-
-    @Override
-    public Optional<Integer> getZSliceIndex() {
-        return asOptional(zSliceGroupID, zSliceNum);
-    }
-
-    @Override
-    public Optional<Integer> getTimeIndex() {
-        return asOptional(timeIndexGroupID, timeIndex);
+        return Optional.of( new FileDetails(path, asOptional(channelGroupID, channelNum), asOptional(zSliceGroupID, zSliceNum), asOptional(timeIndexGroupID, timeIndex)) );
     }
 
     @Override
@@ -106,16 +89,16 @@ public class RegExpFilePathParser extends FilePathParser {
         return key;
     }
 
+    public void setExpression(String expression) {
+        this.expression = expression;
+        this.pattern = Pattern.compile(expression);
+    }
+    
     private static Optional<Integer> asOptional(int groupID, int val) {
         if (groupID > 0) {
             return Optional.of(val);
         } else {
             return Optional.empty();
         }
-    }
-
-    public void setExpression(String expression) {
-        this.expression = expression;
-        this.pattern = Pattern.compile(expression);
     }
 }

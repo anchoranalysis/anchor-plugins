@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.CreateException;
@@ -47,19 +47,19 @@ import org.anchoranalysis.plugin.mpp.bean.proposer.orientation.RandomOrientation
 import org.anchoranalysis.plugin.mpp.bean.proposer.radii.UniformRandomRadiiProposer;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.extract.FromVoxelizedMarksWithEnergy;
 import org.anchoranalysis.test.image.EnergyStackFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SimulatedAnnealingTest {
+class SimulatedAnnealingTest {
 
     @Test
-    public void testOverlappingEllipses()
+    void testOverlappingEllipses()
             throws OptimizationTerminatedEarlyException, CreateException, InitException,
                     BeanMisconfiguredException {
         runTest(false, 26, 4847.0, false);
     }
 
     @Test
-    public void testOverlappingEllipsoids()
+    void testOverlappingEllipsoids()
             throws OptimizationTerminatedEarlyException, CreateException, InitException,
                     BeanMisconfiguredException {
         runTest(true, 18, 4159, false);
@@ -100,8 +100,8 @@ public class SimulatedAnnealingTest {
                         EnergyStackFixture.create(true, use3D),
                         logToConsole);
 
-        assertEquals("number of marks", expectedSize, optimum.getMarks().size());
-        assertEquals("energy", expectedEnergy, optimum.getEnergyTotal(), 1e-1);
+        assertEquals(expectedSize, optimum.getMarks().size(), "number of marks");
+        assertEquals(expectedEnergy, optimum.getEnergyTotal(), 1e-1, "energy");
     }
 
     private static MarkProposer radiiAndOrientationProposer(boolean use3D) {

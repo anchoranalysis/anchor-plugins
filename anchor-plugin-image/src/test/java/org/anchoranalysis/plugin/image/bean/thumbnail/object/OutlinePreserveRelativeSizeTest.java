@@ -25,10 +25,11 @@
  */
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Color;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
@@ -50,15 +51,15 @@ import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.WriteIntoDirectory;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests {@link OutlinePreserveRelativeSize}.
  *
  * @author Owen Feehan
  */
-public class OutlinePreserveRelativeSizeTest {
+class OutlinePreserveRelativeSizeTest {
 
     private static final SizeXY SIZE = new SizeXY(300, 200);
 
@@ -71,26 +72,27 @@ public class OutlinePreserveRelativeSizeTest {
 
     private static final Stack BACKGROUND = EnergyStackFixture.create(true, false).asStack();
 
-    @Rule public WriteIntoDirectory writer = new WriteIntoDirectory(false);
+    @TempDir Path temporaryDirectory;
+    
+    private WriteIntoDirectory writer = new WriteIntoDirectory(temporaryDirectory, false);
 
     @Test
-    public void testThumbnails() throws OperationFailedException, CreateException {
+    void testThumbnails() throws OperationFailedException, CreateException {
 
         List<DisplayStack> thumbnails = createAndWriteThumbnails();
 
         assertEquals(
-                "number of thumbnails",
                 thumbnails.size(),
-                NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING);
+                NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING, "number of thumbnails");
         for (DisplayStack thumbnail : thumbnails) {
-            assertEquals("size of a thumbnail", SIZE.asExtent(), thumbnail.extent());
+            assertEquals(SIZE.asExtent(), thumbnail.extent(), "size of a thumbnail");
         }
 
         DualComparer comparer =
                 DualComparerFactory.compareTemporaryDirectoryToTest(
                         writer.getDirectory(), Optional.of("thumbnails"), "thumbnails01");
         assertTrue(
-                "thumbnails are identical to saved copy", comparer.compareTwoSubdirectories("."));
+                comparer.compareTwoSubdirectories("."), "thumbnails are identical to saved copy");
     }
 
     /**
