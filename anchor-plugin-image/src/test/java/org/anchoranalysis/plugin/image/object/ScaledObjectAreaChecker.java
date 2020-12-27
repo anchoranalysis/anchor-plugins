@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.plugin.image.object;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +54,7 @@ class ScaledObjectAreaChecker {
     }
 
     public void assertConnected(String name, ObjectMask object) {
-        assertTrue(name + " is connected", object.checkIfConnected());
+        assertTrue(object.checkIfConnected(), name + " is connected");
     }
 
     public void assertExpectedArea(ObjectMask unscaled, ObjectMask scaled) {
@@ -69,10 +69,10 @@ class ScaledObjectAreaChecker {
     public void assertExpectedArea(int sizeUnscaled, int sizeScaled) {
         // Compare sizes within some tolerance
         assertEquals(
-                "area",
                 sizeUnscaled * Math.pow(scaleFactor, 2),
                 sizeScaled,
-                sizeScaled * TOLERANCE_RATIO_SIZE);
+                sizeScaled * TOLERANCE_RATIO_SIZE,
+                "area");
     }
 
     private static int totalArea(Collection<ObjectMask> objects) {

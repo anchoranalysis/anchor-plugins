@@ -8,16 +8,6 @@
   <artifactId>anchor-plugin-imagej</artifactId>
   <version>0.0.8-SNAPSHOT</version>
   <description>Plugins that call ImageJ.</description>
-  
-    <repositories>
-
-		<repository>
-			<id>imagej</id>
-			<name>ImageJ repository</name>
-			<url>http://maven.imagej.net/content/groups/public</url>
-		</repository>
-		
-   	</repositories>
 	
   <dependencies>
     <dependency>

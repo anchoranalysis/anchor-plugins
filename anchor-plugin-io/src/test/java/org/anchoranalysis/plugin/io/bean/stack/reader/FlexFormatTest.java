@@ -26,16 +26,16 @@
 
 package org.anchoranalysis.plugin.io.bean.stack.reader;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
 import org.anchoranalysis.test.TestLoader;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class FlexFormatTest {
+class FlexFormatTest {
 
     private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
@@ -52,7 +52,7 @@ public class FlexFormatTest {
      * @throws ImageIOException
      */
     @Test
-    public void testSizeCAndT() throws ImageIOException {
+    void testSizeCAndT() throws ImageIOException {
 
         Path path = loader.resolveTestPath("exampleFormats/001001007.flex");
 

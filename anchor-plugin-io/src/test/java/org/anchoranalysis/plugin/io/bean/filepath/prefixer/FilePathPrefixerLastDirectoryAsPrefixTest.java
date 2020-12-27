@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.nio.file.Path;
@@ -36,12 +36,12 @@ import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class FilePathPrefixerLastDirectoryAsPrefixTest {
+class FilePathPrefixerLastDirectoryAsPrefixTest {
 
     @Test
-    public void test() throws PathPrefixerException {
+    void test() throws PathPrefixerException {
 
         Path root = mock(Path.class);
 

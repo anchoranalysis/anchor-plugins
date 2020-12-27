@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.feature.bean;
 
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Optional;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
@@ -49,28 +49,29 @@ import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities;
 import org.anchoranalysis.test.image.EnergyStackFixture;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-public class FeatureListMPPTest {
+class FeatureListMPPTest {
 
     private static final EnergyStack ENERGY_STACK = EnergyStackFixture.create(false, true);
     private static final Dimensions DIMENSIONS = ENERGY_STACK.dimensions();
 
-    @Before
-    public void setUp() {
+    @BeforeAll
+    static void setUp() {
         RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 
-    @Test(expected = NamedFeatureCalculateException.class)
-    public void testNoParams()
+    @Test
+    void testNoParams()
             throws InitException, NamedFeatureCalculateException, CreateException {
-
-        testConstantsInList((FeatureInput) null, (FeatureInput) null);
+        assertThrows(NamedFeatureCalculateException.class, () ->
+            testConstantsInList((FeatureInput) null, (FeatureInput) null)
+        );
     }
 
     @Test
-    public void testArbitraryParams()
+    void testArbitraryParams()
             throws InitException, NamedFeatureCalculateException, CreateException {
 
         MarkCollectionFixture marksFixture = new MarkCollectionFixture(DIMENSIONS);
@@ -83,7 +84,7 @@ public class FeatureListMPPTest {
     }
 
     @Test
-    public void testMark() throws InitException, CreateException, NamedFeatureCalculateException {
+    void testMark() throws InitException, CreateException, NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputMark> session =
                 createAndStart(FeatureListFixtureMPP.mark());
@@ -113,7 +114,7 @@ public class FeatureListMPPTest {
     }
 
     @Test
-    public void testMarks()
+    void testMarks()
             throws InitException, CreateException, FeatureCalculationException,
                     NamedFeatureCalculateException {
 

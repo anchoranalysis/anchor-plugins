@@ -121,19 +121,19 @@ public class MultiFileReaderOpenedRaster implements OpenedImageFile {
 
         for (FileDetails fd : fileBag) {
 
-            OpenedImageFile or = stackReader.openFile(fd.getFilePath());
+            OpenedImageFile or = stackReader.openFile(fd.getPath());
             try {
                 TimeSequence ts = or.open(seriesIndex, progress);
                 multiFile.add(
                         ts.get(0),
-                        fd.getChannelNum(),
-                        fd.getSliceNum(),
+                        fd.getChannelIndex(),
+                        fd.getSliceIndex(),
                         fd.getTimeIndex(),
-                        fd.getFilePath());
+                        fd.getPath());
             } catch (Exception e) {
                 throw new ImageIOException(
                         String.format(
-                                "Could not open '%s'. Abandoning MultiFile.", fd.getFilePath()),
+                                "Could not open '%s'. Abandoning MultiFile.", fd.getPath()),
                         e);
             } finally {
                 or.close();

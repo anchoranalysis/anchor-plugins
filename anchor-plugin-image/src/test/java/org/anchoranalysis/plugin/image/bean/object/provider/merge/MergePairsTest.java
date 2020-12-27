@@ -44,10 +44,10 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class MergePairsTest {
+class MergePairsTest {
 
     static {
         RegisterBeanFactories.registerAllPackageBeanFactories();
@@ -59,7 +59,7 @@ public class MergePairsTest {
      * @throws OperationFailedException
      */
     @Test
-    public void testAllMerge()
+    void testAllMerge()
             throws BeanMisconfiguredException, CreateException, InitException,
                     OperationFailedException {
         testLinear(EXPECTED_RESULT_ALL_INTERSECTING_MERGED, 26, 14, 1);
@@ -71,7 +71,7 @@ public class MergePairsTest {
      * @throws OperationFailedException
      */
     @Test
-    public void testSomeMerge()
+    void testSomeMerge()
             throws BeanMisconfiguredException, CreateException, InitException,
                     OperationFailedException {
         testLinear(EXPECTED_RESULT_FIRST_THREE_NOT_MERGING, 22, 12, 300);

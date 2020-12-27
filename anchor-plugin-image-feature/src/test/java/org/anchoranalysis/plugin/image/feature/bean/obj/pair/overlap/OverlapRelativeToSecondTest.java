@@ -30,12 +30,12 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
 import org.anchoranalysis.plugin.image.feature.bean.object.pair.overlap.OverlapRelativeToSecond;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class OverlapRelativeToSecondTest {
+class OverlapRelativeToSecondTest {
 
     @Test
-    public void testOverlapping() throws FeatureCalculationException, InitException {
+    void testOverlapping() throws FeatureCalculationException, InitException {
         ParamsFixtureHelper.testTwoSizesOverlappingDouble(
                 new OverlapRelativeToSecond(),
                 ParamsFixtureHelper.OVERLAP_RATIO_TO_MAX_VOLUME_DIFFERENT_SIZE,

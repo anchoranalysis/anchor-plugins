@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -39,9 +39,9 @@ import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeo
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class WatershedYeongTest {
+class WatershedYeongTest {
 
     private static final String PATH_CHANNEL_BLURRED = "channelInBlurred.tif";
     private static final String PATH_MASK = "mask.tif";
@@ -54,13 +54,13 @@ public class WatershedYeongTest {
             new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory("watershed01/"));
 
     @Test
-    public void testNoMasksNoSeeds()
+    void testNoMasksNoSeeds()
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
         segment(PATH_EXPECTED_NO_MASKS_NO_SEEDS, Optional.empty());
     }
 
     @Test
-    public void testMasksNoSeeds()
+    void testMasksNoSeeds()
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
         segment(PATH_EXPECTED_MASKS_NO_SEEDS, Optional.of(PATH_MASK));
     }
