@@ -63,7 +63,12 @@ class SegmentTextTest {
 
     @TempDir Path temporaryDirectory;
     
-    private WriteIntoDirectory writer = new WriteIntoDirectory(temporaryDirectory, false);
+    private WriteIntoDirectory writer;
+    
+    @BeforeEach
+    void setup() {
+        writer = new WriteIntoDirectory(temporaryDirectory, false);
+    }
 
     @BeforeEach
     void setUp() throws InitException {

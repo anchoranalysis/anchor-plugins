@@ -51,6 +51,7 @@ import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.WriteIntoDirectory;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -74,7 +75,12 @@ class OutlinePreserveRelativeSizeTest {
 
     @TempDir Path temporaryDirectory;
     
-    private WriteIntoDirectory writer = new WriteIntoDirectory(temporaryDirectory, false);
+    private WriteIntoDirectory writer;
+    
+    @BeforeEach
+    void setup() {
+        writer = new WriteIntoDirectory(temporaryDirectory, false);
+    }
 
     @Test
     void testThumbnails() throws OperationFailedException, CreateException {
