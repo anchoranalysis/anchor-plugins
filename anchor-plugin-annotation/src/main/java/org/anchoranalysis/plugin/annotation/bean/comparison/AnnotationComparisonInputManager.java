@@ -34,7 +34,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
@@ -76,21 +75,16 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
                 tempList.add(iterator.next());
             }
 
-            try {
-                List<AnnotationComparisonInput<T>> outList =
-                        createListInputWithAnnotationPath(
-                                tempList, new ProgressOneOfMany(progressMultiple));
-                progressMultiple.incrementWorker();
-                return outList;
-            } catch (CreateException e) {
-                throw new InputReadFailedException(
-                        "Cannot create inputs (with annotation path)", e);
-            }
+            List<AnnotationComparisonInput<T>> outList =
+                    createListInputWithAnnotationPath(
+                            tempList, new ProgressOneOfMany(progressMultiple));
+            progressMultiple.incrementWorker();
+            return outList;
         }
     }
 
     private List<AnnotationComparisonInput<T>> createListInputWithAnnotationPath(
-            List<T> listInputs, Progress progress) throws CreateException {
+            List<T> listInputs, Progress progress) {
         return FunctionalProgress.mapList(
                 listInputs,
                 progress,
