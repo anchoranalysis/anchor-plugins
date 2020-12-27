@@ -36,7 +36,6 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
@@ -71,19 +70,13 @@ class FeatureListImageTest {
     }
 
     @Test
-    void testNoParams()
-            throws InitException, FeatureCalculationException, CreateException,
-                    NamedFeatureCalculateException {
+    void testNoParams() {
 
         assertThrows(NamedFeatureCalculateException.class, () -> {
             FeatureCalculatorMulti<FeatureInput> session =
                     createAndStart(ConstantsInListFixture.create());
     
-            ResultsVector rv1 = session.calculate((FeatureInput) null);
-            ConstantsInListFixture.checkResultVector(rv1);
-    
-            ResultsVector rv2 = session.calculate((FeatureInput) null);
-            ConstantsInListFixture.checkResultVector(rv2);
+            session.calculate((FeatureInput) null);
         });
     }
 
