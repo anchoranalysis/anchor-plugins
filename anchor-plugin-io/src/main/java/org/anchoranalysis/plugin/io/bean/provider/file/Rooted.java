@@ -43,18 +43,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Represents a set of files, with a different root depending on the operating-system and
- * conditions.
+ * Represents a set of files, with a different path-root depending on context.
  *
- * <p>The following determines which root is used, and prepended to a copy of the FileSet:
- *
- * <p>If the operating system is windows:
- *
- * <ul>
- *   <li>If the fileSet directory exists in localWindowsRootPath we use that
- *   <li>Otherwise, TODO
- * </ul>
- *
+ * <p>Note the path-root refers a prefix applied to each path e.g. {@code /a/b/c}, not just
+ * the "c:\" or similar part that Java-s {@link Path} class refers to as a root.
+ * 
  * @author Owen Feehan
  */
 public class Rooted extends FilesProvider {
@@ -92,7 +85,7 @@ public class Rooted extends FilesProvider {
 
             boolean directoryNewExists = directoryNew.toFile().exists();
 
-            // As a special behaviour, if the debug folder doesn't exist
+            // As a special behavior, if the debug folder doesn't exist
             // we try and again with the non-debug folder
             if (params.isDebugModeActivated() && !directoryNewExists) {
                 directoryNew =
