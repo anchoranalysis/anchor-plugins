@@ -41,6 +41,11 @@ public class NumberIterations extends NumberIterationsBase {
     public NumberIterations(int iterations) {
         super(iterations);
     }
+
+    @Override
+    public void init() {
+        // NOTHING TO DO
+    }
     
     @Override
     public boolean continueFurther(

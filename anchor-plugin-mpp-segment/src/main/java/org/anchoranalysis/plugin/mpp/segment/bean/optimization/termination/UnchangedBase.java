@@ -12,6 +12,11 @@ public abstract class UnchangedBase extends NumberIterationsBase {
     
     /** The number of repeats so far while then number-of-marks is unchanged. */
     private int repeatsUnchanged = 0;
+   
+    @Override
+    public void init() {
+        this.repeatsUnchanged = 0;
+    }
     
     @Override
     public boolean continueFurther(
