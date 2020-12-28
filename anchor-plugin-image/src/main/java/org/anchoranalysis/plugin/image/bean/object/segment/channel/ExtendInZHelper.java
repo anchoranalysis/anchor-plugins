@@ -99,11 +99,11 @@ class ExtendInZHelper {
         return newMask;
     }
 
-    private static BoundingBox createBoundingBoxForAllZ(BoundingBox exst, int z) {
-        Point3i cornerMin = copyPointChangeZ(exst.cornerMin(), 0);
-        Extent e = copyExtentChangeZ(exst.extent(), z);
+    private static BoundingBox createBoundingBoxForAllZ(BoundingBox existing, int z) {
+        Point3i cornerMin = copyPointChangeZ(existing.cornerMin(), 0);
+        Extent extent = copyExtentChangeZ(existing.extent(), z);
 
-        return new BoundingBox(cornerMin, e);
+        return new BoundingBox(cornerMin, extent);
     }
 
     private static Point3i copyPointChangeZ(ReadableTuple3i in, int z) {

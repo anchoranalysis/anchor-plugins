@@ -76,7 +76,7 @@ public abstract class CopyFilesNaming<T> extends AnchorBean<CopyFilesNaming<T>> 
      * @param destinationDirectory destination-directory
      * @param file file to be copied
      * @param index an increasing sequence of numbers for each file beginning at 0
-     * @param sharedState TODO
+     * @param sharedState
      * @return the relative-path. if empty, the file should be skipped.
      * @throws OutputWriteFailedException
      */

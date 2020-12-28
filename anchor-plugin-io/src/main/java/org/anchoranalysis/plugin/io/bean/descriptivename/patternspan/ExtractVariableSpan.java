@@ -46,7 +46,7 @@ import org.apache.commons.io.IOCase;
  * @author Owen Feehan
  */
 class ExtractVariableSpan {
-
+    
     private static Logger log = Logger.getLogger(ExtractVariableSpan.class.getName());
 
     private Pattern pattern;
@@ -99,23 +99,23 @@ class ExtractVariableSpan {
      * @param file
      * @return the spanning-portion of the file-path.
      */
-    public String extractSpanPortionFor(File file) {
+    public String extractSpanPortionFor(File file, IOCase ioCase) {
         return FilePathToUnixStyleConverter.toStringUnixStyle(
-                extractVariableSpanUnnormalized(file));
+                extractVariableSpanUnnormalized(file, ioCase));
     }
 
-    private String extractVariableSpanUnnormalized(File file) {
+    private String extractVariableSpanUnnormalized(File file, IOCase ioCase) {
         try {
-            return extractVariableSpanWithError(file);
+            return extractVariableSpanWithError(file, ioCase);
         } catch (OperationFailedException e) {
             log.log(Level.WARNING, "Cannot extract a variable", e);
             return elseName;
         }
     }
 
-    private String extractVariableSpanWithError(File file) throws OperationFailedException {
+    private String extractVariableSpanWithError(File file, IOCase ioCase) throws OperationFailedException {
         String path = file.toPath().toString();
-        return trimConstantElementsFromBothSides(path, IOCase.INSENSITIVE);
+        return trimConstantElementsFromBothSides(path, ioCase);
     }
 
     private String trimConstantElementsFromBothSides(String str, IOCase ioCase)

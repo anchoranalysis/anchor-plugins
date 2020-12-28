@@ -29,10 +29,13 @@ package org.anchoranalysis.plugin.io.bean.descriptivename.patternspan;
 import com.owenfeehan.pathpatternfinder.PathPatternFinder;
 import com.owenfeehan.pathpatternfinder.Pattern;
 import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
+import lombok.Getter;
+import lombok.Setter;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
@@ -48,6 +51,11 @@ import org.apache.commons.io.IOCase;
  */
 public class PatternSpan extends FileNamer {
 
+    // START BEAN PROPERTIES
+    /** Iff true, a case sensitive search is used to match patterns. */
+    @BeanField @Getter @Setter private boolean caseSensitive = false;
+    // END BEAN PROPERTIES
+    
     @Override
     public List<NamedFile> deriveName(Collection<File> files, String elseName, Logger logger) {
 
@@ -58,15 +66,18 @@ public class PatternSpan extends FileNamer {
             // Everything's a constant, so there must only be a single file. Return the file-name.
             return listExtractFileName(files);
         }
+        
+        IOCase ioCase = createCaseSensitivity();
 
-        // For now, hard-coded case-insensitivity here, and in ExtractVariableSpan
-        // TODO consider making it optional in both places
-        Pattern pattern = PathPatternFinder.findPatternPaths(paths, IOCase.INSENSITIVE);
-
+        Pattern pattern = PathPatternFinder.findPatternPaths(paths, ioCase);
         assert hasAtLeastOneVariableElement(pattern);
 
         return ExtractVariableSpanForList.listExtract(
-                files, new SelectSpanToExtract(pattern).createExtracter(elseName));
+                files, new SelectSpanToExtract(pattern).createExtracter(elseName), ioCase);
+    }
+        
+    private IOCase createCaseSensitivity() {
+        return caseSensitive ? IOCase.SENSITIVE : IOCase.INSENSITIVE;
     }
 
     private static boolean hasAtLeastOneVariableElement(Pattern pattern) {

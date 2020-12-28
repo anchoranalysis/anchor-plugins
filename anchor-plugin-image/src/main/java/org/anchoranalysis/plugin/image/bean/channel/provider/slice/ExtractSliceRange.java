@@ -42,18 +42,37 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.Extent;
 
 /**
- * Extracts slices from {@code sliceStart} (inclusive) to {@code sliceEnd} (inclusive)
+ * Extracts slices from {@code sliceStart} (inclusive) to {@code sliceEnd} (inclusive).
  *
+ * <p>If {@code duplicate==true} bean-property will ensure it is duplicated, and each channel
+ * has independent copies of the slices. If this is not needed {@code duplicate==false} results
+ * in less memory allocation and copying operations.
+ * 
  * @author Owen Feehan
  */
 public class ExtractSliceRange extends ChannelProviderUnary {
 
     // START BEANS
-    @BeanField @Positive @Getter @Setter private int sliceStart;
+    /** Slice index to start extracting from (inclusive). */
+    @BeanField @Positive @Getter @Setter private int indexStart;
 
-    @BeanField @Positive @Getter @Setter private int sliceEnd;
+    /** Slice index to end extracting from (inclusive). */
+    @BeanField @Positive @Getter @Setter private int indexEnd;
+    
+    /** If true, an extracted slice is duplicated before being assigned to the output channel. */
+    @BeanField private boolean duplicate = true;
     // END BEANS
 
+    @Override
+    public void checkMisconfigured(BeanInstanceMap defaultInstances)
+            throws BeanMisconfiguredException {
+        super.checkMisconfigured(defaultInstances);
+        if (indexEnd < indexStart) {
+            throw new BeanMisconfiguredException(
+                    String.format("indexStart (%d) must be less than indexEnd (%d)", indexStart, indexEnd));
+        }
+    }
+    
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
 
@@ -61,33 +80,15 @@ public class ExtractSliceRange extends ChannelProviderUnary {
 
         Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
-        Extent extent = channel.extent().duplicateChangeZ(sliceEnd - sliceStart + 1);
+        Extent extent = channel.extent().duplicateChangeZ(indexEnd - indexStart + 1);
 
         Channel channelOut =
                 factory.createEmptyInitialised(new Dimensions(extent, channel.resolution()));
+
         Voxels<UnsignedByteBuffer> voxelsOut = channelOut.voxels().asByte();
-
-        int volumeXY = voxels.extent().volumeXY();
-        for (int z = sliceStart; z <= sliceEnd; z++) {
-
-            // TODO change to use the replaceSlice method?
-            UnsignedByteBuffer bufferIn = voxels.sliceBuffer(z);
-            UnsignedByteBuffer bufferOut = voxelsOut.sliceBuffer(z - sliceStart);
-
-            for (int i = 0; i < volumeXY; i++) {
-                bufferOut.putRaw(i, bufferIn.getRaw(i));
-            }
+        for (int z = indexStart; z <= indexEnd; z++) {
+            voxelsOut.replaceSlice(z - indexStart, voxels.slice(z));
         }
-
         return channelOut;
-    }
-
-    @Override
-    public void checkMisconfigured(BeanInstanceMap defaultInstances)
-            throws BeanMisconfiguredException {
-        super.checkMisconfigured(defaultInstances);
-        if (sliceEnd < sliceStart) {
-            throw new BeanMisconfiguredException("SliceStart must be less than SliceEnd");
-        }
     }
 }
