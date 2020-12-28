@@ -51,6 +51,7 @@ public class UnchangedScore extends UnchangedBase {
     @Override
     public void init() {
         super.init();
+        this.previousScore = 0;
         this.toleranceRaised = Math.pow(10.0, tolerance);
     }
 

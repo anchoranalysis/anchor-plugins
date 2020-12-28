@@ -37,6 +37,12 @@ public class UnchangedSize extends UnchangedBase {
     private int previousSize = -1;
 
     @Override
+    public void init() {
+        super.init();
+        this.previousSize = -1;
+    }
+    
+    @Override
     protected boolean isUnchanged(double score, int size) {
         return size == previousSize;
     }
