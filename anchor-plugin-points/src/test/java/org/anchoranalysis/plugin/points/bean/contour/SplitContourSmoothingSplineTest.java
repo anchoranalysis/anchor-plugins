@@ -43,8 +43,7 @@ class SplitContourSmoothingSplineTest {
             new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
-    void test()
-            throws CreateException, OperationFailedException, SetOperationFailedException {
+    void test() throws CreateException, OperationFailedException, SetOperationFailedException {
 
         ObjectMask contourIn = loader.openLargestObjectFrom("01");
 

@@ -59,8 +59,7 @@ class CalculateIncrementalOperationMapTest {
     }
 
     @Test
-    void testInsertingAndAppending()
-            throws OperationFailedException, FeatureCalculationException {
+    void testInsertingAndAppending() throws OperationFailedException, FeatureCalculationException {
 
         int NUM_FIRST = 8;
         int NUM_ADDITIONAL = 3;

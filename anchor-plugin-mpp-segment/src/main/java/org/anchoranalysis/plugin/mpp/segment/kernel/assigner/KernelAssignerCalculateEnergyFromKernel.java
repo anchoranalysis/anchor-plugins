@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
@@ -40,25 +39,25 @@ import org.anchoranalysis.plugin.mpp.segment.bean.optimization.kernelbridge.Kern
 
 /**
  * @author Owen Feehan
- * @param <S> Optimization state
- * @param <T> Knerel type
+ * @param <S> optimization state
+ * @param <T> kernel type
+ * @param <V> updatable state
  */
 @AllArgsConstructor
-public class KernelAssignerCalculateEnergyFromKernel<S, T>
-        implements KernelAssigner<S, T, UpdatableMarksList> {
+public class KernelAssignerCalculateEnergyFromKernel<S, T, V> implements KernelAssigner<S, T, V> {
 
     private final KernelStateBridge<S, T> kernelStateBridge;
 
     @Override
     public void assignProposal(
-            OptimizationStep<S, T, UpdatableMarksList> optStep,
+            OptimizationStep<S, T, V> step,
             TransformationContext context,
-            KernelWithIdentifier<S, UpdatableMarksList> kernel)
+            KernelWithIdentifier<S, V> kernel)
             throws KernelCalculateEnergyException {
 
         try {
-            Optional<S> proposalOptional = proposal(optStep, kernel, context);
-            optStep.assignProposal(
+            Optional<S> proposalOptional = proposal(step, kernel, context);
+            step.assignProposal(
                     OptionalUtilities.flatMap(
                             proposalOptional,
                             proposal ->
@@ -73,13 +72,13 @@ public class KernelAssignerCalculateEnergyFromKernel<S, T>
     }
 
     private Optional<S> proposal(
-            OptimizationStep<S, T, UpdatableMarksList> optStep,
-            KernelWithIdentifier<S, UpdatableMarksList> kernel,
+            OptimizationStep<S, T, V> step,
+            KernelWithIdentifier<S, V> kernel,
             TransformationContext context)
             throws KernelCalculateEnergyException, OperationFailedException {
         return kernel.getKernel()
                 .makeProposal(
-                        kernelStateBridge.stateToKernel().transform(optStep.getCurrent(), context),
+                        kernelStateBridge.stateToKernel().transform(step.getCurrent(), context),
                         context.getKernelCalcContext());
     }
 }

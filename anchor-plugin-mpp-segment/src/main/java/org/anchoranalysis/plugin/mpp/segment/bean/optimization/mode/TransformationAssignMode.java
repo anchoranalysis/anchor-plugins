@@ -33,7 +33,7 @@ import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.StateReporter;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.kernelbridge.KernelStateBridge;
-import org.anchoranalysis.plugin.mpp.segment.optimization.AccptProbCalculator;
+import org.anchoranalysis.plugin.mpp.segment.optimization.AcceptanceProbabilityCalculator;
 
 /**
  * Applies a transformation to the kernel-type U to calculate the Energy used as the primary readout
@@ -59,8 +59,8 @@ public class TransformationAssignMode<S, T, U> extends AssignMode<S, T, U> {
     // END BEAN PROPERTIES
 
     @Override
-    public AccptProbCalculator<T> probCalculator(AnnealScheme annealScheme) {
-        return new AccptProbCalculator<>(annealScheme, extractScoreSizeState);
+    public AcceptanceProbabilityCalculator<T> acceptableProbability(AnnealScheme annealScheme) {
+        return new AcceptanceProbabilityCalculator<>(annealScheme, extractScoreSizeState);
     }
 
     @Override

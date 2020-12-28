@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 import static org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportOutputter.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
+
 import java.nio.file.Path;
 import java.util.function.Consumer;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
@@ -80,10 +81,11 @@ class ExportFeaturesTaskTest {
 
     @Test
     void testSimpleSmall() throws OperationFailedException {
-        assertThrows(OperationFailedException.class, () ->
-            // The saved directory is irrelevant because an exception is thrown
-            testOnTask(OUTPUT_DIR_IRRELEVANT, TaskFixture::useSmallEnergyInstead)
-        );
+        assertThrows(
+                OperationFailedException.class,
+                () ->
+                        // The saved directory is irrelevant because an exception is thrown
+                        testOnTask(OUTPUT_DIR_IRRELEVANT, TaskFixture::useSmallEnergyInstead));
     }
 
     @Test
@@ -96,14 +98,15 @@ class ExportFeaturesTaskTest {
     @Test
     void testMergedSmall() {
         // The saved directory is irrelevant because an exception is thrown
-        assertThrows(OperationFailedException.class, () ->
-            testOnTask(
-                    OUTPUT_DIR_IRRELEVANT,
-                    fixture -> {
-                        fixture.useSmallEnergyInstead();
-                        fixture.changeToMergedPairs(false, false);
-                    })
-        );
+        assertThrows(
+                OperationFailedException.class,
+                () ->
+                        testOnTask(
+                                OUTPUT_DIR_IRRELEVANT,
+                                fixture -> {
+                                    fixture.useSmallEnergyInstead();
+                                    fixture.changeToMergedPairs(false, false);
+                                }));
     }
 
     @Test
@@ -182,8 +185,7 @@ class ExportFeaturesTaskTest {
      * @throws CreateException
      */
     @Test
-    void testRepeatedCalculationInSingleAndPair()
-            throws OperationFailedException, CreateException {
+    void testRepeatedCalculationInSingleAndPair() throws OperationFailedException, CreateException {
 
         Feature<FeatureInputSingleObject> feature =
                 MockFeatureWithCalculationFixture.createMockFeatureWithCalculation();
@@ -210,8 +212,7 @@ class ExportFeaturesTaskTest {
 
     /** Calculate with a reference to another feature included in the list */
     @Test
-    void testSimpleLargeWithIncludedReference()
-            throws OperationFailedException, CreateException {
+    void testSimpleLargeWithIncludedReference() throws OperationFailedException, CreateException {
         testOnTask(
                 OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE,
                 fixture -> fixture.featureLoader().changeSingleToReferenceWithInclude());
@@ -219,8 +220,7 @@ class ExportFeaturesTaskTest {
 
     /** Calculate with a reference to a feature that exists among the shared features */
     @Test
-    void testSimpleLargeWithSharedReference()
-            throws OperationFailedException, CreateException {
+    void testSimpleLargeWithSharedReference() throws OperationFailedException, CreateException {
         testOnTask(
                 OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE,
                 fixture -> fixture.featureLoader().changeSingleToReferenceShared());

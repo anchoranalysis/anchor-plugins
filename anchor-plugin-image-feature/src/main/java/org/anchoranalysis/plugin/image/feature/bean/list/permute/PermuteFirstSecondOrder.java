@@ -51,9 +51,9 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
 
     // START REQUIRED ARGUMENTS
     private final CreateFirstSecondOrder<T> factory;
-    
+
     private final double minRange;
-    
+
     private final double maxRange;
     // END REQUIRED ARGUMENTS
 

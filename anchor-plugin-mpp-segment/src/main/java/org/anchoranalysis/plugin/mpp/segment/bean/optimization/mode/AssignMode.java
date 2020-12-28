@@ -28,13 +28,12 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
-import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.StateReporter;
 import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.kernelbridge.KernelStateBridge;
 import org.anchoranalysis.plugin.mpp.segment.kernel.assigner.KernelAssignerCalculateEnergyFromKernel;
-import org.anchoranalysis.plugin.mpp.segment.optimization.AccptProbCalculator;
+import org.anchoranalysis.plugin.mpp.segment.optimization.AcceptanceProbabilityCalculator;
 
 /**
  * How assignments and other decisions are made in the SimulatedAnnealing optimizaton
@@ -46,9 +45,10 @@ import org.anchoranalysis.plugin.mpp.segment.optimization.AccptProbCalculator;
  */
 public abstract class AssignMode<S, T, U> extends AnchorBean<AssignMode<S, T, U>> {
 
-    public abstract AccptProbCalculator<T> probCalculator(AnnealScheme annealScheme);
+    public abstract AcceptanceProbabilityCalculator<T> acceptableProbability(
+            AnnealScheme annealScheme);
 
-    public KernelAssigner<U, T, UpdatableMarksList> kernelAssigner() {
+    public <V> KernelAssigner<U, T, V> kernelAssigner() {
         return new KernelAssignerCalculateEnergyFromKernel<>(kernelStateBridge());
     }
 

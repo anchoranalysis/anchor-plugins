@@ -32,30 +32,16 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
-import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
-import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.termination.TerminationCondition;
-import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationTerminatedEarlyException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.OptimizationStep;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
-import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode.AssignMode;
-import org.anchoranalysis.plugin.mpp.segment.kernel.assigner.KernelAssignerAddErrorLevel;
-import org.anchoranalysis.plugin.mpp.segment.kernel.updater.KernelUpdater;
-import org.anchoranalysis.plugin.mpp.segment.kernel.updater.KernelUpdaterSimple;
-import org.anchoranalysis.plugin.mpp.segment.optimization.AccptProbCalculator;
-import org.apache.commons.lang.time.StopWatch;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class SimulatedAnnealingHelper {
@@ -65,7 +51,7 @@ class SimulatedAnnealingHelper {
      *
      * @param assignMode
      * @param annealScheme
-     * @param marks
+     * @param updatableState
      * @param feedbackGenerator
      * @param kernelProposer
      * @param termConditionAll
@@ -73,15 +59,16 @@ class SimulatedAnnealingHelper {
      * @param <S> type reported back
      * @param <T> optimization state
      * @param <U> kernel-proposer type
+     * @param <V> updatable-state
      * @return
      * @throws OptimizationTerminatedEarlyException
      */
-    public static <S, T, U> T doOptimization(
+    public static <S, T, U, V> T doOptimization(
             AssignMode<S, T, U> assignMode,
             AnnealScheme annealScheme,
-            UpdatableMarksList marks,
+            V updatableState,
             FeedbackGenerator<S> feedbackGenerator,
-            KernelProposer<U, UpdatableMarksList> kernelProposer,
+            KernelProposer<U, V> kernelProposer,
             TerminationCondition termConditionAll,
             TransformationContext context)
             throws OptimizationTerminatedEarlyException {
@@ -92,39 +79,41 @@ class SimulatedAnnealingHelper {
             throw new OptimizationTerminatedEarlyException("Init failed", e);
         }
 
-        OptimizationStep<U, T, UpdatableMarksList> optStep = new OptimizationStep<>();
+        OptimizationStep<U, T, V> step = new OptimizationStep<>();
 
-        int iter = 0;
+        int iteration = 0;
         do {
-            optStep.setTemperature(annealScheme.calculateTemperature(iter));
+            step.setTemperature(annealScheme.calculateTemperature(iteration));
 
-            applyKernelToOptStep(
-                    optStep,
-                    iter,
-                    context,
+            ProposalToConsider<U, T, V> proposal =
+                    new ProposalToConsider<>(
+                            step,
+                            iteration,
+                            assignMode.acceptableProbability(annealScheme),
+                            context);
+            proposal.applyKernelToStep(
                     kernelProposer,
-                    marks,
-                    assignMode.probCalculator(annealScheme),
                     assignMode.kernelAssigner(),
+                    updatableState,
                     assignMode.kernelStateBridge().stateToKernel());
 
             try {
-                reportOptStep(
-                        optStep.reporting(iter, assignMode.stateReporter(), context),
+                reportOptimizationStep(
+                        step.reporting(iteration, assignMode.stateReporter(), context),
                         feedbackGenerator);
             } catch (OperationFailedException | ReporterException e) {
                 throw new OptimizationTerminatedEarlyException(
-                        "Cannot create reporting for optStep", e);
+                        "Cannot create reporting for step", e);
             }
         } while (continueIterations(
-                optStep.getBest(),
-                ++iter,
+                step.getBest(),
+                ++iteration,
                 termConditionAll,
                 assignMode.extractScoreSizeState(),
                 context.getLogger().messageLogger()));
 
         try {
-            return optStep.releaseKeepBest();
+            return step.releaseKeepBest();
         } catch (OperationFailedException e) {
             throw new OptimizationTerminatedEarlyException("Cannot release the best item", e);
         }
@@ -132,22 +121,22 @@ class SimulatedAnnealingHelper {
 
     private static <T> boolean continueIterations(
             Optional<T> state,
-            int iter,
+            int iteration,
             TerminationCondition termConditionAll,
             ExtractScoreSize<T> extractScoreSize,
             MessageLogger logger) {
-        if (!state.isPresent()) {
+        if (state.isPresent()) {
+            return termConditionAll.continueIterations(
+                    iteration,
+                    extractScoreSize.extractScore(state.get()),
+                    extractScoreSize.extractSize(state.get()),
+                    logger);
+        } else {
             return true;
         }
-
-        return termConditionAll.continueIterations(
-                iter,
-                extractScoreSize.extractScore(state.get()),
-                extractScoreSize.extractSize(state.get()),
-                logger);
     }
 
-    private static <S> void reportOptStep(
+    private static <S> void reportOptimizationStep(
             Reporting<S> reporting, FeedbackGenerator<S> feedbackGenerator)
             throws ReporterException {
 
@@ -156,85 +145,5 @@ class SimulatedAnnealingHelper {
         }
 
         feedbackGenerator.record(reporting);
-    }
-
-    private static <S, T> void applyKernelToOptStep(
-            OptimizationStep<S, T, UpdatableMarksList> optStep,
-            int iter,
-            TransformationContext context,
-            KernelProposer<S, UpdatableMarksList> kernelProposer,
-            UpdatableMarksList marks,
-            AccptProbCalculator<T> accptProbCalc,
-            KernelAssigner<S, T, UpdatableMarksList> kernelAssigner,
-            StateTransformer<Optional<T>, Optional<S>> funcExtractForUpdate)
-            throws OptimizationTerminatedEarlyException {
-        try {
-            // Propose a kernel
-            KernelWithIdentifier<S, UpdatableMarksList> kid =
-                    proposeKernel(
-                            kernelProposer,
-                            context.getKernelCalcContext().proposer().getRandomNumberGenerator(),
-                            iter == 0);
-
-            KernelUpdater<S, T, UpdatableMarksList> kernelUpdater =
-                    new KernelUpdaterSimple<>(
-                            marks, kernelProposer.getAllKernelFactories(), funcExtractForUpdate);
-
-            assignToOptStepForKernel(
-                    optStep, iter, kid, context, accptProbCalc, kernelUpdater, kernelAssigner);
-
-        } catch (KernelCalculateEnergyException e) {
-            throw new OptimizationTerminatedEarlyException(
-                    "A kernel-calculation error occurred", e);
-        } catch (UpdateMarkSetException e) {
-            throw new OptimizationTerminatedEarlyException("An update-mask-set error occurred", e);
-        }
-    }
-
-    private static <S, U> KernelWithIdentifier<S, U> proposeKernel(
-            KernelProposer<S, U> kernelProposer,
-            RandomNumberGenerator randomNumberGenerator,
-            boolean firstStep) {
-        if (firstStep) {
-            return kernelProposer.initialKernel();
-        } else {
-            return kernelProposer.proposeKernel(randomNumberGenerator);
-        }
-    }
-
-    private static <S, T> void assignToOptStepForKernel(
-            OptimizationStep<S, T, UpdatableMarksList> optStep,
-            int iter,
-            KernelWithIdentifier<S, UpdatableMarksList> kid,
-            TransformationContext context,
-            AccptProbCalculator<T> accptProbCalc,
-            KernelUpdater<S, T, UpdatableMarksList> kernelUpdater,
-            KernelAssigner<S, T, UpdatableMarksList> kernelAssigner)
-            throws KernelCalculateEnergyException, UpdateMarkSetException {
-
-        StopWatch timer = new StopWatch();
-        timer.start();
-
-        // We switch off debugging for now to check out the synchronization problems
-        ProposerFailureDescription error = new ProposerFailureDescription();
-
-        // We assign the proposed marks
-        createAssigner(kernelAssigner, error.getRoot()).assignProposal(optStep, context, kid);
-
-        ConsiderProposalHelper.maybeAcceptProposal(
-                optStep, iter, accptProbCalc, kernelUpdater, error, context);
-
-        assignExecutionTime(optStep, timer);
-    }
-
-    private static <S, T, U> KernelAssigner<S, T, U> createAssigner(
-            KernelAssigner<S, T, U> kernelAssigner, ErrorNode error) {
-        return new KernelAssignerAddErrorLevel<>(kernelAssigner, error);
-    }
-
-    private static void assignExecutionTime(OptimizationStep<?, ?, ?> optStep, StopWatch timer) {
-        long time = timer.getTime();
-        timer.reset();
-        optStep.setExecutionTime(time);
     }
 }

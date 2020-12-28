@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
@@ -40,18 +41,16 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
 // NB we execute every feedback action in a separate thread
 //  on the Swing's event dispatch thread
+@RequiredArgsConstructor
 class FeedbackGenerator<T> {
+
+    // START REQUIRED BEANS
+    private final FeedbackReceiver<T> feedbackReceiver;
+    private final ErrorReporter errorReporter;
+    // END REQUIRED BEANS
 
     private PeriodTriggerBank<T> periodTriggerBank;
     private AggregateTriggerBank<T> aggregateTriggerBank;
-    private FeedbackReceiver<T> feedbackReceiver;
-    private ErrorReporter errorReporter;
-
-    public FeedbackGenerator(FeedbackReceiver<T> feedbackReceiver, ErrorReporter errorReporter) {
-        super();
-        this.feedbackReceiver = feedbackReceiver;
-        this.errorReporter = errorReporter;
-    }
 
     public void begin(FeedbackBeginParameters<T> initParams, ExtractScoreSize<T> extracter) {
 
@@ -97,7 +96,7 @@ class FeedbackGenerator<T> {
         }
     }
 
-    public void end(FeedbackEndParameters<T> optStep) {
+    public void end(FeedbackEndParameters<T> step) {
 
         try {
             aggregateTriggerBank.end();
@@ -105,7 +104,7 @@ class FeedbackGenerator<T> {
             errorReporter.recordError(FeedbackGenerator.class, e);
         }
         try {
-            feedbackReceiver.reportEnd(optStep);
+            feedbackReceiver.reportEnd(step);
         } catch (ReporterException e) {
             errorReporter.recordError(FeedbackGenerator.class, e);
         }

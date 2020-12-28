@@ -25,4 +25,3 @@ Before reading the source code, please:
 * Understand Maven and [multi-module projects](https://www.anchoranalysis.org/developer_guide_building_anchor.html).
 * Consider Anchor's [architecture](https://www.anchoranalysis.org/developer_guide_architecture_overview.html).
 * Consider the role of each [module](https://www.anchoranalysis.org/developer_guide_architecture_modules.html) in the repository.
-

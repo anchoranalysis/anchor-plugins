@@ -62,9 +62,9 @@ class SegmentTextTest {
     private SegmentStackIntoObjectsPooled<?> segmenter;
 
     @TempDir Path temporaryDirectory;
-    
+
     private WriteIntoDirectory writer;
-    
+
     @BeforeEach
     void setup() {
         writer = new WriteIntoDirectory(temporaryDirectory, false);

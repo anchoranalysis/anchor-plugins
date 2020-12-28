@@ -68,8 +68,8 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
  * <p>Integer numbers are simply loaded in ascending numerical order. So gaps are allowed, and
  * starting numbers are irrelevant.
  *
- * <p>It is more powerful than {@link MultiFileReader}, which expects only one image per folder. This class
- * allows multiple images per folder and only performs a single glob for filenames.
+ * <p>It is more powerful than {@link MultiFileReader}, which expects only one image per folder.
+ * This class allows multiple images per folder and only performs a single glob for filenames.
  *
  * @author Owen Feehan
  */
@@ -111,7 +111,8 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
             } else {
                 if (requireAllFilesMatch) {
                     throw new InputReadFailedException(
-                            String.format("File %s did not match parser", input.getFile().toPath()));
+                            String.format(
+                                    "File %s did not match parser", input.getFile().toPath()));
                 }
             }
         }

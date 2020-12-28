@@ -45,10 +45,10 @@ import org.anchoranalysis.plugin.image.feature.bean.object.single.OutlineKernelB
 
 /**
  * Calculates the number of voxels on the object that have a neighbor.
- * 
- * <p>What possible neighbors are specified by a binary-mask from an energy-channel. This
- * should have with 255 high, and 0 low, and indicate all possible neighbor voxels. The region on
- * the binary-mask coinciding with the object is irrelevant and be set to any value.
+ *
+ * <p>What possible neighbors are specified by a binary-mask from an energy-channel. This should
+ * have with 255 high, and 0 low, and indicate all possible neighbor voxels. The region on the
+ * binary-mask coinciding with the object is irrelevant and be set to any value.
  *
  * @author Owen Feehan
  */

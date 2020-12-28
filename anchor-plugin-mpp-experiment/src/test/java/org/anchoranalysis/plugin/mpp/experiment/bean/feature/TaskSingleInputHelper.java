@@ -139,7 +139,7 @@ class TaskSingleInputHelper {
 
             try {
                 return task.executeJob(
-                                new ParametersUnbound<>(paramsExperiment, input, sharedState, false));
+                        new ParametersUnbound<>(paramsExperiment, input, sharedState, false));
             } finally {
                 task.afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
             }
