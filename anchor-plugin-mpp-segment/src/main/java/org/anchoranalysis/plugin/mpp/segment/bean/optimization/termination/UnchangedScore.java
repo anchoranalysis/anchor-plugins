@@ -29,41 +29,38 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.termination;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.mpp.segment.bean.optimization.termination.TerminationCondition;
 
 /**
- * TODO consider renaming to constant size
+ * Terminate when the <b>score</b> remains unchanged for a certain number of iterations.
  *
  * @author Owen Feehan
  */
-public class UnchangingNumberMarks extends TerminationCondition {
+public class UnchangedScore extends UnchangedBase {
 
-    // BEAN PARAMETERS
-    @BeanField @Getter @Setter private int numRep = -1;
+    // START BEAN PARAMETERS
+    /** An exponent of 10 which determines a tolerance, less than which a score will be deemed unchanged compared to another. */
+    @BeanField @Getter @Setter private int tolerance = -1;
     // END BEAN PARAMETERS
 
-    private int prevSize = 0;
-    private int rep = 0;
+    /** The value after raising {@code 10^exponent}. */ 
+    private double toleranceRaised = -1;
+
+    /** The total energy in the previous step. */
+    private double previousScore = 0;
 
     @Override
-    public boolean continueIterations(
-            int currentIteration, double score, int size, MessageLogger logger) {
+    public void init() {
+        super.init();
+        this.toleranceRaised = Math.pow(10.0, tolerance);
+    }
 
-        // We increase our repetition counter, if the energy total is identical to the last time
-        if (size == prevSize) {
-            rep++;
-        } else {
-            rep = 0;
-        }
-
-        prevSize = size;
-
-        if (rep < numRep) {
-            return true;
-        } else {
-            logger.log("ConstantMarksSize returned false");
-            return false;
-        }
+    @Override
+    protected void assignPrevious(double score, int size) {
+        this.previousScore = score;
+    }
+    
+    @Override
+    protected boolean isUnchanged(double score, int size) {
+        return Math.abs(score - previousScore) < this.toleranceRaised;
     }
 }

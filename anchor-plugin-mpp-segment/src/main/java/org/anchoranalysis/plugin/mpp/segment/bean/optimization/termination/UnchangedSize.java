@@ -26,56 +26,23 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.termination;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.mpp.segment.bean.optimization.termination.TerminationCondition;
-
 /**
- * TODO consider renaming to ConstantScore
+ * Terminate when the <b>size</b> remains unchanged for a certain number of iterations.
  *
  * @author Owen Feehan
  */
-public class UnchangingEnergy extends TerminationCondition {
+public class UnchangedSize extends UnchangedBase {
 
-    // START BEAN PARAMETERS
-    @BeanField @Getter @Setter private int toleranceLog10 = -1;
-
-    @BeanField @Positive @Getter @Setter private int numRep = -1;
-    // END BEAN PARAMETERS
-
-    private double tolerance = -1;
-
-    private double prevEnergy = 0;
-
-    private int rep = 0;
+    /** The size in the previous step. */
+    private int previousSize = -1;
 
     @Override
-    public boolean continueIterations(
-            int currentIteration, double score, int size, MessageLogger logger) {
-
-        // We increase our repetition counter, if the energy total is identical to the last time
-        if (Math.abs(score - prevEnergy) < this.tolerance) {
-            rep++;
-        } else {
-            rep = 0;
-        }
-
-        prevEnergy = score;
-
-        if (rep < numRep) {
-            return true;
-        } else {
-            logger.logFormatted("ConstantEnergy returned false at iter=%d", currentIteration);
-            return false;
-        }
+    protected boolean isUnchanged(double score, int size) {
+        return size == previousSize;
     }
-
+    
     @Override
-    public void init() {
-        super.init();
-        this.tolerance = Math.pow(10.0, toleranceLog10);
+    protected void assignPrevious(double score, int size) {
+        previousSize = size;        
     }
 }

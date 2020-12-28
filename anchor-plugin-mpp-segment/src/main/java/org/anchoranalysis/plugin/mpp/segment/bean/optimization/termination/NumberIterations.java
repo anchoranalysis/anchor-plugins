@@ -26,29 +26,29 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.termination;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.mpp.segment.bean.optimization.termination.TerminationCondition;
 
+/**
+ * Terminates after a specific number of iterations.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor
-@AllArgsConstructor
-public class NumberIterations extends TerminationCondition {
+public class NumberIterations extends NumberIterationsBase {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int maxNumber = -1;
-    // END BEAN PROPERTIES
-
+    public NumberIterations(int iterations) {
+        super(iterations);
+    }
+    
     @Override
-    public boolean continueIterations(
-            int currentIteration, double score, int size, MessageLogger logger) {
-        if (currentIteration < maxNumber) {
+    public boolean continueFurther(
+            int iteration, double score, int size, MessageLogger logger) {
+        if (iteration < getIterations()) {
             return true;
         } else {
-            logger.log("NumberIterations returned false");
+            logger.logFormatted("Terminating as the number of iterations reached %d", iteration);
             return false;
         }
     }
