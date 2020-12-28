@@ -126,7 +126,7 @@ class SimulatedAnnealingHelper {
             ExtractScoreSize<T> extractScoreSize,
             MessageLogger logger) {
         if (state.isPresent()) {
-            return termConditionAll.continueIterations(
+            return termConditionAll.continueFurther(
                     iteration,
                     extractScoreSize.extractScore(state.get()),
                     extractScoreSize.extractSize(state.get()),
