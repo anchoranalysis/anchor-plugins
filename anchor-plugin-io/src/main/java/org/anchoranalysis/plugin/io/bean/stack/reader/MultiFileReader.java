@@ -81,7 +81,7 @@ public class MultiFileReader extends StackReader {
         ParsedFilePathBag bag = new ParsedFilePathBag();
 
         while (fileIterator.hasNext()) {
-            Optional<FileDetails> details = filePathParser.parsePath(fileIterator.next().toPath()); 
+            Optional<FileDetails> details = filePathParser.parsePath(fileIterator.next().toPath());
             if (details.isPresent()) {
                 bag.add(details.get());
             }

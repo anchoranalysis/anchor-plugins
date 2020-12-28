@@ -74,9 +74,9 @@ class OutlinePreserveRelativeSizeTest {
     private static final Stack BACKGROUND = EnergyStackFixture.create(true, false).asStack();
 
     @TempDir Path temporaryDirectory;
-    
+
     private WriteIntoDirectory writer;
-    
+
     @BeforeEach
     void setup() {
         writer = new WriteIntoDirectory(temporaryDirectory, false);
@@ -89,7 +89,8 @@ class OutlinePreserveRelativeSizeTest {
 
         assertEquals(
                 thumbnails.size(),
-                NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING, "number of thumbnails");
+                NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING,
+                "number of thumbnails");
         for (DisplayStack thumbnail : thumbnails) {
             assertEquals(SIZE.asExtent(), thumbnail.extent(), "size of a thumbnail");
         }

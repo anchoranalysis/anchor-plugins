@@ -27,41 +27,26 @@
 package org.anchoranalysis.plugin.mpp.experiment.objects;
 
 import java.nio.file.Path;
-import java.util.Optional;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.InputFromManagerDelegate;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
-@AllArgsConstructor
-public class FromCSVInput implements InputFromManager, InputForMPPBean {
+public class FromCSVInput extends InputFromManagerDelegate<MultiInput> implements InputForMPPBean {
 
-    private MultiInput input;
-    @Getter private Path csvFilePath;
+    @Getter private final Path csvFilePath;
 
-    @Override
-    public String name() {
-        return input.name();
-    }
-
-    @Override
-    public Optional<Path> pathForBinding() {
-        return input.pathForBinding();
-    }
-
-    @Override
-    public void close(ErrorReporter errorReporter) {
-        input.close(errorReporter);
+    public FromCSVInput(MultiInput input, Path csvFilePath) {
+        super(input);
+        this.csvFilePath = csvFilePath;
     }
 
     @Override
     public void addToSharedObjects(MPPInitParams soMPP, ImageInitParams soImage)
             throws OperationFailedException {
-        input.addToSharedObjects(soMPP, soImage);
+        getDelegate().addToSharedObjects(soMPP, soImage);
     }
 }

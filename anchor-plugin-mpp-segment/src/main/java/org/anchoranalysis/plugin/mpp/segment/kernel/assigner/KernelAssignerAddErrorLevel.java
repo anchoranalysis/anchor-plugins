@@ -42,7 +42,7 @@ public class KernelAssignerAddErrorLevel<S, T, U> implements KernelAssigner<S, T
 
     @Override
     public void assignProposal(
-            OptimizationStep<S, T, U> optStep,
+            OptimizationStep<S, T, U> step,
             TransformationContext context,
             KernelWithIdentifier<S, U> kernel)
             throws KernelCalculateEnergyException {
@@ -51,6 +51,6 @@ public class KernelAssignerAddErrorLevel<S, T, U> implements KernelAssigner<S, T
         ErrorNode errorNode = parentErrorNode.add(kernel.getKernel().getName());
 
         // We assign the proposed marks
-        kernelAssigner.assignProposal(optStep, context.replaceError(errorNode), kernel);
+        kernelAssigner.assignProposal(step, context.replaceError(errorNode), kernel);
     }
 }

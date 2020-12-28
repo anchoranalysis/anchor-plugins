@@ -58,9 +58,7 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
      */
     public abstract Set<String> allLabels(T params);
 
-    /**
-     * Determines a particular group-identifier for an input
-     */
+    /** Determines a particular group-identifier for an input */
     public abstract String labelFor(
             T sharedState, ProvidesStackInput input, InputOutputContext context)
             throws OperationFailedException;

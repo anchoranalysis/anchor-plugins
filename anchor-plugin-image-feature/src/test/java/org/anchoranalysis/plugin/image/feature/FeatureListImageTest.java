@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.feature;
 
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
@@ -72,12 +73,14 @@ class FeatureListImageTest {
     @Test
     void testNoParams() {
 
-        assertThrows(NamedFeatureCalculateException.class, () -> {
-            FeatureCalculatorMulti<FeatureInput> session =
-                    createAndStart(ConstantsInListFixture.create());
-    
-            session.calculate((FeatureInput) null);
-        });
+        assertThrows(
+                NamedFeatureCalculateException.class,
+                () -> {
+                    FeatureCalculatorMulti<FeatureInput> session =
+                            createAndStart(ConstantsInListFixture.create());
+
+                    session.calculate((FeatureInput) null);
+                });
     }
 
     @Test

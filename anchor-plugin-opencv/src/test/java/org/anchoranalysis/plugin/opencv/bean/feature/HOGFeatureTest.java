@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.opencv.bean.feature;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
@@ -51,9 +51,7 @@ class HOGFeatureTest {
 
     @Test
     void testOutsideBounds() throws FeatureCalculationException {
-        assertThrows(FeatureCalculationException.class, () ->
-            featureValForIndex(60000)
-        );
+        assertThrows(FeatureCalculationException.class, () -> featureValForIndex(60000));
     }
 
     private double featureValForIndex(int index) throws FeatureCalculationException {

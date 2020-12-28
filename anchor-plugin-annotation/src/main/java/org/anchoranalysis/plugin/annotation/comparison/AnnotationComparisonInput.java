@@ -27,32 +27,28 @@
 package org.anchoranalysis.plugin.annotation.comparison;
 
 import io.vavr.Tuple2;
-import java.nio.file.Path;
-import java.util.Optional;
-import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Getter;
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
-import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.InputFromManagerDelegate;
 
-@Value
-@AllArgsConstructor
-public class AnnotationComparisonInput<T extends InputFromManager> implements InputFromManager {
+public class AnnotationComparisonInput<T extends InputFromManager>
+        extends InputFromManagerDelegate<T> {
 
-    private final T input;
-    private final Tuple2<Comparer, Comparer> comparers;
-    private final Tuple2<String, String> names;
-    private final StackReader stackReader;
+    @Getter private final Tuple2<Comparer, Comparer> comparers;
+    @Getter private final Tuple2<String, String> names;
+    @Getter private final StackReader stackReader;
 
-    @Override
-    public String name() {
-        return input.name();
-    }
-
-    @Override
-    public Optional<Path> pathForBinding() {
-        return input.pathForBinding();
+    public AnnotationComparisonInput(
+            T input,
+            Tuple2<Comparer, Comparer> comparers,
+            Tuple2<String, String> names,
+            StackReader stackReader) {
+        super(input);
+        this.comparers = comparers;
+        this.names = names;
+        this.stackReader = stackReader;
     }
 
     // Uses a boolean flag to multiplex between comparerLeft and comparerRight
@@ -64,8 +60,7 @@ public class AnnotationComparisonInput<T extends InputFromManager> implements In
         }
     }
 
-    @Override
-    public void close(ErrorReporter errorReporter) {
-        input.close(errorReporter);
+    public T getInput() {
+        return getDelegate();
     }
 }

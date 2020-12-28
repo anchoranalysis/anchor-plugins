@@ -76,12 +76,14 @@ class ReduceElementsTester {
 
         assertEquals(
                 countTotalVoxels(segments),
-                countTotalVoxels(reduced), "identical number of voxels");
+                countTotalVoxels(reduced),
+                "identical number of voxels");
         assertEquals(numberObjectsAfter, reduced.asList().size(), "number-objects-after");
 
-        assertEquals(highestConfidenceObjectUnchanged,
-                segments.highestConfidence().equals(reduced.highestConfidence())
-                        , "highest confidence object unchanged");
+        assertEquals(
+                highestConfidenceObjectUnchanged,
+                segments.highestConfidence().equals(reduced.highestConfidence()),
+                "highest confidence object unchanged");
         assertEquals(
                 highestConfidence,
                 reduced.highestConfidence().get().getConfidence(),

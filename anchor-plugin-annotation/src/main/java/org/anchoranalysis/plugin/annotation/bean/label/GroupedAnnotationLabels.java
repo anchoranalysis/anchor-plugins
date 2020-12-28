@@ -38,9 +38,7 @@ public class GroupedAnnotationLabels {
     private MultiMap map = new MultiValueMap();
 
     public GroupedAnnotationLabels(Collection<AnnotationLabel> labels) {
-        labels.forEach( label ->
-            map.put(label.getGroup(), label)
-        );
+        labels.forEach(label -> map.put(label.getGroup(), label));
     }
 
     public int numberGroups() {
