@@ -28,15 +28,16 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelParameters;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.border.NumberVoxelsAtBorder;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ShapeRegularityCalculator {
 
-    private static final OutlineKernelParameters OUTLINE_KERNEL_PARAMETERS =
-            new OutlineKernelParameters(false, false, false);
+    private static final KernelApplicationParameters OUTLINE_KERNEL_PARAMETERS =
+            new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, false);
 
     public static double calculateShapeRegularity(ObjectMask object) {
         double area = object.numberVoxelsOn();

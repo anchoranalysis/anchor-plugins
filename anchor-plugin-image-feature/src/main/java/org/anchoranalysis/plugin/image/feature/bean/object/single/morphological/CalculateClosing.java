@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological;
 
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -36,7 +35,6 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
@@ -65,13 +63,8 @@ class CalculateClosing extends FeatureCalculation<ObjectMask, FeatureInputSingle
         try {
             ObjectMask dilated = mapDilation.getOrCalculate(params, iterations);
 
-            return MorphologicalErosion.createErodedObject(
-                    dilated,
-                    params.dimensionsOptional().map(Dimensions::extent),
-                    do3D,
-                    iterations,
-                    false,
-                    Optional.empty());
+            return MorphologicalErosion.erode(
+                    dilated, iterations, do3D);
 
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);
