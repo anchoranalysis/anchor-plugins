@@ -50,6 +50,53 @@ import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
  */
 public class ExperimentResultsExperimentStructure extends FilesProvider {
 
+    private class DirectoryCreator {
+
+        public String apply() {
+            StringBuilder builder = new StringBuilder("experiments/");
+
+            if (rootInStructure) {
+                addRootName(builder);
+            }
+
+            addExperimentType(builder);
+            addDataset(builder);
+
+            return builder.toString();
+        }
+
+        private void addRootName(StringBuilder builder) {
+            if (!rootNameForStructure.isEmpty()) {
+                builder.append(rootNameForStructure);
+            } else {
+                builder.append(experiment.getRootName());
+            }
+            builder.append("/");
+        }
+
+        private void addExperimentType(StringBuilder builder) {
+            builder.append(experiment.getExperimentType());
+            builder.append("/");
+        }
+
+        private void addDataset(StringBuilder builder) {
+            builder.append(datasetName);
+            builder.append("_");
+            builder.append(datasetVersion);
+            builder.append("/");
+
+            if (!subdirectory.isEmpty()) {
+                builder.append(subdirectory);
+                builder.append("/");
+            }
+
+            if (datasetNameSubdirectory) {
+                builder.append(datasetName);
+                builder.append("/");
+            }
+        }
+    }
+
     // START BEAN PROPERTIES
     /** The name of the experiment including version suffix */
     @BeanField @Getter @Setter private String datasetName;
@@ -57,14 +104,7 @@ public class ExperimentResultsExperimentStructure extends FilesProvider {
     /** A version-suffix appended to the dataset name extracted from the reg exp */
     @BeanField @Getter @Setter private String datasetVersion;
 
-    /**
-     * A folder identifying the type of experiment (where the outputs are all put in the same
-     * directory
-     */
-    @BeanField @Getter @Setter private String experimentType;
-
-    /** Root-name assuming multi-rooted strucutre */
-    @BeanField @Getter @Setter private String rootName;
+    @BeanField @Getter @Setter private RootedExperiment experiment;
 
     /** Files to search for */
     @BeanField @Getter @Setter private String fileFilter = "*";
@@ -117,10 +157,15 @@ public class ExperimentResultsExperimentStructure extends FilesProvider {
         }
     }
 
+    @Override
+    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
+        return delegate.create(params);
+    }
+
     private Rooted createRootedFileSet() {
         Rooted out = new Rooted();
         out.setDisableDebugMode(true);
-        out.setRootName(rootName);
+        out.setRootName(experiment.getRootName());
         out.setFiles(createFiles());
         return out;
     }
@@ -132,57 +177,5 @@ public class ExperimentResultsExperimentStructure extends FilesProvider {
         out.setRecursive(recursive);
         out.setMaxDirectoryDepth(maxDirectoryDepth);
         return out;
-    }
-
-    private class DirectoryCreator {
-
-        public String apply() {
-            StringBuilder sb = new StringBuilder("experiments/");
-
-            if (rootInStructure) {
-                addRootName(sb);
-            }
-
-            addExperimentType(sb);
-            addDataset(sb);
-
-            return sb.toString();
-        }
-
-        private void addRootName(StringBuilder sb) {
-            if (!rootNameForStructure.isEmpty()) {
-                sb.append(rootNameForStructure);
-            } else {
-                sb.append(rootName);
-            }
-            sb.append("/");
-        }
-
-        private void addExperimentType(StringBuilder sb) {
-            sb.append(experimentType);
-            sb.append("/");
-        }
-
-        private void addDataset(StringBuilder sb) {
-            sb.append(datasetName);
-            sb.append("_");
-            sb.append(datasetVersion);
-            sb.append("/");
-
-            if (!subdirectory.isEmpty()) {
-                sb.append(subdirectory);
-                sb.append("/");
-            }
-
-            if (datasetNameSubdirectory) {
-                sb.append(datasetName);
-                sb.append("/");
-            }
-        }
-    }
-
-    @Override
-    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
-        return delegate.create(params);
     }
 }

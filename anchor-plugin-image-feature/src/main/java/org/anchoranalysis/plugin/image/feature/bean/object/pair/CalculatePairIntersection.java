@@ -137,13 +137,11 @@ class CalculatePairIntersection
 
         // We erode it, and use this as a mask on the input object
         ObjectMask eroded =
-                MorphologicalErosion.createErodedObject(
+                MorphologicalErosion.erode(
                         input.getMerged(),
-                        Optional.of(extent),
-                        do3D,
                         iterationsErosion,
-                        true,
-                        Optional.empty());
+                        do3D
+                        );
 
         return intersection.intersect(eroded, extent);
     }

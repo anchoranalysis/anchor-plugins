@@ -28,16 +28,18 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
-import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodIgnoreOutsideScene;
+import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhood;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 @AllArgsConstructor
@@ -55,43 +57,28 @@ class CalculateOutlineNumberVoxelFaces
     private final boolean suppress3D;
 
     private static int calculateSurfaceSize(
-            ObjectMask object, Dimensions dimensions, boolean mip, boolean suppress3D)
-            throws OperationFailedException {
+            ObjectMask object, Dimensions dimensions, boolean mip, boolean suppress3D) {
 
         boolean do3D = (dimensions.z() > 1) && !suppress3D;
 
         if (do3D && mip) {
             // If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
-            CountKernel kernel =
-                    new CountKernelNeighborhoodIgnoreOutsideScene(
-                            false,
-                            object.binaryValuesByte(),
-                            true,
-                            dimensions.extent(),
-                            object.boundingBox().cornerMin());
+            CountKernel kernel = new CountKernelNeighborhood();
 
-            Voxels<UnsignedByteBuffer> voxelsProjected = object.extract().projectMax();
-            return ApplyKernel.applyForCount(kernel, voxelsProjected);
+            BinaryVoxels<UnsignedByteBuffer> voxelsProjected = BinaryVoxelsFactory.reuseByte( object.extract().projectMax(), object.binaryValues() );
+            KernelApplicationParameters params = new KernelApplicationParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, false);
+            return ApplyKernel.applyForCount(kernel, voxelsProjected, params);
 
         } else {
-            CountKernel kernel =
-                    new CountKernelNeighborhoodIgnoreOutsideScene(
-                            do3D,
-                            object.binaryValuesByte(),
-                            true,
-                            dimensions.extent(),
-                            object.boundingBox().cornerMin());
-            return ApplyKernel.applyForCount(kernel, object.voxels());
+            CountKernel kernel = new CountKernelNeighborhood();
+            KernelApplicationParameters params = new KernelApplicationParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, do3D);
+            return ApplyKernel.applyForCount(kernel, object.binaryVoxels(), params);
         }
     }
 
     @Override
     protected Integer execute(FeatureInputSingleObject params) throws FeatureCalculationException {
-        try {
-            return calculateSurfaceSize(
-                    params.getObject(), params.dimensionsRequired(), mip, suppress3D);
-        } catch (OperationFailedException e) {
-            throw new FeatureCalculationException(e);
-        }
+        return calculateSurfaceSize(
+                params.getObject(), params.dimensionsRequired(), mip, suppress3D);
     }
 }

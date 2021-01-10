@@ -35,42 +35,43 @@ import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
 @RequiredArgsConstructor
-public class AccptProbCalculator<T> {
+public class AcceptanceProbabilityCalculator<T> {
 
     // START REQUIRED ARGUMENTS
     private final AnnealScheme annealScheme;
     private final ExtractScoreSize<T> extracter;
     // END REQUIRED ARGUMENTS
 
-    public double calculateAcceptanceProb(
+    public double calculateAcceptanceProbability(
             Kernel<?, ?> kernel,
-            Optional<T> crnt,
+            Optional<T> current,
             T proposal,
-            int iter,
+            int iteration,
             KernelCalculationContext context) {
         return kernel.calculateAcceptanceProbability(
-                sizeOrZero(crnt),
+                sizeOrZero(current),
                 sizeOrZero(Optional.of(proposal)),
                 context.getMarkFactory().getReferencePoissonIntensity(),
                 context.proposer().dimensions(),
-                densityRatio(crnt, Optional.of(proposal), iter));
+                densityRatio(current, Optional.of(proposal), iteration));
     }
 
-    public ToDoubleFunction<T> getFuncScore() {
+    public ToDoubleFunction<T> getScoreExtracter() {
         return extracter::extractScore;
     }
 
-    private int sizeOrZero(Optional<T> crnt) {
-        return crnt.map(extracter::extractSize).orElse(0);
+    private int sizeOrZero(Optional<T> current) {
+        return current.map(extracter::extractSize).orElse(0);
     }
 
-    private double densityRatio(Optional<T> crnt, Optional<T> proposal, int iter) {
-
-        if (!proposal.isPresent() || !crnt.isPresent()) {
+    private double densityRatio(Optional<T> current, Optional<T> proposal, int iteration) {
+        if (proposal.isPresent() && current.isPresent()) {
+            return annealScheme.calculateDensityRatio(
+                    extracter.extractScore(proposal.get()),
+                    extracter.extractScore(current.get()),
+                    iteration);
+        } else {
             return Double.NaN;
         }
-
-        return annealScheme.calculateDensityRatio(
-                extracter.extractScore(proposal.get()), extracter.extractScore(crnt.get()), iter);
     }
 }

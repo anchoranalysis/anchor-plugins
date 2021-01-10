@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -37,9 +38,13 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.spatial.point.Point3i;
 
-/** Base class for performing morphological operations */
+/** 
+ * Base class for performing morphological operations on {@link BinaryVoxels}.
+ */
 public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
 
     // START PROPERTIES
@@ -63,13 +68,18 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
 
         return mask;
     }
-
-    protected Optional<Voxels<UnsignedByteBuffer>> background() throws CreateException {
-
+    
+    protected Optional<Predicate<Point3i>> precondition() throws CreateException {
         if (minIntensityValue > 0) {
-            return Optional.of(backgroundChannelProvider.create().voxels().asByte());
+            Voxels<UnsignedByteBuffer> background = backgroundChannelProvider.create().voxels().asByte();
+            return Optional.of(point -> intensityCondition(background, point, minIntensityValue));
         } else {
             return Optional.empty();
         }
     }
+    
+    private static boolean intensityCondition(Voxels<UnsignedByteBuffer> voxels, Point3i point, int minIntensityValue) {
+        return minIntensityValue==0 || voxels.extract().voxel(point) >= minIntensityValue;
+    }
+
 }

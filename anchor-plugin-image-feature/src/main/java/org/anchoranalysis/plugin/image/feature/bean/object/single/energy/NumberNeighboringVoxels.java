@@ -38,17 +38,17 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelNeighborMatchValue;
-import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelParameters;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.OutlineKernelBase;
 
 /**
  * Calculates the number of voxels on the object that have a neighbor.
- * 
- * <p>What possible neighbors are specified by a binary-mask from an energy-channel. This
- * should have with 255 high, and 0 low, and indicate all possible neighbor voxels. The region on
- * the binary-mask coinciding with the object is irrelevant and be set to any value.
+ *
+ * <p>What possible neighbors are specified by a binary-mask from an energy-channel. This should
+ * have with 255 high, and 0 low, and indicate all possible neighbor voxels. The region on the
+ * binary-mask coinciding with the object is irrelevant and be set to any value.
  *
  * @author Owen Feehan
  */
@@ -62,14 +62,14 @@ public class NumberNeighboringVoxels extends OutlineKernelBase {
     @Override
     protected double calculateWithParameters(
             ObjectMask object,
-            OutlineKernelParameters parameters,
+            KernelApplicationParameters parameters,
             CheckedSupplier<EnergyStack, FeatureCalculationException> energyStack)
             throws FeatureCalculationException {
         Channel channel = energyStack.get().getChannel(energyIndex);
 
         OutlineKernelNeighborMatchValue kernelMatch =
-                new OutlineKernelNeighborMatchValue(object, binaryVoxels(channel), parameters);
-        return ApplyKernel.applyForCount(kernelMatch, object.voxels());
+                new OutlineKernelNeighborMatchValue(binaryVoxels(channel));
+        return ApplyKernel.applyForCount(kernelMatch, object.binaryVoxels(), parameters);
     }
 
     private BinaryVoxels<UnsignedByteBuffer> binaryVoxels(Channel channel)

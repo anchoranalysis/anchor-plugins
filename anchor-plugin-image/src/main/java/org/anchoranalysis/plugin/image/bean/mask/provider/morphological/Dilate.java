@@ -26,42 +26,29 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationContext;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
-import org.anchoranalysis.image.voxel.object.morphological.SelectDimensionsFactory;
 
-/** Performs an dilation morphological operation on a binary-image */
+/** 
+ * Performs a <b>dilation</b> morphological operation on {@link BinaryVoxels}.
+ * 
+ * @author Owen Feehan
+ */
 public class Dilate extends MorphologicalOperatorBase {
 
     // START BEAN FIELDS
-    @BeanField @Getter @Setter private boolean zOnly = false; // Only dilates in the z-direction
-
     @BeanField @Getter @Setter private boolean bigNeighborhood = false;
     // END BEAN FIELDS
-
-    // Checks that a mark's initial parameters are correct
-    @Override
-    public void checkMisconfigured(BeanInstanceMap defaultInstances)
-            throws BeanMisconfiguredException {
-        super.checkMisconfigured(defaultInstances);
-        if (isSuppress3D() && zOnly) {
-            throw new BeanMisconfiguredException(
-                    "Either suppress3D and zOnly may be selected, but not both");
-        }
-    }
 
     // Assumes imgChannelOut has the same ImgChannelRegions
     @Override
@@ -72,19 +59,15 @@ public class Dilate extends MorphologicalOperatorBase {
                     MorphologicalDilation.dilate(
                             source.binaryVoxels(),
                             getIterations(),
-                            background(),
-                            getMinIntensityValue(),
-                            Optional.empty(),
-                            new DilationKernelFactory(
-                                    SelectDimensionsFactory.of(do3D, zOnly),
-                                    false,
-                                    bigNeighborhood));
+                            new DilationContext(
+                                    OutsideKernelPolicy.AS_OFF,
+                                    do3D,
+                                    bigNeighborhood,
+                                    precondition()));
 
             source.replaceBy(out);
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
         }
     }
 }

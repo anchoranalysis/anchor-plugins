@@ -46,8 +46,7 @@ class CVFindContoursTest {
             new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
-    void test01()
-            throws CreateException, OperationFailedException, SetOperationFailedException {
+    void test01() throws CreateException, OperationFailedException, SetOperationFailedException {
         testFor("01");
     }
 

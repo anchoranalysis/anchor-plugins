@@ -45,6 +45,6 @@ public class MapGroupToRow {
 
     @SuppressWarnings("unchecked")
     public Collection<CSVRow> get(String key) {
-        return (Collection<CSVRow>) delegate.getCollection(key);
+        return delegate.getCollection(key);
     }
 }

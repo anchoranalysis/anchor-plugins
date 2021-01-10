@@ -173,7 +173,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
                     featuresAggregateAsStore(),
                     source.includeGroupInExperiment(isGroupGeneratorDefined()),
                     context);
-            sharedState.closeAnyOpenIO();            
+            sharedState.closeAnyOpenIO();
         } catch (OutputWriteFailedException | CreateException | IOException e) {
             throw new ExperimentExecutionException(e);
         }

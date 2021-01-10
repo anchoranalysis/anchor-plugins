@@ -34,7 +34,8 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelParameters;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public abstract class OutlineKernelBase extends FeatureSingleObject {
@@ -60,11 +61,11 @@ public abstract class OutlineKernelBase extends FeatureSingleObject {
 
     protected abstract double calculateWithParameters(
             ObjectMask object,
-            OutlineKernelParameters parameters,
+            KernelApplicationParameters parameters,
             CheckedSupplier<EnergyStack, FeatureCalculationException> energyStack)
             throws FeatureCalculationException;
 
-    private OutlineKernelParameters createParameters() {
-        return new OutlineKernelParameters(outsideAtThreshold, do3D, ignoreAtThreshold);
+    private KernelApplicationParameters createParameters() {
+        return new KernelApplicationParameters( OutsideKernelPolicy.of(ignoreAtThreshold, outsideAtThreshold), do3D);
     }
 }

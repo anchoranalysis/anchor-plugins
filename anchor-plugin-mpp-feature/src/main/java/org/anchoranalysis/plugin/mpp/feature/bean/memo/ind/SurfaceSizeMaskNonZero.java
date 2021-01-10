@@ -33,10 +33,12 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -80,7 +82,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object)
             throws FeatureCalculationException {
 
-        Voxels<UnsignedByteBuffer> voxelsOutline = outline(object, !suppressZ);
+        BinaryVoxels<UnsignedByteBuffer> voxelsOutline = outline(object, !suppressZ);
 
         Extent extent = object.boundingBox().extent();
 
@@ -104,8 +106,9 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
         }
     }
 
-    private static Voxels<UnsignedByteBuffer> outline(ObjectMask object, boolean useZ) {
-        OutlineKernel kernel = new OutlineKernel(object.binaryValuesByte(), false, useZ);
-        return ApplyKernel.apply(kernel, object.voxels(), object.binaryValuesByte());
+    private static BinaryVoxels<UnsignedByteBuffer> outline(ObjectMask object, boolean useZ) {
+        OutlineKernel kernel = new OutlineKernel();
+        KernelApplicationParameters params = new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, useZ);
+        return ApplyKernel.apply(kernel, object.binaryVoxels(), params);
     }
 }

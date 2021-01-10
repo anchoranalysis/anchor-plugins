@@ -37,7 +37,7 @@ import org.anchoranalysis.mpp.segment.bean.optimization.StateReporter;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.kernelbridge.KernelStateBridge;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.kernelbridge.KernelStateBridgeIdentity;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.statereporter.StateReporterIdentity;
-import org.anchoranalysis.plugin.mpp.segment.optimization.AccptProbCalculator;
+import org.anchoranalysis.plugin.mpp.segment.optimization.AcceptanceProbabilityCalculator;
 
 /**
  * Directly assigns a state for every optimisation step
@@ -52,8 +52,9 @@ public class DirectAssignMode<S> extends AssignMode<S, S, S> {
     @BeanField @Getter @Setter private ExtractScoreSize<S> extractScoreSize;
     // END BEAN PROPERTIES
 
-    public AccptProbCalculator<S> probCalculator(AnnealScheme annealScheme) {
-        return new AccptProbCalculator<>(annealScheme, extractScoreSize);
+    @Override
+    public AcceptanceProbabilityCalculator<S> acceptableProbability(AnnealScheme annealScheme) {
+        return new AcceptanceProbabilityCalculator<>(annealScheme, extractScoreSize);
     }
 
     @Override

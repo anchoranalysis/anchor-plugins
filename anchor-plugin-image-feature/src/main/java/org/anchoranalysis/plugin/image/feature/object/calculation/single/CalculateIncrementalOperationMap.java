@@ -40,7 +40,7 @@ public abstract class CalculateIncrementalOperationMap
                 ObjectMask, FeatureInputSingleObject, Integer, FeatureCalculationException> {
     private boolean do3D;
 
-    public CalculateIncrementalOperationMap(boolean do3D) {
+    protected CalculateIncrementalOperationMap(boolean do3D) {
         super(100);
         this.do3D = do3D;
     }

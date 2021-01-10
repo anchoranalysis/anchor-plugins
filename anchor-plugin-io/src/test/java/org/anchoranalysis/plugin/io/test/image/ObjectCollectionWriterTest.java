@@ -73,7 +73,7 @@ class ObjectCollectionWriterTest {
     private void testWriteRead(boolean hdf5)
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
-        
+
         ObjectCollection objects = fixture.createMockObjects(2, 7);
         writeObjects(objects, directory, generator(hdf5, false));
 

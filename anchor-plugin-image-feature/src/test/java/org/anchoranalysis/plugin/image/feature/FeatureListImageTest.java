@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.feature;
 
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
@@ -36,7 +37,6 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
@@ -71,20 +71,16 @@ class FeatureListImageTest {
     }
 
     @Test
-    void testNoParams()
-            throws InitException, FeatureCalculationException, CreateException,
-                    NamedFeatureCalculateException {
+    void testNoParams() {
 
-        assertThrows(NamedFeatureCalculateException.class, () -> {
-            FeatureCalculatorMulti<FeatureInput> session =
-                    createAndStart(ConstantsInListFixture.create());
-    
-            ResultsVector rv1 = session.calculate((FeatureInput) null);
-            ConstantsInListFixture.checkResultVector(rv1);
-    
-            ResultsVector rv2 = session.calculate((FeatureInput) null);
-            ConstantsInListFixture.checkResultVector(rv2);
-        });
+        assertThrows(
+                NamedFeatureCalculateException.class,
+                () -> {
+                    FeatureCalculatorMulti<FeatureInput> session =
+                            createAndStart(ConstantsInListFixture.create());
+
+                    session.calculate((FeatureInput) null);
+                });
     }
 
     @Test

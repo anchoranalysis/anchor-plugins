@@ -58,7 +58,8 @@ class OpenCVReaderTest {
         assertTrue(stack.allChannelsHaveIdenticalType(), "all channels identical type");
         assertEquals(
                 UnsignedByteVoxelType.INSTANCE,
-                stack.getChannel(0).getVoxelDataType(), "channel type");
+                stack.getChannel(0).getVoxelDataType(),
+                "channel type");
         assertTrue(stack.isRGB(), "rgb");
     }
 }

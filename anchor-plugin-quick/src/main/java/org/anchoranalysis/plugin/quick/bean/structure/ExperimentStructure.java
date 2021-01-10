@@ -42,17 +42,15 @@ import org.anchoranalysis.plugin.io.bean.filepath.prefixer.PathRegEx;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.Rooted;
 
 /**
- * A file path prefixer that combines a prefix with an experimentType
+ * A {@link PathPrefixer} that combines a prefix with an {@code experimentType}.
  *
- * <p>A convenience method for commonly used prefixer settings when the output occurs in an
- * experiment/$1/ filesystem structure where $1 is the experimentType
+ * <p>A convenience method for commonly used prefixer settings when the output occurs in an {@code
+ * experiment/$1/} filesystem structure where {@code $1} is the {@code experimentType}.
  */
 public class ExperimentStructure extends PathPrefixer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String experimentType;
-
-    @BeanField @Getter @Setter private String rootName;
+    @BeanField @Getter @Setter private RootedExperiment experiment;
 
     @BeanField @Getter @Setter private RegEx regEx;
 
@@ -92,7 +90,7 @@ public class ExperimentStructure extends PathPrefixer {
     private void createDelegateIfNeeded() throws PathPrefixerException {
 
         if (delegate == null) {
-            delegate = new Rooted(createResolver(), rootName);
+            delegate = new Rooted(createResolver(), experiment.getRootName());
 
             try {
                 delegate.checkMisconfigured(defaultInstances);
@@ -104,7 +102,7 @@ public class ExperimentStructure extends PathPrefixer {
 
     private PathPrefixerAvoidResolve createResolver() {
         PathRegEx resolver = new PathRegEx();
-        resolver.setOutPathPrefix(prefix + experimentType);
+        resolver.setOutPathPrefix(prefix + experiment.getExperimentType());
         resolver.setRegEx(regEx);
         return resolver;
     }

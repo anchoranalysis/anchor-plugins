@@ -41,9 +41,7 @@ import org.anchoranalysis.io.output.writer.ElementSupplier;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 import org.anchoranalysis.mpp.mark.ColoredMarks;
-import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 
 /**
@@ -76,7 +74,7 @@ class MarksVisualization {
             ColorIndex colorIndex = outputter.getSettings().defaultColorIndexFor(marks.size());
 
             return new ColoredMarksWithDisplayStack(
-                    new ColoredMarks(marks, colorIndex, new IdentifyByIteration<Mark>()),
+                    new ColoredMarks(marks, colorIndex, new IdentifyByIteration<>()),
                     backgroundStack);
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
@@ -93,6 +91,6 @@ class MarksVisualization {
     }
 
     private static MarksGenerator createMarksGenerator(DrawObject drawObject) {
-        return new MarksGenerator(drawObject, new IdentifyByIteration<Overlay>());
+        return new MarksGenerator(drawObject, new IdentifyByIteration<>());
     }
 }

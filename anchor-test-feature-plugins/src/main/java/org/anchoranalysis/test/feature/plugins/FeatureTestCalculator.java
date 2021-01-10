@@ -92,7 +92,8 @@ public class FeatureTestCalculator {
             double expectedResult,
             double delta)
             throws FeatureCalculationException {
-        double result = FeatureTestCalculator.calculateSequentialSession(feature, params, initParams);
+        double result =
+                FeatureTestCalculator.calculateSequentialSession(feature, params, initParams);
         assertEquals(expectedResult, result, delta, message);
     }
 

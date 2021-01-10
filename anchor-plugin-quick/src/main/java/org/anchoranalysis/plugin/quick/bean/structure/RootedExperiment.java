@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-plugin-mpp-sgmn
+ * anchor-plugin-quick
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,38 +23,24 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.plugin.quick.bean.structure;
 
-package org.anchoranalysis.plugin.mpp.segment.bean.optimization.termination;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.annotation.BeanField;
 
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.log.MessageLogger;
+public class RootedExperiment extends AnchorBean<RootedExperiment> {
 
-/**
- * Terminates after a specific number of iterations.
- * 
- * @author Owen Feehan
- *
- */
-@NoArgsConstructor
-public class NumberIterations extends NumberIterationsBase {
+    // START BEAN PROPERTIES
+    /**
+     * A directory identifying the type of experiment.
+     *
+     * <p>This assumes that all such the outputs are all put in the same directory.
+     */
+    @BeanField @Getter @Setter private String experimentType;
 
-    public NumberIterations(int iterations) {
-        super(iterations);
-    }
-
-    @Override
-    public void init() {
-        // NOTHING TO DO
-    }
-    
-    @Override
-    public boolean continueFurther(
-            int iteration, double score, int size, MessageLogger logger) {
-        if (iteration < getIterations()) {
-            return true;
-        } else {
-            logger.logFormatted("Terminating as the number of iterations reached %d", iteration);
-            return false;
-        }
-    }
+    /** Root-name assuming multi-rooted structure. */
+    @BeanField @Getter @Setter private String rootName;
+    // END BEAN PROPERTIES
 }

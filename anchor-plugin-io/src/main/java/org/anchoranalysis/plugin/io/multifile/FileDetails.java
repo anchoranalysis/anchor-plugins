@@ -31,7 +31,8 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public class FileDetails {
     private Path path;
     private Optional<Integer> channelIndex;

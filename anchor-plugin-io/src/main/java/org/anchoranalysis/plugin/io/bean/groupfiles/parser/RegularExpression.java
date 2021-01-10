@@ -60,7 +60,9 @@ public class RegularExpression extends FilePathParser {
     public Optional<FileDetails> parsePath(Path path) {
 
         // Replace backslashes with forward slashes
-        Matcher matcher = pattern.matcher(FilePathToUnixStyleConverter.toStringUnixStyle(path.toAbsolutePath()));
+        Matcher matcher =
+                pattern.matcher(
+                        FilePathToUnixStyleConverter.toStringUnixStyle(path.toAbsolutePath()));
 
         if (!matcher.matches()) {
             return Optional.empty();
@@ -81,7 +83,12 @@ public class RegularExpression extends FilePathParser {
             }
             key = extractedKey.get();
         }
-        return Optional.of( new FileDetails(path, asOptional(channelGroupID, channelNum), asOptional(zSliceGroupID, zSliceNum), asOptional(timeIndexGroupID, timeIndex)) );
+        return Optional.of(
+                new FileDetails(
+                        path,
+                        asOptional(channelGroupID, channelNum),
+                        asOptional(zSliceGroupID, zSliceNum),
+                        asOptional(timeIndexGroupID, timeIndex)));
     }
 
     @Override
@@ -93,7 +100,7 @@ public class RegularExpression extends FilePathParser {
         this.expression = expression;
         this.pattern = Pattern.compile(expression);
     }
-    
+
     private static Optional<Integer> asOptional(int groupID, int val) {
         if (groupID > 0) {
             return Optional.of(val);

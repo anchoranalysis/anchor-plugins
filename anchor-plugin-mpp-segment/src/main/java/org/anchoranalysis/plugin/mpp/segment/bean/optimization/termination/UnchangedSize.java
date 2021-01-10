@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-test-mpp
+ * anchor-plugin-mpp-sgmn
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,31 +24,31 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.contour;
+package org.anchoranalysis.plugin.mpp.segment.bean.optimization.termination;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+/**
+ * Terminate when the <b>size</b> remains unchanged for a certain number of iterations.
+ *
+ * @author Owen Feehan
+ */
+public class UnchangedSize extends UnchangedBase {
 
-import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.points.contour.ContourList;
-import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.object.TestLoaderObjects;
-import org.junit.jupiter.api.Test;
+    /** The size in the previous step. */
+    private int previousSize = -1;
 
-class SplitContourSmoothingSplineTest {
-
-    private TestLoaderObjects loader =
-            new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
-
-    @Test
-    void test() throws CreateException, OperationFailedException, SetOperationFailedException {
-
-        ObjectMask contourIn = loader.openLargestObjectFrom("01");
-
-        ContourList contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
-
-        assertEquals(72, contours.size());
+    @Override
+    public void init() {
+        super.init();
+        this.previousSize = -1;
+    }
+    
+    @Override
+    protected boolean isUnchanged(double score, int size) {
+        return size == previousSize;
+    }
+    
+    @Override
+    protected void assignPrevious(double score, int size) {
+        previousSize = size;        
     }
 }

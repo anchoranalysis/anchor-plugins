@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean;
 
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Optional;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
@@ -63,11 +64,10 @@ class FeatureListMPPTest {
     }
 
     @Test
-    void testNoParams()
-            throws InitException, NamedFeatureCalculateException, CreateException {
-        assertThrows(NamedFeatureCalculateException.class, () ->
-            testConstantsInList((FeatureInput) null, (FeatureInput) null)
-        );
+    void testNoParams() throws InitException, NamedFeatureCalculateException, CreateException {
+        assertThrows(
+                NamedFeatureCalculateException.class,
+                () -> testConstantsInList((FeatureInput) null, (FeatureInput) null));
     }
 
     @Test
