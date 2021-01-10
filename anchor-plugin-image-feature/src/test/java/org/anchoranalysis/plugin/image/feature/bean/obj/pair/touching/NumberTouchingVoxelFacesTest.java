@@ -32,11 +32,17 @@ import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper
 import org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumberTouchingVoxelFaces;
 import org.junit.jupiter.api.Test;
 
-class NumTouchingVoxelFacesTest {
+/**
+ * Tests {@link NumberTouchingVoxelFaces}.
+ * 
+ * @author Owen Feehan
+ *
+ */
+class NumberTouchingVoxelFacesTest {
 
     @Test
     void testOverlapping() throws FeatureCalculationException, InitException {
 
-        ParamsFixtureHelper.testTwoSizesOverlappingDouble(new NumberTouchingVoxelFaces(), 131, 105);
+        ParamsFixtureHelper.testTwoSizesOverlappingDouble(new NumberTouchingVoxelFaces(), 167, 103);
     }
 }

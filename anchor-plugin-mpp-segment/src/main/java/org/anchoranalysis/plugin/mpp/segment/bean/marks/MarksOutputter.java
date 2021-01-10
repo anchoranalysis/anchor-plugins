@@ -47,10 +47,8 @@ import org.anchoranalysis.mpp.io.marks.generator.MarksAsUniqueValueGenerator;
 import org.anchoranalysis.mpp.io.marks.generator.MarksFlattenedGenerator;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 import org.anchoranalysis.mpp.mark.ColoredMarks;
-import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.optimization.DualStack;
-import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -82,7 +80,7 @@ class MarksOutputter {
                 new ColoredMarks(
                         marks.getMarks(),
                         outputter.getSettings().defaultColorIndexFor(20),
-                        new IdentifyByIteration<Mark>());
+                        new IdentifyByIteration<>());
 
         ColoredMarksWithDisplayStack coloredMarksDisplayStack =
                 new ColoredMarksWithDisplayStack(coloredMarks, dualStack.getBackground());
@@ -131,17 +129,13 @@ class MarksOutputter {
                 outputNamePrefix,
                 () ->
                         new MarksGenerator(
-                                outlineWriter,
-                                new IdentifyByIteration<Overlay>(),
-                                regionMembership),
+                                outlineWriter, new IdentifyByIteration<>(), regionMembership),
                 () -> coloredMarksDisplayStack);
         writer.write(
                 outputNamePrefix + "MIP",
                 () ->
                         new MarksFlattenedGenerator(
-                                outlineWriter,
-                                new IdentifyByIteration<Overlay>(),
-                                regionMembership),
+                                outlineWriter, new IdentifyByIteration<>(), regionMembership),
                 () -> coloredMarksDisplayStack);
     }
 

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological;
 
-import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -50,8 +49,8 @@ public class CalculateErosionMap extends CalculateIncrementalOperationMap {
     protected ObjectMask applyOperation(ObjectMask object, Extent extent, boolean do3D)
             throws OperationFailedException {
         try {
-            return MorphologicalErosion.createErodedObject(
-                    object, Optional.of(extent), do3D, 1, true, Optional.empty());
+            return MorphologicalErosion.erode(
+                    object, 1, do3D);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

@@ -55,16 +55,10 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
     /**
      * A set of identifiers for all groups that can be outputted by the labeller. Should be callable
      * always
-     *
-     * @param params TODO
      */
     public abstract Set<String> allLabels(T params);
 
-    /**
-     * Determines a particular group-identifier for an input
-     *
-     * @param sharedState TODO
-     */
+    /** Determines a particular group-identifier for an input */
     public abstract String labelFor(
             T sharedState, ProvidesStackInput input, InputOutputContext context)
             throws OperationFailedException;

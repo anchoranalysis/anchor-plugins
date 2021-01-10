@@ -132,8 +132,7 @@ public class MultiFileReaderOpenedRaster implements OpenedImageFile {
                         fd.getPath());
             } catch (Exception e) {
                 throw new ImageIOException(
-                        String.format(
-                                "Could not open '%s'. Abandoning MultiFile.", fd.getPath()),
+                        String.format("Could not open '%s'. Abandoning MultiFile.", fd.getPath()),
                         e);
             } finally {
                 or.close();

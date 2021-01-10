@@ -25,14 +25,11 @@
  */
 package org.anchoranalysis.plugin.io.bean.input.stack;
 
-import java.nio.file.Path;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.core.progress.ProgressOneOfMany;
@@ -46,19 +43,17 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.image.io.stack.input.TimeSequenceSupplier;
+import org.anchoranalysis.io.input.InputFromManagerDelegate;
 
 /**
- * An input object that converts {@link NamedChannelsInput} to {@link StackSequenceInput}
+ * An input object that converts {@link NamedChannelsInput} to {@link StackSequenceInput}.
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
-public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
+public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<NamedChannelsInput>
+        implements StackSequenceInput {
 
     private static final String DEFAULT_STACK_NAME = "stack";
-
-    /** Input to convert */
-    private NamedChannelsInput input;
 
     /** Time-index to convert */
     private int timeIndex = 0;
@@ -69,29 +64,34 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
      */
     private Optional<String> channelName;
 
+    /**
+     * Create with an input.
+     *
+     * @param input the input to convert.
+     */
     public ConvertNamedChannelsInputToStack(NamedChannelsInput input) {
         this(input, 0, Optional.empty());
     }
 
-    @Override
-    public String name() {
-        return input.name();
-    }
-
-    @Override
-    public Optional<Path> pathForBinding() {
-        return input.pathForBinding();
-    }
-
-    @Override
-    public void close(ErrorReporter errorReporter) {
-        input.close(errorReporter);
+    /**
+     * Create with an input.
+     *
+     * @param input the input to convert.
+     * @param timeIndex time-index to convert.
+     * @param channelName by default all channels are converted into a stack. If set, only this
+     *     channel is converted into a stack.
+     */
+    public ConvertNamedChannelsInputToStack(
+            NamedChannelsInput input, int timeIndex, Optional<String> channelName) {
+        super(input);
+        this.timeIndex = timeIndex;
+        this.channelName = channelName;
     }
 
     @Override
     public TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex)
             throws ImageIOException {
-        return progress -> convert(progress, input, seriesIndex);
+        return progress -> convert(progress, getDelegate(), seriesIndex);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
 
     @Override
     public int numberFrames() throws OperationFailedException {
-        return input.numberFrames();
+        return getDelegate().numberFrames();
     }
 
     private TimeSequence convert(Progress progress, NamedChannelsInput input, int seriesIndex)
@@ -140,7 +140,7 @@ public class ConvertNamedChannelsInputToStack implements StackSequenceInput {
             int seriesIndex,
             Progress progress)
             throws OperationFailedException {
-        stacks.add(name, () -> convert(progress, input, seriesIndex));
+        stacks.add(name, () -> convert(progress, getDelegate(), seriesIndex));
     }
 
     private Stack stackFromChannels(NamedChannelsForSeries channels, ProgressMultiple progress)

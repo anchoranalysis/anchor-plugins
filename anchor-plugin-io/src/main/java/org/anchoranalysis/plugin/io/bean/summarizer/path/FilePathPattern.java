@@ -28,9 +28,6 @@ package org.anchoranalysis.plugin.io.bean.summarizer.path;
 
 import com.owenfeehan.pathpatternfinder.PathPatternFinder;
 import com.owenfeehan.pathpatternfinder.Pattern;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,6 +35,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
@@ -65,18 +65,18 @@ public class FilePathPattern extends Summarizer<Path> {
 
     /**
      * Create with one or more paths.
-     * 
+     *
      * @param paths the paths
      * @throws OperationFailedException
      */
-    public FilePathPattern(String ... paths) throws OperationFailedException {
+    public FilePathPattern(String... paths) throws OperationFailedException {
         CheckedStream.forEach(Arrays.stream(paths), OperationFailedException.class, this::add);
     }
-    
+
     public void add(String element) throws OperationFailedException {
         add(Paths.get(element));
     }
-    
+
     @Override
     public synchronized void add(Path element) throws OperationFailedException {
         try {

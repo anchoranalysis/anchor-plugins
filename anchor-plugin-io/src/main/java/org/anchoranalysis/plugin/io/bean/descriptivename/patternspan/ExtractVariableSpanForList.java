@@ -30,11 +30,13 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.files.NamedFile;
+import org.apache.commons.io.IOCase;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractVariableSpanForList {
@@ -47,11 +49,12 @@ class ExtractVariableSpanForList {
      *
      * @param files files
      * @param extractVariableSpan extracted-pattern
+     * @param ioCase whether to be case-sensitive when extracting a variable span.
      * @return
      */
     public static List<NamedFile> listExtract(
-            Collection<File> files, ExtractVariableSpan extractVariableSpan) {
-        List<NamedFile> listMaybeEmpty = listExtractMaybeEmpty(files, extractVariableSpan);
+            Collection<File> files, ExtractVariableSpan extractVariableSpan, IOCase ioCase) {
+        List<NamedFile> listMaybeEmpty = listExtractMaybeEmpty(files, file -> extractVariableSpan.extractSpanPortionFor(file, ioCase));
 
         if (hasAnyEmptyDescriptiveName(listMaybeEmpty)) {
             String prependStr =
@@ -81,11 +84,11 @@ class ExtractVariableSpanForList {
     }
 
     private static List<NamedFile> listExtractMaybeEmpty(
-            Collection<File> files, ExtractVariableSpan extractVariableSpan) {
+            Collection<File> files, Function<File,String> extractVariableSpan) {
 
         return FunctionalList.mapToList(
                 files,
-                file -> new NamedFile(extractVariableSpan.extractSpanPortionFor(file), file));
+                file -> new NamedFile(extractVariableSpan.apply(file), file));
     }
 
     private static String extractLastComponent(String str) {

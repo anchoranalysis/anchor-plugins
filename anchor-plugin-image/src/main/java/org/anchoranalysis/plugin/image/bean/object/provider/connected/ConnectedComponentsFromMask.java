@@ -98,8 +98,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
         return createFactory(minNumberVoxels).createUnsignedByte(mask.binaryVoxels());
     }
 
-    private ObjectCollection createObjectsBySlice(Mask mask, int minNumberVoxels)
-            throws CreateException {
+    private ObjectCollection createObjectsBySlice(Mask mask, int minNumberVoxels) {
 
         ObjectsFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 

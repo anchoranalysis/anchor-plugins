@@ -36,6 +36,6 @@ class NumberTouchingVoxelsTest {
 
     @Test
     void testOverlapping() throws FeatureCalculationException, InitException {
-        ParamsFixtureHelper.testTwoSizesOverlappingDouble(new NumberTouchingVoxels(), 91, 71);
+        ParamsFixtureHelper.testTwoSizesOverlappingDouble(new NumberTouchingVoxels(), 167, 103);
     }
 }

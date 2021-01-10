@@ -35,6 +35,7 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.spatial.direction.VectorInDirection;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.orientation.DirectionVector;
 import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
 
 public class FromUnitValueDistance extends ScalarProposer {
@@ -45,13 +46,20 @@ public class FromUnitValueDistance extends ScalarProposer {
     @BeanField @Getter @Setter private VectorInDirection directionVector;
     // END BEAN PROPERTIES
 
+    private DirectionVector directionVectorMemo;
+    
     @Override
     public double propose(
             RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws OperationFailedException {
-        // TODO this could be a bit slow, we are creating an object on the heap every time from
-        // directionVector
         return unitValueDistance.resolve(
-                resolution.map(Resolution::unitConvert), directionVector.createVector());
+                resolution.map(Resolution::unitConvert), directoryVectorMemoized());
+    }
+    
+    private DirectionVector directoryVectorMemoized() {
+        if (directionVectorMemo==null) {
+            directionVectorMemo = directionVector.createVector();
+        }
+        return directionVectorMemo;
     }
 }

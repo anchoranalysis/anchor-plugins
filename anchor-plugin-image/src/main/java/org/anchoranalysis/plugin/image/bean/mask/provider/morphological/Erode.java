@@ -26,10 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
-import java.util.Optional;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -38,26 +34,23 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 
-/** Performs an erosion morphological operation on a binary-image */
+/** 
+ * Performs an <b>erosion</b> morphological operation on {@link BinaryVoxels}.
+ * 
+ * @author Owen Feehan
+ */
 public class Erode extends MorphologicalOperatorBase {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private boolean outsideAtThreshold = true;
-    // END BEAN PROPERTIES
-
-    // Assumes imgChannelOut has the same ImgChannelRegions
     @Override
     protected void applyMorphologicalOperation(Mask source, boolean do3D) throws CreateException {
 
         BinaryVoxels<UnsignedByteBuffer> out =
                 MorphologicalErosion.erode(
                         source.binaryVoxels(),
-                        do3D,
                         getIterations(),
-                        background(),
-                        getMinIntensityValue(),
-                        outsideAtThreshold,
-                        Optional.empty());
+                        do3D,
+                        precondition()
+                        );
 
         try {
             source.replaceBy(out);

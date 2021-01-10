@@ -56,12 +56,12 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
      *
      * <p>This is to correct for a problem with formats such as czi where the seriesIndex doesn't
      * indicate the total number of series but rather is incremented with each acquisition, so for
-     * our purposes we treat it as if its 0
+     * our purposes we treat it as if its 0.
      */
     private final boolean useLastSeriesIndexOnly;
 
     // We cache a certain amount of stacks read for particular series
-    private OpenedImageFile openedFileMemo = null;
+    private OpenedImageFile openedFileMemo;
 
     public int numberSeries() throws ImageIOException {
         if (useLastSeriesIndexOnly) {
@@ -81,14 +81,14 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         }
     }
 
-    public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum)
+    public TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex)
             throws ImageIOException {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
-            seriesNum = getOpenedRaster().numberSeries() - 1;
+            seriesIndex = getOpenedRaster().numberSeries() - 1;
         }
-        return openRasterAsOperation(getOpenedRaster(), seriesNum);
+        return openRasterAsOperation(getOpenedRaster(), seriesIndex);
     }
 
     @Override
@@ -117,17 +117,6 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                 });
     }
 
-    private static TimeSequenceSupplier openRasterAsOperation(
-            final OpenedImageFile openedFile, final int seriesNum) {
-        return progress -> {
-            try {
-                return openedFile.open(seriesNum, progress);
-            } catch (ImageIOException e) {
-                throw new OperationFailedException(e);
-            }
-        };
-    }
-
     @Override
     public String name() {
         return delegate.name();
@@ -140,6 +129,17 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
     public File getFile() {
         return delegate.getFile();
+    }
+
+    @Override
+    public void close(ErrorReporter errorReporter) {
+        if (openedFileMemo != null) {
+            try {
+                openedFileMemo.close();
+            } catch (ImageIOException e) {
+                errorReporter.recordError(StackSequenceInput.class, e);
+            }
+        }
     }
 
     private OpenedImageFile getOpenedRaster() throws ImageIOException {
@@ -155,14 +155,14 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         return openedFileMemo;
     }
 
-    @Override
-    public void close(ErrorReporter errorReporter) {
-        if (openedFileMemo != null) {
+    private static TimeSequenceSupplier openRasterAsOperation(
+            OpenedImageFile openedFile, int seriesIndex) {
+        return progress -> {
             try {
-                openedFileMemo.close();
+                return openedFile.open(seriesIndex, progress);
             } catch (ImageIOException e) {
-                errorReporter.recordError(StackSequenceInput.class, e);
+                throw new OperationFailedException(e);
             }
-        }
+        };
     }
 }

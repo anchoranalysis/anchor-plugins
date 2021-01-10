@@ -48,8 +48,7 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
     @BeanField @Getter @Setter private int bundleSize = 1000;
     // END BEAN PARAMETERS
 
-    public ObjectSerializerPeriodicReporter(String defaultManifestFunction) {
-        super();
+    protected ObjectSerializerPeriodicReporter(String defaultManifestFunction) {
         this.manifestFunction = defaultManifestFunction;
     }
 

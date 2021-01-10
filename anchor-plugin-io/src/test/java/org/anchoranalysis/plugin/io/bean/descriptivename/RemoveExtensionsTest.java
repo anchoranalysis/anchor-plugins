@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.bean.descriptivename;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -53,9 +54,7 @@ class RemoveExtensionsTest {
 
     @Test
     void testNonUnique() throws InputReadFailedException {
-        assertThrows(InputReadFailedException.class, () ->
-            applyTest(false, listOfFiles())
-        );
+        assertThrows(InputReadFailedException.class, () -> applyTest(false, listOfFiles()));
     }
 
     @Test

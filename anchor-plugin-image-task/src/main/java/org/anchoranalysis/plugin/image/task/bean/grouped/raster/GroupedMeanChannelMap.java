@@ -62,7 +62,6 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
             ConsistentChannelChecker channelChecker,
             InputOutputContext context)
             throws IOException {
-        // TODO change always2D
         VoxelDataType outputType = channelChecker.getChannelType();
         context.getOutputter()
                 .writerSecondLevel(outputName)

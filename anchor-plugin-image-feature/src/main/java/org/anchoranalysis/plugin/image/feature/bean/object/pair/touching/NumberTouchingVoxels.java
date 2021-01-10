@@ -54,17 +54,17 @@ public class NumberTouchingVoxels extends TouchingVoxels {
         // or om2->om1, it's done in both directions.
         try {
             return Math.max(
-                    numTouchingFrom(object1, object2, boxIntersect),
-                    numTouchingFrom(object2, object1, boxIntersect));
+                    numberTouchingFrom(object1, object2, boxIntersect),
+                    numberTouchingFrom(object2, object1, boxIntersect));
 
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
     }
 
-    private int numTouchingFrom(ObjectMask source, ObjectMask destination, BoundingBox boxIntersect)
+    private int numberTouchingFrom(ObjectMask source, ObjectMask destination, BoundingBox boxIntersect)
             throws OperationFailedException {
-        BoundingBox boxIntersectRelative = RelativeUtilities.createRelBBox(boxIntersect, source);
+        BoundingBox boxIntersectRelative = RelativeUtilities.relativizeBox(boxIntersect, source);
         return calculateNeighborhoodTouchingPixels(source, destination, boxIntersectRelative);
     }
 
@@ -74,10 +74,7 @@ public class NumberTouchingVoxels extends TouchingVoxels {
 
         CountKernelNeighborhoodMask kernelMatch =
                 new CountKernelNeighborhoodMask(
-                        isDo3D(),
-                        source.binaryValuesByte(),
-                        RelativeUtilities.createRelMask(destination, source),
-                        false);
-        return ApplyKernel.applyForCount(kernelMatch, source.voxels(), boxIntersectRelative);
+                        RelativeUtilities.relativizeObject(destination, source));
+        return ApplyKernel.applyForCount(kernelMatch, source.binaryVoxels(), boxIntersectRelative, createParams());
     }
 }

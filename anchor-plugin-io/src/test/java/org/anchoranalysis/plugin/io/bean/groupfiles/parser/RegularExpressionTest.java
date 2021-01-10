@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.groupfiles.parser;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.nio.file.Paths;
 import java.util.Optional;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
@@ -44,16 +45,16 @@ class RegularExpressionTest {
         parser.setChannelGroupID(2);
         parser.setExpression(".*hello_(\\d*)_(\\d*)_.*");
 
-        Optional<FileDetails> details = parser.parsePath( Paths.get("hello_4_2_world") );
+        Optional<FileDetails> details = parser.parsePath(Paths.get("hello_4_2_world"));
 
         assertTrue(details.isPresent());
-        assertTrue(details.get().getChannelIndex().get() == 2);
-        assertTrue(details.get().getSliceIndex().get() == 4);
+        assertEquals(2, details.get().getChannelIndex().get());
+        assertEquals(4, details.get().getSliceIndex().get());
 
         parser.setChannelGroupID(0);
 
-        details = parser.parsePath( Paths.get("hello_5_7_world") );
+        details = parser.parsePath(Paths.get("hello_5_7_world"));
 
-        assertTrue(details.get().getSliceIndex().get() == 5);
+        assertEquals(5, details.get().getSliceIndex().get());
     }
 }

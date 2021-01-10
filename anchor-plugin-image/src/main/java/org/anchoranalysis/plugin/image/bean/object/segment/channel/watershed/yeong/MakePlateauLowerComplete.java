@@ -44,7 +44,8 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 class MakePlateauLowerComplete {
 
-    private static class PointEvaluator implements ProcessChangedPointAbsoluteMasked<List<Point3i>> {
+    private static class PointEvaluator
+            implements ProcessChangedPointAbsoluteMasked<List<Point3i>> {
 
         private final EncodedVoxels matS;
 
