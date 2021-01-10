@@ -34,6 +34,8 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodMask;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -80,8 +82,12 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
         return input.calculate(new CalculateIntersectionOfDilatedBoundingBox(do3D));
     }
 
-    protected CountKernel createCountKernelMask(ObjectMask object1, ObjectMask object2Relative) {
+    protected CountKernel createCountKernelMask(ObjectMask object2Relative) {
         return new CountKernelNeighborhoodMask(
-                do3D, object1.binaryValuesByte(), object2Relative, true);
+                object2Relative);
+    }
+    
+    protected KernelApplicationParameters createParams() {
+        return new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, do3D);
     }
 }

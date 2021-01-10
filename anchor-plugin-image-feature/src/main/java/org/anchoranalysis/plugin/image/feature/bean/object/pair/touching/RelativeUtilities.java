@@ -46,11 +46,11 @@ class RelativeUtilities {
      * @param objectRelativeBase object to make the bounding-box relative to
      * @return a new bounding box with relative coordinates
      */
-    public static BoundingBox createRelBBox(BoundingBox box, ObjectMask objectRelativeBase) {
-        BoundingBox boxIntersectRel =
+    public static BoundingBox relativizeBox(BoundingBox box, ObjectMask objectRelativeBase) {
+        BoundingBox boxIntersectRelative =
                 new BoundingBox(
                         box.relativePositionTo(objectRelativeBase.boundingBox()), box.extent());
-        return boxIntersectRel.clampTo(objectRelativeBase.boundingBox().extent());
+        return boxIntersectRelative.clampTo(objectRelativeBase.boundingBox().extent());
     }
 
     /**
@@ -60,7 +60,7 @@ class RelativeUtilities {
      * @param objectRelativeBase the other object to use as a base to make om relative to
      * @return a new object with new bounding-box (but with identical memory used for the mask)
      */
-    public static ObjectMask createRelMask(ObjectMask object, ObjectMask objectRelativeBase) {
+    public static ObjectMask relativizeObject(ObjectMask object, ObjectMask objectRelativeBase) {
         return object.relativeMaskTo(objectRelativeBase.boundingBox())
                 .mapBoundingBoxPreserveExtent(BoundingBox::reflectThroughOrigin);
     }

@@ -48,8 +48,6 @@ import org.anchoranalysis.spatial.Extent;
 public class Erode extends ObjectCollectionProviderMorphological {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private boolean outsideAtThreshold = true;
-
     @BeanField @Getter @Setter private boolean rejectIterationIfAllLow = false;
 
     @BeanField @Getter @Setter private boolean rejectIterationIfDisconnected = false;
@@ -59,7 +57,7 @@ public class Erode extends ObjectCollectionProviderMorphological {
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
-        if (!outsideAtThreshold && getDimensions() == null) {
+        if (getDimensions() == null) {
             throw new BeanMisconfiguredException(
                     "If outsideAtThreshold==false then dim must be set");
         }
@@ -77,12 +75,10 @@ public class Erode extends ObjectCollectionProviderMorphological {
             acceptConditionsDilation.add(new RejectIterationIfLowDisconnected());
         }
 
-        return MorphologicalErosion.createErodedObject(
+        return MorphologicalErosion.erode(
                 object,
-                extent,
-                isDo3D(),
                 getIterations(),
-                outsideAtThreshold,
+                isDo3D(),
                 Optional.of(acceptConditionsDilation));
     }
 }
