@@ -74,7 +74,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
 
     private float[] extractHOGDescriptor(Stack stack) throws OperationFailedException {
         try {
-            Mat img = ConvertToMat.makeRGBStack(stack);
+            Mat img = ConvertToMat.fromStack(stack);
             MatOfFloat descriptorValues = new MatOfFloat();
             params.createDescriptor(stack.extent()).compute(img, descriptorValues);
             return convertToArray(descriptorValues);
