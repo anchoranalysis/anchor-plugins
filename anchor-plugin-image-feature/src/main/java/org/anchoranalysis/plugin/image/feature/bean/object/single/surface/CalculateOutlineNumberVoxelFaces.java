@@ -65,13 +65,17 @@ class CalculateOutlineNumberVoxelFaces
             // If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
             CountKernel kernel = new CountKernelNeighborhood();
 
-            BinaryVoxels<UnsignedByteBuffer> voxelsProjected = BinaryVoxelsFactory.reuseByte( object.extract().projectMax(), object.binaryValues() );
-            KernelApplicationParameters params = new KernelApplicationParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, false);
+            BinaryVoxels<UnsignedByteBuffer> voxelsProjected =
+                    BinaryVoxelsFactory.reuseByte(
+                            object.extract().projectMax(), object.binaryValues());
+            KernelApplicationParameters params =
+                    new KernelApplicationParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, false);
             return ApplyKernel.applyForCount(kernel, voxelsProjected, params);
 
         } else {
             CountKernel kernel = new CountKernelNeighborhood();
-            KernelApplicationParameters params = new KernelApplicationParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, do3D);
+            KernelApplicationParameters params =
+                    new KernelApplicationParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, do3D);
             return ApplyKernel.applyForCount(kernel, object.binaryVoxels(), params);
         }
     }

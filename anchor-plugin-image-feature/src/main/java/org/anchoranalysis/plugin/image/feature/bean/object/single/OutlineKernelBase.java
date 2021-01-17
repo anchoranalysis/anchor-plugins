@@ -66,6 +66,7 @@ public abstract class OutlineKernelBase extends FeatureSingleObject {
             throws FeatureCalculationException;
 
     private KernelApplicationParameters createParameters() {
-        return new KernelApplicationParameters( OutsideKernelPolicy.of(ignoreAtThreshold, outsideAtThreshold), do3D);
+        return new KernelApplicationParameters(
+                OutsideKernelPolicy.of(ignoreAtThreshold, outsideAtThreshold), do3D);
     }
 }

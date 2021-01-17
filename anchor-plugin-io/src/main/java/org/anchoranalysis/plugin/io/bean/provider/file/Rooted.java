@@ -45,9 +45,9 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Represents a set of files, with a different path-root depending on context.
  *
- * <p>Note the path-root refers a prefix applied to each path e.g. {@code /a/b/c}, not just
- * the "c:\" or similar part that Java-s {@link Path} class refers to as a root.
- * 
+ * <p>Note the path-root refers a prefix applied to each path e.g. {@code /a/b/c}, not just the
+ * "c:\" or similar part that Java-s {@link Path} class refers to as a root.
+ *
  * @author Owen Feehan
  */
 public class Rooted extends FilesProvider {

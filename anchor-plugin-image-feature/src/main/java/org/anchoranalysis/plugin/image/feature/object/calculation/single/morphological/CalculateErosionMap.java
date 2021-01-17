@@ -49,8 +49,7 @@ public class CalculateErosionMap extends CalculateIncrementalOperationMap {
     protected ObjectMask applyOperation(ObjectMask object, Extent extent, boolean do3D)
             throws OperationFailedException {
         try {
-            return MorphologicalErosion.erode(
-                    object, 1, do3D);
+            return MorphologicalErosion.erode(object, 1, do3D);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

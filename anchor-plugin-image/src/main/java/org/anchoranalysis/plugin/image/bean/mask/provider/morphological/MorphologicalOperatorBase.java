@@ -42,9 +42,7 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/** 
- * Base class for performing morphological operations on {@link BinaryVoxels}.
- */
+/** Base class for performing morphological operations on {@link BinaryVoxels}. */
 public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
 
     // START PROPERTIES
@@ -68,18 +66,19 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
 
         return mask;
     }
-    
+
     protected Optional<Predicate<Point3i>> precondition() throws CreateException {
         if (minIntensityValue > 0) {
-            Voxels<UnsignedByteBuffer> background = backgroundChannelProvider.create().voxels().asByte();
+            Voxels<UnsignedByteBuffer> background =
+                    backgroundChannelProvider.create().voxels().asByte();
             return Optional.of(point -> intensityCondition(background, point, minIntensityValue));
         } else {
             return Optional.empty();
         }
     }
-    
-    private static boolean intensityCondition(Voxels<UnsignedByteBuffer> voxels, Point3i point, int minIntensityValue) {
-        return minIntensityValue==0 || voxels.extract().voxel(point) >= minIntensityValue;
-    }
 
+    private static boolean intensityCondition(
+            Voxels<UnsignedByteBuffer> voxels, Point3i point, int minIntensityValue) {
+        return minIntensityValue == 0 || voxels.extract().voxel(point) >= minIntensityValue;
+    }
 }

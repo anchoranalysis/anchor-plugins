@@ -63,8 +63,7 @@ class CalculateClosing extends FeatureCalculation<ObjectMask, FeatureInputSingle
         try {
             ObjectMask dilated = mapDilation.getOrCalculate(params, iterations);
 
-            return MorphologicalErosion.erode(
-                    dilated, iterations, do3D);
+            return MorphologicalErosion.erode(dilated, iterations, do3D);
 
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);

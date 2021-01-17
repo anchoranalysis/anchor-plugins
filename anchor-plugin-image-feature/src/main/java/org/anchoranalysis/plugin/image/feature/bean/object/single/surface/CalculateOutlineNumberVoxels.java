@@ -28,11 +28,12 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
@@ -54,27 +55,25 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureIn
 
     @Override
     protected Integer execute(FeatureInputSingleObject input) throws FeatureCalculationException {
-        try {
-            return calculateSurfaceSize(input.getObject(), input.dimensionsRequired(), mip, suppress3D);
-        } catch (OperationFailedException e) {
-            throw new FeatureCalculationException(e);
-        }
+        return calculateSurfaceSize(input.getObject(), input.dimensionsRequired(), mip, suppress3D);
     }
-    
+
     private static int calculateSurfaceSize(
-            ObjectMask object, Dimensions dimensions, boolean mip, boolean suppress3D) throws OperationFailedException {
+            ObjectMask object, Dimensions dimensions, boolean mip, boolean suppress3D) {
 
         boolean do3D = (dimensions.z() > 1) && !suppress3D;
-        
+
         if (do3D && mip) {
             // If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
-            OutlineKernel kernel = new OutlineKernel();
-            KernelApplicationParameters params = new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, false);
-            return ApplyKernel.applyForCount(kernel, object.flattenZ().binaryVoxels(), params);
+            return applyForCount(object.flattenZ().binaryVoxels(), false);
         } else {
-            KernelApplicationParameters params = new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, do3D);
-            return ApplyKernel.applyForCount(
-                    new OutlineKernel(), object.binaryVoxels(), params);
+            return applyForCount(object.binaryVoxels(), do3D);
         }
+    }
+
+    private static int applyForCount(BinaryVoxels<UnsignedByteBuffer> voxels, boolean do3D) {
+        KernelApplicationParameters params =
+                new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, do3D);
+        return ApplyKernel.applyForCount(new OutlineKernel(), voxels, params);
     }
 }
