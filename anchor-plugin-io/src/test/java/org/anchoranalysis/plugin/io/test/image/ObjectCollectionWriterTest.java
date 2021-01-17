@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.io.test.image;
 
 import static org.anchoranalysis.plugin.io.test.image.HelperReadWriteObjects.*;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Path;
@@ -80,9 +81,7 @@ class ObjectCollectionWriterTest {
         ObjectCollection objectsRead = readObjects(outputPathExpected(hdf5, directory));
 
         assertEquals(objects.size(), objectsRead.size(), "Objects size");
-        // TODO fix this test after code is compiling to be object independent
-        // assertTrue("Objects first object",  objects.get(0).equals(objectsRead.get(0)) );
-        // assertTrue(objects.equalsDeep(objectsRead));
+        assertTrue(objects.equalsDeep(objectsRead));
     }
 
     private static Path outputPathExpected(boolean hdf5, Path path) {
