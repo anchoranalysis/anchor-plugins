@@ -108,7 +108,8 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 
     private static BinaryVoxels<UnsignedByteBuffer> outline(ObjectMask object, boolean useZ) {
         OutlineKernel kernel = new OutlineKernel();
-        KernelApplicationParameters params = new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, useZ);
+        KernelApplicationParameters params =
+                new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, useZ);
         return ApplyKernel.apply(kernel, object.binaryVoxels(), params);
     }
 }

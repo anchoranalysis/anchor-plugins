@@ -34,9 +34,8 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link NumberTouchingVoxelFaces}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class NumberTouchingVoxelFacesTest {
 

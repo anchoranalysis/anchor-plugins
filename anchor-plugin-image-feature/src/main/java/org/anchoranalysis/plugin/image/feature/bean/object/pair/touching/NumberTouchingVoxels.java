@@ -62,7 +62,8 @@ public class NumberTouchingVoxels extends TouchingVoxels {
         }
     }
 
-    private int numberTouchingFrom(ObjectMask source, ObjectMask destination, BoundingBox boxIntersect)
+    private int numberTouchingFrom(
+            ObjectMask source, ObjectMask destination, BoundingBox boxIntersect)
             throws OperationFailedException {
         BoundingBox boxIntersectRelative = RelativeUtilities.relativizeBox(boxIntersect, source);
         return calculateNeighborhoodTouchingPixels(source, destination, boxIntersectRelative);
@@ -75,6 +76,7 @@ public class NumberTouchingVoxels extends TouchingVoxels {
         CountKernelNeighborhoodMask kernelMatch =
                 new CountKernelNeighborhoodMask(
                         RelativeUtilities.relativizeObject(destination, source));
-        return ApplyKernel.applyForCount(kernelMatch, source.binaryVoxels(), boxIntersectRelative, createParams());
+        return ApplyKernel.applyForCount(
+                kernelMatch, source.binaryVoxels(), boxIntersectRelative, createParams());
     }
 }

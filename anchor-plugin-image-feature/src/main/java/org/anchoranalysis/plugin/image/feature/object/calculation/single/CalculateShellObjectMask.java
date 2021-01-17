@@ -119,8 +119,7 @@ public class CalculateShellObjectMask
     private ObjectMask maybeErodeSecondTime(ObjectMask object) throws FeatureCalculationException {
         try {
             if (iterationsErosionSecond > 0) {
-                return MorphologicalErosion.erode(
-                        object, iterationsErosionSecond, do3D);
+                return MorphologicalErosion.erode(object, iterationsErosionSecond, do3D);
             } else {
                 return object;
             }

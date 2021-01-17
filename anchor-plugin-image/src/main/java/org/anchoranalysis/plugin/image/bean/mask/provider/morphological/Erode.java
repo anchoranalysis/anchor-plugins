@@ -34,9 +34,9 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 
-/** 
+/**
  * Performs an <b>erosion</b> morphological operation on {@link BinaryVoxels}.
- * 
+ *
  * @author Owen Feehan
  */
 public class Erode extends MorphologicalOperatorBase {
@@ -46,11 +46,7 @@ public class Erode extends MorphologicalOperatorBase {
 
         BinaryVoxels<UnsignedByteBuffer> out =
                 MorphologicalErosion.erode(
-                        source.binaryVoxels(),
-                        getIterations(),
-                        do3D,
-                        precondition()
-                        );
+                        source.binaryVoxels(), getIterations(), do3D, precondition());
 
         try {
             source.replaceBy(out);

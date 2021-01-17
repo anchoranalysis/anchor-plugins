@@ -46,7 +46,7 @@ import org.apache.commons.io.IOCase;
  * @author Owen Feehan
  */
 class ExtractVariableSpan {
-    
+
     private static Logger log = Logger.getLogger(ExtractVariableSpan.class.getName());
 
     private Pattern pattern;
@@ -113,7 +113,8 @@ class ExtractVariableSpan {
         }
     }
 
-    private String extractVariableSpanWithError(File file, IOCase ioCase) throws OperationFailedException {
+    private String extractVariableSpanWithError(File file, IOCase ioCase)
+            throws OperationFailedException {
         String path = file.toPath().toString();
         return trimConstantElementsFromBothSides(path, ioCase);
     }

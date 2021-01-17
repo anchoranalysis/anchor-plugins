@@ -76,9 +76,6 @@ public class Erode extends ObjectCollectionProviderMorphological {
         }
 
         return MorphologicalErosion.erode(
-                object,
-                getIterations(),
-                isDo3D(),
-                Optional.of(acceptConditionsDilation));
+                object, getIterations(), isDo3D(), Optional.of(acceptConditionsDilation));
     }
 }

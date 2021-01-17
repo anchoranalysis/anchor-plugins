@@ -31,9 +31,8 @@ import org.anchoranalysis.core.log.MessageLogger;
 
 /**
  * Terminates after a specific number of iterations.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class NumberIterations extends NumberIterationsBase {
@@ -46,10 +45,9 @@ public class NumberIterations extends NumberIterationsBase {
     public void init() {
         // NOTHING TO DO
     }
-    
+
     @Override
-    public boolean continueFurther(
-            int iteration, double score, int size, MessageLogger logger) {
+    public boolean continueFurther(int iteration, double score, int size, MessageLogger logger) {
         if (iteration < getIterations()) {
             return true;
         } else {

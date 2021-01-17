@@ -44,10 +44,10 @@ import org.anchoranalysis.spatial.Extent;
 /**
  * Extracts slices from {@code sliceStart} (inclusive) to {@code sliceEnd} (inclusive).
  *
- * <p>If {@code duplicate==true} bean-property will ensure it is duplicated, and each channel
- * has independent copies of the slices. If this is not needed {@code duplicate==false} results
- * in less memory allocation and copying operations.
- * 
+ * <p>If {@code duplicate==true} bean-property will ensure it is duplicated, and each channel has
+ * independent copies of the slices. If this is not needed {@code duplicate==false} results in less
+ * memory allocation and copying operations.
+ *
  * @author Owen Feehan
  */
 public class ExtractSliceRange extends ChannelProviderUnary {
@@ -58,7 +58,7 @@ public class ExtractSliceRange extends ChannelProviderUnary {
 
     /** Slice index to end extracting from (inclusive). */
     @BeanField @Positive @Getter @Setter private int indexEnd;
-    
+
     /** If true, an extracted slice is duplicated before being assigned to the output channel. */
     @BeanField private boolean duplicate = true;
     // END BEANS
@@ -69,10 +69,12 @@ public class ExtractSliceRange extends ChannelProviderUnary {
         super.checkMisconfigured(defaultInstances);
         if (indexEnd < indexStart) {
             throw new BeanMisconfiguredException(
-                    String.format("indexStart (%d) must be less than indexEnd (%d)", indexStart, indexEnd));
+                    String.format(
+                            "indexStart (%d) must be less than indexEnd (%d)",
+                            indexStart, indexEnd));
         }
     }
-    
+
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
 
