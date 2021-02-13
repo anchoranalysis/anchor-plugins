@@ -53,7 +53,7 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
  */
 public class Autoname extends ChannelMap {
 
-    private static final String[] RGB_CHANNEL_NAMES = RGBChannelNames.rgbArray();
+    private static final String[] RGB_CHANNEL_NAMES = RGBChannelNames.asArray();
 
     @Override
     public NamedEntries createMap(OpenedImageFile openedFile) throws CreateException {
