@@ -83,10 +83,9 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
     }
 
     protected CountKernel createCountKernelMask(ObjectMask object2Relative) {
-        return new CountKernelNeighborhoodMask(
-                object2Relative);
+        return new CountKernelNeighborhoodMask(object2Relative);
     }
-    
+
     protected KernelApplicationParameters createParams() {
         return new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, do3D);
     }

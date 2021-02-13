@@ -62,6 +62,14 @@ public class ImageLoader {
     public EnergyStackWithoutParams carRGBAsEnergy() {
         return new EnergyStackWithoutParams(carRGB());
     }
+    
+    public EnergyStackWithoutParams carGrayscale8BitAsEnergy() {
+        return new EnergyStackWithoutParams(carGrayscale8Bit());
+    }
+    
+    public EnergyStackWithoutParams carGrayscale16BitAsEnergy() {
+        return new EnergyStackWithoutParams(carGrayscale16Bit());
+    }
 
     public Path modelDirectory() {
         return loader.getLoader().getRoot();

@@ -64,7 +64,7 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
     /** If false, the folders are ignored, and only the file-name is used in the output */
     @BeanField @Getter @Setter private boolean includeDirectories = true;
 
-    @BeanField @AllowEmpty @Getter @Setter private String inPathPrefix = "";
+    @BeanField @AllowEmpty @Getter @Setter private String prefixToRemove = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -83,7 +83,7 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
 
     private PathDifference differenceToPrefix(Path pathInRemoved) throws PathPrefixerException {
         try {
-            return PathDifference.differenceFrom(Paths.get(inPathPrefix), pathInRemoved);
+            return PathDifference.differenceFrom(Paths.get(prefixToRemove), pathInRemoved);
         } catch (PathDifferenceException e) {
             throw new PathPrefixerException(e);
         }

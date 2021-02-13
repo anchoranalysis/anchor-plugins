@@ -54,7 +54,9 @@ class ExtractVariableSpanForList {
      */
     public static List<NamedFile> listExtract(
             Collection<File> files, ExtractVariableSpan extractVariableSpan, IOCase ioCase) {
-        List<NamedFile> listMaybeEmpty = listExtractMaybeEmpty(files, file -> extractVariableSpan.extractSpanPortionFor(file, ioCase));
+        List<NamedFile> listMaybeEmpty =
+                listExtractMaybeEmpty(
+                        files, file -> extractVariableSpan.extractSpanPortionFor(file, ioCase));
 
         if (hasAnyEmptyDescriptiveName(listMaybeEmpty)) {
             String prependStr =
@@ -84,11 +86,10 @@ class ExtractVariableSpanForList {
     }
 
     private static List<NamedFile> listExtractMaybeEmpty(
-            Collection<File> files, Function<File,String> extractVariableSpan) {
+            Collection<File> files, Function<File, String> extractVariableSpan) {
 
         return FunctionalList.mapToList(
-                files,
-                file -> new NamedFile(extractVariableSpan.apply(file), file));
+                files, file -> new NamedFile(extractVariableSpan.apply(file), file));
     }
 
     private static String extractLastComponent(String str) {

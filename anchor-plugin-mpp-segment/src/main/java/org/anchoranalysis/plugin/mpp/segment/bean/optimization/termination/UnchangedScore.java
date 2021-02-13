@@ -38,11 +38,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 public class UnchangedScore extends UnchangedBase {
 
     // START BEAN PARAMETERS
-    /** An exponent of 10 which determines a tolerance, less than which a score will be deemed unchanged compared to another. */
+    /**
+     * An exponent of 10 which determines a tolerance, less than which a score will be deemed
+     * unchanged compared to another.
+     */
     @BeanField @Getter @Setter private int tolerance = -1;
     // END BEAN PARAMETERS
 
-    /** The value after raising {@code 10^exponent}. */ 
+    /** The value after raising {@code 10^exponent}. */
     private double toleranceRaised = -1;
 
     /** The total energy in the previous step. */
@@ -59,7 +62,7 @@ public class UnchangedScore extends UnchangedBase {
     protected void assignPrevious(double score, int size) {
         this.previousScore = score;
     }
-    
+
     @Override
     protected boolean isUnchanged(double score, int size) {
         return Math.abs(score - previousScore) < this.toleranceRaised;

@@ -190,8 +190,8 @@ public class QuickExperiment<S> extends Experiment {
         }
 
         DirectoryStructure filePathResolver = new DirectoryStructure();
-        filePathResolver.setInPathPrefix(inPathBaseDir.toString());
-        filePathResolver.setOutPathPrefix(pathDirectoryOut.toString());
+        filePathResolver.setPrefixToRemove(inPathBaseDir.toString());
+        filePathResolver.setPrefix(pathDirectoryOut.toString());
         try {
             filePathResolver.localise(getLocalPath());
         } catch (BeanMisconfiguredException e) {

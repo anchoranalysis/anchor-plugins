@@ -58,7 +58,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @author Owen Feehan
  */
-class ExportFeaturesTaskTest {
+class ExportFeaturesTest {
 
     private static TestLoader loader;
     private TaskFixture taskFixture;

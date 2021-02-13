@@ -47,7 +47,7 @@ public class FromUnitValueDistance extends ScalarProposer {
     // END BEAN PROPERTIES
 
     private DirectionVector directionVectorMemo;
-    
+
     @Override
     public double propose(
             RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
@@ -55,9 +55,9 @@ public class FromUnitValueDistance extends ScalarProposer {
         return unitValueDistance.resolve(
                 resolution.map(Resolution::unitConvert), directoryVectorMemoized());
     }
-    
+
     private DirectionVector directoryVectorMemoized() {
-        if (directionVectorMemo==null) {
+        if (directionVectorMemo == null) {
             directionVectorMemo = directionVector.createVector();
         }
         return directionVectorMemo;

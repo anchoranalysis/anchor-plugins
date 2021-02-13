@@ -41,20 +41,38 @@ import org.junit.jupiter.api.Test;
 class HOGFeatureTest {
 
     private ImageLoader loader = new ImageLoader();
-
-    private EnergyStackWithoutParams stack = loader.carRGBAsEnergy();
+    
+    private static final double DELTA = 10e-6;
 
     @Test
-    void testWithinBounds() throws FeatureCalculationException {
-        assertEquals(0.01632116, featureValForIndex(0), 10e-6);
+    void testRGB() throws FeatureCalculationException {
+        assertFeatureValueFirst(loader.carRGBAsEnergy(), 0.01632116);
+    }
+    
+    @Test
+    void testGrayscale8bit() throws FeatureCalculationException {
+        assertFeatureValueFirst(loader.carGrayscale8BitAsEnergy(), 00.03600078);
+    }
+    
+    @Test
+    void testGrayscale16bit() throws FeatureCalculationException {
+        assertFailure(loader.carGrayscale16BitAsEnergy(), 0);
     }
 
     @Test
     void testOutsideBounds() throws FeatureCalculationException {
-        assertThrows(FeatureCalculationException.class, () -> featureValForIndex(60000));
+        assertFailure(loader.carRGBAsEnergy(), 60000);
+    }
+    
+    private void assertFailure(EnergyStackWithoutParams stack, int index) {
+        assertThrows(FeatureCalculationException.class, () -> featureValueForIndex(loader.carRGBAsEnergy(), 60000));
+    }
+    
+    private void assertFeatureValueFirst(EnergyStackWithoutParams stack, double expectedValue) throws FeatureCalculationException {
+        assertEquals(expectedValue, featureValueForIndex(stack, 0), DELTA);
     }
 
-    private double featureValForIndex(int index) throws FeatureCalculationException {
+    private double featureValueForIndex(EnergyStackWithoutParams stack, int index) throws FeatureCalculationException {
         HOGFeature feature = new HOGFeature(new SizeXY(64, 64), index);
         return FeatureSession.calculateWith(
                 feature, new FeatureInputStack(stack), LoggingFixture.suppressedLogErrorReporter());

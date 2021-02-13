@@ -51,7 +51,6 @@ import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -66,7 +65,7 @@ import org.anchoranalysis.test.image.io.OutputterFixture;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class TaskSingleInputHelper {
+public class TaskSingleInputHelper {
 
     /**
      * Executes a task on a single-input
@@ -76,8 +75,8 @@ class TaskSingleInputHelper {
      * @param <V> task type
      * @param input the input for the task
      * @param task the task to run
-     * @param pathDirOutput an absolute path to a directory where outputs of the task will be placed
-     * @param pathDirSaved a path (relative to the src/test/resources) to a directory of
+     * @param pathDirectoryOutput an absolute path to a directory where outputs of the task will be placed
+     * @param pathDirectorySaved a path (relative to the src/test/resources) to a directory of
      *     saved-results to compare with
      * @param pathsFileToCompare paths (relative to the src/test/resources) to check that are
      *     identical
@@ -87,20 +86,20 @@ class TaskSingleInputHelper {
             void runTaskAndCompareOutputs(
                     T input,
                     V task,
-                    Path pathDirOutput,
-                    String pathDirSaved,
+                    Path pathDirectoryOutput,
+                    String pathDirectorySaved,
                     String[] pathsFileToCompare)
                     throws OperationFailedException {
 
-        boolean successful = runTaskOnSingleInput(input, task, pathDirOutput);
+        boolean successful = runTaskOnSingleInput(input, task, pathDirectoryOutput);
         // Successful outcome
         assertTrue(successful, "Sucessful execution of task");
 
-        CompareHelper.compareOutputWithSaved(pathDirOutput, pathDirSaved, pathsFileToCompare);
+        CompareHelper.compareOutputWithSaved(pathDirectoryOutput, pathDirectorySaved, pathsFileToCompare);
     }
 
     /**
-     * Executes a task on a single-input
+     * Executes a task on a single-input.
      *
      * @param <T> input type
      * @param <S> shared-state type
@@ -127,7 +126,6 @@ class TaskSingleInputHelper {
 
             ParametersExperiment paramsExperiment =
                     createParametersExperiment(
-                            pathForOutputs,
                             outputter.getChecked(),
                             outputManager.getPrefixer(),
                             logger);
@@ -144,8 +142,7 @@ class TaskSingleInputHelper {
                 task.afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
             }
 
-        } catch (InputReadFailedException
-                | ExperimentExecutionException
+        } catch (ExperimentExecutionException
                 | JobExecutionException
                 | BeanMisconfiguredException
                 | BindFailedException exc) {
@@ -154,11 +151,9 @@ class TaskSingleInputHelper {
     }
 
     private static ParametersExperiment createParametersExperiment(
-            Path pathTemporaryDirectory,
             OutputterChecked outputter,
             PathPrefixer prefixer,
-            StatefulMessageLogger logger)
-            throws InputReadFailedException {
+            StatefulMessageLogger logger) {
         ParametersExperiment params =
                 new ParametersExperiment(
                         new ExecutionArguments(Paths.get(".")),

@@ -102,7 +102,7 @@ public class ExperimentStructure extends PathPrefixer {
 
     private PathPrefixerAvoidResolve createResolver() {
         PathRegEx resolver = new PathRegEx();
-        resolver.setOutPathPrefix(prefix + experiment.getExperimentType());
+        resolver.setPrefix(prefix + experiment.getExperimentType());
         resolver.setRegEx(regEx);
         return resolver;
     }
