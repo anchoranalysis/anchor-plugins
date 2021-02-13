@@ -38,7 +38,11 @@ import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
 import org.anchoranalysis.test.image.csv.CSVComparer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class CompareHelper {
 
     /**

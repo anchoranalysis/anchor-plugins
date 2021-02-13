@@ -46,7 +46,8 @@ public class NumberVoxelsAtBorder extends OutlineKernelBase {
         return (double) numberBorderPixels(object, parameters);
     }
 
-    public static int numberBorderPixels(ObjectMask object, KernelApplicationParameters parameters) {
+    public static int numberBorderPixels(
+            ObjectMask object, KernelApplicationParameters parameters) {
         OutlineKernel kernel = new OutlineKernel();
         return ApplyKernel.applyForCount(kernel, object.binaryVoxels(), parameters);
     }

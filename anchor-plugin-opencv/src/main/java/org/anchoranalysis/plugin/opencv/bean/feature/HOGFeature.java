@@ -71,7 +71,6 @@ public class HOGFeature extends FeatureStack {
     // END BEAN PROPRERTIES
 
     public HOGFeature(SizeXY resizeTo, int index) {
-        super();
         this.resizeTo = resizeTo;
         this.index = index;
     }
@@ -98,17 +97,17 @@ public class HOGFeature extends FeatureStack {
 
         CVInit.blockUntilLoaded();
 
-        float[] arr =
+        float[] descriptor =
                 input.calculate(new CalculateHOGDescriptor(Optional.ofNullable(resizeTo), params));
 
-        if (index >= arr.length) {
+        if (index >= descriptor.length) {
             throw new FeatureCalculationException(
                     String.format(
                             "Index %d is out-of-bounds as the hog-descriptor has %d elements",
-                            index, arr.length));
+                            index, descriptor.length));
         }
 
-        return arr[index];
+        return descriptor[index];
     }
 
     @Override

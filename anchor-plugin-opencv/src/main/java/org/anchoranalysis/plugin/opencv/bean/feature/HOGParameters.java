@@ -69,7 +69,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
     @BeanField @Getter @Setter private SizeXY cellSize = new SizeXY(8, 8);
 
     /** The number of bins in each histogram for a cell */
-    @BeanField @Getter @Setter private int numBins = 9;
+    @BeanField @Getter @Setter private int numberBins = 9;
     // END BEAN PROPERTIES
 
     /**
@@ -94,7 +94,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 
         // We assume we are always using the default winStride, which is equal to cellSize
         // windows per image
-        return blocksPerWindow * cellsPerBlock * numBins * windowsPerImage;
+        return blocksPerWindow * cellsPerBlock * numberBins * windowsPerImage;
     }
 
     public HOGDescriptor createDescriptor(Extent imageSize) {
@@ -103,7 +103,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
                 sizeFor(blockSize),
                 sizeFor(blockStride),
                 sizeFor(cellSize),
-                numBins);
+                numberBins);
     }
 
     private Size determineWindowSize(Extent imageSize) {

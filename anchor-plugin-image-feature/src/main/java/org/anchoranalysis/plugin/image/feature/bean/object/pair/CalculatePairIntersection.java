@@ -136,12 +136,7 @@ class CalculatePairIntersection
             throws CreateException {
 
         // We erode it, and use this as a mask on the input object
-        ObjectMask eroded =
-                MorphologicalErosion.erode(
-                        input.getMerged(),
-                        iterationsErosion,
-                        do3D
-                        );
+        ObjectMask eroded = MorphologicalErosion.erode(input.getMerged(), iterationsErosion, do3D);
 
         return intersection.intersect(eroded, extent);
     }

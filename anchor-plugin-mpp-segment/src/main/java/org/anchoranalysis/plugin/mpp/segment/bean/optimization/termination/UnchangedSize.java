@@ -41,14 +41,14 @@ public class UnchangedSize extends UnchangedBase {
         super.init();
         this.previousSize = -1;
     }
-    
+
     @Override
     protected boolean isUnchanged(double score, int size) {
         return size == previousSize;
     }
-    
+
     @Override
     protected void assignPrevious(double score, int size) {
-        previousSize = size;        
+        previousSize = size;
     }
 }

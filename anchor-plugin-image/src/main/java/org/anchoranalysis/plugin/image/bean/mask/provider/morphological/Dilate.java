@@ -39,9 +39,9 @@ import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.kernel.morphological.DilationContext;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
 
-/** 
+/**
  * Performs a <b>dilation</b> morphological operation on {@link BinaryVoxels}.
- * 
+ *
  * @author Owen Feehan
  */
 public class Dilate extends MorphologicalOperatorBase {

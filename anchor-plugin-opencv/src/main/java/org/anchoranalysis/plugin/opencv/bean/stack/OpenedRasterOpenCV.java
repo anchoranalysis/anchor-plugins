@@ -94,7 +94,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     @Override
     public Optional<List<String>> channelNames() throws ImageIOException {
         openStackIfNecessary();
-        return OptionalUtilities.createFromFlag(stack.isRGB(), RGBChannelNames.rgbList());
+        return OptionalUtilities.createFromFlag(stack.isRGB(), RGBChannelNames.asList());
     }
 
     @Override
@@ -115,7 +115,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
             throw new ImageIOException(
                     "Not all channels have identical channel type, so not calculating bit-depth.");
         }
-        return stack.getChannel(0).getVoxelDataType().numberBits();
+        return stack.getChannel(0).getVoxelDataType().bitDepth();
     }
 
     @Override
