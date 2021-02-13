@@ -38,11 +38,11 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 public class ImageSize extends SummarizerNamedChannels<WrappedImageDim> {
 
     @Override
-    public void add(NamedChannelsInput img) throws OperationFailedException {
+    public void add(NamedChannelsInput input) throws OperationFailedException {
 
         try {
-            for (int i = 0; i < img.numberSeries(); i++) {
-                incrementCount(new WrappedImageDim(img.dimensions(i)));
+            for (int i = 0; i < input.numberSeries(); i++) {
+                incrementCount(new WrappedImageDim(input.dimensions(i)));
             }
 
         } catch (ImageIOException exc) {

@@ -63,15 +63,19 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.RasterTask;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
+import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.RGB;
 import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 
 /**
  * Converts each input-image to an output format, optionally changing the bit depth.
  *
  * <p>Stacks containing multiple series (i.e. multiple images in a single file) are supported.
  *
- * <p>If it looks like an RGB image, channels are written together. Otherwise they are written.
- * independently.
+ * <p>If it looks like an RGB image, channels are written as a single RGB image. Otherwise, each channel
+ * is written separately.
+ * 
+ * <p>If only a single stack will be converted, its name is suppressed in the output.
  *
  * <p>The following outputs are produced:
  *
@@ -94,11 +98,14 @@ public class ConvertImageFormat
     private static final String OUTPUT_COPY = "converted";
 
     // START BEAN PROPERTIES
-
     /** To convert as RGB or independently or in another way */
-    @BeanField @Getter @Setter private ChannelConvertStyle channelConversionStyle = null;
+    @BeanField @Getter @Setter private ChannelConvertStyle channelConversionStyle = new RGB();
 
-    /** If true, the series index is not included in the outputted file-names. */
+    /** 
+     * If true, the series index is not included in the outputted file-names.
+     * 
+     * <p>It is always suppressed if only a single series exists.
+     */
     @BeanField @Getter @Setter private boolean suppressSeries = false;
 
     /** Optionally, includes only certain channels when converting. */
@@ -166,7 +173,7 @@ public class ConvertImageFormat
 
         try {
             NamedChannelsForSeries channels =
-                    createChannelCollection(input.getInput(), seriesIndex);
+                    createNamedChannels(input.getInput(), seriesIndex);
 
             ChannelGetter channelGetter = maybeAddFilter(channels, context);
 
@@ -216,7 +223,7 @@ public class ConvertImageFormat
         for (int t = 0; t < sizeT; t++) {
 
             CalculateOutputName namer =
-                    new CalculateOutputName(seriesIndex, numberSeries, t, sizeT, suppressSeries);
+                    new CalculateOutputName(seriesIndex, t, numberSeries, sizeT, suppressSeries);
 
             logger.messageLogger().logFormatted("Starting time-point: %d", t);
 
@@ -228,8 +235,13 @@ public class ConvertImageFormat
                                 logger);
 
                 stacks.forEach(
-                        (stackName, stack) ->
-                                addStackToOutput(outputSequence, stackName, stack, namer));
+                        (existingName, stack) ->
+                                addStackToOutput(
+                                        outputSequence,
+                                        maybeSuppressExistingName(stacks, existingName),
+                                        stack,
+                                        namer)
+                               );
             } catch (OperationFailedException e) {
                 throw new JobExecutionException(e);
             }
@@ -238,20 +250,22 @@ public class ConvertImageFormat
         }
     }
 
-    private NamedChannelsForSeries createChannelCollection(
+    private NamedChannelsForSeries createNamedChannels(
             NamedChannelsInput input, int seriesIndex) throws ImageIOException {
         return input.createChannelsForSeries(seriesIndex, new ProgressConsole(1));
     }
 
     private void addStackToOutput(
             OutputSequenceIndexed<Stack, String> outputSequence,
-            String name,
+            Optional<String> existingName,
             StoreSupplier<Stack> stack,
-            CalculateOutputName calculateOutputName)
+            CalculateOutputName namer)
             throws OperationFailedException {
         try {
-            Optional<String> outputName = calculateOutputName.calculateOutputName(name);
-            outputSequence.add(stack.get(), outputName);
+            outputSequence.add(
+                    stack.get(),
+                    namer.calculateOutputName(existingName)
+            );
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
@@ -276,5 +290,16 @@ public class ConvertImageFormat
         } else {
             return channels;
         }
+    }
+        
+    /**
+     * The existing-name of a stack if supressed, if there is only a single stack.
+     * 
+     * @param stacks the totality of the named-stacks
+     * @param existingName existing individual stack-name
+     * @return the existingName if there is more than one stack.
+     */
+    private static Optional<String> maybeSuppressExistingName(NamedStacks stacks, String existingName) {
+        return OptionalUtilities.createFromFlag(stacks.size() > 1, () -> existingName);
     }
 }
