@@ -121,6 +121,6 @@ public class RecordingCounter<T> {
 
     /** Closes the logger. */
     public void closeLogger() {
-        logger.close(true);
+        logger.close(true, false);
     }
 }

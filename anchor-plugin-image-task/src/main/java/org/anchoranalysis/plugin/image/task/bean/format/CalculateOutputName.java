@@ -26,12 +26,9 @@
 
 package org.anchoranalysis.plugin.image.task.bean.format;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import org.anchoranalysis.bean.OptionalFactory;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.value.StringUtilities;
 
 /**
  * Calculates an output-name based upon the number of series and timepoints.
@@ -43,19 +40,19 @@ class CalculateOutputName {
 
     /** The index of the current series. */
     private int seriesIndex;
-    
+
     /** The index of the current timepoint. */
     private int timeIndex;
 
     /** The total number of elements in the series to be outputted. */
     private int numberSeries;
-    
+
     /** The total number of timepoints to be outputted. */
     private int numberTimepoints;
 
-    /** 
+    /**
      * If true, the series index is not included in the outputted file-names.
-     * 
+     *
      * <p>It is always suppressed if only a single series exists.
      */
     private boolean suppressSeries;
@@ -63,19 +60,16 @@ class CalculateOutputName {
     /**
      * Calculates an output-name.
      *
-     * <p>The output-name is unique across {@code seriesIndex} and {@code timeIndex}, but drops either variable if
-     * there is a single element only. So an empty-string is returned if it's single series, single
-     * time-point.
+     * <p>The output-name is unique across {@code seriesIndex} and {@code timeIndex}, but drops
+     * either variable if there is a single element only. So an empty-string is returned if it's
+     * single series, single time-point.
      *
      * @param existingName any existing name that may exist.
      * @return a unique outputName
      */
     public Optional<String> calculateOutputName(Optional<String> existingName) {
-        
-        List<String> components = listOfNonEmptyStrings( calculateSeriesComponent(),
-                calculateTimeComponent(), existingName.orElse("") );
-        
-        return OptionalFactory.create(!components.isEmpty(), () -> String.join("_", components));
+        return StringUtilities.joinNonEmpty(
+                "_", calculateSeriesComponent(), calculateTimeComponent(), existingName.orElse(""));
     }
 
     private String calculateSeriesComponent() {
@@ -92,10 +86,5 @@ class CalculateOutputName {
         } else {
             return String.format("%05d", timeIndex);
         }
-    }
-    
-    /** Creates a list of strings, where strings are included only if they are non-empty. */
-    private static List<String> listOfNonEmptyStrings(String... stringMaybeEmpty) {
-        return Arrays.stream(stringMaybeEmpty).filter( string -> !string.isEmpty() ).collect( Collectors.toList() );
     }
 }

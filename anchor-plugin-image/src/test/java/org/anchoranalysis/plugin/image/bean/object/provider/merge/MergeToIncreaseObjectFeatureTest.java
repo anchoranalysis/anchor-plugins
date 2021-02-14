@@ -99,7 +99,7 @@ class MergeToIncreaseObjectFeatureTest {
             ToDoubleFunction<FeatureInputSingleObject> calculationFunction)
             throws CreateException {
 
-        Logger logger = LoggingFixture.suppressedLogErrorReporter();
+        Logger logger = LoggingFixture.suppressedLogger();
 
         MergeToIncreaseObjectFeature provider = new MergeToIncreaseObjectFeature();
 

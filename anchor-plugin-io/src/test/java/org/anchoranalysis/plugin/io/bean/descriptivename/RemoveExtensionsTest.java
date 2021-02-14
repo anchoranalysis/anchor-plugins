@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 
 class RemoveExtensionsTest {
 
-    private static final Logger LOGGER = LoggingFixture.suppressedLogErrorReporter();
+    private static final Logger LOGGER = LoggingFixture.suppressedLogger();
 
     @Test
     void testPreserveExt() throws InputReadFailedException {

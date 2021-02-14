@@ -30,6 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.OperationFailedRuntimeException;
 import org.anchoranalysis.core.format.ImageFileFormat;
@@ -38,11 +40,8 @@ import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
 import org.anchoranalysis.test.image.csv.CSVComparer;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CompareHelper {
 
     /**

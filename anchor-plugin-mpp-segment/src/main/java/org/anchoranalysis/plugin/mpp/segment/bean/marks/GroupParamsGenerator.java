@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.format.NonImageFileFormat;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -39,8 +40,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 class GroupParamsGenerator extends OneStageGenerator<KeyValueParams> {
 
     @Override
-    public void writeToFile(
-            KeyValueParams element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(KeyValueParams element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
         try {
             element.writeToFile(filePath);
@@ -50,7 +50,7 @@ class GroupParamsGenerator extends OneStageGenerator<KeyValueParams> {
     }
 
     @Override
-    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger) {
         return NonImageFileFormat.PROPERTIES_XML.extensionWithoutPeriod();
     }
 

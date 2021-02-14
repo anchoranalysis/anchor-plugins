@@ -43,7 +43,7 @@ import org.w3c.dom.Element;
 class CSVRowXMLGenerator extends XMLGenerator<CSVRow> {
 
     @Override
-    public void writeToFile(CSVRow element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(CSVRow element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
         try {
             XMLWriter.writeXmlToFile(csvRowAsXml(element), filePath);

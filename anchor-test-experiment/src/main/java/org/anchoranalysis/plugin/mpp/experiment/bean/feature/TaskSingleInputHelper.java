@@ -75,7 +75,8 @@ public class TaskSingleInputHelper {
      * @param <V> task type
      * @param input the input for the task
      * @param task the task to run
-     * @param pathDirectoryOutput an absolute path to a directory where outputs of the task will be placed
+     * @param pathDirectoryOutput an absolute path to a directory where outputs of the task will be
+     *     placed
      * @param pathDirectorySaved a path (relative to the src/test/resources) to a directory of
      *     saved-results to compare with
      * @param pathsFileToCompare paths (relative to the src/test/resources) to check that are
@@ -95,7 +96,8 @@ public class TaskSingleInputHelper {
         // Successful outcome
         assertTrue(successful, "Sucessful execution of task");
 
-        CompareHelper.compareOutputWithSaved(pathDirectoryOutput, pathDirectorySaved, pathsFileToCompare);
+        CompareHelper.compareOutputWithSaved(
+                pathDirectoryOutput, pathDirectorySaved, pathsFileToCompare);
     }
 
     /**
@@ -126,9 +128,7 @@ public class TaskSingleInputHelper {
 
             ParametersExperiment paramsExperiment =
                     createParametersExperiment(
-                            outputter.getChecked(),
-                            outputManager.getPrefixer(),
-                            logger);
+                            outputter.getChecked(), outputManager.getPrefixer(), logger);
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);
             S sharedState =
@@ -151,9 +151,7 @@ public class TaskSingleInputHelper {
     }
 
     private static ParametersExperiment createParametersExperiment(
-            OutputterChecked outputter,
-            PathPrefixer prefixer,
-            StatefulMessageLogger logger) {
+            OutputterChecked outputter, PathPrefixer prefixer, StatefulMessageLogger logger) {
         ParametersExperiment params =
                 new ParametersExperiment(
                         new ExecutionArguments(Paths.get(".")),
