@@ -60,7 +60,7 @@ public class EnergySchemeFixture {
         return new EnergySchemeWithSharedFeatures(
                 createEnergyScheme(weightOverlap),
                 new SharedFeatureMulti(),
-                LoggingFixture.suppressedLogErrorReporter());
+                LoggingFixture.suppressedLogger());
     }
 
     private static EnergyScheme createEnergyScheme(double weightOverlap) throws CreateException {

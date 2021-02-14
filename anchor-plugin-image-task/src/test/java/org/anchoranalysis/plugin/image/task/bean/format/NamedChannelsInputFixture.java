@@ -13,16 +13,16 @@ import org.anchoranalysis.test.image.StackFixture;
 import org.anchoranalysis.test.image.rasterwriter.ChannelSpecification;
 
 class NamedChannelsInputFixture extends NamedChannelsInput {
-    
-    private final static Extent EXTENT = new Extent(200,20,3);
-    
+
+    private static final Extent EXTENT = new Extent(200, 20, 3);
+
     private final Stack stack;
-    
+
     public NamedChannelsInputFixture(ChannelSpecification channelSpecification) {
         StackFixture fixture = new StackFixture();
         this.stack = fixture.create(channelSpecification, EXTENT);
     }
-    
+
     @Override
     public String name() {
         return "someInput";

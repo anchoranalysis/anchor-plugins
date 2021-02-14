@@ -80,7 +80,7 @@ class MergeTestHelper {
             MergeBase provider)
             throws OperationFailedException {
 
-        Logger logger = LoggingFixture.suppressedLogErrorReporter();
+        Logger logger = LoggingFixture.suppressedLogger();
 
         try {
             ProviderFixture.initProvider(provider, logger);

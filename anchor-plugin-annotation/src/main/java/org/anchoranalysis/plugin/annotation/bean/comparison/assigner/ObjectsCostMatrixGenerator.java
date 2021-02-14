@@ -64,7 +64,7 @@ class ObjectsCostMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
 
     @Override
     public void writeToFile(
-            CostMatrix<ObjectMask> element, OutputWriteSettings outputWriteSettings, Path filePath)
+            CostMatrix<ObjectMask> element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
 
         try (CSVWriter writer = CSVWriter.create(filePath)) {
