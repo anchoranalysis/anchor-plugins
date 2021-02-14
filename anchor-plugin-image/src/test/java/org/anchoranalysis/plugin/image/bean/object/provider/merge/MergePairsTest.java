@@ -93,7 +93,7 @@ class MergePairsTest {
     private static MergePairs createMergePair(ObjectCollection objects, int threshold)
             throws CreateException {
 
-        Logger logger = LoggingFixture.suppressedLogErrorReporter();
+        Logger logger = LoggingFixture.suppressedLogger();
 
         MergePairs provider = new MergePairs();
 

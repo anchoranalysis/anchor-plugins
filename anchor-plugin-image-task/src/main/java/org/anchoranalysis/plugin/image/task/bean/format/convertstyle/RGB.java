@@ -63,7 +63,8 @@ public class RGB extends ChannelConvertStyle {
      *
      * <p>If unset, an error is instead thrown in this circumstances
      */
-    @BeanField @OptionalBean @Getter @Setter private ChannelConvertStyle fallback = new IndependentChannels();
+    @BeanField @OptionalBean @Getter @Setter
+    private ChannelConvertStyle fallback = new IndependentChannels();
     // END BEAN PROPERTIES
 
     @Override

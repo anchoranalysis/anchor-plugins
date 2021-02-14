@@ -152,8 +152,7 @@ class InteresectingObjectsTestHelper {
         SharedObjects sharedObjects =
                 new SharedObjects(
                         new CommonContext(
-                                LoggingFixture.suppressedLogErrorReporter(),
-                                Mockito.mock(Path.class)));
+                                LoggingFixture.suppressedLogger(), Mockito.mock(Path.class)));
 
         sharedObjects.getOrCreate(ObjectCollection.class).add(ID, () -> others);
 

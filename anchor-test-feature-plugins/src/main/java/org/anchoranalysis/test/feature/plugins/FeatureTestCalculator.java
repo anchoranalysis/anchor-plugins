@@ -107,7 +107,7 @@ public class FeatureTestCalculator {
                             feature,
                             initParams,
                             new SharedFeatureMulti(),
-                            LoggingFixture.suppressedLogErrorReporter());
+                            LoggingFixture.suppressedLogger());
 
             return calculator.calculate(params);
         } catch (InitException e) {

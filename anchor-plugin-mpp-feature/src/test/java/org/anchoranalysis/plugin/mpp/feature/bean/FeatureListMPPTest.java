@@ -153,7 +153,7 @@ class FeatureListMPPTest {
 
     private static <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart(
             FeatureList<T> features) throws InitException {
-        return FeatureSession.with(features, LoggingFixture.suppressedLogErrorReporter());
+        return FeatureSession.with(features, LoggingFixture.suppressedLogger());
     }
 
     private void testConstantsInList(FeatureInput params1, FeatureInput params2)

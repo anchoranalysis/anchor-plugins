@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressConsole;
@@ -65,16 +66,15 @@ import org.anchoranalysis.plugin.image.task.bean.RasterTask;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.RGB;
 import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
-import org.anchoranalysis.core.functional.OptionalUtilities;
 
 /**
  * Converts each input-image to an output format, optionally changing the bit depth.
  *
  * <p>Stacks containing multiple series (i.e. multiple images in a single file) are supported.
  *
- * <p>If it looks like an RGB image, channels are written as a single RGB image. Otherwise, each channel
- * is written separately.
- * 
+ * <p>If it looks like an RGB image, channels are written as a single RGB image. Otherwise, each
+ * channel is written separately.
+ *
  * <p>If only a single stack will be converted, its name is suppressed in the output.
  *
  * <p>The following outputs are produced:
@@ -101,9 +101,9 @@ public class ConvertImageFormat
     /** To convert as RGB or independently or in another way */
     @BeanField @Getter @Setter private ChannelConvertStyle channelConversionStyle = new RGB();
 
-    /** 
+    /**
      * If true, the series index is not included in the outputted file-names.
-     * 
+     *
      * <p>It is always suppressed if only a single series exists.
      */
     @BeanField @Getter @Setter private boolean suppressSeries = false;
@@ -172,8 +172,7 @@ public class ConvertImageFormat
             throws JobExecutionException {
 
         try {
-            NamedChannelsForSeries channels =
-                    createNamedChannels(input.getInput(), seriesIndex);
+            NamedChannelsForSeries channels = createNamedChannels(input.getInput(), seriesIndex);
 
             ChannelGetter channelGetter = maybeAddFilter(channels, context);
 
@@ -240,8 +239,7 @@ public class ConvertImageFormat
                                         outputSequence,
                                         maybeSuppressExistingName(stacks, existingName),
                                         stack,
-                                        namer)
-                               );
+                                        namer));
             } catch (OperationFailedException e) {
                 throw new JobExecutionException(e);
             }
@@ -250,8 +248,8 @@ public class ConvertImageFormat
         }
     }
 
-    private NamedChannelsForSeries createNamedChannels(
-            NamedChannelsInput input, int seriesIndex) throws ImageIOException {
+    private NamedChannelsForSeries createNamedChannels(NamedChannelsInput input, int seriesIndex)
+            throws ImageIOException {
         return input.createChannelsForSeries(seriesIndex, new ProgressConsole(1));
     }
 
@@ -262,10 +260,7 @@ public class ConvertImageFormat
             CalculateOutputName namer)
             throws OperationFailedException {
         try {
-            outputSequence.add(
-                    stack.get(),
-                    namer.calculateOutputName(existingName)
-            );
+            outputSequence.add(stack.get(), namer.calculateOutputName(existingName));
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
@@ -291,15 +286,16 @@ public class ConvertImageFormat
             return channels;
         }
     }
-        
+
     /**
      * The existing-name of a stack if supressed, if there is only a single stack.
-     * 
+     *
      * @param stacks the totality of the named-stacks
      * @param existingName existing individual stack-name
      * @return the existingName if there is more than one stack.
      */
-    private static Optional<String> maybeSuppressExistingName(NamedStacks stacks, String existingName) {
+    private static Optional<String> maybeSuppressExistingName(
+            NamedStacks stacks, String existingName) {
         return OptionalUtilities.createFromFlag(stacks.size() > 1, () -> existingName);
     }
 }
