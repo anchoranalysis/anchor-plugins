@@ -33,6 +33,7 @@ import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.OutputPrefixerSettings;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
@@ -45,22 +46,22 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 public class IfIncrementingNumberRequested extends PathPrefixerAvoidResolve {
 
     // START BEAN PROPERTIES
-    /** Called if an incrementing-number sequence <b>was</b> requested as output. */
-    @Getter @Setter @BeanField PathPrefixerAvoidResolve prefixerIncrementingNumber;
+    /** Called if the requested condition <b>is</b> true. */
+    @Getter @Setter @BeanField PathPrefixerAvoidResolve prefixerIf;
 
-    /** Called if an incrementing-number sequence <b>was not</b> requested as output. */
+    /** Called if the requested condition <b>is not</b> true. */
     @Getter @Setter @BeanField PathPrefixerAvoidResolve prefixerElse;
     // END BEAN PROPERTIES
 
     @Override
     public DirectoryWithPrefix outFilePrefixFromPath(
             NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException {
-        return multiplex(context).outFilePrefixFromPath(path, root, context);
+        return multiplex(context.getPrefixer()).outFilePrefixFromPath(path, root, context);
     }
 
-    private PathPrefixerAvoidResolve multiplex(PathPrefixerContext context) {
-        if (context.isOutputIncrementingNumberSequence()) {
-            return prefixerIncrementingNumber;
+    private PathPrefixerAvoidResolve multiplex(OutputPrefixerSettings settings) {
+        if (settings.isOutputIncrementingNumberSequence()) {
+            return prefixerIf;
         } else {
             return prefixerElse;
         }
