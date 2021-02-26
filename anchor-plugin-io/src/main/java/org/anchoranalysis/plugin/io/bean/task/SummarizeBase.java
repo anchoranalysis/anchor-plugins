@@ -104,6 +104,7 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
 
         arguments
                 .output()
+                .getPrefixer()
                 .getOutputDirectory()
                 .ifPresent(dir -> log.logFormatted("An output-directory has been set as %s", dir));
     }
