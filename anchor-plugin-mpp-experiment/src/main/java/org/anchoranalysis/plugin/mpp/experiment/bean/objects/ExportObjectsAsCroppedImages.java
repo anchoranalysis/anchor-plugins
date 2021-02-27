@@ -46,7 +46,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
@@ -62,7 +62,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
+import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMarks;
 import org.anchoranalysis.spatial.box.BoundedList;
 
 /**
@@ -80,7 +80,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
     private static final String FILE_PREFIX_EXTRACTED_OBJECTS = "object";
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private DefineOutputterMPP define;
+    @BeanField @Getter @Setter private DefineOutputterMarks define;
 
     /** The channels we extract the object-masks from - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
@@ -115,8 +115,8 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
         try {
             define.processInputImage(
                     input.getInput(),
-                    input.createInitParamsContext(),
-                    paramsInit -> outputObjects(paramsInit, input.getContextJob()));
+                    input.createInitializationContext(),
+                    initialization -> outputObjects(initialization, input.getContextJob()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -172,15 +172,16 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
                         sequence);
     }
 
-    private void outputObjects(ImageInitParams paramsInit, InputOutputContext context)
+    private void outputObjects(ImageInitialization initialization, InputOutputContext context)
             throws OperationFailedException {
 
         try {
             Logger logger = context.getLogger();
 
-            NamedStacks stacks = createStacksFromProviders(listStackProvider, paramsInit, logger);
+            NamedStacks stacks =
+                    createStacksFromProviders(listStackProvider, initialization, logger);
             NamedStacks stacksProjected =
-                    createStacksFromProviders(listStackProviderMIP, paramsInit, logger);
+                    createStacksFromProviders(listStackProviderMIP, initialization, logger);
 
             if (stacks.keys().isEmpty()) {
                 // Nothing to do
@@ -191,7 +192,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
 
             outputGeneratorSequence(
                     createGenerator(dimensions, stacks, stacksProjected),
-                    maybeExtendZObjects(inputs(paramsInit, logger), dimensions.z()),
+                    maybeExtendZObjects(inputs(initialization, logger), dimensions.z()),
                     context.getOutputter().getChecked());
         } catch (CreateException | InitException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
@@ -199,15 +200,17 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
     }
 
     private static NamedStacks createStacksFromProviders(
-            List<NamedBean<StackProvider>> stackProviders, ImageInitParams so, Logger logger)
+            List<NamedBean<StackProvider>> providers,
+            ImageInitialization initalization,
+            Logger logger)
             throws CreateException {
         // Get named image stack collection
         NamedStacksUniformSize stacks = new NamedStacksUniformSize();
 
-        for (NamedBean<StackProvider> namedStackProvider : stackProviders) {
+        for (NamedBean<StackProvider> namedStackProvider : providers) {
 
             try {
-                namedStackProvider.getValue().initRecursive(so, logger);
+                namedStackProvider.getValue().initRecursive(initalization, logger);
             } catch (InitException e) {
                 // NB if we cannot create a particular channel provider, we simply skip.  We use
                 // this as a means to provide for channels

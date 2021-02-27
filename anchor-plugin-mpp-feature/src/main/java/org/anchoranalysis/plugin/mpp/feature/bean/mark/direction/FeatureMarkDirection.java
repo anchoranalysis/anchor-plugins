@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.bean.spatial.direction.VectorInDirection;
 import org.anchoranalysis.image.core.orientation.Orientation;
@@ -50,8 +50,8 @@ public abstract class FeatureMarkDirection extends FeatureMark {
     private Vector3d vectorInDirection;
 
     @Override
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
         this.vectorInDirection = direction.createVector().createVector3d();
     }
 

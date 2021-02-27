@@ -29,29 +29,40 @@ package org.anchoranalysis.plugin.image.bean.params;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.ImageBean;
 
 /**
- * A key and associated value
+ * Checks if a value in a {@link Dictionary} is equal to an expected-value.
  *
  * @author Owen Feehan
  */
-public class KeyValueCondition extends ImageBean<KeyValueCondition> {
+public class DictionaryCondition extends ImageBean<DictionaryCondition> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueParamsProvider params;
+    /** The dictionary to provide a value to check. */
+    @BeanField @Getter @Setter private DictionaryProvider dictionary;
 
+    /** The key in the dictionary whose value is checked. */
     @BeanField @Getter @Setter private String key = "";
 
+    /**
+     * The value the key should have in the dictionary, in order for the condition to be fulfilled.
+     */
     @BeanField @Getter @Setter private String value = "";
     // END BEAN PROPERTIES
 
     public boolean isConditionTrue() throws CreateException {
-        KeyValueParams kvp = params.create();
-
-        return value.equals(kvp.getProperty(key));
+        Dictionary dictionaryCreated = dictionary.create();
+        String valueToMatch =
+                dictionaryCreated
+                        .getAsString(key)
+                        .orElseThrow(
+                                () ->
+                                        new CreateException(
+                                                "No dictionary value exists for: " + key));
+        return value.equals(valueToMatch);
     }
 }

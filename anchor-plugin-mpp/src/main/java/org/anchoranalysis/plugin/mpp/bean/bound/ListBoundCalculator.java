@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 
 public class ListBoundCalculator extends ArrayList<BoundCalculator> {
 
@@ -38,7 +38,7 @@ public class ListBoundCalculator extends ArrayList<BoundCalculator> {
     private static final long serialVersionUID = -6980387308682133678L;
 
     // probMap is the thresholded outlineMap
-    public void init(MPPInitParams so, Logger logger) throws InitException {
+    public void init(MarksInitialization so, Logger logger) throws InitException {
 
         for (BoundCalculator bc : this) {
             bc.initRecursive(so, logger);

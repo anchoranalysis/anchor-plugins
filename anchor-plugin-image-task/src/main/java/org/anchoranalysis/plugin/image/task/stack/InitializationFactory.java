@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,24 +23,30 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.task.feature;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
-import org.anchoranalysis.experiment.io.InitParamsContext;
-import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
+package org.anchoranalysis.plugin.image.task.stack;
 
-@Value
-@AllArgsConstructor
-public class InitParamsWithEnergyStack {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.experiment.io.InitializationContext;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
+import org.anchoranalysis.image.io.ImageInitializationFactory;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 
-    ImageInitParams imageInit;
-    EnergyStack energyStack;
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class InitializationFactory {
 
-    public InitParamsWithEnergyStack(EnergyStack energyStack, InitParamsContext context) {
-        this.energyStack = energyStack;
-        this.imageInit = InitParamsFactory.createWithoutStacks(context);
+    public static ImageInitialization createWithStacks(
+            ProvidesStackInput input, InitializationContext context)
+            throws OperationFailedException {
+        ImageInitialization initialization = createWithoutStacks(context);
+        input.addToStoreInferNames(initialization.stacks());
+        return initialization;
+    }
+
+    public static ImageInitialization createWithoutStacks(InitializationContext context) {
+        return ImageInitializationFactory.create(
+                context.getInputOutput(), context.getSuggestedResize());
     }
 }

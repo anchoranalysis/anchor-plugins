@@ -43,7 +43,7 @@ import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.ImageInitializationFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -111,7 +111,7 @@ public class ProviderFixture {
             provider.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
             provider.init(
-                    ImageInitParamsFactory.create(InputOutputContextFixture.withLogger(logger)),
+                    ImageInitializationFactory.create(InputOutputContextFixture.withLogger(logger)),
                     logger);
 
         } catch (BeanMisconfiguredException | InitException e) {

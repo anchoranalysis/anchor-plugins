@@ -30,21 +30,21 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.mpp.feature.error.CheckException;
@@ -57,17 +57,17 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 
     @BeanField @Getter @Setter protected double minVal = 0;
 
-    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEANS
 
     private SharedFeatureMulti sharedFeatureSet;
 
-    private FeatureCalculatorSingle<T> session;
+    private FeatureCalculatorSingle<T> featureCalculator;
 
     @Override
-    public void onInit(MPPInitParams soMPP) throws InitException {
-        super.onInit(soMPP);
-        sharedFeatureSet = soMPP.getFeature().getSharedFeatureSet();
+    public void onInit(MarksInitialization initialization) throws InitException {
+        super.onInit(initialization);
+        sharedFeatureSet = initialization.getFeature().getSharedFeatures();
     }
 
     @Override
@@ -76,17 +76,17 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
         try {
             Feature<T> featureCreated = feature.create();
 
-            KeyValueParams paramsCreated = createKeyValueParams();
+            Dictionary dictionaryCreated = createDictionary();
 
-            session =
+            featureCalculator =
                     FeatureSession.with(
                             featureCreated,
-                            new FeatureInitParams(paramsCreated),
+                            new FeatureInitialization(dictionaryCreated),
                             sharedFeatureSet,
                             getLogger());
 
         } catch (CreateException | InitException e) {
-            session = null;
+            featureCalculator = null;
             throw new OperationFailedException(e);
         }
     }
@@ -95,13 +95,14 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
     public boolean check(Mark mark, RegionMap regionMap, EnergyStack energyStack)
             throws CheckException {
 
-        if (session == null) {
+        if (featureCalculator == null) {
             throw new CheckException("No session initialized");
         }
 
         try {
             double energy =
-                    session.calculate(createFeatureCalcParams(mark, regionMap, energyStack));
+                    featureCalculator.calculate(
+                            createFeatureCalcParams(mark, regionMap, energyStack));
 
             return (energy >= minVal);
 
@@ -114,11 +115,11 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
     protected abstract T createFeatureCalcParams(
             Mark mark, RegionMap regionMap, EnergyStack energyStack);
 
-    private KeyValueParams createKeyValueParams() throws CreateException {
-        if (params != null) {
-            return params.create();
+    private Dictionary createDictionary() throws CreateException {
+        if (dictionary != null) {
+            return dictionary.create();
         } else {
-            return new KeyValueParams();
+            return new Dictionary();
         }
     }
 

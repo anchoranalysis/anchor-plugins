@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
@@ -65,7 +65,12 @@ public class FeatureTestCalculator {
             double expectedResult)
             throws FeatureCalculationException {
         assertResultTolerance(
-                message, feature, params, createInitParams(sharedObjects), expectedResult, 1e-4);
+                message,
+                feature,
+                params,
+                createInitialization(sharedObjects),
+                expectedResult,
+                1e-4);
     }
 
     public static <T extends FeatureInput> void assertIntResult(
@@ -76,36 +81,42 @@ public class FeatureTestCalculator {
             int expectedResult)
             throws FeatureCalculationException {
         assertResultTolerance(
-                message, feature, params, createInitParams(sharedObjects), expectedResult, 1e-20);
+                message,
+                feature,
+                params,
+                createInitialization(sharedObjects),
+                expectedResult,
+                1e-20);
     }
 
-    private static FeatureInitParams createInitParams(Optional<SharedObjects> sharedObjects) {
-        Optional<FeatureInitParams> mapped = sharedObjects.map(FeatureInitParams::new);
-        return mapped.orElse(new FeatureInitParams());
+    private static FeatureInitialization createInitialization(
+            Optional<SharedObjects> sharedObjects) {
+        Optional<FeatureInitialization> mapped = sharedObjects.map(FeatureInitialization::new);
+        return mapped.orElse(new FeatureInitialization());
     }
 
     private static <T extends FeatureInput> void assertResultTolerance(
             String message,
             Feature<T> feature,
             T params,
-            FeatureInitParams initParams,
+            FeatureInitialization initialization,
             double expectedResult,
             double delta)
             throws FeatureCalculationException {
         double result =
-                FeatureTestCalculator.calculateSequentialSession(feature, params, initParams);
+                FeatureTestCalculator.calculateSequentialSession(feature, params, initialization);
         assertEquals(expectedResult, result, delta, message);
     }
 
     private static <T extends FeatureInput> double calculateSequentialSession(
-            Feature<T> feature, T params, FeatureInitParams initParams)
+            Feature<T> feature, T params, FeatureInitialization initialization)
             throws FeatureCalculationException {
 
         try {
             FeatureCalculatorSingle<T> calculator =
                     FeatureSession.with(
                             feature,
-                            initParams,
+                            initialization,
                             new SharedFeatureMulti(),
                             LoggingFixture.suppressedLogger());
 

@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -50,10 +50,10 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
     private MarkSplitProposer delegate = null;
 
     @Override
-    public void onInit(MPPInitParams pso) throws InitException {
+    public void onInit(MarksInitialization pso) throws InitException {
         super.onInit(pso);
         try {
-            delegate = getInitializationParameters().getMarkSplitProposerSet().getException(id);
+            delegate = getInitialization().getMarkSplitProposerSet().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

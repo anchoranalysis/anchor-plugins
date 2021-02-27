@@ -62,7 +62,7 @@ public class ScaleXY extends ChannelProviderUnary {
                 channel,
                 scaleCalculator,
                 interpolator.create(),
-                getInitializationParameters().getSuggestedResize(),
+                getInitialization().getSuggestedResize(),
                 getLogger().messageLogger());
     }
 

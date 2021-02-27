@@ -37,7 +37,7 @@ import org.anchoranalysis.test.feature.plugins.FeatureTestCalculatorDuo;
 import org.anchoranalysis.test.feature.plugins.objects.FeatureInputOverlappingCircleFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ParamsFixtureHelper {
+public class FeatureInputPairTester {
 
     /** A particular result that should be the same for the same-size case in both directions */
     public static final double OVERLAP_RATIO_TO_OTHER_SAME_SIZE = 0.7901453385324353;

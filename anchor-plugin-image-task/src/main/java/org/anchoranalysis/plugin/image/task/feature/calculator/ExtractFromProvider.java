@@ -38,21 +38,21 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractFromProvider {
 
     public static EnergyStack extractStack(
-            StackProvider stackEnergy, ImageInitParams initParams, Logger logger)
+            StackProvider stackEnergy, ImageInitialization initialization, Logger logger)
             throws OperationFailedException {
 
         try {
             // Extract the energy stack
             StackProvider providerDuplicated = stackEnergy.duplicateBean();
-            providerDuplicated.initRecursive(initParams, logger);
+            providerDuplicated.initRecursive(initialization, logger);
 
             return new EnergyStack(providerDuplicated.create());
         } catch (InitException | CreateException e) {
@@ -66,12 +66,12 @@ class ExtractFromProvider {
     public static <T extends FeatureInput> Feature<T> extractFeature(
             FeatureListProvider<T> featureListProvider,
             String featureProviderName,
-            SharedFeaturesInitParams initParams,
+            FeaturesInitialization initialization,
             Logger logger)
             throws FeatureCalculationException {
 
         try {
-            featureListProvider.initRecursive(initParams, logger);
+            featureListProvider.initRecursive(initialization, logger);
 
             FeatureList<T> features = featureListProvider.create();
             if (features.size() != 1) {

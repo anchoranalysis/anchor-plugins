@@ -32,10 +32,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -52,12 +52,12 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
     private ObjectCollection searchObjects;
 
     @Override
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
 
-        ImageInitParams imageInit = new ImageInitParams(paramsInit.sharedObjectsRequired());
+        ImageInitialization image = new ImageInitialization(initialization.sharedObjectsRequired());
         try {
-            this.searchObjects = imageInit.objects().getException(id);
+            this.searchObjects = image.objects().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.bean.initializable.params.NullInitParams;
+import org.anchoranalysis.bean.initializable.params.NullInitialization;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -51,7 +51,7 @@ class CalculateOtsuThresholdedHistogram
     protected Histogram execute(FeatureInputHistogram params) throws FeatureCalculationException {
         try {
             if (!calculateLevel.isInitialized()) {
-                calculateLevel.init(NullInitParams.instance(), logger);
+                calculateLevel.init(NullInitialization.instance(), logger);
             }
             return HistogramThresholder.withCalculateLevel(
                     params.getHistogram().duplicate(), // Important to duplicate

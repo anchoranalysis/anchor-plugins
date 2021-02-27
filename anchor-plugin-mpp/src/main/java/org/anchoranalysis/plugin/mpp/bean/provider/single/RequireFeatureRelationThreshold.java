@@ -39,7 +39,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
@@ -97,8 +97,8 @@ public class RequireFeatureRelationThreshold extends SingleMarkProvider {
             FeatureCalculatorSingle<FeatureInputMark> session =
                     FeatureSession.with(
                             feature,
-                            new FeatureInitParams(),
-                            getInitializationParameters().getFeature().getSharedFeatureSet(),
+                            new FeatureInitialization(),
+                            getInitialization().getFeature().getSharedFeatures(),
                             getLogger());
             return session.calculate(input);
 

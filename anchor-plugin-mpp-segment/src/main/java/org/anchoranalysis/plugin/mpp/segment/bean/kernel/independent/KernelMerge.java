@@ -35,7 +35,7 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -67,12 +67,12 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy, Updatabl
     @Getter @Setter private RandomCollection<IdentifiablePair<Mark>> pairCollection;
 
     @Override
-    public void onInit(MPPInitParams pso) throws InitException {
+    public void onInit(MarksInitialization pso) throws InitException {
         super.onInit(pso);
 
         try {
             pairCollection =
-                    getInitializationParameters()
+                    getInitialization()
                             .getSimplePairCollection()
                             .getException(simplePairCollectionID);
         } catch (NamedProviderGetException e) {

@@ -32,12 +32,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
@@ -56,12 +56,13 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputEnergy
     // END BEAN PROPERTIES
 
     @Override
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
-        beforeCalcWithImageInitParams(new ImageInitParams(paramsInit.sharedObjectsRequired()));
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
+        beforeCalcWithInitialization(
+                new ImageInitialization(initialization.sharedObjectsRequired()));
     }
 
-    protected abstract void beforeCalcWithImageInitParams(ImageInitParams imageInit)
+    protected abstract void beforeCalcWithInitialization(ImageInitialization initialization)
             throws InitException;
 
     @Override

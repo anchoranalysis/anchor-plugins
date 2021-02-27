@@ -44,7 +44,7 @@ import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -54,7 +54,7 @@ import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -77,11 +77,11 @@ import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackInt
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
+import org.anchoranalysis.plugin.image.task.feature.InitializationWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.segment.SharedStateSegmentInstance;
-import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
+import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
 
 /**
  * Using a model-pool, performs instance segmentation on an image producing zero, one or more
@@ -187,7 +187,7 @@ public class SegmentInstanceWithModel<T>
             ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            initializeBeans(params.createInitParamsContext());
+            initializeBeans(params.createInitializationContext());
             ConcurrentModelPool<T> modelPool = segment.createModelPool(plan);
 
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);
@@ -202,7 +202,7 @@ public class SegmentInstanceWithModel<T>
     public void doJobOnInput(InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input)
             throws JobExecutionException {
         try {
-            initializeBeans(input.createInitParamsContext());
+            initializeBeans(input.createInitializationContext());
 
             Stack stack = inputStack(input);
 
@@ -272,7 +272,8 @@ public class SegmentInstanceWithModel<T>
         CalculateFeaturesForObjects<FeatureInputSingleObject> calculator =
                 new CalculateFeaturesForObjects<>(
                         COMBINE_OBJECTS,
-                        new InitParamsWithEnergyStack(energyStack, input.createInitParamsContext()),
+                        new InitializationWithEnergyStack(
+                                energyStack, input.createInitializationContext()),
                         true,
                         input.getSharedState()
                                 .createInputProcessContext(
@@ -347,8 +348,8 @@ public class SegmentInstanceWithModel<T>
         }
     }
 
-    private void initializeBeans(InitParamsContext context) throws InitException {
-        ImageInitParams params = InitParamsFactory.createWithoutStacks(context);
+    private void initializeBeans(InitializationContext context) throws InitException {
+        ImageInitialization params = InitializationFactory.createWithoutStacks(context);
         segment.initRecursive(params, context.getLogger());
     }
 

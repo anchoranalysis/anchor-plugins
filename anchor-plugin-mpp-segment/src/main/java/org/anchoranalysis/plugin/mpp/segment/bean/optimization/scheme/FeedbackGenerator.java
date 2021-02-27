@@ -52,18 +52,18 @@ class FeedbackGenerator<T> {
     private PeriodTriggerBank<T> periodTriggerBank;
     private AggregateTriggerBank<T> aggregateTriggerBank;
 
-    public void begin(FeedbackBeginParameters<T> initParams, ExtractScoreSize<T> extracter) {
+    public void begin(FeedbackBeginParameters<T> initialization, ExtractScoreSize<T> extracter) {
 
         this.periodTriggerBank = new PeriodTriggerBank<>();
         this.aggregateTriggerBank = new AggregateTriggerBank<>(extracter);
 
-        initParams.setPeriodTriggerBank(periodTriggerBank);
-        initParams.setAggregateTriggerBank(aggregateTriggerBank);
+        initialization.setPeriodTriggerBank(periodTriggerBank);
+        initialization.setAggregateTriggerBank(aggregateTriggerBank);
 
         try {
-            feedbackReceiver.reportBegin(initParams);
+            feedbackReceiver.reportBegin(initialization);
 
-            aggregateTriggerBank.start(initParams);
+            aggregateTriggerBank.start(initialization);
         } catch (AggregatorException | ReporterException e) {
             errorReporter.recordError(FeedbackGenerator.class, e);
         }

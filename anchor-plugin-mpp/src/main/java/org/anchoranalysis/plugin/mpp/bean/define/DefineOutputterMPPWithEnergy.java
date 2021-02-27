@@ -32,17 +32,17 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
-import org.anchoranalysis.core.value.KeyValueParams;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.mpp.io.input.InputForMPPBean;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
+import org.anchoranalysis.mpp.io.input.InputForMarksBean;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 
 /**
@@ -71,21 +71,21 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
      */
     @FunctionalInterface
     public interface OperationWithEnergyStack<T, S> {
-        S process(T initParams, EnergyStack energyStack) throws OperationFailedException;
+        S process(T initialization, EnergyStack energyStack) throws OperationFailedException;
     }
 
     public <S> S processInput(
-            InputForMPPBean input,
-            InitParamsContext context,
-            OperationWithEnergyStack<ImageInitParams, S> operation)
+            InputForMarksBean input,
+            InitializationContext context,
+            OperationWithEnergyStack<ImageInitialization, S> operation)
             throws OperationFailedException {
 
         try {
-            MPPInitParams initParams = super.createInitParams(input, context);
+            MarksInitialization initialization = super.createInitialization(input, context);
             return processWithEnergyStack(
-                    initParams.getImage(),
-                    initParams.getImage(),
-                    initParams,
+                    initialization.getImage(),
+                    initialization.getImage(),
+                    initialization,
                     operation,
                     context.getInputOutput());
         } catch (CreateException e) {
@@ -94,19 +94,19 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
     }
 
     public <S> S processInput(
-            InitParamsContext context,
+            InitializationContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
-            Optional<KeyValueParams> keyValueParams,
-            OperationWithEnergyStack<MPPInitParams, S> operation)
+            Optional<Dictionary> dictionary,
+            OperationWithEnergyStack<MarksInitialization, S> operation)
             throws OperationFailedException {
         try {
-            MPPInitParams initParams =
-                    super.createInitParams(context, stacks, objects, keyValueParams);
+            MarksInitialization initialization =
+                    super.createInitialization(context, stacks, objects, dictionary);
             return processWithEnergyStack(
-                    initParams,
-                    initParams.getImage(),
-                    initParams,
+                    initialization,
+                    initialization.getImage(),
+                    initialization,
                     operation,
                     context.getInputOutput());
 
@@ -116,16 +116,16 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
     }
 
     private <T, S> S processWithEnergyStack(
-            T initParams,
-            ImageInitParams imageParams,
-            MPPInitParams mppParams,
+            T initialization,
+            ImageInitialization imageParams,
+            MarksInitialization mppParams,
             OperationWithEnergyStack<T, S> operation,
             InputOutputContext context)
             throws OperationFailedException {
         try {
             EnergyStack energyStack = super.createEnergyStack(imageParams, context.getLogger());
 
-            S result = operation.process(initParams, energyStack);
+            S result = operation.process(initialization, energyStack);
 
             outputSharedObjects(mppParams, energyStack, context.getOutputter());
 
@@ -138,10 +138,10 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
 
     // General objects can be outputted
     private void outputSharedObjects(
-            MPPInitParams initParams, EnergyStack energyStack, Outputter outputter)
+            MarksInitialization initialization, EnergyStack energyStack, Outputter outputter)
             throws OutputWriteFailedException {
 
-        super.outputSharedObjects(initParams, outputter.getChecked());
+        super.outputSharedObjects(initialization, outputter.getChecked());
 
         new EnergyStackWriter(energyStack, outputter).writeEnergyStack();
     }

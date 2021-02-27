@@ -38,8 +38,8 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.core.system.MemoryUtilities;
-import org.anchoranalysis.core.value.KeyValueParams;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -50,7 +50,7 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
@@ -143,7 +143,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     public MarkCollection segment(
             NamedStacks stacks,
             NamedProvider<ObjectCollection> objects,
-            Optional<KeyValueParams> keyValueParams,
+            Optional<Dictionary> dictionary,
             InputOutputContext context)
             throws SegmentationFailedException {
         UpdatableMarksList updatableMarkSetCollection = new UpdatableMarksList();
@@ -152,16 +152,16 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             MemoryUtilities.logMemoryUsage("Start of segment", context.getMessageReporter());
 
             return define.processInput(
-                    new InitParamsContext(context),
+                    new InitializationContext(context),
                     Optional.of(stacks),
                     Optional.of(objects),
-                    keyValueParams,
+                    dictionary,
                     (mppInit, energyStack) ->
                             segmentAndWrite(
                                     mppInit,
                                     energyStack,
                                     updatableMarkSetCollection,
-                                    keyValueParams,
+                                    dictionary,
                                     context));
 
         } catch (OperationFailedException e) {
@@ -178,10 +178,10 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     }
 
     private MarkCollection segmentAndWrite(
-            MPPInitParams mppInit,
+            MarksInitialization mppInit,
             EnergyStack energyStack,
             UpdatableMarksList updatableMarkSetCollection,
-            Optional<KeyValueParams> keyValueParams,
+            Optional<Dictionary> dictionary,
             InputOutputContext context)
             throws OperationFailedException {
         try {
@@ -203,7 +203,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                 return new MarkCollection();
             }
 
-            maybeWriteGroupParams(keyValueParams, context.getOutputter());
+            maybeWriteGroupParams(dictionary, context.getOutputter());
 
             OptimizationContext initContext =
                     new OptimizationContext(
@@ -226,14 +226,14 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         }
     }
 
-    private void init(MPPInitParams soMPP, Logger logger) throws InitException {
+    private void init(MarksInitialization initialization, Logger logger) throws InitException {
         markFactory.initRecursive(logger);
 
         energySchemeShared =
-                SegmentHelper.initEnergy(energySchemeCreator, soMPP.getFeature(), logger);
+                SegmentHelper.initEnergy(energySchemeCreator, initialization.getFeature(), logger);
 
         // The kernelProposers can change proposerSharedObjects
-        SegmentHelper.initKernelProposers(kernelProposer, markFactory, soMPP, logger);
+        SegmentHelper.initKernelProposers(kernelProposer, markFactory, initialization, logger);
     }
 
     private MarksWithTotalEnergy findOptimum(
@@ -275,12 +275,11 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         return new DualStack(energyStack, background);
     }
 
-    private void maybeWriteGroupParams(
-            Optional<KeyValueParams> keyValueParams, Outputter outputter) {
-        if (keyValueParams.isPresent()) {
+    private void maybeWriteGroupParams(Optional<Dictionary> dictionary, Outputter outputter) {
+        if (dictionary.isPresent()) {
             outputter
                     .writerSelective()
-                    .write("groupParams", GroupParamsGenerator::new, keyValueParams::get);
+                    .write("groupParams", GroupParamsGenerator::new, dictionary::get);
         }
     }
 }

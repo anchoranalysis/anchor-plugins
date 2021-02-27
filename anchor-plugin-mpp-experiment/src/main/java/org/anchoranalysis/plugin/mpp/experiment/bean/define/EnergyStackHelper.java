@@ -31,9 +31,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
@@ -44,24 +44,22 @@ class EnergyStackHelper {
     // TODO make this more elegant in the design We make a special exception for writing our
     // energyStacks
     public static void writeEnergyStackParams(
-            ImageInitParams soImage,
-            Optional<String> energyParamsName,
+            ImageInitialization initialization,
+            Optional<String> energyDictionaryName,
             InputOutputContext context) {
 
         try {
-            if (soImage.stacks().keys().contains("energyStack")) {
+            if (initialization.stacks().keys().contains("energyStack")) {
 
-                KeyValueParams params =
+                Dictionary dictionary =
                         OptionalUtilities.flatMap(
-                                        energyParamsName,
-                                        paramsName ->
-                                                soImage.params()
-                                                        .getNamedKeyValueParams()
-                                                        .getOptional(paramsName))
-                                .orElseGet(KeyValueParams::new);
+                                        energyDictionaryName,
+                                        name -> initialization.dictionaries().getOptional(name))
+                                .orElseGet(Dictionary::new);
 
                 EnergyStack energyStack =
-                        new EnergyStack(soImage.stacks().getException("energyStack"), params);
+                        new EnergyStack(
+                                initialization.stacks().getException("energyStack"), dictionary);
                 new EnergyStackWriter(energyStack, context.getOutputter()).writeEnergyStack();
             }
         } catch (NamedProviderGetException e) {

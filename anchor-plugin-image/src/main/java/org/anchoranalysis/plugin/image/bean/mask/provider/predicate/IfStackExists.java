@@ -46,6 +46,6 @@ public class IfStackExists extends IfPredicateBase {
 
     @Override
     protected boolean predicate(Mask mask) throws CreateException {
-        return getInitializationParameters().channels().keys().contains(stackID);
+        return getInitialization().channels().keys().contains(stackID);
     }
 }

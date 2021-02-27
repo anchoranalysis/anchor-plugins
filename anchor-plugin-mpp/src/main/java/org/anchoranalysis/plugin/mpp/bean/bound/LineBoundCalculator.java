@@ -64,7 +64,7 @@ public class LineBoundCalculator extends BoundCalculator {
             assert (outlineChannel != null);
 
             ResolvedBound minMax =
-                    getInitializationParameters()
+                    getInitialization()
                             .getMarkBounds()
                             .calculateMinMax(
                                     outlineChannel.resolution(),
