@@ -29,13 +29,13 @@ package org.anchoranalysis.plugin.image.feature.bean.score;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.math.histogram.Histogram;
 
 public abstract class FromParamsBase extends SingleChannel {
 
     @Override
-    public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
+    public void init(List<Histogram> histograms, Optional<Dictionary> keyValueParams)
             throws InitException {
 
         if (!keyValueParams.isPresent()) {
@@ -46,14 +46,14 @@ public abstract class FromParamsBase extends SingleChannel {
         setupParams(keyValueParams.get());
     }
 
-    protected abstract void setupParams(KeyValueParams keyValueParams) throws InitException;
+    protected abstract void setupParams(Dictionary dictionary) throws InitException;
 
-    protected static double extractParamsAsDouble(KeyValueParams kpv, String key)
+    protected static double extractAsDouble(Dictionary dictionary, String key)
             throws InitException {
-        if (!kpv.containsKey(key)) {
+        if (!dictionary.containsKey(key)) {
             throw new InitException(String.format("Key '%s' does not exist", key));
         }
 
-        return Double.valueOf(kpv.getProperty(key));
+        return dictionary.getAsDouble(key);
     }
 }

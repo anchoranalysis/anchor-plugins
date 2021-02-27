@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
@@ -43,7 +43,7 @@ public class NormalizeByMax extends SingleChannel {
     private double maxEdge;
 
     @Override
-    public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
+    public void init(List<Histogram> histograms, Optional<Dictionary> keyValueParams)
             throws InitException {
         try {
             maxEdge = histograms.get(getEnergyChannelIndex()).calculateMaximum();

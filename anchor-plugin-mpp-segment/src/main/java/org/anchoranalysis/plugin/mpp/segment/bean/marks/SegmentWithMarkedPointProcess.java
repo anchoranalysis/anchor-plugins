@@ -38,7 +38,7 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.core.system.MemoryUtilities;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -143,7 +143,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     public MarkCollection segment(
             NamedStacks stacks,
             NamedProvider<ObjectCollection> objects,
-            Optional<KeyValueParams> keyValueParams,
+            Optional<Dictionary> keyValueParams,
             InputOutputContext context)
             throws SegmentationFailedException {
         UpdatableMarksList updatableMarkSetCollection = new UpdatableMarksList();
@@ -181,7 +181,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             MPPInitParams mppInit,
             EnergyStack energyStack,
             UpdatableMarksList updatableMarkSetCollection,
-            Optional<KeyValueParams> keyValueParams,
+            Optional<Dictionary> keyValueParams,
             InputOutputContext context)
             throws OperationFailedException {
         try {
@@ -276,7 +276,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     }
 
     private void maybeWriteGroupParams(
-            Optional<KeyValueParams> keyValueParams, Outputter outputter) {
+            Optional<Dictionary> keyValueParams, Outputter outputter) {
         if (keyValueParams.isPresent()) {
             outputter
                     .writerSelective()

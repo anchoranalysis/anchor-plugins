@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.VoxelScore;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -70,7 +70,7 @@ public class IdentityImposeValueRelationToHistogram extends VoxelScore {
     }
 
     @Override
-    public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
+    public void init(List<Histogram> histograms, Optional<Dictionary> keyValueParams)
             throws InitException {
         try {
             if (max) {

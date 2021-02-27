@@ -31,16 +31,16 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-class GroupParamsGenerator extends OneStageGenerator<KeyValueParams> {
+class GroupParamsGenerator extends OneStageGenerator<Dictionary> {
 
     @Override
-    public void writeToFile(KeyValueParams element, OutputWriteSettings settings, Path filePath)
+    public void writeToFile(Dictionary element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
         try {
             element.writeToFile(filePath);

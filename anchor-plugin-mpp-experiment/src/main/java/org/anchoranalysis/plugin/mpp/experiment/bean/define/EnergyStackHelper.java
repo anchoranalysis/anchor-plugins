@@ -31,7 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -51,14 +51,14 @@ class EnergyStackHelper {
         try {
             if (soImage.stacks().keys().contains("energyStack")) {
 
-                KeyValueParams params =
+                Dictionary params =
                         OptionalUtilities.flatMap(
                                         energyParamsName,
                                         paramsName ->
                                                 soImage.params()
                                                         .getNamedKeyValueParams()
                                                         .getOptional(paramsName))
-                                .orElseGet(KeyValueParams::new);
+                                .orElseGet(Dictionary::new);
 
                 EnergyStack energyStack =
                         new EnergyStack(soImage.stacks().getException("energyStack"), params);

@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -48,7 +48,7 @@ public class AssignFromParams extends ChannelProviderUnary {
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
 
-        KeyValueParams params;
+        Dictionary params;
         try {
             params =
                     getInitializationParameters()
@@ -64,7 +64,7 @@ public class AssignFromParams extends ChannelProviderUnary {
             throw new CreateException(String.format("Cannot find key '%s'", key));
         }
 
-        byte valueByte = (byte) Double.parseDouble(params.getProperty(key));
+        byte valueByte = (byte) params.getAsDouble(key);
 
         Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 

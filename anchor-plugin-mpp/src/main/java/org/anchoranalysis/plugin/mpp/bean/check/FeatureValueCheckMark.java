@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -76,7 +76,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
         try {
             Feature<T> featureCreated = feature.create();
 
-            KeyValueParams paramsCreated = createKeyValueParams();
+            Dictionary paramsCreated = createKeyValueParams();
 
             session =
                     FeatureSession.with(
@@ -114,11 +114,11 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
     protected abstract T createFeatureCalcParams(
             Mark mark, RegionMap regionMap, EnergyStack energyStack);
 
-    private KeyValueParams createKeyValueParams() throws CreateException {
+    private Dictionary createKeyValueParams() throws CreateException {
         if (params != null) {
             return params.create();
         } else {
-            return new KeyValueParams();
+            return new Dictionary();
         }
     }
 

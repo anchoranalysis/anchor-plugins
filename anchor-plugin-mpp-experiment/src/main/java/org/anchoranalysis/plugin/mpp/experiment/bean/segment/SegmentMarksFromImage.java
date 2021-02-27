@@ -40,7 +40,7 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.LazyEvaluationStore;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -145,7 +145,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
             NamedProviderStore<ObjectCollection> objects = objectsFromInput(input);
 
-            Optional<KeyValueParams> paramsCreated = keyValueParamsFromInput(input);
+            Optional<Dictionary> paramsCreated = keyValueParamsFromInput(input);
 
             MarkCollection marks =
                     segment.duplicateBean()
@@ -178,9 +178,9 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
         return stackCollection;
     }
 
-    private Optional<KeyValueParams> keyValueParamsFromInput(MultiInput input)
+    private Optional<Dictionary> keyValueParamsFromInput(MultiInput input)
             throws JobExecutionException {
-        NamedProviderStore<KeyValueParams> paramsCollection =
+        NamedProviderStore<Dictionary> paramsCollection =
                 new LazyEvaluationStore<>("keyValueParams");
         try {
             input.keyValueParams().addToStore(paramsCollection);

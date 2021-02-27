@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
 
 public class GaussianFromParams extends FromParamsBase {
@@ -47,9 +47,9 @@ public class GaussianFromParams extends FromParamsBase {
     private double stdDev;
 
     @Override
-    protected void setupParams(KeyValueParams kpv) throws InitException {
-        mean = extractParamsAsDouble(kpv, keyMean);
-        stdDev = extractParamsAsDouble(kpv, keyStdDev);
+    protected void setupParams(Dictionary kpv) throws InitException {
+        mean = extractAsDouble(kpv, keyMean);
+        stdDev = extractAsDouble(kpv, keyStdDev);
     }
 
     @Override
