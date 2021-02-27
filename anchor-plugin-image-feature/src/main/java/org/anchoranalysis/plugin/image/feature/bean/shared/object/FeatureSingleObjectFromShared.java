@@ -56,12 +56,13 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputEnergy
     // END BEAN PROPERTIES
 
     @Override
-    protected void beforeCalc(FeatureInitialization paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
-        beforeCalcWithImageInitParams(new ImageInitialization(paramsInit.sharedObjectsRequired()));
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
+        beforeCalcWithInitialization(
+                new ImageInitialization(initialization.sharedObjectsRequired()));
     }
 
-    protected abstract void beforeCalcWithImageInitParams(ImageInitialization imageInit)
+    protected abstract void beforeCalcWithInitialization(ImageInitialization initialization)
             throws InitException;
 
     @Override

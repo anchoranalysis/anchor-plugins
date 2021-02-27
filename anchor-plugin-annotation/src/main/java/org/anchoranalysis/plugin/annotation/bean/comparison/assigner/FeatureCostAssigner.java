@@ -87,8 +87,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
             throws CreateException {
         try {
             FeaturesInitialization soFeature =
-                    FeaturesInitialization.create(
-                            context.getLogger(), context.getModelDirectory());
+                    FeaturesInitialization.create(context.getLogger(), context.getModelDirectory());
             featureEvaluator.initRecursive(soFeature, context.getLogger());
 
             AssignmentObjectFactory assignmentCreator =

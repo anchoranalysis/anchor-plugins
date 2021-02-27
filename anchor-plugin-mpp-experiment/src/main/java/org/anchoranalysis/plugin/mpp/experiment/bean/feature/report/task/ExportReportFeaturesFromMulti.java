@@ -45,10 +45,10 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
+import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMarks;
 
 /**
- * Creates a report of feature values from a {@link DefineOutputterMPP} and a {@link MultiInput}.
+ * Creates a report of feature values from a {@link DefineOutputterMarks} and a {@link MultiInput}.
  *
  * <p>The following outputs are produced:
  *
@@ -68,7 +68,7 @@ public class ExportReportFeaturesFromMulti
         extends ExportReportFeatures<MultiInput, CSVWriter, MarksInitialization> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private DefineOutputterMPP define;
+    @BeanField @OptionalBean @Getter @Setter private DefineOutputterMarks define;
     // END BEAN PROPERTIES
 
     @Override
@@ -113,10 +113,10 @@ public class ExportReportFeaturesFromMulti
         try {
             define.processInputMPP(
                     input.getInput(),
-                    input.createInitParamsContext(),
-                    soMPP ->
+                    input.createInitializationContext(),
+                    initialization ->
                             writeFeaturesIntoReporter(
-                                    soMPP,
+                                    initialization,
                                     writer,
                                     Optional.of(input.getInput().name()),
                                     input.getLogger()));

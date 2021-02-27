@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image-feature
+ * anchor-plugin-image-task
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,36 +24,19 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.feature.bean.score;
+package org.anchoranalysis.plugin.image.task.labeller;
 
-import java.util.List;
-import java.util.Optional;
-import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.value.Dictionary;
-import org.anchoranalysis.math.histogram.Histogram;
+import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
-public abstract class FromParamsBase extends SingleChannel {
-
-    @Override
-    public void init(List<Histogram> histograms, Optional<Dictionary> keyValueParams)
-            throws InitException {
-
-        if (!keyValueParams.isPresent()) {
-            throw new InitException(
-                    "This pixel-score required key-value-params to be present, but they are not");
-        }
-
-        setupParams(keyValueParams.get());
-    }
-
-    protected abstract void setupParams(Dictionary dictionary) throws InitException;
-
-    protected static double extractAsDouble(Dictionary dictionary, String key)
-            throws InitException {
-        if (!dictionary.containsKey(key)) {
-            throw new InitException(String.format("Key '%s' does not exist", key));
-        }
-
-        return dictionary.getAsDouble(key);
-    }
+/**
+ * @author Owen Feehan
+ * @param <T> type of the initialization contained within (delegate)
+ */
+@AllArgsConstructor
+@Value
+public class ImageLabellerStringMapInitialization<T> {
+    private Map<String, String> map;
+    private T initialization;
 }

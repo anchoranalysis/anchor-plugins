@@ -32,10 +32,11 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
 import org.anchoranalysis.mpp.bean.init.MarksInitialization;
-import org.anchoranalysis.mpp.io.input.InputForMPPBean;
+import org.anchoranalysis.mpp.io.input.InputForMarksBean;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
-public class FromCSVInput extends InputFromManagerDelegate<MultiInput> implements InputForMPPBean {
+public class FromCSVInput extends InputFromManagerDelegate<MultiInput>
+        implements InputForMarksBean {
 
     @Getter private final Path csvFilePath;
 
@@ -45,8 +46,8 @@ public class FromCSVInput extends InputFromManagerDelegate<MultiInput> implement
     }
 
     @Override
-    public void addToSharedObjects(MarksInitialization soMPP, ImageInitialization soImage)
+    public void addToSharedObjects(MarksInitialization marks, ImageInitialization image)
             throws OperationFailedException {
-        getDelegate().addToSharedObjects(soMPP, soImage);
+        getDelegate().addToSharedObjects(marks, image);
     }
 }

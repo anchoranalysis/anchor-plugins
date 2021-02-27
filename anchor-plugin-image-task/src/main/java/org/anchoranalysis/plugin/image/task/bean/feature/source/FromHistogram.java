@@ -50,7 +50,7 @@ import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
-import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.ImageInitializationFactory;
 import org.anchoranalysis.image.io.histogram.input.HistogramCSVReader;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.files.FileInput;
@@ -117,8 +117,8 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
                                     context.getLogger())
                             .calculate(new FeatureInputHistogram(histogramRead, Optional.empty()));
 
-            // Exports results as a KeyValueParams
-            KeyValueParamsExporter.export(context.getFeatureNames(), results, context.getContext());
+            // Exports results as a Dictionary
+            DictionaryExporter.export(context.getFeatureNames(), results, context.getContext());
 
             return new ResultsVectorWithThumbnail(results);
 
@@ -138,7 +138,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
         try {
             providerDuplicated.initRecursive(
-                    createImageInitParams(inputtedHistogram, context), context.getLogger());
+                    createImageInitialization(inputtedHistogram, context), context.getLogger());
 
             return providerDuplicated.create();
         } catch (CreateException | InitException | OperationFailedException e) {
@@ -146,12 +146,12 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         }
     }
 
-    private ImageInitialization createImageInitParams(
+    private ImageInitialization createImageInitialization(
             Histogram inputtedHist, InputOutputContext context) throws OperationFailedException {
         // Create a shared-objects and initialise
-        ImageInitialization paramsInit = ImageInitParamsFactory.create(context);
-        paramsInit.histograms().add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, () -> inputtedHist);
-        return paramsInit;
+        ImageInitialization initialization = ImageInitializationFactory.create(context);
+        initialization.histograms().add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, () -> inputtedHist);
+        return initialization;
     }
 
     private static FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(

@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
+import org.anchoranalysis.plugin.image.bean.params.DictionaryCondition;
 
 /**
  * The current {@code mask} is returned if a condition on key-values is satisfied otherwise {@code
@@ -42,7 +42,7 @@ import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
 public class IfKeyValueCondition extends IfPredicateBase {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueCondition condition;
+    @BeanField @Getter @Setter private DictionaryCondition condition;
     // END BEAN PROPERTIES
 
     @Override

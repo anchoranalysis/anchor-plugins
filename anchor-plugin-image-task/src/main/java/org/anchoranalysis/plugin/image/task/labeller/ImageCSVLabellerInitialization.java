@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-plugin-image-task
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,24 +23,15 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.task.feature;
+
+package org.anchoranalysis.plugin.image.task.labeller;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.experiment.io.InitParamsContext;
-import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
-import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
 
-@Value
 @AllArgsConstructor
-public class InitParamsWithEnergyStack {
+@Value
+public class ImageCSVLabellerInitialization {
 
-    ImageInitialization imageInit;
-    EnergyStack energyStack;
-
-    public InitParamsWithEnergyStack(EnergyStack energyStack, InitParamsContext context) {
-        this.energyStack = energyStack;
-        this.imageInit = InitParamsFactory.createWithoutStacks(context);
-    }
+    private FileLabelMap<String> labelMap;
 }

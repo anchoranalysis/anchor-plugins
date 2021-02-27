@@ -53,9 +53,9 @@ public class ReferenceOrElse extends ObjectCollectionProvider {
     private ObjectCollection objects;
 
     @Override
-    public void onInit(ImageInitialization so) throws InitException {
+    public void onInit(ImageInitialization initialization) throws InitException {
         try {
-            objects = so.objects().getException(id);
+            objects = initialization.objects().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

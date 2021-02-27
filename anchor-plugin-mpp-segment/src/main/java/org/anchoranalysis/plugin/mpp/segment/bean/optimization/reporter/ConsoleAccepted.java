@@ -43,9 +43,9 @@ public class ConsoleAccepted extends FeedbackReceiverBean<VoxelizedMarksWithEner
     private Logger logger;
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
-        this.logger = initParams.getInitContext().getLogger();
+        this.logger = initialization.getInitContext().getLogger();
     }
 
     @Override

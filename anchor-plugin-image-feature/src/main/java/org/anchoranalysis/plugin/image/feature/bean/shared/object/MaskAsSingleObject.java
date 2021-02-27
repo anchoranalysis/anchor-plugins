@@ -57,7 +57,7 @@ public class MaskAsSingleObject<T extends FeatureInputEnergy>
     private Mask createdMask;
 
     @Override
-    protected void beforeCalcWithImageInitParams(ImageInitialization params) throws InitException {
+    protected void beforeCalcWithInitialization(ImageInitialization params) throws InitException {
         mask.initRecursive(params, getLogger());
 
         try {

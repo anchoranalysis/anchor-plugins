@@ -35,25 +35,34 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.ImageBean;
 
 /**
- * A key and associated value
+ * Checks if a value in a {@link Dictionary} is equal to an expected-value.
  *
  * @author Owen Feehan
  */
-public class KeyValueCondition extends ImageBean<KeyValueCondition> {
+public class DictionaryCondition extends ImageBean<DictionaryCondition> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private DictionaryProvider params;
+    /** The dictionary to provide a value to check. */
+    @BeanField @Getter @Setter private DictionaryProvider dictionary;
 
+    /** The key in the dictionary whose value is checked. */
     @BeanField @Getter @Setter private String key = "";
 
+    /**
+     * The value the key should have in the dictionary, in order for the condition to be fulfilled.
+     */
     @BeanField @Getter @Setter private String value = "";
     // END BEAN PROPERTIES
 
     public boolean isConditionTrue() throws CreateException {
-        Dictionary dictionary = params.create();
-        String valueToMatch = dictionary.getAsString(key).orElseThrow( () ->
-            new CreateException("No dictionary value exists for: " + key)
-        );
+        Dictionary dictionaryCreated = dictionary.create();
+        String valueToMatch =
+                dictionaryCreated
+                        .getAsString(key)
+                        .orElseThrow(
+                                () ->
+                                        new CreateException(
+                                                "No dictionary value exists for: " + key));
         return value.equals(valueToMatch);
     }
 }

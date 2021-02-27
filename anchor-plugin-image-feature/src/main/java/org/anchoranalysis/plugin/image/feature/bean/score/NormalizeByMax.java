@@ -43,7 +43,7 @@ public class NormalizeByMax extends SingleChannel {
     private double maxEdge;
 
     @Override
-    public void init(List<Histogram> histograms, Optional<Dictionary> keyValueParams)
+    public void init(List<Histogram> histograms, Optional<Dictionary> dictionary)
             throws InitException {
         try {
             maxEdge = histograms.get(getEnergyChannelIndex()).calculateMaximum();

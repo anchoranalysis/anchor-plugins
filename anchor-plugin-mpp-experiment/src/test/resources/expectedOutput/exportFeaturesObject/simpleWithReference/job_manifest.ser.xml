@@ -93,7 +93,7 @@
           <outputName>energyStackParams</outputName>
           <index></index>
           <description>
-            <type>keyvalueparams</type>
+            <type>dictionary</type>
             <function>energyStackParams</function>
           </description>
         </org.anchoranalysis.io.manifest.file.OutputtedFile>

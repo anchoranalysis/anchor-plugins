@@ -70,7 +70,7 @@ public class IdentityImposeValueRelationToHistogram extends VoxelScore {
     }
 
     @Override
-    public void init(List<Histogram> histograms, Optional<Dictionary> keyValueParams)
+    public void init(List<Histogram> histograms, Optional<Dictionary> dictionary)
             throws InitException {
         try {
             if (max) {

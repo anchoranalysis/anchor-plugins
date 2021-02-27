@@ -48,10 +48,10 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
     @BeanField @Getter @Setter private Padding padding;
     // END BEAN PROPERTIES
 
-    protected ObjectCollection inputs(ImageInitialization so, Logger logger)
+    protected ObjectCollection inputs(ImageInitialization initialization, Logger logger)
             throws CreateException, InitException {
         ObjectCollectionProvider objectsDuplicated = objects.duplicateBean();
-        objectsDuplicated.initRecursive(so, logger);
+        objectsDuplicated.initRecursive(initialization, logger);
         return objectsDuplicated.create();
     }
 }

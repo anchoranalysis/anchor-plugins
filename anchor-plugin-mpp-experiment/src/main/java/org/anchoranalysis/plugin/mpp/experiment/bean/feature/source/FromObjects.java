@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -56,7 +56,7 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
-import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
+import org.anchoranalysis.plugin.image.task.feature.InitializationWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
@@ -150,11 +150,11 @@ public class FromObjects<T extends FeatureInput>
             throws OperationFailedException {
         define.processInput(
                 input,
-                new InitParamsContext(context.getContext()),
-                (initParams, energyStack) ->
+                new InitializationContext(context.getContext()),
+                (initialization, energyStack) ->
                         calculateFeaturesForImage(
                                 input.name(),
-                                new InitParamsWithEnergyStack(initParams, energyStack),
+                                new InitializationWithEnergyStack(initialization, energyStack),
                                 context));
     }
 
@@ -180,15 +180,15 @@ public class FromObjects<T extends FeatureInput>
 
     private int calculateFeaturesForImage(
             String inputName,
-            InitParamsWithEnergyStack initParams,
+            InitializationWithEnergyStack initialization,
             InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
 
         CalculateFeaturesForObjects<T> objectsCalculator =
-                new CalculateFeaturesForObjects<>(combine, initParams, suppressErrors, context);
+                new CalculateFeaturesForObjects<>(combine, initialization, suppressErrors, context);
 
         CalculateFeaturesFromProvider<T> fromProviderCalculator =
-                new CalculateFeaturesFromProvider<>(objectsCalculator, initParams);
+                new CalculateFeaturesFromProvider<>(objectsCalculator, initialization);
         processAllProviders(inputName, context.getGroupGeneratorName(), fromProviderCalculator);
 
         // Arbitrary, we need a return-type

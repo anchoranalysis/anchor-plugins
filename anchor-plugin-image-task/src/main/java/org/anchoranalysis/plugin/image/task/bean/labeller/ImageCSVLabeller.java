@@ -39,9 +39,9 @@ import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.labeller.FileLabelMap;
-import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
+import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitialization;
 
-public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> {
+public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitialization> {
 
     // START BEAN PROPERTIES
     /**
@@ -54,12 +54,12 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
     // END BEAN PROPERTIES
 
     @Override
-    public ImageCSVLabellerInitParams init(Path pathForBinding) throws InitException {
+    public ImageCSVLabellerInitialization init(Path pathForBinding) throws InitException {
 
         try {
             Path csvPath = pathLabel.deriveFrom(pathForBinding, false);
 
-            return new ImageCSVLabellerInitParams(FileLabelMap.readFromCSV(csvPath, false));
+            return new ImageCSVLabellerInitialization(FileLabelMap.readFromCSV(csvPath, false));
 
         } catch (CSVReaderException | DerivePathException e) {
             throw new InitException(e);
@@ -67,13 +67,13 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
     }
 
     @Override
-    public Set<String> allLabels(ImageCSVLabellerInitParams params) {
+    public Set<String> allLabels(ImageCSVLabellerInitialization params) {
         return params.getLabelMap().labels();
     }
 
     @Override
     public String labelFor(
-            ImageCSVLabellerInitParams sharedState,
+            ImageCSVLabellerInitialization sharedState,
             ProvidesStackInput input,
             InputOutputContext context)
             throws OperationFailedException {

@@ -37,7 +37,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInputParams;
-import org.anchoranalysis.plugin.operator.feature.bean.Param;
+import org.anchoranalysis.plugin.operator.feature.bean.FromDictionary;
 
 /**
  * Permutes a property on a feature with a sequence of integers.
@@ -86,7 +86,7 @@ public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputParams
             PermutePropertySequenceInteger permuteProperty);
 
     protected Feature<T> createParam(String suffix, boolean appendNumber) {
-        Param<T> param = new Param<>();
+        FromDictionary<T> param = new FromDictionary<>();
         param.setKeyPrefix(paramPrefix);
         param.setKey(sequenceNumberOrEmpty(appendNumber));
         param.setKeySuffix(suffix);

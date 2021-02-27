@@ -62,7 +62,7 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
     private ColorIndex colorIndex;
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
 
         try {
@@ -80,7 +80,7 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
                 new CombinedListGenerator<>(
                         GeneratorBridge.createOneToOne(
                                 iterableRaster,
-                                sourceObject -> addColor(sourceObject.getMarks(), initParams)));
+                                sourceObject -> addColor(sourceObject.getMarks(), initialization)));
 
         try {
             init(iterableCombined);
@@ -88,7 +88,7 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
             throw new ReporterException(e);
         }
 
-        super.reportBegin(initParams);
+        super.reportBegin(initialization);
     }
 
     @Override
@@ -103,8 +103,9 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
     }
 
     private ColoredMarksWithDisplayStack addColor(
-            MarkCollection marks, FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
-        DisplayStack stack = initParams.getInitContext().getDualStack().getBackground();
+            MarkCollection marks,
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization) {
+        DisplayStack stack = initialization.getInitContext().getDualStack().getBackground();
         ColoredMarks coloredMarks =
                 new ColoredMarks(marks, colorIndex, new IdentifyByIteration<>());
         return new ColoredMarksWithDisplayStack(coloredMarks, stack);

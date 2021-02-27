@@ -30,13 +30,14 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.store.LazyEvaluationStore;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
@@ -99,7 +100,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
      * If non-empty, the identifier of a key-value-params collection that is passed to the
      * segmentation procedure.
      */
-    @BeanField @AllowEmpty @Getter @Setter private String keyValueParamsID = "";
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
     @Override
@@ -145,14 +146,12 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
             NamedProviderStore<ObjectCollection> objects = objectsFromInput(input);
 
-            Optional<Dictionary> paramsCreated = keyValueParamsFromInput(input);
-
             MarkCollection marks =
                     segment.duplicateBean()
                             .segment(
                                     stackCollection,
                                     objects,
-                                    paramsCreated,
+                                    createDictionary(),
                                     inputBound.getContextJob());
             writeVisualization(
                     marks, inputBound.getOutputter(), stackCollection, inputBound.getLogger());
@@ -160,9 +159,19 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
         } catch (SegmentationFailedException e) {
             throw new JobExecutionException("An error occurred segmenting a configuration", e);
         } catch (BeanDuplicateException e) {
-            throw new JobExecutionException("An error occurred duplicating the sgmn bean", e);
+            throw new JobExecutionException(
+                    "An error occurred duplicating the segmentation bean", e);
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
+        }
+    }
+
+    private Optional<Dictionary> createDictionary() throws JobExecutionException {
+        try {
+            return OptionalUtilities.map(
+                    Optional.ofNullable(dictionary), DictionaryProvider::create);
+        } catch (CreateException e) {
+            throw new JobExecutionException("An error occurred creating the dictionary.", e);
         }
     }
 
@@ -176,29 +185,6 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
         NamedStacks stackCollection = new NamedStacks();
         input.stack().addToStore(new WrapStackAsTimeSequenceStore(stackCollection));
         return stackCollection;
-    }
-
-    private Optional<Dictionary> keyValueParamsFromInput(MultiInput input)
-            throws JobExecutionException {
-        NamedProviderStore<Dictionary> paramsCollection =
-                new LazyEvaluationStore<>("keyValueParams");
-        try {
-            input.keyValueParams().addToStore(paramsCollection);
-        } catch (OperationFailedException e1) {
-            throw new JobExecutionException("Cannot retrieve key-value-params from input-object");
-        }
-
-        // We select a particular key value params to send as output
-        try {
-            if (!keyValueParamsID.isEmpty()) {
-                return Optional.of(paramsCollection.getException(keyValueParamsID));
-            } else {
-                return Optional.empty();
-            }
-
-        } catch (NamedProviderGetException e) {
-            throw new JobExecutionException("Cannot retrieve key-values-params", e.summarize());
-        }
     }
 
     private NamedProviderStore<ObjectCollection> objectsFromInput(MultiInput input)

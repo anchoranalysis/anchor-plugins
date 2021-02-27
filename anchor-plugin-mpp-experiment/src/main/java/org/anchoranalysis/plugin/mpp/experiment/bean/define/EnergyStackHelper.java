@@ -44,23 +44,22 @@ class EnergyStackHelper {
     // TODO make this more elegant in the design We make a special exception for writing our
     // energyStacks
     public static void writeEnergyStackParams(
-            ImageInitialization soImage,
-            Optional<String> energyParamsName,
+            ImageInitialization initialization,
+            Optional<String> energyDictionaryName,
             InputOutputContext context) {
 
         try {
-            if (soImage.stacks().keys().contains("energyStack")) {
+            if (initialization.stacks().keys().contains("energyStack")) {
 
-                Dictionary params =
+                Dictionary dictionary =
                         OptionalUtilities.flatMap(
-                                        energyParamsName,
-                                        paramsName ->
-                                                soImage.dictionaries()
-                                                        .getOptional(paramsName))
+                                        energyDictionaryName,
+                                        name -> initialization.dictionaries().getOptional(name))
                                 .orElseGet(Dictionary::new);
 
                 EnergyStack energyStack =
-                        new EnergyStack(soImage.stacks().getException("energyStack"), params);
+                        new EnergyStack(
+                                initialization.stacks().getException("energyStack"), dictionary);
                 new EnergyStackWriter(energyStack, context.getOutputter()).writeEnergyStack();
             }
         } catch (NamedProviderGetException e) {

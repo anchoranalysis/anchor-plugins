@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
@@ -50,7 +50,7 @@ public class IfParamEqual extends ObjectCollectionProvider {
 
     @BeanField @Getter @Setter private ObjectCollectionProvider whenNotEqual;
 
-    @BeanField @Getter @Setter private DictionaryProvider params;
+    @BeanField @Getter @Setter private DictionaryProvider dictionary;
 
     @BeanField @Getter @Setter private String key;
 
@@ -60,7 +60,7 @@ public class IfParamEqual extends ObjectCollectionProvider {
     @Override
     public ObjectCollection create() throws CreateException {
 
-        Optional<String> dictionaryValue = params.create().getAsString(key);
+        Optional<String> dictionaryValue = dictionary.create().getAsString(key);
 
         if (!dictionaryValue.isPresent()) {
             throw new CreateException(String.format("Dictionary key does not exist: %s", key));

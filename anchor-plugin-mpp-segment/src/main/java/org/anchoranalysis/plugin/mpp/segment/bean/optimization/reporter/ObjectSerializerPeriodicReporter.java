@@ -53,11 +53,11 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
     }
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
 
         try {
-            super.reportBegin(initParams);
+            super.reportBegin(initialization);
             init(new ObjectOutputStreamGenerator<>(Optional.of(manifestFunction)));
 
         } catch (OutputWriteFailedException e) {

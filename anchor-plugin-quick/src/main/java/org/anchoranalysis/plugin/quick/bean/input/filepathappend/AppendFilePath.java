@@ -42,6 +42,6 @@ public class AppendFilePath extends FilePathBaseAppendToManagerWithFileID {
     @Override
     protected List<NamedBean<DerivePath>> getListFromManager(MultiInputManager inputManager)
             throws BeanMisconfiguredException {
-        return inputManager.getListAppendFilePath();
+        return inputManager.getAppendFilePath();
     }
 }

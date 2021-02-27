@@ -65,7 +65,12 @@ public class FeatureTestCalculator {
             double expectedResult)
             throws FeatureCalculationException {
         assertResultTolerance(
-                message, feature, params, createInitParams(sharedObjects), expectedResult, 1e-4);
+                message,
+                feature,
+                params,
+                createInitialization(sharedObjects),
+                expectedResult,
+                1e-4);
     }
 
     public static <T extends FeatureInput> void assertIntResult(
@@ -76,10 +81,16 @@ public class FeatureTestCalculator {
             int expectedResult)
             throws FeatureCalculationException {
         assertResultTolerance(
-                message, feature, params, createInitParams(sharedObjects), expectedResult, 1e-20);
+                message,
+                feature,
+                params,
+                createInitialization(sharedObjects),
+                expectedResult,
+                1e-20);
     }
 
-    private static FeatureInitialization createInitParams(Optional<SharedObjects> sharedObjects) {
+    private static FeatureInitialization createInitialization(
+            Optional<SharedObjects> sharedObjects) {
         Optional<FeatureInitialization> mapped = sharedObjects.map(FeatureInitialization::new);
         return mapped.orElse(new FeatureInitialization());
     }
@@ -88,24 +99,24 @@ public class FeatureTestCalculator {
             String message,
             Feature<T> feature,
             T params,
-            FeatureInitialization initParams,
+            FeatureInitialization initialization,
             double expectedResult,
             double delta)
             throws FeatureCalculationException {
         double result =
-                FeatureTestCalculator.calculateSequentialSession(feature, params, initParams);
+                FeatureTestCalculator.calculateSequentialSession(feature, params, initialization);
         assertEquals(expectedResult, result, delta, message);
     }
 
     private static <T extends FeatureInput> double calculateSequentialSession(
-            Feature<T> feature, T params, FeatureInitialization initParams)
+            Feature<T> feature, T params, FeatureInitialization initialization)
             throws FeatureCalculationException {
 
         try {
             FeatureCalculatorSingle<T> calculator =
                     FeatureSession.with(
                             feature,
-                            initParams,
+                            initialization,
                             new SharedFeatureMulti(),
                             LoggingFixture.suppressedLogger());
 

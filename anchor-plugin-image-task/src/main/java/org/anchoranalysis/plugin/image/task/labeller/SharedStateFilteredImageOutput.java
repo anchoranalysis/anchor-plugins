@@ -64,7 +64,7 @@ public class SharedStateFilteredImageOutput<T> {
 
     private Optional<FeatureCSVWriter> csvWriter;
 
-    private T filterInitParams;
+    private T initialization;
 
     private boolean groupIdentifierForCalled = false;
 
@@ -130,7 +130,7 @@ public class SharedStateFilteredImageOutput<T> {
             groupIdentifierForCalled = true;
         }
 
-        return filter.labelFor(filterInitParams, input, context);
+        return filter.labelFor(initialization, input, context);
     }
 
     /** groupIdentifierFor should always called at least once before getOutputManagerFor */
@@ -138,11 +138,11 @@ public class SharedStateFilteredImageOutput<T> {
         return outputters.map(outputter -> outputter.getOutputterFor(groupIdentifier));
     }
 
-    public T getFilterInitParams(Path pathForBinding) throws InitException {
-        if (filterInitParams == null) {
-            filterInitParams = filter.init(pathForBinding);
+    public T getFilterInitialization(Path pathForBinding) throws InitException {
+        if (initialization == null) {
+            initialization = filter.init(pathForBinding);
         }
-        return filterInitParams;
+        return initialization;
     }
 
     private void initFilterOutputters(Path pathForBinding) throws InitException {
@@ -156,6 +156,6 @@ public class SharedStateFilteredImageOutput<T> {
                         directory ->
                                 new GroupedMultiplexOutputters(
                                         directory,
-                                        filter.allLabels(getFilterInitParams(pathForBinding))));
+                                        filter.allLabels(getFilterInitialization(pathForBinding))));
     }
 }
