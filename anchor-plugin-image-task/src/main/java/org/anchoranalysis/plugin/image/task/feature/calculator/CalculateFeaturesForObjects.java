@@ -40,7 +40,7 @@ import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.feature.object.ListWithThumbnails;
-import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
+import org.anchoranalysis.plugin.image.task.feature.InitializationWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
@@ -72,12 +72,13 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
 
     public CalculateFeaturesForObjects(
             CombineObjectsForFeatures<T> table,
-            InitParamsWithEnergyStack initParams,
+            InitializationWithEnergyStack initialization,
             boolean suppressErrors,
             InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
         this.table = table;
-        this.calculator = startCalculator(context.getRowSource(), initParams, context.getLogger());
+        this.calculator =
+                startCalculator(context.getRowSource(), initialization, context.getLogger());
         this.suppressErrors = suppressErrors;
         this.context = context;
     }
@@ -163,13 +164,15 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
 
     private static <T extends FeatureInput> FeatureCalculatorMulti<T> startCalculator(
             FeatureTableCalculator<T> calculator,
-            InitParamsWithEnergyStack initParams,
+            InitializationWithEnergyStack initialization,
             Logger logger)
             throws OperationFailedException {
 
         try {
             calculator.start(
-                    initParams.getImageInit(), Optional.of(initParams.getEnergyStack()), logger);
+                    initialization.getImage(),
+                    Optional.of(initialization.getEnergyStack()),
+                    logger);
         } catch (InitException e) {
             throw new OperationFailedException(e);
         }

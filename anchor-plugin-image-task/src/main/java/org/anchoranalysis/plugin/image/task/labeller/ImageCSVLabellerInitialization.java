@@ -31,7 +31,7 @@ import lombok.Value;
 
 @AllArgsConstructor
 @Value
-public class ImageCSVLabellerInitParams {
+public class ImageCSVLabellerInitialization {
 
     private FileLabelMap<String> labelMap;
 }

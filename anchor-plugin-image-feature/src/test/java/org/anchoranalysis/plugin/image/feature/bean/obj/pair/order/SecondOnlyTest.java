@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.Second;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.FeatureInputPairTester;
 import org.junit.jupiter.api.Test;
 
 class SecondOnlyTest {
@@ -37,6 +37,6 @@ class SecondOnlyTest {
     @Test
     void testOverlapping() throws FeatureCalculationException, InitException {
 
-        ParamsFixtureHelper.testSimpleInt(OrderHelper.addFeatureToOrder(new Second()), 3409);
+        FeatureInputPairTester.testSimpleInt(OrderHelper.addFeatureToOrder(new Second()), 3409);
     }
 }

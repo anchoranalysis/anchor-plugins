@@ -34,12 +34,12 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -48,13 +48,13 @@ import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMult
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
+import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
 
 /**
  * Calculates feature or feature values.
@@ -66,7 +66,7 @@ import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
  */
 public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
 
-    private final ImageInitParams initParams;
+    private final ImageInitialization initialization;
 
     @Getter private final EnergyStack energyStack;
 
@@ -77,12 +77,13 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
             Optional<StackProvider> stackEnergy,
             InputOutputContext context)
             throws OperationFailedException {
-        this.initParams =
-                InitParamsFactory.createWithStacks(stackInput, new InitParamsContext(context));
+        this.initialization =
+                InitializationFactory.createWithStacks(
+                        stackInput, new InitializationContext(context));
         this.energyStack =
                 energyStackFromProviderOrElse(
                         stackEnergy,
-                        CachedSupplier.cache(() -> allStacksAsOne(initParams.stacks())),
+                        CachedSupplier.cache(() -> allStacksAsOne(initialization.stacks())),
                         context.getLogger());
         this.logger = context.getLogger();
     }
@@ -99,9 +100,13 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
         try {
             Feature<T> feature =
                     ExtractFromProvider.extractFeature(
-                            provider, providerName, initParams.features(), logger);
+                            provider,
+                            providerName,
+                            initialization.featuresInitialization(),
+                            logger);
 
-            return createSingleCalculator(feature, initParams.features().getSharedFeatureSet());
+            return createSingleCalculator(
+                    feature, initialization.featuresInitialization().getSharedFeatures());
         } catch (InitException | FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
@@ -110,7 +115,8 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
     /** Calculates all image-features in the feature-store */
     public FeatureCalculatorMulti<T> calculatorForAll(FeatureList<T> features)
             throws InitException {
-        return createMultiCalculator(features, initParams.features().getSharedFeatureSet());
+        return createMultiCalculator(
+                features, initialization.featuresInitialization().getSharedFeatures());
     }
 
     /** Calculates a energy-stack from a provider if it's available, or otherwise uses a fallback */
@@ -120,7 +126,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
             Logger logger)
             throws OperationFailedException {
         if (stackEnergy.isPresent()) {
-            return ExtractFromProvider.extractStack(stackEnergy.get(), initParams, logger);
+            return ExtractFromProvider.extractStack(stackEnergy.get(), initialization, logger);
         } else {
             return new EnergyStack(fallback.get());
         }
@@ -129,14 +135,14 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
     private FeatureCalculatorMulti<T> createMultiCalculator(
             FeatureList<T> features, SharedFeatureMulti sharedFeatures) throws InitException {
         return new FeatureCalculatorMultiChangeInput<>(
-                FeatureSession.with(features, new FeatureInitParams(), sharedFeatures, logger),
+                FeatureSession.with(features, new FeatureInitialization(), sharedFeatures, logger),
                 input -> input.setEnergyStack(energyStack));
     }
 
     private FeatureCalculatorSingle<T> createSingleCalculator(
             Feature<T> feature, SharedFeatureMulti sharedFeatures) throws InitException {
         return new FeatureCalculatorSingleChangeInput<>(
-                FeatureSession.with(feature, new FeatureInitParams(), sharedFeatures, logger),
+                FeatureSession.with(feature, new FeatureInitialization(), sharedFeatures, logger),
                 input -> input.setEnergyStack(energyStack));
     }
 

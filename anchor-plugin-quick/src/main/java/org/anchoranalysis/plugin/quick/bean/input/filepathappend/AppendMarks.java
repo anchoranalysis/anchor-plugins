@@ -38,7 +38,7 @@ public class AppendMarks extends FilePathBaseAppendToManagerWithFileID {
     @Override
     protected List<NamedBean<DerivePath>> getListFromManager(MultiInputManager inputManager)
             throws BeanMisconfiguredException {
-        return inputManager.getListAppendMarks();
+        return inputManager.getAppendMarks();
     }
 
     @Override

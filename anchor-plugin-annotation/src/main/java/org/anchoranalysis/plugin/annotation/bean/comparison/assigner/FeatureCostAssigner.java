@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
@@ -86,9 +86,8 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
             InputOutputContext context)
             throws CreateException {
         try {
-            SharedFeaturesInitParams soFeature =
-                    SharedFeaturesInitParams.create(
-                            context.getLogger(), context.getModelDirectory());
+            FeaturesInitialization soFeature =
+                    FeaturesInitialization.create(context.getLogger(), context.getModelDirectory());
             featureEvaluator.initRecursive(soFeature, context.getLogger());
 
             AssignmentObjectFactory assignmentCreator =

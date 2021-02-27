@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.math.histogram.Histogram;
 
@@ -46,15 +46,14 @@ public class Reference extends HistogramProvider {
     private Histogram histogram;
 
     public Reference(String id) {
-        super();
         this.id = id;
     }
 
     @Override
-    public void onInit(ImageInitParams so) throws InitException {
-        super.onInit(so);
+    public void onInit(ImageInitialization initialization) throws InitException {
+        super.onInit(initialization);
         try {
-            histogram = so.histograms().getException(id);
+            histogram = initialization.histograms().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

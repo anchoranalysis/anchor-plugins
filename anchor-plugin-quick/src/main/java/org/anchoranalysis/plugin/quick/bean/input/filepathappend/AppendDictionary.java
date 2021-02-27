@@ -37,9 +37,9 @@ import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 
-public class AppendKeyValueParams extends FilePathBaseAppendToManager {
+public class AppendDictionary extends FilePathBaseAppendToManager {
 
-    private static final String PARAMS_FILENAME_WITHOUT_EXTENSION = "keyValueParams";
+    private static final String DICTIONARY_FILENAME_WITHOUT_EXTENSION = "dictionary";
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean includeFileName = false;
@@ -51,13 +51,13 @@ public class AppendKeyValueParams extends FilePathBaseAppendToManager {
     @Override
     protected List<NamedBean<DerivePath>> getListFromManager(MultiInputManager inputManager)
             throws BeanMisconfiguredException {
-        return inputManager.getListAppendKeyValueParams();
+        return inputManager.getAppendDictionary();
     }
 
     @Override
     protected String createOutPathString() throws BeanMisconfiguredException {
         String firstPart = selectMaybeDir(selectFirstPart());
-        return NonImageFileFormat.XML.buildPath(firstPart, PARAMS_FILENAME_WITHOUT_EXTENSION);
+        return NonImageFileFormat.XML.buildPath(firstPart, DICTIONARY_FILENAME_WITHOUT_EXTENSION);
     }
 
     private String selectMaybeDir(String firstPart) {

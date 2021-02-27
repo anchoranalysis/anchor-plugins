@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.bean.channel.convert;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ToUnsignedByteScaleByMinMaxValue;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @Getter @Setter private DictionaryProvider dictionary;
 
     @BeanField @Getter @Setter private String keyLower;
 
@@ -59,10 +59,10 @@ public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
     @Override
     public ChannelConverter<UnsignedByteBuffer> createConverter() throws CreateException {
 
-        KeyValueParams kvp = params.create();
+        Dictionary dictionaryCreated = dictionary.create();
 
-        int min = getScaled(kvp, keyLower, scaleLower);
-        int max = getScaled(kvp, keyUpper, scaleUpper);
+        int min = getScaled(dictionaryCreated, keyLower, scaleLower);
+        int max = getScaled(dictionaryCreated, keyUpper, scaleUpper);
 
         getLogger()
                 .messageLogger()
@@ -71,16 +71,14 @@ public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
         return new ToUnsignedByteScaleByMinMaxValue(min, max);
     }
 
-    private int getScaled(KeyValueParams kvp, String key, double scale) throws CreateException {
+    private static int getScaled(Dictionary dictionary, String key, double scale)
+            throws CreateException {
 
-        if (!kvp.containsKey(key)) {
+        if (!dictionary.containsKey(key)) {
             throw new CreateException(String.format("Params is missing key '%s'", key));
         }
 
-        double val = kvp.getPropertyAsDouble(key);
-
-        getLogger().messageLogger().logFormatted("%f * %f = %f", val, scale, val * scale);
-
+        double val = dictionary.getAsDouble(key);
         return (int) Math.round(val * scale);
     }
 }

@@ -31,7 +31,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
 import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -40,13 +40,13 @@ import org.anchoranalysis.mpp.pair.RandomCollection;
 
 class UpdateMarkSet {
 
-    private MPPInitParams psoImage;
+    private MarksInitialization psoImage;
     private EnergyStack energyStack;
     private UpdatableMarksList updatableMarkSetCollection;
     private Logger logger;
 
     public UpdateMarkSet(
-            MPPInitParams psoImage,
+            MarksInitialization psoImage,
             EnergyStack energyStack,
             UpdatableMarksList updatableMarkSetCollection,
             Logger logger) {
@@ -71,7 +71,7 @@ class UpdateMarkSet {
                         new MemoList(),
                         energyStack,
                         logger,
-                        psoImage.getFeature().getSharedFeatureSet());
+                        psoImage.getFeature().getSharedFeatures());
                 updatableMarkSetCollection.add(pair);
             }
         } catch (InitException e) {

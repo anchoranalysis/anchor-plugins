@@ -76,7 +76,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
         ScaleFactor scaleFactor =
                 determineScaleFactor(
-                        channel.dimensions(), getInitializationParameters().getSuggestedResize());
+                        channel.dimensions(), getInitialization().getSuggestedResize());
 
         Extent extent = channel.extent();
 

@@ -37,7 +37,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.image.task.labeller.ImageLabellerStringMapInitParams;
+import org.anchoranalysis.plugin.image.task.labeller.ImageLabellerStringMapInitialization;
 
 /**
  * Maps one set of labels to another
@@ -45,7 +45,8 @@ import org.anchoranalysis.plugin.image.task.labeller.ImageLabellerStringMapInitP
  * @author Owen Feehan
  * @param <T> the init-param-type of filter that is the delegate
  */
-public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerStringMapInitParams<T>> {
+public class ImageLabellerStringMap<T>
+        extends ImageLabeller<ImageLabellerStringMapInitialization<T>> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ImageLabeller<T> filter;
@@ -54,22 +55,23 @@ public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerString
     // END BEAN PROPERTIES
 
     @Override
-    public ImageLabellerStringMapInitParams<T> init(Path pathForBinding) throws InitException {
-        return new ImageLabellerStringMapInitParams<>(map.create(), filter.init(pathForBinding));
+    public ImageLabellerStringMapInitialization<T> init(Path pathForBinding) throws InitException {
+        return new ImageLabellerStringMapInitialization<>(
+                map.create(), filter.init(pathForBinding));
     }
 
     @Override
-    public Set<String> allLabels(ImageLabellerStringMapInitParams<T> params) {
-        return new HashSet<>(params.getMap().values());
+    public Set<String> allLabels(ImageLabellerStringMapInitialization<T> initialization) {
+        return new HashSet<>(initialization.getMap().values());
     }
 
     @Override
     public String labelFor(
-            ImageLabellerStringMapInitParams<T> sharedState,
+            ImageLabellerStringMapInitialization<T> sharedState,
             ProvidesStackInput input,
             InputOutputContext context)
             throws OperationFailedException {
-        String firstId = filter.labelFor(sharedState.getInitParams(), input, context);
+        String firstId = filter.labelFor(sharedState.getInitialization(), input, context);
         return sharedState.getMap().get(firstId);
     }
 }

@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -57,7 +57,7 @@ public class MaskAsSingleObject<T extends FeatureInputEnergy>
     private Mask createdMask;
 
     @Override
-    protected void beforeCalcWithImageInitParams(ImageInitParams params) throws InitException {
+    protected void beforeCalcWithInitialization(ImageInitialization params) throws InitException {
         mask.initRecursive(params, getLogger());
 
         try {

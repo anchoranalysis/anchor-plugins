@@ -63,7 +63,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     private Reporting<VoxelizedMarksWithEnergy> lastOptimizationStep;
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
 
         OutputPatternIntegerSuffix pattern =
@@ -74,7 +74,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
                         Optional.of(new ManifestDescription("serialized", manifestFunction)));
 
         try {
-            outputSequence = createSequenceFactory(initParams).increasingIntegers(pattern);
+            outputSequence = createSequenceFactory(initialization).increasingIntegers(pattern);
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }
@@ -115,9 +115,9 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     }
 
     private OutputSequenceFactory<MarksWithEnergyBreakdown> createSequenceFactory(
-            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization) {
 
-        OutputterChecked outputter = initParams.getInitContext().getOutputter().getChecked();
+        OutputterChecked outputter = initialization.getInitContext().getOutputter().getChecked();
 
         Generator<MarksWithEnergyBreakdown> generator =
                 new ObjectOutputStreamGenerator<>(Optional.of(manifestFunction));

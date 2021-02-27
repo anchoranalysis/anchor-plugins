@@ -34,9 +34,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
@@ -73,7 +73,7 @@ public class ScoreVoxels extends ChannelProvider {
 
     @BeanField @Getter @Setter private List<HistogramProvider> histogramsExtra = new ArrayList<>();
 
-    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
     @Override
@@ -84,12 +84,12 @@ public class ScoreVoxels extends ChannelProvider {
         VoxelsWrapperList voxelsCreated = createVoxelsList(intensityCreated);
         List<Histogram> histogramsCreated = ProviderBeanHelper.listFromBeans(histogramsExtra);
 
-        Optional<KeyValueParams> paramsCreated = OptionalFactory.create(params);
+        Optional<Dictionary> dictionaryCreated = OptionalFactory.create(dictionary);
 
         Optional<ObjectMask> object = createObject();
 
         VoxelsFromScoreCreator creator =
-                new VoxelsFromScoreCreator(voxelsCreated, paramsCreated, histogramsCreated);
+                new VoxelsFromScoreCreator(voxelsCreated, dictionaryCreated, histogramsCreated);
         Voxels<UnsignedByteBuffer> voxelsPixelScore =
                 creator.createVoxelsFromPixelScore(score, object);
 

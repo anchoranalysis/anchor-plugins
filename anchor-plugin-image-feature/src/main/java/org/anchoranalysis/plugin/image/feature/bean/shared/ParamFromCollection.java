@@ -31,19 +31,19 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
 /**
  * Retrieves a parameter from a collection in shared-objects.
  *
- * <p>This differs from {@link org.anchoranalysis.plugin.operator.feature.bean.Param} which reads
- * the parameter from the energy-stack, whereas this from a specific parameters collection.
+ * <p>This differs from {@link org.anchoranalysis.plugin.operator.feature.bean.FromDictionary} which
+ * reads the parameter from the energy-stack, whereas this from a specific parameters collection.
  *
  * @author Owen Feehan
  * @param <T> feature-input-type
@@ -59,14 +59,13 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
     private double value;
 
     @Override
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
 
-        ImageInitParams imageInit = new ImageInitParams(paramsInit.sharedObjectsRequired());
+        ImageInitialization image = new ImageInitialization(initialization.sharedObjectsRequired());
         try {
-            KeyValueParams keyValueParams =
-                    imageInit.params().getNamedKeyValueParams().getException(collectionID);
-            this.value = keyValueParams.getPropertyAsDouble(key);
+            Dictionary dictionary = image.dictionaries().getException(collectionID);
+            this.value = dictionary.getAsDouble(key);
 
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-plugin-image-task
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,28 +24,19 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.stack;
+package org.anchoranalysis.plugin.image.task.labeller;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.experiment.io.InitParamsContext;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.io.ImageInitParamsFactory;
-import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
+import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class InitParamsFactory {
-
-    public static ImageInitParams createWithStacks(
-            ProvidesStackInput input, InitParamsContext context) throws OperationFailedException {
-        ImageInitParams params = createWithoutStacks(context);
-        input.addToStoreInferNames(params.stacks());
-        return params;
-    }
-
-    public static ImageInitParams createWithoutStacks(InitParamsContext context) {
-        return ImageInitParamsFactory.create(
-                context.getInputOutput(), context.getSuggestedResize());
-    }
+/**
+ * @author Owen Feehan
+ * @param <T> type of the initialization contained within (delegate)
+ */
+@AllArgsConstructor
+@Value
+public class ImageLabellerStringMapInitialization<T> {
+    private Map<String, String> map;
+    private T initialization;
 }

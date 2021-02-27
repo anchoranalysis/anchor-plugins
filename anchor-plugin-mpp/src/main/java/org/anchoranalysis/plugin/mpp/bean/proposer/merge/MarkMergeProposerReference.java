@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
@@ -48,10 +48,10 @@ public class MarkMergeProposerReference extends MarkMergeProposer {
     private MarkMergeProposer delegate = null;
 
     @Override
-    public void onInit(MPPInitParams pso) throws InitException {
+    public void onInit(MarksInitialization pso) throws InitException {
         super.onInit(pso);
         try {
-            delegate = getInitializationParameters().getMarkMergeProposerSet().getException(id);
+            delegate = getInitialization().getMarkMergeProposerSet().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(
                     String.format(

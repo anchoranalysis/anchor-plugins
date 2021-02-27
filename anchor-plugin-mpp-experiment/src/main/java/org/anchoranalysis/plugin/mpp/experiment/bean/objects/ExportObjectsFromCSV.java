@@ -43,11 +43,11 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
@@ -60,7 +60,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
-import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
+import org.anchoranalysis.mpp.io.input.MarksInitializationFactory;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInput;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVSharedState;
@@ -157,11 +157,11 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
             MapGroupToRow mapGroup = groupedRows.get(fileIdentifier);
 
             if (mapGroup != null) {
-                InitParamsContext initContext =
-                        new InitParamsContext(
+                InitializationContext initContext =
+                        new InitializationContext(
                                 groupContext, inputBound.getTaskArguments().getSize());
                 processFileWithMap(
-                        MPPInitParamsFactory.create(
+                        MarksInitializationFactory.create(
                                         initContext, Optional.empty(), Optional.of(input))
                                 .getImage(),
                         mapGroup,
@@ -196,7 +196,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
     }
 
     private void processFileWithMap(
-            ImageInitParams imageInit,
+            ImageInitialization initialization,
             MapGroupToRow mapGroup,
             Set<String> groupNameSet,
             InputOutputContext groupContext,
@@ -205,7 +205,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
 
         try {
             ObjectCollectionRTree objects =
-                    new ObjectCollectionRTree(inputs(imageInit, groupContext.getLogger()));
+                    new ObjectCollectionRTree(inputs(initialization, groupContext.getLogger()));
 
             // Create a writer with output-naming rules not from the group-context, but the
             // top-level experiment context.
@@ -215,7 +215,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                                     objects,
                                     () ->
                                             createBackgroundStack(
-                                                    imageInit, groupContext.getLogger()),
+                                                    initialization, groupContext.getLogger()),
                                     getPadding(),
                                     outputRules);
 
@@ -247,7 +247,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
         }
     }
 
-    private DisplayStack createBackgroundStack(ImageInitParams params, Logger logger)
+    private DisplayStack createBackgroundStack(ImageInitialization params, Logger logger)
             throws OutputWriteFailedException {
         // Get our background-stack and objects. We duplicate to avoid threading issues
         StackProvider providerCopy = stack.duplicateBean();

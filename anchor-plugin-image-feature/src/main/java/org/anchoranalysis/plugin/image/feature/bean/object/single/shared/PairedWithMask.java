@@ -33,10 +33,10 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
@@ -61,10 +61,11 @@ public class PairedWithMask extends FeatureSingleObject {
     private Mask createdMask;
 
     @Override
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
 
-        mask.initRecursive(new ImageInitParams(paramsInit.sharedObjectsRequired()), getLogger());
+        mask.initRecursive(
+                new ImageInitialization(initialization.sharedObjectsRequired()), getLogger());
 
         try {
             createdMask = mask.create();

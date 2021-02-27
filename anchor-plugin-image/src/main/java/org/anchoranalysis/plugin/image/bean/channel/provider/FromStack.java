@@ -100,7 +100,7 @@ public class FromStack extends ChannelProvider {
             return stack.createAsStack();
         } else {
             try {
-                return getInitializationParameters().stacks().getException(stackProviderID);
+                return getInitialization().stacks().getException(stackProviderID);
             } catch (NamedProviderGetException e) {
                 throw new CreateException(e.summarize());
             }

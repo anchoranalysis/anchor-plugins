@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.bean.task.Task;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.spatial.Padding;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -48,10 +48,10 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
     @BeanField @Getter @Setter private Padding padding;
     // END BEAN PROPERTIES
 
-    protected ObjectCollection inputs(ImageInitParams so, Logger logger)
+    protected ObjectCollection inputs(ImageInitialization initialization, Logger logger)
             throws CreateException, InitException {
         ObjectCollectionProvider objectsDuplicated = objects.duplicateBean();
-        objectsDuplicated.initRecursive(so, logger);
+        objectsDuplicated.initRecursive(initialization, logger);
         return objectsDuplicated.create();
     }
 }

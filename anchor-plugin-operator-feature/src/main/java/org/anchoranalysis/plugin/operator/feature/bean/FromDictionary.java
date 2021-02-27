@@ -33,15 +33,15 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 
 /**
- * Extracts a key-value-param as a double
+ * Extracts a key-value from a {@link Dictionary} as a double.
  *
  * <p>Note the key has an optional prefix and suffix, so that the actual key used is <code>
  * ${keyPrefix}${key}${keySuffix}</code>
@@ -49,7 +49,7 @@ import org.anchoranalysis.feature.input.FeatureInputParams;
  * @author Owen Feehan
  * @param <T> feature-input type
  */
-public class Param<T extends FeatureInputParams> extends FeatureOperator<T> {
+public class FromDictionary<T extends FeatureInputParams> extends FeatureOperator<T> {
 
     // START BEAN PROPERTIES
     /** Prefix prepended to key */
@@ -73,18 +73,18 @@ public class Param<T extends FeatureInputParams> extends FeatureOperator<T> {
     }
 
     @Override
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
         keyAggregated = keyAggregated();
     }
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
-        KeyValueParams kvp = input.get().getParamsRequired();
+        Dictionary dictionary = input.get().getParamsRequired();
 
-        if (kvp.containsKey(keyAggregated)) {
-            return kvp.getPropertyAsDouble(keyAggregated);
+        if (dictionary.containsKey(keyAggregated)) {
+            return dictionary.getAsDouble(keyAggregated);
         } else {
             throw new FeatureCalculationException(
                     String.format("Param '%s' is missing", keyAggregated));

@@ -87,17 +87,14 @@ public class Reference extends StackProvider {
     }
 
     private Optional<Stack> fromStacks() throws NamedProviderGetException {
-        return getInitializationParameters().stacks().getOptional(id);
+        return getInitialization().stacks().getOptional(id);
     }
 
     private Optional<Stack> fromChannels() throws NamedProviderGetException {
-        return getInitializationParameters().channels().getOptional(id).map(Stack::new);
+        return getInitialization().channels().getOptional(id).map(Stack::new);
     }
 
     private Optional<Stack> fromMasks() throws NamedProviderGetException {
-        return getInitializationParameters()
-                .masks()
-                .getOptional(id)
-                .map(mask -> new Stack(mask.channel()));
+        return getInitialization().masks().getOptional(id).map(mask -> new Stack(mask.channel()));
     }
 }

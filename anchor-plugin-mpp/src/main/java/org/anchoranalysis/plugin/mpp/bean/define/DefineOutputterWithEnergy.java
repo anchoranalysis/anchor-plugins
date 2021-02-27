@@ -30,12 +30,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.StackIdentifiers;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
@@ -47,20 +47,20 @@ public abstract class DefineOutputterWithEnergy extends DefineOutputter {
     @BeanField @Getter @Setter
     private StackProvider stackEnergy = ReferenceFactory.stack(StackIdentifiers.ENERGY_STACK);
 
-    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
-    protected EnergyStack createEnergyStack(ImageInitParams so, Logger logger)
+    protected EnergyStack createEnergyStack(ImageInitialization initialization, Logger logger)
             throws InitException, CreateException {
 
         // Extract the energy stack
-        StackProvider stackEnergyLoc = stackEnergy.duplicateBean();
-        stackEnergyLoc.initRecursive(so, logger);
-        EnergyStack stack = new EnergyStack(stackEnergyLoc.create());
+        StackProvider stackDuplicated = stackEnergy.duplicateBean();
+        stackDuplicated.initRecursive(initialization, logger);
+        EnergyStack stack = new EnergyStack(stackDuplicated.create());
 
-        if (params != null) {
-            params.initRecursive(so.params(), logger);
-            stack.setParams(params.create());
+        if (dictionary != null) {
+            dictionary.initRecursive(initialization.dictionaryInitialization(), logger);
+            stack.setDictionary(dictionary.create());
         }
         return stack;
     }

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
 
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.FeatureInputPairTester;
 import org.anchoranalysis.plugin.image.feature.bean.object.pair.overlap.OverlapRelativeToFirst;
 import org.junit.jupiter.api.Test;
 
@@ -36,9 +36,9 @@ class OverlapRelativeToFirstTest {
 
     @Test
     void testOverlapping() throws FeatureCalculationException, InitException {
-        ParamsFixtureHelper.testTwoSizesOverlappingDouble(
+        FeatureInputPairTester.testTwoSizesOverlappingDouble(
                 new OverlapRelativeToFirst(),
                 0.8713222261609358,
-                ParamsFixtureHelper.OVERLAP_RATIO_TO_OTHER_SAME_SIZE);
+                FeatureInputPairTester.OVERLAP_RATIO_TO_OTHER_SAME_SIZE);
     }
 }

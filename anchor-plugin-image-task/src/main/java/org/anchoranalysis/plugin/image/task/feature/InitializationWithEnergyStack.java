@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image-feature
+ * anchor-plugin-mpp-experiment
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,37 +23,24 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.plugin.image.task.feature;
 
-package org.anchoranalysis.plugin.image.feature.bean.score;
+import lombok.AllArgsConstructor;
+import lombok.Value;
+import org.anchoranalysis.experiment.io.InitializationContext;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
+import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
 
-import java.util.List;
-import java.util.Optional;
-import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.value.KeyValueParams;
-import org.anchoranalysis.math.histogram.Histogram;
+@Value
+@AllArgsConstructor
+public class InitializationWithEnergyStack {
 
-public abstract class FromParamsBase extends SingleChannel {
+    ImageInitialization image;
+    EnergyStack energyStack;
 
-    @Override
-    public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
-            throws InitException {
-
-        if (!keyValueParams.isPresent()) {
-            throw new InitException(
-                    "This pixel-score required key-value-params to be present, but they are not");
-        }
-
-        setupParams(keyValueParams.get());
-    }
-
-    protected abstract void setupParams(KeyValueParams keyValueParams) throws InitException;
-
-    protected static double extractParamsAsDouble(KeyValueParams kpv, String key)
-            throws InitException {
-        if (!kpv.containsKey(key)) {
-            throw new InitException(String.format("Key '%s' does not exist", key));
-        }
-
-        return Double.valueOf(kpv.getProperty(key));
+    public InitializationWithEnergyStack(EnergyStack energyStack, InitializationContext context) {
+        this.energyStack = energyStack;
+        this.image = InitializationFactory.createWithoutStacks(context);
     }
 }

@@ -112,7 +112,7 @@ public class MergePairs extends MergeWithFeature {
 
             PairsTableCalculator session =
                     new PairsTableCalculator(new MergedPairsFeatures(features));
-            session.start(getInitializationParameters(), energyStack, getLogger());
+            session.start(getInitialization(), energyStack, getLogger());
 
             return maybeWrapWithEnergyStack(
                     new FeatureCalculatorSingleFromMulti<>(session), energyStack);

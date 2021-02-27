@@ -73,11 +73,11 @@ public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEner
     }
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
 
         try {
-            this.csvOutput = createOutput(initParams);
+            this.csvOutput = createOutput(initialization);
             OptionalUtilities.ifPresent(
                     csvOutput,
                     output -> {
@@ -95,8 +95,8 @@ public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEner
     }
 
     private Optional<TextFileOutput> createOutput(
-            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization) {
         return CSVReporterUtilities.createFileOutputFor(
-                OUTPUT_CSV_STATISTICS, initParams, MANIFEST_FUNCTION);
+                OUTPUT_CSV_STATISTICS, initialization, MANIFEST_FUNCTION);
     }
 }

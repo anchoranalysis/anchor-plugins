@@ -44,20 +44,20 @@ public final class OptimizationStepLogReporter extends ReporterAggregate<Voxeliz
     private MessageLogger logger;
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
 
-        super.reportBegin(initParams);
+        super.reportBegin(initialization);
 
         timer = new StopWatch();
         timer.start();
 
-        logger = initParams.getInitContext().getLogger().messageLogger();
+        logger = initialization.getInitContext().getLogger().messageLogger();
     }
 
     @Override
     public void aggStart(
-            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams, Aggregator agg) {
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization, Aggregator agg) {
         // NOTHING TO DO
     }
 

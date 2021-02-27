@@ -33,13 +33,13 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.StackIdentifiers;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -53,7 +53,7 @@ class SegmentHelper {
 
     public static EnergySchemeWithSharedFeatures initEnergy(
             EnergySchemeCreator energySchemeCreator,
-            SharedFeaturesInitParams featureInit,
+            FeaturesInitialization featureInit,
             Logger logger)
             throws InitException {
 
@@ -63,19 +63,19 @@ class SegmentHelper {
             EnergyScheme energyScheme = energySchemeCreator.create();
 
             return new EnergySchemeWithSharedFeatures(
-                    energyScheme, featureInit.getSharedFeatureSet(), logger);
+                    energyScheme, featureInit.getSharedFeatures(), logger);
         } catch (CreateException e) {
             throw new InitException(e);
         }
     }
 
     public static EnergyStack createEnergyStack(
-            NamedProvider<Stack> stackCollection, KeyValueParams params) throws CreateException {
+            NamedProvider<Stack> stackCollection, Dictionary dictionary) throws CreateException {
         try {
             EnergyStackWithoutParams energyStack =
                     new EnergyStackWithoutParams(
                             stackCollection.getException(StackIdentifiers.ENERGY_STACK));
-            return new EnergyStack(energyStack, params);
+            return new EnergyStack(energyStack, dictionary);
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);
         }
@@ -84,12 +84,12 @@ class SegmentHelper {
     public static void initKernelProposers(
             KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer,
             MarkWithIdentifierFactory markFactory,
-            MPPInitParams soMPP,
+            MarksInitialization initialization,
             Logger logger)
             throws InitException {
         // The initial initiation to establish the kernelProposer
         kernelProposer.init();
-        kernelProposer.initWithProposerSharedObjects(soMPP, logger);
+        kernelProposer.initWithProposerSharedObjects(initialization, logger);
 
         // Check that the kernelProposer is compatible with our marks
         kernelProposer.checkCompatibleWith(markFactory.getTemplateMark().create());
