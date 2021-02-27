@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -50,7 +50,7 @@ public class IfParamEqual extends ObjectCollectionProvider {
 
     @BeanField @Getter @Setter private ObjectCollectionProvider whenNotEqual;
 
-    @BeanField @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @Getter @Setter private DictionaryProvider params;
 
     @BeanField @Getter @Setter private String key;
 

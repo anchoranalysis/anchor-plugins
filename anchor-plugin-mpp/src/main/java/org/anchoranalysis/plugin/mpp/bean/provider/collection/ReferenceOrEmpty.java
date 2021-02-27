@@ -50,7 +50,7 @@ public class ReferenceOrEmpty extends MarkCollectionProvider {
 
         try {
             MarkCollection marks =
-                    getInitializationParameters().getMarksCollection().getException(id);
+                    getInitialization().getMarksCollection().getException(id);
 
             if (marks == null) {
                 return new MarkCollection();

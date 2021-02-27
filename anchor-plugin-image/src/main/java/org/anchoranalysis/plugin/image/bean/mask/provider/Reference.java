@@ -64,7 +64,7 @@ public class Reference extends MaskProvider {
 
     private Mask createMask() throws CreateException {
         try {
-            Mask maskForId = getInitializationParameters().masks().getException(id);
+            Mask maskForId = getInitialization().masks().getException(id);
 
             if (duplicate) {
                 return maskForId.duplicate();

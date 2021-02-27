@@ -34,10 +34,10 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
 /**
  * Retrieves a parameter from a collection in shared-objects.
@@ -59,14 +59,14 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
     private double value;
 
     @Override
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+    protected void beforeCalc(FeatureInitialization paramsInit) throws InitException {
         super.beforeCalc(paramsInit);
 
-        ImageInitParams imageInit = new ImageInitParams(paramsInit.sharedObjectsRequired());
+        ImageInitialization imageInit = new ImageInitialization(paramsInit.sharedObjectsRequired());
         try {
-            Dictionary keyValueParams =
-                    imageInit.params().getNamedKeyValueParams().getException(collectionID);
-            this.value = keyValueParams.getAsDouble(key);
+            Dictionary dictionary =
+                    imageInit.dictionaries().getException(collectionID);
+            this.value = dictionary.getAsDouble(key);
 
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());

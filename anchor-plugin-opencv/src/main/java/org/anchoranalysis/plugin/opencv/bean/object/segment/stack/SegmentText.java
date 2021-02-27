@@ -171,7 +171,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
     }
 
     private Path pathToEastModel() {
-        return getInitializationParameters()
+        return getInitialization()
                 .getModelDirectory()
                 .resolve("frozen_east_text_detection.pb");
     }

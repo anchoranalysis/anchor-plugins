@@ -32,7 +32,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
@@ -54,7 +54,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
     }
 
     private static ObjectCollection objectsFromProvider(
-            ObjectCollectionProvider provider, ImageInitParams imageInitParams, Logger logger)
+            ObjectCollectionProvider provider, ImageInitialization imageInitParams, Logger logger)
             throws OperationFailedException {
 
         try {

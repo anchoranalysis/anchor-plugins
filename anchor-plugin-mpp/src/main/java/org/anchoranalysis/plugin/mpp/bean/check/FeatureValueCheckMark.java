@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -38,13 +38,13 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.mpp.feature.error.CheckException;
@@ -57,7 +57,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 
     @BeanField @Getter @Setter protected double minVal = 0;
 
-    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider params;
     // END BEANS
 
     private SharedFeatureMulti sharedFeatureSet;
@@ -65,9 +65,9 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
     private FeatureCalculatorSingle<T> session;
 
     @Override
-    public void onInit(MPPInitParams soMPP) throws InitException {
+    public void onInit(MarksInitialization soMPP) throws InitException {
         super.onInit(soMPP);
-        sharedFeatureSet = soMPP.getFeature().getSharedFeatureSet();
+        sharedFeatureSet = soMPP.getFeature().getSharedFeatures();
     }
 
     @Override
@@ -81,7 +81,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
             session =
                     FeatureSession.with(
                             featureCreated,
-                            new FeatureInitParams(paramsCreated),
+                            new FeatureInitialization(paramsCreated),
                             sharedFeatureSet,
                             getLogger());
 

@@ -36,10 +36,10 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.StackIdentifiers;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -53,7 +53,7 @@ class SegmentHelper {
 
     public static EnergySchemeWithSharedFeatures initEnergy(
             EnergySchemeCreator energySchemeCreator,
-            SharedFeaturesInitParams featureInit,
+            FeaturesInitialization featureInit,
             Logger logger)
             throws InitException {
 
@@ -63,7 +63,7 @@ class SegmentHelper {
             EnergyScheme energyScheme = energySchemeCreator.create();
 
             return new EnergySchemeWithSharedFeatures(
-                    energyScheme, featureInit.getSharedFeatureSet(), logger);
+                    energyScheme, featureInit.getSharedFeatures(), logger);
         } catch (CreateException e) {
             throw new InitException(e);
         }
@@ -84,7 +84,7 @@ class SegmentHelper {
     public static void initKernelProposers(
             KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer,
             MarkWithIdentifierFactory markFactory,
-            MPPInitParams soMPP,
+            MarksInitialization soMPP,
             Logger logger)
             throws InitException {
         // The initial initiation to establish the kernelProposer

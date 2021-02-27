@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -146,7 +146,7 @@ class InteresectingObjectsTestHelper {
         return out;
     }
 
-    private static ImageInitParams createInitParams(ObjectCollection others)
+    private static ImageInitialization createInitParams(ObjectCollection others)
             throws OperationFailedException {
 
         SharedObjects sharedObjects =
@@ -156,7 +156,7 @@ class InteresectingObjectsTestHelper {
 
         sharedObjects.getOrCreate(ObjectCollection.class).add(ID, () -> others);
 
-        return new ImageInitParams(sharedObjects);
+        return new ImageInitialization(sharedObjects);
     }
 
     private static FeatureIntersectingObjects addId(FeatureIntersectingObjects feature) {

@@ -51,7 +51,7 @@ public class GuessDimensions extends DimensionsProvider {
     public Dimensions create() throws CreateException {
 
         if (dimensions == null) {
-            dimensions = takeDimFromStackCollection(getInitializationParameters().stacks());
+            dimensions = takeDimFromStackCollection(getInitialization().stacks());
         }
 
         return dimensions;
@@ -76,7 +76,7 @@ public class GuessDimensions extends DimensionsProvider {
     private Dimensions dimensionsFromSpecificStack(String keyThatExists) throws CreateException {
         Stack stack;
         try {
-            stack = getInitializationParameters().stacks().getException(keyThatExists);
+            stack = getInitialization().stacks().getException(keyThatExists);
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);
         }

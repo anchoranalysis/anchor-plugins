@@ -51,9 +51,8 @@ public class AssignFromParams extends ChannelProviderUnary {
         Dictionary params;
         try {
             params =
-                    getInitializationParameters()
-                            .params()
-                            .getNamedKeyValueParams()
+                    getInitialization()
+                            .dictionaries()
                             .getException(keyValueParamsID);
         } catch (NamedProviderGetException e) {
             throw new CreateException(

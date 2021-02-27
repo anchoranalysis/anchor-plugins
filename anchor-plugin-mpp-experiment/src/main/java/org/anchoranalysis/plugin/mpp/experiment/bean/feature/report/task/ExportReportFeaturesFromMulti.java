@@ -43,7 +43,7 @@ import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
@@ -65,7 +65,7 @@ import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
  * @author Owen Feehan
  */
 public class ExportReportFeaturesFromMulti
-        extends ExportReportFeatures<MultiInput, CSVWriter, MPPInitParams> {
+        extends ExportReportFeatures<MultiInput, CSVWriter, MarksInitialization> {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private DefineOutputterMPP define;

@@ -33,7 +33,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
@@ -44,7 +44,7 @@ class EnergyStackHelper {
     // TODO make this more elegant in the design We make a special exception for writing our
     // energyStacks
     public static void writeEnergyStackParams(
-            ImageInitParams soImage,
+            ImageInitialization soImage,
             Optional<String> energyParamsName,
             InputOutputContext context) {
 
@@ -55,8 +55,7 @@ class EnergyStackHelper {
                         OptionalUtilities.flatMap(
                                         energyParamsName,
                                         paramsName ->
-                                                soImage.params()
-                                                        .getNamedKeyValueParams()
+                                                soImage.dictionaries()
                                                         .getOptional(paramsName))
                                 .orElseGet(Dictionary::new);
 

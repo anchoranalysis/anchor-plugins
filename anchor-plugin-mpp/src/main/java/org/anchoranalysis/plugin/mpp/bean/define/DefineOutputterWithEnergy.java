@@ -30,12 +30,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.StackIdentifiers;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
@@ -47,10 +47,10 @@ public abstract class DefineOutputterWithEnergy extends DefineOutputter {
     @BeanField @Getter @Setter
     private StackProvider stackEnergy = ReferenceFactory.stack(StackIdentifiers.ENERGY_STACK);
 
-    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider params;
     // END BEAN PROPERTIES
 
-    protected EnergyStack createEnergyStack(ImageInitParams so, Logger logger)
+    protected EnergyStack createEnergyStack(ImageInitialization so, Logger logger)
             throws InitException, CreateException {
 
         // Extract the energy stack
@@ -59,7 +59,7 @@ public abstract class DefineOutputterWithEnergy extends DefineOutputter {
         EnergyStack stack = new EnergyStack(stackEnergyLoc.create());
 
         if (params != null) {
-            params.initRecursive(so.params(), logger);
+            params.initRecursive(so.dictionaryInitParams(), logger);
             stack.setParams(params.create());
         }
         return stack;
