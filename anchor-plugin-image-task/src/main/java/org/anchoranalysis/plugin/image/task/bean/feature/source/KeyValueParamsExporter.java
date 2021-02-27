@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
@@ -49,7 +49,7 @@ class KeyValueParamsExporter {
     }
 
     private static void writeKeyValueParams(
-            ElementSupplier<KeyValueParams> params, Outputter outputter) {
+            ElementSupplier<Dictionary> params, Outputter outputter) {
         outputter
                 .writerSelective()
                 .write(
@@ -58,11 +58,11 @@ class KeyValueParamsExporter {
                         params);
     }
 
-    private static KeyValueParams convert(
+    private static Dictionary convert(
             FeatureNameList featureNames, ResultsVector rv, Logger logger) {
         assert (featureNames.size() == rv.length());
 
-        KeyValueParams kv = new KeyValueParams();
+        Dictionary kv = new Dictionary();
         for (int i = 0; i < featureNames.size(); i++) {
 
             String key = featureNames.get(i);

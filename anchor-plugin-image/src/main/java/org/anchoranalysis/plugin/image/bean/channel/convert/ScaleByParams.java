@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ToUnsignedByteScaleByMinMaxValue;
@@ -59,7 +59,7 @@ public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
     @Override
     public ChannelConverter<UnsignedByteBuffer> createConverter() throws CreateException {
 
-        KeyValueParams kvp = params.create();
+        Dictionary kvp = params.create();
 
         int min = getScaled(kvp, keyLower, scaleLower);
         int max = getScaled(kvp, keyUpper, scaleUpper);
@@ -71,13 +71,13 @@ public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
         return new ToUnsignedByteScaleByMinMaxValue(min, max);
     }
 
-    private int getScaled(KeyValueParams kvp, String key, double scale) throws CreateException {
+    private int getScaled(Dictionary kvp, String key, double scale) throws CreateException {
 
         if (!kvp.containsKey(key)) {
             throw new CreateException(String.format("Params is missing key '%s'", key));
         }
 
-        double val = kvp.getPropertyAsDouble(key);
+        double val = kvp.getAsDouble(key);
 
         getLogger().messageLogger().logFormatted("%f * %f = %f", val, scale, val * scale);
 

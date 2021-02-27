@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -70,7 +70,7 @@ class SegmentHelper {
     }
 
     public static EnergyStack createEnergyStack(
-            NamedProvider<Stack> stackCollection, KeyValueParams params) throws CreateException {
+            NamedProvider<Stack> stackCollection, Dictionary params) throws CreateException {
         try {
             EnergyStackWithoutParams energyStack =
                     new EnergyStackWithoutParams(

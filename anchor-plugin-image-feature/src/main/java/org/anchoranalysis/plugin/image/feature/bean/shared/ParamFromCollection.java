@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
@@ -64,9 +64,9 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
 
         ImageInitParams imageInit = new ImageInitParams(paramsInit.sharedObjectsRequired());
         try {
-            KeyValueParams keyValueParams =
+            Dictionary keyValueParams =
                     imageInit.params().getNamedKeyValueParams().getException(collectionID);
-            this.value = keyValueParams.getPropertyAsDouble(key);
+            this.value = keyValueParams.getAsDouble(key);
 
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());

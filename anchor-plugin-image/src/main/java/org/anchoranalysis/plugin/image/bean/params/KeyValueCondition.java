@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.ImageBean;
 
 /**
@@ -50,8 +50,10 @@ public class KeyValueCondition extends ImageBean<KeyValueCondition> {
     // END BEAN PROPERTIES
 
     public boolean isConditionTrue() throws CreateException {
-        KeyValueParams kvp = params.create();
-
-        return value.equals(kvp.getProperty(key));
+        Dictionary dictionary = params.create();
+        String valueToMatch = dictionary.getAsString(key).orElseThrow( () ->
+            new CreateException("No dictionary value exists for: " + key)
+        );
+        return value.equals(valueToMatch);
     }
 }

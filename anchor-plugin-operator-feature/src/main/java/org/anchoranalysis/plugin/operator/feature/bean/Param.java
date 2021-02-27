@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
@@ -81,10 +81,10 @@ public class Param<T extends FeatureInputParams> extends FeatureOperator<T> {
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
-        KeyValueParams kvp = input.get().getParamsRequired();
+        Dictionary kvp = input.get().getParamsRequired();
 
         if (kvp.containsKey(keyAggregated)) {
-            return kvp.getPropertyAsDouble(keyAggregated);
+            return kvp.getAsDouble(keyAggregated);
         } else {
             throw new FeatureCalculationException(
                     String.format("Param '%s' is missing", keyAggregated));

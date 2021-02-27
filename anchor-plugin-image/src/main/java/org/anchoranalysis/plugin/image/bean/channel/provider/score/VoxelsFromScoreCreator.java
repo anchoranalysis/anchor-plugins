@@ -32,7 +32,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.feature.bean.VoxelScore;
@@ -51,7 +51,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 class VoxelsFromScoreCreator {
 
     private VoxelsWrapperList listVoxels;
-    private Optional<KeyValueParams> keyValueParams;
+    private Optional<Dictionary> keyValueParams;
     private List<Histogram> listAdditionalHistograms;
 
     public Voxels<UnsignedByteBuffer> createVoxelsFromPixelScore(

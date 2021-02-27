@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
@@ -84,7 +84,7 @@ public class ScoreVoxels extends ChannelProvider {
         VoxelsWrapperList voxelsCreated = createVoxelsList(intensityCreated);
         List<Histogram> histogramsCreated = ProviderBeanHelper.listFromBeans(histogramsExtra);
 
-        Optional<KeyValueParams> paramsCreated = OptionalFactory.create(params);
+        Optional<Dictionary> paramsCreated = OptionalFactory.create(params);
 
         Optional<ObjectMask> object = createObject();
 

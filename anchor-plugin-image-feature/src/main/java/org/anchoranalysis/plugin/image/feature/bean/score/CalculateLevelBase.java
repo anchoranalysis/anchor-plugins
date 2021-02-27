@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.math.histogram.Histogram;
 
@@ -48,7 +48,7 @@ public abstract class CalculateLevelBase extends SingleChannel {
     private int level;
 
     @Override
-    public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
+    public void init(List<Histogram> histograms, Optional<Dictionary> keyValueParams)
             throws InitException {
 
         try {

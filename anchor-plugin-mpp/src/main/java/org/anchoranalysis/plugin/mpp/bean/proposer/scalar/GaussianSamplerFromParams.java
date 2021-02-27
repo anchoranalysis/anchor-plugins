@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
 
@@ -57,24 +57,23 @@ public class GaussianSamplerFromParams extends ScalarProposer {
             throws OperationFailedException {
 
         try {
-            KeyValueParams paramsCreated = params.create();
-            assert (paramsCreated != null);
+            Dictionary paramsCreated = params.create();
 
             if (!paramsCreated.containsKey(getParamMean())) {
                 throw new OperationFailedException(
-                        String.format("Params are missing key '%s' for paramMean", getParamMean()));
+                        String.format("Dictionary is missing key '%s' for paramMean", getParamMean()));
             }
 
             if (!paramsCreated.containsKey(getParamStdDev())) {
                 throw new OperationFailedException(
                         String.format(
-                                "Params are missing key '%s' for paramStdDev", getParamStdDev()));
+                                "Dictionary is missing key '%s' for paramStdDev", getParamStdDev()));
             }
 
-            double mean = Double.parseDouble(paramsCreated.getProperty(getParamMean()));
-            double sd = Double.valueOf(paramsCreated.getProperty(getParamStdDev())) * factorStdDev;
+            double mean = paramsCreated.getAsDouble(getParamMean());
+            double stdDev = paramsCreated.getAsDouble(getParamStdDev()) * factorStdDev;
 
-            return randomNumberGenerator.generateNormal(mean, sd).nextDouble();
+            return randomNumberGenerator.generateNormal(mean, stdDev).nextDouble();
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
