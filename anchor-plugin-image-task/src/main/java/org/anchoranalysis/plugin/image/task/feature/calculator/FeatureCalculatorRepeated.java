@@ -29,13 +29,13 @@ package org.anchoranalysis.plugin.image.task.feature.calculator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
+import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureCalculatorRepeated {
@@ -43,8 +43,8 @@ public class FeatureCalculatorRepeated {
     public static EnergyStack extractStack(
             ProvidesStackInput input, StackProvider stackEnergy, InputOutputContext context)
             throws OperationFailedException {
-        ImageInitialization paramsInit =
-                InitParamsFactory.createWithStacks(input, new InitParamsContext(context));
-        return ExtractFromProvider.extractStack(stackEnergy, paramsInit, context.getLogger());
+        ImageInitialization initialization =
+                InitializationFactory.createWithStacks(input, new InitializationContext(context));
+        return ExtractFromProvider.extractStack(stackEnergy, initialization, context.getLogger());
     }
 }

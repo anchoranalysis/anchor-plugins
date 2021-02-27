@@ -48,10 +48,10 @@ public class FromInput extends StackProvider {
     }
 
     @Override
-    public void onInit(ImageInitialization so) throws InitException {
-        super.onInit(so);
+    public void onInit(ImageInitialization initialization) throws InitException {
+        super.onInit(initialization);
         try {
-            stack = so.stacks().getException(StackIdentifiers.INPUT_IMAGE);
+            stack = initialization.stacks().getException(StackIdentifiers.INPUT_IMAGE);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

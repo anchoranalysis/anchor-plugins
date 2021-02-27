@@ -76,14 +76,14 @@ public class CSVReporterAggregated extends ReporterAggregate<VoxelizedMarksWithE
     }
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
 
-        super.reportBegin(initParams);
+        super.reportBegin(initialization);
 
         this.csvOutput =
                 CSVReporterUtilities.createFileOutputFor(
-                        OUTPUT_CSV_STATISTICS, initParams, MANIFEST_FUNCTION);
+                        OUTPUT_CSV_STATISTICS, initialization, MANIFEST_FUNCTION);
 
         timer = new StopWatch();
         timer.start();
@@ -95,7 +95,7 @@ public class CSVReporterAggregated extends ReporterAggregate<VoxelizedMarksWithE
 
     @Override
     public void aggStart(
-            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization, Aggregator agg)
             throws AggregatorException {
 
         try {

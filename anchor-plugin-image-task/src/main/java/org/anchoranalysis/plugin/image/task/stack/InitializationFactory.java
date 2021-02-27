@@ -29,23 +29,24 @@ package org.anchoranalysis.plugin.image.task.stack;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
-import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.ImageInitializationFactory;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class InitParamsFactory {
+public class InitializationFactory {
 
     public static ImageInitialization createWithStacks(
-            ProvidesStackInput input, InitParamsContext context) throws OperationFailedException {
-        ImageInitialization params = createWithoutStacks(context);
-        input.addToStoreInferNames(params.stacks());
-        return params;
+            ProvidesStackInput input, InitializationContext context)
+            throws OperationFailedException {
+        ImageInitialization initialization = createWithoutStacks(context);
+        input.addToStoreInferNames(initialization.stacks());
+        return initialization;
     }
 
-    public static ImageInitialization createWithoutStacks(InitParamsContext context) {
-        return ImageInitParamsFactory.create(
+    public static ImageInitialization createWithoutStacks(InitializationContext context) {
+        return ImageInitializationFactory.create(
                 context.getInputOutput(), context.getSuggestedResize());
     }
 }

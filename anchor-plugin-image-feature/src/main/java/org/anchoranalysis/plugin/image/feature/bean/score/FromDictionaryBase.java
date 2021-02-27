@@ -26,45 +26,34 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.score;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
+import java.util.List;
+import java.util.Optional;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.value.Dictionary;
-import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
+import org.anchoranalysis.math.histogram.Histogram;
 
-public class GaussianFromParams extends FromParamsBase {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String keyMean;
-
-    @BeanField @Getter @Setter private String keyStdDev;
-
-    @BeanField @Getter @Setter private double shift;
-    // END BEAN PROPERTIES
-
-    private double mean;
-    private double stdDev;
+public abstract class FromDictionaryBase extends SingleChannel {
 
     @Override
-    protected void setupParams(Dictionary kpv) throws InitException {
-        mean = extractAsDouble(kpv, keyMean);
-        stdDev = extractAsDouble(kpv, keyStdDev);
-    }
+    public void init(List<Histogram> histograms, Optional<Dictionary> dictionary)
+            throws InitException {
 
-    @Override
-    protected double deriveScoreFromVoxel(int voxelIntensity) {
-
-        // Values higher than the mean should be included for definite
-        if (voxelIntensity > mean) {
-            return 1.0;
+        if (!dictionary.isPresent()) {
+            throw new InitException(
+                    "This pixel-score required key-value-params to be present, but they are not");
         }
 
-        double scoreBeforeShift =
-                GaussianScoreCalculator.calc(mean, stdDev, voxelIntensity, false, false);
+        setupParams(dictionary.get());
+    }
 
-        double scoreShifted = (scoreBeforeShift - shift) / (1 - shift);
+    protected abstract void setupParams(Dictionary dictionary) throws InitException;
 
-        return (scoreShifted / 2) + 0.5;
+    protected static double extractAsDouble(Dictionary dictionary, String key)
+            throws InitException {
+        if (!dictionary.containsKey(key)) {
+            throw new InitException(String.format("Key '%s' does not exist", key));
+        }
+
+        return dictionary.getAsDouble(key);
     }
 }

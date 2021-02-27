@@ -33,49 +33,45 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
+import org.anchoranalysis.io.generator.serialized.DictionaryGenerator;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.ElementSupplier;
 
-/** Exports a ResultVector as a KeyValueParams */
+/** Exports a ResultVector as a {@link Dictionary}. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class KeyValueParamsExporter {
+class DictionaryExporter {
 
     public static void export(
             FeatureNameList featureNames, ResultsVector rv, InputOutputContext context) {
-        writeKeyValueParams(
+        writeDictionary(
                 () -> convert(featureNames, rv, context.getLogger()), context.getOutputter());
     }
 
-    private static void writeKeyValueParams(
-            ElementSupplier<Dictionary> params, Outputter outputter) {
+    private static void writeDictionary(ElementSupplier<Dictionary> params, Outputter outputter) {
         outputter
                 .writerSelective()
-                .write(
-                        "keyValueParams",
-                        () -> new KeyValueParamsGenerator("keyValueParams"),
-                        params);
+                .write("dictionary", () -> new DictionaryGenerator("dictionary"), params);
     }
 
     private static Dictionary convert(
             FeatureNameList featureNames, ResultsVector rv, Logger logger) {
         assert (featureNames.size() == rv.length());
 
-        Dictionary kv = new Dictionary();
+        Dictionary dictionary = new Dictionary();
         for (int i = 0; i < featureNames.size(); i++) {
 
             String key = featureNames.get(i);
             Optional<Double> val = rv.getDoubleOrNull(i);
 
             if (val.isPresent()) {
-                kv.put(key, val.get());
+                dictionary.put(key, val.get());
             } else {
                 // Then an error happened and we report it
                 logger.errorReporter().recordError(FromHistogram.class, rv.getException(i));
-                kv.put(key, Double.NaN);
+                dictionary.put(key, Double.NaN);
             }
         }
-        return kv;
+        return dictionary;
     }
 }

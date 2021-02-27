@@ -40,7 +40,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -52,7 +52,7 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.labeller.SharedStateFilteredImageOutput;
-import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
+import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
 
 /**
  * Assigns a label to each image and copies into subdirectories for each label, and creates a
@@ -140,7 +140,7 @@ public class ImageAssignLabel<T>
                         createFromProviderWith(
                                 outputStackProvider,
                                 input.getInput(),
-                                input.createInitParamsContext()),
+                                input.createInitializationContext()),
                         input.getInput().name(),
                         input.getSharedState());
             }
@@ -150,11 +150,11 @@ public class ImageAssignLabel<T>
     }
 
     private static Stack createFromProviderWith(
-            StackProvider provider, ProvidesStackInput stack, InitParamsContext context)
+            StackProvider provider, ProvidesStackInput stack, InitializationContext context)
             throws CreateException {
         try {
             provider.initRecursive(
-                    InitParamsFactory.createWithStacks(stack, context), context.getLogger());
+                    InitializationFactory.createWithStacks(stack, context), context.getLogger());
             return provider.create();
         } catch (InitException | OperationFailedException e) {
             throw new CreateException(e);

@@ -67,7 +67,7 @@ public class Log4JReporter extends ReporterAggregate<VoxelizedMarksWithEnergy>
 
     @Override
     public void aggStart(
-            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams, Aggregator agg) {
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization, Aggregator agg) {
         // NOTHING TO DO
     }
 

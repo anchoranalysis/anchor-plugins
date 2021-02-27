@@ -47,20 +47,20 @@ public abstract class DefineOutputterWithEnergy extends DefineOutputter {
     @BeanField @Getter @Setter
     private StackProvider stackEnergy = ReferenceFactory.stack(StackIdentifiers.ENERGY_STACK);
 
-    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
-    protected EnergyStack createEnergyStack(ImageInitialization so, Logger logger)
+    protected EnergyStack createEnergyStack(ImageInitialization initialization, Logger logger)
             throws InitException, CreateException {
 
         // Extract the energy stack
-        StackProvider stackEnergyLoc = stackEnergy.duplicateBean();
-        stackEnergyLoc.initRecursive(so, logger);
-        EnergyStack stack = new EnergyStack(stackEnergyLoc.create());
+        StackProvider stackDuplicated = stackEnergy.duplicateBean();
+        stackDuplicated.initRecursive(initialization, logger);
+        EnergyStack stack = new EnergyStack(stackDuplicated.create());
 
-        if (params != null) {
-            params.initRecursive(so.dictionaryInitParams(), logger);
-            stack.setParams(params.create());
+        if (dictionary != null) {
+            dictionary.initRecursive(initialization.dictionaryInitialization(), logger);
+            stack.setDictionary(dictionary.create());
         }
         return stack;
     }

@@ -48,10 +48,11 @@ public class FromStackChannel extends MaskProvider {
     private Channel channel;
 
     @Override
-    public void onInit(ImageInitialization so) throws InitException {
-        super.onInit(so);
+    public void onInit(ImageInitialization initialization) throws InitException {
+        super.onInit(initialization);
         try {
-            channel = so.stacks().getException(stackProviderID).getChannel(channelIndex);
+            channel =
+                    initialization.stacks().getException(stackProviderID).getChannel(channelIndex);
         } catch (NamedProviderGetException e) {
             throw InitException.createOrReuse(e.summarize());
         }

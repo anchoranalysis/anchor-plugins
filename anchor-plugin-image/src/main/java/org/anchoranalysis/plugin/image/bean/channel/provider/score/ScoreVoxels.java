@@ -73,7 +73,7 @@ public class ScoreVoxels extends ChannelProvider {
 
     @BeanField @Getter @Setter private List<HistogramProvider> histogramsExtra = new ArrayList<>();
 
-    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
     @Override
@@ -84,12 +84,12 @@ public class ScoreVoxels extends ChannelProvider {
         VoxelsWrapperList voxelsCreated = createVoxelsList(intensityCreated);
         List<Histogram> histogramsCreated = ProviderBeanHelper.listFromBeans(histogramsExtra);
 
-        Optional<Dictionary> paramsCreated = OptionalFactory.create(params);
+        Optional<Dictionary> dictionaryCreated = OptionalFactory.create(dictionary);
 
         Optional<ObjectMask> object = createObject();
 
         VoxelsFromScoreCreator creator =
-                new VoxelsFromScoreCreator(voxelsCreated, paramsCreated, histogramsCreated);
+                new VoxelsFromScoreCreator(voxelsCreated, dictionaryCreated, histogramsCreated);
         Voxels<UnsignedByteBuffer> voxelsPixelScore =
                 creator.createVoxelsFromPixelScore(score, object);
 

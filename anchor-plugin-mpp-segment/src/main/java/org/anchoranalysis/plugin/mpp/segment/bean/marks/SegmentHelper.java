@@ -70,12 +70,12 @@ class SegmentHelper {
     }
 
     public static EnergyStack createEnergyStack(
-            NamedProvider<Stack> stackCollection, Dictionary params) throws CreateException {
+            NamedProvider<Stack> stackCollection, Dictionary dictionary) throws CreateException {
         try {
             EnergyStackWithoutParams energyStack =
                     new EnergyStackWithoutParams(
                             stackCollection.getException(StackIdentifiers.ENERGY_STACK));
-            return new EnergyStack(energyStack, params);
+            return new EnergyStack(energyStack, dictionary);
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);
         }
@@ -84,12 +84,12 @@ class SegmentHelper {
     public static void initKernelProposers(
             KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer,
             MarkWithIdentifierFactory markFactory,
-            MarksInitialization soMPP,
+            MarksInitialization initialization,
             Logger logger)
             throws InitException {
         // The initial initiation to establish the kernelProposer
         kernelProposer.init();
-        kernelProposer.initWithProposerSharedObjects(soMPP, logger);
+        kernelProposer.initWithProposerSharedObjects(initialization, logger);
 
         // Check that the kernelProposer is compatible with our marks
         kernelProposer.checkCompatibleWith(markFactory.getTemplateMark().create());

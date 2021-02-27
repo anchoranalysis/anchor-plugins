@@ -135,7 +135,7 @@ class InteresectingObjectsTestHelper {
                 message,
                 addId(feature),
                 new FeatureInputSingleObject(objectMask, CircleObjectFixture.energyStack()),
-                Optional.of(createInitParams(others).getSharedObjects()),
+                Optional.of(createInitialization(others).getSharedObjects()),
                 expectedResult);
     }
 
@@ -146,7 +146,7 @@ class InteresectingObjectsTestHelper {
         return out;
     }
 
-    private static ImageInitialization createInitParams(ObjectCollection others)
+    private static ImageInitialization createInitialization(ObjectCollection others)
             throws OperationFailedException {
 
         SharedObjects sharedObjects =

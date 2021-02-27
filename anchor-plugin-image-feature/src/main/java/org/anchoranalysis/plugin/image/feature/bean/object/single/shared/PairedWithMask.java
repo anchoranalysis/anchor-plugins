@@ -61,10 +61,11 @@ public class PairedWithMask extends FeatureSingleObject {
     private Mask createdMask;
 
     @Override
-    protected void beforeCalc(FeatureInitialization paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
 
-        mask.initRecursive(new ImageInitialization(paramsInit.sharedObjectsRequired()), getLogger());
+        mask.initRecursive(
+                new ImageInitialization(initialization.sharedObjectsRequired()), getLogger());
 
         try {
             createdMask = mask.create();

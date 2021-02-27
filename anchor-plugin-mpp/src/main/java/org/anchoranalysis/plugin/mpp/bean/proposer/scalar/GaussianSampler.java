@@ -38,17 +38,35 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
 
-public class GaussianSamplerFromParams extends ScalarProposer {
+/**
+ * Samples from a Gaussian distribution whose parameters are determined by a {@link Dictionary}.
+ *
+ * @author Owen Feehan
+ */
+public class GaussianSampler extends ScalarProposer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private DictionaryProvider params;
+    /** The dictionary that parameterizes the Gaussian-distribution that is sampled from. */
+    @BeanField @Getter @Setter private DictionaryProvider dictionary;
 
-    @BeanField @Getter @Setter private String paramMean = "";
+    /** The name of the key in the dictionary with the mean of the distribution. */
+    @BeanField @Getter @Setter private String keyMean = "";
 
-    @BeanField @Getter @Setter private String paramStdDev = "";
+    /**
+     * The name of the key in the dictionary with the standard-deviation.
+     *
+     * <p>Ultimately the standard-deviation of the distribution is formed by {@code
+     * from(keyStandardDeviation) * factorStandardDeviation}.
+     */
+    @BeanField @Getter @Setter private String keyStandardDeviation = "";
 
-    @BeanField @Getter @Setter
-    private double factorStdDev = 1.0; // Multiples the standard deviation by a factor
+    /**
+     * Multiples the standard deviation of the distribution found in {@code keyStandardDeviation}.
+     *
+     * <p>Ultimately the standard-deviation of the distribution is formed by {@code
+     * from(keyStandardDeviation) * factorStandardDeviation}.
+     */
+    @BeanField @Getter @Setter private double factorStandardDeviation = 1.0;
     // END BEAN PROPERTIES
 
     @Override
@@ -57,21 +75,23 @@ public class GaussianSamplerFromParams extends ScalarProposer {
             throws OperationFailedException {
 
         try {
-            Dictionary paramsCreated = params.create();
+            Dictionary dictionaryCreated = dictionary.create();
 
-            if (!paramsCreated.containsKey(getParamMean())) {
+            if (!dictionaryCreated.containsKey(keyMean)) {
                 throw new OperationFailedException(
-                        String.format("Dictionary is missing key '%s' for paramMean", getParamMean()));
+                        String.format("Dictionary is missing key '%s' for paramMean", keyMean));
             }
 
-            if (!paramsCreated.containsKey(getParamStdDev())) {
+            if (!dictionaryCreated.containsKey(keyStandardDeviation)) {
                 throw new OperationFailedException(
                         String.format(
-                                "Dictionary is missing key '%s' for paramStdDev", getParamStdDev()));
+                                "Dictionary is missing key '%s' for paramStdDev",
+                                keyStandardDeviation));
             }
 
-            double mean = paramsCreated.getAsDouble(getParamMean());
-            double stdDev = paramsCreated.getAsDouble(getParamStdDev()) * factorStdDev;
+            double mean = dictionaryCreated.getAsDouble(keyMean);
+            double stdDev =
+                    dictionaryCreated.getAsDouble(keyStandardDeviation) * factorStandardDeviation;
 
             return randomNumberGenerator.generateNormal(mean, stdDev).nextDouble();
         } catch (CreateException e) {

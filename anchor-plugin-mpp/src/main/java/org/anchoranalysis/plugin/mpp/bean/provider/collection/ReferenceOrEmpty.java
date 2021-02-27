@@ -49,8 +49,7 @@ public class ReferenceOrEmpty extends MarkCollectionProvider {
     public MarkCollection create() throws CreateException {
 
         try {
-            MarkCollection marks =
-                    getInitialization().getMarksCollection().getException(id);
+            MarkCollection marks = getInitialization().getMarksCollection().getException(id);
 
             if (marks == null) {
                 return new MarkCollection();

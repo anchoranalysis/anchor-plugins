@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.RatioFirstToSecond;
-import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
+import org.anchoranalysis.plugin.image.feature.bean.obj.pair.FeatureInputPairTester;
 import org.junit.jupiter.api.Test;
 
 class RatioFirstToSecondTest {
@@ -37,7 +37,7 @@ class RatioFirstToSecondTest {
     @Test
     void testOverlapping() throws FeatureCalculationException, InitException {
 
-        ParamsFixtureHelper.testSimpleDouble(
+        FeatureInputPairTester.testSimpleDouble(
                 OrderHelper.addFeatureToOrder(new RatioFirstToSecond()), 0.8275154004106776);
     }
 }

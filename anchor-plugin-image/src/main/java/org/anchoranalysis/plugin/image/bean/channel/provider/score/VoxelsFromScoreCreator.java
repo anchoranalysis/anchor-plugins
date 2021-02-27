@@ -51,7 +51,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 class VoxelsFromScoreCreator {
 
     private VoxelsWrapperList listVoxels;
-    private Optional<Dictionary> keyValueParams;
+    private Optional<Dictionary> dictionary;
     private List<Histogram> listAdditionalHistograms;
 
     public Voxels<UnsignedByteBuffer> createVoxelsFromPixelScore(
@@ -81,7 +81,7 @@ class VoxelsFromScoreCreator {
 
     /** Initializes the pixel-score */
     private void init(VoxelScore pixelScore, Optional<ObjectMask> object) throws InitException {
-        pixelScore.init(createHistograms(object), keyValueParams);
+        pixelScore.init(createHistograms(object), dictionary);
     }
 
     private List<Histogram> createHistograms(Optional<ObjectMask> object) {

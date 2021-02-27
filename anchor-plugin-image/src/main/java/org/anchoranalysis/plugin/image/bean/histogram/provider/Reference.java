@@ -46,15 +46,14 @@ public class Reference extends HistogramProvider {
     private Histogram histogram;
 
     public Reference(String id) {
-        super();
         this.id = id;
     }
 
     @Override
-    public void onInit(ImageInitialization so) throws InitException {
-        super.onInit(so);
+    public void onInit(ImageInitialization initialization) throws InitException {
+        super.onInit(initialization);
         try {
-            histogram = so.histograms().getException(id);
+            histogram = initialization.histograms().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

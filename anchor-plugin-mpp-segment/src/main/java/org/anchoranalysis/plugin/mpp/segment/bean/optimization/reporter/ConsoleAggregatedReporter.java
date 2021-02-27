@@ -50,15 +50,15 @@ public final class ConsoleAggregatedReporter extends ReporterAggregate<Voxelized
 
     @Override
     public void aggStart(
-            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization, Aggregator agg)
             throws AggregatorException {
         // NOTHING TO DO
     }
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
-        super.reportBegin(initParams);
+        super.reportBegin(initialization);
         timer = new StopWatch();
         timer.start();
     }

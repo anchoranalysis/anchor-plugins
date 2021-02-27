@@ -58,7 +58,7 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
-import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
+import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
 
 /**
  * Creates a scaled copy of images.
@@ -127,13 +127,13 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         try {
             NamedStacks stacks = input.getInput().asSet(ProgressIgnore.get());
 
-            ImageInitialization soImage =
-                    InitParamsFactory.createWithoutStacks(input.createInitParamsContext());
+            ImageInitialization initialization =
+                    InitializationFactory.createWithoutStacks(input.createInitializationContext());
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
-            soImage.copyStacksFrom(stacks);
+            initialization.copyStacksFrom(stacks);
 
-            populateAndOutput(soImage, input.getContextJob());
+            populateAndOutput(initialization, input.getContextJob());
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
         }
@@ -155,7 +155,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_SCALED);
     }
 
-    private void populateAndOutput(ImageInitialization soImage, InputOutputContext context)
+    private void populateAndOutput(ImageInitialization initialization, InputOutputContext context)
             throws JobExecutionException {
 
         // Output collections
@@ -167,7 +167,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
                         OutputterHelper.isFirstLevelOutputEnabled(
                                 OUTPUT_SCALED_FLATTENED, context));
         if (dualEnabled.isEitherEnabled()) {
-            populateStacksFromSharedObjects(soImage, stacks, dualEnabled, context);
+            populateStacksFromSharedObjects(initialization, stacks, dualEnabled, context);
             OutputterHelper.outputStacks(
                     stacks,
                     dualEnabled,

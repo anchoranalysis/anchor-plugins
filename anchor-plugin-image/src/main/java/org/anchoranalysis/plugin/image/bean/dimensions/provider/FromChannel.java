@@ -58,8 +58,8 @@ public class FromChannel extends DimensionsProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public void onInit(ImageInitialization so) throws InitException {
-        super.onInit(so);
+    public void onInit(ImageInitialization initialization) throws InitException {
+        super.onInit(initialization);
         if (id.isEmpty() && channel == null) {
             throw new InitException("One of either channelProvider or id must be set");
         }

@@ -52,21 +52,21 @@ public final class TextFile extends ReporterAggregate<VoxelizedMarksWithEnergy>
 
     @Override
     public void aggStart(
-            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization, Aggregator agg)
             throws AggregatorException {
         fileOutput =
                 TextFileOutputter.create(
                         "txt",
                         Optional.of(new ManifestDescription("text", "event_log")),
-                        initParams.getInitContext().getOutputter().getChecked(),
+                        initialization.getInitContext().getOutputter().getChecked(),
                         "eventLog");
     }
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
 
-        super.reportBegin(initParams);
+        super.reportBegin(initialization);
         try {
             if (fileOutput.isPresent()) {
                 fileOutput.get().start();

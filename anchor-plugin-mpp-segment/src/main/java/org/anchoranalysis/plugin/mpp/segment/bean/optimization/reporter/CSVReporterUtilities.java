@@ -41,12 +41,12 @@ public class CSVReporterUtilities {
 
     public static Optional<TextFileOutput> createFileOutputFor(
             String outputName,
-            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams,
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization,
             String manifestFunction) {
         return TextFileOutputter.create(
                 NonImageFileFormat.CSV.extensionWithoutPeriod(),
                 Optional.of(new ManifestDescription("csv", manifestFunction)),
-                initParams.getInitContext().getOutputter().getChecked(),
+                initialization.getInitContext().getOutputter().getChecked(),
                 outputName);
     }
 }

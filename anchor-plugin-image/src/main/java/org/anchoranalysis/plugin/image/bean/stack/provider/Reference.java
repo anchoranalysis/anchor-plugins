@@ -95,9 +95,6 @@ public class Reference extends StackProvider {
     }
 
     private Optional<Stack> fromMasks() throws NamedProviderGetException {
-        return getInitialization()
-                .masks()
-                .getOptional(id)
-                .map(mask -> new Stack(mask.channel()));
+        return getInitialization().masks().getOptional(id).map(mask -> new Stack(mask.channel()));
     }
 }

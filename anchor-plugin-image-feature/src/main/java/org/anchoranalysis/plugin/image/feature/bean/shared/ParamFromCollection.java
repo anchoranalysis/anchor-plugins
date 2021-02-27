@@ -42,8 +42,8 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 /**
  * Retrieves a parameter from a collection in shared-objects.
  *
- * <p>This differs from {@link org.anchoranalysis.plugin.operator.feature.bean.Param} which reads
- * the parameter from the energy-stack, whereas this from a specific parameters collection.
+ * <p>This differs from {@link org.anchoranalysis.plugin.operator.feature.bean.FromDictionary} which
+ * reads the parameter from the energy-stack, whereas this from a specific parameters collection.
  *
  * @author Owen Feehan
  * @param <T> feature-input-type
@@ -59,13 +59,12 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
     private double value;
 
     @Override
-    protected void beforeCalc(FeatureInitialization paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
 
-        ImageInitialization imageInit = new ImageInitialization(paramsInit.sharedObjectsRequired());
+        ImageInitialization image = new ImageInitialization(initialization.sharedObjectsRequired());
         try {
-            Dictionary dictionary =
-                    imageInit.dictionaries().getException(collectionID);
+            Dictionary dictionary = image.dictionaries().getException(collectionID);
             this.value = dictionary.getAsDouble(key);
 
         } catch (NamedProviderGetException e) {

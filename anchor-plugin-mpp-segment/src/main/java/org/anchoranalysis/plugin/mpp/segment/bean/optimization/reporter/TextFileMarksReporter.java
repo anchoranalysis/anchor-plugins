@@ -38,10 +38,10 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 public class TextFileMarksReporter extends PeriodicSubdirectoryReporter<MarkCollection> {
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
 
-        super.reportBegin(initParams);
+        super.reportBegin(initialization);
 
         try {
             init(new ObjectAsStringGenerator<>());

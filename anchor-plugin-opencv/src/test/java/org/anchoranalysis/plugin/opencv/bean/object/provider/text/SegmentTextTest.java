@@ -31,7 +31,7 @@ import java.util.List;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.ImageInitializationFactory;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyMergeOverlappingObjects;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
@@ -100,6 +100,6 @@ class SegmentTextTest {
     private void initSegmenter() throws InitException {
         InputOutputContext context =
                 InputOutputContextFixture.withSuppressedLogger(loader.modelDirectory());
-        segmenter.initRecursive(ImageInitParamsFactory.create(context), context.getLogger());
+        segmenter.initRecursive(ImageInitializationFactory.create(context), context.getLogger());
     }
 }

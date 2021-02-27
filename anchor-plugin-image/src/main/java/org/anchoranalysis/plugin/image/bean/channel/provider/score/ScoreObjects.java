@@ -113,7 +113,7 @@ public class ScoreObjects extends UnaryWithObjectsBase {
         return FeatureSession.with(
                 feature,
                 new FeatureInitialization(),
-                getInitialization().featuresInitParams().getSharedFeatures(),
+                getInitialization().featuresInitialization().getSharedFeatures(),
                 getLogger());
     }
 

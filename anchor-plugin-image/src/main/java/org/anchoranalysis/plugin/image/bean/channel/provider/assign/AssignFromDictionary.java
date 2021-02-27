@@ -29,54 +29,33 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.assign;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
-public class AssignFromParams extends ChannelProviderUnary {
+public class AssignFromDictionary extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String keyValueParamsID = "";
+    /** The dictionary from which an assignment will occur. */
+    @BeanField @Getter @Setter private DictionaryProvider dictionary;
 
+    /** The key of the value in the dictionary that will be assigned. */
     @BeanField @Getter @Setter private String key;
     // END BEAN PROPERTIES
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Dictionary params;
-        try {
-            params =
-                    getInitialization()
-                            .dictionaries()
-                            .getException(keyValueParamsID);
-        } catch (NamedProviderGetException e) {
-            throw new CreateException(
-                    String.format("Cannot find KeyValueParams '%s'", keyValueParamsID), e);
-        }
+        Dictionary createdDictionary = dictionary.create();
 
-        if (!params.containsKey(key)) {
+        if (!createdDictionary.containsKey(key)) {
             throw new CreateException(String.format("Cannot find key '%s'", key));
         }
 
-        byte valueByte = (byte) params.getAsDouble(key);
-
-        Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
-
-        int volumeXY = voxels.extent().volumeXY();
-        for (int z = 0; z < voxels.extent().z(); z++) {
-            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
-
-            int offset = 0;
-            while (offset < volumeXY) {
-                buffer.putRaw(offset++, valueByte);
-            }
-        }
-
+        int valueToAssign = (int) createdDictionary.getAsDouble(key);
+        channel.voxels().assignValue(valueToAssign).toAll();
         return channel;
     }
 }

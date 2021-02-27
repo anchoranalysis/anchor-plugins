@@ -49,7 +49,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
-import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
+import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMarks;
 
 /**
  * Derives various types of outputs (images, histograms etc.) from {@link MultiInput}s.
@@ -75,13 +75,15 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
 
     // START BEAN PROPERTIES
     /** Defines entities (chanels, stacks etc.) that are derived from inputs and other entities. */
-    @BeanField @Getter @Setter private DefineOutputterMPP define;
+    @BeanField @Getter @Setter private DefineOutputterMarks define;
 
     /** Specifies a feature-table that can also be outputted. */
     @BeanField @Getter @Setter private List<OutputFeatureTable> featureTables = new ArrayList<>();
 
-    /** If non-empty, A keyValueParams is treated as part of the energyStack */
-    @BeanField @AllowEmpty @Getter @Setter private String energyParamsName = "";
+    /**
+     * If non-empty, the identifier for a dictionary that is treated as part of the energy-stack.
+     */
+    @BeanField @AllowEmpty @Getter @Setter private String dictionary = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -91,9 +93,9 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
         try {
             define.processInputImage(
                     input.getInput(),
-                    input.createInitParamsContext(),
-                    imageInitParams ->
-                            outputFeaturesAndEnergyStack(imageInitParams, input.getContextJob()));
+                    input.createInitializationContext(),
+                    initialization ->
+                            outputFeaturesAndEnergyStack(initialization, input.getContextJob()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -119,25 +121,25 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
     }
 
     private void outputFeaturesAndEnergyStack(
-            ImageInitialization imageInitParams, InputOutputContext context)
+            ImageInitialization initialization, InputOutputContext context)
             throws OperationFailedException {
 
         try {
-            outputFeatureTables(imageInitParams, context);
+            outputFeatureTables(initialization, context);
         } catch (IOException e) {
             throw new OperationFailedException(e);
         }
 
         EnergyStackHelper.writeEnergyStackParams(
-                imageInitParams, OptionalUtilities.create(energyParamsName), context);
+                initialization, OptionalUtilities.create(dictionary), context);
     }
 
-    private void outputFeatureTables(ImageInitialization so, InputOutputContext context)
+    private void outputFeatureTables(ImageInitialization initialization, InputOutputContext context)
             throws IOException {
         for (OutputFeatureTable outputFeatureTable : featureTables) {
 
             try {
-                outputFeatureTable.initRecursive(so, context.getLogger());
+                outputFeatureTable.initRecursive(initialization, context.getLogger());
             } catch (InitException e) {
                 throw new IOException(e);
             }

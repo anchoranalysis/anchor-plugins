@@ -52,10 +52,10 @@ public class MinimalExecutionTimeStatsReporter
     private StopWatch stopWatch;
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+    public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
-        outputter = initParams.getInitContext().getOutputter();
-        stats = new KernelExecutionStats(initParams.getKernelFactoryList().size());
+        outputter = initialization.getInitContext().getOutputter();
+        stats = new KernelExecutionStats(initialization.getKernelFactoryList().size());
         stopWatch = new StopWatch();
         stopWatch.start();
     }

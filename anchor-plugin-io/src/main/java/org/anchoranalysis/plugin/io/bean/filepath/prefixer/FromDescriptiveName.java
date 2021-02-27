@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * The prefixer uses a combination of a out-path-prefix and the descriptive-name of inputs to create
@@ -44,50 +44,44 @@ import lombok.Setter;
  */
 public class FromDescriptiveName extends PathPrefixerAvoidResolve {
 
-    /**
-     * The Unix separator character.
-     */
+    /** The Unix separator character. */
     private static final char UNIX_SEPARATOR = '/';
 
-    /**
-     * The Windows separator character.
-     */
+    /** The Windows separator character. */
     private static final char WINDOWS_SEPARATOR = '\\';
-    
-    /**
-     * The character to replace directory separators with when suppressed.
-     */
+
+    /** The character to replace directory separators with when suppressed. */
     private static final char REPLACEMENT_CHARACTER = '_';
-    
+
     // START BEAN PROPERTIES
-    /** 
-     * If true, any directory separators in the identifier in a descriptive-name are replaced by underscores.
-     * 
-     * If false, this may still occur if it is requested in the {@link PathPrefixerContext}.
+    /**
+     * If true, any directory separators in the identifier in a descriptive-name are replaced by
+     * underscores.
+     *
+     * <p>If false, this may still occur if it is requested in the {@link PathPrefixerContext}.
      */
     @BeanField @Getter @Setter private boolean suppressDirectories = false;
     // END BEAN PROPERTIES
-        
+
     @Override
     public DirectoryWithPrefix outFilePrefixFromPath(
             NamedPath path, Path root, PathPrefixerContext context) {
-        Path combined = root.resolve(Paths.get(
-            calculateIdentifierForPrefix(path, context)
-        ));
+        Path combined = root.resolve(Paths.get(calculateIdentifierForPrefix(path, context)));
         return new DirectoryWithPrefix(combined);
     }
-    
+
     private String calculateIdentifierForPrefix(NamedPath path, PathPrefixerContext context) {
         String identifier = path.getName();
-        
+
         if (suppressDirectories || context.getPrefixer().isOutputSuppressDirectories()) {
             return replaceSeperatorsWithUnderscore(identifier);
         } else {
             return identifier;
         }
     }
-    
+
     private static String replaceSeperatorsWithUnderscore(String string) {
-        return string.replace(WINDOWS_SEPARATOR, REPLACEMENT_CHARACTER).replace(UNIX_SEPARATOR, REPLACEMENT_CHARACTER);
+        return string.replace(WINDOWS_SEPARATOR, REPLACEMENT_CHARACTER)
+                .replace(UNIX_SEPARATOR, REPLACEMENT_CHARACTER);
     }
 }

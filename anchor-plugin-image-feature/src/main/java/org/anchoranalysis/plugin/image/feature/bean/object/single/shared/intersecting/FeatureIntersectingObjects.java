@@ -52,12 +52,12 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
     private ObjectCollection searchObjects;
 
     @Override
-    protected void beforeCalc(FeatureInitialization paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
 
-        ImageInitialization imageInit = new ImageInitialization(paramsInit.sharedObjectsRequired());
+        ImageInitialization image = new ImageInitialization(initialization.sharedObjectsRequired());
         try {
-            this.searchObjects = imageInit.objects().getException(id);
+            this.searchObjects = image.objects().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

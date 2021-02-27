@@ -48,7 +48,7 @@ public abstract class CalculateLevelBase extends SingleChannel {
     private int level;
 
     @Override
-    public void init(List<Histogram> histograms, Optional<Dictionary> keyValueParams)
+    public void init(List<Histogram> histograms, Optional<Dictionary> dictionary)
             throws InitException {
 
         try {

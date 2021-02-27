@@ -31,13 +31,13 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
-import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
+import org.anchoranalysis.mpp.io.input.MarksInitializationFactory;
 import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.plugin.mpp.bean.proposer.mark.collection.CreateNew;
@@ -63,14 +63,14 @@ class KernelProposerFixture {
 
         InputOutputContext context = InputOutputContextFixture.withSuppressedLogger();
 
-        MarksInitialization initParams =
-                MPPInitParamsFactory.create(
-                        new InitParamsContext(context), Optional.empty(), Optional.empty());
+        MarksInitialization initialization =
+                MarksInitializationFactory.create(
+                        new InitializationContext(context), Optional.empty(), Optional.empty());
 
         KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer =
                 createProposerTwoEqual(
-                        createInitialKernel(initParams, context.getLogger()),
-                        createBirthKernel(markProposer, initParams, context.getLogger()),
+                        createInitialKernel(initialization, context.getLogger()),
+                        createBirthKernel(markProposer, initialization, context.getLogger()),
                         new KernelDeathPixelized());
         kernelProposer.init();
         return BeanTestChecker.check(kernelProposer);
@@ -95,8 +95,8 @@ class KernelProposerFixture {
     }
 
     private static KernelBirthPixelized createBirthKernel(
-            MarkProposer markProposer, MarksInitialization initParams, Logger logger) {
+            MarkProposer markProposer, MarksInitialization initialization, Logger logger) {
         return BeanTestChecker.checkAndInit(
-                new KernelBirthPixelized(markProposer), initParams, logger);
+                new KernelBirthPixelized(markProposer), initialization, logger);
     }
 }
