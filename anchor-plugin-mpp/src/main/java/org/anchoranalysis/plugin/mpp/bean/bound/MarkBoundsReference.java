@@ -43,7 +43,7 @@ public class MarkBoundsReference extends MarkBoundsProvider {
     @Override
     public MarkBounds create() throws CreateException {
         try {
-            return getInitializationParameters().getMarkBoundsSet().getException(id);
+            return getInitialization().getMarkBoundsSet().getException(id);
         } catch (NamedProviderGetException e) {
             throw new CreateException(e.summarize());
         }

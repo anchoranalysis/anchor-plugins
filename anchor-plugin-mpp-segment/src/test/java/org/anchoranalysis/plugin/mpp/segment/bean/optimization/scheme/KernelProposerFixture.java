@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
@@ -63,7 +63,7 @@ class KernelProposerFixture {
 
         InputOutputContext context = InputOutputContextFixture.withSuppressedLogger();
 
-        MPPInitParams initParams =
+        MarksInitialization initParams =
                 MPPInitParamsFactory.create(
                         new InitParamsContext(context), Optional.empty(), Optional.empty());
 
@@ -89,13 +89,13 @@ class KernelProposerFixture {
     }
 
     private static KernelInitialMarksVoxelized createInitialKernel(
-            MPPInitParams params, Logger logger) {
+            MarksInitialization params, Logger logger) {
         return BeanTestChecker.checkAndInit(
                 new KernelInitialMarksVoxelized(new CreateNew()), params, logger);
     }
 
     private static KernelBirthPixelized createBirthKernel(
-            MarkProposer markProposer, MPPInitParams initParams, Logger logger) {
+            MarkProposer markProposer, MarksInitialization initParams, Logger logger) {
         return BeanTestChecker.checkAndInit(
                 new KernelBirthPixelized(markProposer), initParams, logger);
     }

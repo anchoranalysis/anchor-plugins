@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -58,7 +58,7 @@ public class FromChannel extends DimensionsProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public void onInit(ImageInitParams so) throws InitException {
+    public void onInit(ImageInitialization so) throws InitException {
         super.onInit(so);
         if (id.isEmpty() && channel == null) {
             throw new InitException("One of either channelProvider or id must be set");
@@ -86,8 +86,8 @@ public class FromChannel extends DimensionsProvider {
 
         try {
             return OptionalUtilities.orFlat(
-                            getInitializationParameters().channels().getOptional(id),
-                            getInitializationParameters()
+                            getInitialization().channels().getOptional(id),
+                            getInitialization()
                                     .stacks()
                                     .getOptional(id)
                                     .map(FromChannel::firstChannel))

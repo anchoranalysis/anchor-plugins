@@ -74,6 +74,6 @@ public class ScaleXY extends MaskProviderUnary {
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
-        return scale(mask, scaleCalculator, getInitializationParameters().getSuggestedResize());
+        return scale(mask, scaleCalculator, getInitialization().getSuggestedResize());
     }
 }

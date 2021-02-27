@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -48,7 +48,7 @@ import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMult
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -66,7 +66,7 @@ import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
  */
 public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
 
-    private final ImageInitParams initParams;
+    private final ImageInitialization initParams;
 
     @Getter private final EnergyStack energyStack;
 
@@ -99,9 +99,9 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
         try {
             Feature<T> feature =
                     ExtractFromProvider.extractFeature(
-                            provider, providerName, initParams.features(), logger);
+                            provider, providerName, initParams.featuresInitParams(), logger);
 
-            return createSingleCalculator(feature, initParams.features().getSharedFeatureSet());
+            return createSingleCalculator(feature, initParams.featuresInitParams().getSharedFeatures());
         } catch (InitException | FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
@@ -110,7 +110,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
     /** Calculates all image-features in the feature-store */
     public FeatureCalculatorMulti<T> calculatorForAll(FeatureList<T> features)
             throws InitException {
-        return createMultiCalculator(features, initParams.features().getSharedFeatureSet());
+        return createMultiCalculator(features, initParams.featuresInitParams().getSharedFeatures());
     }
 
     /** Calculates a energy-stack from a provider if it's available, or otherwise uses a fallback */
@@ -129,14 +129,14 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
     private FeatureCalculatorMulti<T> createMultiCalculator(
             FeatureList<T> features, SharedFeatureMulti sharedFeatures) throws InitException {
         return new FeatureCalculatorMultiChangeInput<>(
-                FeatureSession.with(features, new FeatureInitParams(), sharedFeatures, logger),
+                FeatureSession.with(features, new FeatureInitialization(), sharedFeatures, logger),
                 input -> input.setEnergyStack(energyStack));
     }
 
     private FeatureCalculatorSingle<T> createSingleCalculator(
             Feature<T> feature, SharedFeatureMulti sharedFeatures) throws InitException {
         return new FeatureCalculatorSingleChangeInput<>(
-                FeatureSession.with(feature, new FeatureInitParams(), sharedFeatures, logger),
+                FeatureSession.with(feature, new FeatureInitialization(), sharedFeatures, logger),
                 input -> input.setEnergyStack(energyStack));
     }
 

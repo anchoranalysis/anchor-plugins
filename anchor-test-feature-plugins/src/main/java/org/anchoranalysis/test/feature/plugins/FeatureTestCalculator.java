@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
@@ -79,16 +79,16 @@ public class FeatureTestCalculator {
                 message, feature, params, createInitParams(sharedObjects), expectedResult, 1e-20);
     }
 
-    private static FeatureInitParams createInitParams(Optional<SharedObjects> sharedObjects) {
-        Optional<FeatureInitParams> mapped = sharedObjects.map(FeatureInitParams::new);
-        return mapped.orElse(new FeatureInitParams());
+    private static FeatureInitialization createInitParams(Optional<SharedObjects> sharedObjects) {
+        Optional<FeatureInitialization> mapped = sharedObjects.map(FeatureInitialization::new);
+        return mapped.orElse(new FeatureInitialization());
     }
 
     private static <T extends FeatureInput> void assertResultTolerance(
             String message,
             Feature<T> feature,
             T params,
-            FeatureInitParams initParams,
+            FeatureInitialization initParams,
             double expectedResult,
             double delta)
             throws FeatureCalculationException {
@@ -98,7 +98,7 @@ public class FeatureTestCalculator {
     }
 
     private static <T extends FeatureInput> double calculateSequentialSession(
-            Feature<T> feature, T params, FeatureInitParams initParams)
+            Feature<T> feature, T params, FeatureInitialization initParams)
             throws FeatureCalculationException {
 
         try {

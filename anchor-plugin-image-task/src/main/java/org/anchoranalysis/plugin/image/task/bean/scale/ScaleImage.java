@@ -45,7 +45,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
@@ -127,7 +127,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         try {
             NamedStacks stacks = input.getInput().asSet(ProgressIgnore.get());
 
-            ImageInitParams soImage =
+            ImageInitialization soImage =
                     InitParamsFactory.createWithoutStacks(input.createInitParamsContext());
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
@@ -155,7 +155,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_SCALED);
     }
 
-    private void populateAndOutput(ImageInitParams soImage, InputOutputContext context)
+    private void populateAndOutput(ImageInitialization soImage, InputOutputContext context)
             throws JobExecutionException {
 
         // Output collections
@@ -178,7 +178,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     }
 
     private void populateStacksFromSharedObjects(
-            ImageInitParams params,
+            ImageInitialization params,
             DualNamedStacks stacksToAddTo,
             DualEnabled dualEnabled,
             InputOutputContext context)

@@ -30,21 +30,21 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.io.InitParamsContext;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.io.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InitParamsFactory {
 
-    public static ImageInitParams createWithStacks(
+    public static ImageInitialization createWithStacks(
             ProvidesStackInput input, InitParamsContext context) throws OperationFailedException {
-        ImageInitParams params = createWithoutStacks(context);
+        ImageInitialization params = createWithoutStacks(context);
         input.addToStoreInferNames(params.stacks());
         return params;
     }
 
-    public static ImageInitParams createWithoutStacks(InitParamsContext context) {
+    public static ImageInitialization createWithoutStacks(InitParamsContext context) {
         return ImageInitParamsFactory.create(
                 context.getInputOutput(), context.getSuggestedResize());
     }

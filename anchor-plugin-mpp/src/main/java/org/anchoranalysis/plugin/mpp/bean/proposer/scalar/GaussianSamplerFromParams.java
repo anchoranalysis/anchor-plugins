@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -41,7 +41,7 @@ import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
 public class GaussianSamplerFromParams extends ScalarProposer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @Getter @Setter private DictionaryProvider params;
 
     @BeanField @Getter @Setter private String paramMean = "";
 

@@ -46,7 +46,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
@@ -172,7 +172,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
                         sequence);
     }
 
-    private void outputObjects(ImageInitParams paramsInit, InputOutputContext context)
+    private void outputObjects(ImageInitialization paramsInit, InputOutputContext context)
             throws OperationFailedException {
 
         try {
@@ -199,7 +199,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
     }
 
     private static NamedStacks createStacksFromProviders(
-            List<NamedBean<StackProvider>> stackProviders, ImageInitParams so, Logger logger)
+            List<NamedBean<StackProvider>> stackProviders, ImageInitialization so, Logger logger)
             throws CreateException {
         // Get named image stack collection
         NamedStacksUniformSize stacks = new NamedStacksUniformSize();

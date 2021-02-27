@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.params;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.ImageBean;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.bean.ImageBean;
 public class KeyValueCondition extends ImageBean<KeyValueCondition> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @Getter @Setter private DictionaryProvider params;
 
     @BeanField @Getter @Setter private String key = "";
 

@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.log.Logger;
@@ -75,7 +75,7 @@ public class BeanTestChecker {
      * @param params initialization-parameters
      * @param logger logger
      */
-    public static <T extends InitializableBean<?, P>, P extends BeanInitParams> T checkAndInit(
+    public static <T extends InitializableBean<?, P>, P extends BeanInitialization> T checkAndInit(
             T bean, P params, Logger logger) {
         check(bean);
         try {

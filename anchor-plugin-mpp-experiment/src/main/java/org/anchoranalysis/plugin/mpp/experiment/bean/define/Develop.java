@@ -42,7 +42,7 @@ import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.io.bean.object.feature.OutputFeatureTable;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -119,7 +119,7 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
     }
 
     private void outputFeaturesAndEnergyStack(
-            ImageInitParams imageInitParams, InputOutputContext context)
+            ImageInitialization imageInitParams, InputOutputContext context)
             throws OperationFailedException {
 
         try {
@@ -132,7 +132,7 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
                 imageInitParams, OptionalUtilities.create(energyParamsName), context);
     }
 
-    private void outputFeatureTables(ImageInitParams so, InputOutputContext context)
+    private void outputFeatureTables(ImageInitialization so, InputOutputContext context)
             throws IOException {
         for (OutputFeatureTable outputFeatureTable : featureTables) {
 

@@ -50,7 +50,7 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
@@ -178,7 +178,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     }
 
     private MarkCollection segmentAndWrite(
-            MPPInitParams mppInit,
+            MarksInitialization mppInit,
             EnergyStack energyStack,
             UpdatableMarksList updatableMarkSetCollection,
             Optional<Dictionary> keyValueParams,
@@ -226,7 +226,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         }
     }
 
-    private void init(MPPInitParams soMPP, Logger logger) throws InitException {
+    private void init(MarksInitialization soMPP, Logger logger) throws InitException {
         markFactory.initRecursive(logger);
 
         energySchemeShared =

@@ -38,15 +38,15 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractFromProvider {
 
     public static EnergyStack extractStack(
-            StackProvider stackEnergy, ImageInitParams initParams, Logger logger)
+            StackProvider stackEnergy, ImageInitialization initParams, Logger logger)
             throws OperationFailedException {
 
         try {
@@ -66,7 +66,7 @@ class ExtractFromProvider {
     public static <T extends FeatureInput> Feature<T> extractFeature(
             FeatureListProvider<T> featureListProvider,
             String featureProviderName,
-            SharedFeaturesInitParams initParams,
+            FeaturesInitialization initParams,
             Logger logger)
             throws FeatureCalculationException {
 

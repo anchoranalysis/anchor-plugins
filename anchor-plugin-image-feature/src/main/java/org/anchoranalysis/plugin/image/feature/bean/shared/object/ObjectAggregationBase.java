@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -60,7 +60,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputEnergy>
     private ObjectCollection createdObjects;
 
     @Override
-    protected void beforeCalcWithImageInitParams(ImageInitParams params) throws InitException {
+    protected void beforeCalcWithImageInitParams(ImageInitialization params) throws InitException {
         objects.initRecursive(params, getLogger());
     }
 

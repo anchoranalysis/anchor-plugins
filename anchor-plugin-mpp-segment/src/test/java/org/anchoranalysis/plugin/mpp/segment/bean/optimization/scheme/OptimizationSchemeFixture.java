@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.initializable.params.NullInitParams;
+import org.anchoranalysis.bean.initializable.params.NullInitialization;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -112,7 +112,7 @@ class OptimizationSchemeFixture {
         MarkWithIdentifierFactory factoryWithidentifier =
                 new MarkWithIdentifierFactory(markFactory);
         BeanTestChecker.checkAndInit(
-                factoryWithidentifier, NullInitParams.instance(), context.getLogger());
+                factoryWithidentifier, NullInitialization.instance(), context.getLogger());
 
         // Uses a fixed random-seed so tests always generate the same result
         return new OptimizationContext(

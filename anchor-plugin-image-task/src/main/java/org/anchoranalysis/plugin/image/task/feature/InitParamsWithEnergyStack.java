@@ -29,14 +29,14 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.plugin.image.task.stack.InitParamsFactory;
 
 @Value
 @AllArgsConstructor
 public class InitParamsWithEnergyStack {
 
-    ImageInitParams imageInit;
+    ImageInitialization imageInit;
     EnergyStack energyStack;
 
     public InitParamsWithEnergyStack(EnergyStack energyStack, InitParamsContext context) {

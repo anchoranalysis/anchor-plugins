@@ -65,7 +65,7 @@ public class Reference extends ChannelProvider {
 
     private Channel getMaybeDuplicate() throws CreateException {
         try {
-            Channel existing = getInitializationParameters().channels().getException(id);
+            Channel existing = getInitialization().channels().getException(id);
 
             if (duplicate) {
                 return existing.duplicate();

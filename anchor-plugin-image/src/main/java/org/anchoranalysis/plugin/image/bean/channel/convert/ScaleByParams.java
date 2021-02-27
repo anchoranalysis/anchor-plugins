@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.convert;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @Getter @Setter private DictionaryProvider params;
 
     @BeanField @Getter @Setter private String keyLower;
 

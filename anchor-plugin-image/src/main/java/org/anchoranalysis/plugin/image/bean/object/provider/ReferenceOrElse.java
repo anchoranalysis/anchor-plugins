@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
@@ -53,7 +53,7 @@ public class ReferenceOrElse extends ObjectCollectionProvider {
     private ObjectCollection objects;
 
     @Override
-    public void onInit(ImageInitParams so) throws InitException {
+    public void onInit(ImageInitialization so) throws InitException {
         try {
             objects = so.objects().getException(id);
         } catch (NamedProviderGetException e) {

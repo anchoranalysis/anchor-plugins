@@ -47,7 +47,7 @@ import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
@@ -196,7 +196,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
     }
 
     private void processFileWithMap(
-            ImageInitParams imageInit,
+            ImageInitialization imageInit,
             MapGroupToRow mapGroup,
             Set<String> groupNameSet,
             InputOutputContext groupContext,
@@ -247,7 +247,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
         }
     }
 
-    private DisplayStack createBackgroundStack(ImageInitParams params, Logger logger)
+    private DisplayStack createBackgroundStack(ImageInitialization params, Logger logger)
             throws OutputWriteFailedException {
         // Get our background-stack and objects. We duplicate to avoid threading issues
         StackProvider providerCopy = stack.duplicateBean();

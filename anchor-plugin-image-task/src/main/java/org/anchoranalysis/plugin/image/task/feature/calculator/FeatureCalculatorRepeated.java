@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -43,7 +43,7 @@ public class FeatureCalculatorRepeated {
     public static EnergyStack extractStack(
             ProvidesStackInput input, StackProvider stackEnergy, InputOutputContext context)
             throws OperationFailedException {
-        ImageInitParams paramsInit =
+        ImageInitialization paramsInit =
                 InitParamsFactory.createWithStacks(input, new InitParamsContext(context));
         return ExtractFromProvider.extractStack(stackEnergy, paramsInit, context.getLogger());
     }

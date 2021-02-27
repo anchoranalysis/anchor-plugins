@@ -54,7 +54,7 @@ import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -348,7 +348,7 @@ public class SegmentInstanceWithModel<T>
     }
 
     private void initializeBeans(InitParamsContext context) throws InitException {
-        ImageInitParams params = InitParamsFactory.createWithoutStacks(context);
+        ImageInitialization params = InitParamsFactory.createWithoutStacks(context);
         segment.initRecursive(params, context.getLogger());
     }
 

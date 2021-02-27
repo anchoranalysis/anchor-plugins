@@ -37,7 +37,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.functional.checked.CheckedToIntFunction;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -112,8 +112,8 @@ public class ScoreObjects extends UnaryWithObjectsBase {
             Feature<FeatureInputSingleObject> feature) throws InitException {
         return FeatureSession.with(
                 feature,
-                new FeatureInitParams(),
-                getInitializationParameters().features().getSharedFeatureSet(),
+                new FeatureInitialization(),
+                getInitialization().featuresInitParams().getSharedFeatures(),
                 getLogger());
     }
 

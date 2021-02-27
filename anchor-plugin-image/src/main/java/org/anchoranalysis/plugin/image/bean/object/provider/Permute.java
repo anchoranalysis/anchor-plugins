@@ -92,7 +92,7 @@ public class Permute extends ObjectCollectionProvider {
 
         // We init after the permutation, as we might be changing a reference
         try {
-            provider.initRecursive(getInitializationParameters(), getLogger());
+            provider.initRecursive(getInitialization(), getLogger());
         } catch (InitException e) {
             throw new CreateException(e);
         }

@@ -36,7 +36,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 
@@ -73,7 +73,7 @@ public class Param<T extends FeatureInputParams> extends FeatureOperator<T> {
     }
 
     @Override
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+    protected void beforeCalc(FeatureInitialization paramsInit) throws InitException {
         super.beforeCalc(paramsInit);
         keyAggregated = keyAggregated();
     }

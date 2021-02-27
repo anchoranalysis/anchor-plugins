@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.mpp.experiment.objects;
 import java.nio.file.Path;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
@@ -45,7 +45,7 @@ public class FromCSVInput extends InputFromManagerDelegate<MultiInput> implement
     }
 
     @Override
-    public void addToSharedObjects(MPPInitParams soMPP, ImageInitParams soImage)
+    public void addToSharedObjects(MarksInitialization soMPP, ImageInitialization soImage)
             throws OperationFailedException {
         getDelegate().addToSharedObjects(soMPP, soImage);
     }

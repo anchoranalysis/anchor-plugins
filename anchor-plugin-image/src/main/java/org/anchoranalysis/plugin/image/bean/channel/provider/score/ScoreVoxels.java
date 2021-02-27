@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -73,7 +73,7 @@ public class ScoreVoxels extends ChannelProvider {
 
     @BeanField @Getter @Setter private List<HistogramProvider> histogramsExtra = new ArrayList<>();
 
-    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider params;
     // END BEAN PROPERTIES
 
     @Override

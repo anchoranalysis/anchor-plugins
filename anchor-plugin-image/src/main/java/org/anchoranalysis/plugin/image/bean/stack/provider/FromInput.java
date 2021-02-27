@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.stack.provider;
 
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.StackIdentifiers;
@@ -48,7 +48,7 @@ public class FromInput extends StackProvider {
     }
 
     @Override
-    public void onInit(ImageInitParams so) throws InitException {
+    public void onInit(ImageInitialization so) throws InitException {
         super.onInit(so);
         try {
             stack = so.stacks().getException(StackIdentifiers.INPUT_IMAGE);
