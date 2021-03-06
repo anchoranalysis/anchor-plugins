@@ -60,7 +60,7 @@ import org.anchoranalysis.plugin.image.task.feature.InitializationWithEnergyStac
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
-import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
+import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMarksWithEnergy;
 
 /**
  * Extracts features for each object in a collection.
@@ -90,7 +90,7 @@ import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td rowspan="3"><i>outputs from a sub-class of {@link DefineOutputterMPPWithEnergy} as used in {@code define}.</i></td></tr>
+ * <tr><td rowspan="3"><i>outputs from a sub-class of {@link DefineOutputterMarksWithEnergy} as used in {@code define}.</i></td></tr>
  * </tbody>
  * </table>
  *
@@ -112,7 +112,7 @@ public class FromObjects<T extends FeatureInput>
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
-    private DefineOutputterMPPWithEnergy define = new DefineOutputterMPPWithEnergy();
+    private DefineOutputterMarksWithEnergy define = new DefineOutputterMarksWithEnergy();
 
     @BeanField @Getter @Setter
     private List<NamedBean<ObjectCollectionProvider>> objects = new ArrayList<>();

@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 
 public class GaussianBlur2D extends ChannelProviderUnary {
@@ -42,16 +43,20 @@ public class GaussianBlur2D extends ChannelProviderUnary {
     @BeanField @Positive @Getter @Setter private double sigma = 3;
     // END BEAN PROPERTIES
 
-    @SuppressWarnings("deprecation")
-    private Channel blur(Channel channel) {
+    @Override
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        try {
+            return blur(channel);
+        } catch (ImageJConversionException e) {
+            throw new CreateException(e);
+        }
+    }
+    
 
+    @SuppressWarnings("deprecation")
+    private Channel blur(Channel channel) throws ImageJConversionException {
         GaussianBlur gb = new GaussianBlur();
         FilterHelper.processEachSlice(channel, processor -> gb.blur(processor, sigma)); // NOSONAR
         return channel;
-    }
-
-    @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
-        return blur(channel);
     }
 }
