@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.task;
 
+import java.nio.file.Path;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -72,8 +73,11 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
         try {
             params.getSharedState().add(extractObjectForSummary(params.getInput()));
         } catch (OperationFailedException e) {
-            throw new JobExecutionException(
-                    String.format("Cannot summarize %s", params.getInput().pathForBinding()), e);
+            
+            String message = String.format("Cannot summarize %s",
+                    params.getInput().pathForBinding().map(Path::toString).orElse("the input."));
+            
+            throw new JobExecutionException(message, e);
         }
     }
 
