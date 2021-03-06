@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.io.input.InputForMarksBean;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 
 /**
- * Like a {@link Define} but outputs also MPP-related data objects and an energy-stack.
+ * Like a {@link Define} but outputs also marks-related data objects and an energy-stack.
  *
  * <p>The following outputs are produced:
  *
@@ -62,7 +62,7 @@ import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
  *
  * @author Owen Feehan
  */
-public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
+public class DefineOutputterMarksWithEnergy extends DefineOutputterWithEnergy {
 
     /**
      * @author Owen Feehan

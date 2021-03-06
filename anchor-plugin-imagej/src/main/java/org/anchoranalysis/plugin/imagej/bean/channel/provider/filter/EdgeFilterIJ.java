@@ -30,16 +30,20 @@ import ij.process.ImageProcessor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 
 public class EdgeFilterIJ extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-
-        Channel out = channel.duplicate();
-        FilterHelper.processEachSlice(
-                out, processor -> processor.filter(ImageProcessor.FIND_EDGES));
-        return out;
+        try {
+            Channel out = channel.duplicate();
+            FilterHelper.processEachSlice(
+                    out, processor -> processor.filter(ImageProcessor.FIND_EDGES));
+            return out;
+        } catch (ImageJConversionException e) {
+            throw new CreateException(e);
+        }
     }
 }

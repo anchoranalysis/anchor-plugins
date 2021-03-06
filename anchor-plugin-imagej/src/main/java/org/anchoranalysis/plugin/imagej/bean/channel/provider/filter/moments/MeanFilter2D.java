@@ -27,15 +27,11 @@
 package org.anchoranalysis.plugin.imagej.bean.channel.provider.filter.moments;
 
 import ij.plugin.filter.RankFilters;
-import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.plugin.imagej.bean.channel.provider.WithRadiusBase;
-import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
+import org.anchoranalysis.plugin.imagej.bean.channel.provider.WithFilterBase;
 
-public class MeanFilter2D extends WithRadiusBase {
+public class MeanFilter2D extends WithFilterBase {
 
-    @Override
-    public Channel createFromChannel(Channel channel, int radius) throws CreateException {
-        return FilterHelper.applyRankFilter(channel, radius, RankFilters.MEAN);
+    public MeanFilter2D() {
+        super(RankFilters.MEAN);
     }
 }

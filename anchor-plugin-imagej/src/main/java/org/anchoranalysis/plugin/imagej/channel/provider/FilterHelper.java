@@ -31,22 +31,31 @@ import ij.process.ImageProcessor;
 import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
+import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FilterHelper {
 
-    /** Applies a 2D rank-filter to each slice independently. */
-    public static Channel applyRankFilter(Channel channel, int radius, int filterType) {
-
-        RankFilters rankFilters = new RankFilters();
-        processEachSlice(channel, processor -> rankFilters.rank(processor, radius, filterType));
-        return channel;
+    /** 
+     * Applies a 2D rank-filter to each slice independently. 
+     * 
+     * @throws OperationFailedException if <code>channel</code> contains an unsupported data-type.
+     */
+    public static Channel applyRankFilter(Channel channel, int radius, int filterType) throws OperationFailedException {
+        try {
+            RankFilters rankFilters = new RankFilters();
+            processEachSlice(channel, processor -> rankFilters.rank(processor, radius, filterType));
+            return channel;
+        } catch (ImageJConversionException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     /**
@@ -56,8 +65,9 @@ public class FilterHelper {
      *
      * @param channel the channel whose slices will be processed.
      * @param consumer successively applied to the {@link ImageProcessor} derived from each slice.
+     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short (the only two supported types)
      */
-    public static void processEachSlice(Channel channel, Consumer<ImageProcessor> consumer) {
+    public static void processEachSlice(Channel channel, Consumer<ImageProcessor> consumer) throws ImageJConversionException {
         VoxelsWrapper voxels = channel.voxels();
         channel.extent()
                 .iterateOverZ(

@@ -38,6 +38,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
+import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 
 public class MontageSlices extends StackProviderUnary {
 
@@ -77,7 +78,7 @@ public class MontageSlices extends StackProviderUnary {
                     channel ->
                             montageChannel(
                                     channel,
-                                    fffectiveColumns(numberSlices, numberColumns),
+                                    effectiveColumns(numberSlices, numberColumns),
                                     rowsForColumns(numberSlices, numberColumns),
                                     firstSlice(),
                                     lastSlice(numberSlices)));
@@ -86,15 +87,19 @@ public class MontageSlices extends StackProviderUnary {
         }
     }
 
-    private Channel montageChannel(Channel in, int cols, int rows, int firstSlice, int lastSlice) {
+    private Channel montageChannel(Channel channel, int columns, int rows, int firstSlice, int lastSlice) throws OperationFailedException {
 
-        ImagePlus imp = ConvertToImagePlus.from(in);
-
-        MontageMaker mm = new MontageMaker();
-        ImagePlus res =
-                mm.makeMontage2(
-                        imp, cols, rows, scale, firstSlice, lastSlice, 1, borderWidth, label);
-        return ConvertFromImagePlus.toChannel(res, in.dimensions().resolution());
+        try {
+            ImagePlus imp = ConvertToImagePlus.from(channel);
+    
+            MontageMaker mm = new MontageMaker();
+            ImagePlus result =
+                    mm.makeMontage2(
+                            imp, columns, rows, scale, firstSlice, lastSlice, 1, borderWidth, label);
+            return ConvertFromImagePlus.toChannel(result, channel.dimensions().resolution());
+        } catch (ImageJConversionException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     private int numberColumns(int totalNumSlices) {
@@ -125,7 +130,7 @@ public class MontageSlices extends StackProviderUnary {
     }
 
     // Possibly corrects if there are more columsn than slices
-    private static int fffectiveColumns(int totalNumSlices, int columns) {
+    private static int effectiveColumns(int totalNumSlices, int columns) {
         return Math.min(totalNumSlices, columns);
     }
 
