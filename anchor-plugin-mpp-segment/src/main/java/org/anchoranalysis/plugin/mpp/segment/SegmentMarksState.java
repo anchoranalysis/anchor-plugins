@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 
 // State that only needs to be initialized once can be shared across many calls to the algoritm
 @AllArgsConstructor
-public class SgmnMPPState implements ExperimentState {
+public class SegmentMarksState implements ExperimentState {
 
     private static final String OUTPUT_SERIALIZED = "kernelProposer";
 

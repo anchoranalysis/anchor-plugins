@@ -53,7 +53,7 @@ import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class FeatureListMPPTest {
+class FeatureListMarksTest {
 
     private static final EnergyStack ENERGY_STACK = EnergyStackFixture.create(false, true);
     private static final Dimensions DIMENSIONS = ENERGY_STACK.dimensions();
@@ -87,7 +87,7 @@ class FeatureListMPPTest {
     void testMark() throws InitException, CreateException, NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputMark> session =
-                createAndStart(FeatureListFixtureMPP.mark());
+                createAndStart(FeatureListMarksFixture.mark());
 
         MarkFixture markFixture = new MarkFixture(DIMENSIONS);
 
@@ -119,7 +119,7 @@ class FeatureListMPPTest {
                     NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputMarkCollection> session =
-                createAndStart(FeatureListFixtureMPP.marks());
+                createAndStart(FeatureListMarksFixture.marks());
 
         MarkCollectionFixture marksFixture = new MarkCollectionFixture(DIMENSIONS);
 

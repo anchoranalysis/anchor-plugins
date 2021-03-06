@@ -33,7 +33,7 @@ import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkColle
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 
-public class FeatureListFixtureMPP {
+public class FeatureListMarksFixture {
 
     private static TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 

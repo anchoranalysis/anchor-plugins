@@ -32,17 +32,15 @@ import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
+import lombok.AllArgsConstructor;
 
-public class TestLoaderMPP {
+@AllArgsConstructor
+public class TestLoaderMarks {
 
-    private TestLoader delegate;
-
-    public TestLoaderMPP(TestLoader loader) {
-        this.delegate = loader;
-    }
+    private TestLoader loader;
 
     public MarkCollection openMarksFromTestPath(String testPath) {
-        Path filePath = delegate.resolveTestPath(testPath);
+        Path filePath = loader.resolveTestPath(testPath);
         return openMarksFromFilePath(filePath);
     }
 
