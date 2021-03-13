@@ -55,7 +55,7 @@ class CommonRootHelper {
                 .orElseThrow(
                         () ->
                                 new ExperimentExecutionException(
-                                        "No common root exists for the paths, so cannot copy"));
+                                        "No common root exists for the paths, so cannot copy."));
     }
 
     /** Finds the common root of a list of inputs. */
