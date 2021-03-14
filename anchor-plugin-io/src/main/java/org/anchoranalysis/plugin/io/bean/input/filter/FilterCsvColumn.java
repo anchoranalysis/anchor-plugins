@@ -107,7 +107,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
         while (itr.hasNext()) {
             T item = itr.next();
 
-            if (!mustContain.contains(item.name())) {
+            if (!mustContain.contains(item.identifier())) {
                 itr.remove();
             }
         }

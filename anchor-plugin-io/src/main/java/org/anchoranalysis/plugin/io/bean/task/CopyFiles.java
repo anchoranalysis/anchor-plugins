@@ -42,16 +42,17 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.files.FileWithDirectoryInput;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.math.arithmetic.Counter;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.Bytewise;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.naming.CopyFilesNaming;
+import org.anchoranalysis.plugin.io.input.path.CopyContext;
 import org.anchoranalysis.plugin.io.shared.RecordingCounter;
 
 /**
@@ -130,9 +131,10 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
             copyFile(
                     input.getInput().getDirectory(),
                     input.getContextExperiment().getOutputter(),
-                    input.getInput().pathForBindingRequired().toFile(),
+                    input.getInput().getFile(),
+                    input.getContextJob().getOutputter().getPrefix(),
                     input.getSharedState());
-        } catch (OperationFailedException | InputReadFailedException e) {
+        } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
         }
     }
@@ -149,7 +151,11 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
     }
 
     private void copyFile(
-            Path source, Outputter outputter, File file, RecordingCounter<T> recordingCounter)
+            Path source,
+            Outputter outputter,
+            File file,
+            DirectoryWithPrefix outputTarget,
+            RecordingCounter<T> recordingCounter)
             throws OperationFailedException {
 
         Path destinationDirectory = outputter.getOutputDirectory();
@@ -157,24 +163,13 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
         try {
             int index = recordingCounter.incrementCounter();
 
+            CopyContext<T> context =
+                    new CopyContext<>(
+                            source, destinationDirectory, recordingCounter.getNamingSharedState());
             Optional<Path> destinationFile =
-                    naming.destinationPath(
-                            source,
-                            destinationDirectory,
-                            file,
-                            index,
-                            recordingCounter.getNamingSharedState());
+                    naming.destinationPath(file, outputTarget, index, context);
 
             if (destinationFile.isPresent() && copyEnabled) {
-
-                // Express the destination path relative to the output directory
-                // Path destinationFileRelative =
-                // destinationFile.get().relativize(destinationDirectory);
-
-                // outputter.writerPermissive().createFilenameForWriting(outputName, extension,
-                // manifestDescription)
-                // outputter.
-
                 method.makeCopy(file.toPath(), destinationFile.get());
             }
 

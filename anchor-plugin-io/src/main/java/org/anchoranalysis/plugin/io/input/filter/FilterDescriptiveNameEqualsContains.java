@@ -73,7 +73,7 @@ public class FilterDescriptiveNameEqualsContains {
         while (itr.hasNext()) {
             T item = itr.next();
 
-            if (!predicate.test(item.name())) {
+            if (!predicate.test(item.identifier())) {
                 itr.remove();
             }
         }

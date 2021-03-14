@@ -75,7 +75,7 @@ class ConvertInputHelper {
             T input, Optional<Path> directory) throws ExperimentExecutionException {
         try {
             NamedFile namedFile =
-                    new NamedFile(input.name(), input.pathForBindingRequired().toFile());
+                    new NamedFile(input.identifier(), input.pathForBindingRequired().toFile());
             return new FileWithDirectoryInput(namedFile, directory.get()); // NOSONAR
         } catch (InputReadFailedException e) {
             throw new ExperimentExecutionException(e);

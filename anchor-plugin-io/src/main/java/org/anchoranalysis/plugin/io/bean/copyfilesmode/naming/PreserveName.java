@@ -32,6 +32,8 @@ import java.util.Optional;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.plugin.io.input.path.CopyContext;
 
 /**
  * Copies files to maintain the same relative-path from the destination file to the
@@ -49,14 +51,15 @@ public class PreserveName extends CopyFilesNamingWithoutSharedState {
 
     @Override
     public Optional<Path> destinationPathRelative(
-            Path sourceDirectory,
-            Path destinationDirectory,
             File file,
+            DirectoryWithPrefix outputTarget,
             int iter,
-            NoSharedState sharedState)
+            CopyContext<NoSharedState> context)
             throws OutputWriteFailedException {
         try {
-            return Optional.of(NamingUtilities.filePathDifference(sourceDirectory, file.toPath()));
+            return Optional.of(
+                    NamingUtilities.filePathDifference(
+                            context.getSourceDirectory(), file.toPath()));
         } catch (PathDifferenceException e) {
             throw new OutputWriteFailedException(e);
         }

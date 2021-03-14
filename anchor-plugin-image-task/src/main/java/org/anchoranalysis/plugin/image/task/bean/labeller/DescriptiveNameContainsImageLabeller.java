@@ -44,6 +44,6 @@ public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabe
     public String labelFor(
             NoSharedState sharedState, ProvidesStackInput input, InputOutputContext context)
             throws OperationFailedException {
-        return classificationString(input.name().contains(contains));
+        return classificationString(input.identifier().contains(contains));
     }
 }

@@ -35,6 +35,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.plugin.io.input.path.CopyContext;
 
 public abstract class CopyFilesNamingOne extends CopyFilesNamingWithoutSharedState {
 
@@ -50,15 +52,13 @@ public abstract class CopyFilesNamingOne extends CopyFilesNamingWithoutSharedSta
 
     @Override
     public Optional<Path> destinationPathRelative(
-            Path sourceDirectory,
-            Path destinationDirectory,
             File file,
+            DirectoryWithPrefix outputTarget,
             int iter,
-            NoSharedState sharedState)
+            CopyContext<NoSharedState> context)
             throws OutputWriteFailedException {
         Optional<Path> pathDelegate =
-                copyFilesNaming.destinationPathRelative(
-                        sourceDirectory, destinationDirectory, file, iter, sharedState);
+                copyFilesNaming.destinationPathRelative(file, outputTarget, iter, context);
         return OptionalUtilities.flatMap(pathDelegate, this::destinationPathRelative);
     }
 
