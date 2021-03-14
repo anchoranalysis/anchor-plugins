@@ -74,7 +74,7 @@ class ExtractVariableSpanForList {
 
     private static List<NamedFile> mapNamesOnList(
             Collection<NamedFile> collection, BiFunction<String, File, String> changeName) {
-        return FunctionalList.mapToList(collection, df -> df.mapName(changeName));
+        return FunctionalList.mapToList(collection, df -> df.mapIdentifier(changeName));
     }
 
     private static String prependName(String prefix, String name) {
@@ -82,7 +82,7 @@ class ExtractVariableSpanForList {
     }
 
     private static boolean hasAnyEmptyDescriptiveName(List<NamedFile> list) {
-        return list.stream().filter(df -> df.getName().isEmpty()).count() > 0;
+        return list.stream().filter(df -> df.getIdentifier().isEmpty()).count() > 0;
     }
 
     private static List<NamedFile> listExtractMaybeEmpty(

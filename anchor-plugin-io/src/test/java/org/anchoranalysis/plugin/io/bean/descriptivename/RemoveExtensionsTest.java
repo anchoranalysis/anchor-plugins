@@ -111,6 +111,6 @@ class RemoveExtensionsTest {
     }
 
     private static String nameFor(List<NamedFile> df, int index) {
-        return df.get(index).getName();
+        return df.get(index).getIdentifier();
     }
 }

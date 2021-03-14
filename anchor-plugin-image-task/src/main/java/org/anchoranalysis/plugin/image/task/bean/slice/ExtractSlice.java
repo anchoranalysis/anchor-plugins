@@ -116,7 +116,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                     selectSlice(
                             energyStack,
                             params.getLogger(),
-                            params.getInput().name(),
+                            params.getInput().identifier(),
                             params.getSharedState());
 
             deriveSlicesAndOutput(

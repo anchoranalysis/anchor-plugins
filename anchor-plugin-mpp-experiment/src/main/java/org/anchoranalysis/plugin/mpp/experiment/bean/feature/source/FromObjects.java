@@ -153,7 +153,7 @@ public class FromObjects<T extends FeatureInput>
                 new InitializationContext(context.getContext()),
                 (initialization, energyStack) ->
                         calculateFeaturesForImage(
-                                input.name(),
+                                input.identifier(),
                                 new InitializationWithEnergyStack(initialization, energyStack),
                                 context));
     }

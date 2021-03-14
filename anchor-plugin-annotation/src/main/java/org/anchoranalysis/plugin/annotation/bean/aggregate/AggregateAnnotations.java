@@ -105,7 +105,7 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
             throws JobExecutionException {
         try {
             return input.labelForAggregation()
-                    .map(label -> new ImageAnnotation(input.name(), label));
+                    .map(label -> new ImageAnnotation(input.identifier(), label));
         } catch (InputReadFailedException exc) {
             throw new JobExecutionException(exc);
         }

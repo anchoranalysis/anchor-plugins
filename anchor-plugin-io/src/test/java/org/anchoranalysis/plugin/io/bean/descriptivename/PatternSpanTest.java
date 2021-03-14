@@ -101,6 +101,6 @@ class PatternSpanTest {
     }
 
     private static void assertIndexEquals(List<NamedFile> ret, int index, String expected) {
-        assertEquals(expected, ret.get(index).getName());
+        assertEquals(expected, ret.get(index).getIdentifier());
     }
 }

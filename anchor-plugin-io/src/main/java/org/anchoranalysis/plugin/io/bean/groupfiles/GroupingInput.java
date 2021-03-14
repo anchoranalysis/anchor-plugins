@@ -76,7 +76,7 @@ class GroupingInput extends NamedChannelsInput {
     }
 
     @Override
-    public String name() {
+    public String identifier() {
         return inputName;
     }
 

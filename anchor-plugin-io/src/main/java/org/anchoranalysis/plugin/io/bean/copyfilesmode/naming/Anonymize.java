@@ -38,6 +38,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.plugin.io.input.path.CopyContext;
 import org.anchoranalysis.plugin.io.shared.AnonymizeSharedState;
 import org.anchoranalysis.plugin.io.shared.NumberToStringConverter;
 
@@ -59,13 +61,12 @@ public class Anonymize extends CopyFilesNaming<AnonymizeSharedState> {
 
     @Override
     public Optional<Path> destinationPathRelative(
-            Path sourceDirectory,
-            Path destinationDirectory,
             File file,
+            DirectoryWithPrefix outputTarget,
             int iter,
-            AnonymizeSharedState sharedState)
+            CopyContext<AnonymizeSharedState> context)
             throws OutputWriteFailedException {
-        Integer mappedIteration = sharedState.getMapping().get(iter);
+        Integer mappedIteration = context.getSharedState().getMapping().get(iter);
         if (mappedIteration == null) {
             throw new OutputWriteFailedException(
                     "An unexpected value was passed as iteration, and no mapping is available: "
@@ -76,7 +77,8 @@ public class Anonymize extends CopyFilesNaming<AnonymizeSharedState> {
 
         String filenameToCopyTo =
                 ExtensionUtilities.appendExtension(
-                        sharedState.getNumberConverter().convert(mappedIteration), extension);
+                        context.getSharedState().getNumberConverter().convert(mappedIteration),
+                        extension);
         return Optional.of(Paths.get(filenameToCopyTo));
     }
 

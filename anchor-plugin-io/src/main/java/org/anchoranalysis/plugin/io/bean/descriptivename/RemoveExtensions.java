@@ -91,7 +91,9 @@ public class RemoveExtensions extends FileNamer {
         // A count for each file, based upon the uniqueness of the description
         Map<String, Long> countedWithoutExt =
                 dfWithoutExt.stream()
-                        .collect(Collectors.groupingBy(NamedFile::getName, Collectors.counting()));
+                        .collect(
+                                Collectors.groupingBy(
+                                        NamedFile::getIdentifier, Collectors.counting()));
 
         return listMaybeWithExtension(df, dfWithoutExt, countedWithoutExt);
     }
@@ -115,7 +117,7 @@ public class RemoveExtensions extends FileNamer {
         for (int i = 0; i < listWith.size(); i++) {
 
             NamedFile without = listWithout.get(i);
-            long count = countWithout.get(without.getName());
+            long count = countWithout.get(without.getIdentifier());
 
             out.add(count > 1 ? listWith.get(i) : without);
         }
@@ -128,7 +130,7 @@ public class RemoveExtensions extends FileNamer {
 
     private static NamedFile maybeRemoveExtension(NamedFile file, String elseName) {
         String maybeExtensionRemoved =
-                maybeRemoveExtensionForwardSlashes(file.getName(), file.getPath());
+                maybeRemoveExtensionForwardSlashes(file.getIdentifier(), file.getPath());
         if (maybeExtensionRemoved.isEmpty()) {
             maybeExtensionRemoved = elseName;
         }

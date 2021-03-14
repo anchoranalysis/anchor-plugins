@@ -7,10 +7,12 @@ import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.plugin.io.input.path.CopyContext;
 
 /**
  * Copies files using whatever prefix is assigned to an input by the {@link OutputManager} as the
- * file-name.
+ * file-name, adding the same extension as the source file.
  *
  * <p>An extension is added, based on whatever extension already exists on the file.
  *
@@ -22,18 +24,21 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  */
-public class UseOutputPrefix extends CopyFilesNamingWithoutSharedState {
+public class OutputPrefixWithExtension extends CopyFilesNamingWithoutSharedState {
 
     @Override
     public Optional<Path> destinationPathRelative(
-            Path sourceDirectory,
-            Path destinationDirectory,
             File file,
+            DirectoryWithPrefix outputTarget,
             int index,
-            NoSharedState sharedState)
+            CopyContext<NoSharedState> context)
             throws OutputWriteFailedException {
 
         Optional<String> extension = ExtensionUtilities.extractExtension(file.toString());
-        return null;
+
+        Path prefixRelativeToSource =
+                context.getDestinationDirectory().relativize(outputTarget.asPath(false));
+
+        return Optional.of(ExtensionUtilities.appendExtension(prefixRelativeToSource, extension));
     }
 }

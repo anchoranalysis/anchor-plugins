@@ -83,11 +83,11 @@ public class CoupledManifests implements InputFromManager {
         lastDirectories.setRemoveExtensionInDescription(false);
         return lastDirectories
                 .deriveName(jobManifest.getRootPath().toFile(), "<unknown>", logger)
-                .getName();
+                .getIdentifier();
     }
 
     @Override
-    public String name() {
+    public String identifier() {
         return name;
     }
 

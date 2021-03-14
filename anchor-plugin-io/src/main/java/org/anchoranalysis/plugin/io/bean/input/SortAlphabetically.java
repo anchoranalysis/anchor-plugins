@@ -55,7 +55,7 @@ public class SortAlphabetically<T extends InputFromManager> extends InputManager
         // Shallow copy
         List<T> list = new ArrayList<>(input.inputs(params));
 
-        Collections.sort(list, (T o1, T o2) -> o1.name().compareTo(o2.name()));
+        Collections.sort(list, (T o1, T o2) -> o1.identifier().compareTo(o2.identifier()));
 
         return list;
     }

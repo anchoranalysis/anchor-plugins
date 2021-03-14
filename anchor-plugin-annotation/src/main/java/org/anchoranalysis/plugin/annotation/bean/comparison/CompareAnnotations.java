@@ -217,7 +217,7 @@ public class CompareAnnotations<T extends Assignment>
 
     private SplitString createSplitString(AnnotationComparisonInput<ProvidesStackInput> input) {
         return hasDescriptiveSplit()
-                ? new SplitString(input.name(), splitDescriptiveNameRegex)
+                ? new SplitString(input.identifier(), splitDescriptiveNameRegex)
                 : null;
     }
 

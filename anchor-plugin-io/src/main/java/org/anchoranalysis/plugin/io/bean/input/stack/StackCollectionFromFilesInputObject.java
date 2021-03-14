@@ -118,8 +118,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     }
 
     @Override
-    public String name() {
-        return delegate.name();
+    public String identifier() {
+        return delegate.identifier();
     }
 
     @Override

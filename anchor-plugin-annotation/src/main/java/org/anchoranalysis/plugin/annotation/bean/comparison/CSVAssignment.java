@@ -111,7 +111,7 @@ class CSVAssignment {
         Elements rowElements = new Elements();
 
         try {
-            rowElements.add(input.name());
+            rowElements.add(input.identifier());
             rowElements.add(input.pathForBindingRequired().toString());
         } catch (InputReadFailedException e) {
             throw new OperationFailedException(e);
