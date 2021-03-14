@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.core.system.path.PathDifference;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
@@ -39,7 +40,6 @@ import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * Reuses the directories between a path and its root to form the output - and also the filename.
@@ -71,14 +71,10 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
     public DirectoryWithPrefix outFilePrefixFromPath(
             NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException {
 
-        PathDifference difference = differenceToPrefix(removeExtension(path.getPath()));
+        Path pathWithoutExtension = ExtensionUtilities.removeExtension(path.getPath());
+        PathDifference difference = differenceToPrefix(pathWithoutExtension);
 
         return new DirectoryWithPrefix(buildOutPath(root, difference));
-    }
-
-    private static Path removeExtension(Path withExtension) {
-        String pathWithExtension = withExtension.toString();
-        return Paths.get(FilenameUtils.removeExtension(pathWithExtension));
     }
 
     private PathDifference differenceToPrefix(Path pathInRemoved) throws PathPrefixerException {
@@ -89,11 +85,11 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
         }
     }
 
-    private Path buildOutPath(Path root, PathDifference ff) {
+    private Path buildOutPath(Path root, PathDifference difference) {
         if (includeDirectories) {
-            return root.resolve(ff.combined());
+            return root.resolve(difference.combined());
         } else {
-            return root.resolve(ff.getFilename());
+            return root.resolve(difference.getFilename());
         }
     }
 }

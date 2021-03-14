@@ -27,14 +27,14 @@
 package org.anchoranalysis.plugin.quick.bean.file.path.derive;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * Takes a file-path of form somedir/somename.ext and converts to somedir.ext
@@ -59,12 +59,9 @@ public class CollapseFileName extends DerivePath {
 
     private static Path collapse(Path path) throws CreateException {
 
-        PathTwoParts pathDir = new PathTwoParts(path);
+        PathTwoParts pathParts = new PathTwoParts(path);
 
-        String ext = FilenameUtils.getExtension(pathDir.getSecond().toString());
-        if (ext.isEmpty()) {
-            return pathDir.getFirst();
-        }
-        return Paths.get(String.format("%s.%s", pathDir.getFirst().toString(), ext));
+        Optional<String> extension = ExtensionUtilities.extractExtension(pathParts.getSecond());
+        return ExtensionUtilities.appendExtension(pathParts.getFirst(), extension);
     }
 }

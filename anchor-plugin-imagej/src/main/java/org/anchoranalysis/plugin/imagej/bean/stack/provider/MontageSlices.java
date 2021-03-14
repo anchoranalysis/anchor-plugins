@@ -87,15 +87,25 @@ public class MontageSlices extends StackProviderUnary {
         }
     }
 
-    private Channel montageChannel(Channel channel, int columns, int rows, int firstSlice, int lastSlice) throws OperationFailedException {
+    private Channel montageChannel(
+            Channel channel, int columns, int rows, int firstSlice, int lastSlice)
+            throws OperationFailedException {
 
         try {
             ImagePlus imp = ConvertToImagePlus.from(channel);
-    
+
             MontageMaker mm = new MontageMaker();
             ImagePlus result =
                     mm.makeMontage2(
-                            imp, columns, rows, scale, firstSlice, lastSlice, 1, borderWidth, label);
+                            imp,
+                            columns,
+                            rows,
+                            scale,
+                            firstSlice,
+                            lastSlice,
+                            1,
+                            borderWidth,
+                            label);
             return ConvertFromImagePlus.toChannel(result, channel.dimensions().resolution());
         } catch (ImageJConversionException e) {
             throw new OperationFailedException(e);

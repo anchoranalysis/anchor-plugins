@@ -43,12 +43,13 @@ import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FilterHelper {
 
-    /** 
-     * Applies a 2D rank-filter to each slice independently. 
-     * 
+    /**
+     * Applies a 2D rank-filter to each slice independently.
+     *
      * @throws OperationFailedException if <code>channel</code> contains an unsupported data-type.
      */
-    public static Channel applyRankFilter(Channel channel, int radius, int filterType) throws OperationFailedException {
+    public static Channel applyRankFilter(Channel channel, int radius, int filterType)
+            throws OperationFailedException {
         try {
             RankFilters rankFilters = new RankFilters();
             processEachSlice(channel, processor -> rankFilters.rank(processor, radius, filterType));
@@ -65,9 +66,11 @@ public class FilterHelper {
      *
      * @param channel the channel whose slices will be processed.
      * @param consumer successively applied to the {@link ImageProcessor} derived from each slice.
-     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short (the only two supported types)
+     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
+     *     (the only two supported types)
      */
-    public static void processEachSlice(Channel channel, Consumer<ImageProcessor> consumer) throws ImageJConversionException {
+    public static void processEachSlice(Channel channel, Consumer<ImageProcessor> consumer)
+            throws ImageJConversionException {
         VoxelsWrapper voxels = channel.voxels();
         channel.extent()
                 .iterateOverZ(

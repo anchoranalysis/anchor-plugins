@@ -36,10 +36,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.io.shared.AnonymizeSharedState;
 import org.anchoranalysis.plugin.io.shared.NumberToStringConverter;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * Copies files to a number 001 002 etc. in the same order they are inputted.
@@ -71,10 +71,12 @@ public class Anonymize extends CopyFilesNaming<AnonymizeSharedState> {
                     "An unexpected value was passed as iteration, and no mapping is available: "
                             + iter);
         }
+
+        Optional<String> extension = ExtensionUtilities.extractExtension(file.toString());
+
         String filenameToCopyTo =
-                sharedState.getNumberConverter().convert(mappedIteration)
-                        + "."
-                        + FilenameUtils.getExtension(file.toString());
+                ExtensionUtilities.appendExtension(
+                        sharedState.getNumberConverter().convert(mappedIteration), extension);
         return Optional.of(Paths.get(filenameToCopyTo));
     }
 

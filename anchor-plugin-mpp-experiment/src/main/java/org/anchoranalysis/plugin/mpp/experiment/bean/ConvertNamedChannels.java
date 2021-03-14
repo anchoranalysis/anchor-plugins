@@ -137,14 +137,13 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
     /** Convert all inputs, placing them into the map. */
     @SuppressWarnings("unchecked")
     private List<U> convertListAndPopulateMap(
-            List<T> inputs,
-            SharedStateRememberConverted<U, S> sharedState)
+            List<T> inputs, SharedStateRememberConverted<U, S> sharedState)
             throws ExperimentExecutionException {
-        
+
         Optional<Path> directory = deriveCommonRootIfNeeded(inputs);
-        
-        assert(!directory.isPresent() || directory.get().toFile().isDirectory());
-        
+
+        assert (!directory.isPresent() || directory.get().toFile().isDirectory());
+
         List<U> out = new ArrayList<>();
 
         InputTypesExpected inputTypesExpected = task.inputTypesExpected();
@@ -157,11 +156,13 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
         }
         return out;
     }
-    
+
     /**
-     * If a directory is associated with the inputs, as needed for conversion to {@link FileWithDirectoryInput}.
+     * If a directory is associated with the inputs, as needed for conversion to {@link
+     * FileWithDirectoryInput}.
      */
-    private Optional<Path> deriveCommonRootIfNeeded(List<T> inputs) throws ExperimentExecutionException {
+    private Optional<Path> deriveCommonRootIfNeeded(List<T> inputs)
+            throws ExperimentExecutionException {
         // Derive a directory if needed
         InputTypesExpected expectedFromDelegate = task.inputTypesExpected();
         return OptionalFactory.createWithException(
