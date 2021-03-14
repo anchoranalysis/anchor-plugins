@@ -38,9 +38,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.files.NamedFile;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
 /**
@@ -101,6 +101,6 @@ public class PatternSpan extends FileNamer {
 
     // The file-name without an extension
     private static String extensionlessNameFromFile(File file) {
-        return FilenameUtils.removeExtension(file.getName());
+        return ExtensionUtilities.removeExtension(file);
     }
 }

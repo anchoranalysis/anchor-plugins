@@ -126,17 +126,11 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
     public void doJobOnInput(InputBound<FileWithDirectoryInput, RecordingCounter<T>> input)
             throws JobExecutionException {
         // Determine a destination for the output, and create a corresponding logger
-        Path destination = input.getContextExperiment().getOutputter().getOutputDirectory();
-
         try {
             copyFile(
                     input.getInput().getDirectory(),
-                    destination,
+                    input.getContextExperiment().getOutputter(),
                     input.getInput().pathForBindingRequired().toFile(),
-                    input.getContextExperiment()
-                            .getOutputter()
-                            .outputsEnabled()
-                            .isOutputEnabled(OUTPUT_COPY),
                     input.getSharedState());
         } catch (OperationFailedException | InputReadFailedException e) {
             throw new JobExecutionException(e);
@@ -155,13 +149,11 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
     }
 
     private void copyFile(
-            Path source,
-            Path destinationDirectory,
-            File file,
-            boolean copyEnabled,
-            RecordingCounter<T> recordingCounter)
+            Path source, Outputter outputter, File file, RecordingCounter<T> recordingCounter)
             throws OperationFailedException {
 
+        Path destinationDirectory = outputter.getOutputDirectory();
+        boolean copyEnabled = outputter.outputsEnabled().isOutputEnabled(OUTPUT_COPY);
         try {
             int index = recordingCounter.incrementCounter();
 
@@ -174,6 +166,15 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
                             recordingCounter.getNamingSharedState());
 
             if (destinationFile.isPresent() && copyEnabled) {
+
+                // Express the destination path relative to the output directory
+                // Path destinationFileRelative =
+                // destinationFile.get().relativize(destinationDirectory);
+
+                // outputter.writerPermissive().createFilenameForWriting(outputName, extension,
+                // manifestDescription)
+                // outputter.
+
                 method.makeCopy(file.toPath(), destinationFile.get());
             }
 

@@ -33,8 +33,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.input.bean.descriptivename.FileNamerIndependent;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * Derives a name by taking the filename together with optionally several subdirectories names.
@@ -96,7 +96,7 @@ public class LastDirectories extends FileNamerIndependent {
 
         String nameOut = "";
         if (!skipFileName) {
-            nameOut = maybeRemoveExtension(new File(file.getPath()).getName());
+            nameOut = maybeRemoveExtension(file);
         }
 
         File currentFile = file;
@@ -123,11 +123,11 @@ public class LastDirectories extends FileNamerIndependent {
         }
     }
 
-    private String maybeRemoveExtension(String path) {
+    private String maybeRemoveExtension(File file) {
         if (removeExtensionInDescription) {
-            return FilenameUtils.removeExtension(path);
+            return ExtensionUtilities.removeExtension(file);
         } else {
-            return path;
+            return file.getName();
         }
     }
 }

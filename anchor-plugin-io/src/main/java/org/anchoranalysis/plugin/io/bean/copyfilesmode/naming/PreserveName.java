@@ -33,7 +33,13 @@ import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class PreserveName extends CopyFilesNaming<NoSharedState> {
+/**
+ * Copies files to maintain the same relative-path from the destination file to the
+ * destination-directory, as existed from the source file to the source-directory.
+ *
+ * @author Owen Feehan
+ */
+public class PreserveName extends CopyFilesNamingWithoutSharedState {
 
     @Override
     public NoSharedState beforeCopying(Path destinationDirectory, int totalNumberFiles) {

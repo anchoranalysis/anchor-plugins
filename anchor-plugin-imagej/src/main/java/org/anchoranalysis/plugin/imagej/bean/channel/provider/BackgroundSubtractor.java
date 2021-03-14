@@ -47,19 +47,19 @@ public class BackgroundSubtractor extends WithRadiusBase {
             throw new CreateException(e);
         }
     }
-    
+
     private void subtractBackground(ImagePlus image, Extent extent, int radius) {
 
         BackgroundSubtracter plugin = new BackgroundSubtracter();
         extent.iterateOverZ(
-                        z ->
-                                plugin.rollingBallBackground(
-                                        image.getStack().getProcessor(z + 1),
-                                        radius,
-                                        false,
-                                        false,
-                                        false,
-                                        true,
-                                        true));        
+                z ->
+                        plugin.rollingBallBackground(
+                                image.getStack().getProcessor(z + 1),
+                                radius,
+                                false,
+                                false,
+                                false,
+                                true,
+                                true));
     }
 }

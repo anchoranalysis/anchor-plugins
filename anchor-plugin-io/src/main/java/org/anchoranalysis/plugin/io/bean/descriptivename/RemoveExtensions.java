@@ -40,10 +40,10 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.files.NamedFile;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * Removes extensions from the descriptive-name (but not from the file) AND only if the extension
@@ -152,7 +152,7 @@ public class RemoveExtensions extends FileNamer {
     private static String removeExtension(String nameLikePath) {
         Path path = Paths.get(nameLikePath);
         Path fileNamePart = path.getFileName();
-        String fileNamePartRemoved = FilenameUtils.removeExtension(fileNamePart.toString());
+        String fileNamePartRemoved = ExtensionUtilities.removeExtension(fileNamePart.toString());
 
         // Trim any white space from either side before resolving
         fileNamePartRemoved = fileNamePartRemoved.trim();

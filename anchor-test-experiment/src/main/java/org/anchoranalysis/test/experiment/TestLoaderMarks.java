@@ -27,12 +27,12 @@
 package org.anchoranalysis.test.experiment;
 
 import java.nio.file.Path;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class TestLoaderMarks {

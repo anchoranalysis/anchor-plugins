@@ -51,7 +51,6 @@ public class GaussianBlur2D extends ChannelProviderUnary {
             throw new CreateException(e);
         }
     }
-    
 
     @SuppressWarnings("deprecation")
     private Channel blur(Channel channel) throws ImageJConversionException {

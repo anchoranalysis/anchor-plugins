@@ -6,12 +6,11 @@ import org.anchoranalysis.test.image.rasterwriter.PNGTestBase;
 
 /**
  * Tests {@link PNG}, the ImageJ PNG writer.
- * 
- * <p>This test is located here rather than in the same package as {@link PNG} so as to have
- * access to {@link PNGTestBase}.
- * 
- * @author Owen Feehan
  *
+ * <p>This test is located here rather than in the same package as {@link PNG} so as to have access
+ * to {@link PNGTestBase}.
+ *
+ * @author Owen Feehan
  */
 class ImageJPNGWriterTest extends PNGTestBase {
 

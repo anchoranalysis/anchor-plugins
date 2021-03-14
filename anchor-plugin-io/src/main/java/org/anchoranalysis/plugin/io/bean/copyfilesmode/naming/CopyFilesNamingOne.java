@@ -36,7 +36,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public abstract class CopyFilesNamingOne extends CopyFilesNaming<NoSharedState> {
+public abstract class CopyFilesNamingOne extends CopyFilesNamingWithoutSharedState {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private CopyFilesNaming<NoSharedState> copyFilesNaming;
@@ -45,7 +45,7 @@ public abstract class CopyFilesNamingOne extends CopyFilesNaming<NoSharedState> 
     @Override
     public NoSharedState beforeCopying(Path destinationDirectory, int totalNumberFiles) {
         copyFilesNaming.beforeCopying(destinationDirectory, totalNumberFiles);
-        return NoSharedState.INSTANCE;
+        return super.beforeCopying(destinationDirectory, totalNumberFiles);
     }
 
     @Override
