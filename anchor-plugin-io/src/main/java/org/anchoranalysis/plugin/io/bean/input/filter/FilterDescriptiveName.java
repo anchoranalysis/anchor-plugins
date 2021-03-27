@@ -63,6 +63,6 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
         FilterDescriptiveNameEqualsContains filter =
                 new FilterDescriptiveNameEqualsContains(equals, contains);
 
-        return filter.removeNonMatching(fromDelegate);  // Existing collection
+        return filter.removeNonMatching(fromDelegate); // Existing collection
     }
 }

@@ -81,7 +81,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManagerUna
             throw new InputReadFailedException(e);
         }
     }
-    
+
     private Set<String> matchingNames(Path pathForGenerator, boolean doDebug, int numRowsExpected)
             throws DerivePathException {
         // Read CSV file using the path of the first object
