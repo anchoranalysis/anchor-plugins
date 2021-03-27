@@ -53,7 +53,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.image.io.ImageInitializationFactory;
 import org.anchoranalysis.image.io.histogram.input.HistogramCSVReader;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
-import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.input.file.FileInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;

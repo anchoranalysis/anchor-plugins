@@ -35,8 +35,8 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.files.FileWithDirectoryInput;
-import org.anchoranalysis.io.input.files.NamedFile;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
+import org.anchoranalysis.io.input.file.NamedFile;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.input.stack.ConvertNamedChannelsInputToStack;
 

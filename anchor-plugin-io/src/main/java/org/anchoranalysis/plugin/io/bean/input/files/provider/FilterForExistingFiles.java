@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.io.input.bean.files.FilesProviderUnary;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 import org.anchoranalysis.io.input.path.DerivePathException;
 
 public class FilterForExistingFiles extends FilesProviderUnary {

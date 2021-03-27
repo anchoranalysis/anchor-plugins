@@ -53,7 +53,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.IgnoreUnderscorePrefixUnless;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.io.bean.filepath.prefixer.DirectoryStructure;
+import org.anchoranalysis.plugin.io.bean.file.path.prefixer.DirectoryStructure;
 import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
 

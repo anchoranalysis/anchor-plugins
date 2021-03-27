@@ -39,7 +39,7 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 import org.anchoranalysis.io.manifest.deserializer.SimpleManifestDeserializer;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;

@@ -34,7 +34,10 @@ import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.files.NamedFile;
+import org.anchoranalysis.io.input.file.FileNamerContext;
+import org.anchoranalysis.io.input.file.NamedFile;
+import org.anchoranalysis.plugin.io.bean.file.namer.NormalizedPath;
+import org.anchoranalysis.plugin.io.bean.file.namer.RemoveExtension;
 import org.anchoranalysis.test.LoggingFixture;
 import org.junit.jupiter.api.Test;
 
@@ -77,7 +80,7 @@ class RemoveExtensionsTest {
 
     private List<NamedFile> applyTest(boolean preserveExtension, List<File> files)
             throws InputReadFailedException {
-        RemoveExtensions remove = new RemoveExtensions();
+        RemoveExtension remove = new RemoveExtension();
 
         // The normalize-path is a simple descriptive-name that reuses the existing
         //  path, only making sure it has forward-slashes. So it's good for testing
@@ -85,7 +88,7 @@ class RemoveExtensionsTest {
         remove.setNamer(new NormalizedPath());
 
         remove.setPreserveExtensionIfDuplicate(preserveExtension);
-        return remove.deriveNameUnique(files, LOGGER);
+        return remove.deriveNameUnique(files, new FileNamerContext(LOGGER));
     }
 
     private static List<File> listOfFiles() {

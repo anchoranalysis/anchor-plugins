@@ -26,25 +26,29 @@
 package org.anchoranalysis.plugin.io.bean.input.files;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
-import org.anchoranalysis.io.input.files.FilesProviderException;
-import org.anchoranalysis.io.input.files.NamedFile;
-import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
-import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
+import org.anchoranalysis.io.input.bean.namer.FileNamer;
+import org.anchoranalysis.io.input.file.FileNamerContext;
+import org.anchoranalysis.io.input.file.FilesProviderException;
+import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
  * Base class for an input-manager that produces inputs that are created from a {@link NamedFile}.
@@ -57,7 +61,7 @@ import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan
 public abstract class NamedFilesBase<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FileNamer namer = new RemoveExtensions(new PatternSpan());
+    @BeanField @DefaultInstance @Getter @Setter private FileNamer namer;
     // END BEAN PROPERTIES
 
     /**
@@ -77,10 +81,21 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
         try {
             Collection<File> filesCreated = files.create(params);
 
+            FileNamerContext context =
+                    new FileNamerContext(
+                            inputDirectory(files, params.getInputContext()),
+                            params.getInputContext().isRelativeForIdentifier(),
+                            params.getLogger());
             return FunctionalList.mapToList(
-                    namer.deriveNameUnique(filesCreated, params.getLogger()), mapToInput);
+                    namer.deriveNameUnique(filesCreated, context), mapToInput);
         } catch (FilesProviderException e) {
             throw new InputReadFailedException("Cannot find files", e);
         }
+    }
+
+    private static Optional<Path> inputDirectory(FilesProvider files, InputContextParams context)
+            throws FilesProviderException {
+        return OptionalUtilities.orElseGetFlat(
+                context.getInputDirectory(), () -> files.rootDirectory(context));
     }
 }

@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
-import org.anchoranalysis.io.input.files.FileWithDirectoryInput;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 
 public class NamedFilesWithDirectory extends NamedFilesBase<FileWithDirectoryInput> {
 
