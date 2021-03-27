@@ -108,7 +108,7 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
     private void summarizeExperimentArguments(MessageLogger log, ExecutionArguments arguments) {
         arguments
                 .input()
-                .getInputDirectory()
+                .getDirectory()
                 .ifPresent(dir -> log.logFormatted("An input-directory has been set as %s", dir));
 
         arguments

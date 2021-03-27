@@ -31,10 +31,11 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
  * Randomly shuffles the order of an input-manager
@@ -42,17 +43,18 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
  * @author Owen Feehan
  * @param <T> input-object type
  */
-public class Shuffle<T extends InputFromManager> extends InputManager<T> {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private InputManager<T> input;
-    // END BEAN PROPERITES
+public class Shuffle<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
-
-        List<T> list = input.inputs(params);
-        Collections.shuffle(list);
-        return list;
+    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params) {
+        return shuffleInputs(fromDelegate, params);
+    }
+    
+    static <T extends InputFromManager> List<T> shuffleInputs(List<T> inputs, InputManagerParams params) {
+        MessageLogger logger = params.getLogger().messageLogger(); 
+        logger.log("Shuffling input order.");
+        logger.logEmptyLine();
+        Collections.shuffle(inputs);
+        return inputs;
     }
 }

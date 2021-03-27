@@ -33,8 +33,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
  * Limits the number of input-objects to a certain hard-maximum
@@ -44,27 +44,23 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
  * @author Owen Feehan
  * @param <T>
  */
-public class Limit<T extends InputFromManager> extends InputManager<T> {
+public class Limit<T extends InputFromManager> extends InputManagerUnary<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private InputManager<T> input;
-
-    @BeanField @Getter @Setter private int maxNumItems = 0;
+    @BeanField @Getter @Setter private int maxNumberItems = 0;
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
-
+    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+            throws InputReadFailedException {
         int i = 0;
 
-        List<T> list = input.inputs(params);
-
-        ListIterator<T> itr = list.listIterator();
+        ListIterator<T> itr = fromDelegate.listIterator();
         while (itr.hasNext()) {
-            if (i++ >= maxNumItems) {
+            if (i++ >= maxNumberItems) {
                 itr.remove();
             }
         }
-        return list;
+        return fromDelegate;
     }
 }
