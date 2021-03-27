@@ -35,8 +35,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerUnary;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.path.DerivePathException;
@@ -52,40 +52,36 @@ import org.anchoranalysis.io.input.path.DerivePathException;
  * @author Owen Feehan
  * @param <T> InputType
  */
-public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T> {
+public class FilterCsvColumn<T extends InputFromManager> extends InputManagerUnary<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private InputManager<T> input;
-
     @BeanField @Getter @Setter private DerivePath csvFilePath;
 
     @BeanField @Getter @Setter private String match;
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
+    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+            throws InputReadFailedException {
 
-        // Existing collection
-        List<T> in = input.inputs(params);
-
-        if (in.isEmpty()) {
-            return in;
+        if (fromDelegate.isEmpty()) {
+            return fromDelegate;
         }
 
         try {
             Set<String> matching =
                     matchingNames(
-                            in.get(0).pathForBindingRequired(),
+                            fromDelegate.get(0).pathForBindingRequired(),
                             params.isDebugModeActivated(),
-                            in.size());
+                            fromDelegate.size());
 
-            applyFilter(in, matching);
-            return in;
+            applyFilter(fromDelegate, matching);
+            return fromDelegate;
         } catch (DerivePathException e) {
             throw new InputReadFailedException(e);
         }
     }
-
+    
     private Set<String> matchingNames(Path pathForGenerator, boolean doDebug, int numRowsExpected)
             throws DerivePathException {
         // Read CSV file using the path of the first object
