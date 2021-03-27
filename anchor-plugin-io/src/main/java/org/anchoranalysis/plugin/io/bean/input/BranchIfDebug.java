@@ -53,7 +53,8 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManagerUnary
     // END BEAN PROPERTIES
 
     @Override
-    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params) throws InputReadFailedException {
+    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+            throws InputReadFailedException {
         if (params.isDebugModeActivated()) {
             if (inputDebug == null) {
                 // We pick the first
