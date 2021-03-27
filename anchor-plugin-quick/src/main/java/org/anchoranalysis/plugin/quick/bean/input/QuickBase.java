@@ -36,10 +36,10 @@ import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
-import org.anchoranalysis.io.input.files.FileInput;
-import org.anchoranalysis.plugin.io.bean.descriptivename.LastDirectories;
+import org.anchoranalysis.io.input.bean.namer.FileNamer;
+import org.anchoranalysis.io.input.file.FileInput;
+import org.anchoranalysis.plugin.io.bean.file.namer.LastDirectories;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 
 /**

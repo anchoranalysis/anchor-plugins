@@ -70,8 +70,8 @@ import org.anchoranalysis.mpp.segment.bean.optimization.termination.TriggerTermi
 import org.anchoranalysis.mpp.segment.optimization.DualStack;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationContext;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationTerminatedEarlyException;
-import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
-import org.anchoranalysis.plugin.mpp.segment.SgmnMPPState;
+import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMarksWithEnergy;
+import org.anchoranalysis.plugin.mpp.segment.SegmentMarksState;
 
 /**
  * Segments a channel with marked pointed processes.
@@ -118,7 +118,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     private FeedbackReceiverBean<VoxelizedMarksWithEnergy> feedbackReceiver;
 
     /** Adds definitions of stacks/objects etc. to be used during segmentation. */
-    @BeanField @Getter @Setter private DefineOutputterMPPWithEnergy define;
+    @BeanField @Getter @Setter private DefineOutputterMarksWithEnergy define;
 
     /** Iff true the algorithm exits before optimization begins (useful for debugging). */
     @BeanField @Getter @Setter private boolean exitBeforeOptimization = false;
@@ -134,8 +134,8 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     private EnergySchemeWithSharedFeatures energySchemeShared;
 
     @Override
-    public SgmnMPPState createExperimentState() {
-        return new SgmnMPPState(kernelProposer, define.getDefine());
+    public SegmentMarksState createExperimentState() {
+        return new SegmentMarksState(kernelProposer, define.getDefine());
     }
 
     // Do segmentation

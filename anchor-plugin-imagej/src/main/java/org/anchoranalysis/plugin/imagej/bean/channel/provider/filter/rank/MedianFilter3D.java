@@ -32,18 +32,27 @@ import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
+import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 
 public class MedianFilter3D extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        ImagePlus image = ConvertToImagePlus.from(channel);
+        try {
+            ImagePlus image = ConvertToImagePlus.from(channel);
 
+            ImagePlus filtered = applyFilter(image);
+
+            return ConvertFromImagePlus.toChannel(filtered, channel.resolution());
+        } catch (ImageJConversionException e) {
+            throw new CreateException(e);
+        }
+    }
+
+    private ImagePlus applyFilter(ImagePlus image) {
         Hybrid_3D_Median_Filter plugin = new Hybrid_3D_Median_Filter();
         plugin.setup("", image);
 
-        ImagePlus filtered = plugin.Hybrid3dMedianizer(image);
-
-        return ConvertFromImagePlus.toChannel(filtered, channel.resolution());
+        return plugin.Hybrid3dMedianizer(image);
     }
 }

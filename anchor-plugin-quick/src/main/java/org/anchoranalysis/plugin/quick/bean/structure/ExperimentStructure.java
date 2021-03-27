@@ -38,8 +38,8 @@ import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
-import org.anchoranalysis.plugin.io.bean.filepath.prefixer.PathRegEx;
-import org.anchoranalysis.plugin.io.bean.filepath.prefixer.Rooted;
+import org.anchoranalysis.plugin.io.bean.file.path.prefixer.PathRegEx;
+import org.anchoranalysis.plugin.io.bean.file.path.prefixer.Rooted;
 
 /**
  * A {@link PathPrefixer} that combines a prefix with an {@code experimentType}.

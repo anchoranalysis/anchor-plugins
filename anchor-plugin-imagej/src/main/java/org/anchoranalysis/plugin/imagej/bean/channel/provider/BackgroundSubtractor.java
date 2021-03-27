@@ -32,25 +32,34 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
+import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
+import org.anchoranalysis.spatial.Extent;
 
 public class BackgroundSubtractor extends WithRadiusBase {
 
     @Override
     protected Channel createFromChannel(Channel channel, int radius) throws CreateException {
-        ImagePlus image = ConvertToImagePlus.from(channel);
+        try {
+            ImagePlus image = ConvertToImagePlus.from(channel);
+            subtractBackground(image, channel.extent(), radius);
+            return ConvertFromImagePlus.toChannel(image, channel.resolution());
+        } catch (ImageJConversionException e) {
+            throw new CreateException(e);
+        }
+    }
+
+    private void subtractBackground(ImagePlus image, Extent extent, int radius) {
 
         BackgroundSubtracter plugin = new BackgroundSubtracter();
-        channel.extent()
-                .iterateOverZ(
-                        z ->
-                                plugin.rollingBallBackground(
-                                        image.getStack().getProcessor(z + 1),
-                                        radius,
-                                        false,
-                                        false,
-                                        false,
-                                        true,
-                                        true));
-        return ConvertFromImagePlus.toChannel(image, channel.resolution());
+        extent.iterateOverZ(
+                z ->
+                        plugin.rollingBallBackground(
+                                image.getStack().getProcessor(z + 1),
+                                radius,
+                                false,
+                                false,
+                                false,
+                                true,
+                                true));
     }
 }

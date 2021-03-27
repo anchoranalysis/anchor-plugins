@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerUnary;
 import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
 
 /**
@@ -45,11 +45,9 @@ import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsCont
  * @author Owen Feehan
  * @param <T> input-type
  */
-public class FilterDescriptiveName<T extends InputFromManager> extends InputManager<T> {
+public class FilterDescriptiveName<T extends InputFromManager> extends InputManagerUnary<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private InputManager<T> input;
-
     /**
      * A descriptive-name must be exactly equal to (case-sensitive) this string. If empty, disabled.
      */
@@ -60,13 +58,11 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
-
+    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+            throws InputReadFailedException {
         FilterDescriptiveNameEqualsContains filter =
                 new FilterDescriptiveNameEqualsContains(equals, contains);
 
-        return filter.removeNonMatching(
-                input.inputs(params) // Existing collection
-                );
+        return filter.removeNonMatching(fromDelegate); // Existing collection
     }
 }

@@ -27,9 +27,10 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.path;
 
 import java.nio.file.Path;
+import java.util.Optional;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.shared.FrequencyMap;
-import org.apache.commons.io.FilenameUtils;
 
 /** Remembers each unique extension, and associated count */
 public class ExtensionCount extends Summarizer<Path> {
@@ -41,7 +42,7 @@ public class ExtensionCount extends Summarizer<Path> {
     @Override
     public void add(Path fullFilePath) {
 
-        String extension = FilenameUtils.getExtension(fullFilePath.toString());
+        Optional<String> extension = ExtensionUtilities.extractExtension(fullFilePath.toString());
 
         map.incrementCount(tidyExtension(extension));
     }
@@ -52,12 +53,11 @@ public class ExtensionCount extends Summarizer<Path> {
         return map.describe("extension");
     }
 
-    private static String tidyExtension(String extension) {
-
-        if (extension.isEmpty()) {
-            return NO_EXTENSION;
+    private static String tidyExtension(Optional<String> extension) {
+        if (extension.isPresent()) {
+            return extension.get().toLowerCase();
         } else {
-            return extension.toLowerCase();
+            return NO_EXTENSION;
         }
     }
 }

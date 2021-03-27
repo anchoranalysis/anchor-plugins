@@ -33,8 +33,9 @@ import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.files.NamedFile;
-import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
+import org.anchoranalysis.io.input.file.FileNamerContext;
+import org.anchoranalysis.io.input.file.NamedFile;
+import org.anchoranalysis.plugin.io.bean.file.namer.patternspan.PatternSpan;
 import org.anchoranalysis.test.LoggingFixture;
 import org.junit.jupiter.api.Test;
 
@@ -88,8 +89,8 @@ class PatternSpanTest {
     private static void applyTest(String[] paths, String[] expected) {
         List<File> files = filesFromStrs(paths);
 
-        PatternSpan ps = new PatternSpan();
-        List<NamedFile> ret = ps.deriveName(files, "unknown", LOGGER);
+        PatternSpan span = new PatternSpan();
+        List<NamedFile> ret = span.deriveName(files, new FileNamerContext(LOGGER));
 
         for (int i = 0; i < expected.length; i++) {
             assertIndexEquals(ret, i, expected[i]);
@@ -101,6 +102,6 @@ class PatternSpanTest {
     }
 
     private static void assertIndexEquals(List<NamedFile> ret, int index, String expected) {
-        assertEquals(expected, ret.get(index).getName());
+        assertEquals(expected, ret.get(index).getIdentifier());
     }
 }

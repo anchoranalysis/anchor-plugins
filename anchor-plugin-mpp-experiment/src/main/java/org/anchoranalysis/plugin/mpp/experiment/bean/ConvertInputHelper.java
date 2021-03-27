@@ -35,8 +35,8 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.files.FileWithDirectoryInput;
-import org.anchoranalysis.io.input.files.NamedFile;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
+import org.anchoranalysis.io.input.file.NamedFile;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.input.stack.ConvertNamedChannelsInputToStack;
 
@@ -75,7 +75,7 @@ class ConvertInputHelper {
             T input, Optional<Path> directory) throws ExperimentExecutionException {
         try {
             NamedFile namedFile =
-                    new NamedFile(input.name(), input.pathForBindingRequired().toFile());
+                    new NamedFile(input.identifier(), input.pathForBindingRequired().toFile());
             return new FileWithDirectoryInput(namedFile, directory.get()); // NOSONAR
         } catch (InputReadFailedException e) {
             throw new ExperimentExecutionException(e);

@@ -36,6 +36,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
  * Excludes all inputs that match a regular expression
@@ -43,7 +44,7 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
  * @author Owen Feehan
  * @param <T>
  */
-public class Exclude<T extends InputFromManager> extends InputManager<T> {
+public class Exclude<T extends InputFromManager> extends InputManagerUnary<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<T> input;
@@ -52,18 +53,17 @@ public class Exclude<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERITES
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
+    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+            throws InputReadFailedException {
 
-        List<T> list = input.inputs(params);
-
-        ListIterator<T> itr = list.listIterator();
+        ListIterator<T> itr = fromDelegate.listIterator();
         while (itr.hasNext()) {
 
-            if (regEx.hasMatch(itr.next().name())) {
+            if (regEx.hasMatch(itr.next().identifier())) {
                 itr.remove();
             }
         }
 
-        return list;
+        return fromDelegate;
     }
 }

@@ -118,7 +118,7 @@ public class ExportReportFeaturesFromMulti
                             writeFeaturesIntoReporter(
                                     initialization,
                                     writer,
-                                    Optional.of(input.getInput().name()),
+                                    Optional.of(input.getInput().identifier()),
                                     input.getLogger()));
 
         } catch (OperationFailedException e) {
