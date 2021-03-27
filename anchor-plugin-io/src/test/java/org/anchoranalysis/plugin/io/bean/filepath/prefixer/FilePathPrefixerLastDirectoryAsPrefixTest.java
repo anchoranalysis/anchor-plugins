@@ -36,6 +36,7 @@ import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
+import org.anchoranalysis.plugin.io.bean.file.path.prefixer.LastDirectoryAsPrefix;
 import org.junit.jupiter.api.Test;
 
 class FilePathPrefixerLastDirectoryAsPrefixTest {

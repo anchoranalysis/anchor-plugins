@@ -28,14 +28,11 @@ package org.anchoranalysis.plugin.io.bean.input.filter;
 
 import java.util.Arrays;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
-import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerUnary;
 import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
 
 /**
@@ -44,20 +41,14 @@ import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsCont
  * @author Owen Feehan
  * @param <T> input-type
  */
-public class FilterIfDebug<T extends InputFromManager> extends InputManager<T> {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private InputManager<T> input;
-    // END BEAN PROPERTIES
+public class FilterIfDebug<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
-
-        List<T> unfiltered = input.inputs(params);
-
+    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+            throws InputReadFailedException {
         return params.getDebugModeParams()
-                .map(dir -> takeFirst(maybeFilteredList(unfiltered, dir)))
-                .orElse(unfiltered);
+                .map(paramsToMap -> takeFirst(maybeFilteredList(fromDelegate, paramsToMap)))
+                .orElse(fromDelegate);
     }
 
     /** Take first item, if there's more than one in a list */

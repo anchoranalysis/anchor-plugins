@@ -41,7 +41,7 @@ import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.image.io.stack.input.TimeSequenceSupplier;
-import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.input.file.FileInput;
 
 @RequiredArgsConstructor
 class StackCollectionFromFilesInputObject implements StackSequenceInput {
@@ -118,8 +118,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     }
 
     @Override
-    public String name() {
-        return delegate.name();
+    public String identifier() {
+        return delegate.identifier();
     }
 
     @Override

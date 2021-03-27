@@ -30,13 +30,13 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
-import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.input.bean.namer.FileNamer;
+import org.anchoranalysis.io.input.file.FileInput;
+import org.anchoranalysis.plugin.io.bean.file.provider.Rooted;
 import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.anchoranalysis.plugin.io.bean.input.filter.FilterCsvColumn;
-import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

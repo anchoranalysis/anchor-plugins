@@ -283,7 +283,7 @@ public class SegmentInstanceWithModel<T>
                 energyStack,
                 (featureInput, index) ->
                         identifierFor(
-                                input.getInput().name(),
+                                input.getInput().identifier(),
                                 featureInput,
                                 calculator,
                                 segments.get(index).getConfidence()));

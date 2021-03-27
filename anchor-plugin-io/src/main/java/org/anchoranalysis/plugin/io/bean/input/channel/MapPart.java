@@ -44,7 +44,7 @@ import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.input.file.FileInput;
 
 /**
  * Provides a set of channels as an input, each of which has a name.
@@ -106,8 +106,8 @@ class MapPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public String name() {
-        return delegate.name();
+    public String identifier() {
+        return delegate.identifier();
     }
 
     @Override

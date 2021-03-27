@@ -132,7 +132,7 @@ public class ImageAssignLabel<T>
             String groupIdentifier =
                     input.getSharedState().labelFor(input.getInput(), input.getContextJob());
 
-            input.getSharedState().writeRow(input.getInput().name(), groupIdentifier);
+            input.getSharedState().writeRow(input.getInput().identifier(), groupIdentifier);
 
             if (outputStackProvider != null) {
                 outputStack(
@@ -141,7 +141,7 @@ public class ImageAssignLabel<T>
                                 outputStackProvider,
                                 input.getInput(),
                                 input.createInitializationContext()),
-                        input.getInput().name(),
+                        input.getInput().identifier(),
                         input.getSharedState());
             }
         } catch (OperationFailedException | CreateException e) {

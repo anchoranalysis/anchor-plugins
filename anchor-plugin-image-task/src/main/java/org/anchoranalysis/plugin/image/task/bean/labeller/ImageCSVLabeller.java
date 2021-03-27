@@ -77,11 +77,11 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitializati
             ProvidesStackInput input,
             InputOutputContext context)
             throws OperationFailedException {
-        String label = sharedState.getLabelMap().get(input.name());
+        String label = sharedState.getLabelMap().get(input.identifier());
 
         if (label == null) {
             throw new OperationFailedException(
-                    String.format("No label can be found for the name: %s", input.name()));
+                    String.format("No label can be found for the name: %s", input.identifier()));
         }
 
         return label;

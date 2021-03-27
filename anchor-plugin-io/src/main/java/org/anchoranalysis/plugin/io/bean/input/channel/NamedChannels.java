@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.input.file.FileInput;
 import org.anchoranalysis.plugin.io.bean.channel.map.Autoname;
 
 /**

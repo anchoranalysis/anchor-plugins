@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -45,7 +46,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.input.files.FileWithDirectoryInput;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -79,18 +80,8 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
             ParametersExperiment params)
             throws ExperimentExecutionException {
 
-        // If a directory is associated with the inputs, as needed for conversion to {@link
-        // FileWithDirectoryInput}.
-        Optional<Path> directory = Optional.empty();
-
-        // Derive a directory if needed
-        InputTypesExpected expectedFromDelegate = task.inputTypesExpected();
-        if (expectedFromDelegate.doesClassInheritFromAny(FileWithDirectoryInput.class)) {
-            directory = Optional.of(CommonRootHelper.findCommonPathRoot(inputs));
-        }
-
         SharedStateRememberConverted<U, S> sharedState = new SharedStateRememberConverted<>();
-        List<U> convertedInputs = convertListAndPopulateMap(inputs, sharedState, directory);
+        List<U> convertedInputs = convertListAndPopulateMap(inputs, sharedState);
         sharedState.setSharedState(
                 task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, convertedInputs, params));
         return sharedState;
@@ -146,10 +137,13 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
     /** Convert all inputs, placing them into the map. */
     @SuppressWarnings("unchecked")
     private List<U> convertListAndPopulateMap(
-            List<T> inputs,
-            SharedStateRememberConverted<U, S> sharedState,
-            Optional<Path> directory)
+            List<T> inputs, SharedStateRememberConverted<U, S> sharedState)
             throws ExperimentExecutionException {
+
+        Optional<Path> directory = deriveCommonRootIfNeeded(inputs);
+
+        assert (!directory.isPresent() || directory.get().toFile().isDirectory());
+
         List<U> out = new ArrayList<>();
 
         InputTypesExpected inputTypesExpected = task.inputTypesExpected();
@@ -161,5 +155,18 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
             out.add(converted);
         }
         return out;
+    }
+
+    /**
+     * If a directory is associated with the inputs, as needed for conversion to {@link
+     * FileWithDirectoryInput}.
+     */
+    private Optional<Path> deriveCommonRootIfNeeded(List<T> inputs)
+            throws ExperimentExecutionException {
+        // Derive a directory if needed
+        InputTypesExpected expectedFromDelegate = task.inputTypesExpected();
+        return OptionalFactory.createWithException(
+                expectedFromDelegate.doesClassInheritFromAny(FileWithDirectoryInput.class),
+                () -> CommonRootHelper.findCommonPathRoot(inputs));
     }
 }

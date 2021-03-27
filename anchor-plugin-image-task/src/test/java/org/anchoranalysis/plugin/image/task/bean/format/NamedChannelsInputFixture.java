@@ -24,7 +24,7 @@ class NamedChannelsInputFixture extends NamedChannelsInput {
     }
 
     @Override
-    public String name() {
+    public String identifier() {
         return "someInput";
     }
 

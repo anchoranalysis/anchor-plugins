@@ -87,7 +87,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             ResultsVectorWithThumbnail results = calculateResultsForInput(input, context);
 
             context.addResultsFor(
-                    identifierFor(input.name(), context.getGroupGeneratorName()), results);
+                    identifierFor(input.identifier(), context.getGroupGeneratorName()), results);
 
         } catch (BeanDuplicateException | NamedFeatureCalculateException e) {
             throw new OperationFailedException(e);

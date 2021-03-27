@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Paths;
 import java.util.Optional;
+import org.anchoranalysis.plugin.io.bean.file.group.parser.RegularExpression;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
 import org.junit.jupiter.api.Test;
 

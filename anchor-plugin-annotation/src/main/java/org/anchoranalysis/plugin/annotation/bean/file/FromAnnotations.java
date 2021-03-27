@@ -37,10 +37,10 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.bean.files.FilesProvider;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithoutDirectory;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 
-public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProvider {
+public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProviderWithoutDirectory {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter

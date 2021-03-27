@@ -42,16 +42,17 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.files.FileWithDirectoryInput;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.math.arithmetic.Counter;
-import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.Bytewise;
-import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
-import org.anchoranalysis.plugin.io.bean.copyfilesmode.naming.CopyFilesNaming;
+import org.anchoranalysis.plugin.io.bean.file.copy.method.Bytewise;
+import org.anchoranalysis.plugin.io.bean.file.copy.method.CopyFilesMethod;
+import org.anchoranalysis.plugin.io.bean.file.copy.naming.CopyFilesNaming;
+import org.anchoranalysis.plugin.io.input.path.CopyContext;
 import org.anchoranalysis.plugin.io.shared.RecordingCounter;
 
 /**
@@ -126,19 +127,14 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
     public void doJobOnInput(InputBound<FileWithDirectoryInput, RecordingCounter<T>> input)
             throws JobExecutionException {
         // Determine a destination for the output, and create a corresponding logger
-        Path destination = input.getContextExperiment().getOutputter().getOutputDirectory();
-
         try {
             copyFile(
                     input.getInput().getDirectory(),
-                    destination,
-                    input.getInput().pathForBindingRequired().toFile(),
-                    input.getContextExperiment()
-                            .getOutputter()
-                            .outputsEnabled()
-                            .isOutputEnabled(OUTPUT_COPY),
+                    input.getContextExperiment().getOutputter(),
+                    input.getInput().getFile(),
+                    input.getContextJob().getOutputter().getPrefix(),
                     input.getSharedState());
-        } catch (OperationFailedException | InputReadFailedException e) {
+        } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
         }
     }
@@ -156,22 +152,22 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
 
     private void copyFile(
             Path source,
-            Path destinationDirectory,
+            Outputter outputter,
             File file,
-            boolean copyEnabled,
+            DirectoryWithPrefix outputTarget,
             RecordingCounter<T> recordingCounter)
             throws OperationFailedException {
 
+        Path destinationDirectory = outputter.getOutputDirectory();
+        boolean copyEnabled = outputter.outputsEnabled().isOutputEnabled(OUTPUT_COPY);
         try {
             int index = recordingCounter.incrementCounter();
 
+            CopyContext<T> context =
+                    new CopyContext<>(
+                            source, destinationDirectory, recordingCounter.getNamingSharedState());
             Optional<Path> destinationFile =
-                    naming.destinationPath(
-                            source,
-                            destinationDirectory,
-                            file,
-                            index,
-                            recordingCounter.getNamingSharedState());
+                    naming.destinationPath(file, outputTarget, index, context);
 
             if (destinationFile.isPresent() && copyEnabled) {
                 method.makeCopy(file.toPath(), destinationFile.get());

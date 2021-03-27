@@ -43,7 +43,7 @@ import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.input.csv.CSVReaderByLine;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.ReadByLine;
-import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.input.file.FileInput;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -130,7 +130,7 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
         Path inputPath = input.getFile().toPath();
         try (ReadByLine readByLine = CSVReaderByLine.open(inputPath, seperator, firstLineHeaders)) {
 
-            String name = addName ? input.name() : null; // null means no-name is added
+            String name = addName ? input.identifier() : null; // null means no-name is added
             AddWithName addWithName = new AddWithName(writer, firstLineHeaders, name);
 
             if (transposed) {

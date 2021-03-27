@@ -33,8 +33,9 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.system.path.PathDifference;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.file.FileNamerContext;
 import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.plugin.io.bean.descriptivename.LastDirectories;
+import org.anchoranalysis.plugin.io.bean.file.namer.LastDirectories;
 
 // A file manifest together with the overall manifest for the experiment
 public class CoupledManifests implements InputFromManager {
@@ -47,7 +48,6 @@ public class CoupledManifests implements InputFromManager {
 
     public CoupledManifests(
             DeserializedManifest jobManifest, int numberDirectoriesInDescription, Logger logger) {
-        super();
         this.experimentManifest = Optional.empty();
         this.jobManifest = jobManifest;
         name = generateNameFromDirectories(numberDirectoriesInDescription, logger);
@@ -56,7 +56,6 @@ public class CoupledManifests implements InputFromManager {
     public CoupledManifests(
             Manifest experimentManifest, DeserializedManifest jobManifest, Logger logger)
             throws PathDifferenceException {
-        super();
         this.experimentManifest = Optional.of(experimentManifest);
         this.jobManifest = jobManifest;
         name = generateName(logger);
@@ -82,12 +81,14 @@ public class CoupledManifests implements InputFromManager {
         LastDirectories lastDirectories = new LastDirectories(numberDirectoriesInDescription);
         lastDirectories.setRemoveExtensionInDescription(false);
         return lastDirectories
-                .deriveName(jobManifest.getRootPath().toFile(), "<unknown>", logger)
-                .getName();
+                .deriveName(
+                        jobManifest.getRootPath().toFile(),
+                        new FileNamerContext("<unknown>", logger))
+                .getIdentifier();
     }
 
     @Override
-    public String name() {
+    public String identifier() {
         return name;
     }
 
