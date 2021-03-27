@@ -33,9 +33,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
-import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.input.bean.namer.FileNamer;
+import org.anchoranalysis.io.input.file.FileInput;
 
 /**
  * File-paths

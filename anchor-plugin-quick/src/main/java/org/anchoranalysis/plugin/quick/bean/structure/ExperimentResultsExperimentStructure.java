@@ -35,12 +35,12 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithoutDirectory;
 import org.anchoranalysis.io.input.bean.files.SearchDirectory;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
-import org.anchoranalysis.io.input.files.FilesProviderException;
-import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
+import org.anchoranalysis.io.input.file.FilesProviderException;
+import org.anchoranalysis.plugin.io.bean.file.provider.Rooted;
 
 /**
  * Finds some files produced in a previous experiment assuming a certain structure
@@ -48,7 +48,7 @@ import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
  * <p>A convenience method for commonly used prefixer settings when the output occurs in an
  * experiment/$1/ filesystem structure where $1 is the experimentType
  */
-public class ExperimentResultsExperimentStructure extends FilesProvider {
+public class ExperimentResultsExperimentStructure extends FilesProviderWithoutDirectory {
 
     private class DirectoryCreator {
 

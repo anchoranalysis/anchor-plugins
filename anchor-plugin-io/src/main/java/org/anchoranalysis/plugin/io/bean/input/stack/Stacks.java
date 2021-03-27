@@ -37,7 +37,7 @@ import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.input.file.FileInput;
 
 /**
  * Each file gives either: * a single stack * a time-series of stacks

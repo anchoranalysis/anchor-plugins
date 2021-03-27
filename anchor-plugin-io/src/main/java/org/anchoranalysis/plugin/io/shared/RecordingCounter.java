@@ -32,7 +32,7 @@ import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.log.TextFileMessageLogger;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.math.arithmetic.Counter;
-import org.anchoranalysis.plugin.io.bean.copyfilesmode.naming.CopyFilesNaming;
+import org.anchoranalysis.plugin.io.bean.file.copy.naming.CopyFilesNaming;
 
 /**
  * A counter that also records a manifest of copied outputs in a message-log and CSV file.
