@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -55,7 +56,7 @@ public class HomeSubdirectory extends PathPrefixer {
 
     @Override
     public DirectoryWithPrefix outFilePrefix(
-            NamedPath path, String expName, PathPrefixerContext context)
+            NamedPath path, Optional<String> expName, PathPrefixerContext context)
             throws PathPrefixerException {
         try {
             initIfPossible();
@@ -66,7 +67,7 @@ public class HomeSubdirectory extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootDirectoryPrefix(String expName, PathPrefixerContext context)
+    public DirectoryWithPrefix rootDirectoryPrefix(Optional<String> expName, PathPrefixerContext context)
             throws PathPrefixerException {
         try {
             initIfPossible();
