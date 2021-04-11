@@ -120,7 +120,11 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
         T namingSharedState =
                 naming.beforeCopying(params.getOutputter().getOutputDirectory(), inputs.size());
 
-        return new RecordingCounter<>(new Counter(), outputter, namingSharedState);
+        try {
+            return new RecordingCounter<>(new Counter(), outputter, namingSharedState);
+        } catch (OperationFailedException e) {
+            throw new ExperimentExecutionException(e);
+        }
     }
 
     @Override
