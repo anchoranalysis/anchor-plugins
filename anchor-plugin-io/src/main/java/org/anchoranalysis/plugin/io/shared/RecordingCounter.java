@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.shared;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.log.TextFileMessageLogger;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -78,7 +79,7 @@ public class RecordingCounter<T> {
 
     @Getter private final T namingSharedState;
 
-    public RecordingCounter(Counter counter, Outputter outputter, T namingSharedState) {
+    public RecordingCounter(Counter counter, Outputter outputter, T namingSharedState) throws OperationFailedException {
         this.counter = counter;
         this.namingSharedState = namingSharedState;
 

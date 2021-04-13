@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.file.path.prefixer;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,7 +62,7 @@ public class Rooted extends PathPrefixer {
 
     @Override
     public DirectoryWithPrefix outFilePrefix(
-            NamedPath path, String experimentName, PathPrefixerContext context)
+            NamedPath path, Optional<String> experimentName, PathPrefixerContext context)
             throws PathPrefixerException {
 
         DirectoryWithPrefix directoryWithPrefix =
@@ -87,7 +88,7 @@ public class Rooted extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootDirectoryPrefix(String expName, PathPrefixerContext context)
+    public DirectoryWithPrefix rootDirectoryPrefix(Optional<String> expName, PathPrefixerContext context)
             throws PathPrefixerException {
         DirectoryWithPrefix fpp = prefixer.rootDirectoryPrefixAvoidResolve(expName);
         fpp.setDirectory(folderPathOut(fpp.getDirectory(), context.isDebugMode()));
