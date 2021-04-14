@@ -35,7 +35,7 @@ import org.anchoranalysis.test.image.rasterwriter.TiffTestBase;
  *
  * @author Owen Feehan
  */
-public class TiffTest extends TiffTestBase {
+class TiffTest extends TiffTestBase {
 
     static {
         ConfigureBioformatsLogging.instance().makeSureConfigured();

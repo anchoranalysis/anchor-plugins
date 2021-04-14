@@ -37,7 +37,7 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReadAnnotationFromFile {
 
-    public static Optional<ImageLabelAnnotation> readCheckExists(Path path) {
+    public static Optional<ImageLabelAnnotation> readCheckExists(Path path) throws InputReadFailedException {
 
         if (path.toFile().exists()) {
             return readAssumeExists(path);
@@ -46,13 +46,8 @@ public class ReadAnnotationFromFile {
         }
     }
 
-    public static Optional<ImageLabelAnnotation> readAssumeExists(Path path) {
-        try {
-            WholeImageLabelAnnotationReader reader = new WholeImageLabelAnnotationReader();
-            return reader.read(path);
-        } catch (InputReadFailedException exc) {
-            // TODO PUT SOME LOGGING HERE
-            return Optional.empty();
-        }
+    public static Optional<ImageLabelAnnotation> readAssumeExists(Path path) throws InputReadFailedException {
+        WholeImageLabelAnnotationReader reader = new WholeImageLabelAnnotationReader();
+        return reader.read(path);
     }
 }
