@@ -45,9 +45,6 @@ import org.opencv.imgproc.Imgproc;
  * aren't directly usable in OpenCV and vice-versa, so new images are created both inwards and
  * outwards.
  *
- * <p>TODO: find a way to use the same allocated memory in both the Java structures and the OpenCV
- * structures
- *
  * @author Owen Feehan
  */
 public abstract class ColorConverterBase extends StackProviderUnary {
