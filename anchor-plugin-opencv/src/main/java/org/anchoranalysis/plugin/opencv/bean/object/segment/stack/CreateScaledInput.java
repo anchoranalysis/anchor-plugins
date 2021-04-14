@@ -55,7 +55,6 @@ class CreateScaledInput {
     public static Tuple2<Mat, ScaleFactor> apply(Stack stack, Extent targetExtent)
             throws CreateException {
 
-        // TODO consider scaling before if it it is quicker
         Mat original = ConvertToMat.makeRGBStack(stack);
 
         Mat input = resizeMatToTarget(original, targetExtent);
