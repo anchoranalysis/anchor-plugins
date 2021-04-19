@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.file.FileInput;
@@ -96,7 +97,7 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
     }
 
     @Override
-    public List<MultiInput> inputs(InputManagerParams params) throws InputReadFailedException {
+    public InputsWithDirectory<MultiInput> inputs(InputManagerParams params) throws InputReadFailedException {
         return inputManager.inputs(params);
     }
 

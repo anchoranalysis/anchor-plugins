@@ -28,8 +28,10 @@ package org.anchoranalysis.plugin.annotation.bean.file;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.annotation.io.bean.AnnotationInputManager;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -50,8 +52,9 @@ public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProviderW
     @Override
     public Collection<File> create(InputManagerParams params) throws FilesProviderException {
         try {
-            return FunctionalList.flatMapToList(
-                    annotations.inputs(params), input -> input.deriveAssociatedFiles().stream());
+            List<AnnotationWithStrategy<T>> inputs = annotations.inputs(params).inputs();
+            return FunctionalList.flatMapToList(inputs,
+                    input -> input.deriveAssociatedFiles().stream());
         } catch (InputReadFailedException e) {
             throw new FilesProviderException(e);
         }

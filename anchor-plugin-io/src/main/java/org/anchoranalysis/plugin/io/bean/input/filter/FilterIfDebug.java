@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
@@ -44,11 +45,16 @@ import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsCont
 public class FilterIfDebug<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
-    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
         return params.getDebugModeParams()
-                .map(paramsToMap -> takeFirst(maybeFilteredList(fromDelegate, paramsToMap)))
+                .map(paramsToMap -> maybeFilterInputs(fromDelegate, paramsToMap) )
                 .orElse(fromDelegate);
+    }
+    
+    private InputsWithDirectory<T> maybeFilterInputs(InputsWithDirectory<T> fromDelegate, DebugModeParams debugModeParams) {
+        List<T> filtered = takeFirst(maybeFilteredList(fromDelegate.inputs(), debugModeParams));
+        return fromDelegate.withInputs(filtered);
     }
 
     /** Take first item, if there's more than one in a list */
