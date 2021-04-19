@@ -26,15 +26,14 @@
 
 package org.anchoranalysis.plugin.io.bean.input.stack;
 
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.file.FileInput;
@@ -58,10 +57,9 @@ public class Stacks extends InputManagerWithStackReader<StackSequenceInput> {
     }
 
     @Override
-    public List<StackSequenceInput> inputs(InputManagerParams params)
+    public InputsWithDirectory<StackSequenceInput> inputs(InputManagerParams params)
             throws InputReadFailedException {
-        return FunctionalList.mapToList(
-                fileInput.inputs(params),
+        return fileInput.inputs(params).map(
                 file ->
                         new StackCollectionFromFilesInputObject(
                                 file, getStackReader(), useLastSeriesIndexOnly));

@@ -35,6 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
@@ -61,7 +62,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManagerUna
     // END BEAN PROPERTIES
 
     @Override
-    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
 
         if (fromDelegate.isEmpty()) {
@@ -69,13 +70,15 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManagerUna
         }
 
         try {
+            List<T> inputs = fromDelegate.inputs();
+            
             Set<String> matching =
                     matchingNames(
-                            fromDelegate.get(0).pathForBindingRequired(),
+                            inputs.get(0).pathForBindingRequired(),
                             params.isDebugModeActivated(),
-                            fromDelegate.size());
+                            inputs.size());
 
-            applyFilter(fromDelegate, matching);
+            applyFilter(inputs, matching);
             return fromDelegate;
         } catch (DerivePathException e) {
             throw new InputReadFailedException(e);

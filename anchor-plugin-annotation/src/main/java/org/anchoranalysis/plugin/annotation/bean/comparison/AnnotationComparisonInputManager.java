@@ -41,6 +41,7 @@ import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
@@ -61,12 +62,14 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
     // END BEAN PROPERTIES
 
     @Override
-    public List<AnnotationComparisonInput<T>> inputs(InputManagerParams params)
+    public InputsWithDirectory<AnnotationComparisonInput<T>> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
         try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
 
-            Iterator<T> iterator = input.inputs(params).iterator();
+            InputsWithDirectory<T> inputs = input.inputs(params);
+            
+            Iterator<T> iterator = inputs.iterator();
 
             progressMultiple.incrementWorker();
 
@@ -79,7 +82,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
                     createListInputWithAnnotationPath(
                             tempList, new ProgressOneOfMany(progressMultiple));
             progressMultiple.incrementWorker();
-            return outList;
+            return inputs.withInputs(outList);
         }
     }
 

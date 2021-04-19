@@ -34,6 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
@@ -52,9 +53,11 @@ public class FromCSVInputManager extends InputManager<FromCSVInput> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<FromCSVInput> inputs(InputManagerParams params) throws InputReadFailedException {
+    public InputsWithDirectory<FromCSVInput> inputs(InputManagerParams params) throws InputReadFailedException {
 
-        Iterator<MultiInput> itr = input.inputs(params).iterator();
+        InputsWithDirectory<MultiInput> inputs = input.inputs(params);
+        
+        Iterator<MultiInput> itr = inputs.iterator();
 
         List<FromCSVInput> out = new ArrayList<>();
 
@@ -71,6 +74,6 @@ public class FromCSVInputManager extends InputManager<FromCSVInput> {
             }
         }
 
-        return out;
+        return inputs.withInputs(out);
     }
 }

@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.io.bean.input.manifest;
 
 import java.util.Collections;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -36,6 +35,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
@@ -54,33 +54,33 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
     @BeanField @Getter @Setter private ManifestDeserializer manifestDeserializer;
     // END BEAN PROPERTIES
 
-    private ManifestCouplingDefinition mcd = null;
+    private ManifestCouplingDefinition manifestCouplingDefinition = null;
 
     public CoupledManifestsInputManager() {
         manifestDeserializer = new CachedManifestDeserializer(new SimpleManifestDeserializer(), 50);
     }
 
     @Override
-    public List<ManifestCouplingDefinition> inputs(InputManagerParams params)
+    public InputsWithDirectory<ManifestCouplingDefinition> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
         try {
-            if (mcd == null) {
-                mcd = createDeserializedList(params);
+            if (manifestCouplingDefinition == null) {
+                manifestCouplingDefinition = createDeserializedList(params);
             }
         } catch (DeserializationFailedException e) {
             throw new InputReadFailedException("Deserialization failed", e);
         }
 
-        return Collections.singletonList(mcd);
+        return new InputsWithDirectory<>(Collections.singletonList(manifestCouplingDefinition));
     }
 
     public ManifestCouplingDefinition manifestCouplingDefinition(InputManagerParams params)
             throws DeserializationFailedException {
-        if (mcd == null) {
-            mcd = createDeserializedList(params);
+        if (manifestCouplingDefinition == null) {
+            manifestCouplingDefinition = createDeserializedList(params);
         }
-        return mcd;
+        return manifestCouplingDefinition;
     }
 
     // Runs the experiment on a particular file
