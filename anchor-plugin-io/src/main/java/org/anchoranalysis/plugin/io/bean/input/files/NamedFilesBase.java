@@ -82,13 +82,15 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
         try {
             Collection<File> filesCreated = files.create(params);
 
+            Optional<Path> inputDirectory = inputDirectory(files, params.getInputContext());
+            
             FileNamerContext context =
                     new FileNamerContext(
-                            inputDirectory(files, params.getInputContext()),
+                            inputDirectory,
                             params.getInputContext().isRelativeForIdentifier(),
                             params.getLogger());
             
-            return new InputsWithDirectory<>( createInputs(filesCreated, mapToInput, context) );
+            return new InputsWithDirectory<>( createInputs(filesCreated, mapToInput, context), inputDirectory);
         } catch (FilesProviderException e) {
             throw new InputReadFailedException("Cannot find files", e);
         }
