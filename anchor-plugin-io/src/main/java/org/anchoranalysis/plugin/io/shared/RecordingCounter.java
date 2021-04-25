@@ -79,7 +79,8 @@ public class RecordingCounter<T> {
 
     @Getter private final T namingSharedState;
 
-    public RecordingCounter(Counter counter, Outputter outputter, T namingSharedState) throws OperationFailedException {
+    public RecordingCounter(Counter counter, Outputter outputter, T namingSharedState)
+            throws OperationFailedException {
         this.counter = counter;
         this.namingSharedState = namingSharedState;
 

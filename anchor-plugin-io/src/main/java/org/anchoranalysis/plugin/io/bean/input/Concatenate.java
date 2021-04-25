@@ -51,7 +51,8 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public InputsWithDirectory<T> inputs(InputManagerParams params) throws InputReadFailedException {
+    public InputsWithDirectory<T> inputs(InputManagerParams params)
+            throws InputReadFailedException {
 
         try (ProgressMultiple progressMultiple =
                 new ProgressMultiple(params.getProgress(), list.size())) {

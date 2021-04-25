@@ -59,7 +59,8 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
     // END BEAN PROPERTIES
 
     @Override
-    protected InputsWithDirectory<T> inputsFromDelegate(InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
         FilterDescriptiveNameEqualsContains filter =
                 new FilterDescriptiveNameEqualsContains(equals, contains);

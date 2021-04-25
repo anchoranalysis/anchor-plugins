@@ -53,7 +53,8 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManagerUnary
     // END BEAN PROPERTIES
 
     @Override
-    protected InputsWithDirectory<T> inputsFromDelegate(InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
         if (params.isDebugModeActivated()) {
             if (inputDebug == null) {

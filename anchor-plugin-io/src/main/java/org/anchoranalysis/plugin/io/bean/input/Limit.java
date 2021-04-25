@@ -51,7 +51,8 @@ public class Limit<T extends InputFromManager> extends InputManagerUnary<T> {
     // END BEAN PROPERTIES
 
     @Override
-    protected InputsWithDirectory<T> inputsFromDelegate(InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
         int i = 0;
 

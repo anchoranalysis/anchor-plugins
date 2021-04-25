@@ -97,7 +97,8 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
     }
 
     @Override
-    public InputsWithDirectory<MultiInput> inputs(InputManagerParams params) throws InputReadFailedException {
+    public InputsWithDirectory<MultiInput> inputs(InputManagerParams params)
+            throws InputReadFailedException {
         return inputManager.inputs(params);
     }
 

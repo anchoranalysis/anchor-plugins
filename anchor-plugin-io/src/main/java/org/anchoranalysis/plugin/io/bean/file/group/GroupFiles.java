@@ -100,7 +100,7 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
             throws InputReadFailedException {
 
         InputsWithDirectory<FileInput> inputs = fileInput.inputs(params);
-        
+
         GroupFilesMap map = new GroupFilesMap();
 
         // Iterate through each file, match against the reg-exp and populate a hash-map
@@ -120,7 +120,7 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
                 }
             }
         }
-        return inputs.withInputs( listFromMap(map, params.getLogger()) );
+        return inputs.withInputs(listFromMap(map, params.getLogger()));
     }
 
     private List<NamedChannelsInput> listFromMap(GroupFilesMap map, Logger logger)

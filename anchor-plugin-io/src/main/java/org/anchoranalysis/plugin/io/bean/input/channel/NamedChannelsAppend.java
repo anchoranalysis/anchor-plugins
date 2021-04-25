@@ -72,7 +72,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
         try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
 
             InputsWithDirectory<NamedChannelsInputPart> inputs = input.inputs(params);
-            
+
             Iterator<NamedChannelsInputPart> iterator = inputs.iterator();
 
             progressMultiple.incrementWorker();

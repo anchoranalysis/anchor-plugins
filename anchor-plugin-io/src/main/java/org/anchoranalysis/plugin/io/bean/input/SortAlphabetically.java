@@ -44,7 +44,8 @@ import org.anchoranalysis.io.input.bean.InputManagerUnary;
 public class SortAlphabetically<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
-    protected InputsWithDirectory<T> inputsFromDelegate(InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
         List<T> list = new ArrayList<>(fromDelegate.inputs());
         Collections.sort(list, (T o1, T o2) -> o1.identifier().compareTo(o2.identifier()));

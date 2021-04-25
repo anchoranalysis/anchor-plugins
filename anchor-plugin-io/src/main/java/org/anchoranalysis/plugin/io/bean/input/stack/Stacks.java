@@ -59,9 +59,11 @@ public class Stacks extends InputManagerWithStackReader<StackSequenceInput> {
     @Override
     public InputsWithDirectory<StackSequenceInput> inputs(InputManagerParams params)
             throws InputReadFailedException {
-        return fileInput.inputs(params).map(
-                file ->
-                        new StackCollectionFromFilesInputObject(
-                                file, getStackReader(), useLastSeriesIndexOnly));
+        return fileInput
+                .inputs(params)
+                .map(
+                        file ->
+                                new StackCollectionFromFilesInputObject(
+                                        file, getStackReader(), useLastSeriesIndexOnly));
     }
 }
