@@ -53,7 +53,8 @@ public class Exclude<T extends InputFromManager> extends InputManagerUnary<T> {
     // END BEAN PROPERITES
 
     @Override
-    protected InputsWithDirectory<T> inputsFromDelegate(InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
 
         ListIterator<T> itr = fromDelegate.listIterator();

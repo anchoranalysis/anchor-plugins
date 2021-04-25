@@ -16,7 +16,8 @@ import org.anchoranalysis.io.input.bean.InputManagerUnary;
 public class ShuffleIfRequested<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
-    protected InputsWithDirectory<T> inputsFromDelegate(InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
 
         if (params.getInputContext().isShuffle()) {

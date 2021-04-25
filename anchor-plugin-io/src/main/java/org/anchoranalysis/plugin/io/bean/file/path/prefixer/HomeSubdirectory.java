@@ -67,8 +67,8 @@ public class HomeSubdirectory extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootDirectoryPrefix(Optional<String> expName, PathPrefixerContext context)
-            throws PathPrefixerException {
+    public DirectoryWithPrefix rootDirectoryPrefix(
+            Optional<String> expName, PathPrefixerContext context) throws PathPrefixerException {
         try {
             initIfPossible();
         } catch (InitException e) {

@@ -53,8 +53,8 @@ public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProviderW
     public Collection<File> create(InputManagerParams params) throws FilesProviderException {
         try {
             List<AnnotationWithStrategy<T>> inputs = annotations.inputs(params).inputs();
-            return FunctionalList.flatMapToList(inputs,
-                    input -> input.deriveAssociatedFiles().stream());
+            return FunctionalList.flatMapToList(
+                    inputs, input -> input.deriveAssociatedFiles().stream());
         } catch (InputReadFailedException e) {
             throw new FilesProviderException(e);
         }

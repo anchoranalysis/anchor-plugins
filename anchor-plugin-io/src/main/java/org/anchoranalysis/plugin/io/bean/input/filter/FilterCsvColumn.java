@@ -62,7 +62,8 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManagerUna
     // END BEAN PROPERTIES
 
     @Override
-    protected InputsWithDirectory<T> inputsFromDelegate(InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
 
         if (fromDelegate.isEmpty()) {
@@ -71,7 +72,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManagerUna
 
         try {
             List<T> inputs = fromDelegate.inputs();
-            
+
             Set<String> matching =
                     matchingNames(
                             inputs.get(0).pathForBindingRequired(),

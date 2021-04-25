@@ -68,7 +68,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
         try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
 
             InputsWithDirectory<T> inputs = input.inputs(params);
-            
+
             Iterator<T> iterator = inputs.iterator();
 
             progressMultiple.incrementWorker();

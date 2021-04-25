@@ -53,10 +53,11 @@ public class FromCSVInputManager extends InputManager<FromCSVInput> {
     // END BEAN PROPERTIES
 
     @Override
-    public InputsWithDirectory<FromCSVInput> inputs(InputManagerParams params) throws InputReadFailedException {
+    public InputsWithDirectory<FromCSVInput> inputs(InputManagerParams params)
+            throws InputReadFailedException {
 
         InputsWithDirectory<MultiInput> inputs = input.inputs(params);
-        
+
         Iterator<MultiInput> itr = inputs.iterator();
 
         List<FromCSVInput> out = new ArrayList<>();

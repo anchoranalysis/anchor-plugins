@@ -60,7 +60,8 @@ public class NamedFiles extends NamedFilesBase<FileInput> {
     }
 
     @Override
-    public InputsWithDirectory<FileInput> inputs(InputManagerParams params) throws InputReadFailedException {
+    public InputsWithDirectory<FileInput> inputs(InputManagerParams params)
+            throws InputReadFailedException {
         return createInputsFromFiles(files, params, FileInput::new);
     }
 }

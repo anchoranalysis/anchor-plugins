@@ -30,8 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-import org.anchoranalysis.io.input.InputFromManager;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.io.input.InputFromManager;
 
 /**
  * Filters a list of input-objects by the descriptive name
@@ -43,7 +43,7 @@ public class FilterDescriptiveNameEqualsContains {
 
     /** If non-empty, any item that doesn't match this string is filtered away. */
     private String equals;
-    
+
     /** If non-empty, any item that doesn't contain this string is filtered away. */
     private String contains;
 

@@ -83,22 +83,26 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
             Collection<File> filesCreated = files.create(params);
 
             Optional<Path> inputDirectory = inputDirectory(files, params.getInputContext());
-            
+
             FileNamerContext context =
                     new FileNamerContext(
                             inputDirectory,
                             params.getInputContext().isRelativeForIdentifier(),
                             params.getLogger());
-            
-            return new InputsWithDirectory<>( createInputs(filesCreated, mapToInput, context), inputDirectory);
+
+            return new InputsWithDirectory<>(
+                    createInputs(filesCreated, mapToInput, context), inputDirectory);
         } catch (FilesProviderException e) {
             throw new InputReadFailedException("Cannot find files", e);
         }
     }
-    
-    private List<T> createInputs(Collection<File> filesCreated, Function<NamedFile, T> mapToInput, FileNamerContext context) throws InputReadFailedException {
-        return FunctionalList.mapToList(
-                namer.deriveNameUnique(filesCreated, context), mapToInput);
+
+    private List<T> createInputs(
+            Collection<File> filesCreated,
+            Function<NamedFile, T> mapToInput,
+            FileNamerContext context)
+            throws InputReadFailedException {
+        return FunctionalList.mapToList(namer.deriveNameUnique(filesCreated, context), mapToInput);
     }
 
     private static Optional<Path> inputDirectory(FilesProvider files, InputContextParams context)

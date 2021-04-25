@@ -45,14 +45,16 @@ import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsCont
 public class FilterIfDebug<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
-    protected InputsWithDirectory<T> inputsFromDelegate(InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
         return params.getDebugModeParams()
-                .map(paramsToMap -> maybeFilterInputs(fromDelegate, paramsToMap) )
+                .map(paramsToMap -> maybeFilterInputs(fromDelegate, paramsToMap))
                 .orElse(fromDelegate);
     }
-    
-    private InputsWithDirectory<T> maybeFilterInputs(InputsWithDirectory<T> fromDelegate, DebugModeParams debugModeParams) {
+
+    private InputsWithDirectory<T> maybeFilterInputs(
+            InputsWithDirectory<T> fromDelegate, DebugModeParams debugModeParams) {
         List<T> filtered = takeFirst(maybeFilteredList(fromDelegate.inputs(), debugModeParams));
         return fromDelegate.withInputs(filtered);
     }
