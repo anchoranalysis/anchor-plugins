@@ -1,9 +1,9 @@
 package org.anchoranalysis.plugin.io.bean.input;
 
-import java.util.List;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
@@ -16,11 +16,12 @@ import org.anchoranalysis.io.input.bean.InputManagerUnary;
 public class ShuffleIfRequested<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
-    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
 
         if (params.getInputContext().isShuffle()) {
-            Shuffle.shuffleInputs(fromDelegate, params);
+            Shuffle.shuffleInputs(fromDelegate.inputs(), params);
         }
         return fromDelegate;
     }

@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.io.bean.input;
 
-import java.util.List;
 import java.util.ListIterator;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
@@ -51,7 +51,8 @@ public class Limit<T extends InputFromManager> extends InputManagerUnary<T> {
     // END BEAN PROPERTIES
 
     @Override
-    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
         int i = 0;
 

@@ -44,6 +44,7 @@ import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
@@ -65,12 +66,14 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInputPart> inputs(InputManagerParams params)
+    public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
         try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
 
-            Iterator<NamedChannelsInputPart> iterator = input.inputs(params).iterator();
+            InputsWithDirectory<NamedChannelsInputPart> inputs = input.inputs(params);
+
+            Iterator<NamedChannelsInputPart> iterator = inputs.iterator();
 
             progressMultiple.incrementWorker();
 
@@ -87,7 +90,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
             progressMultiple.incrementWorker();
 
-            return outList;
+            return inputs.withInputs(outList);
         }
     }
 

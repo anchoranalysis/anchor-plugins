@@ -41,6 +41,7 @@ import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.namer.FileNamer;
 import org.anchoranalysis.io.input.file.FileInput;
@@ -95,13 +96,15 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInput> inputs(InputManagerParams params)
+    public InputsWithDirectory<NamedChannelsInput> inputs(InputManagerParams params)
             throws InputReadFailedException {
+
+        InputsWithDirectory<FileInput> inputs = fileInput.inputs(params);
 
         GroupFilesMap map = new GroupFilesMap();
 
         // Iterate through each file, match against the reg-exp and populate a hash-map
-        Iterator<FileInput> iterator = fileInput.inputs(params).iterator();
+        Iterator<FileInput> iterator = inputs.iterator();
         while (iterator.hasNext()) {
 
             FileInput input = iterator.next();
@@ -117,7 +120,7 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
                 }
             }
         }
-        return listFromMap(map, params.getLogger());
+        return inputs.withInputs(listFromMap(map, params.getLogger()));
     }
 
     private List<NamedChannelsInput> listFromMap(GroupFilesMap map, Logger logger)

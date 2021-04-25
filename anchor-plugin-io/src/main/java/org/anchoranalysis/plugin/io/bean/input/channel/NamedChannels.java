@@ -26,14 +26,13 @@
 
 package org.anchoranalysis.plugin.io.bean.input.channel;
 
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.file.FileInput;
@@ -55,10 +54,16 @@ public class NamedChannels extends NamedChannelsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInputPart> inputs(InputManagerParams params)
+    public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParams params)
             throws InputReadFailedException {
-        return FunctionalList.mapToList(
-                fileInput.inputs(params),
-                input -> new MapPart(input, getStackReader(), channelMap, useLastSeriesIndexOnly));
+        return fileInput
+                .inputs(params)
+                .map(
+                        input ->
+                                new MapPart(
+                                        input,
+                                        getStackReader(),
+                                        channelMap,
+                                        useLastSeriesIndexOnly));
     }
 }
