@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -37,22 +38,14 @@ import org.anchoranalysis.io.input.InputFromManager;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class FilterDescriptiveNameEqualsContains {
 
+    /** If non-empty, any item that doesn't match this string is filtered away. */
     private String equals;
-    private String contains;
 
-    /**
-     * Constructor
-     *
-     * @param equals if non-empty, any item that doesn't match this string is filtered away
-     * @param contains if non-empty, any item that doesn't contain this string is filtered away
-     */
-    public FilterDescriptiveNameEqualsContains(String equals, String contains) {
-        super();
-        this.equals = equals;
-        this.contains = contains;
-    }
+    /** If non-empty, any item that doesn't contain this string is filtered away. */
+    private String contains;
 
     public <T extends InputFromManager> List<T> removeNonMatching(List<T> in) {
 

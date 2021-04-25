@@ -42,6 +42,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
@@ -75,22 +76,33 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
      * @return a newly created list of inputs
      * @throws InputReadFailedException
      */
-    protected List<T> createInputsFromFiles(
+    protected InputsWithDirectory<T> createInputsFromFiles(
             FilesProvider files, InputManagerParams params, Function<NamedFile, T> mapToInput)
             throws InputReadFailedException {
         try {
             Collection<File> filesCreated = files.create(params);
 
+            Optional<Path> inputDirectory = inputDirectory(files, params.getInputContext());
+
             FileNamerContext context =
                     new FileNamerContext(
-                            inputDirectory(files, params.getInputContext()),
+                            inputDirectory,
                             params.getInputContext().isRelativeForIdentifier(),
                             params.getLogger());
-            return FunctionalList.mapToList(
-                    namer.deriveNameUnique(filesCreated, context), mapToInput);
+
+            return new InputsWithDirectory<>(
+                    createInputs(filesCreated, mapToInput, context), inputDirectory);
         } catch (FilesProviderException e) {
             throw new InputReadFailedException("Cannot find files", e);
         }
+    }
+
+    private List<T> createInputs(
+            Collection<File> filesCreated,
+            Function<NamedFile, T> mapToInput,
+            FileNamerContext context)
+            throws InputReadFailedException {
+        return FunctionalList.mapToList(namer.deriveNameUnique(filesCreated, context), mapToInput);
     }
 
     private static Optional<Path> inputDirectory(FilesProvider files, InputContextParams context)

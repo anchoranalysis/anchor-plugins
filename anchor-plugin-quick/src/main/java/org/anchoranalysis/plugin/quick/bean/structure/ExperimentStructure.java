@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.quick.bean.structure;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
@@ -81,7 +81,8 @@ public class ExperimentStructure extends PathPrefixer {
 
     @Override
     public DirectoryWithPrefix rootDirectoryPrefix(
-            Optional<String> experimentIdentifier, PathPrefixerContext context) throws PathPrefixerException {
+            Optional<String> experimentIdentifier, PathPrefixerContext context)
+            throws PathPrefixerException {
 
         createDelegateIfNeeded();
 

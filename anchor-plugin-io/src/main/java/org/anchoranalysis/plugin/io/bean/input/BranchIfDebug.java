@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
@@ -53,14 +53,15 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManagerUnary
     // END BEAN PROPERTIES
 
     @Override
-    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
         if (params.isDebugModeActivated()) {
             if (inputDebug == null) {
                 // We pick the first
                 Iterator<T> all = fromDelegate.iterator();
                 T firstItem = all.next();
-                return Collections.singletonList(firstItem);
+                return fromDelegate.withInputs(Collections.singletonList(firstItem));
             }
 
             return inputDebug.inputs(params);

@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 
@@ -50,7 +51,8 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
+    public InputsWithDirectory<T> inputs(InputManagerParams params)
+            throws InputReadFailedException {
 
         try (ProgressMultiple progressMultiple =
                 new ProgressMultiple(params.getProgress(), list.size())) {
@@ -58,11 +60,11 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
             ArrayList<T> listOut = new ArrayList<>();
 
             for (InputManager<T> inputManager : list) {
-                listOut.addAll(inputManager.inputs(params));
+                listOut.addAll(inputManager.inputs(params).inputs());
 
                 progressMultiple.incrementWorker();
             }
-            return listOut;
+            return new InputsWithDirectory<>(listOut);
         }
     }
 }

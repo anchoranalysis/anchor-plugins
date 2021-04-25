@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
@@ -42,8 +43,10 @@ import org.anchoranalysis.io.input.bean.InputManagerUnary;
 public class Shuffle<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
-    protected List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params) {
-        return shuffleInputs(fromDelegate, params);
+    protected InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params) {
+        shuffleInputs(fromDelegate.inputs(), params);
+        return fromDelegate;
     }
 
     static <T extends InputFromManager> List<T> shuffleInputs(
