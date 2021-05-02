@@ -50,7 +50,7 @@ import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-class LoadFeatureListProviderFixture<T extends FeatureInput> {
+class LoadFeatureList<T extends FeatureInput> {
 
     private static final String SINGLE_FEATURE_NAME = "someFeature";
 

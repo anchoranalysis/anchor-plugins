@@ -62,7 +62,7 @@ class CompareHelper {
     private static final CSVComparer CSV_COMPARER = new CSVComparer(",", true, 0, true, false);
 
     public static void compareOutputWithSaved(
-            Path pathAbsoluteOutput, String pathRelativeSaved, String[] relativePaths)
+            Path pathAbsoluteOutput, String pathRelativeSaved, Iterable<String> relativePaths)
             throws OperationFailedException {
 
         DualComparer comparer =

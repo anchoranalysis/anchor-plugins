@@ -30,24 +30,18 @@ import static org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportOutput
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-import java.nio.file.Path;
-import java.util.function.Consumer;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
+import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.feature.bean.dimensions.Extent;
-import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
-import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests running {#link ExportFeaturesTask} on objects (both single and pairs)
@@ -58,25 +52,13 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @author Owen Feehan
  */
-class ExportFeaturesTest {
+class ExportFeaturesObjectTest
+        extends ExportFeaturesTestBase<MultiInput, FeatureInputSingleObject, TaskFixtureObjects> {
 
-    private static TestLoader loader;
-    private TaskFixture taskFixture;
+    private static final String EXPECTED_OUTPUT_SUBDIRECTORY = "object";
 
-    private static final String RELATIVE_PATH_SAVED_RESULTS =
-            "expectedOutput/exportFeaturesObject/";
-
-    @TempDir Path directory;
-
-    @BeforeAll
-    static void setup() {
-        RegisterBeanFactories.registerAllPackageBeanFactories();
-        loader = TestLoader.createFromMavenWorkingDirectory();
-    }
-
-    @BeforeEach
-    void setupTest() throws CreateException {
-        taskFixture = new TaskFixture(loader);
+    ExportFeaturesObjectTest() {
+        super(EXPECTED_OUTPUT_SUBDIRECTORY, true, loader -> new TaskFixtureObjects(loader));
     }
 
     @Test
@@ -226,30 +208,8 @@ class ExportFeaturesTest {
                 fixture -> fixture.featureLoader().changeSingleToReferenceShared());
     }
 
-    private void testOnTask(String outputDirectory, Consumer<TaskFixture> changeFixture)
-            throws OperationFailedException {
-        changeFixture.accept(taskFixture);
-        testOnTask(outputDirectory);
-    }
-
-    /**
-     * Runs a test to check if the results of {@link ExportFeatures} correspond to saved-values
-     *
-     * @param suffixPathDirectorySaved a suffix to identify where to find the saved-output to
-     *     compare against
-     * @throws OperationFailedException
-     */
-    private void testOnTask(String suffixPathDirectorySaved) throws OperationFailedException {
-
-        try {
-            TaskSingleInputHelper.runTaskAndCompareOutputs(
-                    MultiInputFixture.createInput(taskFixture.energyStack()),
-                    taskFixture.createTask(),
-                    directory,
-                    RELATIVE_PATH_SAVED_RESULTS + suffixPathDirectorySaved,
-                    OUTPUTS_TO_COMPARE);
-        } catch (CreateException e) {
-            throw new OperationFailedException(e);
-        }
+    @Override
+    protected MultiInput createInput(EnergyStackWithoutParams stack) {
+        return MultiInputFixture.createInput(stack);
     }
 }

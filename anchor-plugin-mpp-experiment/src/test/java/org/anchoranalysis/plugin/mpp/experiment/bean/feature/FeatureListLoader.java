@@ -38,27 +38,26 @@ import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.test.TestLoader;
 
 /** Loads features-lists of different types from particular XML files */
-class ExportObjectsFeatureLoader {
+class FeatureListLoader {
 
     /** The "single" and "pair" and "image" features in use. */
-    private LoadFeatureListProviderFixture<FeatureInputSingleObject> single;
+    private LoadFeatureList<FeatureInputSingleObject> single;
 
-    private LoadFeatureListProviderFixture<FeatureInputPairObjects> pair;
-    private LoadFeatureListProviderFixture<FeatureInputStack> image;
+    private LoadFeatureList<FeatureInputPairObjects> pair;
+    private LoadFeatureList<FeatureInputStack> image;
 
     /** The features used for the shared-feature set */
-    private LoadFeatureListProviderFixture<FeatureInput> shared;
+    private LoadFeatureList<FeatureInput> shared;
 
     /** The features used for aggregating results */
-    private LoadFeatureListProviderFixture<FeatureInputResults> aggregated;
+    private LoadFeatureList<FeatureInputResults> aggregated;
 
-    public ExportObjectsFeatureLoader(TestLoader loader) {
-        super();
-        this.single = new LoadFeatureListProviderFixture<>(loader, "singleFeatures.xml");
-        this.pair = new LoadFeatureListProviderFixture<>(loader, "pairFeatures.xml");
-        this.image = new LoadFeatureListProviderFixture<>(loader, "imageFeatures.xml");
-        this.shared = new LoadFeatureListProviderFixture<>(loader, "sharedFeatures.xml");
-        this.aggregated = new LoadFeatureListProviderFixture<>(loader, "aggregatedFeatures.xml");
+    public FeatureListLoader(TestLoader loader) {
+        this.single = new LoadFeatureList<>(loader, "singleFeatures.xml");
+        this.pair = new LoadFeatureList<>(loader, "pairFeatures.xml");
+        this.image = new LoadFeatureList<>(loader, "imageFeatures.xml");
+        this.shared = new LoadFeatureList<>(loader, "sharedFeatures.xml");
+        this.aggregated = new LoadFeatureList<>(loader, "aggregatedFeatures.xml");
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> single() {

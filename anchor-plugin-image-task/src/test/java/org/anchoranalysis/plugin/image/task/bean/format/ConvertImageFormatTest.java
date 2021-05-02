@@ -1,6 +1,8 @@
 package org.anchoranalysis.plugin.image.task.bean.format;
 
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -17,6 +19,11 @@ import org.junit.jupiter.api.io.TempDir;
  */
 class ConvertImageFormatTest {
 
+    private static final List<String> FILENAME_CONVERTED = Arrays.asList("converted.tif");
+
+    private static final List<String> FILENAMES_INDEPENDENT =
+            Arrays.asList("channel00.tif", "channel01.tif", "channel02.tif");
+
     @TempDir Path directory;
 
     @BeforeAll
@@ -29,7 +36,7 @@ class ConvertImageFormatTest {
         performTest(
                 new ChannelSpecification(UnsignedByteVoxelType.INSTANCE, 1, false),
                 "single",
-                new String[] {"converted.tif"});
+                FILENAME_CONVERTED);
     }
 
     @Test
@@ -37,7 +44,7 @@ class ConvertImageFormatTest {
         performTest(
                 new ChannelSpecification(UnsignedByteVoxelType.INSTANCE, 3, false),
                 "independent3",
-                new String[] {"channel00.tif", "channel01.tif", "channel02.tif"});
+                FILENAMES_INDEPENDENT);
     }
 
     @Test
@@ -45,13 +52,13 @@ class ConvertImageFormatTest {
         performTest(
                 new ChannelSpecification(UnsignedByteVoxelType.INSTANCE, 3, true),
                 "rgb",
-                new String[] {"converted.tif"});
+                FILENAME_CONVERTED);
     }
 
     private void performTest(
             ChannelSpecification channelSpecification,
             String resourceDirectorySuffix,
-            String[] filenamesToCompare)
+            Iterable<String> filenamesToCompare)
             throws OperationFailedException {
 
         ConvertImageFormat task = new ConvertImageFormat();
