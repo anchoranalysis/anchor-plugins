@@ -89,7 +89,7 @@ public class TaskSingleInputHelper {
                     V task,
                     Path pathDirectoryOutput,
                     String pathDirectorySaved,
-                    String[] pathsFileToCompare)
+                    Iterable<String> pathsFileToCompare)
                     throws OperationFailedException {
 
         boolean successful = runTaskOnSingleInput(input, task, pathDirectoryOutput);
