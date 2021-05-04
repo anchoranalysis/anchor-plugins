@@ -58,7 +58,7 @@ class ExportFeaturesObjectTest
     private static final String EXPECTED_OUTPUT_SUBDIRECTORY = "object";
 
     ExportFeaturesObjectTest() {
-        super(EXPECTED_OUTPUT_SUBDIRECTORY, true, loader -> new TaskFixtureObjects(loader));
+        super(EXPECTED_OUTPUT_SUBDIRECTORY, true, TaskFixtureObjects::new);
     }
 
     @Test

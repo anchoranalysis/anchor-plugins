@@ -41,55 +41,55 @@ import org.anchoranalysis.test.TestLoader;
 class FeatureListLoader {
 
     /** The "single" and "pair" and "image" features in use. */
-    private LoadFeatureList<FeatureInputSingleObject> single;
+    private LoadFeatures<FeatureInputSingleObject> single;
 
-    private LoadFeatureList<FeatureInputPairObjects> pair;
-    private LoadFeatureList<FeatureInputStack> image;
+    private LoadFeatures<FeatureInputPairObjects> pair;
+    private LoadFeatures<FeatureInputStack> image;
 
     /** The features used for the shared-feature set */
-    private LoadFeatureList<FeatureInput> shared;
+    private LoadFeatures<FeatureInput> shared;
 
     /** The features used for aggregating results */
-    private LoadFeatureList<FeatureInputResults> aggregated;
+    private LoadFeatures<FeatureInputResults> aggregated;
 
     public FeatureListLoader(TestLoader loader) {
-        this.single = new LoadFeatureList<>(loader, "singleFeatures.xml");
-        this.pair = new LoadFeatureList<>(loader, "pairFeatures.xml");
-        this.image = new LoadFeatureList<>(loader, "imageFeatures.xml");
-        this.shared = new LoadFeatureList<>(loader, "sharedFeatures.xml");
-        this.aggregated = new LoadFeatureList<>(loader, "aggregatedFeatures.xml");
+        this.single = new LoadFeatures<>(loader, "single");
+        this.pair = new LoadFeatures<>(loader, "pair");
+        this.image = new LoadFeatures<>(loader, "image");
+        this.shared = new LoadFeatures<>(loader, "shared");
+        this.aggregated = new LoadFeatures<>(loader, "aggregated");
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> single() {
-        return single.asListNamedBeansProvider();
+        return single.asNamedBean();
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> pair() {
-        return pair.asListNamedBeansProvider();
+        return pair.asNamedBean();
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInputStack>>> image() {
-        return image.asListNamedBeansProvider();
+        return image.asNamedBean();
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInput>>> shared() {
-        return shared.asListNamedBeansProvider();
+        return shared.asNamedBean();
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInputResults>>> aggregated() {
-        return aggregated.asListNamedBeansProvider();
+        return aggregated.asNamedBean();
     }
 
     public void changeSingleToReferenceShared() {
-        changeSingleTo("referenceWithShared.xml");
+        changeSingleTo("referenceWithShared");
     }
 
     public void changeSingleToReferenceWithInclude() {
-        changeSingleTo("referenceWithInclude.xml");
+        changeSingleTo("referenceWithInclude");
     }
 
     public void changeSingleToShellFeatures() {
-        changeSingleTo("singleFeaturesWithShell.xml");
+        changeSingleTo("singleWithShell");
     }
 
     /**
