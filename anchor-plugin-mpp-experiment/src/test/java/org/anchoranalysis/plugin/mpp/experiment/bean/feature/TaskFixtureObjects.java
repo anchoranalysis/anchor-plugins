@@ -67,7 +67,7 @@ class TaskFixtureObjects
     @SuppressWarnings("unchecked")
     @Override
     protected FromObjects<FeatureInputSingleObject> createSource(
-            EnergyStackWithoutParams energyStack, FeatureListLoader featureLoader)
+            EnergyStackWithoutParams energyStack, FeaturesLoader featureLoader)
             throws CreateException {
         FromObjects<FeatureInputSingleObject> source = new FromObjects<>();
         source.setDefine(DefineFixture.create(energyStack, Optional.of(featureLoader.shared())));
@@ -78,7 +78,7 @@ class TaskFixtureObjects
 
     @Override
     protected List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> createFeatures(
-            FeatureListLoader featureLoader) {
+            FeaturesLoader featureLoader) {
         return featureLoader.single();
     }
 

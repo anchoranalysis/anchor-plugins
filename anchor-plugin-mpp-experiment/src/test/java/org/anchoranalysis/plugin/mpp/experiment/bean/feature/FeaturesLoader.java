@@ -38,7 +38,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.test.TestLoader;
 
 /** Loads features-lists of different types from particular XML files */
-class FeatureListLoader {
+class FeaturesLoader {
 
     /** The "single" and "pair" and "image" features in use. */
     private LoadFeatures<FeatureInputSingleObject> single;
@@ -52,7 +52,7 @@ class FeatureListLoader {
     /** The features used for aggregating results */
     private LoadFeatures<FeatureInputResults> aggregated;
 
-    public FeatureListLoader(TestLoader loader) {
+    public FeaturesLoader(TestLoader loader) {
         this.single = new LoadFeatures<>(loader, "single");
         this.pair = new LoadFeatures<>(loader, "pair");
         this.image = new LoadFeatures<>(loader, "image");
