@@ -46,14 +46,14 @@ class TaskFixtureStack
 
     @Override
     protected FeatureSource<ProvidesStackInput, FeatureList<FeatureInputStack>, FeatureInputStack>
-            createSource(EnergyStackWithoutParams energyStack, FeatureListLoader featureLoader)
+            createSource(EnergyStackWithoutParams energyStack, FeaturesLoader featureLoader)
                     throws CreateException {
         return new FromImage();
     }
 
     @Override
     protected List<NamedBean<FeatureListProvider<FeatureInputStack>>> createFeatures(
-            FeatureListLoader featureLoader) {
+            FeaturesLoader featureLoader) {
         return featureLoader.image();
     }
 }

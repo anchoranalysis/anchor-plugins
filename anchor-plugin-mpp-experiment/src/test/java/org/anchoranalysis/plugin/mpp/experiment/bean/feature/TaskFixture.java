@@ -48,7 +48,7 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
 
     @Getter private EnergyStackWithoutParams energyStack;
 
-    @Getter protected final FeatureListLoader featureLoader;
+    @Getter protected final FeaturesLoader featureLoader;
 
     /**
      * Constructor
@@ -64,7 +64,7 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
      */
     public TaskFixture(TestLoader loader) throws CreateException {
         this.energyStack = createEnergyStack(true);
-        this.featureLoader = new FeatureListLoader(loader);
+        this.featureLoader = new FeaturesLoader(loader);
     }
 
     /** Change to using a small energy-stack that causes some features to throw errors */
@@ -90,11 +90,11 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
     }
 
     protected abstract FeatureSource<S, V, T> createSource(
-            EnergyStackWithoutParams energyStack, FeatureListLoader featureLoader)
+            EnergyStackWithoutParams energyStack, FeaturesLoader featureLoader)
             throws CreateException;
 
     protected abstract List<NamedBean<FeatureListProvider<T>>> createFeatures(
-            FeatureListLoader featureLoader);
+            FeaturesLoader featureLoader);
 
     private EnergyStackWithoutParams createEnergyStack(boolean bigSizeEnergy) {
         return EnergyStackFixture.create(bigSizeEnergy, false).withoutParams();
