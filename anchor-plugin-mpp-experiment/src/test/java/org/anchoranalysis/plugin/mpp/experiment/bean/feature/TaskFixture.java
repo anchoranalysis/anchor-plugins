@@ -43,10 +43,9 @@ import org.anchoranalysis.plugin.io.bean.path.derive.Constant;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 
-
 /**
  * A fixture that creates a {@link ExportFeatures} task.
- * 
+ *
  * @param <S> input-type from which one or more rows of features are derived
  * @param <T> feature-input type for {@code features} bean-field
  * @param <V> row-source that is duplicated for each new thread (to prevent any concurrency issues)

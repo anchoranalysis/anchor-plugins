@@ -53,7 +53,11 @@ import org.junit.jupiter.api.Test;
  * @author Owen Feehan
  */
 class ExportFeaturesObjectTest
-        extends ExportFeaturesTestBase<MultiInput, FeatureInputSingleObject, FeatureTableCalculator<FeatureInputSingleObject>, TaskFixtureObjects> {
+        extends ExportFeaturesTestBase<
+                MultiInput,
+                FeatureInputSingleObject,
+                FeatureTableCalculator<FeatureInputSingleObject>,
+                TaskFixtureObjects> {
 
     private static final String EXPECTED_OUTPUT_SUBDIRECTORY = "object";
 

@@ -60,6 +60,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.io.input.MarksInitializationFactory;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInput;
@@ -160,10 +161,11 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                 InitializationContext initContext =
                         new InitializationContext(
                                 groupContext, inputBound.getTaskArguments().getSize());
-                processFileWithMap(
+                MarksInitialization initialization =
                         MarksInitializationFactory.create(
-                                        initContext, Optional.empty(), Optional.of(input))
-                                .getImage(),
+                                Optional.of(input), initContext, Optional.empty());
+                processFileWithMap(
+                        initialization.image(),
                         mapGroup,
                         groupedRows.groupNameSet(),
                         groupContext,

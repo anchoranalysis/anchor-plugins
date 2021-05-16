@@ -113,12 +113,12 @@ public class ExportReportFeaturesFromMulti
         try {
             define.process(
                     input,
-                    initialization -> 
-                    writeFeaturesIntoReporter(
-                            initialization,
-                            writer,
-                            Optional.of(input.getInput().identifier()),
-                            input.getLogger()));            
+                    initialization ->
+                            writeFeaturesIntoReporter(
+                                    initialization,
+                                    writer,
+                                    Optional.of(input.getInput().identifier()),
+                                    input.getLogger()));
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
         }

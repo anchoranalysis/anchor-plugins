@@ -113,7 +113,8 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
     public void doJobOnInput(InputBound<MultiInput, NoSharedState> input)
             throws JobExecutionException {
         try {
-            define.process(input, initialization -> outputObjects(initialization, input.getContextJob()));
+            define.process(
+                    input, initialization -> outputObjects(initialization, input.getContextJob()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);

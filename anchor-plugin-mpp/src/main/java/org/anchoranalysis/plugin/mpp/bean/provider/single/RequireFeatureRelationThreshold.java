@@ -98,7 +98,7 @@ public class RequireFeatureRelationThreshold extends SingleMarkProvider {
                     FeatureSession.with(
                             feature,
                             new FeatureInitialization(),
-                            getInitialization().getFeature().getSharedFeatures(),
+                            getInitialization().feature().getSharedFeatures(),
                             getLogger());
             return session.calculate(input);
 

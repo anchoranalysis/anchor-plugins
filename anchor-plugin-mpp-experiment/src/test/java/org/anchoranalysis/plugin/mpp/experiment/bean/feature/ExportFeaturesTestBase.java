@@ -48,11 +48,14 @@ import org.junit.jupiter.api.io.TempDir;
  * @author Owen Feehan
  * @param <S> input-type
  * @param <T> feature-type exported
- * @param <U> shared-state type 
+ * @param <U> shared-state type
  * @param <V> type of fixture used for creating tasks
  */
 abstract class ExportFeaturesTestBase<
-        S extends InputFromManager, T extends FeatureInputEnergy, U, V extends TaskFixture<S, T, U>> {
+        S extends InputFromManager,
+        T extends FeatureInputEnergy,
+        U,
+        V extends TaskFixture<S, T, U>> {
 
     private static Path EXPECTED_RESULTS_BASE = Paths.get("expectedOutput");
 
@@ -114,9 +117,9 @@ abstract class ExportFeaturesTestBase<
         try {
             @SuppressWarnings("unchecked")
             S input = (S) MultiInputFixture.createInput(taskFixture.energyStack());
-            
-            ExportFeatures<S, U, T> task = taskFixture.createTask(); 
-            
+
+            ExportFeatures<S, U, T> task = taskFixture.createTask();
+
             TaskSingleInputHelper.runTaskAndCompareOutputs(
                     input,
                     task,

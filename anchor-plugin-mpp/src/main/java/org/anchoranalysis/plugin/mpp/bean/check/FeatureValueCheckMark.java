@@ -67,7 +67,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
     @Override
     public void onInit(MarksInitialization initialization) throws InitException {
         super.onInit(initialization);
-        sharedFeatureSet = initialization.getFeature().getSharedFeatures();
+        sharedFeatureSet = initialization.feature().getSharedFeatures();
     }
 
     @Override

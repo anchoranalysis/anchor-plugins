@@ -65,7 +65,7 @@ class KernelProposerFixture {
 
         MarksInitialization initialization =
                 MarksInitializationFactory.create(
-                        new InitializationContext(context), Optional.empty(), Optional.empty());
+                        Optional.empty(), new InitializationContext(context), Optional.empty());
 
         KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer =
                 createProposerTwoEqual(
