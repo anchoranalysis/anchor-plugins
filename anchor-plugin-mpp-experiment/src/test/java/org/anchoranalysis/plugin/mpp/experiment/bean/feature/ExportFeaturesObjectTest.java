@@ -34,8 +34,8 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
+import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -53,7 +53,7 @@ import org.junit.jupiter.api.Test;
  * @author Owen Feehan
  */
 class ExportFeaturesObjectTest
-        extends ExportFeaturesTestBase<MultiInput, FeatureInputSingleObject, TaskFixtureObjects> {
+        extends ExportFeaturesTestBase<MultiInput, FeatureInputSingleObject, FeatureTableCalculator<FeatureInputSingleObject>, TaskFixtureObjects> {
 
     private static final String EXPECTED_OUTPUT_SUBDIRECTORY = "object";
 
@@ -206,10 +206,5 @@ class ExportFeaturesObjectTest
         testOnTask(
                 OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE,
                 fixture -> fixture.featureLoader().changeSingleToReferenceShared());
-    }
-
-    @Override
-    protected MultiInput createInput(EnergyStackWithoutParams stack) {
-        return MultiInputFixture.createInput(stack);
     }
 }

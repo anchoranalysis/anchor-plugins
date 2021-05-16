@@ -26,13 +26,13 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.junit.jupiter.api.Test;
 
 class ExportFeaturesImageTest
-        extends ExportFeaturesTestBase<ProvidesStackInput, FeatureInputStack, TaskFixtureStack> {
+        extends ExportFeaturesTestBase<ProvidesStackInput, FeatureInputStack, FeatureList<FeatureInputStack>, TaskFixtureStack> {
 
     private static final String EXPECTED_OUTPUT_SUBDIRECTORY = "stack";
 
@@ -47,10 +47,5 @@ class ExportFeaturesImageTest
         testOnTask(
                 OUTPUT_DIRECTORY_SIMPLE, fixture -> {} // Change nothing
                 );
-    }
-
-    @Override
-    protected ProvidesStackInput createInput(EnergyStackWithoutParams stack) {
-        return MultiInputFixture.createInput(stack);
     }
 }
