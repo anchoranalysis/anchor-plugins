@@ -29,14 +29,13 @@ package org.anchoranalysis.plugin.mpp.experiment.objects;
 import java.nio.file.Path;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
-import org.anchoranalysis.mpp.io.input.InputForMarksBean;
+import org.anchoranalysis.mpp.io.input.ExportSharedObjects;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
 public class FromCSVInput extends InputFromManagerDelegate<MultiInput>
-        implements InputForMarksBean {
+        implements ExportSharedObjects {
 
     @Getter private final Path csvFilePath;
 
@@ -46,8 +45,7 @@ public class FromCSVInput extends InputFromManagerDelegate<MultiInput>
     }
 
     @Override
-    public void addToSharedObjects(MarksInitialization marks, ImageInitialization image)
-            throws OperationFailedException {
-        getDelegate().addToSharedObjects(marks, image);
+    public void copyTo(SharedObjects target) throws OperationFailedException {
+        getDelegate().copyTo(target);
     }
 }

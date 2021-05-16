@@ -32,7 +32,11 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.junit.jupiter.api.Test;
 
 class ExportFeaturesImageTest
-        extends ExportFeaturesTestBase<ProvidesStackInput, FeatureInputStack, FeatureList<FeatureInputStack>, TaskFixtureStack> {
+        extends ExportFeaturesTestBase<
+                ProvidesStackInput,
+                FeatureInputStack,
+                FeatureList<FeatureInputStack>,
+                TaskFixtureStack> {
 
     private static final String EXPECTED_OUTPUT_SUBDIRECTORY = "stack";
 

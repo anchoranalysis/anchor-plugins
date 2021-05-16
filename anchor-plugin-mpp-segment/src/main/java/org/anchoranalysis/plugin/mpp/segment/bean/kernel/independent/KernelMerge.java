@@ -71,10 +71,7 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy, Updatabl
         super.onInit(pso);
 
         try {
-            pairCollection =
-                    getInitialization()
-                            .getSimplePairCollection()
-                            .getException(simplePairCollectionID);
+            pairCollection = getInitialization().markPairs().getException(simplePairCollectionID);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

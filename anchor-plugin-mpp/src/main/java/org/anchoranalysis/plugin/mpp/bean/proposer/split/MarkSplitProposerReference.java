@@ -53,7 +53,7 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
     public void onInit(MarksInitialization pso) throws InitException {
         super.onInit(pso);
         try {
-            delegate = getInitialization().getMarkSplitProposerSet().getException(id);
+            delegate = getInitialization().markSplitProposers().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

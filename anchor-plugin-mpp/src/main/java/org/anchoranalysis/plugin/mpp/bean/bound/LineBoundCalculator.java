@@ -65,7 +65,7 @@ public class LineBoundCalculator extends BoundCalculator {
 
             ResolvedBound minMax =
                     getInitialization()
-                            .getMarkBounds()
+                            .getPrimaryMarkBounds()
                             .calculateMinMax(
                                     outlineChannel.resolution(),
                                     rotMatrix.getNumberDimensions() >= 3);

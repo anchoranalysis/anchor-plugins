@@ -90,8 +90,10 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
             throws JobExecutionException {
 
         try {
-            define.process(input,
-                    initialization -> outputFeaturesAndEnergyStack(initialization, input.getContextJob()));
+            define.process(
+                    input,
+                    initialization ->
+                            outputFeaturesAndEnergyStack(initialization, input.getContextJob()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
