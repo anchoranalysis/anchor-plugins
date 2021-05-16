@@ -70,19 +70,19 @@ public class DefineOutputterMarksWithEnergy extends DefineOutputterWithEnergy {
      * @param <S> return-type
      */
     @FunctionalInterface
-    public interface OperationWithEnergyStack<T, S> {
+    public interface ProcessWithEnergyStack<T, S> {
         S process(T initialization, EnergyStack energyStack) throws OperationFailedException;
     }
 
-    public <S> S processInput(
+    public <S> void processInput(
             InputForMarksBean input,
             InitializationContext context,
-            OperationWithEnergyStack<ImageInitialization, S> operation)
+            ProcessWithEnergyStack<ImageInitialization, S> operation)
             throws OperationFailedException {
 
         try {
             MarksInitialization initialization = super.createInitialization(input, context);
-            return processWithEnergyStack(
+            processWithEnergyStack(
                     initialization.getImage(),
                     initialization.getImage(),
                     initialization,
@@ -98,7 +98,7 @@ public class DefineOutputterMarksWithEnergy extends DefineOutputterWithEnergy {
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
             Optional<Dictionary> dictionary,
-            OperationWithEnergyStack<MarksInitialization, S> operation)
+            ProcessWithEnergyStack<MarksInitialization, S> operation)
             throws OperationFailedException {
         try {
             MarksInitialization initialization =
@@ -119,7 +119,7 @@ public class DefineOutputterMarksWithEnergy extends DefineOutputterWithEnergy {
             T initialization,
             ImageInitialization imageParams,
             MarksInitialization mppParams,
-            OperationWithEnergyStack<T, S> operation,
+            ProcessWithEnergyStack<T, S> operation,
             InputOutputContext context)
             throws OperationFailedException {
         try {
