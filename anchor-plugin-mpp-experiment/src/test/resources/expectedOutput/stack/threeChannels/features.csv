@@ -1,2 +1,2 @@
-"image","group","voxelDataTypeMaxValue","sceneExtntX_Pixels","sceneExtntY_Pixels","sceneExtntZ_Pixels","sceneExtntX","sceneExtntY","sceneExtntZ","imageSizeMicrons.x","imageSizeMicrons.y","imageSizeMicrons.z"
-"arbitraryName","arbitraryGroup",255.0000000000,1031.0000000000,2701.0000000000,1.0000000000,10310000.0000000020,27010000.0000000040,25000.0000000000,10310000.0000000020,27010000.0000000040,25000.0000000000
+"image","group","voxelDataTypeMaxValue","sceneExtntX_Pixels","sceneExtntY_Pixels","sceneExtntZ_Pixels","sceneExtntX","sceneExtntY","sceneExtntZ","imageSizeMicrons.x","imageSizeMicrons.y","imageSizeMicrons.z","numberChannels"
+"arbitraryName","arbitraryGroup",255.0000000000,1031.0000000000,2701.0000000000,1.0000000000,10310000.0000000020,27010000.0000000040,25000.0000000000,10310000.0000000020,27010000.0000000040,25000.0000000000,3.0000000000
