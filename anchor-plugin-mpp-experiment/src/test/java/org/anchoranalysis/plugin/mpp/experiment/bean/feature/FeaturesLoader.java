@@ -44,7 +44,12 @@ class FeaturesLoader {
     private LoadFeatures<FeatureInputSingleObject> single;
 
     private LoadFeatures<FeatureInputPairObjects> pair;
+    
+    /** Features on the entire image (the entire stack). */
     private LoadFeatures<FeatureInputStack> image;
+    
+    /** An expanded set of image features compared to {@code image}. */
+    private LoadFeatures<FeatureInputStack> imageExpanded;
 
     /** The features used for the shared-feature set */
     private LoadFeatures<FeatureInput> shared;
@@ -56,6 +61,7 @@ class FeaturesLoader {
         this.single = new LoadFeatures<>(loader, "single");
         this.pair = new LoadFeatures<>(loader, "pair");
         this.image = new LoadFeatures<>(loader, "image");
+        this.imageExpanded = new LoadFeatures<>(loader, "imageExpanded");
         this.shared = new LoadFeatures<>(loader, "shared");
         this.aggregated = new LoadFeatures<>(loader, "aggregated");
     }
@@ -70,6 +76,10 @@ class FeaturesLoader {
 
     public List<NamedBean<FeatureListProvider<FeatureInputStack>>> image() {
         return image.asNamedBean();
+    }
+    
+    public List<NamedBean<FeatureListProvider<FeatureInputStack>>> imageExpanded() {
+        return imageExpanded.asNamedBean();
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInput>>> shared() {

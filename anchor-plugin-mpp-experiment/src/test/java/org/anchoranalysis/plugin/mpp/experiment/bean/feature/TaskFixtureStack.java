@@ -54,6 +54,6 @@ class TaskFixtureStack
     @Override
     protected List<NamedBean<FeatureListProvider<FeatureInputStack>>> createFeatures(
             FeaturesLoader featureLoader) {
-        return featureLoader.image();
+        return featureLoader.imageExpanded();
     }
 }

@@ -71,7 +71,7 @@ class ExportFeaturesObjectTest
                 OperationFailedException.class,
                 () ->
                         // The saved directory is irrelevant because an exception is thrown
-                        testOnTask(OUTPUT_DIR_IRRELEVANT, TaskFixture::useSmallEnergyInstead));
+                        testOnTask(OUTPUT_DIR_IRRELEVANT, TaskFixture::useSmallEnergy));
     }
 
     @Test
@@ -90,7 +90,7 @@ class ExportFeaturesObjectTest
                         testOnTask(
                                 OUTPUT_DIR_IRRELEVANT,
                                 fixture -> {
-                                    fixture.useSmallEnergyInstead();
+                                    fixture.useSmallEnergy();
                                     fixture.changeToMergedPairs(false, false);
                                 }));
     }
