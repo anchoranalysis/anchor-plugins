@@ -1,2 +1,2 @@
-"voxelDataTypeMaxValue","sceneExtntX_Pixels","sceneExtntY_Pixels","sceneExtntZ_Pixels","sceneExtntX","sceneExtntY","sceneExtntZ","imageSizeMicrons.x","imageSizeMicrons.y","imageSizeMicrons.z"
-255.0000000000,1031.0000000000,2701.0000000000,1.0000000000,NaN,NaN,NaN,NaN,NaN,NaN
+"voxelDataTypeMaxValue","sceneExtntX_Pixels","sceneExtntY_Pixels","sceneExtntZ_Pixels","sceneExtntX","sceneExtntY","sceneExtntZ","imageSizeMicrons.x","imageSizeMicrons.y","imageSizeMicrons.z","numberChannels"
+255.0000000000,1031.0000000000,2701.0000000000,1.0000000000,NaN,NaN,NaN,NaN,NaN,NaN,3.0000000000
