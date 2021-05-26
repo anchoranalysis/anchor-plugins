@@ -50,7 +50,9 @@ import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculatorFromProvider;
 
-/** An image that produces one row of features. */
+/** 
+ * An image that produces one row of features.
+ */
 public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInputStack> {
 
     // START BEAN PROPERTIES

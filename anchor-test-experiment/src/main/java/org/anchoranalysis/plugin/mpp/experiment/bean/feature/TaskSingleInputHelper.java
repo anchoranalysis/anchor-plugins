@@ -77,9 +77,9 @@ public class TaskSingleInputHelper {
      * @param task the task to run
      * @param pathDirectoryOutput an absolute path to a directory where outputs of the task will be
      *     placed
-     * @param pathDirectorySaved a path (relative to the src/test/resources) to a directory of
+     * @param pathDirectorySaved a path (relative to the {@code src/test/resources}) to a directory of
      *     saved-results to compare with
-     * @param pathsFileToCompare paths (relative to the src/test/resources) to check that are
+     * @param pathsFileToCompare paths (relative to the {@code src/test/resources}) to check that are
      *     identical
      * @throws OperationFailedException if anything goes wrong
      */

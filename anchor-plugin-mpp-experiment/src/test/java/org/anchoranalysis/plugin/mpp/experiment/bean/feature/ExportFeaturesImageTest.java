@@ -39,17 +39,38 @@ class ExportFeaturesImageTest
                 TaskFixtureStack> {
 
     private static final String EXPECTED_OUTPUT_SUBDIRECTORY = "stack";
-
-    public static final String OUTPUT_DIRECTORY_SIMPLE = "simple/";
+    
+    public static final String OUTPUT_DIRECTORY_SINGLE_CHANNEL = "singleChannel/";
+    
+    public static final String OUTPUT_DIRECTORY_THREE_CHANNELS = "threeChannels/";
+    
+    public static final String OUTPUT_DIRECTORY_WITHOUT_RESOLUTION = "withoutResolution/";
 
     ExportFeaturesImageTest() {
         super(EXPECTED_OUTPUT_SUBDIRECTORY, false, TaskFixtureStack::new);
     }
-
+    
+    /** Tests a single channel image <b>with</b> an accompanying image resolution. */
     @Test
-    void testSimple() throws OperationFailedException {
+    void testSingle() throws OperationFailedException {
         testOnTask(
-                OUTPUT_DIRECTORY_SIMPLE, fixture -> {} // Change nothing
+                OUTPUT_DIRECTORY_SINGLE_CHANNEL, TaskFixture::useSingleChannelEnergy
+                );
+    }
+
+    /** Tests a three channel image <b>with</b> an accompanying image resolution. */
+    @Test
+    void testThree() throws OperationFailedException {
+        testOnTask(
+                OUTPUT_DIRECTORY_THREE_CHANNELS, fixture -> {} // Change nothing
+                );
+    }
+    
+    /** Tests a single channel image <b>without</b> an accompanying image resolution. */
+    @Test
+    void testWithoutResolution() throws OperationFailedException {
+        testOnTask(
+                OUTPUT_DIRECTORY_WITHOUT_RESOLUTION, TaskFixture::removeResolution
                 );
     }
 }
