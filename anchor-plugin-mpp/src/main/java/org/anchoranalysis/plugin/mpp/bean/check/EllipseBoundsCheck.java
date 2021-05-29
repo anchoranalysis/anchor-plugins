@@ -48,11 +48,11 @@ public class EllipseBoundsCheck extends CheckMark {
         try {
             double minBound =
                     getInitialization()
-                            .getMarkBounds()
+                            .getPrimaryMarkBounds()
                             .getMinResolved(energyStack.resolution(), false);
             double maxBound =
                     getInitialization()
-                            .getMarkBounds()
+                            .getPrimaryMarkBounds()
                             .getMaxResolved(energyStack.resolution(), false);
 
             if (me.getRadii().x() < minBound) {

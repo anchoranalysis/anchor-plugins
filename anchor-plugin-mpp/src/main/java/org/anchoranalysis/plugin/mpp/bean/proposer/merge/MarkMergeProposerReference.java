@@ -51,7 +51,7 @@ public class MarkMergeProposerReference extends MarkMergeProposer {
     public void onInit(MarksInitialization pso) throws InitException {
         super.onInit(pso);
         try {
-            delegate = getInitialization().getMarkMergeProposerSet().getException(id);
+            delegate = getInitialization().markMergeProposers().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(
                     String.format(

@@ -26,11 +26,14 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 
-/** Helpful routines and constants related to outputting for {@link ExportFeaturesTest} */
+/** Helpful routines and constants related to outputting for {@link ExportFeaturesObjectTest} */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExportOutputter {
 
@@ -47,15 +50,41 @@ class ExportOutputter {
     // It doesn't physically exist
     public static final String OUTPUT_DIR_IRRELEVANT = "irrelevant/";
 
-    public static final String[] OUTPUTS_TO_COMPARE = {
+    private static final String[] OUTPUTS_TO_COMPARE_ALWAYS = {
         "featuresAggregated.csv",
         "features.csv",
         "grouped/arbitraryGroup/featuresGroup.csv",
-        "stacks/input.tif",
-        "energyStack/energyStack_00.tif",
-        "energyStack/energyStack_01.tif",
-        "energyStack/energyStack_02.tif",
-        NonImageFileFormat.HDF5.buildPath("objects", MultiInputFixture.OBJECTS_NAME),
         "job_manifest.ser.xml"
     };
+
+    /**
+     * A list of relative-filenames of outputs to compare.
+     *
+     * @param inputStack whether to include an input-stack
+     * @param energyStack whether to include an energy-stack
+     * @param objects whether to include HDF5 objects
+     * @return
+     */
+    public static Iterable<String> outputsToCompare(
+            boolean inputStack, boolean energyStack, boolean objects) {
+        List<String> list = new ArrayList<>();
+
+        Arrays.stream(OUTPUTS_TO_COMPARE_ALWAYS).forEach(list::add);
+
+        if (inputStack) {
+            list.add("stacks/input.tif");
+        }
+
+        if (energyStack) {
+            list.add("energyStack/energyStack_00.tif");
+            list.add("energyStack/energyStack_01.tif");
+            list.add("energyStack/energyStack_02.tif");
+        }
+
+        if (objects) {
+            list.add(NonImageFileFormat.HDF5.buildPath("objects", MultiInputFixture.OBJECTS_NAME));
+        }
+
+        return list;
+    }
 }

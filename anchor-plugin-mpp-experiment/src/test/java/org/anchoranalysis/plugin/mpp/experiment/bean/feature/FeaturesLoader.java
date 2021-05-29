@@ -38,59 +38,68 @@ import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.test.TestLoader;
 
 /** Loads features-lists of different types from particular XML files */
-class ExportObjectsFeatureLoader {
+class FeaturesLoader {
 
     /** The "single" and "pair" and "image" features in use. */
-    private LoadFeatureListProviderFixture<FeatureInputSingleObject> single;
+    private LoadFeatures<FeatureInputSingleObject> single;
 
-    private LoadFeatureListProviderFixture<FeatureInputPairObjects> pair;
-    private LoadFeatureListProviderFixture<FeatureInputStack> image;
+    private LoadFeatures<FeatureInputPairObjects> pair;
+    
+    /** Features on the entire image (the entire stack). */
+    private LoadFeatures<FeatureInputStack> image;
+    
+    /** An expanded set of image features compared to {@code image}. */
+    private LoadFeatures<FeatureInputStack> imageExpanded;
 
     /** The features used for the shared-feature set */
-    private LoadFeatureListProviderFixture<FeatureInput> shared;
+    private LoadFeatures<FeatureInput> shared;
 
     /** The features used for aggregating results */
-    private LoadFeatureListProviderFixture<FeatureInputResults> aggregated;
+    private LoadFeatures<FeatureInputResults> aggregated;
 
-    public ExportObjectsFeatureLoader(TestLoader loader) {
-        super();
-        this.single = new LoadFeatureListProviderFixture<>(loader, "singleFeatures.xml");
-        this.pair = new LoadFeatureListProviderFixture<>(loader, "pairFeatures.xml");
-        this.image = new LoadFeatureListProviderFixture<>(loader, "imageFeatures.xml");
-        this.shared = new LoadFeatureListProviderFixture<>(loader, "sharedFeatures.xml");
-        this.aggregated = new LoadFeatureListProviderFixture<>(loader, "aggregatedFeatures.xml");
+    public FeaturesLoader(TestLoader loader) {
+        this.single = new LoadFeatures<>(loader, "single");
+        this.pair = new LoadFeatures<>(loader, "pair");
+        this.image = new LoadFeatures<>(loader, "image");
+        this.imageExpanded = new LoadFeatures<>(loader, "imageExpanded");
+        this.shared = new LoadFeatures<>(loader, "shared");
+        this.aggregated = new LoadFeatures<>(loader, "aggregated");
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> single() {
-        return single.asListNamedBeansProvider();
+        return single.asNamedBean();
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> pair() {
-        return pair.asListNamedBeansProvider();
+        return pair.asNamedBean();
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInputStack>>> image() {
-        return image.asListNamedBeansProvider();
+        return image.asNamedBean();
+    }
+    
+    public List<NamedBean<FeatureListProvider<FeatureInputStack>>> imageExpanded() {
+        return imageExpanded.asNamedBean();
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInput>>> shared() {
-        return shared.asListNamedBeansProvider();
+        return shared.asNamedBean();
     }
 
     public List<NamedBean<FeatureListProvider<FeatureInputResults>>> aggregated() {
-        return aggregated.asListNamedBeansProvider();
+        return aggregated.asNamedBean();
     }
 
     public void changeSingleToReferenceShared() {
-        changeSingleTo("referenceWithShared.xml");
+        changeSingleTo("referenceWithShared");
     }
 
     public void changeSingleToReferenceWithInclude() {
-        changeSingleTo("referenceWithInclude.xml");
+        changeSingleTo("referenceWithInclude");
     }
 
     public void changeSingleToShellFeatures() {
-        changeSingleTo("singleFeaturesWithShell.xml");
+        changeSingleTo("singleWithShell");
     }
 
     /**

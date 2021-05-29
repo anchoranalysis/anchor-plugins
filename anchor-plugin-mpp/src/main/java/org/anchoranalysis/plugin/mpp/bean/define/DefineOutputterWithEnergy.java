@@ -26,22 +26,49 @@
 
 package org.anchoranalysis.plugin.mpp.bean.define;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.StackIdentifiers;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.mpp.io.input.ExportSharedObjects;
+import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
 import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
 
-public abstract class DefineOutputterWithEnergy extends DefineOutputter {
+/**
+ * Like a {@link Define} but outputs also an energy-stack.
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td rowspan="3"><i>outputs from {@link EnergyStackWriter}</i></td></tr>
+ * </tbody>
+ * </table>
+ *
+ * @author Owen Feehan
+ */
+public class DefineOutputterWithEnergy extends DefineOutputter {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
@@ -50,7 +77,73 @@ public abstract class DefineOutputterWithEnergy extends DefineOutputter {
     @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
-    protected EnergyStack createEnergyStack(ImageInitialization initialization, Logger logger)
+    /**
+     * @author Owen Feehan
+     * @param <T> init-params-type
+     * @param <S> return-type
+     */
+    @FunctionalInterface
+    public interface ProcessWithEnergyStack<T, S> {
+        S process(T initialization, EnergyStack energyStack) throws OperationFailedException;
+    }
+
+    public <S> void processInput(
+            ExportSharedObjects input,
+            InitializationContext context,
+            ProcessWithEnergyStack<ImageInitialization, S> operation)
+            throws OperationFailedException {
+
+        try {
+            ImageInitialization initialization = super.createInitialization(context, input);
+            processWithEnergyStack(
+                    initialization,
+                    operation,
+                    context.getInputOutput());
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    public <S> S processInput(
+            InitializationContext context,
+            SharedObjects sharedObjects,
+            Optional<Dictionary> dictionary,
+            ProcessWithEnergyStack<ImageInitialization, S> operation)
+            throws OperationFailedException {
+        try {
+            ImageInitialization initialization =
+                    super.createInitialization(context, Optional.of(sharedObjects), dictionary);
+            return processWithEnergyStack(
+                    initialization, operation, context.getInputOutput());
+
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    private <S> S processWithEnergyStack(
+            ImageInitialization initialization,
+            ProcessWithEnergyStack<ImageInitialization, S> operation,
+            InputOutputContext context)
+            throws OperationFailedException {
+        try {
+            EnergyStack energyStack = createEnergyStack(initialization, context.getLogger());
+
+            S result = operation.process(initialization, energyStack);
+
+            outputSharedObjects(
+                    initialization.getSharedObjects(),
+                    Optional.of(energyStack),
+                    context.getOutputter());
+
+            return result;
+
+        } catch (InitException | CreateException | OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    private EnergyStack createEnergyStack(ImageInitialization initialization, Logger logger)
             throws InitException, CreateException {
 
         // Extract the energy stack

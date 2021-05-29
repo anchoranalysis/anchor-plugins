@@ -26,10 +26,13 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.dimensions;
 
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.axis.AxisType;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * The physical size of a pixel in a specific dimension.
@@ -39,14 +42,25 @@ import org.anchoranalysis.spatial.axis.AxisType;
  */
 public class VoxelPhysicalSize<T extends FeatureInputEnergy> extends ForSpecificAxis<T> {
 
+    // START BEAN FIELDS
+    /**
+     * Whether to throw an exception (if true) if image-resolution is missing, or return {@code Double.Nan} (if false). 
+     */
+    private @BeanField @Getter @Setter boolean acceptMissingResolution = false;
+    // END BEAN FIELDS
+    
     @Override
     protected double calculateForAxis(Dimensions dimensions, AxisType axis)
             throws FeatureCalculationException {
         if (dimensions.resolution().isPresent()) {
             return dimensions.resolution().get().valueByDimension(axis); // NOSONAR
         } else {
-            throw new FeatureCalculationException(
-                    "No image-resolution is present, so physical voxel size is not specified.");
+            if (acceptMissingResolution) {
+                return Double.NaN;
+            } else {
+                throw new FeatureCalculationException(
+                        "No image-resolution is present, so physical voxel size is not specified.");
+            }
         }
     }
 }

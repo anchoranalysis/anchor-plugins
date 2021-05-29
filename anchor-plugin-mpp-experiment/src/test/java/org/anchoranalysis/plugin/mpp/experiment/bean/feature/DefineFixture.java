@@ -42,24 +42,24 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMarksWithEnergy;
+import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterWithEnergy;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DefineFixture {
 
     /**
-     * Creates a DefineOutputter
+     * Creates a {@link DefineOutputterWithEnergy}.
      *
      * @param energyStack the energy-stack associated with the define
      * @param sharedFeatures any shared to be added to the define
      * @return
      * @throws CreateException
      */
-    public static DefineOutputterMarksWithEnergy create(
+    public static DefineOutputterWithEnergy create(
             EnergyStackWithoutParams energyStack,
             Optional<List<NamedBean<FeatureListProvider<FeatureInput>>>> sharedFeatures)
             throws CreateException {
-        DefineOutputterMarksWithEnergy out = new DefineOutputterMarksWithEnergy();
+        DefineOutputterWithEnergy out = new DefineOutputterWithEnergy();
         out.setStackEnergy(stackEnergy(energyStack));
         out.setDefine(createDefine(sharedFeatures));
         return out;
