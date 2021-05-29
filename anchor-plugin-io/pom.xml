@@ -15,7 +15,13 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-	
+ <repositories>
+  		<repository>
+			<id>path-pattern-finder</id>
+			<name>Path Pattern Finder</name>
+			<url>https://maven.pkg.github.com/path-pattern-finder/path-pattern-find/</url>
+		</repository>
+  </repositories>
    <dependencies>
    
         <dependency>
