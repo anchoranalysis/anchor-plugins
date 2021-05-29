@@ -62,7 +62,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMarks;
+import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
 import org.anchoranalysis.spatial.box.BoundedList;
 
 /**
@@ -80,7 +80,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
     private static final String FILE_PREFIX_EXTRACTED_OBJECTS = "object";
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private DefineOutputterMarks define;
+    @BeanField @Getter @Setter private DefineOutputter define;
 
     /** The channels we extract the object-masks from - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
@@ -113,10 +113,8 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
     public void doJobOnInput(InputBound<MultiInput, NoSharedState> input)
             throws JobExecutionException {
         try {
-            define.processInputImage(
-                    input.getInput(),
-                    input.createInitializationContext(),
-                    initialization -> outputObjects(initialization, input.getContextJob()));
+            define.process(
+                    input, initialization -> outputObjects(initialization, input.getContextJob()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);

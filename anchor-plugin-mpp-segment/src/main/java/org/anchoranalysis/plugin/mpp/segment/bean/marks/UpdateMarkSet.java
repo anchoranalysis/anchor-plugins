@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.marks;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
@@ -38,41 +40,25 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.mpp.pair.RandomCollection;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class UpdateMarkSet {
 
-    private MarksInitialization psoImage;
-    private EnergyStack energyStack;
-    private UpdatableMarksList updatableMarkSetCollection;
-    private Logger logger;
-
-    public UpdateMarkSet(
-            MarksInitialization psoImage,
+    public static void addPairsToUpdatableMarks(
+            MarksInitialization initialization,
             EnergyStack energyStack,
-            UpdatableMarksList updatableMarkSetCollection,
-            Logger logger) {
-        super();
-        this.psoImage = psoImage;
-        this.energyStack = energyStack;
-        this.updatableMarkSetCollection = updatableMarkSetCollection;
-        this.logger = logger;
-    }
-
-    public void apply() throws OperationFailedException {
-        makePairsUpdatable();
-    }
-
-    private void makePairsUpdatable() throws OperationFailedException {
-
+            UpdatableMarksList updatableMarks,
+            Logger logger)
+            throws OperationFailedException {
         try {
-            for (String key : psoImage.getSimplePairCollection().keys()) {
+            for (String key : initialization.markPairs().keys()) {
                 RandomCollection<IdentifiablePair<Mark>> pair =
-                        psoImage.getSimplePairCollection().getException(key);
+                        initialization.markPairs().getException(key);
                 pair.initUpdatableMarks(
                         new MemoList(),
                         energyStack,
                         logger,
-                        psoImage.getFeature().getSharedFeatures());
-                updatableMarkSetCollection.add(pair);
+                        initialization.feature().getSharedFeatures());
+                updatableMarks.add(pair);
             }
         } catch (InitException e) {
             throw new OperationFailedException(e);

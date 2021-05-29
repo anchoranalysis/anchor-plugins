@@ -1,0 +1,9 @@
+<org.anchoranalysis.io.manifest.Manifest>
+  <rootDirectory>
+    <subdirectories/>
+    <delegate>
+      <directory class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../.."/>
+      <files/>
+    </delegate>
+  </rootDirectory>
+</org.anchoranalysis.io.manifest.Manifest>

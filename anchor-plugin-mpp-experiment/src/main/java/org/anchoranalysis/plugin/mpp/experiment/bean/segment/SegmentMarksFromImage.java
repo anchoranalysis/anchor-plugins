@@ -38,8 +38,8 @@ import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.identifier.provider.store.LazyEvaluationStore;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -49,10 +49,9 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.stack.DisplayStack;
-import org.anchoranalysis.image.core.stack.named.NamedStacks;
-import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -142,19 +141,20 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
         MultiInput input = inputBound.getInput();
 
         try {
-            NamedStacks stackCollection = stacksFromInput(input);
+            SharedObjects sharedObjects =
+                    new SharedObjects(inputBound.createInitializationContext().common());
+            input.copyTo(sharedObjects);
 
-            NamedProviderStore<ObjectCollection> objects = objectsFromInput(input);
+            ImageInitialization initialization = new ImageInitialization(sharedObjects);
 
             MarkCollection marks =
                     segment.duplicateBean()
-                            .segment(
-                                    stackCollection,
-                                    objects,
-                                    createDictionary(),
-                                    inputBound.getContextJob());
+                            .segment(sharedObjects, createDictionary(), inputBound.getContextJob());
             writeVisualization(
-                    marks, inputBound.getOutputter(), stackCollection, inputBound.getLogger());
+                    marks,
+                    inputBound.getOutputter(),
+                    initialization.stacks(),
+                    inputBound.getLogger());
 
         } catch (SegmentationFailedException e) {
             throw new JobExecutionException("An error occurred segmenting a configuration", e);
@@ -181,22 +181,11 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
         sharedState.outputAfterAllTasksAreExecuted(context.getOutputter());
     }
 
-    private NamedStacks stacksFromInput(MultiInput input) throws OperationFailedException {
-        NamedStacks stackCollection = new NamedStacks();
-        input.stack().addToStore(new WrapStackAsTimeSequenceStore(stackCollection));
-        return stackCollection;
-    }
-
-    private NamedProviderStore<ObjectCollection> objectsFromInput(MultiInput input)
-            throws OperationFailedException {
-        NamedProviderStore<ObjectCollection> objectsStore =
-                new LazyEvaluationStore<>("object-collections");
-        input.objects().addToStore(objectsStore);
-        return objectsStore;
-    }
-
     private void writeVisualization(
-            MarkCollection marks, Outputter outputter, NamedStacks stackCollection, Logger logger) {
+            MarkCollection marks,
+            Outputter outputter,
+            NamedProviderStore<Stack> stacks,
+            Logger logger) {
         outputter
                 .writerSelective()
                 .write(
@@ -206,8 +195,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
         try {
             DisplayStack backgroundStack =
-                    BackgroundCreator.createBackground(
-                            stackCollection, segment.getBackgroundStackName());
+                    BackgroundCreator.createBackground(stacks, segment.getBackgroundStackName());
 
             new MarksVisualization(marks, outputter, backgroundStack).write();
         } catch (CreateException e) {

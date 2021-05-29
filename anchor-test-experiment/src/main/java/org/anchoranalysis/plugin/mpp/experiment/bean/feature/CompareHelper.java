@@ -62,7 +62,7 @@ class CompareHelper {
     private static final CSVComparer CSV_COMPARER = new CSVComparer(",", true, 0, true, false);
 
     public static void compareOutputWithSaved(
-            Path pathAbsoluteOutput, String pathRelativeSaved, String[] relativePaths)
+            Path pathAbsoluteOutput, String pathRelativeSaved, Iterable<String> relativePaths)
             throws OperationFailedException {
 
         DualComparer comparer =
@@ -107,7 +107,7 @@ class CompareHelper {
             if (ImageFileFormat.TIFF.matchesEnd(relativePath)) {
                 return comparer.compareTwoImages(relativePath);
             } else if (NonImageFileFormat.CSV.matchesEnd(relativePath)) {
-                return comparer.compareTwoCsvFiles(relativePath, CSV_COMPARER, System.out);
+                return comparer.compareTwoCsvFiles(relativePath, CSV_COMPARER, System.out); // NOSONAR
             } else if (NonImageFileFormat.XML.matchesEnd(relativePath)) {
                 return comparer.compareTwoXmlDocuments(relativePath);
             } else if (NonImageFileFormat.HDF5.matchesEnd(relativePath)) {

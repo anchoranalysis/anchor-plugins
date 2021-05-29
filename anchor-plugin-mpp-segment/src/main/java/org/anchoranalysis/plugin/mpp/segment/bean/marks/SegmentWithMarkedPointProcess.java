@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.core.system.MemoryUtilities;
@@ -44,8 +44,6 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.named.NamedStacks;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -70,7 +68,7 @@ import org.anchoranalysis.mpp.segment.bean.optimization.termination.TriggerTermi
 import org.anchoranalysis.mpp.segment.optimization.DualStack;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationContext;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationTerminatedEarlyException;
-import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMarksWithEnergy;
+import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterWithEnergy;
 import org.anchoranalysis.plugin.mpp.segment.SegmentMarksState;
 
 /**
@@ -118,7 +116,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     private FeedbackReceiverBean<VoxelizedMarksWithEnergy> feedbackReceiver;
 
     /** Adds definitions of stacks/objects etc. to be used during segmentation. */
-    @BeanField @Getter @Setter private DefineOutputterMarksWithEnergy define;
+    @BeanField @Getter @Setter private DefineOutputterWithEnergy define;
 
     /** Iff true the algorithm exits before optimization begins (useful for debugging). */
     @BeanField @Getter @Setter private boolean exitBeforeOptimization = false;
@@ -141,28 +139,27 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     // Do segmentation
     @Override
     public MarkCollection segment(
-            NamedStacks stacks,
-            NamedProvider<ObjectCollection> objects,
+            SharedObjects sharedObjects,
             Optional<Dictionary> dictionary,
             InputOutputContext context)
             throws SegmentationFailedException {
-        UpdatableMarksList updatableMarkSetCollection = new UpdatableMarksList();
+        UpdatableMarksList updatableMarks = new UpdatableMarksList();
 
         try {
             MemoryUtilities.logMemoryUsage("Start of segment", context.getMessageReporter());
 
             return define.processInput(
                     new InitializationContext(context),
-                    Optional.of(stacks),
-                    Optional.of(objects),
+                    sharedObjects,
                     dictionary,
-                    (mppInit, energyStack) ->
+                    (initialization, energyStack) ->
                             segmentAndWrite(
-                                    mppInit,
+                                    new MarksInitialization(initialization),
                                     energyStack,
-                                    updatableMarkSetCollection,
+                                    updatableMarks,
                                     dictionary,
-                                    context));
+                                    context)
+            );
 
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
@@ -178,26 +175,26 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     }
 
     private MarkCollection segmentAndWrite(
-            MarksInitialization mppInit,
+            MarksInitialization initialization,
             EnergyStack energyStack,
-            UpdatableMarksList updatableMarkSetCollection,
+            UpdatableMarksList updatableMarks,
             Optional<Dictionary> dictionary,
             InputOutputContext context)
             throws OperationFailedException {
         try {
-            init(mppInit, context.getLogger());
+            init(initialization, context.getLogger());
 
             new EnergyStackWriter(energyStack, context.getOutputter()).writeEnergyStack();
 
             // We initialize the feedback receiver
-            feedbackReceiver.initRecursive(mppInit, context.getLogger());
+            feedbackReceiver.initRecursive(initialization, context.getLogger());
 
             MemoryUtilities.logMemoryUsage("Before findOpt", context.getMessageReporter());
 
-            new UpdateMarkSet(mppInit, energyStack, updatableMarkSetCollection, context.getLogger())
-                    .apply();
+            UpdateMarkSet.addPairsToUpdatableMarks(
+                    initialization, energyStack, updatableMarks, context.getLogger());
 
-            DualStack dualStack = wrapWithBackground(energyStack, mppInit.getImage().stacks());
+            DualStack dualStack = wrapWithBackground(energyStack, initialization.image().stacks());
 
             if (exitBeforeOptimization) {
                 return new MarkCollection();
@@ -215,7 +212,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                             new RandomNumberGeneratorMersenne(fixRandomSeed),
                             markFactory);
 
-            MarksWithTotalEnergy marks = findOptimum(updatableMarkSetCollection, initContext);
+            MarksWithTotalEnergy marks = findOptimum(updatableMarks, initContext);
             return marks.getMarks().deepCopy();
 
         } catch (InitException
@@ -230,7 +227,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         markFactory.initRecursive(logger);
 
         energySchemeShared =
-                SegmentHelper.initEnergy(energySchemeCreator, initialization.getFeature(), logger);
+                SegmentHelper.initEnergy(energySchemeCreator, initialization.feature(), logger);
 
         // The kernelProposers can change proposerSharedObjects
         SegmentHelper.initKernelProposers(kernelProposer, markFactory, initialization, logger);

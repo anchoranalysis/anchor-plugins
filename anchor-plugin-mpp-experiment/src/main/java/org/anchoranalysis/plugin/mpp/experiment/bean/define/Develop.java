@@ -49,7 +49,6 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
-import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMarks;
 
 /**
  * Derives various types of outputs (images, histograms etc.) from {@link MultiInput}s.
@@ -75,7 +74,7 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
 
     // START BEAN PROPERTIES
     /** Defines entities (chanels, stacks etc.) that are derived from inputs and other entities. */
-    @BeanField @Getter @Setter private DefineOutputterMarks define;
+    @BeanField @Getter @Setter private DefineOutputter define;
 
     /** Specifies a feature-table that can also be outputted. */
     @BeanField @Getter @Setter private List<OutputFeatureTable> featureTables = new ArrayList<>();
@@ -91,9 +90,8 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
             throws JobExecutionException {
 
         try {
-            define.processInputImage(
-                    input.getInput(),
-                    input.createInitializationContext(),
+            define.process(
+                    input,
                     initialization ->
                             outputFeaturesAndEnergyStack(initialization, input.getContextJob()));
 

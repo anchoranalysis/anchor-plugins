@@ -52,7 +52,7 @@ public class MarkProposerReference extends MarkProposer {
     public void onInit(MarksInitialization pso) throws InitException {
         super.onInit(pso);
         try {
-            delegate = getInitialization().getMarkProposerSet().getException(id);
+            delegate = getInitialization().markProposers().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }
