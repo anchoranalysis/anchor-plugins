@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.dimensions;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.axis.AxisType;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * The physical size of a pixel in a specific dimension.
@@ -44,11 +44,12 @@ public class VoxelPhysicalSize<T extends FeatureInputEnergy> extends ForSpecific
 
     // START BEAN FIELDS
     /**
-     * Whether to throw an exception (if true) if image-resolution is missing, or return {@code Double.Nan} (if false). 
+     * Whether to throw an exception (if true) if image-resolution is missing, or return {@code
+     * Double.Nan} (if false).
      */
     private @BeanField @Getter @Setter boolean acceptMissingResolution = false;
     // END BEAN FIELDS
-    
+
     @Override
     protected double calculateForAxis(Dimensions dimensions, AxisType axis)
             throws FeatureCalculationException {

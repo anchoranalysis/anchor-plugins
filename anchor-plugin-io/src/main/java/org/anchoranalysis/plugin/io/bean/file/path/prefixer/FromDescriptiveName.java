@@ -44,15 +44,6 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
  */
 public class FromDescriptiveName extends PathPrefixerAvoidResolve {
 
-    /** The Unix separator character. */
-    private static final char UNIX_SEPARATOR = '/';
-
-    /** The Windows separator character. */
-    private static final char WINDOWS_SEPARATOR = '\\';
-
-    /** The character to replace directory separators with when suppressed. */
-    private static final char REPLACEMENT_CHARACTER = '_';
-
     // START BEAN PROPERTIES
     /**
      * If true, any directory separators in the identifier in a descriptive-name are replaced by
@@ -66,22 +57,9 @@ public class FromDescriptiveName extends PathPrefixerAvoidResolve {
     @Override
     public DirectoryWithPrefix outFilePrefixFromPath(
             NamedPath path, Path root, PathPrefixerContext context) {
-        Path combined = root.resolve(Paths.get(calculateIdentifierForPrefix(path, context)));
+        String identifier =
+                context.getPrefixer().maybeSuppressDirectories(path.getName(), suppressDirectories);
+        Path combined = root.resolve(Paths.get(identifier));
         return new DirectoryWithPrefix(combined);
-    }
-
-    private String calculateIdentifierForPrefix(NamedPath path, PathPrefixerContext context) {
-        String identifier = path.getName();
-
-        if (suppressDirectories || context.getPrefixer().isOutputSuppressDirectories()) {
-            return replaceSeperatorsWithUnderscore(identifier);
-        } else {
-            return identifier;
-        }
-    }
-
-    private static String replaceSeperatorsWithUnderscore(String string) {
-        return string.replace(WINDOWS_SEPARATOR, REPLACEMENT_CHARACTER)
-                .replace(UNIX_SEPARATOR, REPLACEMENT_CHARACTER);
     }
 }

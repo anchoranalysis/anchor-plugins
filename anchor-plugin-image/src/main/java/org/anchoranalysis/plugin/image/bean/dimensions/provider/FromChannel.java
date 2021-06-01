@@ -86,11 +86,12 @@ public class FromChannel extends DimensionsProvider {
 
         try {
             return OptionalUtilities.orFlat(
-                            getInitialization().channels().getOptional(id),
-                            getInitialization()
-                                    .stacks()
-                                    .getOptional(id)
-                                    .map(FromChannel::firstChannel))
+                            () -> getInitialization().channels().getOptional(id),
+                            () ->
+                                    getInitialization()
+                                            .stacks()
+                                            .getOptional(id)
+                                            .map(FromChannel::firstChannel))
                     .orElseThrow(
                             () ->
                                     new CreateException(

@@ -78,12 +78,12 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
     public void useSmallEnergy() {
         this.energyStack = createEnergyStack(false, false, true);
     }
-    
+
     /** Change to a single channel energy-stack. */
     public void useSingleChannelEnergy() {
         this.energyStack = createEnergyStack(true, true, true);
     }
-    
+
     /** Change to a three channel big energy-stack, without resolution. */
     public void removeResolution() {
         this.energyStack = createEnergyStack(true, false, false);
@@ -113,7 +113,9 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
     protected abstract List<NamedBean<FeatureListProvider<T>>> createFeatures(
             FeaturesLoader featureLoader);
 
-    private EnergyStackWithoutParams createEnergyStack(boolean bigSizeEnergy, boolean singleChannel, boolean includeResolution) {
-        return EnergyStackFixture.create(bigSizeEnergy, false, singleChannel, includeResolution).withoutParams();
+    private EnergyStackWithoutParams createEnergyStack(
+            boolean bigSizeEnergy, boolean singleChannel, boolean includeResolution) {
+        return EnergyStackFixture.create(bigSizeEnergy, false, singleChannel, includeResolution)
+                .withoutParams();
     }
 }
