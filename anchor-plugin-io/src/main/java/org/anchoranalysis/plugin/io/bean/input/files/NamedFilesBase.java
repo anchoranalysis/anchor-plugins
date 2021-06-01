@@ -88,6 +88,7 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
                     new FileNamerContext(
                             inputDirectory,
                             params.getInputContext().isRelativeForIdentifier(),
+                            params.getInputContext().getIdentifierSubrange(),
                             params.getLogger());
 
             return new InputsWithDirectory<>(

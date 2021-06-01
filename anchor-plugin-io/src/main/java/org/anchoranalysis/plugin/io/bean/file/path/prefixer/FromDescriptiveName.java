@@ -57,7 +57,8 @@ public class FromDescriptiveName extends PathPrefixerAvoidResolve {
     @Override
     public DirectoryWithPrefix outFilePrefixFromPath(
             NamedPath path, Path root, PathPrefixerContext context) {
-        String identifier = context.getPrefixer().maybeSuppressDirectories(path.getName(), suppressDirectories);
+        String identifier =
+                context.getPrefixer().maybeSuppressDirectories(path.getName(), suppressDirectories);
         Path combined = root.resolve(Paths.get(identifier));
         return new DirectoryWithPrefix(combined);
     }
