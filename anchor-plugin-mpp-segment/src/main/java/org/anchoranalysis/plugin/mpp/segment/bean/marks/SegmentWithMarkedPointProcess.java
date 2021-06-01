@@ -158,8 +158,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                                     energyStack,
                                     updatableMarks,
                                     dictionary,
-                                    context)
-            );
+                                    context));
 
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);

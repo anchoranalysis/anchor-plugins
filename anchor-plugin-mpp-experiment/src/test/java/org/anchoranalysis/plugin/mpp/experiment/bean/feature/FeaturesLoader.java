@@ -44,10 +44,10 @@ class FeaturesLoader {
     private LoadFeatures<FeatureInputSingleObject> single;
 
     private LoadFeatures<FeatureInputPairObjects> pair;
-    
+
     /** Features on the entire image (the entire stack). */
     private LoadFeatures<FeatureInputStack> image;
-    
+
     /** An expanded set of image features compared to {@code image}. */
     private LoadFeatures<FeatureInputStack> imageExpanded;
 
@@ -77,7 +77,7 @@ class FeaturesLoader {
     public List<NamedBean<FeatureListProvider<FeatureInputStack>>> image() {
         return image.asNamedBean();
     }
-    
+
     public List<NamedBean<FeatureListProvider<FeatureInputStack>>> imageExpanded() {
         return imageExpanded.asNamedBean();
     }

@@ -95,10 +95,7 @@ public class DefineOutputterWithEnergy extends DefineOutputter {
 
         try {
             ImageInitialization initialization = super.createInitialization(context, input);
-            processWithEnergyStack(
-                    initialization,
-                    operation,
-                    context.getInputOutput());
+            processWithEnergyStack(initialization, operation, context.getInputOutput());
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
@@ -113,8 +110,7 @@ public class DefineOutputterWithEnergy extends DefineOutputter {
         try {
             ImageInitialization initialization =
                     super.createInitialization(context, Optional.of(sharedObjects), dictionary);
-            return processWithEnergyStack(
-                    initialization, operation, context.getInputOutput());
+            return processWithEnergyStack(initialization, operation, context.getInputOutput());
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);
