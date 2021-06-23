@@ -93,7 +93,11 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
     private static final String OUTPUT_COPY = "copy";
 
     // START BEAN PROPERTIES
-    /** How the copying occurs (e.g. with or without compression). */
+    /** 
+     * How the copying occurs from source to destination file.
+     * 
+     *  <p>e.g. with or without compression.
+     */
     @BeanField @Getter @Setter private CopyFilesMethod method = new Bytewise();
 
     /** How an output name (and path) is selected for an input file. */
