@@ -36,6 +36,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.input.bean.namer.FileNamer;
@@ -45,7 +46,9 @@ import org.apache.commons.io.IOCase;
 
 /**
  * Finds a pattern in the descriptive name, and uses the region from the first variable to the
- * last-variable as the descriptive-name
+ * last-variable as the descriptive-name.
+ * 
+ * <p>In the special case that a single file is passed, its filename is extracted without any extension.
  *
  * @author Owen Feehan
  */
@@ -60,19 +63,21 @@ public class PatternSpan extends FileNamer {
     public List<NamedFile> deriveName(Collection<File> files, FileNamerContext context) {
 
         // Convert to list
-        List<Path> paths = listConvertToPath(files);
+        List<Path> paths = convertToList(files);
 
         if (paths.size() <= 1) {
             // Everything's a constant, so there must only be a single file. Return the file-name.
-            return listExtractFileName(files);
+            return extractFileNames(files);
         }
 
         IOCase ioCase = createCaseSensitivity();
 
-        Pattern pattern = PathPatternFinder.findPatternPaths(paths, ioCase);
-        assert hasAtLeastOneVariableElement(pattern);
+        Pattern pattern = PathPatternFinder.findPatternPaths(paths, ioCase, true);
+        if (!hasAtLeastOneVariableElement(pattern)) {
+            throw new AnchorImpossibleSituationException();
+        }
 
-        return extractFromPattern(pattern, files, ioCase, context.getElseName());
+        return extractFromPattern(pattern, files, ioCase, context);
     }
 
     private IOCase createCaseSensitivity() {
@@ -80,32 +85,29 @@ public class PatternSpan extends FileNamer {
     }
 
     private static List<NamedFile> extractFromPattern(
-            Pattern pattern, Collection<File> files, IOCase ioCase, String elseName) {
-        ExtractVariableSpan extracter = new SelectSpanToExtract(pattern).createExtracter(elseName);
+            Pattern pattern, Collection<File> files, IOCase ioCase, FileNamerContext context) {
+        ExtractVariableSpan extracter = new SelectSpanToExtract(pattern,context.getNameSubrange()).selectSpanToExtract(
+                context.getElseName());
         return ExtractVariableSpanForList.listExtract(files, extracter, ioCase);
     }
 
     private static boolean hasAtLeastOneVariableElement(Pattern pattern) {
-        for (PatternElement e : pattern) {
-            if (!e.hasConstantValue()) {
+        for (PatternElement element : pattern) {
+            if (!element.hasConstantValue()) {
                 return true;
             }
         }
         return false;
     }
 
-    private static List<NamedFile> listExtractFileName(Collection<File> files) {
+    /** Extracts the file-name (without any extension). */
+    private static List<NamedFile> extractFileNames(Collection<File> files) {
         return FunctionalList.mapToList(
-                files, file -> new NamedFile(extensionlessNameFromFile(file), file));
+                files, file -> new NamedFile(ExtensionUtilities.filenameWithoutExtension(file), file));
     }
 
-    // Convert all Files to Path
-    private static List<Path> listConvertToPath(Collection<File> files) {
+    /** Convert {@link File} to {@link Path}. */
+    private static List<Path> convertToList(Collection<File> files) {
         return FunctionalList.mapToList(files, File::toPath);
-    }
-
-    // The file-name without an extension
-    private static String extensionlessNameFromFile(File file) {
-        return ExtensionUtilities.removeExtension(file);
     }
 }

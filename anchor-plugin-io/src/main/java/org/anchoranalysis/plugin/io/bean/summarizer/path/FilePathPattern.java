@@ -40,6 +40,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.apache.commons.io.IOCase;
 
@@ -59,6 +60,11 @@ public class FilePathPattern extends Summarizer<Path> {
      * Windows ingores case, Linux doesn't
      */
     @Getter @Setter private boolean ignoreCase = false;
+    
+    /**
+     * if true, the extension is removed from paths before finding the pattern.
+     */
+    @Getter @Setter private boolean removeExtension = true;
     // END BEAN PROPERTIES
 
     private List<Path> list = new ArrayList<>();
@@ -70,27 +76,18 @@ public class FilePathPattern extends Summarizer<Path> {
      * @throws OperationFailedException
      */
     public FilePathPattern(String... paths) throws OperationFailedException {
-        CheckedStream.forEach(Arrays.stream(paths), OperationFailedException.class, this::add);
-    }
-
-    public void add(String element) throws OperationFailedException {
-        add(Paths.get(element));
+        CheckedStream.forEach(Arrays.stream(paths), OperationFailedException.class, this::addElement);
     }
 
     @Override
     public synchronized void add(Path element) throws OperationFailedException {
         try {
             if (acceptPath(element)) {
-                list.add(element);
+                addPath(element);
             }
         } catch (IOException e) {
             throw new OperationFailedException(e);
         }
-    }
-
-    private boolean acceptPath(Path path) throws IOException {
-        // Always accept the path if it doesn't exist on the filesystem
-        return !path.toFile().exists() || !ignoreHidden || !Files.isHidden(path);
     }
 
     @Override
@@ -105,8 +102,25 @@ public class FilePathPattern extends Summarizer<Path> {
             return list.get(0).toString();
         }
 
-        Pattern pattern = PathPatternFinder.findPatternPaths(list, selectIOCase());
+        Pattern pattern = PathPatternFinder.findPatternPaths(list, selectIOCase(), true);
         return pattern.describeDetailed();
+    }
+
+    private void addElement(String element) {
+        addPath( Paths.get(element) );
+    }
+    
+    private void addPath(Path path) {
+        if (removeExtension) {
+            list.add(ExtensionUtilities.removeExtension(path));
+        } else {
+            list.add(path);
+        }
+    }
+    
+    private boolean acceptPath(Path path) throws IOException {
+        // Always accept the path if it doesn't exist on the filesystem
+        return !path.toFile().exists() || !ignoreHidden || !Files.isHidden(path);
     }
 
     private IOCase selectIOCase() {
