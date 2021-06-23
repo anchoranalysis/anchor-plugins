@@ -17,16 +17,20 @@ import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
  * If specified in the context, the existing name if subsetted according to an index range.
+ * 
+ * <p>The existing name is split into groups by a deliminator (by default a forward/slash) to provide
+ * groups for the subsetting.</p>
  *
  * @author Owen Feehan
  */
 public class SubsetRangeIfRequested extends FileNamer {
 
-    /** Character used to split the name into groups. */
-    private static final String SPLIT_NAME_CHARACTER = "/";
-
     // START BEAN PROPERTIES
+    /** The namer that is called to provide names that are subsetted. */
     @BeanField @Getter @Setter private FileNamer namer;
+    
+    /** Character used to split the name into groups. */
+    @BeanField @Getter @Setter private String delimiter = "/";
     // END BEAN PROPERTIES
 
     @Override
@@ -48,16 +52,16 @@ public class SubsetRangeIfRequested extends FileNamer {
         }
     }
 
-    private static NamedFile subsetFile(
+    private NamedFile subsetFile(
             NamedFile namedFile, IndexRange range, ErrorReporter errorReporter) {
         return namedFile.mapIdentifier((name, file) -> subsetName(name, range, errorReporter));
     }
 
-    private static String subsetName(String name, IndexRange range, ErrorReporter errorReporter) {
+    private String subsetName(String name, IndexRange range, ErrorReporter errorReporter) {
         List<String> groups = splitName(name);
         try {
             List<String> subset = range.extract(groups);
-            return String.join(SPLIT_NAME_CHARACTER, subset);
+            return String.join(delimiter, subset);
         } catch (OperationFailedException e) {
             errorReporter.recordError(
                     SubsetRangeIfRequested.class,
@@ -68,7 +72,7 @@ public class SubsetRangeIfRequested extends FileNamer {
         }
     }
 
-    private static List<String> splitName(String name) {
-        return Arrays.asList(name.split(SPLIT_NAME_CHARACTER));
+    private List<String> splitName(String name) {
+        return Arrays.asList(name.split(delimiter));
     }
 }

@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.file.namer.patternspan;
 import com.google.api.client.repackaged.com.google.common.base.Preconditions;
 import com.owenfeehan.pathpatternfinder.Pattern;
 import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
+import lombok.AllArgsConstructor;
 import java.io.File;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -41,37 +42,26 @@ import org.apache.commons.io.IOCase;
  * Extracts the a "spanning part" of the pattern from the string.
  *
  * <p>The spanning part should contain all variable elements, and optionally adjacent (or in
- * between) constant elements
+ * between) constant elements.
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 class ExtractVariableSpan {
 
     private static Logger log = Logger.getLogger(ExtractVariableSpan.class.getName());
 
+    /** The pattern used to extract the spanning element. */
     private Pattern pattern;
+    
+    /** A constant used if failure occurs automatically extracting a descriptive-name. */
     private String elseName;
+    
+    /** The index of the first element that should be included in the spanning-part. */
     private int indexSpanStart;
+    
+    /** The index of the last element that should be included in the spanning-part. */
     private int indexSpanEnd;
-
-    /**
-     * Constructor
-     *
-     * @param pattern the pattern used to extract the spanning element
-     * @param elseName a constant used if failure occurs automatically extracting a descriptive-name
-     * @param indexSpanStart the index of the first element that should be included in the
-     *     spanning-part
-     * @param indexSpanEnd the index of the last element that should be included in the
-     *     spanning-part
-     */
-    public ExtractVariableSpan(
-            Pattern pattern, String elseName, int indexSpanStart, int indexSpanEnd) {
-        Preconditions.checkArgument(indexSpanEnd >= indexSpanStart);
-        this.pattern = pattern;
-        this.elseName = elseName;
-        this.indexSpanStart = indexSpanStart;
-        this.indexSpanEnd = indexSpanEnd;
-    }
 
     /**
      * The right-most constant element before the span portion begins
@@ -136,7 +126,6 @@ class ExtractVariableSpan {
 
         // Replace any constants from the left-hand-side with empty strings
         for (int i = 0; i < indexSpanStart; i++) {
-            assert (pattern.get(i).hasConstantValue());
             fittedElements[i] = "";
         }
 

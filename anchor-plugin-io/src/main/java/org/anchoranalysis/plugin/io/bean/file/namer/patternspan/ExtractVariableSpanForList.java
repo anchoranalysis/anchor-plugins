@@ -36,21 +36,22 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.file.NamedFile;
+import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.apache.commons.io.IOCase;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractVariableSpanForList {
 
     /**
-     * Extract Descriptive-Files from the files via the extracted pattern
+     * Extract {@link NamedFiles} from the files by naming via the extracted pattern.
      *
-     * <p>If any of descriptive-names are blank, then add on a bit of the constant portion to all
-     * names to make it non-blank
+     * <p>If any of descriptive-names are empty, then a string (constant portion) is appended to all
+     * names so none are empty.
      *
      * @param files files
      * @param extractVariableSpan extracted-pattern
      * @param ioCase whether to be case-sensitive when extracting a variable span.
-     * @return
+     * @return a list corresponding to {@code files} but with names associated.
      */
     public static List<NamedFile> listExtract(
             Collection<File> files, ExtractVariableSpan extractVariableSpan, IOCase ioCase) {

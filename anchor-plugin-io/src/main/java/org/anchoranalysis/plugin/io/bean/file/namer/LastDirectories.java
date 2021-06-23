@@ -127,7 +127,7 @@ public class LastDirectories extends FileNamerIndependent {
 
     private String maybeRemoveExtension(File file) {
         if (removeExtensionInDescription) {
-            return ExtensionUtilities.removeExtension(file);
+            return ExtensionUtilities.filenameWithoutExtension(file);
         } else {
             return file.getName();
         }
