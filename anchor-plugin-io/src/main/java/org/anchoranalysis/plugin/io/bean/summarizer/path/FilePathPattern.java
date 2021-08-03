@@ -75,7 +75,7 @@ public class FilePathPattern extends Summarizer<Path> {
      * @param paths the paths
      * @throws OperationFailedException
      */
-    public FilePathPattern(String... paths) throws OperationFailedException {
+    public FilePathPattern(String... paths) throws OperationFailedException {   // NOSONAR
         CheckedStream.forEach(Arrays.stream(paths), OperationFailedException.class, this::addElement);
     }
 

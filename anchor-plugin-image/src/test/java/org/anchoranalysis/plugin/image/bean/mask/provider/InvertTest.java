@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider;
 
-import static org.anchoranalysis.plugin.image.bean.mask.provider.MaskFixture.*;
+import static org.anchoranalysis.test.image.MaskFixture.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
@@ -36,6 +36,7 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.test.image.MaskFixture;
 import org.junit.jupiter.api.Test;
 
 class InvertTest {
@@ -64,17 +65,17 @@ class InvertTest {
     }
 
     private static int expectedNumberVoxelsBefore(boolean do3D) {
-        return WIDTH * HEIGHT * depth(do3D);
+        return MaskFixture.width() * MaskFixture.height() * MaskFixture.depth(do3D);
     }
 
     private static long expectedNumberVoxelsAfterWithoutRestriction(boolean do3D) {
-        return extent(do3D).calculateVolume() - expectedNumberVoxelsBefore(do3D);
+        return maskExtent(do3D).calculateVolume() - expectedNumberVoxelsBefore(do3D);
     }
 
     private static void testRectangle(boolean do3D, boolean mask, long expectedNumberVoxelsAfter)
             throws CreateException {
 
-        Mask maskBefore = createWithRectangle(CORNER_RECTANGLE, do3D);
+        Mask maskBefore = create(CORNER_RECTANGLE, do3D);
 
         Optional<Mask> restrictTo = createRestrictTo(mask, do3D);
 
@@ -88,7 +89,7 @@ class InvertTest {
     private static Optional<Mask> createRestrictTo(boolean flag, boolean do3D)
             throws CreateException {
         return OptionalUtilities.createFromFlagChecked(
-                flag, () -> createWithRectangle(CORNER_MASK, do3D));
+                flag, () -> create(CORNER_MASK, do3D));
     }
 
     private static MaskProvider createProviderInvert(Mask mask, Optional<Mask> restrictTo) {
@@ -104,7 +105,7 @@ class InvertTest {
 
     private static Point3i addHalfHeightInY(Point3i in) {
         Point3i out = new Point3i(in);
-        out.incrementY(HEIGHT / 2);
+        out.incrementY(MaskFixture.height() / 2);
         return out;
     }
 }
