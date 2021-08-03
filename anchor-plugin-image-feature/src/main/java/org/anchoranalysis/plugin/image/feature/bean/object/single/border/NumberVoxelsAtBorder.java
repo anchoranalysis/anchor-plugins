@@ -43,7 +43,7 @@ public class NumberVoxelsAtBorder extends OutlineKernelBase {
             KernelApplicationParameters parameters,
             CheckedSupplier<EnergyStack, FeatureCalculationException> energyStack)
             throws FeatureCalculationException {
-        return (double) numberBorderPixels(object, parameters);
+        return numberBorderPixels(object, parameters);
     }
 
     public static int numberBorderPixels(

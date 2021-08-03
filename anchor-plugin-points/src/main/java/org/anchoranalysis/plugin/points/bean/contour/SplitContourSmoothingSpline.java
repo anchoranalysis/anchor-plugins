@@ -137,7 +137,7 @@ public class SplitContourSmoothingSpline {
             SmoothingCubicSpline splineY,
             int maxEvalPoint,
             ContourList out) {
-        double prevDer = Double.NaN;
+        double prevDerivative = Double.NaN;
 
         Contour contour = new Contour();
 
@@ -148,18 +148,18 @@ public class SplitContourSmoothingSpline {
             double xEval = splineX.evaluate(z);
             double yEval = splineY.evaluate(z);
 
-            double xDer = splineX.derivative(z);
-            double yDer = splineY.derivative(z);
+            double xDerivative = splineX.derivative(z);
+            double yDerivative = splineY.derivative(z);
 
-            double der = xDer / yDer;
+            double derivative = xDerivative / yDerivative;
 
-            if (!Double.isNaN(prevDer)
-                    && !Double.isNaN(der)
-                    && Math.signum(der) != Math.signum(prevDer)) {
+            if (!Double.isNaN(prevDerivative)
+                    && !Double.isNaN(derivative)
+                    && Math.signum(derivative) != Math.signum(prevDerivative)) {
                 out.add(contour);
                 contour = new Contour();
             }
-            prevDer = der;
+            prevDerivative = derivative;
 
             contour.getPoints().add(new Point3f((float) xEval, (float) yEval, 0.0f));
 
@@ -173,7 +173,7 @@ public class SplitContourSmoothingSpline {
     /**
      * @param points
      * @param extracter
-     * @param numExtraPoints repeats the first numLoopedPoints points again at end of curve (to help
+     * @param numberExtraPoints repeats the first numLoopedPoints points again at end of curve (to help
      *     deal with closed curves)
      * @return
      */
@@ -181,16 +181,16 @@ public class SplitContourSmoothingSpline {
             List<Point3i> points,
             ToIntFunction<Point3i> extracter,
             List<Point3i> pointsExtra,
-            int numExtraPoints) {
+            int numberExtraPoints) {
 
-        double[] out = new double[points.size() + numExtraPoints];
+        double[] out = new double[points.size() + numberExtraPoints];
 
         for (int i = 0; i < points.size(); i++) {
-            out[i] = (double) extracter.applyAsInt(points.get(i));
+            out[i] = extracter.applyAsInt(points.get(i));
         }
 
-        for (int i = 0; i < numExtraPoints; i++) {
-            out[points.size() + i] = (double) extracter.applyAsInt(pointsExtra.get(i));
+        for (int i = 0; i < numberExtraPoints; i++) {
+            out[points.size() + i] = extracter.applyAsInt(pointsExtra.get(i));
         }
 
         return out;

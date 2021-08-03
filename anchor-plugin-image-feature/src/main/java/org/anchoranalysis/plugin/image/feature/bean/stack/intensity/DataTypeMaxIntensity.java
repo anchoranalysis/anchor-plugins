@@ -44,7 +44,6 @@ public class DataTypeMaxIntensity<T extends FeatureInputEnergy> extends FeatureE
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-        return (double)
-                input.get().getEnergyStackRequired().getChannel(0).getVoxelDataType().maxValue();
+        return input.get().getEnergyStackRequired().getChannel(0).getVoxelDataType().maxValue();
     }
 }

@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
+import org.anchoranalysis.mpp.bean.AnnealScheme;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.StateReporter;
 import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
