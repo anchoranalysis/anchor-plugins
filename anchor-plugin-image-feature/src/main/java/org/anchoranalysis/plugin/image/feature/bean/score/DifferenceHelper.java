@@ -37,7 +37,7 @@ class DifferenceHelper {
             double widthGreaterThan,
             double widthLessThan,
             int minDifference) {
-        double diff = (double) (valueFirst - valueSecond - minDifference);
+        double diff = valueFirst - valueSecond - minDifference;
 
         if (diff < (-1 * widthLessThan)) {
             return 0.0;
