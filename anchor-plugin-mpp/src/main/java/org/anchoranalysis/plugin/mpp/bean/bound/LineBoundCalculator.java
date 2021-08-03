@@ -32,7 +32,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -41,6 +40,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.mpp.bean.bound.ResolvedBound;
+import org.anchoranalysis.mpp.bean.mark.bounds.EllipseBounds;
 import org.anchoranalysis.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -50,6 +50,8 @@ import org.anchoranalysis.spatial.rotation.RotationMatrix;
 public class LineBoundCalculator extends BoundCalculator {
 
     // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private EllipseBounds bounds;
+    
     @BeanField @Getter @Setter private MaskProvider outlineProvider;
 
     @BeanField @Getter @Setter private double extra = 0;
@@ -63,10 +65,7 @@ public class LineBoundCalculator extends BoundCalculator {
             Channel outlineChannel = outlineProvider.create().channel();
             assert (outlineChannel != null);
 
-            ResolvedBound minMax =
-                    getInitialization()
-                            .getPrimaryMarkBounds()
-                            .calculateMinMax(
+            ResolvedBound minMax = bounds.calculateMinMax(
                                     outlineChannel.resolution(),
                                     rotMatrix.getNumberDimensions() >= 3);
 
@@ -94,8 +93,6 @@ public class LineBoundCalculator extends BoundCalculator {
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);
-        } catch (NamedProviderGetException e) {
-            throw new OperationFailedException(e.summarize());
         }
     }
 

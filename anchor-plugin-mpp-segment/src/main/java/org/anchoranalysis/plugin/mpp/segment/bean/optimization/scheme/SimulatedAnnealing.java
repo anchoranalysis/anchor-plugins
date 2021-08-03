@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
+import org.anchoranalysis.mpp.bean.AnnealScheme;
 import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.segment.bean.optimization.OptimizationScheme;

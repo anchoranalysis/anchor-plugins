@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
+import org.anchoranalysis.mpp.bean.AnnealScheme;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.StateReporter;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.kernelbridge.KernelStateBridge;

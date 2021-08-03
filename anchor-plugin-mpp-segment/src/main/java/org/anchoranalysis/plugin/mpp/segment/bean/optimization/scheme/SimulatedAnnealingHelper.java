@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
+import org.anchoranalysis.mpp.bean.AnnealScheme;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.termination.TerminationCondition;
