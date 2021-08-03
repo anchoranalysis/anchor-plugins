@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
  * @author Owen Feehan
  *
  */
-@NoArgsConstructor(access=AccessLevel.NONE)
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class PatternElementOperations {
 
     /**
@@ -51,10 +51,8 @@ class PatternElementOperations {
     public static int indexLeftMostVariableElement(Pattern pattern, int n) {
         int count = 0;
         for (int i = 0; i < pattern.size(); i++) {
-            if (!pattern.get(i).hasConstantValue()) {
-                if (count++==n) {
-                    return i;
-                }
+            if (!pattern.get(i).hasConstantValue() && count++==n) {
+                return i;
             }
         }
         return -1;
