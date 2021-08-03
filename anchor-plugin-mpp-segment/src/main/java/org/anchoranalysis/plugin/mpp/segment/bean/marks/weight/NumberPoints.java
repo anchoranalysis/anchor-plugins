@@ -34,7 +34,7 @@ public class NumberPoints extends ExtractWeightFromMark {
     @Override
     public double weightFor(Mark mark) {
         PointList cast = (PointList) mark;
-        return (double) cast.getPoints().size();
+        return cast.getPoints().size();
     }
 
     @Override

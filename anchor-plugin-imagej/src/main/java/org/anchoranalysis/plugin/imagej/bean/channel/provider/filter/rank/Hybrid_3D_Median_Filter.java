@@ -432,7 +432,7 @@ class Hybrid_3D_Median_Filter implements PlugInFilter { // NOSONAR
     private double[] short2double(short[] array) {
         double[] doublearray = new double[array.length];
         for (int j = 0; j < array.length; ++j) {
-            doublearray[j] = (double) (0xffff & array[j]);
+            doublearray[j] = (double) (0xffff & array[j]);  // NOSONAR
         }
         return doublearray;
     }
@@ -448,7 +448,7 @@ class Hybrid_3D_Median_Filter implements PlugInFilter { // NOSONAR
     private double[] byte2double(byte[] array) {
         double[] doublearray = new double[array.length];
         for (int j = 0; j < array.length; ++j) {
-            doublearray[j] = (double) (0xff & array[j]);
+            doublearray[j] = (double) (0xff & array[j]);    // NOSONAR
         }
         return doublearray;
     }
