@@ -71,7 +71,6 @@
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-experiment</artifactId>
 		  <version>0.0.8-SNAPSHOT</version>
-		  <scope>test</scope>
 		</dependency>
 		
 	</dependencies>
