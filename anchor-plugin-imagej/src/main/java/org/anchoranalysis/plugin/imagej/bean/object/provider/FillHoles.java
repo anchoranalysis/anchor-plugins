@@ -44,7 +44,9 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.imagej.mask.ApplyImageJMorphologicalOperation;
 
 /**
- * Fills holes in an object. Existing object-masks are overwritten (i.e. their memory buffers are
+ * Fills holes in an object.
+ * 
+ * <p>Existing object-masks are overwritten (i.e. their memory buffers are
  * replaced with filled-in pixels).
  *
  * <p>An optional mask which restricts where a fill operation can happen TODO make this an immutable
