@@ -92,7 +92,7 @@ public class PlotHistogram extends StackProvider {
                 new LinePlot<>(
                         "Histogram",
                         new String[] {"Histogram"},
-                        (HistogramBin item, int yIndex) -> (double) item.getCount());
+                        (HistogramBin item, int yIndex) -> item.getCount());
         plot.getLabels().setX("Intensity");
         plot.getLabels().setY("Voxel Count");
         plot.setGraphColorScheme(graphColorScheme);

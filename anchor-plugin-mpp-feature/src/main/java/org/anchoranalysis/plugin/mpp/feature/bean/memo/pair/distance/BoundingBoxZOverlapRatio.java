@@ -78,7 +78,7 @@ public class BoundingBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 
         int minExtentZ = Math.min(zFor(box1), zFor(box2));
 
-        double overlapZ = (double) zFor(boxOverlap.get());
+        double overlapZ = zFor(boxOverlap.get());
 
         if (normalize) {
             return overlapZ / minExtentZ;

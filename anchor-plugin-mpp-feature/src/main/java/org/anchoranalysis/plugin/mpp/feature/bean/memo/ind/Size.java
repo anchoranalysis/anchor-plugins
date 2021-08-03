@@ -43,6 +43,6 @@ public final class Size extends FeatureSingleMemoRegion {
 
         VoxelStatistics pxlStats = mark.statisticsForAllSlices(0, getRegionID());
 
-        return resolveVolume((double) pxlStats.size(), input.get().getResolutionOptional());
+        return resolveVolume(pxlStats.size(), input.get().getResolutionOptional());
     }
 }
