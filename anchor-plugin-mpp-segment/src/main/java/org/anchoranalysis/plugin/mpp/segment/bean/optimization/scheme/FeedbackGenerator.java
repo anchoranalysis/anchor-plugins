@@ -79,9 +79,9 @@ class FeedbackGenerator<T> {
         }
     }
 
-    public void record(Reporting<T> reporting) throws ReporterException {
+    public void trigger(Reporting<T> reporting) throws ReporterException {
 
-        aggregateTriggerBank.record(reporting);
+        aggregateTriggerBank.trigger(reporting);
 
         try {
             periodTriggerBank.incr(reporting);

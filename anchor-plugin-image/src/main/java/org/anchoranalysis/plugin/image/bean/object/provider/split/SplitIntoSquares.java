@@ -60,7 +60,7 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
     // START BEAN PROPERTIES
     @BeanField @Positive @Getter @Setter private int squareSize = 10;
 
-    /** Only includes squares that have at lesat this number of voxels */
+    /** Only includes squares that have at least this number of voxels. */
     @BeanField @Getter @Setter private int minNumberVoxels = 1;
     // END BEAN PROPERTIES
 

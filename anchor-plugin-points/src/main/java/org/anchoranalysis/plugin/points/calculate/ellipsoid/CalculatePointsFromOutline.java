@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-opencv
+ * anchor-plugin-points
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,24 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Conversion to/from OpenCV data-structures. */
-package org.anchoranalysis.plugin.opencv.convert;
+
+package org.anchoranalysis.plugin.points.calculate.ellipsoid;
+
+import java.util.List;
+import lombok.EqualsAndHashCode;
+import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.core.points.PointsFromObject;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.spatial.point.Point3i;
+
+@EqualsAndHashCode(callSuper = false)
+class CalculatePointsFromOutline
+        extends FeatureCalculation<List<Point3i>, FeatureInputSingleObject> {
+
+    @Override
+    protected List<Point3i> execute(FeatureInputSingleObject params)
+            throws FeatureCalculationException {
+        return PointsFromObject.listFromOutline3i(params.getObject());
+    }
+}
