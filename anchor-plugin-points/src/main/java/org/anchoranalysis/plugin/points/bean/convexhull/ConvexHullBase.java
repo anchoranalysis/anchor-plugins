@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-quick
+ * anchor-plugin-points
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,47 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.quick.bean.file.path.derive;
+package org.anchoranalysis.plugin.points.bean.convexhull;
 
-import java.nio.file.Path;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.system.path.ExtensionUtilities;
-import org.anchoranalysis.io.input.bean.path.DerivePath;
-import org.anchoranalysis.io.input.path.DerivePathException;
+import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.outline.FindOutline;
 
-/**
- * Removes the file-name from a path, but keeps the directories and preserves the file-extension.
- *
- * <p>Specifically, a file-path of form {@code somedir/somename.ext} and converts to {@code
- * somedir.ext}.
- *
- * @author Owen Feehan
- */
-public class CollapseFileName extends DerivePath {
+public abstract class ConvexHullBase extends MaskProviderUnary {
 
-    // START BEAN FIELDS
-    @BeanField @Getter @Setter private DerivePath derivePath;
-    // END BEAN FIELDS
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private boolean erodeAtBoundary = false;
+    // END BEAN PROPERTIES
 
     @Override
-    public Path deriveFrom(Path source, boolean debugMode) throws DerivePathException {
-        Path path = derivePath.deriveFrom(source, debugMode);
-        try {
-            return collapse(path);
-        } catch (CreateException e) {
-            throw new DerivePathException(e);
-        }
+    public Mask createFromMask(Mask mask) throws CreateException {
+        return createFromMask(mask, FindOutline.outline(mask, 1, true, erodeAtBoundary));
     }
 
-    private static Path collapse(Path path) throws CreateException {
-
-        PathTwoParts pathParts = new PathTwoParts(path);
-
-        Optional<String> extension = ExtensionUtilities.extractExtension(pathParts.getSecond());
-        return ExtensionUtilities.appendExtension(pathParts.getFirst(), extension);
-    }
+    protected abstract Mask createFromMask(Mask mask, Mask outline) throws CreateException;
 }

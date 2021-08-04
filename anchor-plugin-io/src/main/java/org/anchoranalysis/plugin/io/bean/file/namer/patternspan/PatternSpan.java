@@ -47,8 +47,9 @@ import org.apache.commons.io.IOCase;
 /**
  * Finds a pattern in the descriptive name, and uses the region from the first variable to the
  * last-variable as the descriptive-name.
- * 
- * <p>In the special case that a single file is passed, its filename is extracted without any extension.
+ *
+ * <p>In the special case that a single file is passed, its filename is extracted without any
+ * extension.
  *
  * @author Owen Feehan
  */
@@ -86,8 +87,9 @@ public class PatternSpan extends FileNamer {
 
     private static List<NamedFile> extractFromPattern(
             Pattern pattern, Collection<File> files, IOCase ioCase, FileNamerContext context) {
-        ExtractVariableSpan extracter = new SelectSpanToExtract(pattern,context.getNameSubrange()).selectSpanToExtract(
-                context.getElseName());
+        ExtractVariableSpan extracter =
+                new SelectSpanToExtract(pattern, context.getNameSubrange())
+                        .selectSpanToExtract(context.getElseName());
         return ExtractVariableSpanForList.listExtract(files, extracter, ioCase);
     }
 
@@ -103,7 +105,8 @@ public class PatternSpan extends FileNamer {
     /** Extracts the file-name (without any extension). */
     private static List<NamedFile> extractFileNames(Collection<File> files) {
         return FunctionalList.mapToList(
-                files, file -> new NamedFile(ExtensionUtilities.filenameWithoutExtension(file), file));
+                files,
+                file -> new NamedFile(ExtensionUtilities.filenameWithoutExtension(file), file));
     }
 
     /** Convert {@link File} to {@link Path}. */

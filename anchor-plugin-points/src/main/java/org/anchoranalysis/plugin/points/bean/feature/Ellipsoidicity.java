@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-opencv
+ * anchor-plugin-points
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,19 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Conversion to/from OpenCV data-structures. */
-package org.anchoranalysis.plugin.opencv.convert;
+
+package org.anchoranalysis.plugin.points.bean.feature;
+
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+
+public class Ellipsoidicity extends EllipsoidBase {
+
+    @Override
+    protected double calc(FeatureInputSingleObject input, Ellipsoid me)
+            throws FeatureCalculationException {
+
+        return EllipticityCalculatorHelper.calc(input.getObject(), me, input.dimensionsRequired());
+    }
+}

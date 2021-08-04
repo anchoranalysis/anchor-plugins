@@ -37,7 +37,6 @@ import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
-import org.anchoranalysis.plugin.points.calculate.CalculatePointsFromOutline;
 import org.anchoranalysis.spatial.point.Point3i;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

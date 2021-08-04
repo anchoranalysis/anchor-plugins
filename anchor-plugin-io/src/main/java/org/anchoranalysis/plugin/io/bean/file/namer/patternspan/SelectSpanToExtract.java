@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.io.bean.file.namer.patternspan;
 
+import com.owenfeehan.pathpatternfinder.Pattern;
 import java.util.Optional;
 import java.util.logging.Logger;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.IndexRange;
-import com.owenfeehan.pathpatternfinder.Pattern;
-import lombok.AllArgsConstructor;
 
 /**
  * Selects which elements to extract from a {@link Pattern}.
@@ -40,23 +40,26 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 class SelectSpanToExtract {
-    
+
     private static Logger log = Logger.getLogger(SelectSpanToExtract.class.getName());
 
     private Pattern pattern;
-    
-    /** If specifies, determines which variable elements mark the start and end of the extracted span. */
+
+    /**
+     * If specifies, determines which variable elements mark the start and end of the extracted
+     * span.
+     */
     private Optional<IndexRange> nameSubrange;
 
     /**
      * Selects which parts of the pattern are included in a {@link ExtractVariableSpan}.
-     * 
-     * <p>If a {@code nameSubrange} is specified, this determines a range of variables that are included,
-     * and any constant elements that occur in between are also included.
-     * 
-     * <p>Otherwise, the entire range of the extracted variables (from first to last inclusive) is included,
-     * including the constant elements inbetween.
-     * 
+     *
+     * <p>If a {@code nameSubrange} is specified, this determines a range of variables that are
+     * included, and any constant elements that occur in between are also included.
+     *
+     * <p>Otherwise, the entire range of the extracted variables (from first to last inclusive) is
+     * included, including the constant elements inbetween.
+     *
      * @param elseName a fallback to use as name if the extraction fails on an element
      * @return a {@link ExtractVariableSpan} configured to extract across all variable elements.
      */
@@ -64,12 +67,15 @@ class SelectSpanToExtract {
         int numberVariableElements = PatternElementOperations.countVariableElements(pattern);
 
         return new ExtractVariableSpan(
-                pattern, elseName, firstIndex(numberVariableElements), finalIndex(numberVariableElements));
+                pattern,
+                elseName,
+                firstIndex(numberVariableElements),
+                finalIndex(numberVariableElements));
     }
-    
+
     private int firstIndex(int numberVariableElements) {
         if (nameSubrange.isPresent()) {
-            try {                
+            try {
                 int variableIndex = nameSubrange.get().correctedStartIndex(numberVariableElements);
                 return findVariableElement(variableIndex);
             } catch (OperationFailedException e) {
@@ -81,7 +87,7 @@ class SelectSpanToExtract {
             return PatternElementOperations.indexLeftMostVariableElement(pattern);
         }
     }
-    
+
     private int finalIndex(int numberVariableElements) {
         if (nameSubrange.isPresent()) {
             try {
@@ -91,26 +97,27 @@ class SelectSpanToExtract {
                 // If an error occurred subsetting, then use the right-most element as a fallback.
                 log.fine(e.getMessage());
                 return finalIndexWithoutSubrange();
-            }                
+            }
         } else {
             return finalIndexWithoutSubrange();
         }
     }
-    
+
     private int finalIndexWithoutSubrange() {
         int rightmost = PatternElementOperations.indexRightMostVariableElement(pattern);
         if (doElementsAfterContainPeriod(rightmost)) {
             return rightmost;
         } else {
-            // If there's no file extension in the constant string afterwards, we assume the file extension
+            // If there's no file extension in the constant string afterwards, we assume the file
+            // extension
             // is part of the variable element, and we thus take the final element irrespective.
             return pattern.size() - 1;
-        }        
+        }
     }
-    
-    /** 
-     * Translates the index of a variable element to an index of all elements. 
-     * 
+
+    /**
+     * Translates the index of a variable element to an index of all elements.
+     *
      * @param variableIndex zero-index, whether its first (0), second (1) third variable element.
      * @return the index across all elements (variable or not) for this variable.
      */

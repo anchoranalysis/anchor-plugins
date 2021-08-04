@@ -58,7 +58,7 @@ import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
 
 /**
- * A quick way of defining an InputOutputExperiment where several assumptions are made.
+ * A quick way of defining an {@link InputOutputExperiment} where several assumptions are made.
  *
  * @author Owen Feehan
  * @param <S> shared-state
@@ -114,38 +114,14 @@ public class QuickExperiment<S> extends Experiment {
         Path combinedFileFilter = BeanPathUtilities.pathRelativeToBean(this, fileInput);
 
         if (NonImageFileFormat.XML.matches(combinedFileFilter)) {
-
-            // Creates from an XML bean
-            delegate.setInput(createInputManagerBean(combinedFileFilter));
-
-            Path outBasePath = combinedFileFilter.getParent();
-            delegate.setOutput(createOutputManager(outBasePath));
-
+            createFromXMLBean(combinedFileFilter);
         } else {
-            // Creates from a file
-            SearchDirectory fs = new SearchDirectory();
-            fs.setFileFilterAndDirectory(combinedFileFilter);
-
-            delegate.setInput(createInputManagerImageFile(fs));
-
-            try {
-                delegate.setOutput(
-                        createOutputManager(
-                                fs.getDirectoryAsPathEnsureAbsolute(
-                                        arguments.createInputContext())));
-
-            } catch (IOException e) {
-                throw new ExperimentExecutionException(e);
-            }
+            createFromFile(combinedFileFilter, arguments);
         }
 
         // Log Reporter
         delegate.setLogExperiment(new ToConsole());
-
-        // Task
-        SequentialProcessor<MultiInput, S> taskProcessor = new SequentialProcessor<>();
-        taskProcessor.setTask(task);
-        delegate.setTaskProcessor(taskProcessor);
+        delegate.setTaskProcessor(createTask());
 
         try {
             delegate.checkMisconfigured(defaultInstances);
@@ -161,6 +137,39 @@ public class QuickExperiment<S> extends Experiment {
         return delegate.useDetailedLogging();
     }
 
+    private void createFromXMLBean(Path combinedFileFilter) throws ExperimentExecutionException {
+        // Creates from an XML bean
+        delegate.setInput(createInputManagerBean(combinedFileFilter));
+
+        Path outBasePath = combinedFileFilter.getParent();
+        delegate.setOutput(createOutputManager(outBasePath));
+    }
+
+    private void createFromFile(Path combinedFileFilter, ExecutionArguments arguments)
+            throws ExperimentExecutionException {
+        // Creates from a file
+        SearchDirectory search = new SearchDirectory();
+        search.setFileFilterAndDirectory(combinedFileFilter);
+
+        delegate.setInput(createInputManagerImageFile(search));
+
+        try {
+            delegate.setOutput(
+                    createOutputManager(
+                            search.getDirectoryAsPathEnsureAbsolute(
+                                    arguments.createInputContext())));
+
+        } catch (IOException e) {
+            throw new ExperimentExecutionException(e);
+        }
+    }
+
+    private SequentialProcessor<MultiInput, S> createTask() {
+        SequentialProcessor<MultiInput, S> taskProcessor = new SequentialProcessor<>();
+        taskProcessor.setTask(task);
+        return taskProcessor;
+    }
+
     private InputManager<MultiInput> createInputManagerBean(Path beanPath)
             throws ExperimentExecutionException {
         try {
@@ -174,32 +183,37 @@ public class QuickExperiment<S> extends Experiment {
         return new MultiInputManager(inputName, new Stacks(new NamedFiles(fs)));
     }
 
-    private OutputManager createOutputManager(Path inPathBaseDir) {
+    private OutputManager createOutputManager(Path baseDirectory) {
+
+        OutputManager manager = new OutputManager();
+        manager.setSilentlyDeleteExisting(true);
+        manager.setOutputsEnabled(new IgnoreUnderscorePrefixUnless());
+
+        try {
+            manager.localise(getLocalPath());
+        } catch (BeanMisconfiguredException e) {
+            // Should never arise, as getLocalPath() should always be absolute
+            throw new AnchorFriendlyRuntimeException(e);
+        }
+
+        manager.setPrefixer(createFilePathResolver(baseDirectory));
+        manager.setOutputWriteSettings(outputWriteSettings);
+        return manager;
+    }
+
+    private DirectoryStructure createFilePathResolver(Path baseDirectory) {
 
         Path pathDirectoryOut = BeanPathUtilities.pathRelativeToBean(this, directoryOutput);
 
-        OutputManager outputManager = new OutputManager();
-        outputManager.setSilentlyDeleteExisting(true);
-        outputManager.setOutputsEnabled(new IgnoreUnderscorePrefixUnless());
-
+        DirectoryStructure resolver = new DirectoryStructure();
+        resolver.setPrefixToRemove(baseDirectory.toString());
+        resolver.setPrefix(pathDirectoryOut.toString());
         try {
-            outputManager.localise(getLocalPath());
+            resolver.localise(getLocalPath());
         } catch (BeanMisconfiguredException e) {
             // Should never arise, as getLocalPath() should always be absolute
             throw new AnchorFriendlyRuntimeException(e);
         }
-
-        DirectoryStructure filePathResolver = new DirectoryStructure();
-        filePathResolver.setPrefixToRemove(inPathBaseDir.toString());
-        filePathResolver.setPrefix(pathDirectoryOut.toString());
-        try {
-            filePathResolver.localise(getLocalPath());
-        } catch (BeanMisconfiguredException e) {
-            // Should never arise, as getLocalPath() should always be absolute
-            throw new AnchorFriendlyRuntimeException(e);
-        }
-        outputManager.setPrefixer(filePathResolver);
-        outputManager.setOutputWriteSettings(outputWriteSettings);
-        return outputManager;
+        return resolver;
     }
 }

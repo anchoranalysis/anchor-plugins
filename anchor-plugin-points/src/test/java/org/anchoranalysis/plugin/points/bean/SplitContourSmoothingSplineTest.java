@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-opencv
+ * anchor-test-mpp
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,33 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Conversion to/from OpenCV data-structures. */
-package org.anchoranalysis.plugin.opencv.convert;
+
+package org.anchoranalysis.plugin.points.bean;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.Contour;
+import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.image.object.TestLoaderObjects;
+import org.junit.jupiter.api.Test;
+
+class SplitContourSmoothingSplineTest {
+
+    private TestLoaderObjects loader =
+            new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
+
+    @Test
+    void test() throws CreateException, OperationFailedException, SetOperationFailedException {
+
+        ObjectMask contourIn = loader.openLargestObjectFrom("01");
+
+        List<Contour> contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
+
+        assertEquals(72, contours.size());
+    }
+}
