@@ -1,9 +1,8 @@
-package org.anchoranalysis.plugin.operator.feature.bean.range.feature;
 /*-
  * #%L
  * anchor-plugin-operator-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,3 +23,21 @@ package org.anchoranalysis.plugin.operator.feature.bean.range.feature;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.plugin.operator.feature.bean.statistics;
+
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
+import org.anchoranalysis.plugin.operator.feature.statistics.FeatureResultSupplier;
+
+// Z-score of a value
+public class ZScore<T extends FeatureInput> extends StatisticalBase<T> {
+
+    @Override
+    protected double deriveScore(double featureValue, double mean, FeatureResultSupplier stdDev)
+            throws FeatureCalculationException {
+
+        return FirstSecondOrderStatistic.calculateZScore(featureValue, mean, stdDev.get());
+    }
+}

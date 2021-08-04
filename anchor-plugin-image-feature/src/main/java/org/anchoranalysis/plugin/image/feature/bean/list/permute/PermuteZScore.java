@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 
 import org.anchoranalysis.feature.input.FeatureInputParams;
-import org.anchoranalysis.plugin.operator.feature.bean.score.ZScore;
+import org.anchoranalysis.plugin.operator.feature.bean.statistics.ZScore;
 
 /**
  * Similar to FeatureListProviderPermute but embeds the feature in a GaussianScore

@@ -51,7 +51,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  * <p>The upstream segmentation should return 2D objects as it is executed on the maximum-intensity
  * projection.
  *
- * <p>A 3D binary-segmentation is applied to the z-stack with @code{segmentStack} to produce a mask
+ * <p>A 3D binary-segmentation is applied to the z-stack with {@code segmentStack} to produce a mask
  * over the z-stack. The the 2D objects are then expanded in the z-dimension to fit this mask.
  *
  * @author Owen Feehan

@@ -36,7 +36,6 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 
-//
 public class ConvertUnits<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
     // START BEAN PROPERTIES
