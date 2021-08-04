@@ -24,62 +24,60 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.operator.feature.bean.range.feature;
+package org.anchoranalysis.plugin.operator.feature.bean.statistics;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.plugin.operator.feature.bean.range.CompareWithRange;
-import org.anchoranalysis.plugin.operator.feature.bean.range.RangeCompareBase;
+import org.anchoranalysis.plugin.operator.feature.statistics.FeatureResultSupplier;
 
 /**
- * Like {@link CompareWithRange} but uses features to calculate boundary values
+ * Calculates a score based upon the statistical mean and std-deviation.
  *
  * @author Owen Feehan
- * @param <T> feature-input type
+ * @param <T> feature input-type
  */
-public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompareBase<T> {
+public abstract class StatisticalBase<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
     // START BEAN PROPERTIES
-    /** Constant to return if value lies within the range */
-    @BeanField @Getter @Setter private double withinValue = 0;
+    @BeanField @Getter @Setter private Feature<T> itemMean;
 
-    /** Calculates minimally-allowed range boundary */
-    @BeanField @Getter @Setter private Feature<T> min;
-
-    /** Calculates maximally-allowed range boundary */
-    @BeanField @Getter @Setter private Feature<T> max;
+    @BeanField @Getter @Setter private Feature<T> itemStdDev;
     // END BEAN PROPERTIES
 
     @Override
-    protected Feature<T> featureToCalcInputVal() {
-        return getItem();
-    }
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
-    @Override
-    protected double boundaryMin(SessionInput<T> input) throws FeatureCalculationException {
-        return input.calculate(min);
-    }
-
-    @Override
-    protected double boundaryMax(SessionInput<T> input) throws FeatureCalculationException {
-        return input.calculate(max);
-    }
-
-    @Override
-    protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
-            throws FeatureCalculationException {
-        return withinValue;
+        return deriveScore(
+                input.calculate(getItem()),
+                input.calculate(itemMean),
+                () -> input.calculate(itemStdDev));
     }
 
     @Override
     public String describeParams() {
         return String.format(
-                "min=%s,max=%s,withinValue=%f,%s",
-                min.getFriendlyName(), max.getFriendlyName(), withinValue, super.describeParams());
+                "%s,%s,%s",
+                getItem().descriptionLong(),
+                getItemMean().descriptionLong(),
+                getItemStdDev().descriptionLong());
     }
+
+    /**
+     * Derive scores given the value, mean and standard-deviation
+     *
+     * @param featureValue the feature-value calculated from getItem()
+     * @param mean the mean
+     * @param stdDev a means to get the std-deviation (if needed)
+     * @return
+     * @throws FeatureCalculationException
+     */
+    protected abstract double deriveScore(
+            double featureValue, double mean, FeatureResultSupplier stdDev)
+            throws FeatureCalculationException;    
 }

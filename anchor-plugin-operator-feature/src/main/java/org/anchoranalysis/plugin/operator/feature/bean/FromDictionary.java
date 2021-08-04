@@ -73,12 +73,6 @@ public class FromDictionary<T extends FeatureInputParams> extends FeatureOperato
     }
 
     @Override
-    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
-        super.beforeCalc(initialization);
-        keyAggregated = keyAggregated();
-    }
-
-    @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         Dictionary dictionary = input.get().getParamsRequired();
@@ -91,6 +85,12 @@ public class FromDictionary<T extends FeatureInputParams> extends FeatureOperato
         }
     }
 
+    @Override
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
+        keyAggregated = keyAggregated();
+    }
+    
     private String keyAggregated() {
         return keyPrefix + key + keySuffix;
     }

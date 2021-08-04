@@ -24,19 +24,19 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.operator.feature.bean.score;
+package org.anchoranalysis.plugin.operator.feature.bean.statistics;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
-import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
+import org.anchoranalysis.plugin.operator.feature.statistics.FeatureResultSupplier;
+import cern.jet.random.Normal;
 
 // A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score
 // approaches 1.0
-public class GaussianScore<T extends FeatureInput> extends StatisticalScoreBase<T> {
+public class GaussianCumulative<T extends FeatureInput> extends StatisticalBase<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
@@ -64,7 +64,30 @@ public class GaussianScore<T extends FeatureInput> extends StatisticalScoreBase<
             return 1.0;
         }
 
-        return GaussianScoreCalculator.calc(
-                mean, stdDev.get(), featureValue, rewardHigherSide, rewardLowerSide);
+        return calc(mean, stdDev.get(), featureValue, rewardHigherSide, rewardLowerSide);
+    }
+    
+    private static double calc(
+            double mean,
+            double stdDev,
+            double val,
+            boolean rewardHigherSide,
+            boolean rewardLowerSide) {
+        Normal normal = new Normal(mean, stdDev, null);
+        double cdf = normal.cdf(val);
+
+        if (rewardHigherSide) {
+            return cdf;
+        }
+
+        if (rewardLowerSide) {
+            return (1 - cdf);
+        }
+
+        if (val > mean) {
+            return (1 - cdf) * 2;
+        } else {
+            return cdf * 2;
+        }
     }
 }
