@@ -40,6 +40,8 @@ import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EnergyStackHelper {
+    
+    private static final String IDENTIFIER = "energyStack";
 
     // TODO make this more elegant in the design We make a special exception for writing our
     // energyStacks
@@ -49,17 +51,11 @@ class EnergyStackHelper {
             InputOutputContext context) {
 
         try {
-            if (initialization.stacks().keys().contains("energyStack")) {
+            if (initialization.stacks().keys().contains(IDENTIFIER)) {
 
-                Dictionary dictionary =
-                        OptionalUtilities.flatMap(
-                                        energyDictionaryName,
-                                        name -> initialization.dictionaries().getOptional(name))
-                                .orElseGet(Dictionary::new);
+                Dictionary dictionary = extractDictionary(initialization, energyDictionaryName);
 
-                EnergyStack energyStack =
-                        new EnergyStack(
-                                initialization.stacks().getException("energyStack"), dictionary);
+                EnergyStack energyStack = createEnergyStack(initialization, dictionary);
                 new EnergyStackWriter(energyStack, context.getOutputter()).writeEnergyStack();
             }
         } catch (NamedProviderGetException e) {
@@ -67,5 +63,17 @@ class EnergyStackHelper {
         } catch (OutputWriteFailedException e) {
             context.getLogger().errorReporter().recordError(EnergyStackHelper.class, e);
         }
+    }
+    
+    private static EnergyStack createEnergyStack(ImageInitialization initialization, Dictionary dictionary) throws NamedProviderGetException {
+        return new EnergyStack(
+                initialization.stacks().getException(IDENTIFIER), dictionary);
+    }
+    
+    private static Dictionary extractDictionary(ImageInitialization initialization, Optional<String> energyDictionaryName) throws NamedProviderGetException {
+        return OptionalUtilities.flatMap(
+                energyDictionaryName,
+                name -> initialization.dictionaries().getOptional(name))
+        .orElseGet(Dictionary::new);
     }
 }
