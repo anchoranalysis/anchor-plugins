@@ -24,60 +24,60 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.operator.feature.bean.score;
+package org.anchoranalysis.plugin.operator.feature.bean.range;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
 
 /**
- * Calculates a score based upon the statistical mean and std-deviation.
+ * Like {@link CompareWithRange} but uses features to calculate boundary values
  *
  * @author Owen Feehan
- * @param <T> feature input-type
+ * @param <T> feature-input type
  */
-public abstract class StatisticalScoreBase<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
+public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompareBase<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private Feature<T> itemMean;
+    /** Constant to return if value lies within the range */
+    @BeanField @Getter @Setter private double withinValue = 0;
 
-    @BeanField @Getter @Setter private Feature<T> itemStdDev;
+    /** Calculates minimally-allowed range boundary */
+    @BeanField @Getter @Setter private Feature<T> min;
+
+    /** Calculates maximally-allowed range boundary */
+    @BeanField @Getter @Setter private Feature<T> max;
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-
-        return deriveScore(
-                input.calculate(getItem()),
-                input.calculate(itemMean),
-                () -> input.calculate(itemStdDev));
+    protected Feature<T> featureToCalcInputVal() {
+        return getItem();
     }
 
-    /**
-     * Derive scores given the value, mean and standard-deviation
-     *
-     * @param featureValue the feature-value calculated from getItem()
-     * @param mean the mean
-     * @param stdDev a means to get the std-deviation (if needed)
-     * @return
-     * @throws FeatureCalculationException
-     */
-    protected abstract double deriveScore(
-            double featureValue, double mean, FeatureResultSupplier stdDev)
-            throws FeatureCalculationException;
+    @Override
+    protected double boundaryMin(SessionInput<T> input) throws FeatureCalculationException {
+        return input.calculate(min);
+    }
+
+    @Override
+    protected double boundaryMax(SessionInput<T> input) throws FeatureCalculationException {
+        return input.calculate(max);
+    }
+
+    @Override
+    protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
+            throws FeatureCalculationException {
+        return withinValue;
+    }
 
     @Override
     public String describeParams() {
         return String.format(
-                "%s,%s,%s",
-                getItem().descriptionLong(),
-                getItemMean().descriptionLong(),
-                getItemStdDev().descriptionLong());
+                "min=%s,max=%s,withinValue=%f,%s",
+                min.getFriendlyName(), max.getFriendlyName(), withinValue, super.describeParams());
     }
 }

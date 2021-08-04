@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 
 import org.anchoranalysis.feature.input.FeatureInputParams;
-import org.anchoranalysis.plugin.operator.feature.bean.score.GaussianScore;
+import org.anchoranalysis.plugin.operator.feature.bean.statistics.GaussianCumulative;
 
 /**
  * Similar to FeatureListProviderPermute but embeds the feature in a GaussianScore
@@ -37,6 +37,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.score.GaussianScore;
 public class PermuteGaussianScore<T extends FeatureInputParams> extends PermuteFirstSecondOrder<T> {
 
     public PermuteGaussianScore() {
-        super(GaussianScore::new, 0, 1);
+        super(GaussianCumulative::new, 0, 1);
     }
 }
