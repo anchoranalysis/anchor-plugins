@@ -24,8 +24,9 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.provider.object;
+package org.anchoranalysis.plugin.points.bean;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,8 +37,6 @@ import org.anchoranalysis.image.core.object.factory.SingleObjectFromPointsFactor
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.points.bean.contour.SplitContourSmoothingSpline;
-import org.anchoranalysis.plugin.points.contour.ContourList;
 import org.anchoranalysis.spatial.Contour;
 import org.anchoranalysis.spatial.point.PointConverter;
 
@@ -84,7 +83,7 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
         }
     }
 
-    private static ObjectCollection contoursAsObjects(ContourList contourList)
+    private static ObjectCollection contoursAsObjects(List<Contour> contourList)
             throws OperationFailedException {
         try {
             return ObjectCollectionFactory.mapFrom(

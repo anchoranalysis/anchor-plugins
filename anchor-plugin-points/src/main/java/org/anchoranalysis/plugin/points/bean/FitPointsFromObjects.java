@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.mark.provider.collection;
+package org.anchoranalysis.plugin.points.bean;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +45,7 @@ import org.anchoranalysis.spatial.point.Point2i;
 import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.PointConverter;
 
-public class PointsFitterFromObjects extends MarkCollectionProvider {
+public class FitPointsFromObjects extends MarkCollectionProvider {
 
     /// START BEAN PROPERTIES
     @BeanField @Getter @Setter private PointsFitterToMark pointsFitter;

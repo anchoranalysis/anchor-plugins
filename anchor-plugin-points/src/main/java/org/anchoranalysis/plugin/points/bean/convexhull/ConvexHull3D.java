@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.mask.provider;
+package org.anchoranalysis.plugin.points.bean.convexhull;
 
 import com.github.quickhull3d.Point3d;
 import com.github.quickhull3d.QuickHull3D;

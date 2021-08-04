@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.io.bean.file.namer.patternspan;
 import com.google.api.client.repackaged.com.google.common.base.Preconditions;
 import com.owenfeehan.pathpatternfinder.Pattern;
 import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
-import lombok.AllArgsConstructor;
 import java.io.File;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.apache.commons.io.IOCase;
@@ -53,13 +53,13 @@ class ExtractVariableSpan {
 
     /** The pattern used to extract the spanning element. */
     private Pattern pattern;
-    
+
     /** A constant used if failure occurs automatically extracting a descriptive-name. */
     private String elseName;
-    
+
     /** The index of the first element that should be included in the spanning-part. */
     private int indexSpanStart;
-    
+
     /** The index of the last element that should be included in the spanning-part. */
     private int indexSpanEnd;
 

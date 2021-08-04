@@ -88,8 +88,7 @@ class InvertTest {
 
     private static Optional<Mask> createRestrictTo(boolean flag, boolean do3D)
             throws CreateException {
-        return OptionalUtilities.createFromFlagChecked(
-                flag, () -> create(CORNER_MASK, do3D));
+        return OptionalUtilities.createFromFlagChecked(flag, () -> create(CORNER_MASK, do3D));
     }
 
     private static MaskProvider createProviderInvert(Mask mask, Optional<Mask> restrictTo) {

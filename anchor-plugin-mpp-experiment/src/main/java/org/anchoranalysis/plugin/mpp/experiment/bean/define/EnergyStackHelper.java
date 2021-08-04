@@ -40,7 +40,7 @@ import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EnergyStackHelper {
-    
+
     private static final String IDENTIFIER = "energyStack";
 
     // TODO make this more elegant in the design We make a special exception for writing our
@@ -64,16 +64,19 @@ class EnergyStackHelper {
             context.getLogger().errorReporter().recordError(EnergyStackHelper.class, e);
         }
     }
-    
-    private static EnergyStack createEnergyStack(ImageInitialization initialization, Dictionary dictionary) throws NamedProviderGetException {
-        return new EnergyStack(
-                initialization.stacks().getException(IDENTIFIER), dictionary);
+
+    private static EnergyStack createEnergyStack(
+            ImageInitialization initialization, Dictionary dictionary)
+            throws NamedProviderGetException {
+        return new EnergyStack(initialization.stacks().getException(IDENTIFIER), dictionary);
     }
-    
-    private static Dictionary extractDictionary(ImageInitialization initialization, Optional<String> energyDictionaryName) throws NamedProviderGetException {
+
+    private static Dictionary extractDictionary(
+            ImageInitialization initialization, Optional<String> energyDictionaryName)
+            throws NamedProviderGetException {
         return OptionalUtilities.flatMap(
-                energyDictionaryName,
-                name -> initialization.dictionaries().getOptional(name))
-        .orElseGet(Dictionary::new);
+                        energyDictionaryName,
+                        name -> initialization.dictionaries().getOptional(name))
+                .orElseGet(Dictionary::new);
     }
 }

@@ -24,18 +24,23 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.feature.object.conic;
+package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 
+import java.util.List;
+import lombok.EqualsAndHashCode;
+import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.core.points.PointsFromObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
-import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+import org.anchoranalysis.spatial.point.Point3i;
 
-public class Ellipsoidicity extends EllipsoidBase {
+@EqualsAndHashCode(callSuper = false)
+class CalculatePointsFromOutline
+        extends FeatureCalculation<List<Point3i>, FeatureInputSingleObject> {
 
     @Override
-    protected double calc(FeatureInputSingleObject input, Ellipsoid me)
+    protected List<Point3i> execute(FeatureInputSingleObject params)
             throws FeatureCalculationException {
-
-        return EllipticityCalculatorHelper.calc(input.getObject(), me, input.dimensionsRequired());
+        return PointsFromObject.listFromOutline3i(params.getObject());
     }
 }

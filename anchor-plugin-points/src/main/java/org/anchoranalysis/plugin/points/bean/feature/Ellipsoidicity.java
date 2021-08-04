@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-test-mpp
+ * anchor-plugin-points
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,31 +24,18 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.contour;
+package org.anchoranalysis.plugin.points.bean.feature;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 
-import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.points.contour.ContourList;
-import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.object.TestLoaderObjects;
-import org.junit.jupiter.api.Test;
+public class Ellipsoidicity extends EllipsoidBase {
 
-class SplitContourSmoothingSplineTest {
+    @Override
+    protected double calc(FeatureInputSingleObject input, Ellipsoid me)
+            throws FeatureCalculationException {
 
-    private TestLoaderObjects loader =
-            new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
-
-    @Test
-    void test() throws CreateException, OperationFailedException, SetOperationFailedException {
-
-        ObjectMask contourIn = loader.openLargestObjectFrom("01");
-
-        ContourList contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
-
-        assertEquals(72, contours.size());
+        return EllipticityCalculatorHelper.calc(input.getObject(), me, input.dimensionsRequired());
     }
 }

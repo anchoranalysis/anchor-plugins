@@ -1,4 +1,2 @@
-/**
- * Extracting features using OpenCV.
- */
+/** Extracting features using OpenCV. */
 package org.anchoranalysis.plugin.opencv.bean.feature;

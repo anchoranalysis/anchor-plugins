@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -42,9 +42,9 @@ import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
  * If specified in the context, the existing name if subsetted according to an index range.
- * 
- * <p>The existing name is split into groups by a deliminator (by default a forward/slash) to provide
- * groups for the subsetting.</p>
+ *
+ * <p>The existing name is split into groups by a deliminator (by default a forward/slash) to
+ * provide groups for the subsetting.
  *
  * @author Owen Feehan
  */
@@ -53,7 +53,7 @@ public class SubsetRangeIfRequested extends FileNamer {
     // START BEAN PROPERTIES
     /** The namer that is called to provide names that are subsetted. */
     @BeanField @Getter @Setter private FileNamer namer;
-    
+
     /** Character used to split the name into groups. */
     @BeanField @Getter @Setter private String delimiter = "/";
     // END BEAN PROPERTIES

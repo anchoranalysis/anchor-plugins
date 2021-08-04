@@ -24,8 +24,9 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.contour;
+package org.anchoranalysis.plugin.points.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.ToIntFunction;
 import lombok.AccessLevel;
@@ -33,14 +34,13 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
-import org.anchoranalysis.plugin.points.contour.ContourList;
 import org.anchoranalysis.spatial.Contour;
 import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.Point3i;
 import umontreal.ssj.functionfit.SmoothingCubicSpline;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SplitContourSmoothingSpline {
+class SplitContourSmoothingSpline {
 
     /**
      * 1. Fits a smoothed-spline to the contour 2. Splits this at each optima (critical points i.e.
@@ -52,7 +52,7 @@ public class SplitContourSmoothingSpline {
      * @return
      * @throws OperationFailedException
      */
-    public static ContourList apply(
+    public static List<Contour> apply(
             ObjectMask object, double rho, int numberLoopPoints, int minimumNumberPoints)
             throws OperationFailedException {
 
@@ -62,13 +62,13 @@ public class SplitContourSmoothingSpline {
                 (pts, out) -> fitSplinesAndExtract(pts, rho, pts, numberLoopPoints, out));
     }
 
-    private static ContourList traversePointsAndCallFitter(
+    private static List<Contour> traversePointsAndCallFitter(
             ObjectMask object, int minimumNumberPoints, FitSplinesExtract fitter)
             throws OperationFailedException {
 
         List<Contour> contoursTraversed = CVFindContours.contoursForObject(object);
 
-        ContourList out = new ContourList();
+        List<Contour> out = new ArrayList<>();
 
         for (Contour contour : contoursTraversed) {
             addSplinesFor(contour, out, fitter, minimumNumberPoints);
@@ -79,7 +79,7 @@ public class SplitContourSmoothingSpline {
 
     private static void addSplinesFor(
             Contour contourIn,
-            ContourList contoursOut,
+            List<Contour> contoursOut,
             FitSplinesExtract fitter,
             int minNumPoints) {
         if (contourIn.getPoints().size() < minNumPoints) {
@@ -91,11 +91,11 @@ public class SplitContourSmoothingSpline {
 
     @FunctionalInterface
     private static interface FitSplinesExtract {
-        public void apply(List<Point3i> pointsTraversed, ContourList out);
+        public void apply(List<Point3i> pointsTraversed, List<Contour> out);
     }
 
     /**
-     * Fits splines to the pts in ptsTraversed (and maybe some points from ptsExtra)
+     * Fits splines to the points (and maybe some points from ptsExtra)
      *
      * <p>As it can be useful to have some overlap with another contour, or to the beginning of the
      * same contour (to handle cyclical contours) ptsExtra provides a means to append some
@@ -113,7 +113,7 @@ public class SplitContourSmoothingSpline {
             double rho,
             List<Point3i> pointsExtra,
             int numExtraPoints,
-            ContourList out) {
+            List<Contour> out) {
         if (numExtraPoints > pointsExtra.size()) {
             numExtraPoints = pointsExtra.size();
         }
@@ -132,11 +132,11 @@ public class SplitContourSmoothingSpline {
     }
 
     /** Extracts and splits contours from the splines */
-    private static ContourList extractSplitContour(
+    private static List<Contour> extractSplitContour(
             SmoothingCubicSpline splineX,
             SmoothingCubicSpline splineY,
             int maxEvalPoint,
-            ContourList out) {
+            List<Contour> out) {
         double prevDerivative = Double.NaN;
 
         Contour contour = new Contour();
@@ -173,8 +173,8 @@ public class SplitContourSmoothingSpline {
     /**
      * @param points
      * @param extracter
-     * @param numberExtraPoints repeats the first numLoopedPoints points again at end of curve (to help
-     *     deal with closed curves)
+     * @param numberExtraPoints repeats the first numLoopedPoints points again at end of curve (to
+     *     help deal with closed curves)
      * @return
      */
     private static double[] extractFromPoint(

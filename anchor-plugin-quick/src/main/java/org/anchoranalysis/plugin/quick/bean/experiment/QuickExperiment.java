@@ -121,7 +121,7 @@ public class QuickExperiment<S> extends Experiment {
 
         // Log Reporter
         delegate.setLogExperiment(new ToConsole());
-        delegate.setTaskProcessor( createTask() );
+        delegate.setTaskProcessor(createTask());
 
         try {
             delegate.checkMisconfigured(defaultInstances);
@@ -144,8 +144,9 @@ public class QuickExperiment<S> extends Experiment {
         Path outBasePath = combinedFileFilter.getParent();
         delegate.setOutput(createOutputManager(outBasePath));
     }
-    
-    private void createFromFile(Path combinedFileFilter, ExecutionArguments arguments) throws ExperimentExecutionException {
+
+    private void createFromFile(Path combinedFileFilter, ExecutionArguments arguments)
+            throws ExperimentExecutionException {
         // Creates from a file
         SearchDirectory search = new SearchDirectory();
         search.setFileFilterAndDirectory(combinedFileFilter);
@@ -162,7 +163,7 @@ public class QuickExperiment<S> extends Experiment {
             throw new ExperimentExecutionException(e);
         }
     }
-        
+
     private SequentialProcessor<MultiInput, S> createTask() {
         SequentialProcessor<MultiInput, S> taskProcessor = new SequentialProcessor<>();
         taskProcessor.setTask(task);
@@ -195,15 +196,15 @@ public class QuickExperiment<S> extends Experiment {
             throw new AnchorFriendlyRuntimeException(e);
         }
 
-        manager.setPrefixer( createFilePathResolver(baseDirectory) );
+        manager.setPrefixer(createFilePathResolver(baseDirectory));
         manager.setOutputWriteSettings(outputWriteSettings);
         return manager;
     }
-    
+
     private DirectoryStructure createFilePathResolver(Path baseDirectory) {
-        
+
         Path pathDirectoryOut = BeanPathUtilities.pathRelativeToBean(this, directoryOutput);
-        
+
         DirectoryStructure resolver = new DirectoryStructure();
         resolver.setPrefixToRemove(baseDirectory.toString());
         resolver.setPrefix(pathDirectoryOut.toString());
