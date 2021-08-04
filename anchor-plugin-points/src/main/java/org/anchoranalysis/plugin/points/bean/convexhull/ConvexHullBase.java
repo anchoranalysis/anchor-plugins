@@ -24,23 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.calculate;
+package org.anchoranalysis.plugin.points.bean.convexhull;
 
-import java.util.List;
-import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.core.points.PointsFromObject;
-import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
-import org.anchoranalysis.spatial.point.Point3i;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.outline.FindOutline;
 
-@EqualsAndHashCode(callSuper = false)
-public class CalculatePointsFromOutline
-        extends FeatureCalculation<List<Point3i>, FeatureInputSingleObject> {
+public abstract class ConvexHullBase extends MaskProviderUnary {
+
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private boolean erodeAtBoundary = false;
+    // END BEAN PROPERTIES
 
     @Override
-    protected List<Point3i> execute(FeatureInputSingleObject params)
-            throws FeatureCalculationException {
-        return PointsFromObject.listFromOutline3i(params.getObject());
+    public Mask createFromMask(Mask mask) throws CreateException {
+        return createFromMask(mask, FindOutline.outline(mask, 1, true, erodeAtBoundary));
     }
+
+    protected abstract Mask createFromMask(Mask mask, Mask outline) throws CreateException;
 }

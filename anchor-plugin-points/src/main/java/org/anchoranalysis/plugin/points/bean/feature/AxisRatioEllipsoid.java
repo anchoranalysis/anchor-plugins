@@ -24,30 +24,20 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.contour;
+package org.anchoranalysis.plugin.points.bean.feature;
 
-import java.util.ArrayList;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.outline.traverser.OutlineTraverser;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PointsFromContourTraverser {
+public class AxisRatioEllipsoid extends EllipsoidBase {
 
-    /** Extracts a list of points from the outline (contour) of the object-mask */
-    public static List<Point3i> pointsFromContour(ObjectMask object)
-            throws OperationFailedException {
+    @Override
+    protected double calc(FeatureInputSingleObject input, Ellipsoid me)
+            throws FeatureCalculationException {
 
-        List<Point3i> pointsTraversed = new ArrayList<>();
+        double[] radii = me.radiiOrdered();
 
-        OutlineTraverser outline =
-                new OutlineTraverser(object.duplicate(), (a, b) -> true, false, true);
-        outline.applyGlobal(pointsTraversed);
-
-        return pointsTraversed;
+        return radii[0] / radii[1];
     }
 }

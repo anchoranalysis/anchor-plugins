@@ -60,10 +60,8 @@ public class FilePathPattern extends Summarizer<Path> {
      * Windows ingores case, Linux doesn't
      */
     @Getter @Setter private boolean ignoreCase = false;
-    
-    /**
-     * if true, the extension is removed from paths before finding the pattern.
-     */
+
+    /** if true, the extension is removed from paths before finding the pattern. */
     @Getter @Setter private boolean removeExtension = true;
     // END BEAN PROPERTIES
 
@@ -75,8 +73,9 @@ public class FilePathPattern extends Summarizer<Path> {
      * @param paths the paths
      * @throws OperationFailedException
      */
-    public FilePathPattern(String... paths) throws OperationFailedException {   // NOSONAR
-        CheckedStream.forEach(Arrays.stream(paths), OperationFailedException.class, this::addElement);
+    public FilePathPattern(String... paths) throws OperationFailedException { // NOSONAR
+        CheckedStream.forEach(
+                Arrays.stream(paths), OperationFailedException.class, this::addElement);
     }
 
     @Override
@@ -107,9 +106,9 @@ public class FilePathPattern extends Summarizer<Path> {
     }
 
     private void addElement(String element) {
-        addPath( Paths.get(element) );
+        addPath(Paths.get(element));
     }
-    
+
     private void addPath(Path path) {
         if (removeExtension) {
             list.add(ExtensionUtilities.removeExtension(path));
@@ -117,7 +116,7 @@ public class FilePathPattern extends Summarizer<Path> {
             list.add(path);
         }
     }
-    
+
     private boolean acceptPath(Path path) throws IOException {
         // Always accept the path if it doesn't exist on the filesystem
         return !path.toFile().exists() || !ignoreHidden || !Files.isHidden(path);

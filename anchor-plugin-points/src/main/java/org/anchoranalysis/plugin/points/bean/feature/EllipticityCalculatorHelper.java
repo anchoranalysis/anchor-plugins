@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.feature.object.conic;
+package org.anchoranalysis.plugin.points.bean.feature;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

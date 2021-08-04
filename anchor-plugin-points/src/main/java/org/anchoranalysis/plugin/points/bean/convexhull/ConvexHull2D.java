@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.mask.provider;
+package org.anchoranalysis.plugin.points.bean.convexhull;
 
 import java.util.List;
 import org.anchoranalysis.core.exception.CreateException;

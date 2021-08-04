@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.mark.proposer.single;
+package org.anchoranalysis.plugin.points.bean;
 
 import java.util.List;
 import java.util.Optional;

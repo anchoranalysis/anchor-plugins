@@ -38,8 +38,9 @@ import org.anchoranalysis.io.input.path.DerivePathException;
 
 /**
  * Removes the file-name from a path, but keeps the directories and preserves the file-extension.
- * 
- * <p>Specifically, a file-path of form {@code somedir/somename.ext} and converts to {@code somedir.ext}. 
+ *
+ * <p>Specifically, a file-path of form {@code somedir/somename.ext} and converts to {@code
+ * somedir.ext}.
  *
  * @author Owen Feehan
  */

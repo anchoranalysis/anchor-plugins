@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-points
+ * anchor-test-mpp
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,20 +24,32 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.feature.object.conic;
+package org.anchoranalysis.plugin.points.bean;
 
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
-import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AxisRatioEllipsoid extends EllipsoidBase {
+import java.util.List;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.Contour;
+import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.image.object.TestLoaderObjects;
+import org.junit.jupiter.api.Test;
 
-    @Override
-    protected double calc(FeatureInputSingleObject input, Ellipsoid me)
-            throws FeatureCalculationException {
+class SplitContourSmoothingSplineTest {
 
-        double[] radii = me.radiiOrdered();
+    private TestLoaderObjects loader =
+            new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
 
-        return radii[0] / radii[1];
+    @Test
+    void test() throws CreateException, OperationFailedException, SetOperationFailedException {
+
+        ObjectMask contourIn = loader.openLargestObjectFrom("01");
+
+        List<Contour> contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
+
+        assertEquals(72, contours.size());
     }
 }

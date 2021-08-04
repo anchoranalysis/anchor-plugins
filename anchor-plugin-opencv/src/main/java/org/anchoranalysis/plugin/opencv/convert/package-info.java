@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * Conversion to/from OpenCV data-structures.
- */
+/** Conversion to/from OpenCV data-structures. */
 package org.anchoranalysis.plugin.opencv.convert;
