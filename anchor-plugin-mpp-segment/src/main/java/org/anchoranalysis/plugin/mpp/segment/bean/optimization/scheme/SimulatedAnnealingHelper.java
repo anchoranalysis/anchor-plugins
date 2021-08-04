@@ -144,6 +144,6 @@ class SimulatedAnnealingHelper {
             feedbackGenerator.recordBest(reporting);
         }
 
-        feedbackGenerator.record(reporting);
+        feedbackGenerator.trigger(reporting);
     }
 }
