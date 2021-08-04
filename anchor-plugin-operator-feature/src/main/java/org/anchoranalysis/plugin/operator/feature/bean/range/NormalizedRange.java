@@ -24,41 +24,41 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.operator.feature.score;
+package org.anchoranalysis.plugin.operator.feature.bean.range;
 
-import cern.jet.random.Normal;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Calculates a Gaussian Score
+ * The range of two feature values (i.e. max - min), divided by their mean.
  *
  * @author Owen Feehan
+ * @param <T> feature input-type
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GaussianScoreCalculator {
+public class NormalizedRange<T extends FeatureInput> extends FeatureDoubleElem<T> {
 
-    public static double calc(
-            double mean,
-            double stdDev,
-            double val,
-            boolean rewardHigherSide,
-            boolean rewardLowerSide) {
-        Normal normal = new Normal(mean, stdDev, null);
-        double cdf = normal.cdf(val);
+    // START BEAN PROPERTIES
+    // END BEAN PROPERTIES
 
-        if (rewardHigherSide) {
-            return cdf;
+    @Override
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+        double val1 = input.calculate(getItem1());
+        double val2 = input.calculate(getItem2());
+
+        double absDiff = Math.abs(val1 - val2);
+        double mean = (val1 + val2) / 2;
+
+        if (mean == 0.0) {
+            return 0.0;
         }
 
-        if (rewardLowerSide) {
-            return (1 - cdf);
-        }
+        return absDiff / mean;
+    }
 
-        if (val > mean) {
-            return (1 - cdf) * 2;
-        } else {
-            return cdf * 2;
-        }
+    @Override
+    public String descriptionLong() {
+        return String.format("%s - %s", getItem1().descriptionLong(), getItem2().descriptionLong());
     }
 }

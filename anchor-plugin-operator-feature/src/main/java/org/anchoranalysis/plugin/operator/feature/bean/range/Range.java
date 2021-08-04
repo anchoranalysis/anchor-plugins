@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.operator.feature.bean.range.feature;
+package org.anchoranalysis.plugin.operator.feature.bean.range;
 
 import lombok.Getter;
 import lombok.Setter;
