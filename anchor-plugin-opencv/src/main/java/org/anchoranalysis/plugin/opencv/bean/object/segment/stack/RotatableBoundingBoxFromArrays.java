@@ -38,7 +38,7 @@ import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 /**
- * Extracts a bounding box from arrays returned by the EAST deep-CNN model.
+ * Extracts a bounding box from arrays returned by the EAST CNN model.
  *
  * @author Owen Feehan
  */
@@ -85,7 +85,7 @@ class RotatableBoundingBoxFromArrays {
         // Make it counter-clockwise by multiplying by -1
         Orientation2D orientation = new Orientation2D(-1.0 * angle);
 
-        Point3d endRotated = rotatedPointWithoffset(endUnrotated, orientation, offset);
+        Point3d endRotated = rotatedPointWithOffset(endUnrotated, orientation, offset);
 
         float width = startUnrotated.x() + endUnrotated.x();
         float height = startUnrotated.y() + endUnrotated.y();
@@ -106,7 +106,7 @@ class RotatableBoundingBoxFromArrays {
         return mark;
     }
 
-    private static Point3d rotatedPointWithoffset(
+    private static Point3d rotatedPointWithOffset(
             Point2f unrotated, Orientation2D orientation, Point2i offset) {
 
         RotationMatrix rotMatrix = orientation.createRotationMatrix();
