@@ -1,4 +1,2 @@
-/**
- * Arithmetic involving features.
- */
+/** Arithmetic involving features. */
 package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;

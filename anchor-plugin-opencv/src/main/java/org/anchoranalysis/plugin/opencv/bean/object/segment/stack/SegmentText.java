@@ -26,27 +26,18 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
-import io.vavr.Tuple2;
-import java.nio.file.Path;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
-import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
-import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
-import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
 /**
@@ -58,11 +49,7 @@ import org.opencv.dnn.Net;
  *
  * @author Owen Feehan
  */
-public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
-
-    static {
-        CVInit.alwaysExecuteBeforeCallingLibrary();
-    }
+public class SegmentText extends SegmentFromTensorFlowModel {
 
     /** Only exact integral multiples of this size in each dimension can be accepted as input */
     private static final Extent EAST_EXTENT = new Extent(32, 32);
@@ -80,29 +67,34 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
     // END BEAN PROPERTIES
 
     @Override
-    public SegmentedObjects segment(Stack stack, ConcurrentModelPool<Net> modelPool)
-            throws SegmentationFailedException {
+    protected SegmentedObjects segmentMat(
+            Mat mat,
+            Optional<Resolution> resolution,
+            Extent unscaledSize,
+            ScaleFactor scaleFactor,
+            ConcurrentModelPool<Net> modelPool)
+            throws Throwable {
+        // Convert marks to object-masks
+        SegmentedObjects objects =
+                EastObjectsExtracter.apply(modelPool, mat, resolution, minConfidence);
 
-        stack = checkAndCorrectInput(stack);
+        // Scale each object-mask and extract as an object-collection
+        return objects.scale(scaleFactor, unscaledSize);
+    }
 
-        try {
-            // Scales the input to the largest acceptable-extent
-            Tuple2<Mat, ScaleFactor> pair =
-                    CreateScaledInput.apply(stack, findLargestExtent(stack.extent()));
+    @Override
+    protected Extent inputSizeForModel(Extent imageSize) throws CreateException {
+        return findLargestExtent(imageSize);
+    }
 
-            // Convert marks to object-masks
-            SegmentedObjects objects =
-                    EastObjectsExtracter.apply(
-                            modelPool, pair._1(), stack.resolution(), minConfidence);
+    @Override
+    protected String modelPath() {
+        return "frozen_east_text_detection.pb";
+    }
 
-            // Scale each object-mask and extract as an object-collection
-            return objects.scale(pair._2(), stack.extent());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new SegmentationFailedException(e);
-        } catch (Throwable e) {
-            throw new SegmentationFailedException(e);
-        }
+    @Override
+    protected Optional<String> textGraphPath() {
+        return Optional.empty();
     }
 
     /**
@@ -118,59 +110,5 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
         } catch (OperationFailedException e) {
             throw new CreateException("Cannot scale input to size needed for EAST", e);
         }
-    }
-
-    private Stack checkAndCorrectInput(Stack stack) throws SegmentationFailedException {
-        if (stack.getNumberChannels() == 1) {
-            return checkInput(grayscaleToRGB(stack.getChannel(0)));
-        } else {
-            return checkInput(stack);
-        }
-    }
-
-    private static Stack grayscaleToRGB(Channel channel) {
-        try {
-            return new Stack(true, channel, channel.duplicate(), channel.duplicate());
-        } catch (IncorrectImageSizeException e) {
-            throw new AnchorImpossibleSituationException();
-        }
-    }
-
-    private Stack checkInput(Stack stack) throws SegmentationFailedException {
-        if (stack.getNumberChannels() != 3) {
-            throw new SegmentationFailedException(
-                    String.format(
-                            "Non-RGB stacks are not supported by this algorithm. This stack has %d channels.",
-                            stack.getNumberChannels()));
-        }
-
-        if (stack.dimensions().z() > 1) {
-            throw new SegmentationFailedException("z-stacks are not supported by this algorithm");
-        }
-
-        return stack;
-    }
-
-    @Override
-    public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan) {
-        Path modelPath = pathToEastModel();
-        return new ConcurrentModelPool<>(plan, useGPU -> createNet(modelPath, useGPU));
-    }
-
-    private static Net createNet(Path pathToModel, boolean useGPU) {
-
-        CVInit.blockUntilLoaded();
-
-        Net net = Dnn.readNetFromTensorflow(pathToModel.toAbsolutePath().toString());
-
-        if (useGPU) {
-            net.setPreferableBackend(Dnn.DNN_BACKEND_CUDA);
-            net.setPreferableTarget(Dnn.DNN_TARGET_CUDA);
-        }
-        return net;
-    }
-
-    private Path pathToEastModel() {
-        return getInitialization().getModelDirectory().resolve("frozen_east_text_detection.pb");
     }
 }

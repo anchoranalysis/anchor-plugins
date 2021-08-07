@@ -90,7 +90,7 @@ public class FromDictionary<T extends FeatureInputParams> extends FeatureOperato
         super.beforeCalc(initialization);
         keyAggregated = keyAggregated();
     }
-    
+
     private String keyAggregated() {
         return keyPrefix + key + keySuffix;
     }
