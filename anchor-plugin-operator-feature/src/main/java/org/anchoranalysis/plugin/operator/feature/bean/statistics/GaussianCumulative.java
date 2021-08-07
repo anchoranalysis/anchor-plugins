@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.statistics;
 
+import cern.jet.random.Normal;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.statistics.FeatureResultSupplier;
-import cern.jet.random.Normal;
 
 // A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score
 // approaches 1.0
@@ -66,7 +66,7 @@ public class GaussianCumulative<T extends FeatureInput> extends StatisticalBase<
 
         return calc(mean, stdDev.get(), featureValue, rewardHigherSide, rewardLowerSide);
     }
-    
+
     private static double calc(
             double mean,
             double stdDev,

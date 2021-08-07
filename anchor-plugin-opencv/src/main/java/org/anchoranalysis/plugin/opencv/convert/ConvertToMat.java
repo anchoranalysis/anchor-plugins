@@ -74,20 +74,33 @@ public class ConvertToMat {
         }
 
         if (stack.getNumberChannels() == 3) {
-            return makeRGBStack(stack);
+            return makeRGBStack(stack, true);
         } else {
             // Single channel
             return makeGrayscale(stack.getChannel(0));
         }
     }
 
-    public static Mat makeRGBStack(Stack stack) throws CreateException {
+    /**
+     * Derives a {@link Mat} representing an RGB stack.
+     *
+     * @param stack a stack containing three channels
+     * @param swapRB if true, the first channel and third channel in {@code stack} are swapped to
+     *     make the {@link Mat} to e.g. translate RGB to BGR (as expected by OpenCV).
+     * @return a newly created {@link Mat} representation of {@code stack}.
+     * @throws CreateException
+     */
+    public static Mat makeRGBStack(Stack stack, boolean swapRB) throws CreateException {
         if (stack.getNumberChannels() != 3) {
             throw new CreateException("Stack must have 3 channels for RGB conversion");
         }
         VoxelDataType dataType = stack.getChannel(0).getVoxelDataType();
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
-            return fromRGBByte(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
+            if (swapRB) {
+                return fromRGBByte(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
+            } else {
+                return fromRGBByte(stack.getChannel(2), stack.getChannel(1), stack.getChannel(0));
+            }
         } else {
             throw new CreateException("Only unsigned 8-bit channels are supported for RGB");
         }

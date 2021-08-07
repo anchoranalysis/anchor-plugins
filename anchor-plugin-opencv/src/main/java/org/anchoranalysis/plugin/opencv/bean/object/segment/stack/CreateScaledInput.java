@@ -51,11 +51,14 @@ class CreateScaledInput {
     /**
      * Returns a scaled-down version of the stack, and a scale-factor that would return it to
      * original size
+     *
+     * @param swapRB if true, the first channel and third channel in {@code stack} are swapped to
+     *     make the {@link Mat} to e.g. translate RGB to BGR (as expected by OpenCV).
      */
-    public static Tuple2<Mat, ScaleFactor> apply(Stack stack, Extent targetExtent)
+    public static Tuple2<Mat, ScaleFactor> apply(Stack stack, Extent targetExtent, boolean swapRB)
             throws CreateException {
 
-        Mat original = ConvertToMat.makeRGBStack(stack);
+        Mat original = ConvertToMat.makeRGBStack(stack, swapRB);
 
         Mat input = resizeMatToTarget(original, targetExtent);
         return Tuple.of(input, relativeScale(original, input));

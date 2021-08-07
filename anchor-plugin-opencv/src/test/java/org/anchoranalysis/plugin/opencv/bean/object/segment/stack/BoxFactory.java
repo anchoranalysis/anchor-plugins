@@ -23,10 +23,8 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
+package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
-import java.util.Arrays;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.Extent;
@@ -34,26 +32,10 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class SegmentTextResults {
-
-    private static final BoundingBox BOX1_RGB = boxAt(302, 315, 127, 42);
-    private static final BoundingBox BOX1_GRAYSCALE = boxAt(316, 319, 104, 33);
-
-    private static final BoundingBox BOX2_RGB = boxAt(393, 199, 31, 28);
-    private static final BoundingBox BOX2_GRAYSCALE = boxAt(394, 199, 27, 27);
-
-    private static final BoundingBox BOX3 = boxAt(438, 310, 78, 40);
-
-    public static List<BoundingBox> rgb() {
-        return Arrays.asList(BOX1_RGB, BOX2_RGB, BOX3);
-    }
-
-    public static List<BoundingBox> grayscale() {
-        return Arrays.asList(BOX1_GRAYSCALE, BOX2_GRAYSCALE, BOX3);
-    }
+class BoxFactory {
 
     /** Bounding box at particular point and coordinates */
-    private static BoundingBox boxAt(int x, int y, int width, int height) {
+    public static BoundingBox at(int x, int y, int width, int height) {
         return new BoundingBox(new Point3i(x, y, 0), new Extent(width, height));
     }
 }

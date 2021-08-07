@@ -79,5 +79,5 @@ public abstract class StatisticalBase<T extends FeatureInput> extends FeatureUna
      */
     protected abstract double deriveScore(
             double featureValue, double mean, FeatureResultSupplier stdDev)
-            throws FeatureCalculationException;    
+            throws FeatureCalculationException;
 }

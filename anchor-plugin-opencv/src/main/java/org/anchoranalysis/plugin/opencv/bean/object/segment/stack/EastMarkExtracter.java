@@ -71,7 +71,7 @@ class EastMarkExtracter {
         try {
             model.setInput(
                     Dnn.blobFromImage(
-                            image, 1.0, image.size(), MEAN_SUBTRACTION_CONSTANTS, true, false));
+                            image, 1.0, image.size(), MEAN_SUBTRACTION_CONSTANTS, false, false));
 
             List<Mat> output = new ArrayList<>();
             model.forward(output, Arrays.asList(OUTPUT_SCORES, OUTPUT_GEOMETRY));
@@ -99,7 +99,7 @@ class EastMarkExtracter {
 
         int rowsByCols = extent.volumeXY();
 
-        float[] scoresData = arrayFromMat(scores, 0, rowsByCols);
+        float[] scoresData = MatExtracter.extractFloatArray(scores, 0, rowsByCols);
         float[][] geometryArrs = splitGeometryIntoFiveArrays(geometry, rowsByCols);
 
         extent.iterateOverXYOffset(
@@ -157,15 +157,8 @@ class EastMarkExtracter {
 
         float[][] out = new float[5][];
         for (int i = 0; i < 5; i++) {
-            out[i] = arrayFromMat(geometry, i, rowsByCols);
+            out[i] = MatExtracter.extractFloatArray(geometry, i, rowsByCols);
         }
         return out;
-    }
-
-    /** Extracts an array of floats from a matrix */
-    private static float[] arrayFromMat(Mat mat, int rowIndex, int arrSize) {
-        float[] arr = new float[arrSize];
-        mat.get(rowIndex, 0, arr);
-        return arr;
     }
 }
