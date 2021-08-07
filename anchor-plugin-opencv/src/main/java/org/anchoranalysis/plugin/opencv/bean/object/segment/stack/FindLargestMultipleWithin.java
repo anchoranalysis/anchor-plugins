@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.Extent;
@@ -36,11 +38,8 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FindLargestMultipleWithin {
-
-    private FindLargestMultipleWithin() {
-        // NOTHING TO DO
-    }
 
     /**
      * Scales an extent as much as possible in BOTH dimensions without growing larger than another

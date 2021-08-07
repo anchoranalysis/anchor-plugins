@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.imagej.bean.interpolator;
 
 import ij.process.ImageProcessor;
+import java.nio.FloatBuffer;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
@@ -59,6 +61,16 @@ class InterpolatorImageJ implements Interpolator {
         ImageProcessor source = ConvertToImageProcessor.fromShort(voxelsSource, extentSource);
         ImageProcessor out = source.resize(extentDestination.x(), extentDestination.y(), true);
         return ConvertToVoxelBuffer.asShort(out);
+    }
+
+    @Override
+    public VoxelBuffer<FloatBuffer> interpolateFloat(
+            VoxelBuffer<FloatBuffer> voxelsSource,
+            VoxelBuffer<FloatBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
+        throw new AnchorFriendlyRuntimeException(
+                "Interpolation of float data type is not supported.");
     }
 
     @Override
