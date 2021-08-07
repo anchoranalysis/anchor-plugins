@@ -39,7 +39,14 @@ public class SegmentMaskRCNN extends SegmentFromTensorFlowModel {
     private static final String OUTPUT_MASKS = "detection_masks";
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private double minConfidence = 0.5;
+    /**
+     * Only proposals outputted from the model with a score greater or equal to this threshold are
+     * considered.
+     */
+    @BeanField @Getter @Setter private float minConfidence = 0.5f;
+
+    /** Threshold above which pixels are considered in the mask. */
+    @BeanField @Getter @Setter private float minMaskValue = 0.3f;
     // END BEAN PROPERTIES
 
     @Override
@@ -86,7 +93,8 @@ public class SegmentMaskRCNN extends SegmentFromTensorFlowModel {
             Mat boxes = output.get(0);
             Mat masks = output.get(1);
 
-            return ExtractMaskRCNNObjects.extractMasks(boxes, masks, unscaledSize, minConfidence);
+            return MaskRCNNObjectExtracter.extractMasks(
+                    boxes, masks, unscaledSize, minConfidence, minMaskValue);
         } catch (Exception e) {
             throw new ConcurrentModelException(e);
         }
