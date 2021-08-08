@@ -7,6 +7,7 @@ import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyM
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBoxFactory;
 
 /**
  * Tests {@link SegmentMaskRCNN}.
@@ -15,7 +16,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  */
 class SegmentMaskRCNNTest extends SegmentStackTestBase {
 
-    private static final BoundingBox BOX = BoxFactory.at(116, 18, 576, 398);
+    private static final BoundingBox BOX = BoundingBoxFactory.at(116, 18, 576, 398);
 
     private ImageLoader loader = new ImageLoader();
 

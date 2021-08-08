@@ -67,4 +67,9 @@ public class RemoveOverlappingObjects extends NonMaximaSuppression<ObjectMask> {
         ObjectMask merged = ObjectMaskMerger.merge(element1, element2);
         return OverlapCalculator.calculateOverlapRatio(element1, element2, merged);
     }
+
+    @Override
+    protected void removeElement(WithConfidence<ObjectMask> elementToRemove) {
+        // TODO remove a deleted object from the rTree
+    }
 }
