@@ -127,7 +127,10 @@ public abstract class ReduceElementsGreedy<T> extends ReduceElements<T> {
             Runnable removeOverlapping,
             Consumer<T> changeSource);
 
-    /** Finds any overlapping objects and processes them accordingly (possibly removing or merging them). */
+    /**
+     * Finds any overlapping objects and processes them accordingly (possibly removing or merging
+     * them).
+     */
     private boolean findOverlappingAndProcess(
             WithConfidence<T> proposal, PriorityQueue<WithConfidence<T>> others) {
 

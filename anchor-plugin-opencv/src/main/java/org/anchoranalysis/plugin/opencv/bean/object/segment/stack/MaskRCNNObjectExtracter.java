@@ -84,13 +84,20 @@ class MaskRCNNObjectExtracter {
             float[] coded =
                     MatExtracter.extractFloatArray(boxes, i, DETECTION_MATRIX_NUMBER_ELEMENTS);
 
-            Optional<WithConfidence<ObjectMask>> object = extractFromCode(coded, masks, i, unscaledSize, minConfidence, maskMinValue);
+            Optional<WithConfidence<ObjectMask>> object =
+                    extractFromCode(coded, masks, i, unscaledSize, minConfidence, maskMinValue);
             object.ifPresent(out::add);
         }
         return out;
     }
-    
-    private static Optional<WithConfidence<ObjectMask>> extractFromCode(float[] coded, Mat masks, int index, Extent unscaledSize, float minConfidence, float maskMinValue) {
+
+    private static Optional<WithConfidence<ObjectMask>> extractFromCode(
+            float[] coded,
+            Mat masks,
+            int index,
+            Extent unscaledSize,
+            float minConfidence,
+            float maskMinValue) {
         BoundingBox box = extractBox(coded, unscaledSize);
         double confidence = coded[2];
 

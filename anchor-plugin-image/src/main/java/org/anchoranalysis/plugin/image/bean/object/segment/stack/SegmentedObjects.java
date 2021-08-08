@@ -28,8 +28,6 @@ package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.scale.ScaledElements;
 import org.anchoranalysis.image.core.object.scale.Scaler;
@@ -42,17 +40,23 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 /**
  * Objects that are a result of an instance-segmentation.
  *
- * <p>Unlike a {@link ObjectCollection}, each object also has a confidence score.
+ * <p>Each object has an associated confidence score, and an associated class-label.
+ *
+ * <p>Internally, objects are partitioned by class-label.
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class SegmentedObjects {
 
     private final List<WithConfidence<ObjectMask>> list;
 
+    /** Create an empty structure containing zero objects. */
     public SegmentedObjects() {
         list = new ArrayList<>();
+    }
+
+    public SegmentedObjects(List<WithConfidence<ObjectMask>> list) {
+        this.list = list;
     }
 
     /**
@@ -71,18 +75,41 @@ public class SegmentedObjects {
         return new SegmentedObjects(listScaled.asListOrderPreserved(list));
     }
 
+    /***
+     * The object-mask with the highest confidence.
+     *
+     * @return the highest-confidence object-mask or {@link Optional#empty} if no objects exist.
+     */
     public Optional<WithConfidence<ObjectMask>> highestConfidence() {
         return list.stream().max((a, b) -> Double.compare(a.getConfidence(), b.getConfidence()));
     }
 
+    /**
+     * Create a {@link ObjectCollection} of <i>all</i> contained objects, <i>excluding</i>
+     * confidence.
+     *
+     * @return a newly created {@link ObjectCollection} that reuses the existing {@link ObjectMask}
+     *     stored in the structure.
+     */
     public ObjectCollection asObjects() {
         return new ObjectCollection(asList().stream().map(WithConfidence::getElement));
     }
 
+    /**
+     * Create a {@link List} of <i>all</i> contained objects, <i>including</i> confidence.
+     *
+     * @return a newly created {@link List} that reuses the existing {@link ObjectMask} stored in
+     *     the structure.
+     */
     public List<WithConfidence<ObjectMask>> asList() {
         return list;
     }
 
+    /**
+     * Whether no segmented objects exist.
+     *
+     * @return true if no segmented objects exist, false otherwise.
+     */
     public boolean isEmpty() {
         return list.isEmpty();
     }

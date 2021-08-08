@@ -70,6 +70,6 @@ public class RemoveOverlappingObjects extends NonMaximaSuppression<ObjectMask> {
 
     @Override
     protected void removeElement(WithConfidence<ObjectMask> elementToRemove) {
-        //rTree.r
+        // TODO remove a deleted object from the rTree
     }
 }

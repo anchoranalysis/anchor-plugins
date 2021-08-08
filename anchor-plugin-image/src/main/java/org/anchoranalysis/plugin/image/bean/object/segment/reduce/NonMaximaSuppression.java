@@ -56,9 +56,9 @@ public abstract class NonMaximaSuppression<T> extends ReduceElementsGreedy<T> {
 
     @Override
     protected boolean includePossiblyOverlappingObject(T source, T other) {
-        if (source!=other) {
+        if (source != other) {
             // These objects are deemed sufficiently-overlapping to be removed
-            return overlapScoreFor(source, other) >= scoreThreshold;    
+            return overlapScoreFor(source, other) >= scoreThreshold;
         } else {
             // Always reject an object if it is compared to itself
             return false;
@@ -83,11 +83,12 @@ public abstract class NonMaximaSuppression<T> extends ReduceElementsGreedy<T> {
      * @param element2 second-element
      */
     protected abstract double overlapScoreFor(T element1, T element2);
-    
+
     /**
      * Called when an element is removed from further consideration.
-     * 
+     *
      * <p>This enables any data-structures used in sub-classes to be updated accoridngly.
+     *
      * @param elementToRemove the element that is being removed
      */
     protected abstract void removeElement(WithConfidence<T> elementToRemove);

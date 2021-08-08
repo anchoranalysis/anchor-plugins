@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.opencv.nonmaxima;
+package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -35,7 +35,6 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ReduceElements;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.spatial.point.Point2d;
