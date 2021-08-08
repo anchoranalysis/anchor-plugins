@@ -3,6 +3,7 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -83,22 +84,29 @@ class MaskRCNNObjectExtracter {
             float[] coded =
                     MatExtracter.extractFloatArray(boxes, i, DETECTION_MATRIX_NUMBER_ELEMENTS);
 
-            BoundingBox box = extractBox(coded, unscaledSize);
-            double confidence = coded[2];
-
-            if (!Double.isNaN(confidence) && confidence >= minConfidence) {
-
-                int objectClassIdentifier = (int) coded[1];
-
-                BinaryVoxels<UnsignedByteBuffer> mask =
-                        extractScaledMask(
-                                masks, i, box.extent(), objectClassIdentifier, maskMinValue);
-
-                ObjectMask object = new ObjectMask(box, mask);
-                out.add(new WithConfidence<ObjectMask>(object, confidence));
-            }
+            Optional<WithConfidence<ObjectMask>> object = extractFromCode(coded, masks, i, unscaledSize, minConfidence, maskMinValue);
+            object.ifPresent(out::add);
         }
         return out;
+    }
+    
+    private static Optional<WithConfidence<ObjectMask>> extractFromCode(float[] coded, Mat masks, int index, Extent unscaledSize, float minConfidence, float maskMinValue) {
+        BoundingBox box = extractBox(coded, unscaledSize);
+        double confidence = coded[2];
+
+        if (!Double.isNaN(confidence) && confidence >= minConfidence) {
+
+            int objectClassIdentifier = (int) coded[1];
+
+            BinaryVoxels<UnsignedByteBuffer> mask =
+                    extractScaledMask(
+                            masks, index, box.extent(), objectClassIdentifier, maskMinValue);
+
+            ObjectMask object = new ObjectMask(box, mask);
+            return Optional.of(new WithConfidence<ObjectMask>(object, confidence));
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**

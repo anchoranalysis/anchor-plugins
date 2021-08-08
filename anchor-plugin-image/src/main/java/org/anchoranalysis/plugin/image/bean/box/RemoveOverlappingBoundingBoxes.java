@@ -68,4 +68,9 @@ public class RemoveOverlappingBoundingBoxes extends NonMaximaSuppression<Boundin
     protected double overlapScoreFor(BoundingBox element1, BoundingBox element2) {
         return IntersectionOverUnion.forBoxes(element1, element2);
     }
+
+    @Override
+    protected void removeElement(WithConfidence<BoundingBox> elementToRemove) {
+        // NOTHING TO DO
+    }
 }
