@@ -23,18 +23,22 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.opencv.nonmaxima;
+package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ThresholdConfidence;
 import org.junit.jupiter.api.Test;
 
-class ThresholdConfidenceTest {
+/**
+ * Tests {@link ConditionallyMergeOverlappingObjects}.
+ *
+ * @author Owen Feehan
+ */
+class ConditionallyMergeOverlappingObjectsTest {
 
     private ReduceElementsTester tester = new ReduceElementsTester();
 
     @Test
     void testReduce() throws OperationFailedException {
-        tester.test(new ThresholdConfidence(0), false, 1, 0.56827);
+        tester.test(new ConditionallyMergeOverlappingObjects(), true, 5, 0.8);
     }
 }

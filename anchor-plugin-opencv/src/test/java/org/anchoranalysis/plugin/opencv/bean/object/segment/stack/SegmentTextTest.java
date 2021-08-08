@@ -33,6 +33,7 @@ import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyM
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBoxFactory;
 
 /**
  * Tests {@link SegmentText}.
@@ -47,7 +48,7 @@ class SegmentTextTest extends SegmentStackTestBase {
 
     private ImageLoader loader = new ImageLoader();
 
-    private static final BoundingBox BOX3 = BoxFactory.at(438, 310, 78, 40);
+    private static final BoundingBox BOX3 = BoundingBoxFactory.at(438, 310, 78, 40);
 
     @Override
     protected SegmentStackIntoObjectsPooled<?> createSegmenter() {
@@ -67,15 +68,15 @@ class SegmentTextTest extends SegmentStackTestBase {
 
     @Override
     protected List<BoundingBox> expectedBoxesRGB() {
-        BoundingBox box1 = BoxFactory.at(302, 315, 127, 42);
-        BoundingBox box2 = BoxFactory.at(393, 199, 31, 28);
+        BoundingBox box1 = BoundingBoxFactory.at(302, 315, 127, 42);
+        BoundingBox box2 = BoundingBoxFactory.at(393, 199, 31, 28);
         return Arrays.asList(box1, box2, BOX3);
     }
 
     @Override
     protected List<BoundingBox> expectedBoxesGrayscale() {
-        BoundingBox box1 = BoxFactory.at(316, 319, 104, 33);
-        BoundingBox box2 = BoxFactory.at(394, 199, 27, 27);
+        BoundingBox box1 = BoundingBoxFactory.at(316, 319, 104, 33);
+        BoundingBox box2 = BoundingBoxFactory.at(394, 199, 27, 27);
         return Arrays.asList(box1, box2);
     }
 }

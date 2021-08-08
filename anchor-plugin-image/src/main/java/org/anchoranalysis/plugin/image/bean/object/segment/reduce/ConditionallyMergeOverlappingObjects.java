@@ -54,7 +54,7 @@ import org.anchoranalysis.plugin.image.segment.WithConfidence;
  *
  * <p>This achieves a similar result as {@link ThresholdConfidence} but is typically slower (unless
  * there are very few overlapping objects). However, it offers a greater ability to distinguish
- * overlapping objects of significanntly differing confidence.
+ * overlapping objects of significantly differing confidence.
  *
  * @author Owen Feehan
  */

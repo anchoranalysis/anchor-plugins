@@ -60,4 +60,9 @@ public class WithConfidence<T> implements Comparable<WithConfidence<T>> {
     public <S> WithConfidence<S> map(Function<T, S> transform) {
         return new WithConfidence<>(transform.apply(element), confidence);
     }
+
+    @Override
+    public String toString() {
+        return String.format("confidence=%.2f, %s", confidence, element);
+    }
 }
