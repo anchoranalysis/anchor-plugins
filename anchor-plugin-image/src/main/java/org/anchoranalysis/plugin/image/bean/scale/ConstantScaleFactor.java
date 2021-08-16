@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -39,7 +40,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 public class ConstantScaleFactor extends ScaleCalculator {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private double value;
+    @Positive @BeanField @Getter @Setter private double value = 1.0;
     // END BEAN PROPERTIES
 
     @Override

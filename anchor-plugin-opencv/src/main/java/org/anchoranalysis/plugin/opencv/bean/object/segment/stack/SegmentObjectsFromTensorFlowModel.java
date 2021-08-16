@@ -1,31 +1,76 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import io.vavr.Tuple2;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.annotation.AllowEmpty;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
-import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.io.manifest.file.TextFileReader;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.CVInit;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance.DecodeInstanceSegmentation;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
-public abstract class SegmentFromTensorFlowModel extends SegmentStackIntoObjectsPooled<Net> {
+/**
+ * Performs instance-segmentation, resulting in {@link ObjectMask}s using a TensorFlow model.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPooled<Net> {
 
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();
     }
+
+    // START BEAN PROPERTIES
+    /**
+     * Relative-path to the TensorFlow model file, likely with <code>.pb</code> extension, relative to the <i>models/</i> directory in the Anchor distribution.
+     */
+    @BeanField @Getter @Setter private String modelBinaryPath;
+    
+    /**
+     * Relative-path to the TensorFlow model file, likely with <code>.pb.txt</code> extension, relative to the <i>models/</i> directory in the Anchor distribution.
+     * 
+     * <p>If empty, then no such file is specified. 
+     */
+    @BeanField @Getter @Setter @AllowEmpty private String modelTextGraphPath = "";
+    
+    /**
+     * Relative-path to the class-labels file, a text file where each line specifies a class label in order, relative to the <i>models/</i> directory in the Anchor distribution.
+     * 
+     * <p>If empty, then no such file is specified. 
+     */
+    @BeanField @Getter @Setter @AllowEmpty private String classLabelsPath = "";
+    
+    /**
+     * Any scaling to be applied to the input-image before being input to the model for inference.
+     */
+    @BeanField @Getter @Setter private ScaleCalculator scaleInput;
+    
+    /**
+     * Decodes inference output into segmented objects.
+     */
+    @BeanField @Getter @Setter private DecodeInstanceSegmentation decode;
+    // END BEAN PROPERTIES
 
     @Override
     public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan) {
@@ -39,11 +84,15 @@ public abstract class SegmentFromTensorFlowModel extends SegmentStackIntoObjects
         stack = checkAndCorrectInput(stack);
 
         try {
-            // Scales the input to the largest acceptable-extent
-            Tuple2<Mat, ScaleFactor> pair =
-                    CreateScaledInput.apply(stack, inputSizeForModel(stack.extent()), false);
+            ScaleFactor downfactor =
+                    scaleInput.calculate(Optional.of(stack.dimensions()), Optional.empty());
 
-            return segmentMat(pair._1(), stack.resolution(), stack.extent(), pair._2(), modelPool);
+            // Scales the input to the largest acceptable-extent
+            Tuple2<Mat, ScaleFactor> pair = CreateScaledInput.apply(stack, downfactor, false);
+
+            ScaleFactor upfactor = pair._2().invert();
+
+            return decode.segmentMat(pair._1(), stack.resolution(), stack.extent(), upfactor, modelPool, classLabels());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);
@@ -52,57 +101,11 @@ public abstract class SegmentFromTensorFlowModel extends SegmentStackIntoObjects
         }
     }
 
-    /**
-     * Segment the image contained in {@code mat}.
-     *
-     * @param mat an OpenCV matrix containing the image to be segmented, already resized to {@link
-     *     #inputSizeForModel}.
-     * @param resolution the image-resolution of {@code mat} if it exists.
-     * @param unscaledSize the size of the image before any scaling to {@link #inputSizeForModel}.
-     * @param scaleFactor the scaling factor used to transform {@code unscaledSize} to {@link
-     *     #inputSizeForModel}.
-     * @param modelPool the models used for CNN inference
-     * @return the results of the segmentation
-     * @throws Throwable
-     */
-    protected abstract SegmentedObjects segmentMat(
-            Mat mat,
-            Optional<Resolution> resolution,
-            Extent unscaledSize,
-            ScaleFactor scaleFactor,
-            ConcurrentModelPool<Net> modelPool)
-            throws Throwable; // NOSONAR
-
-    /**
-     * The size of the image when passed as an input to the CNN Model.
-     *
-     * @param imageSize the size of the original image before any rescaling for the CNN model.
-     * @return the size the image should be resized to when inputted to thei masge
-     * @throws CreateException
-     */
-    protected abstract Extent inputSizeForModel(Extent imageSize) throws CreateException;
-
-    /**
-     * The relative path to the TensorFlow model file.
-     *
-     * @return a path to the model file, relative to the <i>models/</i> subdirectory in the
-     *     resources.
-     */
-    protected abstract String modelPath();
-
-    /**
-     * The relative path to the TensorFlow text-graph file, if it exists.
-     *
-     * @return a path to the text-graph file, relative to the <i>models/</i> subdirectory in the
-     *     resources.
-     */
-    protected abstract Optional<String> textGraphPath();
-
     private Net createNet(boolean useGPU) {
 
-        Path model = resolve(modelPath());
+        Path model = resolve(modelBinaryPath);
 
-        Optional<Path> textGraph = textGraphPath().map(this::resolve);
+        Optional<Path> textGraph = OptionalFactory.create(modelTextGraphPath).map(this::resolve);
 
         CVInit.blockUntilLoaded();
 
@@ -154,9 +157,19 @@ public abstract class SegmentFromTensorFlowModel extends SegmentStackIntoObjects
 
         return stack;
     }
+    
+    /** A list of ordered object-class labels, if a class-labels file is specified. */
+    private Optional<List<String>> classLabels() throws IOException {
+        if (!classLabelsPath.isEmpty()) {
+            Path filename = resolve(classLabelsPath);
+            return Optional.of(TextFileReader.readLinesAsList(filename));
+        } else {
+            return Optional.empty();
+        }
+    }
 
     /** Resolves a relative-filename (to the model directory) into a path. */
-    protected Path resolve(String filename) {
+    private Path resolve(String filename) {
         return getInitialization().getModelDirectory().resolve(filename);
     }
 

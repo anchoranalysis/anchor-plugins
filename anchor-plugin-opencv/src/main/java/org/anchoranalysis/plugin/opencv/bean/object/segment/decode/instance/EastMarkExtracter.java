@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
+package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -38,6 +38,7 @@ import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.scale.ScaleFactorInt;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;

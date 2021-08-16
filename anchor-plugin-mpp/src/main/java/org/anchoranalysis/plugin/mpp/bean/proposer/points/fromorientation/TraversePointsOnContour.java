@@ -68,7 +68,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 
         lastPointsForward.clear();
         lastPointsReverse.clear();
-        
+
         addPointsFromOrientation(
                 centerPoint,
                 orientation,
@@ -82,7 +82,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
                     outlinePixelsRetrieverReverse != null
                             ? outlinePixelsRetrieverReverse
                             : outlinePixelsRetriever;
-            
+
             addPointsFromOrientation(
                     centerPoint,
                     orientation.negative(),
