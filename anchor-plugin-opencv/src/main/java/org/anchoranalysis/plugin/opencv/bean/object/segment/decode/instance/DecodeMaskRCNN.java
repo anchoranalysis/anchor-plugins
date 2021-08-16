@@ -17,6 +17,7 @@ import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
@@ -75,7 +76,7 @@ public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
     private List<LabelledWithConfidence<ObjectMask>> forwardPass(
             Net model, Mat image, Extent unscaledSize, List<String> classLabels) throws ConcurrentModelException {
         try {
-            model.setInput(Dnn.blobFromImage(image));
+            model.setInput(Dnn.blobFromImage(image, 1.0, image.size(), new Scalar(0.0, 0.0, 0.0), false, false));
 
             List<Mat> output = new ArrayList<>();
             model.forward(output, Arrays.asList(OUTPUT_FINAL, OUTPUT_MASKS));
