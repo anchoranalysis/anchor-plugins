@@ -34,13 +34,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
-import org.anchoranalysis.mpp.bean.proposer.radii.RadiiProposer;
+import org.anchoranalysis.mpp.bean.proposer.RadiiProposer;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.spatial.point.Point3d;
 
 /**
@@ -97,10 +96,5 @@ public class OrientationAndRadiiProposer extends MarkProposer {
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return testMark instanceof ConicBase;
-    }
-
-    @Override
-    public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
-        return Optional.empty();
     }
 }

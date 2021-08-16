@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.mark.UpdateMarkSetException;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;

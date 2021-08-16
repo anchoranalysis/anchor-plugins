@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.mpp.bean.mark.bounds.RotationBounds;
+import org.anchoranalysis.mpp.bean.bound.rotation.BoundRotation;
 import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
@@ -45,7 +45,7 @@ import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 public class RandomOrientation extends OrientationProposer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private RotationBounds bounds;
+    @BeanField @Getter @Setter private BoundRotation bounds;
     // END BEAN PROPERTIES
 
     @Override

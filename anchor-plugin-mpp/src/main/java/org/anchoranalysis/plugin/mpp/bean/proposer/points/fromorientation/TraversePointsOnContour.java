@@ -26,9 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation;
 
-import static org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.VisualizationUtilities.*;
-
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +36,6 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.plugin.mpp.bean.outline.OutlinePixelsRetriever;
 import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline.FindPointOnOutline;
@@ -57,11 +53,8 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
     private OutlinePixelsRetriever outlinePixelsRetrieverReverse;
     // END BEAN PROPERTIES
 
-    private boolean do3D;
     private List<Point3i> lastPointsForward = new ArrayList<>();
     private List<Point3i> lastPointsReverse = new ArrayList<>();
-    private Optional<Point3i> forwardCenterPoint;
-    private Optional<Point3i> reverseCenterPoint;
 
     // Calculates the points in both directions
     @Override
@@ -73,33 +66,30 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
             boolean forwardDirectionOnly)
             throws TraverseOutlineException {
 
-        this.do3D = do3D;
-
         lastPointsForward.clear();
         lastPointsReverse.clear();
-
-        forwardCenterPoint =
-                addPointsFromOrientation(
-                        centerPoint,
-                        orientation,
-                        findOutlinePixelAngle,
-                        outlinePixelsRetriever,
-                        lastPointsForward,
-                        randomNumberGenerator);
+        
+        addPointsFromOrientation(
+                centerPoint,
+                orientation,
+                findOutlinePixelAngle,
+                outlinePixelsRetriever,
+                lastPointsForward,
+                randomNumberGenerator);
 
         if (!forwardDirectionOnly) {
             OutlinePixelsRetriever reverseRetriever =
                     outlinePixelsRetrieverReverse != null
                             ? outlinePixelsRetrieverReverse
                             : outlinePixelsRetriever;
-            reverseCenterPoint =
-                    addPointsFromOrientation(
-                            centerPoint,
-                            orientation.negative(),
-                            findOutlinePixelAngle,
-                            reverseRetriever,
-                            lastPointsReverse,
-                            randomNumberGenerator);
+            
+            addPointsFromOrientation(
+                    centerPoint,
+                    orientation.negative(),
+                    findOutlinePixelAngle,
+                    reverseRetriever,
+                    lastPointsReverse,
+                    randomNumberGenerator);
 
             if (lastPointsForward.isEmpty() && lastPointsReverse.isEmpty()) {
                 throw new TraverseOutlineException(
@@ -140,26 +130,5 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
         } catch (OperationFailedException e) {
             throw new TraverseOutlineException("Unable to add points from orientation", e);
         }
-    }
-
-    public CreateProposalVisualization proposalVisualization(boolean detailed) {
-        return marks -> {
-            maybeAddPoints(marks, lastPointsForward, Color.CYAN);
-            maybeAddPoints(marks, lastPointsReverse, Color.YELLOW);
-
-            if (detailed) {
-                maybeAddConic(marks, forwardCenterPoint, Color.MAGENTA, do3D);
-                maybeAddConic(marks, reverseCenterPoint, Color.MAGENTA, do3D);
-                maybeAddLineSegment(marks, forwardCenterPoint, reverseCenterPoint, Color.ORANGE);
-            }
-        };
-    }
-
-    @Override
-    public void clearVisualizationState() {
-        lastPointsForward.clear();
-        lastPointsReverse.clear();
-        forwardCenterPoint = Optional.empty();
-        reverseCenterPoint = Optional.empty();
     }
 }
