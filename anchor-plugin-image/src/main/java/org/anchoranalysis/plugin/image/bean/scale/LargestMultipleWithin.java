@@ -19,7 +19,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * <p>Each dimension is calculated separately, and then the minimum scaling-factor is used for both.
  *
  * <p>e.g. for the X dimension in {@code minimumSize}, the maximum <code>multiple</code> is selected
- * so that <code>(unscaledSizeX * 2^multiple) < maxSixeX</code>.
+ * so that <code>(unscaledSizeX * 2^multiple)</code> is less than <code>maxSixeX</code>.
  *
  * @author Owen Feehan
  */

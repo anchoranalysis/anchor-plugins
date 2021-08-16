@@ -31,6 +31,7 @@ import io.vavr.Tuple2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.concurrency.ConcurrentModelException;
@@ -64,19 +65,31 @@ class EastMarkExtracter {
      */
     public static List<WithConfidence<Mark>> extractBoundingBoxes(
             ConcurrentModelPool<Net> modelPool, Mat image, double minConfidence) throws Throwable {
-        return modelPool.excuteOrWait(model -> forwardPass(model, image, minConfidence));
+        return modelPool.excuteOrWait(model -> performInference(model, image, output -> decode(output, minConfidence)));
+    }
+    
+    public static List<String> expectedOutputs() {
+        return Arrays.asList(OUTPUT_SCORES, OUTPUT_GEOMETRY);
+    }
+    
+    public static Scalar meanSubtractionConstants() {
+        return MEAN_SUBTRACTION_CONSTANTS;
     }
 
-    private static List<WithConfidence<Mark>> forwardPass(
-            Net model, Mat image, double minConfidence) throws ConcurrentModelException {
+    private static List<WithConfidence<Mark>> decode(
+            List<Mat> output, double minConfidence) {
+        return extractFromMatrices(output.get(0), output.get(1), SCALE_BY_4, minConfidence);
+    }
+    
+    private static <T> T performInference(Net model, Mat image, Function<List<Mat>,T> processOutput) throws ConcurrentModelException {
         try {
             model.setInput(
                     Dnn.blobFromImage(
-                            image, 1.0, image.size(), MEAN_SUBTRACTION_CONSTANTS, false, false));
+                            image, 1.0, image.size(), meanSubtractionConstants(), false, false));
 
             List<Mat> output = new ArrayList<>();
-            model.forward(output, Arrays.asList(OUTPUT_SCORES, OUTPUT_GEOMETRY));
-            return extractFromMatrices(output.get(0), output.get(1), SCALE_BY_4, minConfidence);
+            model.forward(output, expectedOutputs());
+            return processOutput.apply(output);
         } catch (Exception e) {
             throw new ConcurrentModelException(e);
         }
@@ -145,13 +158,13 @@ class EastMarkExtracter {
 
         Mat scoresReshaped = scores.reshape(1, 1);
 
-        int rowsByCols = (int) scoresReshaped.size().width;
+        int rowsByColumns = (int) scoresReshaped.size().width;
 
         // Assumes its a square matrix
-        int numCols = (int) Math.floor(Math.sqrt(rowsByCols));
-        int numRows = rowsByCols / numCols;
+        int numberColumns = (int) Math.floor(Math.sqrt(rowsByColumns));
+        int numberRows = rowsByColumns / numberColumns;
 
-        return Tuple.of(scoresReshaped, new Extent(numCols, numRows));
+        return Tuple.of(scoresReshaped, new Extent(numberColumns, numberRows));
     }
 
     private static float[][] splitGeometryIntoFiveArrays(Mat geometry, int rowsByCols) {
