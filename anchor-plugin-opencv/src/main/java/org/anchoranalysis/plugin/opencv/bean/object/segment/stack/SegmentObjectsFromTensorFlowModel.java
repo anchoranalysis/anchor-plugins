@@ -92,7 +92,7 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
 
             ScaleFactor upfactor = pair._2().invert();
 
-            return decode.segmentMat(pair._1(), stack.resolution(), stack.extent(), upfactor, modelPool, classLabels());
+            return decode.segmentMat(pair._1(), stack.dimensions(), stack.extent(), upfactor, modelPool, classLabels());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);

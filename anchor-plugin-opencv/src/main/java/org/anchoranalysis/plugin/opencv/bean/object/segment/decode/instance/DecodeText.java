@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -42,10 +43,11 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.dnn.Net;
 
 /**
@@ -60,8 +62,11 @@ import org.opencv.dnn.Net;
  * @author Owen Feehan
  */
 public class DecodeText extends DecodeInstanceSegmentation {
+    
+    private static final Scalar MEAN_SUBTRACTION_CONSTANTS = new Scalar(123.68, 116.78, 103.94);
 
-    private static final String CLASS_LABEL = "text";
+    private static final String OUTPUT_SCORES = "feature_fusion/Conv_7/Sigmoid";
+    private static final String OUTPUT_GEOMETRY = "feature_fusion/concat_3";
     
     // START BEAN PROPERTIES
     /** Proposed bounding boxes below this confidence interval are removed */
@@ -71,36 +76,44 @@ public class DecodeText extends DecodeInstanceSegmentation {
     @Override
     public SegmentedObjects segmentMat(
             Mat mat,
-            Optional<Resolution> resolution,
+            Dimensions dimensions,
             Extent unscaledSize,
             ScaleFactor scaleFactor,
             ConcurrentModelPool<Net> modelPool, Optional<List<String>> classLabels)
             throws Throwable {
+        
+        Dimensions dimensionsMat = dimensionsForMatrix(mat, dimensions.resolution());
+        
         // Convert marks to object-masks
-        SegmentedObjects objects =
-                deriveObjects(modelPool, mat, resolution, minConfidence);
+        SegmentedObjects objects = new SegmentedObjects(
+                queueInference(modelPool, mat, unscaledSize, classLabels, dimensionsMat).stream());
 
+        // TODO scale the marks up, not the object-masks for better resolution
+        // TODO allow a reduction to occur here before scaling up
+        
         // Scale each object-mask and extract as an object-collection
         return objects.scale(scaleFactor, unscaledSize);
     }
     
-    private static SegmentedObjects deriveObjects(
-            ConcurrentModelPool<Net> modelPool,
-            Mat image,
-            Optional<Resolution> resolution,
-            double minConfidence)
-            throws Throwable {
-        List<WithConfidence<Mark>> listMarks =
-                EastMarkExtracter.extractBoundingBoxes(modelPool, image, minConfidence);
-
-        // Convert marks to object-masks
-        return new SegmentedObjects(
-                CLASS_LABEL,
-                convertMarksToObject(listMarks, dimensionsForMatrix(image, resolution)));
+    @Override
+    public List<String> expectedOutputs() {
+        return Arrays.asList(OUTPUT_SCORES, OUTPUT_GEOMETRY);
+    }
+    
+    @Override
+    public Scalar meanSubtractionConstants() {
+        return MEAN_SUBTRACTION_CONSTANTS;
     }
 
-    private static List<WithConfidence<ObjectMask>> convertMarksToObject(
-            List<WithConfidence<Mark>> listMarks, Dimensions dim) {
+    @Override
+    protected List<LabelledWithConfidence<ObjectMask>> decode(List<Mat> output, Extent unscaledSize,
+            Optional<List<String>> classLabels, Dimensions inputDimensions) {
+        return convertMarksToObject(EastMarkExtracter.decode(output, minConfidence),
+                inputDimensions);
+    }
+        
+    private static List<LabelledWithConfidence<ObjectMask>> convertMarksToObject(
+            List<LabelledWithConfidence<Mark>> listMarks, Dimensions dim) {
         return FunctionalList.mapToList(
                 listMarks, withConfidence -> convertToObject(withConfidence, dim));
     }
@@ -110,17 +123,18 @@ public class DecodeText extends DecodeInstanceSegmentation {
         return new Dimensions(extent, resolution);
     }
 
-    private static WithConfidence<ObjectMask> convertToObject(
-            WithConfidence<Mark> mark, Dimensions dimensions) {
+    private static LabelledWithConfidence<ObjectMask> convertToObject(
+            LabelledWithConfidence<Mark> withConfidence, Dimensions dimensions) {
 
+        // TODO introduce map method on LabelledWithConfidence
         ObjectWithProperties object =
-                mark.getElement()
+                withConfidence.getElement()
                         .deriveObject(
                                 dimensions,
                                 RegionMapSingleton.instance()
                                         .membershipWithFlagsForIndex(
                                                 GlobalRegionIdentifiers.SUBMARK_INSIDE),
                                 BinaryValuesByte.getDefault());
-        return new WithConfidence<>(object.withoutProperties(), mark.getConfidence());
+        return new LabelledWithConfidence<>(object.withoutProperties(), withConfidence.getConfidence(), withConfidence.getLabel());
     }
 }

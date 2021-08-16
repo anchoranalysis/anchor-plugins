@@ -1,16 +1,14 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.concurrency.ConcurrentModelException;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
@@ -18,7 +16,6 @@ import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
 /**
@@ -53,7 +50,7 @@ public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
     @Override
     public SegmentedObjects segmentMat(
             Mat mat,
-            Optional<Resolution> resolution,
+            Dimensions dimensions,
             Extent unscaledSize,
             ScaleFactor scaleFactor,
             ConcurrentModelPool<Net> modelPool, Optional<List<String>> classLabels)
@@ -63,31 +60,27 @@ public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
             throw new OperationFailedException("Class-labels must be specified, but are not.");
         }
 
-        return new SegmentedObjects(inferenceOnMat(modelPool, mat, unscaledSize, classLabels.get()).stream());
+        return new SegmentedObjects(queueInference(modelPool, mat, unscaledSize, classLabels, dimensions).stream());
+    }
+    
+    @Override
+    public List<String> expectedOutputs() {
+        return Arrays.asList(OUTPUT_FINAL, OUTPUT_MASKS);
     }
 
-    /** Performs inference to generate the masks. */
-    private List<LabelledWithConfidence<ObjectMask>> inferenceOnMat(
-            ConcurrentModelPool<Net> modelPool, Mat image, Extent unscaledSize, List<String> classLabels) throws Throwable {
-        return modelPool.excuteOrWait(model -> forwardPass(model, image, unscaledSize, classLabels));
+    @Override
+    public Scalar meanSubtractionConstants() {
+        return new Scalar(0.0, 0.0, 0.0);
     }
 
-    /** Performs the inference on a single image using the CNN model. */
-    private List<LabelledWithConfidence<ObjectMask>> forwardPass(
-            Net model, Mat image, Extent unscaledSize, List<String> classLabels) throws ConcurrentModelException {
-        try {
-            model.setInput(Dnn.blobFromImage(image, 1.0, image.size(), new Scalar(0.0, 0.0, 0.0), false, false));
+    @Override
+    protected List<LabelledWithConfidence<ObjectMask>> decode(
+            List<Mat> output, Extent unscaledSize, Optional<List<String>> classLabels, Dimensions inputDimensions) {
+        
+        Mat boxes = output.get(0);
+        Mat masks = output.get(1);
 
-            List<Mat> output = new ArrayList<>();
-            model.forward(output, Arrays.asList(OUTPUT_FINAL, OUTPUT_MASKS));
-
-            Mat boxes = output.get(0);
-            Mat masks = output.get(1);
-
-            return MaskRCNNObjectExtracter.extractMasks(
-                    boxes, masks, unscaledSize, minConfidence, minMaskValue, classLabels);
-        } catch (Exception e) {
-            throw new ConcurrentModelException(e);
-        }
+        return MaskRCNNObjectExtracter.extractMasks(
+                boxes, masks, unscaledSize, minConfidence, minMaskValue, classLabels.get());    // NOSONAR
     }
 }
