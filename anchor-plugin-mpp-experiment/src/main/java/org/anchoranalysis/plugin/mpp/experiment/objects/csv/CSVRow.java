@@ -31,7 +31,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -56,8 +57,8 @@ public class CSVRow {
 
     @Getter @Setter private String[] line;
 
-    public ObjectCollectionWithProperties findObjectsMatchingRow(ObjectCollectionRTree allObjects)
-            throws OperationFailedException {
+    public ObjectCollectionWithProperties findObjectsMatchingRow(
+            IntersectingObjects<ObjectMask> allObjects) throws OperationFailedException {
         return columnDefinition.findObjectsMatchingRow(this, allObjects);
     }
 

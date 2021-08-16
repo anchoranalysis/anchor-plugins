@@ -58,6 +58,9 @@ public class SuppressNonMaxima<T> extends SegmentStackIntoObjectsPooled<T> {
     /** The algorithm for reducing the number of object-masks. */
     @BeanField @Getter @Setter
     private ReduceElements<ObjectMask> reduce = new RemoveOverlappingObjects();
+
+    /** If true, each label is reduced separately. if false, all labels are reduced together. */
+    @BeanField @Getter @Setter private boolean separateEachLabel = false;
     // END BEAN PROPERTIES
 
     /**
@@ -80,7 +83,7 @@ public class SuppressNonMaxima<T> extends SegmentStackIntoObjectsPooled<T> {
         SegmentedObjects objects = segment.segment(stack, modelPool);
 
         try {
-            return new SegmentedObjects(reduce.reduce(objects.asList()));
+            return objects.reduce(reduce, separateEachLabel);
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }

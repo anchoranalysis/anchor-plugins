@@ -40,9 +40,9 @@ import org.anchoranalysis.image.core.object.scale.Scaler;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.box.ScaleableBackground;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -63,7 +63,7 @@ class FlattenAndScaler {
      * An efficiently searchable index of the unscaled objects, indexed by their scaled
      * bounding-boxes
      */
-    private ObjectCollectionRTree objectsIndexed;
+    private IntersectingObjects<ObjectMask> objectsIndexed;
 
     /**
      * Constructor
@@ -92,7 +92,7 @@ class FlattenAndScaler {
                         Optional.of(ObjectMask::flattenZ),
                         Optional.empty());
         this.objectsIndexed =
-                new ObjectCollectionRTree(
+                IntersectingObjects.create(
                         ObjectCollectionFactory.of(objectsScaled.asCollectionOrderNotPreserved()));
     }
 
@@ -158,11 +158,13 @@ class FlattenAndScaler {
     public ObjectCollection objectsThatIntersectWith(
             BoundingBox box, ObjectCollection excludeFromAdding) {
 
-        ObjectCollection intersectingObjects = objectsIndexed.intersectsWith(box);
+        Set<ObjectMask> intersectingObjects = objectsIndexed.intersectsWith(box);
 
         Set<ObjectMask> excludeSet = excludeFromAdding.stream().toSet();
 
-        return intersectingObjects.stream().filterExclude(excludeSet::contains);
+        // Filter away any objects in the exclude set
+        return new ObjectCollection(
+                intersectingObjects.stream().filter(item -> !excludeSet.contains(item)));
     }
 
     /**

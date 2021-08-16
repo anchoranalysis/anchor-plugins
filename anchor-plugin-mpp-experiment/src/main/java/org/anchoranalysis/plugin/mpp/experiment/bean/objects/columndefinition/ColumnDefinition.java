@@ -33,7 +33,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.CSVRow;
 import org.apache.commons.lang.ArrayUtils;
 import org.w3c.dom.Document;
@@ -73,7 +74,8 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
     }
 
     public abstract ObjectCollectionWithProperties findObjectsMatchingRow(
-            CSVRow csvRow, ObjectCollectionRTree allObjects) throws OperationFailedException;
+            CSVRow csvRow, IntersectingObjects<ObjectMask> allObjects)
+            throws OperationFailedException;
 
     public abstract void writeToXML(CSVRow csvRow, Element xmlElement, Document doc);
 
