@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.points;
 
-import java.awt.Color;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -34,7 +33,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -48,11 +46,8 @@ import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.mark.points.PointListFactory;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposeVisualizationList;
 import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
 import org.anchoranalysis.spatial.axis.AxisType;
@@ -83,8 +78,6 @@ public class XYOrientationExtendToZ extends PointsProposer {
     private UnitValueDistance distanceZEndIfEmpty = new DistanceVoxels(1000000);
     // END BEAN PROPERTIES
 
-    private List<Point3i> lastPointsAll;
-
     @Override
     public Optional<List<Point3i>> propose(
             Point3d point,
@@ -93,7 +86,6 @@ public class XYOrientationExtendToZ extends PointsProposer {
             RandomNumberGenerator randomNumberGenerator,
             ErrorNode errorNode)
             throws ProposalAbnormalFailureException {
-        pointsFromOrientationXYProposer.clearVisualizationState();
 
         Optional<Orientation> orientation =
                 orientationXYProposer.propose(mark, dimensions, randomNumberGenerator);
@@ -102,25 +94,6 @@ public class XYOrientationExtendToZ extends PointsProposer {
                 or ->
                         proposeFromOrientation(
                                 or, point, dimensions, randomNumberGenerator, errorNode));
-    }
-
-    @Override
-    public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
-
-        CreateProposeVisualizationList list = new CreateProposeVisualizationList();
-
-        list.add(pointsFromOrientationXYProposer.proposalVisualization(detailed));
-
-        list.add(
-                marks -> {
-                    if (lastPointsAll != null && !lastPointsAll.isEmpty()) {
-                        marks.addChangeID(
-                                PointListFactory.createMarkFromPoints3i(lastPointsAll),
-                                new RGBColor(Color.ORANGE));
-                    }
-                });
-
-        return Optional.of(list);
     }
 
     @Override
@@ -144,7 +117,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
                                     randomNumberGenerator,
                                     forwardDirectionOnly);
 
-            lastPointsAll =
+            List<Point3i> lastPointsAll =
                     new GeneratePointsHelper(
                                     point,
                                     channelFilled(),

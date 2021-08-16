@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
+import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;

@@ -27,12 +27,10 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 
 import java.util.List;
-import java.util.Optional;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 
 public class OrderedList extends MarkProposerFromList {
 
@@ -49,11 +47,5 @@ public class OrderedList extends MarkProposerFromList {
             }
         }
         return true;
-    }
-
-    @Override
-    protected Optional<CreateProposalVisualization> proposalVisualization(
-            boolean detailed, List<MarkProposer> markProposerList) {
-        return Optional.empty();
     }
 }

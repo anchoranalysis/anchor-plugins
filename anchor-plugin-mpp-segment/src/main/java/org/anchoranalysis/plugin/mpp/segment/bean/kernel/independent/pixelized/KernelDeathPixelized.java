@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.mark.UpdateMarkSetException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.KernelDeath;

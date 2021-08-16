@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
-import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.mark.UpdateMarkSetException;
 import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;

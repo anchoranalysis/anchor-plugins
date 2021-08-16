@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.segment.kernel.updater;
 
 import java.util.Optional;
-import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.mark.UpdateMarkSetException;
 import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 

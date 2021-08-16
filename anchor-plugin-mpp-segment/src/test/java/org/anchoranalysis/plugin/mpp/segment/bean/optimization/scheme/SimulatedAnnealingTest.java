@@ -32,8 +32,8 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.mpp.bean.bound.BoundUnitless;
-import org.anchoranalysis.mpp.bean.mark.bounds.RotationBounds2D;
-import org.anchoranalysis.mpp.bean.mark.bounds.RotationBounds3D;
+import org.anchoranalysis.mpp.bean.bound.rotation.BoundRotation2D;
+import org.anchoranalysis.mpp.bean.bound.rotation.BoundRotation3D;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkEllipseFactory;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkEllipsoidFactory;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkFactory;
@@ -107,6 +107,6 @@ class SimulatedAnnealingTest {
     private static MarkProposer radiiAndOrientationProposer(boolean use3D) {
         return new OrientationAndRadiiProposer(
                 new UniformRandomRadiiProposer(new BoundUnitless(2, 5), use3D),
-                new RandomOrientation(use3D ? new RotationBounds3D() : new RotationBounds2D()));
+                new RandomOrientation(use3D ? new BoundRotation3D() : new BoundRotation2D()));
     }
 }

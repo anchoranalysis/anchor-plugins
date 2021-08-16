@@ -42,7 +42,6 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -102,10 +101,5 @@ public class FitPoints extends MarkProposer {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
-        return pointsProposer.proposalVisualization(detailed);
     }
 }

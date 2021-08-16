@@ -39,13 +39,13 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.StackIdentifiers;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
-import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
+import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
+import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

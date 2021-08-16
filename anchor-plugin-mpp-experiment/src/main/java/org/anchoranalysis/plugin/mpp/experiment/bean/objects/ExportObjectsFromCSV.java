@@ -61,7 +61,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
+import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.io.input.MarksInitializationFactory;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInput;
