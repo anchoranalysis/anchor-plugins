@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.test.image.EnergyStackFixture;
-import org.anchoranalysis.test.image.object.ObjectMaskFixture;
+import org.anchoranalysis.test.image.object.CutOffCornersObjectFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,7 +58,7 @@ class CalculateIncrementalOperationMapTest {
     void setup() throws OperationFailedException {
         // An arbitrary object
         when(mockMap.applyOperation(any(), any(), anyBoolean()))
-                .thenReturn(new ObjectMaskFixture(energyStack.dimensions()).create1());
+                .thenReturn(new CutOffCornersObjectFixture(energyStack.dimensions()).create1());
     }
 
     @Test

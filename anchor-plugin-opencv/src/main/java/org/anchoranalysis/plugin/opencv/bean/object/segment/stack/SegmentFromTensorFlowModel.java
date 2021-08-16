@@ -156,7 +156,7 @@ public abstract class SegmentFromTensorFlowModel extends SegmentStackIntoObjects
     }
 
     /** Resolves a relative-filename (to the model directory) into a path. */
-    private Path resolve(String filename) {
+    protected Path resolve(String filename) {
         return getInitialization().getModelDirectory().resolve(filename);
     }
 

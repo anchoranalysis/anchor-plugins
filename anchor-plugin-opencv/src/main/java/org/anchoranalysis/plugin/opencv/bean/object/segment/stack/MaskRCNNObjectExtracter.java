@@ -18,7 +18,7 @@ import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3f;
@@ -68,36 +68,51 @@ class MaskRCNNObjectExtracter {
      * @param minConfidence a threshold below which we disconsider any proposed bounding-boxes
      * @param maskMinValue only intensity-values greater or equal to this threshold are considered
      *     to belong to the mask
+     * @param objectClassLabels object-class labels, the corresponding index of the element
+     *     describes the label
      * @return a list of newly created extracted objects (greater or equal to the confidence level)
      *     from the tensors.
      */
-    public static List<WithConfidence<ObjectMask>> extractMasks(
-            Mat boxes, Mat masks, Extent unscaledSize, float minConfidence, float maskMinValue) {
+    public static List<LabelledWithConfidence<ObjectMask>> extractMasks(
+            Mat boxes,
+            Mat masks,
+            Extent unscaledSize,
+            float minConfidence,
+            float maskMinValue,
+            List<String> objectClassLabels) {
 
         // Reshape to be two dimensional arrays
         boxes = boxes.reshape(1, NUMBER_BOXES_DETECTED);
         masks = masks.reshape(1, NUMBER_BOXES_DETECTED);
 
-        List<WithConfidence<ObjectMask>> out = new ArrayList<>();
+        List<LabelledWithConfidence<ObjectMask>> out = new ArrayList<>();
         for (int i = 0; i < NUMBER_BOXES_DETECTED; i++) {
 
             float[] coded =
                     MatExtracter.extractFloatArray(boxes, i, DETECTION_MATRIX_NUMBER_ELEMENTS);
 
-            Optional<WithConfidence<ObjectMask>> object =
-                    extractFromCode(coded, masks, i, unscaledSize, minConfidence, maskMinValue);
+            Optional<LabelledWithConfidence<ObjectMask>> object =
+                    extractFromCode(
+                            coded,
+                            masks,
+                            i,
+                            unscaledSize,
+                            minConfidence,
+                            maskMinValue,
+                            objectClassLabels);
             object.ifPresent(out::add);
         }
         return out;
     }
 
-    private static Optional<WithConfidence<ObjectMask>> extractFromCode(
+    private static Optional<LabelledWithConfidence<ObjectMask>> extractFromCode(
             float[] coded,
             Mat masks,
             int index,
             Extent unscaledSize,
             float minConfidence,
-            float maskMinValue) {
+            float maskMinValue,
+            List<String> objectClassLabels) {
         BoundingBox box = extractBox(coded, unscaledSize);
         double confidence = coded[2];
 
@@ -110,7 +125,8 @@ class MaskRCNNObjectExtracter {
                             masks, index, box.extent(), objectClassIdentifier, maskMinValue);
 
             ObjectMask object = new ObjectMask(box, mask);
-            return Optional.of(new WithConfidence<ObjectMask>(object, confidence));
+            String label = objectClassLabels.get(objectClassIdentifier);
+            return Optional.of(new LabelledWithConfidence<ObjectMask>(object, confidence, label));
         } else {
             return Optional.empty();
         }

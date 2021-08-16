@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +14,9 @@ import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.io.manifest.file.TextFileReader;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
@@ -37,6 +40,9 @@ public class SegmentMaskRCNN extends SegmentFromTensorFlowModel {
 
     /** Name of model output for object-masks. */
     private static final String OUTPUT_MASKS = "detection_masks";
+
+    /** Static singleton of the object-class labels used in Mark R-CNN. */
+    private static List<String> objectClassLabels;
 
     // START BEAN PROPERTIES
     /**
@@ -67,7 +73,8 @@ public class SegmentMaskRCNN extends SegmentFromTensorFlowModel {
             ScaleFactor scaleFactor,
             ConcurrentModelPool<Net> modelPool)
             throws Throwable {
-        return new SegmentedObjects(inferenceOnMat(modelPool, mat, unscaledSize));
+
+        return new SegmentedObjects(inferenceOnMat(modelPool, mat, unscaledSize).stream());
     }
 
     @Override
@@ -76,14 +83,14 @@ public class SegmentMaskRCNN extends SegmentFromTensorFlowModel {
     }
 
     /** Performs inference to generate the masks. */
-    private List<WithConfidence<ObjectMask>> inferenceOnMat(
+    private List<LabelledWithConfidence<ObjectMask>> inferenceOnMat(
             ConcurrentModelPool<Net> modelPool, Mat image, Extent unscaledSize) throws Throwable {
         return modelPool.excuteOrWait(model -> forwardPass(model, image, unscaledSize));
     }
 
     /** Performs the inference on a single image using the CNN model. */
-    private List<WithConfidence<ObjectMask>> forwardPass(Net model, Mat image, Extent unscaledSize)
-            throws ConcurrentModelException {
+    private List<LabelledWithConfidence<ObjectMask>> forwardPass(
+            Net model, Mat image, Extent unscaledSize) throws ConcurrentModelException {
         try {
             model.setInput(Dnn.blobFromImage(image));
 
@@ -94,9 +101,18 @@ public class SegmentMaskRCNN extends SegmentFromTensorFlowModel {
             Mat masks = output.get(1);
 
             return MaskRCNNObjectExtracter.extractMasks(
-                    boxes, masks, unscaledSize, minConfidence, minMaskValue);
+                    boxes, masks, unscaledSize, minConfidence, minMaskValue, objectClassLabels());
         } catch (Exception e) {
             throw new ConcurrentModelException(e);
         }
+    }
+
+    /** A list of ordered object-class labels, loaded lazily class-wise upon first access. */
+    private synchronized List<String> objectClassLabels() throws IOException {
+        if (objectClassLabels == null) {
+            Path filename = resolve("mscoco_labels.names");
+            objectClassLabels = TextFileReader.readLinesAsList(filename);
+        }
+        return objectClassLabels;
     }
 }

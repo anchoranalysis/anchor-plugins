@@ -26,12 +26,9 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.PriorityQueue;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 
 /**
  * Reduces the number or spatial-extent of elements by favouring higher-confidence elements over
@@ -40,8 +37,6 @@ import org.anchoranalysis.plugin.image.segment.WithConfidence;
  * <p>Elements can be removed entirely, or can have other operations executed (e.g. removing
  * overlapping voxels).
  *
- * <p>
- *
  * <ol>
  *   <li>Select highest-confidence proposal, remove from list, add to output.
  *   <li>Compare this proposal with remaining proposals, and process any overlapping elements
@@ -49,56 +44,33 @@ import org.anchoranalysis.plugin.image.segment.WithConfidence;
  *   <li>If there are remaining proposals in the queue, goto Step 1.
  * </ol>
  *
- * @param <T> the element-type that exists in the collection (with confidence)
  * @author Owen Feehan
  */
-public abstract class ReduceElementsGreedy<T> extends ReduceElements<T> {
+public abstract class ReduceElementsGreedy extends ReduceElements<ObjectMask> {
 
     @Override
-    public List<WithConfidence<T>> reduce(List<WithConfidence<T>> elements) {
-        init(elements);
+    public List<LabelledWithConfidence<ObjectMask>> reduceLabelled(
+            List<LabelledWithConfidence<ObjectMask>> elements) {
 
-        PriorityQueue<WithConfidence<T>> queue = new PriorityQueue<>(elements);
+        /** Tracks which objects overlap with other objects, updated as merges/deletions occur. */
+        ReduceObjectsGraph graph = new ReduceObjectsGraph(elements);
 
-        List<WithConfidence<T>> out = new ArrayList<>();
+        List<LabelledWithConfidence<ObjectMask>> out = new ArrayList<>();
 
-        while (!queue.isEmpty()) {
+        while (!graph.isEmpty()) {
 
-            WithConfidence<T> highestConfidence = queue.peek();
+            LabelledWithConfidence<ObjectMask> highestConfidence = graph.peek();
 
-            if (!findOverlappingAndProcess(highestConfidence, queue)) {
-                out.add(queue.poll());
+            if (!findIntersectionsAndProcess(highestConfidence, graph)) {
+                out.add(graph.poll());
             }
         }
 
         return out;
     }
 
-    /** Called before the operation begins with all proposals */
-    protected abstract void init(List<WithConfidence<T>> allElements);
-
-    /**
-     * Finds a subset of {@code others} that possibly overlap with the {@code source} element.
-     *
-     * <p>This is not a definite list of element, but must contain all possible overlapping element,
-     * and should be efficient.
-     *
-     * <p>This is the <b>first</b> filtering step. The resulting list will then be further filtered
-     * by {@link #includePossiblyOverlappingObject}.
-     *
-     * @param source the element we are currently processing, for which we search for possibly
-     *     overlapping element
-     * @param others other element that could possibly overlap with {@code source} but need to be
-     *     filtered.
-     */
-    protected abstract Predicate<T> possibleOverlappingObjects(
-            T source, Iterable<WithConfidence<T>> others);
-
     /**
      * Whether to include another (possibly-overlapping with {@code source}) element in processing?
-     *
-     * <p>This is the <b>second</b> filtering step (after {@link #possibleOverlappingObjects(Object,
-     * Iterable)}.
      *
      * @param source the element we are currently processing, for which we search for possibly
      *     overlapping element
@@ -106,55 +78,43 @@ public abstract class ReduceElementsGreedy<T> extends ReduceElements<T> {
      *     with {@code source}).
      * @return true iff {@code other} should be included in processing.
      */
-    protected abstract boolean includePossiblyOverlappingObject(T source, T other);
+    protected abstract boolean shouldObjectsBeProcessed(ObjectMask source, ObjectMask other);
 
     /**
-     * Processes an object that is deemed to overlap.
+     * Processes two objects.
      *
      * @param source the element that is being processed as the <i>source</i>, the object with
      *     higher confidence.
      * @param overlapping the element that is deemed to overlap with the {@code sourceElement} about
      *     which a decision is to be made.
-     * @param removeOverlapping a runnable that can be called to remove {@code overlappingElement},
-     *     if this decision is taken.
-     * @param changeSource a runnable that can ne called to change the source-element, if this
-     *     decision is taken.
      * @return true if the {@code source} object was altered during processing, false if it was not.
      */
-    protected abstract boolean processOverlapping(
-            WithConfidence<T> source,
-            WithConfidence<T> overlapping,
-            Runnable removeOverlapping,
-            Consumer<T> changeSource);
+    protected abstract boolean processObjects(
+            LabelledWithConfidence<ObjectMask> source,
+            LabelledWithConfidence<ObjectMask> overlapping,
+            ReduceObjectsGraph graph);
 
     /**
      * Finds any overlapping objects and processes them accordingly (possibly removing or merging
      * them).
+     *
+     * @return true if the proposal was altered during processing, false otherwise.
      */
-    private boolean findOverlappingAndProcess(
-            WithConfidence<T> proposal, PriorityQueue<WithConfidence<T>> others) {
+    private boolean findIntersectionsAndProcess(
+            LabelledWithConfidence<ObjectMask> proposal, ReduceObjectsGraph graph) {
 
-        Predicate<T> predicate = possibleOverlappingObjects(proposal.getElement(), others);
+        List<LabelledWithConfidence<ObjectMask>> intersecting =
+                graph.adjacentVerticesOutgoing(proposal);
+        for (LabelledWithConfidence<ObjectMask> other : intersecting) {
 
-        Iterator<WithConfidence<T>> othersIterator = others.iterator();
-        while (othersIterator.hasNext()) {
-
-            WithConfidence<T> other = othersIterator.next();
-
-            if (includeElement(predicate, proposal, other)
-                    && processOverlapping(
-                            proposal, other, othersIterator::remove, proposal::setElement)) {
+            if (shouldObjectsBeProcessed(proposal.getElement(), other.getElement())
+                    && processObjects(proposal, other, graph)) {
+                // When a change has occurred to the proposal, then we abandon processing of
+                // overlaps
+                //  and requery the priority-queue (in case things have changed)
                 return true;
             }
         }
-
         return false;
-    }
-
-    /** Whether to consider an object as overlapping or not? */
-    private boolean includeElement(
-            Predicate<T> predicate, WithConfidence<T> proposal, WithConfidence<T> other) {
-        return predicate.test(other.getElement())
-                && includePossiblyOverlappingObject(proposal.getElement(), other.getElement());
     }
 }

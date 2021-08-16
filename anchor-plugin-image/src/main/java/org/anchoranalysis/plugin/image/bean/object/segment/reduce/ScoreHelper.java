@@ -28,13 +28,14 @@ package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ScoreHelper {
 
     public static double confidenceDifference(
-            WithConfidence<ObjectMask> source, WithConfidence<ObjectMask> overlapping) {
+            LabelledWithConfidence<ObjectMask> source,
+            LabelledWithConfidence<ObjectMask> overlapping) {
         return source.getConfidence() - overlapping.getConfidence();
     }
 

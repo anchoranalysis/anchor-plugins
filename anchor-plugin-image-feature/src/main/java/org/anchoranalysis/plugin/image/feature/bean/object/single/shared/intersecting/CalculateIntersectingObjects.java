@@ -30,12 +30,13 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Calculates the intersecting set of objects from a particular collection (represted by an id) and
- * the object-mask in the params
+ * Calculates the intersecting set of objects from a particular collection (represented by an id)
+ * and the object-mask in the params.
  *
  * @author Owen Feehan
  */
@@ -45,7 +46,7 @@ class CalculateIntersectingObjects
         extends FeatureCalculation<ObjectCollection, FeatureInputSingleObject> {
 
     /**
-     * A unique ID that maps 1 to 1 to {@code searchObjects} (and is therefore sufficient to
+     * A unique ID that maps one-to-one to {@code searchObjects} (and is therefore sufficient to
      * uniquely @{code hashCode()})
      */
     private final String id;
@@ -56,7 +57,7 @@ class CalculateIntersectingObjects
     @Override
     protected ObjectCollection execute(FeatureInputSingleObject params) {
 
-        ObjectCollectionRTree boxRTree = new ObjectCollectionRTree(searchObjects);
-        return boxRTree.intersectsWith(params.getObject());
+        IntersectingObjects<ObjectMask> boxRTree = IntersectingObjects.create(searchObjects);
+        return new ObjectCollection(boxRTree.intersectsWithStream(params.getObject()));
     }
 }

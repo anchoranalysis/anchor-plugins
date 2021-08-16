@@ -49,7 +49,7 @@ import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 import org.anchoranalysis.test.feature.plugins.HistogramFixture;
 import org.anchoranalysis.test.image.EnergyStackFixture;
-import org.anchoranalysis.test.image.object.ObjectMaskFixture;
+import org.anchoranalysis.test.image.object.CutOffCornersObjectFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -118,7 +118,8 @@ class FeatureListImageTest {
         FeatureCalculatorMulti<FeatureInputSingleObject> session =
                 createAndStart(objectFeatures(loader));
 
-        ObjectMaskFixture objectFixture = new ObjectMaskFixture(ENERGY_STACK.dimensions());
+        CutOffCornersObjectFixture objectFixture =
+                new CutOffCornersObjectFixture(ENERGY_STACK.dimensions());
 
         assertCalculateObject(
                 session,
