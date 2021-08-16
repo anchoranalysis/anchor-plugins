@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
+package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @author Owen Feehan
  */
-abstract class SegmentStackTestBase {
+abstract class DecodeInstanceSegmentationTestBase {
 
     /** The segmentation implementation to test. */
     private SegmentStackIntoObjectsPooled<?> segmenter;

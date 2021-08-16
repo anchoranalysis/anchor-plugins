@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
+package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
