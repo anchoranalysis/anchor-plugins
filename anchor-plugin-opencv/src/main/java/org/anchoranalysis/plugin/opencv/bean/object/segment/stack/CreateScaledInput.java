@@ -31,7 +31,6 @@ import io.vavr.Tuple2;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.anchoranalysis.spatial.Extent;
@@ -52,24 +51,17 @@ class CreateScaledInput {
      * Returns a scaled-down version of the stack, and a scale-factor that would return it to
      * original size
      *
+     * @param scaleFactor the scaleFactor to use for resizing.
      * @param swapRB if true, the first channel and third channel in {@code stack} are swapped to
      *     make the {@link Mat} to e.g. translate RGB to BGR (as expected by OpenCV).
      */
-    public static Tuple2<Mat, ScaleFactor> apply(Stack stack, Extent targetExtent, boolean swapRB)
-            throws CreateException {
+    public static Tuple2<Mat, ScaleFactor> apply(
+            Stack stack, ScaleFactor scaleFactor, boolean swapRB) throws CreateException {
 
         Mat original = ConvertToMat.makeRGBStack(stack, swapRB);
 
-        Mat input = resizeMatToTarget(original, targetExtent);
-        return Tuple.of(input, relativeScale(original, input));
-    }
-
-    private static ScaleFactor relativeScale(Mat original, Mat resized) {
-        return ResizeExtentUtilities.relativeScale(extentFromMat(resized), extentFromMat(original));
-    }
-
-    private static Extent extentFromMat(Mat mat) {
-        return new Extent(mat.cols(), mat.rows());
+        Mat input = resizeMatToTarget(original, stack.extent().scaleXYBy(scaleFactor));
+        return Tuple.of(input, scaleFactor);
     }
 
     private static Mat resizeMatToTarget(Mat src, Extent targetExtent) {

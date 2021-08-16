@@ -24,19 +24,24 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
+package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import java.util.Arrays;
 import java.util.List;
+import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
+import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyMergeOverlappingObjects;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
+import org.anchoranalysis.plugin.image.bean.scale.LargestMultipleWithin;
+import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentObjectsFromTensorFlowModel;
+import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SuppressNonMaxima;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.BoundingBoxFactory;
 
 /**
- * Tests {@link SegmentText}.
+ * Tests {@link DecodeText}.
  *
  * <p>Note that the weights file for the EAST model is duplicated in src/test/resources, as well as
  * its usual location in the models/ directory of the Anchor distribution. This is as it's difficult
@@ -44,7 +49,7 @@ import org.anchoranalysis.spatial.box.BoundingBoxFactory;
  *
  * @author Owen Feehan
  */
-class SegmentTextTest extends SegmentStackTestBase {
+class DecodeTextTest extends DecodeInstanceSegmentationTestBase {
 
     private ImageLoader loader = new ImageLoader();
 
@@ -52,8 +57,12 @@ class SegmentTextTest extends SegmentStackTestBase {
 
     @Override
     protected SegmentStackIntoObjectsPooled<?> createSegmenter() {
+        SegmentObjectsFromTensorFlowModel segment = new SegmentObjectsFromTensorFlowModel();
+        segment.setDecode( new DecodeText() );
+        segment.setModelBinaryPath("frozen_east_text_detection.pb");
+        segment.setScaleInput( createScaleInput() );
         return new SuppressNonMaxima<>(
-                new SegmentText(), new ConditionallyMergeOverlappingObjects(), false);
+                segment, new ConditionallyMergeOverlappingObjects(), false);
     }
 
     @Override
@@ -78,5 +87,12 @@ class SegmentTextTest extends SegmentStackTestBase {
         BoundingBox box1 = BoundingBoxFactory.at(316, 319, 104, 33);
         BoundingBox box2 = BoundingBoxFactory.at(394, 199, 27, 27);
         return Arrays.asList(box1, box2);
+    }
+    
+    private ScaleCalculator createScaleInput() {
+        LargestMultipleWithin largestMultiple = new LargestMultipleWithin();
+        largestMultiple.setMinimumSize( new SizeXY(32, 32) );
+        largestMultiple.setMaxScaleFactor(23);
+        return largestMultiple;
     }
 }

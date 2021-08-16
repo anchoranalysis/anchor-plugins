@@ -64,7 +64,7 @@ public class Position extends MarkProposer {
 
         return true;
     }
-    
+
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return testMark instanceof MarkWithPosition;

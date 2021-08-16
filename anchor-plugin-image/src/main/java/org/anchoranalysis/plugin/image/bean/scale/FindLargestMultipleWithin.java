@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
+package org.anchoranalysis.plugin.image.bean.scale;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -32,9 +32,10 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactorInt;
 
 /**
- * Finds largest multiple of an Extent without being larger than another extent
+ * Finds largest multiple of an {@link Extent} without being larger than another {@link Extent}.
  *
  * @author Owen Feehan
  */
@@ -51,7 +52,7 @@ class FindLargestMultipleWithin {
      *
      * @param small the extent to scale
      * @param stayWithin a maximum size not to scale beyond
-     * @return the scaled-extent to use
+     * @return the final {@link Extent} to use for the image.
      * @throws OperationFailedException
      */
     public static Extent apply(Extent small, Extent stayWithin, int maxScaleFactor)
@@ -72,10 +73,7 @@ class FindLargestMultipleWithin {
 
         int minFactor = minScaleFactorUnder(scaleFactor, maxScaleFactor);
 
-        // The integral floor of each
-        ScaleFactorInt sfInt = new ScaleFactorInt(minFactor, minFactor);
-
-        return sfInt.scale(small);
+        return new ScaleFactorInt(minFactor, minFactor).scale(small);
     }
 
     /**
