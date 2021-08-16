@@ -29,73 +29,28 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.concurrency.ConcurrentModelException;
-import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactorInt;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
-import org.opencv.dnn.Dnn;
-import org.opencv.dnn.Net;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EastMarkExtracter {
 
-    private static final Scalar MEAN_SUBTRACTION_CONSTANTS = new Scalar(123.68, 116.78, 103.94);
-
-    private static final String OUTPUT_SCORES = "feature_fusion/Conv_7/Sigmoid";
-    private static final String OUTPUT_GEOMETRY = "feature_fusion/concat_3";
-
+    private static final String CLASS_LABEL = "text";
+    
     private static final ScaleFactorInt SCALE_BY_4 = new ScaleFactorInt(4, 4);
 
-    /**
-     * Extracts rotatable bounding boxes (as marks) from an image using the EAST model
-     *
-     * @param image an RGB image to extract boxes from
-     * @param minConfidence filters boxes to have confidence >= minConfidence
-     * @return a list of bounding-boxes, each with a confidence value
-     * @throws Throwable
-     */
-    public static List<WithConfidence<Mark>> extractBoundingBoxes(
-            ConcurrentModelPool<Net> modelPool, Mat image, double minConfidence) throws Throwable {
-        return modelPool.excuteOrWait(model -> performInference(model, image, output -> decode(output, minConfidence)));
-    }
-    
-    public static List<String> expectedOutputs() {
-        return Arrays.asList(OUTPUT_SCORES, OUTPUT_GEOMETRY);
-    }
-    
-    public static Scalar meanSubtractionConstants() {
-        return MEAN_SUBTRACTION_CONSTANTS;
-    }
-
-    private static List<WithConfidence<Mark>> decode(
+    public static List<LabelledWithConfidence<Mark>> decode(
             List<Mat> output, double minConfidence) {
         return extractFromMatrices(output.get(0), output.get(1), SCALE_BY_4, minConfidence);
     }
-    
-    private static <T> T performInference(Net model, Mat image, Function<List<Mat>,T> processOutput) throws ConcurrentModelException {
-        try {
-            model.setInput(
-                    Dnn.blobFromImage(
-                            image, 1.0, image.size(), meanSubtractionConstants(), false, false));
 
-            List<Mat> output = new ArrayList<>();
-            model.forward(output, expectedOutputs());
-            return processOutput.apply(output);
-        } catch (Exception e) {
-            throw new ConcurrentModelException(e);
-        }
-    }
-
-    private static List<WithConfidence<Mark>> extractFromMatrices(
+    private static List<LabelledWithConfidence<Mark>> extractFromMatrices(
             Mat scores, Mat geometry, ScaleFactorInt offsetScale, double minConfidence) {
         Tuple2<Mat, Extent> pair = reshapeScores(scores);
 
@@ -103,13 +58,13 @@ class EastMarkExtracter {
                 pair._1(), reshapeGeometry(geometry), pair._2(), offsetScale, minConfidence);
     }
 
-    private static List<WithConfidence<Mark>> extractFromMatricesReshaped(
+    private static List<LabelledWithConfidence<Mark>> extractFromMatricesReshaped(
             Mat scores,
             Mat geometry,
             Extent extent,
             ScaleFactorInt offsetScale,
             double minConfidence) {
-        List<WithConfidence<Mark>> list = new ArrayList<>();
+        List<LabelledWithConfidence<Mark>> list = new ArrayList<>();
 
         int rowsByCols = extent.volumeXY();
 
@@ -125,7 +80,7 @@ class EastMarkExtracter {
                                 RotatableBoundingBoxFromArrays.markFor(
                                         geometryArrs, offset, offsetScale.scale(point));
 
-                        list.add(new WithConfidence<>(mark, confidence));
+                        list.add(new LabelledWithConfidence<>(mark, confidence, CLASS_LABEL));
                     }
                 });
 
