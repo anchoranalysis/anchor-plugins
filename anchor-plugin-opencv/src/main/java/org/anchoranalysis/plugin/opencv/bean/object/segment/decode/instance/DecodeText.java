@@ -24,12 +24,13 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
+package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import java.util.List;
 import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -43,22 +44,47 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Net;
 
 /**
- * Extracts object-masks representing text regions from an image
+ * Extracts text from a RGB image by using the EAST deep neural network model
  *
  * <p>Each object-mask represented rotated-bounding box and is associated with a confidence score
  *
+ * <p>Particular thanks to <a
+ * href="https://www.pyimagesearch.com/2018/08/20/opencv-text-detection-east-text-detector/">Adrian
+ * Rosebrock</a> whose tutorial was useful in applying this model
+ *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class EastObjectsExtracter {
+public class DecodeText extends DecodeInstanceSegmentation {
 
     private static final String CLASS_LABEL = "text";
+    
+    // START BEAN PROPERTIES
+    /** Proposed bounding boxes below this confidence interval are removed */
+    @BeanField @Getter @Setter private double minConfidence = 0.5;
+    // END BEAN PROPERTIES
+    
+    @Override
+    public SegmentedObjects segmentMat(
+            Mat mat,
+            Optional<Resolution> resolution,
+            Extent unscaledSize,
+            ScaleFactor scaleFactor,
+            ConcurrentModelPool<Net> modelPool, Optional<List<String>> classLabels)
+            throws Throwable {
+        // Convert marks to object-masks
+        SegmentedObjects objects =
+                deriveObjects(modelPool, mat, resolution, minConfidence);
 
-    public static SegmentedObjects apply(
+        // Scale each object-mask and extract as an object-collection
+        return objects.scale(scaleFactor, unscaledSize);
+    }
+    
+    private static SegmentedObjects deriveObjects(
             ConcurrentModelPool<Net> modelPool,
             Mat image,
             Optional<Resolution> resolution,

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
+package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
