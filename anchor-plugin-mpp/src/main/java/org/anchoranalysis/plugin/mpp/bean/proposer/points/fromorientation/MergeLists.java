@@ -33,7 +33,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -43,16 +42,6 @@ public class MergeLists extends PointsFromOrientationProposer {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private PointsFromOrientationProposer pointsFromOrientationProposer;
     // END BEAN PROPERTIEs
-
-    @Override
-    public CreateProposalVisualization proposalVisualization(boolean detailed) {
-        return pointsFromOrientationProposer.proposalVisualization(detailed);
-    }
-
-    @Override
-    public void clearVisualizationState() {
-        pointsFromOrientationProposer.clearVisualizationState();
-    }
 
     @Override
     public List<List<Point3i>> calculatePoints(

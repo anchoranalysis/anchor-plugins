@@ -53,7 +53,7 @@ class SegmentTextTest extends SegmentStackTestBase {
     @Override
     protected SegmentStackIntoObjectsPooled<?> createSegmenter() {
         return new SuppressNonMaxima<>(
-                new SegmentText(), new ConditionallyMergeOverlappingObjects());
+                new SegmentText(), new ConditionallyMergeOverlappingObjects(), false);
     }
 
     @Override

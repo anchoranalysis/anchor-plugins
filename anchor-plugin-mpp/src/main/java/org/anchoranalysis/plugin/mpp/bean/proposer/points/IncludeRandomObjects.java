@@ -42,7 +42,6 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -86,11 +85,6 @@ public class IncludeRandomObjects extends PointsProposer {
         }
 
         return Optional.of(out);
-    }
-
-    @Override
-    public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
-        return Optional.empty();
     }
 
     private static void maybeAddToList(

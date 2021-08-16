@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyMergeOverlappingObjects;
+import org.anchoranalysis.plugin.image.bean.object.segment.reduce.RemoveOverlappingObjects;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -23,7 +23,7 @@ class SegmentMaskRCNNTest extends SegmentStackTestBase {
     @Override
     protected SegmentStackIntoObjectsPooled<?> createSegmenter() {
         return new SuppressNonMaxima<>(
-                new SegmentMaskRCNN(), new ConditionallyMergeOverlappingObjects());
+                new SegmentMaskRCNN(), new RemoveOverlappingObjects(), false);
     }
 
     @Override

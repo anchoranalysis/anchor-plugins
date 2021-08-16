@@ -50,7 +50,8 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.DisplayStack;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
@@ -60,7 +61,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
+import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.io.input.MarksInitializationFactory;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInput;
@@ -206,8 +207,8 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
             throws OperationFailedException {
 
         try {
-            ObjectCollectionRTree objects =
-                    new ObjectCollectionRTree(inputs(initialization, groupContext.getLogger()));
+            IntersectingObjects<ObjectMask> objects =
+                    IntersectingObjects.create(inputs(initialization, groupContext.getLogger()));
 
             // Create a writer with output-naming rules not from the group-context, but the
             // top-level experiment context.

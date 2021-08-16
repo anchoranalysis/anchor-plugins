@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -39,7 +38,6 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 
 public class FromSerializedObject extends MarkProposer {
 
@@ -65,10 +63,5 @@ public class FromSerializedObject extends MarkProposer {
             context.getErrorNode().addFormatted("Exception when deserializing: %s", e.toString());
             return false;
         }
-    }
-
-    @Override
-    public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
-        return Optional.empty();
     }
 }

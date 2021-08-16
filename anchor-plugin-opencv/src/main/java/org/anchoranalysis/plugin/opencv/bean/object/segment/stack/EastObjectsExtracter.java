@@ -56,6 +56,8 @@ import org.opencv.dnn.Net;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EastObjectsExtracter {
 
+    private static final String CLASS_LABEL = "text";
+
     public static SegmentedObjects apply(
             ConcurrentModelPool<Net> modelPool,
             Mat image,
@@ -67,6 +69,7 @@ class EastObjectsExtracter {
 
         // Convert marks to object-masks
         return new SegmentedObjects(
+                CLASS_LABEL,
                 convertMarksToObject(listMarks, dimensionsForMatrix(image, resolution)));
     }
 

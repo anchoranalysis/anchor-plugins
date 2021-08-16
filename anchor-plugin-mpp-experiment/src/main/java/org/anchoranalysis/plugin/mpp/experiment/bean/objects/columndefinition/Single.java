@@ -29,7 +29,8 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.CSVRow;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -48,7 +49,8 @@ public class Single extends ColumnDefinition {
 
     @Override
     public ObjectCollectionWithProperties findObjectsMatchingRow(
-            CSVRow csvRow, ObjectCollectionRTree allObjects) throws OperationFailedException {
+            CSVRow csvRow, IntersectingObjects<ObjectMask> allObjects)
+            throws OperationFailedException {
 
         ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties();
         objects.add(column.findObjectFromCSVRow(allObjects, csvRow));

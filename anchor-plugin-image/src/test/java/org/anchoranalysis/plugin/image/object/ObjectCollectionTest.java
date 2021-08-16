@@ -61,7 +61,6 @@ class ObjectCollectionTest {
     @Test
     void testScaleUpMany() throws OperationFailedException {
         testNumberCircles(300, 0.02);
-        // testNumberCircles(300, 0.0);
     }
 
     /**

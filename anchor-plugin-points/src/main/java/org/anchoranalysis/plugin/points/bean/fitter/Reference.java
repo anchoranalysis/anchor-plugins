@@ -33,10 +33,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.mpp.bean.init.PointsInitialization;
 import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.mpp.init.PointsInitialization;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.point.Point3f;
 
@@ -52,7 +52,7 @@ public class Reference extends PointsFitter {
     public void onInit(PointsInitialization so) throws InitException {
         super.onInit(so);
         try {
-            this.pointsFitter = getInitialization().getPointsFitterSet().getException(id);
+            this.pointsFitter = getInitialization().getPointFitters().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

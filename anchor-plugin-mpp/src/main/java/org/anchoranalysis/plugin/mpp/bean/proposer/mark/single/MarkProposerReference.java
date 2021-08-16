@@ -26,19 +26,17 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 
 public class MarkProposerReference extends MarkProposer {
 
@@ -67,10 +65,5 @@ public class MarkProposerReference extends MarkProposer {
     public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context)
             throws ProposalAbnormalFailureException {
         return delegate.propose(inputMark, context);
-    }
-
-    @Override
-    public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
-        return delegate.proposalVisualization(detailed);
     }
 }

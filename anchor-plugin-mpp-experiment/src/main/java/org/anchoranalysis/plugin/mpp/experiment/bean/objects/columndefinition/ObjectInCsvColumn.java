@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition;
 
+import java.util.Set;
 import lombok.Getter;
 import lombok.Value;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.CSVRow;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -73,7 +73,8 @@ class ObjectInCsvColumn {
      *     voxels required
      * @throws OperationFailedException if no matching object can be found
      */
-    public ObjectMask findObjectFromCSVRow(ObjectCollectionRTree allObjects, CSVRow csvRow)
+    public ObjectMask findObjectFromCSVRow(
+            IntersectingObjects<ObjectMask> allObjects, CSVRow csvRow)
             throws OperationFailedException {
         return findObjectThatMatches(
                 allObjects,
@@ -90,19 +91,20 @@ class ObjectInCsvColumn {
      *     found
      */
     private static ObjectMask findObjectThatMatches(
-            ObjectCollectionRTree objectsToSearch, Point3i point) throws OperationFailedException {
+            IntersectingObjects<ObjectMask> objectsToSearch, Point3i point)
+            throws OperationFailedException {
 
-        ObjectCollection objects = objectsToSearch.contains(point);
+        Set<ObjectMask> objects = objectsToSearch.contains(point);
 
         if (objects.size() > 1) {
             throw new OperationFailedException("More than object lies on point: " + point);
         }
 
-        if (objects.size() == 0) {
+        if (objects.isEmpty()) {
             throw new OperationFailedException(
                     String.format("Cannot find matching object for %s", point.toString()));
         }
 
-        return objects.get(0);
+        return objects.iterator().next();
     }
 }

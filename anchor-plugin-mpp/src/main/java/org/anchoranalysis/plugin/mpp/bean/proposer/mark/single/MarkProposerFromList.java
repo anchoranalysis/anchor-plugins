@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -38,7 +37,6 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 
 public abstract class MarkProposerFromList extends MarkProposer {
 
@@ -65,17 +63,9 @@ public abstract class MarkProposerFromList extends MarkProposer {
         return true;
     }
 
-    @Override
-    public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
-        return proposalVisualization(detailed, list);
-    }
-
     protected abstract boolean propose(
             VoxelizedMarkMemo inputMark,
             ProposerContext context,
             List<MarkProposer> markProposerList)
             throws ProposalAbnormalFailureException;
-
-    protected abstract Optional<CreateProposalVisualization> proposalVisualization(
-            boolean detailed, List<MarkProposer> markProposerList);
 }

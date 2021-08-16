@@ -36,7 +36,6 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkWithPosition;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.spatial.point.Point3d;
 
 public class Position extends MarkProposer {
@@ -65,12 +64,7 @@ public class Position extends MarkProposer {
 
         return true;
     }
-
-    @Override
-    public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
-        return Optional.empty();
-    }
-
+    
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return testMark instanceof MarkWithPosition;

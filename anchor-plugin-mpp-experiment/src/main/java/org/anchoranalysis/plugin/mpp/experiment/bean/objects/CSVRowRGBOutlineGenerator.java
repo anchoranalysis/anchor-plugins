@@ -30,17 +30,19 @@ import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithPrope
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.object.output.rgb.DrawCroppedObjectsGenerator;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorDelegateToRaster;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.CSVRow;
 
 class CSVRowRGBOutlineGenerator
         extends RasterGeneratorDelegateToRaster<ObjectCollectionWithProperties, CSVRow> {
 
     /** All objects associated with the image. */
-    private ObjectCollectionRTree allObjects;
+    private final IntersectingObjects<ObjectMask> allObjects;
 
     public CSVRowRGBOutlineGenerator(
-            DrawCroppedObjectsGenerator drawCroppedGenerator, ObjectCollectionRTree allObjects) {
+            DrawCroppedObjectsGenerator drawCroppedGenerator,
+            IntersectingObjects<ObjectMask> allObjects) {
         super(drawCroppedGenerator);
         this.allObjects = allObjects;
     }

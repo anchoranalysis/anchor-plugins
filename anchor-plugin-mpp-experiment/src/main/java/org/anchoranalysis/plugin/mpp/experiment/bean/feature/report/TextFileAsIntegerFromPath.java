@@ -44,7 +44,7 @@ public class TextFileAsIntegerFromPath extends ReportFeatureForManifestFileBase 
         if (executionTimePath.toFile().exists()) {
             String execTime;
             try {
-                execTime = TextFileReader.readFile(executionTimePath);
+                execTime = TextFileReader.readFileAsString(executionTimePath);
             } catch (IOException e) {
                 throw new OperationFailedException(e);
             }

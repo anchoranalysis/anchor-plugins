@@ -34,7 +34,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.spatial.box.BoundedList;
 import org.anchoranalysis.spatial.rtree.SpatiallySeparate;
@@ -76,31 +78,62 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
     }
 
     @Override
-    public List<WithConfidence<ObjectMask>> reduce(List<WithConfidence<ObjectMask>> elements)
-            throws OperationFailedException {
+    public List<LabelledWithConfidence<ObjectMask>> reduceLabelled(
+            List<LabelledWithConfidence<ObjectMask>> elements) throws OperationFailedException {
 
         if (elements.isEmpty()) {
             // An empty input list produces an empty output list
             return new ArrayList<>();
         }
 
-        SpatiallySeparate<WithConfidence<ObjectMask>> separate =
+        // Take the label from the first element
+        String label = elements.get(0).getLabel();
+
+        // Check that all other labels are the same, otherwise we cannot proceed
+        if (anyLabelDiffersTo(elements, label)) {
+            throw new OperationFailedException(
+                    "Labels are not all identical, so this reduction operation cannot proceed.");
+        }
+
+        SpatiallySeparate<LabelledWithConfidence<ObjectMask>> separate =
                 new SpatiallySeparate<>(
                         withConfidence -> withConfidence.getElement().boundingBox());
 
-        List<WithConfidence<ObjectMask>> out = new ArrayList<>();
+        List<LabelledWithConfidence<ObjectMask>> out = new ArrayList<>();
 
         // For efficiency on rasters sparsely populated with objects, process each
         //  spatially-connected set of objects separately.
-        for (Set<WithConfidence<ObjectMask>> split : separate.separate(elements)) {
-            out.addAll(deriveObjects(Lists.newArrayList(split)));
+        for (Set<LabelledWithConfidence<ObjectMask>> split : separate.separate(elements)) {
+            out.addAll(deriveLabelledObjects(Lists.newArrayList(split), label));
         }
 
         return out;
     }
 
+    private List<LabelledWithConfidence<ObjectMask>> deriveLabelledObjects(
+            List<LabelledWithConfidence<ObjectMask>> elements, String label)
+            throws OperationFailedException {
+
+        List<WithConfidence<ObjectMask>> elementsWithOutLabel =
+                FunctionalList.mapToList(elements, LabelledWithConfidence::getWithConfidence);
+
+        List<WithConfidence<ObjectMask>> derived = deriveObjects(elementsWithOutLabel);
+
+        return FunctionalList.mapToList(
+                derived, object -> new LabelledWithConfidence<>(label, object));
+    }
+
+    /** Checks if any label is different to {@code labelToCOmpare}. */
+    private static <T> boolean anyLabelDiffersTo(
+            List<LabelledWithConfidence<T>> elements, String labelToCompare) {
+        return elements.stream()
+                .map(LabelledWithConfidence::getLabel)
+                .anyMatch(label -> !labelToCompare.equals(label));
+    }
+
     private List<WithConfidence<ObjectMask>> deriveObjects(
             List<WithConfidence<ObjectMask>> elements) throws OperationFailedException {
+
         BoundedList<WithConfidence<ObjectMask>> boundedList =
                 BoundedList.createFromList(
                         elements, withConfidence -> withConfidence.getElement().boundingBox());

@@ -26,50 +26,65 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
-import com.google.common.base.Predicate;
-import java.util.List;
-import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 
 /**
- * Non-maxima suppression for object-masks using an <a
+ * Intersecting objects are removed if they have sufficient overlap.
+ *
+ * <p>This involves non-maxima suppression for object-masks using an <a
  * href="https://en.wikipedia.org/wiki/Jaccard_index">Intersection over Union</a> score.
  *
- * @see NonMaximaSuppression for a description of the algorithm.
+ * <p>A strategy for reducing elements that greedily removes any element with a strong overlap with
+ * another.
+ *
+ * <p>The highest-confidence element is always retained as a priority over lower-confidence
+ * elements.
+ *
+ * <p>The strength of the overlap is measured by a score with {@code 0 <= score <= 1}).
+ *
+ * <p>See <a
+ * href="https://towardsdatascience.com/non-maximum-suppression-nms-93ce178e177c">Non-maximum
+ * suppression</a> for a description of the algorithm.
+ *
  * @author Owen Feehan
  */
-public class RemoveOverlappingObjects extends NonMaximaSuppression<ObjectMask> {
+public class RemoveOverlappingObjects extends ReduceElementsGreedy {
 
-    private ObjectCollectionRTree rTree;
+    // START BEAN FIELDS
+    /** Bounding boxes with scores above this threshold are removed */
+    @BeanField @Getter @Setter private double scoreThreshold = 0.3;
+    // END BEAN FIELDS
 
     @Override
-    protected void init(List<WithConfidence<ObjectMask>> allElements) {
-        // NOTHING TO DO
-        rTree =
-                new ObjectCollectionRTree(
-                        ObjectCollectionFactory.mapFrom(allElements, WithConfidence::getElement));
+    protected boolean shouldObjectsBeProcessed(ObjectMask source, ObjectMask other) {
+        // These objects are deemed sufficiently-overlapping to be removed
+        return overlapScoreFor(source, other) >= scoreThreshold;
     }
 
     @Override
-    protected Predicate<ObjectMask> possibleOverlappingObjects(
-            ObjectMask source, Iterable<WithConfidence<ObjectMask>> others) {
-        // All possible other objects as a hash-set
-        Set<ObjectMask> possibleOthers = rTree.intersectsWith(source).stream().toSet();
-        return possibleOthers::contains;
+    protected boolean processObjects(
+            LabelledWithConfidence<ObjectMask> source,
+            LabelledWithConfidence<ObjectMask> overlapping,
+            ReduceObjectsGraph graph) {
+        // This removes the overlapping object from the current iteration
+        try {
+            graph.removeVertex(overlapping);
+        } catch (OperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+        // No alteration to the source object
+        return false;
     }
 
-    @Override
-    protected double overlapScoreFor(ObjectMask element1, ObjectMask element2) {
+    private double overlapScoreFor(ObjectMask element1, ObjectMask element2) {
         ObjectMask merged = ObjectMaskMerger.merge(element1, element2);
         return OverlapCalculator.calculateOverlapRatio(element1, element2, merged);
-    }
-
-    @Override
-    protected void removeElement(WithConfidence<ObjectMask> elementToRemove) {
-        // TODO remove a deleted object from the rTree
     }
 }

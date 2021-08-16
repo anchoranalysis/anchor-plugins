@@ -34,7 +34,8 @@ import org.anchoranalysis.image.bean.spatial.Padding;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.image.io.object.output.rgb.DrawCroppedObjectsGenerator;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.collection.CollectionGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
@@ -86,7 +87,7 @@ class OutlineOutputHelper {
      * @throws OutputWriteFailedException if a background cannot be generated
      */
     public static CollectionGenerator<CSVRow> createGenerator(
-            ObjectCollectionRTree objects,
+            IntersectingObjects<ObjectMask> objects,
             CheckedSupplier<DisplayStack, OutputWriteFailedException> background,
             Padding padding,
             SingleLevelOutputEnabled outputRules)
