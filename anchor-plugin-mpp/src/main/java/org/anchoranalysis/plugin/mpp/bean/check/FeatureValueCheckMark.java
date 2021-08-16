@@ -44,10 +44,10 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.mpp.feature.error.CheckException;
+import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.Mark;
 
 public abstract class FeatureValueCheckMark<T extends FeatureInput> extends CheckMark {

@@ -49,14 +49,14 @@ public class MaxNonZero extends IndexedRegionBase {
         for (int z = 0; z < voxelizedMark.boundingBox().extent().z(); z++) {
             VoxelStatistics stats = sliceStatisticsForRegion(voxelizedMark, z);
 
-            Histogram h;
+            Histogram histogram;
             try {
-                h = stats.histogram();
+                histogram = stats.histogram();
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
 
-            long num = h.countThreshold(RELATION, 0);
+            long num = histogram.countThreshold(RELATION, 0);
 
             if (num > maxNonZero) {
                 maxNonZero = num;

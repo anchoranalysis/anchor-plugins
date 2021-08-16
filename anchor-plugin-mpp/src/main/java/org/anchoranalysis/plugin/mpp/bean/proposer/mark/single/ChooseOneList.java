@@ -27,17 +27,13 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 
 import java.util.List;
-import java.util.Optional;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 
 // Chooses one from a list
 public class ChooseOneList extends MarkProposerFromList {
-
-    private int lastIndex = -1;
 
     @Override
     protected boolean propose(
@@ -50,18 +46,7 @@ public class ChooseOneList extends MarkProposerFromList {
 
         MarkProposer markProposer = markProposerList.get(index);
 
-        lastIndex = index;
-
         // Calculate position
         return markProposer.propose(inputMark, context);
-    }
-
-    @Override
-    protected Optional<CreateProposalVisualization> proposalVisualization(
-            boolean detailed, List<MarkProposer> markProposerList) {
-        if (lastIndex != -1) {
-            return markProposerList.get(lastIndex).proposalVisualization(detailed);
-        }
-        return Optional.empty();
     }
 }

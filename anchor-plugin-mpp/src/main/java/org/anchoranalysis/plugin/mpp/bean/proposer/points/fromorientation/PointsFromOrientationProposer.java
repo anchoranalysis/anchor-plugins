@@ -30,17 +30,12 @@ import java.util.List;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class PointsFromOrientationProposer
         extends NullParamsBean<PointsFromOrientationProposer> {
-
-    public abstract CreateProposalVisualization proposalVisualization(boolean detailed);
-
-    public abstract void clearVisualizationState();
 
     // Optionally one can specify a maxDistance used to find a contour point, -1 disables
     public abstract List<List<Point3i>> calculatePoints(

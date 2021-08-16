@@ -29,10 +29,12 @@ package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 /**
- * Reduces the number or spatial-extent of elements by favouring higher-confidence elements over
+ * Reduces the number or spatial-extent of elements by favoring higher-confidence elements over
  * lower-confidence elements.
  *
  * @param <T> the element-type that exists in the collection (with confidence)
@@ -40,8 +42,12 @@ import org.anchoranalysis.plugin.image.segment.WithConfidence;
  */
 public abstract class ReduceElements<T> extends AnchorBean<ReduceElements<T>> {
 
+    /** A temporary label added and removed during the reduction of elements. */
+    private static final String LABEL_TEMPORARY = "temporary";
+
     /**
-     * Reduce a list of elements (each with a confidence score) to a smaller-list.
+     * Reduce a list of elements (each with a confidence score, <b>but no label</b>) to a
+     * smaller-list.
      *
      * <p>See the class javadoc for details of algorithm.
      *
@@ -52,6 +58,28 @@ public abstract class ReduceElements<T> extends AnchorBean<ReduceElements<T>> {
      * @return accepted proposals
      * @throws OperationFailedException if anything goes wrong
      */
-    public abstract List<WithConfidence<T>> reduce(List<WithConfidence<T>> elements)
-            throws OperationFailedException;
+    public List<WithConfidence<T>> reduceUnlabelled(List<WithConfidence<T>> elements)
+            throws OperationFailedException {
+        List<LabelledWithConfidence<T>> elementsWithLabel =
+                FunctionalList.mapToList(
+                        elements,
+                        withConfidence ->
+                                new LabelledWithConfidence<>(LABEL_TEMPORARY, withConfidence));
+        List<LabelledWithConfidence<T>> reduced = reduceLabelled(elementsWithLabel);
+        return FunctionalList.mapToList(reduced, LabelledWithConfidence::getWithConfidence);
+    }
+
+    /**
+     * Reduce a list of elements (each with a confidence score <b>and a label</b>) to a
+     * smaller-list.
+     *
+     * <p>It is not guaranteed that the resulting list will have fewer elements than the input list,
+     * but never more.
+     *
+     * @param elements proposed bounding-boxes with scores
+     * @return accepted proposals
+     * @throws OperationFailedException if anything goes wrong
+     */
+    public abstract List<LabelledWithConfidence<T>> reduceLabelled(
+            List<LabelledWithConfidence<T>> elements) throws OperationFailedException;
 }

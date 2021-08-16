@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -43,7 +42,6 @@ import org.anchoranalysis.mpp.mark.points.PointListFactory;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.spatial.point.Point3d;
 
 public class ObjectAsPoints extends MarkProposer {
@@ -83,11 +81,6 @@ public class ObjectAsPoints extends MarkProposer {
 
     private List<Point3d> randomlySelectPoints(ProposerContext context) {
         return context.getRandomNumberGenerator().sampleFromList(points);
-    }
-
-    @Override
-    public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
-        return Optional.empty();
     }
 
     private void createObjectsIfNecessary() throws CreateException {

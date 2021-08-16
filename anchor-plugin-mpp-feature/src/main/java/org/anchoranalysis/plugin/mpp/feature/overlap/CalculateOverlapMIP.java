@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.mpp.feature.overlap;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.mpp.overlap.MaxIntensityProjectionPair;
 
 @EqualsAndHashCode(callSuper = true)
 public class CalculateOverlapMIP extends CalculateOverlapMIPBase {

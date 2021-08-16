@@ -26,12 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 
-import java.awt.Color;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.bean.mark.CheckMark;
@@ -40,7 +37,6 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 
 public class Check extends MarkProposerUnary {
 
@@ -48,15 +44,12 @@ public class Check extends MarkProposerUnary {
     @BeanField @Getter @Setter private CheckMark checkMark = null;
     // END BEAN
 
-    private Mark lastFailedMark;
-
     @Override
     protected boolean propose(
             VoxelizedMarkMemo inputMark, ProposerContext context, MarkProposer source)
             throws ProposalAbnormalFailureException {
 
         if (!source.propose(inputMark, context)) {
-            lastFailedMark = null;
             return false;
         }
 
@@ -70,7 +63,6 @@ public class Check extends MarkProposerUnary {
         try {
             if (!checkMark.check(
                     inputMark.getMark(), context.getRegionMap(), context.getEnergyStack())) {
-                lastFailedMark = inputMark.getMark();
                 return false;
             }
         } catch (CheckException e) {
@@ -79,21 +71,9 @@ public class Check extends MarkProposerUnary {
                     "Failed to check-mark due to abnormal exception", e);
         }
 
-        lastFailedMark = null;
-
         checkMark.end();
 
         return true;
-    }
-
-    @Override
-    public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
-        if (lastFailedMark != null) {
-            return Optional.of(
-                    marks -> marks.addChangeID(lastFailedMark, new RGBColor(Color.ORANGE)));
-        } else {
-            return super.proposalVisualization(detailed);
-        }
     }
 
     @Override

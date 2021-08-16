@@ -27,19 +27,14 @@ package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import org.anchoranalysis.spatial.point.Point2d;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjectsFixture;
 import org.anchoranalysis.test.image.WriteIntoDirectory;
-import org.anchoranalysis.test.image.object.CircleObjectFixture;
 
 /**
  * Tests a reduce-routine on a number of intersecting circles.
@@ -47,8 +42,6 @@ import org.anchoranalysis.test.image.object.CircleObjectFixture;
  * @author Owen Feehan
  */
 class ReduceElementsTester {
-
-    private static final int NUMBER_CIRCLES = 7;
 
     private final Optional<WriteIntoDirectory> writeIntoDirectory;
 
@@ -67,9 +60,9 @@ class ReduceElementsTester {
             double highestConfidence)
             throws OperationFailedException {
 
-        SegmentedObjects segments = createOverlappingCircles();
+        SegmentedObjects segments = SegmentedObjectsFixture.create(true, false);
 
-        SegmentedObjects reduced = new SegmentedObjects(reduce.reduce(segments.asList()));
+        SegmentedObjects reduced = segments.reduce(reduce, true);
 
         writeIntoDirectory.ifPresent(folder -> writeRasters(folder, segments, reduced));
 
@@ -95,20 +88,6 @@ class ReduceElementsTester {
             WriteIntoDirectory write, SegmentedObjects segments, SegmentedObjects reduced) {
         write.writeObjects("before", segments.asObjects());
         write.writeObjects("after", reduced.asObjects());
-    }
-
-    private static SegmentedObjects createOverlappingCircles() {
-        ObjectCollection circles =
-                CircleObjectFixture.successiveCircles(
-                        NUMBER_CIRCLES, new Point2d(15, 15), 5, new Point2d(8, 8), 1);
-
-        // Add confidence successively from 0.2 (inclusive) to 0.8 (inclusive) in 0.1 increments
-        List<WithConfidence<ObjectMask>> list =
-                FunctionalList.mapToListWithIndex(
-                        circles.asList(),
-                        (object, index) -> new WithConfidence<>(object, (index * 0.1) + 0.2));
-
-        return new SegmentedObjects(list);
     }
 
     private static int countTotalVoxels(SegmentedObjects segments) {
