@@ -1,22 +1,41 @@
+/*-
+ * #%L
+ * anchor-plugin-opencv
+ * %%
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
-import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.anchoranalysis.plugin.opencv.segment.InferenceContext;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.dnn.Net;
 
 /**
  * Segments an image according a Mask-RCNN model with an Inception backbone trained on the COCO
@@ -48,22 +67,6 @@ public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
     // END BEAN PROPERTIES
 
     @Override
-    public SegmentedObjects segmentMat(
-            Mat mat,
-            Dimensions dimensions,
-            Extent unscaledSize,
-            ScaleFactor scaleFactor,
-            ConcurrentModelPool<Net> modelPool, Optional<List<String>> classLabels)
-            throws Throwable {
-        
-        if (!classLabels.isPresent()) {
-            throw new OperationFailedException("Class-labels must be specified, but are not.");
-        }
-
-        return new SegmentedObjects(queueInference(modelPool, mat, unscaledSize, classLabels, dimensions).stream());
-    }
-    
-    @Override
     public List<String> expectedOutputs() {
         return Arrays.asList(OUTPUT_FINAL, OUTPUT_MASKS);
     }
@@ -74,13 +77,19 @@ public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
     }
 
     @Override
-    protected List<LabelledWithConfidence<ObjectMask>> decode(
-            List<Mat> output, Extent unscaledSize, Optional<List<String>> classLabels, Dimensions inputDimensions) {
-        
-        Mat boxes = output.get(0);
-        Mat masks = output.get(1);
+    public Stream<LabelledWithConfidence<ObjectMask>> decode(
+            List<Mat> inferenceOutput, InferenceContext context) {
+
+        Mat boxes = inferenceOutput.get(0);
+        Mat masks = inferenceOutput.get(1);
 
         return MaskRCNNObjectExtracter.extractMasks(
-                boxes, masks, unscaledSize, minConfidence, minMaskValue, classLabels.get());    // NOSONAR
+                boxes,
+                masks,
+                context.getDimensions().extent(),
+                minConfidence,
+                minMaskValue,
+                context.getClassLabels())
+                .stream();
     }
 }

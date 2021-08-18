@@ -58,16 +58,9 @@ public class ScaleXY extends MarkCollectionProvider {
             throw new CreateException(e1);
         }
 
-        if (Math.abs(scaleFactor.x() - scaleFactor.y()) >= 1e-1) {
-            throw new CreateException(
-                    String.format(
-                            "ScaleFactor x=%f and y=%f should be within 1e-1 of each other",
-                            scaleFactor.x(), scaleFactor.y()));
-        }
-
         MarkCollection marksCreated = marks.create().deepCopy();
         try {
-            marksCreated.scaleXY(scaleFactor.x());
+            marksCreated.scaleXY(scaleFactor);
         } catch (OptionalOperationUnsupportedException e) {
             throw new CreateException(e);
         }

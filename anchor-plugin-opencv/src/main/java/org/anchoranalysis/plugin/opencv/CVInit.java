@@ -29,6 +29,9 @@ package org.anchoranalysis.plugin.opencv;
 import java.util.concurrent.CompletableFuture;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.opencv.global.opencv_cudaimgproc;
+import org.bytedeco.opencv.opencv_java;
 
 /**
  * Provides for initialization of the JavaCPP bridge to OpenCV.
@@ -77,7 +80,9 @@ public class CVInit {
                                 // nu.pattern.OpenCV.loadShared( seems to stall so, using
                                 //  loadLocally instead as per the suggestion in:
                                 // https://github.com/openpnp/opencv#api
-                                nu.pattern.OpenCV.loadLocally();
+                                Loader.load(opencv_java.class);
+                                Loader.load(opencv_cudaimgproc.class);
+
                                 loaded = true;
                                 LOCK_LOADED.notifyAll();
                             }

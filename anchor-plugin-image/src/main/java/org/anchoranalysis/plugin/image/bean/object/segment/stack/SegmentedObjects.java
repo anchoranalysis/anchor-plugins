@@ -84,15 +84,6 @@ public class SegmentedObjects {
     }
 
     /**
-     * Adds a single object.
-     *
-     * @param object the labelled-object to add
-     */
-    public void add(LabelledWithConfidence<ObjectMask> object) {
-        this.map.put(object.getLabel(), object.getWithConfidence());
-    }
-
-    /**
      * Adds one or more objects with an identical class-label.
      *
      * @param classLabel the label that applies to each object in {@code objects}.
@@ -188,6 +179,15 @@ public class SegmentedObjects {
      */
     public boolean isEmpty() {
         return map.isEmpty();
+    }
+
+    /**
+     * Adds a single object.
+     *
+     * @param object the labelled-object to add
+     */
+    private void add(LabelledWithConfidence<ObjectMask> object) {
+        this.map.put(object.getLabel(), object.getWithConfidence());
     }
 
     /** Creates a list of all labelled objects. */

@@ -63,9 +63,9 @@ import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculator
 import org.anchoranalysis.plugin.image.task.stack.SharedStateSelectedSlice;
 
 /**
- * Reduces a z-stack to a single-slice by taking the optima of a feature calculated for each slice
+ * Reduces a z-stack to a single-slice by taking the optima of a feature calculated for each slice.
  *
- * <p>Expects a second-level output "stack" to determine which slices are outputted or not
+ * <p>Expects a second-level output "stack" to determine which slices are outputted or not.
  *
  * @author Owen Feehan
  */
@@ -140,6 +140,11 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
     @Override
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_SLICES);
+    }
+
+    @Override
+    public boolean hasVeryQuickPerInputExecution() {
+        return false;
     }
 
     /**
@@ -248,10 +253,5 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
-    }
-
-    @Override
-    public boolean hasVeryQuickPerInputExecution() {
-        return false;
     }
 }
