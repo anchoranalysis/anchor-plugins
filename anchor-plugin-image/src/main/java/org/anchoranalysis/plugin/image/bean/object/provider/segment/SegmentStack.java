@@ -29,6 +29,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.stack.ProviderAsStack;
@@ -54,7 +55,8 @@ public class SegmentStack<T> extends ObjectCollectionProvider {
     @Override
     public ObjectCollection create() throws CreateException {
         try {
-            return segment.segment(stack.createAsStack()).asObjects();
+            return segment.segment(stack.createAsStack(), new ExecutionTimeStatistics())
+                    .asObjects();
         } catch (SegmentationFailedException e) {
             throw new CreateException(e);
         }

@@ -58,11 +58,10 @@ class DecodeTextTest extends DecodeInstanceSegmentationTestBase {
     @Override
     protected SegmentStackIntoObjectsPooled<?> createSegmenter() {
         SegmentObjectsFromTensorFlowModel segment = new SegmentObjectsFromTensorFlowModel();
-        segment.setDecode( new DecodeText() );
+        segment.setDecode(new DecodeText());
         segment.setModelBinaryPath("frozen_east_text_detection.pb");
-        segment.setScaleInput( createScaleInput() );
-        return new SuppressNonMaxima<>(
-                segment, new ConditionallyMergeOverlappingObjects(), false);
+        segment.setScaleInput(createScaleInput());
+        return new SuppressNonMaxima<>(segment, new ConditionallyMergeOverlappingObjects(), false);
     }
 
     @Override
@@ -88,10 +87,10 @@ class DecodeTextTest extends DecodeInstanceSegmentationTestBase {
         BoundingBox box2 = BoundingBoxFactory.at(394, 199, 27, 27);
         return Arrays.asList(box1, box2);
     }
-    
+
     private ScaleCalculator createScaleInput() {
         LargestMultipleWithin largestMultiple = new LargestMultipleWithin();
-        largestMultiple.setMinimumSize( new SizeXY(32, 32) );
+        largestMultiple.setMinimumSize(new SizeXY(32, 32));
         largestMultiple.setMaxScaleFactor(23);
         return largestMultiple;
     }

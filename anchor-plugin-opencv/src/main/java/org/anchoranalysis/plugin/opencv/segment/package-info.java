@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-operator-feature
+ * anchor-plugin-opencv
  * %%
  * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Arithmetic involving features. */
-package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
+/** Non-bean classes pertaining to segmentation. */
+package org.anchoranalysis.plugin.opencv.segment;

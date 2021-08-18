@@ -1,3 +1,28 @@
+/*-
+ * #%L
+ * anchor-plugin-opencv
+ * %%
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import io.vavr.Tuple2;
@@ -11,8 +36,10 @@ import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
+import org.anchoranalysis.core.concurrency.ConcurrentModel;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -24,6 +51,7 @@ import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackInt
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance.DecodeInstanceSegmentation;
+import org.anchoranalysis.plugin.opencv.segment.InferenceContext;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Dnn;
@@ -31,9 +59,8 @@ import org.opencv.dnn.Net;
 
 /**
  * Performs instance-segmentation, resulting in {@link ObjectMask}s using a TensorFlow model.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPooled<Net> {
 
@@ -43,42 +70,46 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
 
     // START BEAN PROPERTIES
     /**
-     * Relative-path to the TensorFlow model file, likely with <code>.pb</code> extension, relative to the <i>models/</i> directory in the Anchor distribution.
+     * Relative-path to the TensorFlow model file, likely with <code>.pb</code> extension, relative
+     * to the <i>models/</i> directory in the Anchor distribution.
      */
     @BeanField @Getter @Setter private String modelBinaryPath;
-    
+
     /**
-     * Relative-path to the TensorFlow model file, likely with <code>.pb.txt</code> extension, relative to the <i>models/</i> directory in the Anchor distribution.
-     * 
-     * <p>If empty, then no such file is specified. 
+     * Relative-path to the TensorFlow model file, likely with <code>.pb.txt</code> extension,
+     * relative to the <i>models/</i> directory in the Anchor distribution.
+     *
+     * <p>If empty, then no such file is specified.
      */
     @BeanField @Getter @Setter @AllowEmpty private String modelTextGraphPath = "";
-    
+
     /**
-     * Relative-path to the class-labels file, a text file where each line specifies a class label in order, relative to the <i>models/</i> directory in the Anchor distribution.
-     * 
-     * <p>If empty, then no such file is specified. 
+     * Relative-path to the class-labels file, a text file where each line specifies a class label
+     * in order, relative to the <i>models/</i> directory in the Anchor distribution.
+     *
+     * <p>If empty, then no such file is specified.
      */
     @BeanField @Getter @Setter @AllowEmpty private String classLabelsPath = "";
-    
+
     /**
      * Any scaling to be applied to the input-image before being input to the model for inference.
      */
     @BeanField @Getter @Setter private ScaleCalculator scaleInput;
-    
-    /**
-     * Decodes inference output into segmented objects.
-     */
+
+    /** Decodes inference output into segmented objects. */
     @BeanField @Getter @Setter private DecodeInstanceSegmentation decode;
     // END BEAN PROPERTIES
 
     @Override
     public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan) {
-        return new ConcurrentModelPool<>(plan, this::createNet);
+        return new ConcurrentModelPool<>(plan, this::readPrepareModel);
     }
 
     @Override
-    public SegmentedObjects segment(Stack stack, ConcurrentModelPool<Net> modelPool)
+    public SegmentedObjects segment(
+            Stack stack,
+            ConcurrentModelPool<Net> modelPool,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws SegmentationFailedException {
 
         stack = checkAndCorrectInput(stack);
@@ -92,7 +123,16 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
 
             ScaleFactor upfactor = pair._2().invert();
 
-            return decode.segmentMat(pair._1(), stack.dimensions(), stack.extent(), upfactor, modelPool, classLabels());
+            InferenceHelper helper = new InferenceHelper(decode);
+            return helper.queueInference(
+                    pair._1(),
+                    modelPool,
+                    new InferenceContext(
+                            stack.dimensions(),
+                            upfactor,
+                            classLabels(),
+                            executionTimeRecorder,
+                            getInitialization().getSharedObjects().getContext().getLogger()));
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);
@@ -101,7 +141,14 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
         }
     }
 
-    private Net createNet(boolean useGPU) {
+    /**
+     * Reads the neural-network model from the file-system, and flags whether to use a GPU or not.
+     *
+     * @param useGPU if true, use a GPU if available, otherwise always use a CPU when performing
+     *     inference with the model.
+     * @return a newly created model
+     */
+    private ConcurrentModel<Net> readPrepareModel(boolean useGPU) {
 
         Path model = resolve(modelBinaryPath);
 
@@ -115,7 +162,7 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
             net.setPreferableBackend(Dnn.DNN_BACKEND_CUDA);
             net.setPreferableTarget(Dnn.DNN_TARGET_CUDA);
         }
-        return net;
+        return new ConcurrentModel<>(net, useGPU);
     }
 
     /**
@@ -157,7 +204,7 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
 
         return stack;
     }
-    
+
     /** A list of ordered object-class labels, if a class-labels file is specified. */
     private Optional<List<String>> classLabels() throws IOException {
         if (!classLabelsPath.isEmpty()) {

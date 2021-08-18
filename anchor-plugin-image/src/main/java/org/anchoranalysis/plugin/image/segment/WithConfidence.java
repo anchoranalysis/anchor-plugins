@@ -30,10 +30,11 @@ import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
- * Wraps an element with a confidence-score and imposes an ordering (highest confidence first).
+ * Wraps an element with a confidence-score.
+ *
+ * <p>A natural ordering exists, highest confidences ahead of lower confidences.
  *
  * @param <T> element to be associated with a confidence score
  */
@@ -41,24 +42,27 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class WithConfidence<T> implements Comparable<WithConfidence<T>> {
 
-    @Getter @Setter private T element;
+    /** The underlying element with whom a confidence is associated. */
+    @Getter private T element;
 
+    /** The confidence associated with {@code element}. */
     @Getter private double confidence;
-
-    @Override
-    public int compareTo(WithConfidence<T> other) {
-        return Double.compare(other.confidence, confidence);
-    }
 
     /**
      * Maps the existing object to another object, while retaining an identical confidence score.
      *
      * @param <S> type to map to
-     * @param transform
-     * @return
+     * @param transform converts the existing element into the new type
+     * @return a newly created {@link WithConfidence} object containing the transformed element but
+     *     preserving the confidence.
      */
     public <S> WithConfidence<S> map(Function<T, S> transform) {
         return new WithConfidence<>(transform.apply(element), confidence);
+    }
+
+    @Override
+    public int compareTo(WithConfidence<T> other) {
+        return Double.compare(other.confidence, confidence);
     }
 
     @Override

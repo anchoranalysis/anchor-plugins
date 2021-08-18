@@ -42,7 +42,7 @@ import org.opencv.core.Mat;
 class EastMarkExtracter {
 
     private static final String CLASS_LABEL = "text";
-    
+
     private static final ScaleFactorInt SCALE_BY_4 = new ScaleFactorInt(4, 4);
 
     public static List<LabelledWithConfidence<Mark>> decode(
