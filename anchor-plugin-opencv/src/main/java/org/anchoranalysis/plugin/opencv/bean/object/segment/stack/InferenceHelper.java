@@ -27,10 +27,8 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.core.concurrency.ConcurrentModel;
 import org.anchoranalysis.core.concurrency.ConcurrentModelException;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
@@ -46,19 +44,6 @@ import org.opencv.dnn.Net;
 /** Helps perform inference on an image. */
 @RequiredArgsConstructor
 class InferenceHelper {
-
-    private static final String EXECUTION_TIME_MODEL_PRE_PROCESSING = "Pre-processing Inference";
-
-    /**
-     * Unique identifier for recording first-time operations on model inference, if GPU is enabled.
-     */
-    private static final String EXECUTION_TIME_MODEL_INFERENCE_WARM_UP =
-            "Model Inference (GPU with Warm Up)";
-
-    /** Unique identifier for recording subsequent operations on model inference. */
-    private static final String EXECUTION_TIME_MODEL_INFERENCE_SUBSEQUENT = "Model Inference";
-
-    private static final String EXECUTION_TIME_MODEL_POST_PROCESSING = "Post-processing Inference";
 
     /** Decodes inference output into segmented objects. */
     private final DecodeInstanceSegmentation decode;
@@ -81,91 +66,58 @@ class InferenceHelper {
         return new SegmentedObjects(objects);
     }
 
+    /** Performs inference on an {@code image} using {@code model}. */
     private Stream<LabelledWithConfidence<ObjectMask>> performInference(
             ConcurrentModel<Net> model, Mat image, InferenceContext context)
             throws ConcurrentModelException {
         try {
-            long timestamp = System.currentTimeMillis();
+            InferenceExecutionTimeRecorder recorder =
+                    new InferenceExecutionTimeRecorder(
+                            context.getExecutionTimeRecorder(), model.isGpu());
 
-            try {
-                model.getModel()
-                        .setInput(
-                                Dnn.blobFromImage(
-                                        image,
-                                        1.0,
-                                        image.size(),
-                                        decode.meanSubtractionConstants(),
-                                        false,
-                                        false));
-            } finally {
-                timestamp =
-                        recordExecutionTime(
-                                addSuffix(EXECUTION_TIME_MODEL_PRE_PROCESSING, model.isGpu()),
-                                Optional.empty(),
-                                timestamp,
-                                context);
-            }
+            configureInput(model, image, recorder);
 
-            List<Mat> output = new ArrayList<>();
-            try {
-                model.getModel().forward(output, decode.expectedOutputs());
-            } finally {
-                timestamp =
-                        recordExecutionTime(
-                                addSuffix(EXECUTION_TIME_MODEL_INFERENCE_SUBSEQUENT, model.isGpu()),
-                                OptionalFactory.create(
-                                        model.isGpu(),
-                                        () -> EXECUTION_TIME_MODEL_INFERENCE_WARM_UP),
-                                timestamp,
-                                context);
-            }
-
-            try {
-                return decode.decode(output, context);
-            } finally {
-                recordExecutionTime(
-                        EXECUTION_TIME_MODEL_POST_PROCESSING, Optional.empty(), timestamp, context);
-            }
+            return forwardPassAndDecode(model, recorder, context);
 
         } catch (Exception e) {
             throw new ConcurrentModelException(e);
         }
     }
 
-    /**
-     * Records the execution-time of how long a particular operation took.
-     *
-     * <p>The operation is presumed to end when this function is called.
-     *
-     * @param operationIdentifier the unique name of the operation to record the time against
-     * @param alternativeIdentifierIfFirst an alternative unique to use if this is the first time
-     *     the execution-time is recorded.
-     * @param previousTimestamp the timestamp describing millis from the epoch at the start of the
-     *     operation
-     * @param context the context containing a logger
-     * @return the current timestamp (millis from the epoch) used to measure the end of the
-     *     operation
-     */
-    private static long recordExecutionTime(
-            String operationIdentifier,
-            Optional<String> alternativeIdentifierIfFirst,
-            long previousTimestamp,
-            InferenceContext context) {
-        long currentTimestamp = System.currentTimeMillis();
-        long executionTime = currentTimestamp - previousTimestamp;
-        if (alternativeIdentifierIfFirst.isPresent()) {
-            context.getExecutionTimeRecorder()
-                    .recordExecutionTime(
-                            alternativeIdentifierIfFirst.get(), operationIdentifier, executionTime);
-        } else {
-            context.getExecutionTimeRecorder()
-                    .recordTimeDifferenceFrom(operationIdentifier, currentTimestamp);
+    /** Associates the image with the mode. */
+    private void configureInput(
+            ConcurrentModel<Net> model, Mat image, InferenceExecutionTimeRecorder recorder) {
+        try {
+            Mat blob =
+                    Dnn.blobFromImage(
+                            image,
+                            1.0,
+                            image.size(),
+                            decode.meanSubtractionConstants(),
+                            false,
+                            false);
+            model.getModel().setInput(blob);
+        } finally {
+            recorder.recordPre();
         }
-        return currentTimestamp;
     }
 
-    /** Adds a suffix indicating if a CPU or GPU was used. */
-    private static String addSuffix(String string, boolean gpu) {
-        return String.format("%s (%s)", string, gpu ? "GPU" : "CPU");
+    /** Performs a forward-pass through the Neural Network model, and decodes the output. */
+    private Stream<LabelledWithConfidence<ObjectMask>> forwardPassAndDecode(
+            ConcurrentModel<Net> model,
+            InferenceExecutionTimeRecorder recorder,
+            InferenceContext context) {
+        List<Mat> output = new ArrayList<>();
+        try {
+            model.getModel().forward(output, decode.expectedOutputs());
+        } finally {
+            recorder.recordInference();
+        }
+
+        try {
+            return decode.decode(output, context);
+        } finally {
+            recorder.recordPost();
+        }
     }
 }
