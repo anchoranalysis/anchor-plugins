@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.segment.bean.kernel.dependent.mark;
 
 import java.util.Optional;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.KernelReplace;
 import org.anchoranalysis.plugin.mpp.segment.optimization.MarksFromPartition;
 

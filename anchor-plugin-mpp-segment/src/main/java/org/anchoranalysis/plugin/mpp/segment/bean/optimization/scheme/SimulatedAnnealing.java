@@ -32,14 +32,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.bean.AnnealScheme;
 import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
-import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.segment.bean.optimization.OptimizationScheme;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelProposer;
 import org.anchoranalysis.mpp.segment.bean.optimization.termination.TerminationCondition;
 import org.anchoranalysis.mpp.segment.bean.optimization.termination.TerminationConditionListOr;
-import org.anchoranalysis.mpp.segment.kernel.MarkFactoryContext;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationContext;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationTerminatedEarlyException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
+import org.anchoranalysis.mpp.segment.optimization.kernel.MarkFactoryContext;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode.AssignMode;
 

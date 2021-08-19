@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 public class AsMark extends FeatureUnary<FeatureInputSingleMemo, FeatureInputMark> {
 

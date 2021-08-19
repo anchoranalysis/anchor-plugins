@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.mpp.segment.kernel.assigner;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelAssigner;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelWithIdentifier;
 import org.anchoranalysis.mpp.segment.optimization.step.OptimizationStep;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 

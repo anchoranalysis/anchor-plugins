@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.init.MarksInitialization;
-import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelProposer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class SegmentHelper {

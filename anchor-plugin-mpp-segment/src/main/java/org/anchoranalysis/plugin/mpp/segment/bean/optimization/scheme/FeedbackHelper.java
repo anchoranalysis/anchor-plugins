@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
-import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernelList;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationContext;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
+import org.anchoranalysis.mpp.segment.optimization.kernel.WeightedKernelList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FeedbackHelper {
