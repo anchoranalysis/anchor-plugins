@@ -37,7 +37,6 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.plugin.opencv.segment.InferenceContext;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
 
 /**
  * Extracts text from a RGB image by using the EAST deep neural network model
@@ -52,7 +51,7 @@ import org.opencv.core.Scalar;
  */
 public class DecodeText extends DecodeInstanceSegmentation {
 
-    private static final Scalar MEAN_SUBTRACTION_CONSTANTS = new Scalar(123.68, 116.78, 103.94);
+    private static final double[] MEAN_SUBTRACTION_CONSTANTS = new double[]{123.68, 116.78, 103.94};
 
     private static final String OUTPUT_SCORES = "feature_fusion/Conv_7/Sigmoid";
     private static final String OUTPUT_GEOMETRY = "feature_fusion/concat_3";
@@ -68,7 +67,7 @@ public class DecodeText extends DecodeInstanceSegmentation {
     }
 
     @Override
-    public Scalar meanSubtractionConstants() {
+    public double[] meanSubtractionConstants() {
         return MEAN_SUBTRACTION_CONSTANTS;
     }
 

@@ -102,7 +102,14 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
 
     @Override
     public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan) {
-        return new ConcurrentModelPool<>(plan, this::readPrepareModel);
+        // We disable all GPU inference as the current OpenCV library (from org.openpnp) does not support it
+
+        // Note an alternative library JavaCPP from bytedeco does support CUDA inference with OpenCV when one
+        // uses opencv-platform-gpu instead of opencv-platform. However, the presence of opencv-platform-gpu
+        // in the classpath creates problems (stalling in CVInit) when a CUDA-supported GPU isn't present.
+        // This means this possibility isn't particularly attractive, so for now, it is decided to exclude GPU
+        // support from our OpenCV implementations.
+        return new ConcurrentModelPool<>(plan.disableGPUs(), this::readPrepareModel);
     }
 
     @Override

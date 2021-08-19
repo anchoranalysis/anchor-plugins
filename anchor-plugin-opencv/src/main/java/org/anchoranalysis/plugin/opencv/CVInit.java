@@ -29,8 +29,6 @@ package org.anchoranalysis.plugin.opencv;
 import java.util.concurrent.CompletableFuture;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.opencv.opencv_java;
 
 /**
  * Provides for initialization of the JavaCPP bridge to OpenCV.
@@ -75,7 +73,8 @@ public class CVInit {
                 CompletableFuture.runAsync(
                         () -> {
                             synchronized (LOCK_LOADED) {
-                                Loader.load(opencv_java.class);
+                                // Avoids problems with loadShared
+                                nu.pattern.OpenCV.loadLocally();
                                 loaded = true;
                                 LOCK_LOADED.notifyAll();
                             }

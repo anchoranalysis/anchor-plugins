@@ -32,7 +32,6 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.plugin.opencv.segment.InferenceContext;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
 
 /**
  * Decodes inference output into segmented-objects.
@@ -65,5 +64,5 @@ public abstract class DecodeInstanceSegmentation extends AnchorBean<DecodeInstan
      * A constant intensity for each respective channel to be subtracted before performing
      * inference.
      */
-    public abstract Scalar meanSubtractionConstants();
+    public abstract double[] meanSubtractionConstants();
 }
