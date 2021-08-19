@@ -36,8 +36,8 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.mpp.feature.bean.energy.element.CalculateDeriveSingleMemoFromPair;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 /**
  * Calculates each feature individually, and combines them using the ratios between

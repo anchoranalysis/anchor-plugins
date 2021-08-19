@@ -28,21 +28,21 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 
 import java.util.Optional;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.kernel.proposer.KernelDescision;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelDecision;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
 public class KernelIterDescriptionSerializerPeriodicReporter
-        extends ObjectSerializerPeriodicReporter<KernelDescision> {
+        extends ObjectSerializerPeriodicReporter<KernelDecision> {
 
     public KernelIterDescriptionSerializerPeriodicReporter() {
         super("kernelIterDescription");
     }
 
     @Override
-    protected Optional<KernelDescision> generateIterableElement(
+    protected Optional<KernelDecision> generateIterableElement(
             Reporting<VoxelizedMarksWithEnergy> reporting) {
         return Optional.of(
-                new KernelDescision(
+                new KernelDecision(
                         reporting.getKernel(),
                         reporting.isAccepted(),
                         reporting.getProposal().isPresent(),

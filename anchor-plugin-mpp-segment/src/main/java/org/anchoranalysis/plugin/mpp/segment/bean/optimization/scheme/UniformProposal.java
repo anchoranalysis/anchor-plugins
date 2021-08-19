@@ -32,14 +32,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
-import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.OptimizationScheme;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelProposer;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationContext;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationTerminatedEarlyException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
 
 /**
  * Repeatedly propose new collections of marks and take the collection with optimal energy.

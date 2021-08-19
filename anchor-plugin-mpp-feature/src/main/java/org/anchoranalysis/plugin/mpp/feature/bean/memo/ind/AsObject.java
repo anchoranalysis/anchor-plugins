@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 public class AsObject extends FeatureUnary<FeatureInputSingleMemo, FeatureInputSingleObject> {
 

@@ -33,7 +33,7 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.mark.UpdateMarkSetException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.KernelDeath;
 import org.anchoranalysis.plugin.mpp.segment.optimization.MarksFromPartition;
 

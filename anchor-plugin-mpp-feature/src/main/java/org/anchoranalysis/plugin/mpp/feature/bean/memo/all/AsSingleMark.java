@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 
 public class AsSingleMark extends FeatureUnary<FeatureInputAllMemo, FeatureInputMark> {
 

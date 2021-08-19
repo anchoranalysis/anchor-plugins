@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.extract;
 
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ExtractScoreSize;
 
 public class FromVoxelizedMarksWithEnergy extends ExtractScoreSize<VoxelizedMarksWithEnergy> {
 
