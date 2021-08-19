@@ -35,7 +35,6 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.plugin.opencv.segment.InferenceContext;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
 
 /**
  * Segments an image according a Mask-RCNN model with an Inception backbone trained on the COCO
@@ -49,6 +48,8 @@ import org.opencv.core.Scalar;
  */
 public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
 
+    private static final double[] MEAN_SUBTRACTION_CONSTANTS = new double[]{0.0, 0.0, 0.0};
+    
     /** Name of model output for encoded bounding-boxes. */
     private static final String OUTPUT_FINAL = "detection_out_final";
 
@@ -72,8 +73,8 @@ public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
     }
 
     @Override
-    public Scalar meanSubtractionConstants() {
-        return new Scalar(0.0, 0.0, 0.0);
+    public double[] meanSubtractionConstants() {
+        return MEAN_SUBTRACTION_CONSTANTS;
     }
 
     @Override

@@ -38,6 +38,7 @@ import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance.DecodeInstanceSegmentation;
 import org.anchoranalysis.plugin.opencv.segment.InferenceContext;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
@@ -93,7 +94,7 @@ class InferenceHelper {
                             image,
                             1.0,
                             image.size(),
-                            decode.meanSubtractionConstants(),
+                            new Scalar(decode.meanSubtractionConstants()),
                             false,
                             false);
             model.getModel().setInput(blob);
