@@ -74,11 +74,11 @@
     </dependency>
         	
     <!-- The GPU mode expects CUDA Version 11.4. If it doesn't exist it will use the CPU instead for inference. -->
-    <dependency>
+    <!-- <dependency>
         <groupId>org.bytedeco</groupId>
         <artifactId>opencv-platform-gpu</artifactId>
         <version>4.5.3-1.5.6</version>
-    </dependency>
+    </dependency>-->
         
     <!--  END: OpenCV dependencies -->
 
