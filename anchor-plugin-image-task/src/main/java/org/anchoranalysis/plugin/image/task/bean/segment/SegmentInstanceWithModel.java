@@ -138,6 +138,12 @@ public class SegmentInstanceWithModel<T>
 
     private static final String MANIFEST_FUNCTION_INPUT_IMAGE = "input_image";
 
+    private static final String EXECUTION_TIME_OUTPUTS = "Entire Outputs";
+
+    private static final String EXECUTION_TIME_SEGMENTATION = "Entire Segmentation";
+
+    private static final String EXECUTION_TIME_FEATURES = "Calculating Features";
+
     private static final String[] FEATURE_LABEL_HEADERS =
             new String[] {"image", "object", "confidence"};
 
@@ -207,18 +213,36 @@ public class SegmentInstanceWithModel<T>
             Stack stack = inputStack(input);
 
             SegmentedObjects segments =
-                    segment.segment(stack, input.getSharedState().getModelPool());
-
-            DisplayStack background = DisplayStack.create(stack.extractUpToThreeChannels());
+                    input.getContextExperiment()
+                            .getExecutionTimeRecorder()
+                            .recordExecutionTime(
+                                    EXECUTION_TIME_SEGMENTATION,
+                                    () ->
+                                            segment.segment(
+                                                    stack,
+                                                    input.getSharedState().getModelPool(),
+                                                    input.getContextExperiment()
+                                                            .getExecutionTimeRecorder()));
 
             if (!segments.isEmpty() || !ignoreNoObjects) {
-                writeOutputsForImage(
-                        stack,
-                        segments.asObjects(),
-                        background,
-                        input.getContextJob().getOutputter());
-
-                calculateFeaturesForImage(input, stack, segments.asList());
+                input.getContextExperiment()
+                        .getExecutionTimeRecorder()
+                        .recordExecutionTime(
+                                EXECUTION_TIME_OUTPUTS,
+                                () -> {
+                                    DisplayStack background =
+                                            DisplayStack.create(stack.extractUpToThreeChannels());
+                                    writeOutputsForImage(
+                                            stack,
+                                            segments.asObjects(),
+                                            background,
+                                            input.getContextJob().getOutputter());
+                                });
+                input.getContextExperiment()
+                        .getExecutionTimeRecorder()
+                        .recordExecutionTime(
+                                EXECUTION_TIME_FEATURES,
+                                () -> calculateFeaturesForImage(input, stack, segments.asList()));
             }
 
         } catch (SegmentationFailedException
@@ -339,13 +363,22 @@ public class SegmentInstanceWithModel<T>
      */
     private Stack inputStack(InputBound<StackSequenceInput, ?> input)
             throws OperationFailedException {
-        try {
-            TimeSequence sequence =
-                    input.getInput().createStackSequenceForSeries(0).get(ProgressIgnore.get());
-            return sequence.get(0);
-        } catch (ImageIOException e) {
-            throw new OperationFailedException(e);
-        }
+        return input.getContextJob()
+                .getExecutionTimeRecorder()
+                .recordExecutionTime(
+                        "Reading input stacks",
+                        () -> {
+                            try {
+                                TimeSequence sequence =
+                                        input.getInput()
+                                                .createStackSequenceForSeries(0)
+                                                .get(ProgressIgnore.get());
+                                return sequence.get(0);
+
+                            } catch (ImageIOException e) {
+                                throw new OperationFailedException(e);
+                            }
+                        });
     }
 
     private void initializeBeans(InitializationContext context) throws InitException {

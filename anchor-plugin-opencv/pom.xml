@@ -9,11 +9,6 @@
     <version>0.0.1-SNAPSHOT</version>
 	<description>Plugins that call OpenCV.</description>
     
-    <properties>
-    <JavaCPP.version>1.5.4</JavaCPP.version>
-    <opencv-platform.version>4.4.0-${JavaCPP.version}</opencv-platform.version>
-    </properties>
-    
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
@@ -65,14 +60,14 @@
     
 
 	<!--  START: OpenCV dependencies -->
-    
-    <!-- https://github.com/openpnp/opencv -->
-    <dependency>
-	    <groupId>org.openpnp</groupId>
-	    <artifactId>opencv</artifactId>
-	    <version>4.5.1-2</version>
+
+	<dependency>
+		    <groupId>org.openpnp</groupId>
+		    <artifactId>opencv</artifactId>
+		    <version>4.5.1-2</version>
 	</dependency>
-    
+	
+        
     <!--  END: OpenCV dependencies -->
 
 

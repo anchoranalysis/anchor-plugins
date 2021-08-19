@@ -73,10 +73,7 @@ public class CVInit {
                 CompletableFuture.runAsync(
                         () -> {
                             synchronized (LOCK_LOADED) {
-                                // When run on the command-line with the EXE bootrapping then
-                                // nu.pattern.OpenCV.loadShared( seems to stall so, using
-                                //  loadLocally instead as per the suggestion in:
-                                // https://github.com/openpnp/opencv#api
+                                // Avoids problems with loadShared
                                 nu.pattern.OpenCV.loadLocally();
                                 loaded = true;
                                 LOCK_LOADED.notifyAll();
