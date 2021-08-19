@@ -40,9 +40,9 @@ import org.anchoranalysis.mpp.mark.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.segment.bean.kernel.KernelIndependent;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelIndependent;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
 
 public class KernelExchange
         extends KernelIndependent<VoxelizedMarksWithEnergy, UpdatableMarksList> {

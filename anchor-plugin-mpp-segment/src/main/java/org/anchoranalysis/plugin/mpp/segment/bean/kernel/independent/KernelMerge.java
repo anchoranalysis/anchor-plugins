@@ -49,9 +49,9 @@ import org.anchoranalysis.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.mpp.pair.RandomCollection;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelPosNeg;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
 
 public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy, UpdatableMarksList> {
 

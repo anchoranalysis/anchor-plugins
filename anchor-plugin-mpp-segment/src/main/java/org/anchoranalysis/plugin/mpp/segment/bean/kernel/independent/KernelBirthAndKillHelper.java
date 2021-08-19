@@ -42,8 +42,8 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.overlap.OverlapUtilities;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
 import org.anchoranalysis.spatial.point.Point3d;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

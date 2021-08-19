@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.all;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)

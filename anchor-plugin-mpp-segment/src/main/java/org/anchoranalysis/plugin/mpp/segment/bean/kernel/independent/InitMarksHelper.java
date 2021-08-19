@@ -34,8 +34,8 @@ import org.anchoranalysis.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class InitMarksHelper {
