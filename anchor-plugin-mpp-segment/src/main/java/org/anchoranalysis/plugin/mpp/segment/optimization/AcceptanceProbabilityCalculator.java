@@ -30,9 +30,9 @@ import java.util.Optional;
 import java.util.function.ToDoubleFunction;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.mpp.bean.AnnealScheme;
-import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
-import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.Kernel;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
 
 @RequiredArgsConstructor
 public class AcceptanceProbabilityCalculator<T> {

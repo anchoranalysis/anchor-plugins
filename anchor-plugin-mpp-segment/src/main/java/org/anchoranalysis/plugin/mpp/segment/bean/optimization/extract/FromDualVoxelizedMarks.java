@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.extract;
 
-import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ExtractScoreSize;
 import org.anchoranalysis.plugin.mpp.segment.optimization.DualVoxelizedMarks;
 
 public class FromDualVoxelizedMarks extends ExtractScoreSize<DualVoxelizedMarks> {

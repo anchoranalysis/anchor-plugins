@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.statereporter;
 
 import java.util.Optional;
-import org.anchoranalysis.mpp.segment.bean.optimization.StateReporter;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.StateReporter;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 
 /**

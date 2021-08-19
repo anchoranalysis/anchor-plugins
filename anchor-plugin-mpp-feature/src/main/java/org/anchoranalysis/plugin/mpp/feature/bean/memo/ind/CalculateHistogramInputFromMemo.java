@@ -36,7 +36,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.bean.mark.MarkRegion;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)

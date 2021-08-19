@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.mpp.bean.AnnealScheme;
-import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
-import org.anchoranalysis.mpp.segment.bean.optimization.StateReporter;
-import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.StateReporter;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelAssigner;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.kernelbridge.KernelStateBridge;
 import org.anchoranalysis.plugin.mpp.segment.kernel.assigner.KernelAssignerCalculateEnergyFromKernel;
 import org.anchoranalysis.plugin.mpp.segment.optimization.AcceptanceProbabilityCalculator;

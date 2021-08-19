@@ -37,7 +37,7 @@ import org.anchoranalysis.image.feature.bean.histogram.Mean;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.mpp.bean.mark.MarkRegion;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureSingleMemo;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 public class Intensity extends FeatureSingleMemo {
 

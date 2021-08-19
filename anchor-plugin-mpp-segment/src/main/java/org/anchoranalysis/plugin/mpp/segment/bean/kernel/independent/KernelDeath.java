@@ -34,9 +34,9 @@ import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelPosNeg;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
 
 public abstract class KernelDeath<T> extends KernelPosNeg<T, UpdatableMarksList> {
 

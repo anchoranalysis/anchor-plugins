@@ -31,9 +31,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposerOption;
-import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernel;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelPosNeg;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelProposerOption;
+import org.anchoranalysis.mpp.segment.optimization.kernel.WeightedKernel;
 
 public class KernelProposerOptionDual<T, S> extends KernelProposerOption<T, S> {
 
