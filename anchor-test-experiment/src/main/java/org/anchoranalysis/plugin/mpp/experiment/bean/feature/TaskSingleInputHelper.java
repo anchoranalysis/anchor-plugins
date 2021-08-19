@@ -48,6 +48,8 @@ import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
+import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
+import org.anchoranalysis.experiment.task.ExperimentFeedbackContext;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -130,7 +132,7 @@ public class TaskSingleInputHelper {
                     createParametersExperiment(
                             outputter.getChecked(), outputManager.getPrefixer(), logger);
 
-            ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);
+            ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleCPUProcessor(0);
             S sharedState =
                     task.beforeAnyJobIsExecuted(
                             outputter, concurrencyPlan, Arrays.asList(input), paramsExperiment);
@@ -152,6 +154,8 @@ public class TaskSingleInputHelper {
 
     private static ParametersExperiment createParametersExperiment(
             OutputterChecked outputter, PathPrefixer prefixer, StatefulMessageLogger logger) {
+        ExperimentFeedbackContext context =
+                new ExperimentFeedbackContext(logger, false, new ExecutionTimeStatistics());
         ParametersExperiment params =
                 new ParametersExperiment(
                         new ExecutionArguments(Paths.get(".")),
@@ -159,8 +163,7 @@ public class TaskSingleInputHelper {
                         Optional.empty(),
                         outputter,
                         prefixer,
-                        logger,
-                        false);
+                        context);
         params.setLoggerTaskCreator(createLogReporterBean());
         return params;
     }

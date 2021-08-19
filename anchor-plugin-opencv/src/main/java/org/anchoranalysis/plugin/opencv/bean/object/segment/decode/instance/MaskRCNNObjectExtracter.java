@@ -1,3 +1,28 @@
+/*-
+ * #%L
+ * anchor-plugin-opencv
+ * %%
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import java.nio.FloatBuffer;
@@ -59,6 +84,9 @@ class MaskRCNNObjectExtracter {
     private static final int DETECTION_MATRIX_NUMBER_ELEMENTS =
             NUMBER_BOXES_DETECTED * BOX_CODING_SIZE;
 
+    /** A fallback object-class-label used, if no class-labels are provided to index. */
+    private static final String OBJECT_CLASS_LABEL_FALLBACK = "unknown";
+
     /**
      * Extracts object-masks from the tensors returned as model output from Mask R-CNN inference.
      *
@@ -79,7 +107,7 @@ class MaskRCNNObjectExtracter {
             Extent unscaledSize,
             float minConfidence,
             float maskMinValue,
-            List<String> objectClassLabels) {
+            Optional<List<String>> objectClassLabels) {
 
         // Reshape to be two dimensional arrays
         boxes = boxes.reshape(1, NUMBER_BOXES_DETECTED);
@@ -112,7 +140,7 @@ class MaskRCNNObjectExtracter {
             Extent unscaledSize,
             float minConfidence,
             float maskMinValue,
-            List<String> objectClassLabels) {
+            Optional<List<String>> objectClassLabels) {
         BoundingBox box = extractBox(coded, unscaledSize);
         double confidence = coded[2];
 
@@ -125,11 +153,22 @@ class MaskRCNNObjectExtracter {
                             masks, index, box.extent(), objectClassIdentifier, maskMinValue);
 
             ObjectMask object = new ObjectMask(box, mask);
-            String label = objectClassLabels.get(objectClassIdentifier);
+            String label = objectClassLabelFor(objectClassLabels, objectClassIdentifier);
             return Optional.of(new LabelledWithConfidence<ObjectMask>(object, confidence, label));
         } else {
             return Optional.empty();
         }
+    }
+
+    /**
+     * Determines a label to apply to an object, if labels exist, otherwise a fallback is used.
+     *
+     * @param labels a list of labels
+     * @param index the index to retrieve from the list, to find the corresponding label.
+     * @return the corresponding label from {@code labels} if it exists, otehrwise a fallback label.
+     */
+    private static String objectClassLabelFor(Optional<List<String>> labels, int index) {
+        return labels.map(list -> list.get(index)).orElse(OBJECT_CLASS_LABEL_FALLBACK);
     }
 
     /**

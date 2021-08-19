@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -46,14 +48,19 @@ public abstract class SegmentStackIntoObjectsPooled<T>
     /**
      * Segments individually using a pool of size 1 just for one stack
      *
-     * <p>See {@link #segment(Stack, ConcurrentModelPool)} for more details.
+     * <p>See {@link #segment(Stack, ConcurrentModelPool, ExecutionTimeRecorder)} for more details.
      *
      * @param stack the stack to segment
+     * @param executionTimeStatistics for measuring execution-times of operations.
      * @return a collection of objects with corresponding confidence scores.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
      */
-    public SegmentedObjects segment(Stack stack) throws SegmentationFailedException {
-        return segment(stack, createModelPool(ConcurrencyPlan.singleProcessor(0)));
+    public SegmentedObjects segment(Stack stack, ExecutionTimeStatistics executionTimeStatistics)
+            throws SegmentationFailedException {
+        return segment(
+                stack,
+                createModelPool(ConcurrencyPlan.singleCPUProcessor(0)),
+                executionTimeStatistics);
     }
 
     /**
@@ -70,9 +77,13 @@ public abstract class SegmentStackIntoObjectsPooled<T>
      * <p>Any created objects will always exist inside the stack's {@link Extent}.
      *
      * @param stack the stack to segment
+     * @param executionTimeRecorder TODO
      * @return a collection of objects with corresponding confidence scores.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
      */
-    public abstract SegmentedObjects segment(Stack stack, ConcurrentModelPool<T> modelPool)
+    public abstract SegmentedObjects segment(
+            Stack stack,
+            ConcurrentModelPool<T> modelPool,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws SegmentationFailedException;
 }

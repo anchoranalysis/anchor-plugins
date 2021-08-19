@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -78,9 +79,12 @@ public class SuppressNonMaxima<T> extends SegmentStackIntoObjectsPooled<T> {
     }
 
     @Override
-    public SegmentedObjects segment(Stack stack, ConcurrentModelPool<T> modelPool)
+    public SegmentedObjects segment(
+            Stack stack,
+            ConcurrentModelPool<T> modelPool,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws SegmentationFailedException {
-        SegmentedObjects objects = segment.segment(stack, modelPool);
+        SegmentedObjects objects = segment.segment(stack, modelPool, executionTimeRecorder);
 
         try {
             return objects.reduce(reduce, separateEachLabel);
