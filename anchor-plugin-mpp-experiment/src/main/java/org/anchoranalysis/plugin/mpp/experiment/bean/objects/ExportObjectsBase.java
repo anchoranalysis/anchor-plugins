@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -49,9 +49,9 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
     // END BEAN PROPERTIES
 
     protected ObjectCollection inputs(ImageInitialization initialization, Logger logger)
-            throws CreateException, InitException {
+            throws InitException, ProvisionFailedException {
         ObjectCollectionProvider objectsDuplicated = objects.duplicateBean();
         objectsDuplicated.initRecursive(initialization, logger);
-        return objectsDuplicated.create();
+        return objectsDuplicated.get();
     }
 }

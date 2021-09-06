@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.orientation.Orientation2D;
 import org.anchoranalysis.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -46,7 +45,7 @@ public class CreateEllipse extends SingleMarkProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<Mark> create() throws CreateException {
+    public Optional<Mark> get() {
         Ellipse mark = new Ellipse();
         mark.setMarks(new Point2d(5, 5), new Orientation2D(0));
         mark.setId(id);

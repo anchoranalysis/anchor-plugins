@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.imagej.bean.object.provider;
 
 import java.util.List;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
@@ -50,11 +51,11 @@ import org.anchoranalysis.spatial.point.PointConverter;
 public class DrawLineAlongConvexHull extends ObjectCollectionProviderUnary {
 
     @Override
-    protected ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    protected ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
         return objects.stream().map(this::transform);
     }
 
-    private ObjectMask transform(ObjectMask object) throws CreateException {
+    private ObjectMask transform(ObjectMask object) throws ProvisionFailedException {
         try {
             List<Point2i> pointsConvexHull =
                     ConvexHullUtilities.convexHull2D(ConvexHullUtilities.pointsOnOutline(object));
@@ -64,8 +65,8 @@ public class DrawLineAlongConvexHull extends ObjectCollectionProviderUnary {
             }
 
             return WalkShortestPath.walkLine(PointConverter.convert2iTo3d(pointsConvexHull));
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
+        } catch (OperationFailedException | CreateException e) {
+            throw new ProvisionFailedException(e);
         }
     }
 }

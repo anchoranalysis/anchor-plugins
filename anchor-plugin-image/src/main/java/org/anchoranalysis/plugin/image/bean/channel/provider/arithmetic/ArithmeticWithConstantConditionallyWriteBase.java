@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
@@ -36,7 +36,7 @@ public abstract class ArithmeticWithConstantConditionallyWriteBase extends Unary
 
     @Override
     public Channel createFromChannelWithConstant(Channel channel, double value)
-            throws CreateException {
+            throws ProvisionFailedException {
         processVoxels(channel.voxels().any(), value);
         return channel;
     }

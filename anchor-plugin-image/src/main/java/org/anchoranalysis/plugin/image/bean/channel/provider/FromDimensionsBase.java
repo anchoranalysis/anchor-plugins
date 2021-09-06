@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -43,9 +43,9 @@ public abstract class FromDimensionsBase extends ChannelProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel create() throws CreateException {
-        return createFromDimensions(dimensions.create());
+    public Channel get() throws ProvisionFailedException {
+        return createFromDimensions(dimensions.get());
     }
 
-    protected abstract Channel createFromDimensions(Dimensions dimensions) throws CreateException;
+    protected abstract Channel createFromDimensions(Dimensions dimensions) throws ProvisionFailedException;
 }

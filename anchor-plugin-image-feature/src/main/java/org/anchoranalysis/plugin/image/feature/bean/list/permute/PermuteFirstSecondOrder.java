@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputParams;
@@ -63,7 +63,7 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
     }
 
     @Override
-    protected PermuteFeature<Integer, T> createDelegate(Feature<T> feature) throws CreateException {
+    protected PermuteFeature<Integer, T> createDelegate(Feature<T> feature) throws ProvisionFailedException {
 
         PermuteFeature<Integer, T> delegate = new PermuteFeature<>();
 

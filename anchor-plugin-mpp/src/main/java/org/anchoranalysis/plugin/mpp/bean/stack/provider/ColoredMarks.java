@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.stack.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -56,8 +57,12 @@ public class ColoredMarks extends ColoredBaseWithGenerator {
             throws CreateException {
         RegionMembershipWithFlags regionMembership =
                 RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID);
-        return marks.create()
-                .deriveObjects(backgroundDimensions, regionMembership)
-                .withoutProperties();
+        try {
+            return marks.get()
+                    .deriveObjects(backgroundDimensions, regionMembership)
+                    .withoutProperties();
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
+        }
     }
 }

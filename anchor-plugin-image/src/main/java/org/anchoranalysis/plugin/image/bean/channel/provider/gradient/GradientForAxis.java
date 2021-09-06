@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.gradient;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.spatial.axis.AxisType;
 import org.anchoranalysis.spatial.axis.AxisTypeConverter;
 import org.anchoranalysis.spatial.axis.AxisTypeException;
@@ -47,7 +47,7 @@ public class GradientForAxis extends GradientBaseAddSum {
     // END BEAN
 
     @Override
-    protected boolean[] createAxisArray() throws CreateException {
+    protected boolean[] createAxisArray() throws ProvisionFailedException {
         switch (axisType()) {
             case X:
                 return new boolean[] {true, false, false};
@@ -56,15 +56,15 @@ public class GradientForAxis extends GradientBaseAddSum {
             case Z:
                 return new boolean[] {false, false, true};
             default:
-                throw new CreateException("Axis must be: x or y or z");
+                throw new ProvisionFailedException("Axis must be: x or y or z");
         }
     }
 
-    private AxisType axisType() throws CreateException {
+    private AxisType axisType() throws ProvisionFailedException {
         try {
             return AxisTypeConverter.createFromString(axis);
         } catch (AxisTypeException e) {
-            throw new CreateException(e.friendlyMessageHierarchy());
+            throw new ProvisionFailedException(e.friendlyMessageHierarchy());
         }
     }
 }

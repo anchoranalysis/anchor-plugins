@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
@@ -59,11 +59,11 @@ public class BinarySegmentByObject extends UnaryWithChannelBase {
 
     @Override
     protected ObjectCollection createFromObjects(
-            ObjectCollection objectsSource, Channel channelSource) throws CreateException {
+            ObjectCollection objectsSource, Channel channelSource) throws ProvisionFailedException {
         try {
             return objectsSource.stream().map(object -> sgmnObject(object, channelSource));
         } catch (SegmentationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

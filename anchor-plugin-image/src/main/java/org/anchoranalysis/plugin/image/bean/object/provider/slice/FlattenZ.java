@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.slice;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -42,7 +41,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class FlattenZ extends ObjectCollectionProviderUnary {
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) {
         return objects.stream().map(ObjectMask::flattenZ);
     }
 }

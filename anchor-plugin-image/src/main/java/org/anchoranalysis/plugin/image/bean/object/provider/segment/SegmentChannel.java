@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -58,7 +59,7 @@ public class SegmentChannel extends WithChannelBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected ObjectCollection createFromChannel(Channel channelSource) throws CreateException {
+    protected ObjectCollection createFromChannel(Channel channelSource) throws ProvisionFailedException {
 
         Optional<ObjectMask> maskAsObject = createObjectMask();
 
@@ -68,16 +69,16 @@ public class SegmentChannel extends WithChannelBase {
                     maskAsObject,
                     createSeeds(channelSource.dimensions(), maskAsObject));
         } catch (SegmentationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 
-    private Optional<ObjectMask> createObjectMask() throws CreateException {
+    private Optional<ObjectMask> createObjectMask() throws ProvisionFailedException {
         return OptionalFactory.create(mask).map(Mask::binaryVoxels).map(ObjectMask::new);
     }
 
     private Optional<SeedCollection> createSeeds(
-            Dimensions dimensions, Optional<ObjectMask> maskAsObject) throws CreateException {
+            Dimensions dimensions, Optional<ObjectMask> maskAsObject) throws ProvisionFailedException {
         return OptionalUtilities.map(
                 OptionalFactory.create(objectsSeeds),
                 objects -> createSeeds(objects, maskAsObject, dimensions));
@@ -85,12 +86,16 @@ public class SegmentChannel extends WithChannelBase {
 
     private static SeedCollection createSeeds(
             ObjectCollection seeds, Optional<ObjectMask> maskAsObject, Dimensions dim)
-            throws CreateException {
-        return OptionalUtilities.map(
-                        maskAsObject,
-                        object ->
-                                SeedsFactory.createSeedsWithMask(
-                                        seeds, object, new Point3i(0, 0, 0), dim))
-                .orElseGet(() -> SeedsFactory.createSeedsWithoutMask(seeds));
+            throws ProvisionFailedException {
+        try {
+            return OptionalUtilities.map(
+                            maskAsObject,
+                            object ->
+                                    SeedsFactory.createSeedsWithMask(
+                                            seeds, object, new Point3i(0, 0, 0), dim))
+                    .orElseGet(() -> SeedsFactory.createSeedsWithoutMask(seeds));
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 }

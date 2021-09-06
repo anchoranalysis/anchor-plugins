@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
@@ -62,12 +62,12 @@ public class ReferenceOrElse extends ObjectCollectionProvider {
     }
 
     @Override
-    public ObjectCollection create() throws CreateException {
+    public ObjectCollection get() throws ProvisionFailedException {
 
         if (objects != null) {
             return objects;
         } else {
-            return objectsElse.create();
+            return objectsElse.get();
         }
     }
 }

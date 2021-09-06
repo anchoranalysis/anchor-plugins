@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.bound;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.mpp.bean.provider.MarkBoundsProvider;
@@ -41,11 +41,11 @@ public class MarkBoundsReference extends MarkBoundsProvider {
     // End BEAN
 
     @Override
-    public MarkBounds create() throws CreateException {
+    public MarkBounds get() throws ProvisionFailedException {
         try {
             return getInitialization().markBounds().getException(id);
         } catch (NamedProviderGetException e) {
-            throw new CreateException(e.summarize());
+            throw new ProvisionFailedException(e.summarize());
         }
     }
 }

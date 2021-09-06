@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.connected;
 
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -40,11 +40,11 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class RejectIfNotConnected extends ObjectCollectionProviderUnary {
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
 
         for (ObjectMask objectMask : objects) {
             if (!objectMask.checkIfConnected()) {
-                throw new CreateException("At least one object is not connected");
+                throw new ProvisionFailedException("At least one object is not connected");
             }
         }
 

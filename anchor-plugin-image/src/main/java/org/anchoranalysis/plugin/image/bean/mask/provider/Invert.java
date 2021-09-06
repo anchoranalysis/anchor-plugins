@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.IterateVoxelsMask;
@@ -67,7 +67,7 @@ public class Invert extends MaskProviderUnary {
     // END BEAN FIELDS
 
     @Override
-    public Mask createFromMask(Mask maskToInvert) throws CreateException {
+    public Mask createFromMask(Mask maskToInvert) throws ProvisionFailedException {
 
         Optional<Mask> restricted = OptionalFactory.create(restrictTo);
 

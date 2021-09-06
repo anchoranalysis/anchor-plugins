@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
@@ -62,7 +62,7 @@ public class ObjectWithMaximumFeatureFromEachMatchedCollection
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
 
         FeatureCalculatorSingle<FeatureInputSingleObject> session = createSession();
 
@@ -73,7 +73,7 @@ public class ObjectWithMaximumFeatureFromEachMatchedCollection
                     listMatches, owm -> findMax(session, owm.getMatches()));
 
         } catch (OperationFailedException | FeatureCalculationException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
@@ -49,8 +50,12 @@ public class Dilate extends ObjectCollectionProviderMorphological {
 
     @Override
     protected ObjectMask applyMorphologicalOperation(ObjectMask object, Optional<Extent> extent)
-            throws CreateException {
-        return MorphologicalDilation.createDilatedObject(
-                object, extent, isDo3D(), getIterations(), bigNeighborhood);
+            throws ProvisionFailedException {
+        try {
+            return MorphologicalDilation.createDilatedObject(
+                    object, extent, isDo3D(), getIterations(), bigNeighborhood);
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 }

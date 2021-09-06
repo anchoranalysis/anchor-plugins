@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -46,12 +46,12 @@ public class AssignFromDictionary extends ChannelProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
 
-        Dictionary createdDictionary = dictionary.create();
+        Dictionary createdDictionary = dictionary.get();
 
         if (!createdDictionary.containsKey(key)) {
-            throw new CreateException(String.format("Cannot find key '%s'", key));
+            throw new ProvisionFailedException(String.format("Cannot find key '%s'", key));
         }
 
         int valueToAssign = (int) createdDictionary.getAsDouble(key);

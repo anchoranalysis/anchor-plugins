@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.combine;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -41,8 +41,8 @@ public abstract class CombineBase extends MaskProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromMask(Mask mask) throws CreateException {
-        return createFromTwoMasks(mask, receive.create());
+    public Mask createFromMask(Mask mask) throws ProvisionFailedException {
+        return createFromTwoMasks(mask, receive.get());
     }
 
     /**
@@ -51,8 +51,8 @@ public abstract class CombineBase extends MaskProviderUnary {
      * @param maskToModify first-mask (which is also the mask modified with the result)
      * @param maskOther second-mask (which is not modified)
      * @return either {@code maskToModify} or {@code maskOther} depending on implementation
-     * @throws CreateException
+     * @throws ProvisionFailedException
      */
     protected abstract Mask createFromTwoMasks(Mask maskToModify, Mask maskOther)
-            throws CreateException;
+            throws ProvisionFailedException;
 }

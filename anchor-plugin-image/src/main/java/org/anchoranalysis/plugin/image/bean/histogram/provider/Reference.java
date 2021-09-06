@@ -60,7 +60,7 @@ public class Reference extends HistogramProvider {
     }
 
     @Override
-    public Histogram create() {
+    public Histogram get() {
         return histogram;
     }
 }

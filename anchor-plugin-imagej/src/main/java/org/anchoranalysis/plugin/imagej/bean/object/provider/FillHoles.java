@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
@@ -62,7 +62,7 @@ public class FillHoles extends ObjectCollectionProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
 
         Optional<Mask> maskChannel = OptionalFactory.create(mask);
 
@@ -74,7 +74,7 @@ public class FillHoles extends ObjectCollectionProviderUnary {
             try {
                 ApplyImageJMorphologicalOperation.fill(voxelsDuplicated);
             } catch (OperationFailedException e) {
-                throw new CreateException(e);
+                throw new ProvisionFailedException(e);
             }
 
             if (maskChannel.isPresent()) {

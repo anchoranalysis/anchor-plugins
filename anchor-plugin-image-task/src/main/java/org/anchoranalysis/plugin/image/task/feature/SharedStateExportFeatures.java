@@ -32,6 +32,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.Getter;
 import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -118,11 +119,15 @@ public class SharedStateExportFeatures<S> {
                     ResultsWriterOutputNames outputNames,
                     InputOutputContext context)
                     throws CreateException {
-        return createForFeatures(
-                STORE_FACTORY.createNamedFeatureList(features),
-                metadataHeaders,
-                outputNames,
-                context);
+        try {
+            return createForFeatures(
+                    STORE_FACTORY.createNamedFeatureList(features),
+                    metadataHeaders,
+                    outputNames,
+                    context);
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
+        }
     }
 
     /**

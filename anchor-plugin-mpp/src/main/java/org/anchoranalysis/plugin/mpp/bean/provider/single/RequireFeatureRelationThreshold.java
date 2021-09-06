@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.mpp.bean.provider.single;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.bean.Feature;
@@ -65,31 +65,31 @@ public class RequireFeatureRelationThreshold extends SingleMarkProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<Mark> create() throws CreateException {
+    public Optional<Mark> get() throws ProvisionFailedException {
 
         return OptionalUtilities.flatMap(
-                markProvider.create(),
+                markProvider.get(),
                 mark -> OptionalUtilities.createFromFlag(isFeatureAccepted(mark), mark));
     }
 
-    private boolean isFeatureAccepted(Mark mark) throws CreateException {
-        Feature<FeatureInputMark> featureCreated = feature.create();
+    private boolean isFeatureAccepted(Mark mark) throws ProvisionFailedException {
+        Feature<FeatureInputMark> featureCreated = feature.get();
 
         double featureVal = calculateInput(featureCreated, mark);
 
         return relation.create().isRelationToValueTrue(featureVal, threshold);
     }
 
-    private Optional<Dimensions> dimensions() throws CreateException {
+    private Optional<Dimensions> dimensions() throws ProvisionFailedException {
         if (dimensions != null) {
-            return Optional.of(dimensions.create());
+            return Optional.of(dimensions.get());
         } else {
             return Optional.empty();
         }
     }
 
     private double calculateInput(Feature<FeatureInputMark> feature, Mark mark)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         FeatureInputMark input = new FeatureInputMark(mark, dimensions());
 
@@ -103,7 +103,7 @@ public class RequireFeatureRelationThreshold extends SingleMarkProvider {
             return session.calculate(input);
 
         } catch (FeatureCalculationException | InitException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

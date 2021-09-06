@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -57,7 +57,7 @@ public class SegmentChannelByObject extends UnaryWithChannelBase {
 
     @Override
     public ObjectCollection createFromObjects(
-            ObjectCollection objectsSource, Channel channelToSegment) throws CreateException {
+            ObjectCollection objectsSource, Channel channelToSegment) throws ProvisionFailedException {
         try {
             return objectsSource.stream()
                     .flatMap(
@@ -65,7 +65,7 @@ public class SegmentChannelByObject extends UnaryWithChannelBase {
                             object -> segmentObject(object, channelToSegment));
 
         } catch (SegmentationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

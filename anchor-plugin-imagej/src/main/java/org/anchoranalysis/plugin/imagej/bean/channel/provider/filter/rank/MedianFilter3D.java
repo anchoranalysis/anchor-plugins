@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.imagej.bean.channel.provider.filter.rank;
 
 import ij.ImagePlus;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
@@ -37,7 +37,7 @@ import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 public class MedianFilter3D extends ChannelProviderUnary {
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
         try {
             ImagePlus image = ConvertToImagePlus.from(channel);
 
@@ -45,7 +45,7 @@ public class MedianFilter3D extends ChannelProviderUnary {
 
             return ConvertFromImagePlus.toChannel(filtered, channel.resolution());
         } catch (ImageJConversionException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

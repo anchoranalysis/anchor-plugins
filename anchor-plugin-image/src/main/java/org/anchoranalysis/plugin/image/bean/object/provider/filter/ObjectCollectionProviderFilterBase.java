@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -51,7 +51,7 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
         return createFromObjects(objects, OptionalFactory.create(objectsRejected), createDims());
     }
 
@@ -59,11 +59,11 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
             ObjectCollection objects,
             Optional<Dimensions> dim,
             Optional<ObjectCollection> objectsRejected)
-            throws CreateException {
+            throws ProvisionFailedException {
         try {
             return filter.filter(objects, dim, objectsRejected);
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 
@@ -71,5 +71,5 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
             ObjectCollection objects,
             Optional<ObjectCollection> objectsRejected,
             Optional<Dimensions> dim)
-            throws CreateException;
+            throws ProvisionFailedException;
 }

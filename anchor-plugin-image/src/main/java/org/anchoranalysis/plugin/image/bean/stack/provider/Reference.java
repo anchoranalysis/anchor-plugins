@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -64,25 +64,25 @@ public class Reference extends StackProvider {
     }
 
     @Override
-    public Stack create() throws CreateException {
+    public Stack get() throws ProvisionFailedException {
         if (stack == null) {
             this.stack =
                     findMatchingStack()
                             .orElseThrow(
                                     () ->
-                                            new CreateException(
+                                            new ProvisionFailedException(
                                                     "Cannot find a stack with id: " + id));
         }
         return stack;
     }
 
-    private Optional<Stack> findMatchingStack() throws CreateException {
+    private Optional<Stack> findMatchingStack() throws ProvisionFailedException {
         try {
             return OptionalUtilities.orElseGetFlat(
                     OptionalUtilities.orElseGetFlat(fromStacks(), this::fromChannels),
                     this::fromMasks);
         } catch (NamedProviderGetException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

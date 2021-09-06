@@ -34,6 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
@@ -229,7 +230,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
 
                 processRows(mapGroup.get(groupName), groupName, writer, groupContext);
             }
-        } catch (CreateException | InitException e) {
+        } catch (InitException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -256,8 +257,8 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
         StackProvider providerCopy = stack.duplicateBean();
         try {
             providerCopy.initRecursive(params, logger);
-            return DisplayStack.create(providerCopy.create());
-        } catch (CreateException | InitException e) {
+            return DisplayStack.create(providerCopy.get());
+        } catch (CreateException | InitException | ProvisionFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }

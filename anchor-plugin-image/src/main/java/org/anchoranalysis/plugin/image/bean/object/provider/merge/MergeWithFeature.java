@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.graph.TypedEdge;
@@ -68,7 +69,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objectsSource)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         getLogger()
                 .messageLogger()
@@ -82,7 +83,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
             return merged;
 
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

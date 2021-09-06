@@ -30,10 +30,10 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.unitvalue.distance.DistanceVoxels;
@@ -123,12 +123,12 @@ public class XYOrientationExtendToZ extends PointsProposer {
                                     channelFilled(),
                                     maxZDistance(randomNumberGenerator, dimensions.resolution()),
                                     skipZDistance(dimensions.resolution()),
-                                    mask.create(),
+                                    mask.get(),
                                     dimensions)
                             .generatePoints(pointsXY);
             return Optional.of(lastPointsAll);
 
-        } catch (CreateException | OperationFailedException | TraverseOutlineException e1) {
+        } catch (ProvisionFailedException | OperationFailedException | TraverseOutlineException e1) {
             errorNode.add(e1);
             return Optional.empty();
         }
@@ -150,7 +150,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
                                 resolution.map(Resolution::unitConvert), AxisType.Z));
     }
 
-    private Optional<Mask> channelFilled() throws CreateException {
-        return maskFilled != null ? Optional.of(maskFilled.create()) : Optional.empty();
+    private Optional<Mask> channelFilled() throws ProvisionFailedException {
+        return maskFilled != null ? Optional.of(maskFilled.get()) : Optional.empty();
     }
 }

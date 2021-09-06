@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -56,14 +56,14 @@ public class Reference extends ChannelProvider {
     }
 
     @Override
-    public Channel create() throws CreateException {
+    public Channel get() throws ProvisionFailedException {
         if (channel == null) {
             channel = getMaybeDuplicate();
         }
         return channel;
     }
 
-    private Channel getMaybeDuplicate() throws CreateException {
+    private Channel getMaybeDuplicate() throws ProvisionFailedException {
         try {
             Channel existing = getInitialization().channels().getException(id);
 
@@ -73,7 +73,7 @@ public class Reference extends ChannelProvider {
                 return existing;
             }
         } catch (NamedProviderGetException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

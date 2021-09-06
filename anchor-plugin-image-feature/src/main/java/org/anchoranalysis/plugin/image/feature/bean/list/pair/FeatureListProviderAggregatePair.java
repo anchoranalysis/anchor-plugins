@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -70,8 +70,8 @@ public abstract class FeatureListProviderAggregatePair
     // END BEAN PROPERTIES
 
     @Override
-    public FeatureList<FeatureInputPairObjects> create() throws CreateException {
-        return item.create().map(this::createFeatureFor);
+    public FeatureList<FeatureInputPairObjects> get() throws ProvisionFailedException {
+        return item.get().map(this::createFeatureFor);
     }
 
     private Feature<FeatureInputPairObjects> createFeatureFor(

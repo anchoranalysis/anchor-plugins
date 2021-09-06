@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.filter;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
@@ -44,13 +44,13 @@ public class Match extends ObjectCollectionProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
         try {
             return ObjectCollectionFactory.flatMapFrom(
                     matcher.findMatch(objects), MatchedObject::getMatches);
 
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

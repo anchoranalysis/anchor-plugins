@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -92,7 +92,7 @@ public abstract class MergeBase extends WithContainerBase {
             } else {
                 return mergeAll(mergeFunc, objectsToMerge);
             }
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -100,7 +100,7 @@ public abstract class MergeBase extends WithContainerBase {
     private Optional<Resolution> resolutionOptional() throws OperationFailedException {
         try {
             return OptionalFactory.create(dimensions).flatMap(Dimensions::resolution);
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -52,7 +53,7 @@ public class Dilate extends MorphologicalOperatorBase {
 
     // Assumes imgChannelOut has the same ImgChannelRegions
     @Override
-    protected void applyMorphologicalOperation(Mask source, boolean do3D) throws CreateException {
+    protected void applyMorphologicalOperation(Mask source, boolean do3D) {
 
         try {
             BinaryVoxels<UnsignedByteBuffer> out =
@@ -66,7 +67,7 @@ public class Dilate extends MorphologicalOperatorBase {
                                     precondition()));
 
             source.replaceBy(out);
-        } catch (IncorrectImageSizeException e) {
+        } catch (IncorrectImageSizeException | CreateException | ProvisionFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
     }

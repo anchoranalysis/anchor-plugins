@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -133,7 +133,7 @@ public class Median extends ChannelProviderUnary {
     }
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
 
         Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 

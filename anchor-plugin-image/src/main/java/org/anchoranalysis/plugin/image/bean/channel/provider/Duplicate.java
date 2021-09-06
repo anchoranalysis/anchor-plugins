@@ -26,14 +26,13 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 
 public class Duplicate extends ChannelProviderUnary {
 
     @Override
-    protected Channel createFromChannel(Channel channel) throws CreateException {
+    protected Channel createFromChannel(Channel channel) {
         return channel.duplicate();
     }
 }

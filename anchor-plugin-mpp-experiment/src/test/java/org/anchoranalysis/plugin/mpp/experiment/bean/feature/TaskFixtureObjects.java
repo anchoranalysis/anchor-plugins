@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
@@ -70,7 +71,11 @@ class TaskFixtureObjects
             EnergyStackWithoutParams energyStack, FeaturesLoader featureLoader)
             throws CreateException {
         FromObjects<FeatureInputSingleObject> source = new FromObjects<>();
-        source.setDefine(DefineFixture.create(energyStack, Optional.of(featureLoader.shared())));
+        try {
+            source.setDefine(DefineFixture.create(energyStack, Optional.of(featureLoader.shared())));
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
+        }
         source.setCombine((CombineObjectsForFeatures<FeatureInputSingleObject>) flexiFeatureTable);
         source.setObjects(createObjectProviders(MultiInputFixture.OBJECTS_NAME));
         return source;

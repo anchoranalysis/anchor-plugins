@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.predicate;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.mask.Mask;
 
 /**
@@ -38,7 +37,7 @@ import org.anchoranalysis.image.core.mask.Mask;
 public class IfNotEmpty extends IfPredicateBase {
 
     @Override
-    protected boolean predicate(Mask mask) throws CreateException {
+    protected boolean predicate(Mask mask) {
         return mask.voxelsOn().anyExists();
     }
 }

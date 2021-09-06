@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.object.provider.slice;
 
 import java.util.List;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.object.MatchedObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -52,7 +53,7 @@ public class ExtendInZWithinContainer extends WithContainerBase {
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objectsSource)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         List<MatchedObject> matchList =
                 MatcherIntersectionHelper.matchIntersectingObjects(
@@ -63,10 +64,14 @@ public class ExtendInZWithinContainer extends WithContainerBase {
         // For each obj we extend it into its container
         ObjectCollection out = new ObjectCollection();
 
-        for (MatchedObject owm : matchList) {
-            for (ObjectMask other : owm.getMatches()) {
+        for (MatchedObject matched : matchList) {
+            for (ObjectMask other : matched.getMatches()) {
 
-                out.add(createExtendedObject(other, owm.getSource()));
+                try {
+                    out.add(createExtendedObject(other, matched.getSource()));
+                } catch (CreateException e) {
+                    throw new ProvisionFailedException(e);
+                }
             }
         }
 
