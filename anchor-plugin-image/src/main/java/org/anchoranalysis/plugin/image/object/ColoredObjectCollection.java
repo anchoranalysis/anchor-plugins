@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.image.object;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -107,7 +107,7 @@ public class ColoredObjectCollection {
                                 objects.addAll(objectsCreated);
                                 colors.addMultiple(color, objectsCreated.size());
                             });
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

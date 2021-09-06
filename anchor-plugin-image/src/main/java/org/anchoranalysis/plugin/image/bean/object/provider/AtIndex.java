@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
@@ -47,10 +47,10 @@ public class AtIndex extends ObjectCollectionProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
 
         if (index >= objects.size()) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     String.format(
                             "Index %d is out of bounds. Object-Collection has %d items",
                             index, objects.size()));

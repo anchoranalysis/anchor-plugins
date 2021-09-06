@@ -30,7 +30,6 @@ import com.github.quickhull3d.Point3d;
 import com.github.quickhull3d.QuickHull3D;
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -43,7 +42,7 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 public class ConvexHull3D extends ConvexHullBase {
 
     @Override
-    protected Mask createFromMask(Mask maskIn, Mask outline) throws CreateException {
+    protected Mask createFromMask(Mask maskIn, Mask outline) {
         MessageLogger logger = getLogger().messageLogger();
         List<Point3d> extPoints = pointsFromMask(outline);
 

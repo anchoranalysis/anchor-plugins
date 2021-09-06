@@ -30,7 +30,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -49,9 +49,8 @@ public class Intersection extends ObjectMatcher {
 
         try {
             return MatcherIntersectionHelper.matchIntersectingObjects(
-                    sourceObjects, objects.create());
-
-        } catch (CreateException e) {
+                    sourceObjects, objects.get());
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

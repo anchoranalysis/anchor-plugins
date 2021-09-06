@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -59,10 +59,10 @@ public class AssignFromIntersectingObjects extends ChannelProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
 
-        ObjectCollection source = objectsSource.create();
-        ObjectCollection target = objectsTarget.create();
+        ObjectCollection source = objectsSource.get();
+        ObjectCollection target = objectsTarget.get();
 
         VoxelsExtracter<?> extracter = channel.extract();
 

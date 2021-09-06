@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.feature.calculator;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -54,8 +54,8 @@ class ExtractFromProvider {
             StackProvider providerDuplicated = stackEnergy.duplicateBean();
             providerDuplicated.initRecursive(initialization, logger);
 
-            return new EnergyStack(providerDuplicated.create());
-        } catch (InitException | CreateException e) {
+            return new EnergyStack(providerDuplicated.get());
+        } catch (InitException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -73,7 +73,7 @@ class ExtractFromProvider {
         try {
             featureListProvider.initRecursive(initialization, logger);
 
-            FeatureList<T> features = featureListProvider.create();
+            FeatureList<T> features = featureListProvider.get();
             if (features.size() != 1) {
                 throw new FeatureCalculationException(
                         String.format(
@@ -81,7 +81,7 @@ class ExtractFromProvider {
                                 featureProviderName, features.size()));
             }
             return features.get(0);
-        } catch (CreateException | InitException e) {
+        } catch (InitException | ProvisionFailedException e) {
             throw new FeatureCalculationException(e);
         }
     }

@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -55,14 +55,15 @@ public class Reference extends MaskProvider {
     }
 
     @Override
-    public Mask create() throws CreateException {
+    public Mask get() throws ProvisionFailedException {
         if (mask == null) {
-            mask = createMask();
+            mask = getMaskUncached();
         }
         return mask;
     }
 
-    private Mask createMask() throws CreateException {
+    /** Gets the {@link Mask} ignoring any caching. */
+    private Mask getMaskUncached() throws ProvisionFailedException {
         try {
             Mask maskForId = getInitialization().masks().getException(id);
 
@@ -72,7 +73,7 @@ public class Reference extends MaskProvider {
                 return maskForId;
             }
         } catch (NamedProviderGetException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

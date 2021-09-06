@@ -33,6 +33,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
@@ -63,10 +64,10 @@ public class PlotHistogram extends StackProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Stack create() throws CreateException {
+    public Stack get() throws ProvisionFailedException {
 
         try {
-            List<HistogramBin> histogramItems = binsFromHistogram(histogram.create());
+            List<HistogramBin> histogramItems = binsFromHistogram(histogram.get());
 
             PlotInstance plot =
                     createPlot(histogramItems.iterator(), Optional.empty(), Optional.empty());
@@ -75,8 +76,8 @@ public class PlotHistogram extends StackProvider {
 
             return CreateStackFromBufferedImage.create(image);
 
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
+        } catch (OperationFailedException | CreateException e) {
+            throw new ProvisionFailedException(e);
         }
     }
 

@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -82,12 +82,12 @@ public class FromStack extends ChannelProvider {
     private Channel channel;
 
     @Override
-    public Channel create() throws CreateException {
+    public Channel get() throws ProvisionFailedException {
 
         if (channel == null) {
             channel = stackFromSource().getChannel(channelIndex);
             if (channel == null) {
-                throw new CreateException(
+                throw new ProvisionFailedException(
                         String.format("channel %d cannot be found in stack", channelIndex));
             }
         }
@@ -95,14 +95,14 @@ public class FromStack extends ChannelProvider {
         return channel;
     }
 
-    private Stack stackFromSource() throws CreateException {
+    private Stack stackFromSource() throws ProvisionFailedException {
         if (stack != null) {
-            return stack.createAsStack();
+            return stack.getAsStack();
         } else {
             try {
                 return getInitialization().stacks().getException(stackProviderID);
             } catch (NamedProviderGetException e) {
-                throw new CreateException(e.summarize());
+                throw new ProvisionFailedException(e.summarize());
             }
         }
     }

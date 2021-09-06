@@ -30,7 +30,7 @@ import java.util.SortedSet;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -64,7 +64,7 @@ public class SortByFeature extends ObjectCollectionProviderWithFeature {
     }
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
 
         try {
             FeatureCalculatorSingle<FeatureInputSingleObject> featureSession = createSession();
@@ -82,7 +82,7 @@ public class SortByFeature extends ObjectCollectionProviderWithFeature {
             return ObjectCollectionFactory.mapFrom(sorted, ObjectWithFeatureValue::getObject);
 
         } catch (FeatureCalculationException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
@@ -56,7 +55,7 @@ public class FromInput extends ChannelProvider {
     }
 
     @Override
-    public Channel create() throws CreateException {
+    public Channel get() {
         return inputStack.getChannel(0);
     }
 }

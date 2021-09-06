@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
@@ -68,8 +68,8 @@ public class PairedWithMask extends FeatureSingleObject {
                 new ImageInitialization(initialization.sharedObjectsRequired()), getLogger());
 
         try {
-            createdMask = mask.create();
-        } catch (CreateException e) {
+            createdMask = mask.get();
+        } catch (ProvisionFailedException e) {
             throw new InitException(e);
         }
     }

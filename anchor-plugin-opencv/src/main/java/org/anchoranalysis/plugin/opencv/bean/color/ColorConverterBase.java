@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.opencv.bean.color;
 
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderUnary;
@@ -54,20 +55,20 @@ public abstract class ColorConverterBase extends StackProviderUnary {
     }
 
     @Override
-    public Stack createFromStack(Stack stackRGB) throws CreateException {
+    public Stack createFromStack(Stack stackRGB) throws ProvisionFailedException {
 
-        checkNumChannels(stackRGB);
+        checkNumberChannels(stackRGB);
 
         CVInit.blockUntilLoaded();
 
-        Mat matBGR = ConvertToMat.makeRGBStack(stackRGB, true);
-
-        Mat matHSV = convertColorSpace(stackRGB.extent(), matBGR, colorSpaceCode());
-
         try {
+            Mat matBGR = ConvertToMat.makeRGBStack(stackRGB, true);
+
+            Mat matHSV = convertColorSpace(stackRGB.extent(), matBGR, colorSpaceCode());
+            
             return ConvertFromMat.toStack(matHSV);
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
+        } catch (OperationFailedException | CreateException e) {
+            throw new ProvisionFailedException(e);
         }
     }
 
@@ -84,9 +85,9 @@ public abstract class ColorConverterBase extends StackProviderUnary {
         return matHSV;
     }
 
-    private void checkNumChannels(Stack stack) throws CreateException {
+    private void checkNumberChannels(Stack stack) throws ProvisionFailedException {
         if (stack.getNumberChannels() != 3) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     "Input stack must have exactly 3 channels representing a RGB image");
         }
     }

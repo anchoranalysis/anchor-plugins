@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
@@ -73,8 +73,8 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
         Channel channelSingleRegion;
         try {
-            channelSingleRegion = channel.create();
-        } catch (CreateException e) {
+            channelSingleRegion = channel.get();
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
         assert (channelSingleRegion != null);

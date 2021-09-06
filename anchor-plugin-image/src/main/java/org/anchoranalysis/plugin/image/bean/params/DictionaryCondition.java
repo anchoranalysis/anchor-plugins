@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.ImageBean;
 
@@ -54,14 +54,14 @@ public class DictionaryCondition extends ImageBean<DictionaryCondition> {
     @BeanField @Getter @Setter private String value = "";
     // END BEAN PROPERTIES
 
-    public boolean isConditionTrue() throws CreateException {
-        Dictionary dictionaryCreated = dictionary.create();
+    public boolean isConditionTrue() throws ProvisionFailedException {
+        Dictionary dictionaryCreated = dictionary.get();
         String valueToMatch =
                 dictionaryCreated
                         .getAsString(key)
                         .orElseThrow(
                                 () ->
-                                        new CreateException(
+                                        new ProvisionFailedException(
                                                 "No dictionary value exists for: " + key));
         return value.equals(valueToMatch);
     }

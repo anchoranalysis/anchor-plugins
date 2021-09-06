@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.convert;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -48,8 +48,8 @@ public class FromObjects extends FromDimensionsBase {
     // END BEAN
 
     @Override
-    protected Mask createFromDimensions(Dimensions dimensions) throws CreateException {
-        return createMaybeInverted(objects.create(), dimensions, BinaryValues.getDefault());
+    protected Mask createFromDimensions(Dimensions dimensions) throws ProvisionFailedException {
+        return createMaybeInverted(objects.get(), dimensions, BinaryValues.getDefault());
     }
 
     private Mask createMaybeInverted(

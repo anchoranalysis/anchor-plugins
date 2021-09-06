@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
@@ -192,7 +193,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
                     createGenerator(dimensions, stacks, stacksProjected),
                     maybeExtendZObjects(inputs(initialization, logger), dimensions.z()),
                     context.getOutputter().getChecked());
-        } catch (CreateException | InitException | OutputWriteFailedException e) {
+        } catch (CreateException | InitException | OutputWriteFailedException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -218,8 +219,8 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
             }
 
             try {
-                stacks.add(namedStackProvider.getName(), namedStackProvider.getValue().create());
-            } catch (OperationFailedException e) {
+                stacks.add(namedStackProvider.getName(), namedStackProvider.getValue().get());
+            } catch (ProvisionFailedException | OperationFailedException e) {
                 throw new CreateException(e);
             }
         }

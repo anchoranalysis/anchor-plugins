@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.core.value.Dictionary;
@@ -75,7 +75,7 @@ public class GaussianSampler extends ScalarProposer {
             throws OperationFailedException {
 
         try {
-            Dictionary dictionaryCreated = dictionary.create();
+            Dictionary dictionaryCreated = dictionary.get();
 
             if (!dictionaryCreated.containsKey(keyMean)) {
                 throw new OperationFailedException(
@@ -94,7 +94,7 @@ public class GaussianSampler extends ScalarProposer {
                     dictionaryCreated.getAsDouble(keyStandardDeviation) * factorStandardDeviation;
 
             return randomNumberGenerator.generateNormal(mean, stdDev).nextDouble();
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

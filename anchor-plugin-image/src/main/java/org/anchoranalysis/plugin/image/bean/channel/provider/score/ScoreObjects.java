@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.functional.checked.CheckedToIntFunction;
 import org.anchoranalysis.feature.bean.Feature;
@@ -69,7 +69,7 @@ public class ScoreObjects extends UnaryWithObjectsBase {
 
     @Override
     protected Channel createFromChannel(Channel channel, ObjectCollection objects)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         try {
             EnergyStack energyStack = new EnergyStack(createEnergyStack(channel));
@@ -82,26 +82,26 @@ public class ScoreObjects extends UnaryWithObjectsBase {
                     object -> valueToAssignForObject(object, calculator, energyStack));
 
         } catch (FeatureCalculationException | InitException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 
-    private EnergyStackWithoutParams createEnergyStack(Channel channel) throws CreateException {
+    private EnergyStackWithoutParams createEnergyStack(Channel channel) throws ProvisionFailedException {
         EnergyStackWithoutParams energyStack = new EnergyStackWithoutParams(channel);
 
         // add other channels
         for (ChannelProvider cp : listAdditionalChannelProviders) {
-            Channel channelAdditional = cp.create();
+            Channel channelAdditional = cp.get();
 
             if (!channelAdditional.dimensions().equals(channel.dimensions())) {
-                throw new CreateException(
+                throw new ProvisionFailedException(
                         "Dimensions of additional channel are not equal to main channel");
             }
 
             try {
                 energyStack.asStack().addChannel(channelAdditional);
             } catch (IncorrectImageSizeException e) {
-                throw new CreateException(e);
+                throw new ProvisionFailedException(e);
             }
         }
 

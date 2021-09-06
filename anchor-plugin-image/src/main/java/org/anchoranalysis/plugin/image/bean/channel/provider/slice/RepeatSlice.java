@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.slice;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
@@ -54,17 +54,17 @@ public class RepeatSlice extends FromDimensionsBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromDimensions(Dimensions dimensions) throws CreateException {
+    protected Channel createFromDimensions(Dimensions dimensions) throws ProvisionFailedException {
 
-        Channel sliceCreated = slice.create();
+        Channel sliceCreated = slice.get();
 
         Dimensions dimensionsSource = sliceCreated.dimensions();
 
         if (dimensionsSource.x() != dimensions.x()) {
-            throw new CreateException("x dimension is not equal");
+            throw new ProvisionFailedException("x dimension is not equal");
         }
         if (dimensionsSource.y() != dimensions.y()) {
-            throw new CreateException("y dimension is not equal");
+            throw new ProvisionFailedException("y dimension is not equal");
         }
 
         Channel channelOut =

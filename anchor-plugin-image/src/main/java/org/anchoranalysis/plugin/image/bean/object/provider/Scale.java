@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -56,7 +56,7 @@ public class Scale extends WithDimensionsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
 
         Dimensions dimensions = createDimensions();
 
@@ -64,22 +64,22 @@ public class Scale extends WithDimensionsBase {
         return scaleObjects(objects, factor, dimensions.extent());
     }
 
-    private ScaleFactor calculateFactor(Dimensions dimensions) throws CreateException {
+    private ScaleFactor calculateFactor(Dimensions dimensions) throws ProvisionFailedException {
         try {
             return scaleCalculator.calculate(
                     Optional.of(dimensions), getInitialization().getSuggestedResize());
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 
     private ObjectCollection scaleObjects(
-            ObjectCollection objects, ScaleFactor factor, Extent extent) throws CreateException {
+            ObjectCollection objects, ScaleFactor factor, Extent extent) throws ProvisionFailedException {
         try {
             ScaledElements<ObjectMask> scaledObjects = Scaler.scaleObjects(objects, factor, extent);
             return ObjectCollectionFactory.of(scaledObjects.asCollectionOrderNotPreserved());
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

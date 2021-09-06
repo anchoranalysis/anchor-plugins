@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.combine;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.combine.MaskIfHighLow;
 
@@ -42,8 +41,7 @@ public class IfHighLow extends CombineBase {
 
     // ASSUMES REGIONS ARE IDENTICAL
     @Override
-    protected Mask createFromTwoMasks(Mask maskToModify, Mask maskReceiver) throws CreateException {
-
+    protected Mask createFromTwoMasks(Mask maskToModify, Mask maskReceiver) {
         MaskIfHighLow.apply(maskToModify, maskReceiver);
         return maskToModify;
     }

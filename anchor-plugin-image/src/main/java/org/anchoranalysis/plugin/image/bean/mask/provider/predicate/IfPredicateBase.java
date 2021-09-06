@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.predicate;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -48,11 +48,11 @@ public abstract class IfPredicateBase extends MaskProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    protected Mask createFromMask(Mask mask) throws CreateException {
+    protected Mask createFromMask(Mask mask) throws ProvisionFailedException {
         if (predicate(mask)) {
             return mask;
         } else {
-            return maskElse.create();
+            return maskElse.get();
         }
     }
 
@@ -60,5 +60,5 @@ public abstract class IfPredicateBase extends MaskProviderUnary {
      * If this evaluates true, the mask will be returned as-is, otherwise {@code maskElse} is
      * returned
      */
-    protected abstract boolean predicate(Mask mask) throws CreateException;
+    protected abstract boolean predicate(Mask mask) throws ProvisionFailedException;
 }

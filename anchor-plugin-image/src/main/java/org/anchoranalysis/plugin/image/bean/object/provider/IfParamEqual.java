@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
@@ -58,18 +58,18 @@ public class IfParamEqual extends ObjectCollectionProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection create() throws CreateException {
+    public ObjectCollection get() throws ProvisionFailedException {
 
-        Optional<String> dictionaryValue = dictionary.create().getAsString(key);
+        Optional<String> dictionaryValue = dictionary.get().getAsString(key);
 
         if (!dictionaryValue.isPresent()) {
-            throw new CreateException(String.format("Dictionary key does not exist: %s", key));
+            throw new ProvisionFailedException(String.format("Dictionary key does not exist: %s", key));
         }
 
         if (dictionaryValue.get().equals(value)) {
-            return whenEqual.create();
+            return whenEqual.get();
         } else {
-            return whenNotEqual.create();
+            return whenNotEqual.get();
         }
     }
 }

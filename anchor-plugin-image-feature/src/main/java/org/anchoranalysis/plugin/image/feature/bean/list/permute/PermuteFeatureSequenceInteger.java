@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInputParams;
@@ -66,21 +66,21 @@ public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputParams
     }
 
     @Override
-    protected FeatureList<T> createPermutedFeaturesFor(Feature<T> feature) throws CreateException {
+    protected FeatureList<T> createPermutedFeaturesFor(Feature<T> feature) throws ProvisionFailedException {
         PermuteFeature<Integer, T> delegate = createDelegate(feature);
 
         configurePermutePropertyOnDelegate(delegate);
         try {
             delegate.checkMisconfigured(defaultInstances);
         } catch (BeanMisconfiguredException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
 
-        return delegate.create();
+        return delegate.get();
     }
 
     protected abstract PermuteFeature<Integer, T> createDelegate(Feature<T> feature)
-            throws CreateException;
+            throws ProvisionFailedException;
 
     protected abstract PermutePropertySequenceInteger configurePermuteProperty(
             PermutePropertySequenceInteger permuteProperty);

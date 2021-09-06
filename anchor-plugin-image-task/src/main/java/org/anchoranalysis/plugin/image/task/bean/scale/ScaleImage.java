@@ -32,8 +32,8 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.MessageLogger;
@@ -236,13 +236,13 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
                         suggestedResize,
                         logger);
             }
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }
 
     private Channel scaleChannelAsMask(
-            Channel channel, Optional<ImageSizeSuggestion> suggestedResize) throws CreateException {
+            Channel channel, Optional<ImageSizeSuggestion> suggestedResize) throws ProvisionFailedException {
         Mask mask = new Mask(channel);
         Mask maskScaled =
                 org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(

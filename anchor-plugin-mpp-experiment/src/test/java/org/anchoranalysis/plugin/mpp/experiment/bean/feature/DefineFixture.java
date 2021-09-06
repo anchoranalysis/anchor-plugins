@@ -35,7 +35,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
@@ -53,12 +53,12 @@ class DefineFixture {
      * @param energyStack the energy-stack associated with the define
      * @param sharedFeatures any shared to be added to the define
      * @return
-     * @throws CreateException
+     * @throws ProvisionFailedException
      */
     public static DefineOutputterWithEnergy create(
             EnergyStackWithoutParams energyStack,
             Optional<List<NamedBean<FeatureListProvider<FeatureInput>>>> sharedFeatures)
-            throws CreateException {
+            throws ProvisionFailedException {
         DefineOutputterWithEnergy out = new DefineOutputterWithEnergy();
         out.setStackEnergy(stackEnergy(energyStack));
         out.setDefine(createDefine(sharedFeatures));
@@ -67,7 +67,7 @@ class DefineFixture {
 
     private static Define createDefine(
             Optional<List<NamedBean<FeatureListProvider<FeatureInput>>>> sharedFeatures)
-            throws CreateException {
+            throws ProvisionFailedException {
         Define define = new Define();
 
         if (sharedFeatures.isPresent()) {
@@ -75,7 +75,7 @@ class DefineFixture {
                 try {
                     define.add(namedBean);
                 } catch (OperationFailedException e) {
-                    throw new CreateException(e);
+                    throw new ProvisionFailedException(e);
                 }
             }
         }
@@ -84,14 +84,14 @@ class DefineFixture {
     }
 
     private static StackProvider stackEnergy(EnergyStackWithoutParams energyStack)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         // Create energy stack
         Stack stack = energyStack.asStack();
 
         // Encapsulate in a mock
         StackProvider provider = mock(StackProvider.class);
-        when(provider.create()).thenReturn(stack);
+        when(provider.get()).thenReturn(stack);
         when(provider.duplicateBean()).thenReturn(provider);
         return provider;
     }

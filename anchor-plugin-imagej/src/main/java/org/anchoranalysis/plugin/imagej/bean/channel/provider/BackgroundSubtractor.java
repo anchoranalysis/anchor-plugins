@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.imagej.bean.channel.provider;
 
 import ij.ImagePlus;
 import ij.plugin.filter.BackgroundSubtracter;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
@@ -38,13 +38,13 @@ import org.anchoranalysis.spatial.Extent;
 public class BackgroundSubtractor extends WithRadiusBase {
 
     @Override
-    protected Channel createFromChannel(Channel channel, int radius) throws CreateException {
+    protected Channel createFromChannel(Channel channel, int radius) throws ProvisionFailedException {
         try {
             ImagePlus image = ConvertToImagePlus.from(channel);
             subtractBackground(image, channel.extent(), radius);
             return ConvertFromImagePlus.toChannel(image, channel.resolution());
         } catch (ImageJConversionException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

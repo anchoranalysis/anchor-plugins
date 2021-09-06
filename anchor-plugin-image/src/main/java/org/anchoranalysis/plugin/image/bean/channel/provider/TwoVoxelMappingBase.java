@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.channel.provider;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.functional.checked.IntBinaryOperation;
 import org.anchoranalysis.image.bean.provider.ChannelProviderBinary;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -49,7 +49,7 @@ public abstract class TwoVoxelMappingBase extends ChannelProviderBinary {
     private final IntBinaryOperation operation;
 
     @Override
-    protected Channel process(Channel channel1, Channel channel2) throws CreateException {
+    protected Channel process(Channel channel1, Channel channel2) throws ProvisionFailedException {
 
         Channel channelOut =
                 ChannelFactory.instance()

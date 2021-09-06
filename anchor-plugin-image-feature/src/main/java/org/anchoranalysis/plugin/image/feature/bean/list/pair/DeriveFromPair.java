@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -60,12 +60,12 @@ public class DeriveFromPair extends FeatureListProvider<FeatureInputPairObjects>
     // END BEAN PROPERTIES
 
     @Override
-    public FeatureList<FeatureInputPairObjects> create() throws CreateException {
-        return item.create().map(this::pairFromSingle);
+    public FeatureList<FeatureInputPairObjects> get() throws ProvisionFailedException {
+        return item.get().map(this::pairFromSingle);
     }
 
     private FeatureDeriveFromPair pairFromSingle(Feature<FeatureInputSingleObject> featExst)
-            throws CreateException {
+            throws ProvisionFailedException {
         Feature<FeatureInputSingleObject> featExstDup = featExst.duplicateBean();
 
         FeatureDeriveFromPair featDelegate = createNewDelegateFeature();
@@ -75,7 +75,7 @@ public class DeriveFromPair extends FeatureListProvider<FeatureInputPairObjects>
         return featDelegate;
     }
 
-    private FeatureDeriveFromPair createNewDelegateFeature() throws CreateException {
+    private FeatureDeriveFromPair createNewDelegateFeature() throws ProvisionFailedException {
         if (select.equalsIgnoreCase("first")) {
             return new First();
         } else if (select.equalsIgnoreCase("second")) {
@@ -83,7 +83,7 @@ public class DeriveFromPair extends FeatureListProvider<FeatureInputPairObjects>
         } else if (select.equalsIgnoreCase("merged")) {
             return new Merged();
         } else {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     "An invalid input existings for 'select'. Select one of 'first', 'second' or 'merged'");
         }
     }

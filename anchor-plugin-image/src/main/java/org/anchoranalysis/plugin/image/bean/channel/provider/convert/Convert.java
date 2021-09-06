@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.convert;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -47,9 +48,13 @@ public class Convert<T> extends ConvertBase {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
-        ChannelConverter<?> converter = channelConverter.createConverter();
-        channel = converter.convert(channel, createPolicy());
-        return channel;
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
+        try {
+            ChannelConverter<?> converter = channelConverter.createConverter();
+            channel = converter.convert(channel, createPolicy());
+            return channel;
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 }

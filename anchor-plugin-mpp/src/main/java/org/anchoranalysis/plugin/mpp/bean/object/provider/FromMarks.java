@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.object.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -58,12 +58,12 @@ public class FromMarks extends ObjectCollectionProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection create() throws CreateException {
+    public ObjectCollection get() throws ProvisionFailedException {
 
-        MarkCollection marksCreated = marks.create();
+        MarkCollection marksCreated = marks.get();
 
         return marksCreated
-                .deriveObjects(dimensions.create(), regionMap.membershipWithFlagsForIndex(regionID))
+                .deriveObjects(dimensions.get(), regionMap.membershipWithFlagsForIndex(regionID))
                 .withoutProperties();
     }
 }

@@ -31,8 +31,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ColorProvider;
 
 public class Concatenate extends ColorProvider {
@@ -42,12 +42,12 @@ public class Concatenate extends ColorProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public ColorList create() throws CreateException {
+    public ColorList get() throws ProvisionFailedException {
 
         ColorList out = new ColorList();
 
         for (ColorProvider provider : list) {
-            out.addAll(provider.create());
+            out.addAll(provider.get());
         }
 
         return out;

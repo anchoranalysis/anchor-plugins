@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
@@ -57,7 +57,7 @@ public class ScaleXY extends ChannelProviderUnary {
     // End BEAN PROPERTIES
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
         return scale(
                 channel,
                 scaleCalculator,
@@ -72,7 +72,7 @@ public class ScaleXY extends ChannelProviderUnary {
             Interpolator interpolator,
             Optional<ImageSizeSuggestion> suggestedResize,
             MessageLogger logger)
-            throws CreateException {
+            throws ProvisionFailedException {
         try {
             logResolution("Incoming", channel, logger);
 
@@ -88,7 +88,7 @@ public class ScaleXY extends ChannelProviderUnary {
             return channelOut;
 
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

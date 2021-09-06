@@ -43,7 +43,7 @@ public class FromInput extends StackProvider {
     private Stack stack;
 
     @Override
-    public Stack create() {
+    public Stack get() {
         return stack;
     }
 

@@ -42,7 +42,9 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 
 /**
- * Calculates the gradient in one or more dimensions
+ * Calculates the gradient in one or more dimensions.
+ * 
+ * <p>An out-of-bounds strategy of <i>mirror</i> is used for voxel's lying at the boundary.
  *
  * @author Owen Feehan
  */

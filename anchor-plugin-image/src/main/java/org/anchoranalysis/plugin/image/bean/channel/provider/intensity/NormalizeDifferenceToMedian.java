@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -63,7 +63,7 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
 
     @Override
     protected Channel createFromChannel(Channel channel, ObjectCollection objects)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         Channel lookup = DimensionsChecker.createSameSize(channelLookup, "channelLookup", channel);
 
@@ -78,7 +78,7 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
             return channel;
 
         } catch (OperationFailedException e) {
-            throw new CreateException("An error occurred calculating the mean", e);
+            throw new ProvisionFailedException("An error occurred calculating the mean", e);
         }
     }
 

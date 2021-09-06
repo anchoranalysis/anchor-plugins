@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
@@ -140,8 +140,8 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
             providerDuplicated.initRecursive(
                     createImageInitialization(inputtedHistogram, context), context.getLogger());
 
-            return providerDuplicated.create();
-        } catch (CreateException | InitException | OperationFailedException e) {
+            return providerDuplicated.get();
+        } catch (ProvisionFailedException | InitException | OperationFailedException e) {
             throw new OperationFailedException("Cannot retrieve a histogram from the provider", e);
         }
     }

@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -77,9 +78,9 @@ public class ScoreVoxels extends ChannelProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel create() throws CreateException {
+    public Channel get() throws ProvisionFailedException {
 
-        Channel intensityCreated = intensity.create();
+        Channel intensityCreated = intensity.get();
 
         VoxelsWrapperList voxelsCreated = createVoxelsList(intensityCreated);
         List<Histogram> histogramsCreated = ProviderBeanHelper.listFromBeans(histogramsExtra);
@@ -90,13 +91,18 @@ public class ScoreVoxels extends ChannelProvider {
 
         VoxelsFromScoreCreator creator =
                 new VoxelsFromScoreCreator(voxelsCreated, dictionaryCreated, histogramsCreated);
-        Voxels<UnsignedByteBuffer> voxelsPixelScore =
-                creator.createVoxelsFromPixelScore(score, object);
-
-        return new ChannelFactoryByte().create(voxelsPixelScore, intensityCreated.resolution());
+        
+        try {
+            Voxels<UnsignedByteBuffer> voxelsPixelScore =
+                    creator.createVoxelsFromPixelScore(score, object);
+    
+            return new ChannelFactoryByte().create(voxelsPixelScore, intensityCreated.resolution());
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 
-    private VoxelsWrapperList createVoxelsList(Channel channelIntensity) throws CreateException {
+    private VoxelsWrapperList createVoxelsList(Channel channelIntensity) throws ProvisionFailedException {
 
         VoxelsWrapperList out = new VoxelsWrapperList();
 
@@ -106,18 +112,18 @@ public class ScoreVoxels extends ChannelProvider {
 
         for (ChannelProvider channelProvider : channelsExtra) {
             VoxelsWrapper voxelsExtra =
-                    channelProvider != null ? channelProvider.create().voxels() : null;
+                    channelProvider != null ? channelProvider.get().voxels() : null;
             out.add(voxelsExtra);
         }
         return out;
     }
 
-    private Optional<ObjectMask> createObject() throws CreateException {
+    private Optional<ObjectMask> createObject() throws ProvisionFailedException {
         if (mask == null) {
             return Optional.empty();
         }
 
-        Mask createdMask = mask.create();
+        Mask createdMask = mask.get();
         Channel channelMask = createdMask.channel();
 
         return Optional.of(

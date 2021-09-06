@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -56,10 +56,10 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
     // END PROPERTIES
 
     protected abstract void applyMorphologicalOperation(Mask source, boolean do3D)
-            throws CreateException;
+            throws ProvisionFailedException;
 
     @Override
-    public Mask createFromMask(Mask mask) throws CreateException {
+    public Mask createFromMask(Mask mask) throws ProvisionFailedException {
 
         // Gets outline
         applyMorphologicalOperation(mask, (mask.dimensions().z() > 1) && !suppress3D);
@@ -67,10 +67,10 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
         return mask;
     }
 
-    protected Optional<Predicate<Point3i>> precondition() throws CreateException {
+    protected Optional<Predicate<Point3i>> precondition() throws ProvisionFailedException {
         if (minIntensityValue > 0) {
             Voxels<UnsignedByteBuffer> background =
-                    backgroundChannelProvider.create().voxels().asByte();
+                    backgroundChannelProvider.get().voxels().asByte();
             return Optional.of(point -> intensityCondition(background, point, minIntensityValue));
         } else {
             return Optional.empty();

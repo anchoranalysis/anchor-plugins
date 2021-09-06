@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
@@ -57,18 +57,22 @@ public class FillHoles extends MaskProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromMask(Mask mask) throws CreateException {
+    public Mask createFromMask(Mask mask) throws ProvisionFailedException {
 
         Mask maskDuplicated = fillMask(mask);
 
-        return fillHoles(
-                filterObjectsFromMask(maskDuplicated),
-                mask,
-                mask.dimensions(),
-                BinaryValues.getDefault());
+        try {
+            return fillHoles(
+                    filterObjectsFromMask(maskDuplicated),
+                    mask,
+                    mask.dimensions(),
+                    BinaryValues.getDefault());
+        } catch (UnitValueException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 
-    private Mask fillMask(Mask mask) throws CreateException {
+    private Mask fillMask(Mask mask) throws ProvisionFailedException {
         Mask maskInverted = new Mask(mask.channel(), mask.binaryValues().createInverted());
 
         Mask maskDuplicated = mask.duplicate();
@@ -76,7 +80,7 @@ public class FillHoles extends MaskProviderUnary {
         try {
             ApplyImageJMorphologicalOperation.fill(maskDuplicated.binaryVoxels());
         } catch (OperationFailedException e1) {
-            throw new CreateException(e1);
+            throw new ProvisionFailedException(e1);
         }
 
         MaskAnd.apply(maskDuplicated, maskInverted);
@@ -84,7 +88,7 @@ public class FillHoles extends MaskProviderUnary {
         return maskDuplicated;
     }
 
-    private ObjectCollection filterObjectsFromMask(Mask mask) throws CreateException {
+    private ObjectCollection filterObjectsFromMask(Mask mask) throws UnitValueException {
 
         ObjectsFromConnectedComponentsFactory objectCreator =
                 new ObjectsFromConnectedComponentsFactory();
@@ -94,7 +98,7 @@ public class FillHoles extends MaskProviderUnary {
     }
 
     private ObjectCollection filterObjects(ObjectCollection objects, Dimensions dimensions)
-            throws CreateException {
+            throws UnitValueException {
 
         final double maxVolumeResolved = determineMaxVolume(dimensions);
 
@@ -104,13 +108,9 @@ public class FillHoles extends MaskProviderUnary {
                                 includeObject(objectMask, dimensions.extent(), maxVolumeResolved));
     }
 
-    private double determineMaxVolume(Dimensions dimensions) throws CreateException {
+    private double determineMaxVolume(Dimensions dimensions) throws UnitValueException {
         if (maxVolume != null) {
-            try {
-                return maxVolume.resolveToVoxels(dimensions.unitConvert());
-            } catch (UnitValueException e) {
-                throw new CreateException(e);
-            }
+            return maxVolume.resolveToVoxels(dimensions.unitConvert());
         } else {
             return 0; // Arbitrary, as it will be ignored anyway
         }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderTernary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
@@ -43,9 +43,9 @@ public class MeanThreeChannels extends ChannelProviderTernary {
 
     @Override
     protected Channel process(Channel channel1, Channel channel2, Channel channel3)
-            throws CreateException {
+            throws ProvisionFailedException {
 
-        checkDims(channel1, channel2, channel3);
+        checkDimensions(channel1, channel2, channel3);
 
         Channel channelOut =
                 ChannelFactory.instance()
@@ -86,15 +86,15 @@ public class MeanThreeChannels extends ChannelProviderTernary {
         }
     }
 
-    private void checkDims(Channel channel1, Channel channel2, Channel channel3)
-            throws CreateException {
+    private void checkDimensions(Channel channel1, Channel channel2, Channel channel3)
+            throws ProvisionFailedException {
 
         if (!channel1.dimensions().equals(channel2.dimensions())) {
-            throw new CreateException("Dimensions of channels do not match");
+            throw new ProvisionFailedException("Dimensions of channels do not match");
         }
 
         if (!channel2.dimensions().equals(channel3.dimensions())) {
-            throw new CreateException("Dimensions of channels do not match");
+            throw new ProvisionFailedException("Dimensions of channels do not match");
         }
     }
 }

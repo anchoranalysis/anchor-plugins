@@ -30,11 +30,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -77,7 +77,7 @@ public class FromChannelOrMask extends StackProvider {
     }
 
     @Override
-    public Stack create() throws CreateException {
+    public Stack get() throws ProvisionFailedException {
         return createStackFromChannel(channelFromSource());
     }
 
@@ -95,11 +95,11 @@ public class FromChannelOrMask extends StackProvider {
     }
 
     /** Identifies a channel from one of two sources */
-    private Channel channelFromSource() throws CreateException {
+    private Channel channelFromSource() throws ProvisionFailedException {
         if (channel != null) {
-            return channel.create();
+            return channel.get();
         } else {
-            return mask.create().channel();
+            return mask.get().channel();
         }
     }
 }

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.mask;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -55,8 +55,8 @@ public class AndObjectsWithMasks extends ObjectCollectionProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
-        return createFromObjects(objects, mask.create());
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+        return createFromObjects(objects, mask.get());
     }
 
     private ObjectCollection createFromObjects(ObjectCollection objects, Mask mask) {

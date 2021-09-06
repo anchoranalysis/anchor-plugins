@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -50,9 +50,9 @@ public abstract class WithOptionalDimensionsBase extends ObjectCollectionProvide
     // END BEAN PROPERTIES
 
     /** Returns the dimensions or null if none are provided */
-    protected Optional<Dimensions> createDims() throws CreateException {
+    protected Optional<Dimensions> createDims() throws ProvisionFailedException {
         if (dimensions != null) {
-            return Optional.of(dimensions.create());
+            return Optional.of(dimensions.get());
         } else {
             return Optional.empty();
         }

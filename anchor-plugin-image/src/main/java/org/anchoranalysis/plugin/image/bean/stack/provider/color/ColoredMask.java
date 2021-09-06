@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -53,7 +54,11 @@ public class ColoredMask extends ColoredBase {
     @Override
     protected ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions)
             throws CreateException {
-        ObjectMask maskAsObject = new ObjectMask(mask.create().binaryVoxels());
-        return new ColoredObjectCollection(maskAsObject, color.rgbColor());
+        try {
+            ObjectMask maskAsObject = new ObjectMask(mask.get().binaryVoxels());
+            return new ColoredObjectCollection(maskAsObject, color.rgbColor());
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
+        }
     }
 }

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.provider.collection;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
@@ -38,7 +37,7 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 public class CreateNew extends MarkCollectionProvider {
 
     @Override
-    public MarkCollection create() throws CreateException {
+    public MarkCollection get() {
         return new MarkCollection();
     }
 }
