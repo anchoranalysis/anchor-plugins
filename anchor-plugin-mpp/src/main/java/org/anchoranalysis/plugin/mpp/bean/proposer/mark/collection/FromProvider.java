@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
@@ -55,8 +55,8 @@ public class FromProvider extends MarkCollectionProposer {
             MarkWithIdentifierFactory markFactory, ProposerContext context)
             throws ProposalAbnormalFailureException {
         try {
-            return Optional.of(provider.create());
-        } catch (CreateException e) {
+            return Optional.of(provider.get());
+        } catch (ProvisionFailedException e) {
             throw new ProposalAbnormalFailureException(e);
         }
     }

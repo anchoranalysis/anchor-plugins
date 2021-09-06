@@ -33,6 +33,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
@@ -60,8 +61,8 @@ public class ProviderFixture {
     public static ObjectCollectionProvider providerFor(ObjectCollection objects) {
         ObjectCollectionProvider provider = mock(ObjectCollectionProvider.class);
         try {
-            when(provider.create()).thenReturn(objects);
-        } catch (CreateException e) {
+            when(provider.get()).thenReturn(objects);
+        } catch (ProvisionFailedException e) {
         }
         when(provider.duplicateBean()).thenReturn(provider);
         return provider;
@@ -72,8 +73,8 @@ public class ProviderFixture {
 
         FeatureProvider<T> provider = mock(FeatureProvider.class);
         try {
-            when(provider.create()).thenReturn(feature);
-        } catch (CreateException e) {
+            when(provider.get()).thenReturn(feature);
+        } catch (ProvisionFailedException e) {
         }
         when(provider.duplicateBean()).thenReturn(provider);
         return provider;
@@ -82,8 +83,8 @@ public class ProviderFixture {
     public static MaskProvider providerFor(Mask mask) {
         MaskProvider provider = mock(MaskProvider.class);
         try {
-            when(provider.create()).thenReturn(mask);
-        } catch (CreateException e) {
+            when(provider.get()).thenReturn(mask);
+        } catch (ProvisionFailedException e) {
         }
         when(provider.duplicateBean()).thenReturn(provider);
         return provider;

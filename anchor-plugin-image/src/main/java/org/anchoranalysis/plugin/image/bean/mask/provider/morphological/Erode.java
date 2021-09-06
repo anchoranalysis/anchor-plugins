@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -42,16 +43,17 @@ import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 public class Erode extends MorphologicalOperatorBase {
 
     @Override
-    protected void applyMorphologicalOperation(Mask source, boolean do3D) throws CreateException {
-
-        BinaryVoxels<UnsignedByteBuffer> out =
-                MorphologicalErosion.erode(
-                        source.binaryVoxels(), getIterations(), do3D, precondition());
-
+    protected void applyMorphologicalOperation(Mask source, boolean do3D) throws ProvisionFailedException {
         try {
+            BinaryVoxels<UnsignedByteBuffer> out =
+                    MorphologicalErosion.erode(
+                            source.binaryVoxels(), getIterations(), do3D, precondition());
+            
             source.replaceBy(out);
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
         }
     }
 }

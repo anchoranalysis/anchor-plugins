@@ -30,7 +30,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -64,7 +63,7 @@ public class SpecifyDimensions extends DimensionsProvider {
     }
 
     @Override
-    public Dimensions create() throws CreateException {
+    public Dimensions get() {
         Extent extent = sizeXY.asExtent(sizeZ);
         return new Dimensions(extent, Optional.empty());
     }

@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -64,12 +65,12 @@ public class SegmentWithSeeds extends WithChannelBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected ObjectCollection createFromChannel(Channel channel) throws CreateException {
+    protected ObjectCollection createFromChannel(Channel channel) throws ProvisionFailedException {
 
-        ObjectCollection seeds = objectsSeeds.create();
+        ObjectCollection seeds = objectsSeeds.get();
 
         if (objectsSource != null) {
-            ObjectCollection sourceObjects = objectsSource.create();
+            ObjectCollection sourceObjects = objectsSource.get();
             return createWithSourceObjects(channel, seeds, sourceObjects, segment);
         } else {
             return createWithoutSourceObjects(channel, seeds, segment);
@@ -81,7 +82,7 @@ public class SegmentWithSeeds extends WithChannelBase {
             ObjectCollection seeds,
             ObjectCollection sourceObjects,
             SegmentChannelIntoObjects segment)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         assert (seeds != null);
         assert (sourceObjects != null);
@@ -97,21 +98,21 @@ public class SegmentWithSeeds extends WithChannelBase {
 
     private static ObjectCollection segmentIfMoreThanOne(
             MatchedObject ows, Channel channel, SegmentChannelIntoObjects segment)
-            throws CreateException {
+            throws ProvisionFailedException {
         if (ows.numberMatches() <= 1) {
             return ObjectCollectionFactory.of(ows.getSource());
         } else {
             try {
-                return sgmn(ows, channel, segment);
-            } catch (SegmentationFailedException e) {
-                throw new CreateException(e);
+                return segment(ows, channel, segment);
+            } catch (SegmentationFailedException | CreateException e) {
+                throw new ProvisionFailedException(e);
             }
         }
     }
 
     private static ObjectCollection createWithoutSourceObjects(
             Channel channel, ObjectCollection seedsAsObjects, SegmentChannelIntoObjects sgmn)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         try {
             return sgmn.segment(
@@ -119,12 +120,12 @@ public class SegmentWithSeeds extends WithChannelBase {
                     Optional.empty(),
                     Optional.of(SeedsFactory.createSeedsWithoutMask(seedsAsObjects)));
         } catch (SegmentationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 
     // NB Objects in seeds are changed
-    private static ObjectCollection sgmn(
+    private static ObjectCollection segment(
             MatchedObject matchedObject, Channel channel, SegmentChannelIntoObjects sgmn)
             throws SegmentationFailedException, CreateException {
 

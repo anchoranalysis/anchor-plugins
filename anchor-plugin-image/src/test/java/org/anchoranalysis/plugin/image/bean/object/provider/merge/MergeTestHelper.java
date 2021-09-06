@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -93,12 +94,12 @@ class MergeTestHelper {
                 expectedCalculationCount,
                 () -> {
                     try {
-                        ObjectCollection mergedObjects = provider.create();
+                        ObjectCollection mergedObjects = provider.get();
                         assertEquals(
                                 expectedFinalMergeCount,
                                 mergedObjects.size(),
                                 "final number of merged-objects");
-                    } catch (CreateException e) {
+                    } catch (ProvisionFailedException e) {
                         throw new OperationFailedException(e);
                     }
                 });

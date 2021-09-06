@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -63,41 +64,41 @@ public class Permute extends ObjectCollectionProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection create() throws CreateException {
+    public ObjectCollection get() throws ProvisionFailedException {
 
         try {
             PermutationSetter ps = permuteProperty.createSetter(objects);
 
             return createPermutedObjects(ps, streamFromIterator(permuteProperty.propertyValues()));
         } catch (PermutationSetterException | OperationFailedException e1) {
-            throw new CreateException("Cannot create a permutation setter", e1);
+            throw new ProvisionFailedException("Cannot create a permutation setter", e1);
         }
     }
 
     private ObjectCollection createPermutedObjects(PermutationSetter setter, Stream<?> propVals)
-            throws CreateException {
+            throws ProvisionFailedException {
         return ObjectCollectionFactory.flatMapFrom(
                 propVals, CreateException.class, propVal -> objectsForPermutation(setter, propVal));
     }
 
     private ObjectCollection objectsForPermutation(PermutationSetter setter, Object propVal)
-            throws CreateException {
+            throws ProvisionFailedException {
         // We permute a duplicate, so as to keep the original values
         ObjectCollectionProvider provider = objects.duplicateBean();
         try {
             setter.setPermutation(provider, propVal);
         } catch (PermutationSetterException e) {
-            throw new CreateException("Cannot set permutation on an object-mask-provider", e);
+            throw new ProvisionFailedException("Cannot set permutation on an object-mask-provider", e);
         }
 
         // We init after the permutation, as we might be changing a reference
         try {
             provider.initRecursive(getInitialization(), getLogger());
         } catch (InitException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
 
-        return provider.create();
+        return provider.get();
     }
 
     /** Converts an iterator to a stream */

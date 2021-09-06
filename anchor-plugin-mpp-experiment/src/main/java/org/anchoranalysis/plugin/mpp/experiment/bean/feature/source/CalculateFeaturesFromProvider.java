@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -63,9 +63,9 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
             // Initialise
             providerDuplicated.initRecursive(initialization, logger);
 
-            return providerDuplicated.create();
+            return providerDuplicated.get();
 
-        } catch (InitException | CreateException e) {
+        } catch (InitException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

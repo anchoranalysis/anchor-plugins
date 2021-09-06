@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -174,7 +175,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
                     source.includeGroupInExperiment(isGroupGeneratorDefined()),
                     context);
             sharedState.closeAnyOpenIO();
-        } catch (OutputWriteFailedException | CreateException | IOException e) {
+        } catch (OutputWriteFailedException | ProvisionFailedException | IOException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -203,7 +204,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     }
 
     private Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregateAsStore()
-            throws CreateException {
+            throws ProvisionFailedException {
         return OptionalUtilities.map(
                 Optional.ofNullable(featuresAggregate),
                 STORE_FACTORY_AGGREGATE::createNamedFeatureList);

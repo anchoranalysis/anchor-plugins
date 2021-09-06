@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
@@ -242,7 +243,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
     private Feature<FeatureInputStack> extractScoreFeature() throws OperationFailedException {
         try {
-            FeatureList<FeatureInputStack> features = scoreProvider.create();
+            FeatureList<FeatureInputStack> features = scoreProvider.get();
             if (features.size() != 1) {
                 throw new OperationFailedException(
                         String.format(
@@ -250,7 +251,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                                 features.size()));
             }
             return features.get(0);
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

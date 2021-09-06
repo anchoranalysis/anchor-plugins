@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -49,12 +49,12 @@ public class Reference extends ObjectCollectionProvider {
     }
 
     @Override
-    public ObjectCollection create() throws CreateException {
+    public ObjectCollection get() throws ProvisionFailedException {
         if (objects == null) {
             try {
                 objects = getInitialization().objects().getException(id);
             } catch (NamedProviderGetException e) {
-                throw new CreateException(e);
+                throw new ProvisionFailedException(e);
             }
         }
         return objects;

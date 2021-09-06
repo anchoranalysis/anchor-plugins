@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.dimensions;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFactory;
@@ -40,7 +39,7 @@ import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
 public class AllValuesOn extends FromDimensionsBase {
 
     @Override
-    protected Mask createFromDimensions(Dimensions dimensions) throws CreateException {
+    protected Mask createFromDimensions(Dimensions dimensions) {
         return MaskFactory.createMaskOn(dimensions);
     }
 }

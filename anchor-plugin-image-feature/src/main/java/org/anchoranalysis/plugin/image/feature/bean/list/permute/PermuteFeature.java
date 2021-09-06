@@ -42,6 +42,7 @@ import org.anchoranalysis.bean.permute.ApplyPermutations;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
@@ -90,7 +91,7 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
     }
 
     @Override
-    protected FeatureList<T> createPermutedFeaturesFor(Feature<T> feature) throws CreateException {
+    protected FeatureList<T> createPermutedFeaturesFor(Feature<T> feature) throws ProvisionFailedException {
 
         // Create many copies of 'item' with properties adjusted
         List<Feature<T>> list = createInitialList(feature).asList();
@@ -105,8 +106,10 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
                                         (feat, name) -> feat.setCustomName(name))
                                 .applyPermutationsToCreateDuplicates(list, pp, permutationSetter);
             } catch (PermutationSetterException e) {
-                throw new CreateException(
+                throw new ProvisionFailedException(
                         String.format("Cannot create a permutation-setter for %s", pp), e);
+            } catch (CreateException e) {
+                throw new ProvisionFailedException(e);
             }
         }
 
@@ -137,11 +140,11 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
         }
     }
 
-    private FeatureList<T> createInitialList(Feature<T> feature) throws CreateException {
+    private FeatureList<T> createInitialList(Feature<T> feature) throws ProvisionFailedException {
         try {
             return FeatureListFactory.from(duplicateAndRemoveName(feature));
         } catch (BeanDuplicateException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

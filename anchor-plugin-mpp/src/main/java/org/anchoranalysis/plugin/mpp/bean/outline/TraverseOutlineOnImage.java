@@ -30,8 +30,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.provider.Provider;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -88,8 +89,8 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
     private Mask createOutline() throws TraverseOutlineException {
         try {
-            return maskOutline.create();
-        } catch (CreateException e) {
+            return maskOutline.get();
+        } catch (ProvisionFailedException e) {
             throw new TraverseOutlineException(
                     "Unable to create binaryImgChannelProviderOutline", e);
         }
@@ -97,8 +98,8 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
     private Mask createFilled() throws TraverseOutlineException {
         try {
-            return maskFilled.create();
-        } catch (CreateException e) {
+            return maskFilled.get();
+        } catch (ProvisionFailedException e) {
             throw new TraverseOutlineException(
                     "Unable to create binaryImgChannelProviderFilled", e);
         }

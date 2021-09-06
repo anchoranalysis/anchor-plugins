@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.channel.convert.histogram;
+package org.anchoranalysis.plugin.image.bean.channel.convert;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -31,7 +31,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.points.PointsFromObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -63,7 +63,7 @@ public class ObjectAsPoints extends MarkProposer {
 
         try {
             createObjectsIfNecessary();
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             context.getErrorNode().add(e);
             return false;
         }
@@ -83,11 +83,11 @@ public class ObjectAsPoints extends MarkProposer {
         return context.getRandomNumberGenerator().sampleFromList(points);
     }
 
-    private void createObjectsIfNecessary() throws CreateException {
+    private void createObjectsIfNecessary() throws ProvisionFailedException {
         if (points == null) {
             points = new ArrayList<>();
 
-            for (ObjectMask object : objects.create()) {
+            for (ObjectMask object : objects.get()) {
                 points.add(PointsFromObject.listFrom3d(object));
             }
         }

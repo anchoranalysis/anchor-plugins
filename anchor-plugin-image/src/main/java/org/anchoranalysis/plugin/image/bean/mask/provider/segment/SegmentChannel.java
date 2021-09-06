@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
@@ -80,25 +81,25 @@ public class SegmentChannel extends FromChannelBase {
 
     private BinaryVoxels<UnsignedByteBuffer> segmentChannel(Channel channel)
             throws CreateException {
-        Optional<ObjectMask> object = objectFromMask(channel.dimensions());
-
-        BinarySegmentationParameters params = createParams(channel.dimensions());
-
         try {
+            Optional<ObjectMask> object = objectFromMask(channel.dimensions());
+
+            BinarySegmentationParameters params = createParams(channel.dimensions());
+            
             return segment.segment(channel.voxels(), params, object);
 
-        } catch (SegmentationFailedException e) {
+        } catch (SegmentationFailedException | ProvisionFailedException e) {
             throw new CreateException(e);
         }
     }
 
     private BinarySegmentationParameters createParams(Dimensions dimensions)
-            throws CreateException {
+            throws ProvisionFailedException {
         return new BinarySegmentationParameters(
                 OptionalFactory.create(histogram), dimensions.resolution());
     }
 
-    private Optional<ObjectMask> objectFromMask(Dimensions dim) throws CreateException {
+    private Optional<ObjectMask> objectFromMask(Dimensions dim) throws ProvisionFailedException {
         Optional<Mask> maskChannel =
                 ChannelCreatorHelper.createOptionalCheckSize(mask, "mask", dim);
         return maskChannel.map(channel -> new ObjectMask(channel.binaryVoxels()));

@@ -30,6 +30,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
@@ -63,14 +64,14 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
         return objects.stream().flatMap(CreateException.class, this::splitContoursFromObject);
     }
 
-    private ObjectCollection splitContoursFromObject(ObjectMask object) throws CreateException {
+    private ObjectCollection splitContoursFromObject(ObjectMask object) throws ProvisionFailedException {
 
         if (object.boundingBox().extent().z() > 1) {
-            throw new CreateException("Only objects with z-slices > 1 are allowed");
+            throw new ProvisionFailedException("Only objects with z-slices > 1 are allowed");
         }
 
         try {
@@ -79,7 +80,7 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
                             object, smoothingFactor, numberLoopPoints, minNumberPoints));
 
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

@@ -31,7 +31,7 @@ import ij.plugin.MontageMaker;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -67,7 +67,7 @@ public class MontageSlices extends StackProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Stack createFromStack(Stack source) throws CreateException {
+    public Stack createFromStack(Stack source) throws ProvisionFailedException {
 
         int numberSlices = source.dimensions().z();
 
@@ -83,7 +83,7 @@ public class MontageSlices extends StackProviderUnary {
                                     firstSlice(),
                                     lastSlice(numberSlices)));
         } catch (OperationFailedException e) {
-            throw new CreateException("Failed to execute map operation on a particular channel", e);
+            throw new ProvisionFailedException("Failed to execute map operation on a particular channel", e);
         }
     }
 

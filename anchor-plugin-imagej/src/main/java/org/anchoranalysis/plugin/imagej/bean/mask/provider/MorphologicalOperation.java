@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -57,14 +57,14 @@ public class MorphologicalOperation extends MaskProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromMask(Mask mask) throws CreateException {
+    public Mask createFromMask(Mask mask) throws ProvisionFailedException {
         try {
             BinaryVoxels<UnsignedByteBuffer> processed =
                     ApplyImageJMorphologicalOperation.applyOperation(
                             mask.binaryVoxels(), command, iterations);
             return new Mask(processed, mask.resolution());
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

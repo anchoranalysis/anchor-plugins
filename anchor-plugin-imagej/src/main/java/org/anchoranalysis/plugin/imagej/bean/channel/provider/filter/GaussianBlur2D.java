@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
@@ -44,11 +44,11 @@ public class GaussianBlur2D extends ChannelProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
         try {
             return blur(channel);
         } catch (ImageJConversionException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

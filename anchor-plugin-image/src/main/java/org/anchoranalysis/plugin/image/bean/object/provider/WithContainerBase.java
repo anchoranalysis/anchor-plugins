@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -48,19 +48,19 @@ public abstract class WithContainerBase extends ObjectCollectionProviderUnary {
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsContainer;
     // END BEAN PROPERTIES
 
-    protected Optional<ObjectCollection> containerOptional() throws CreateException {
+    protected Optional<ObjectCollection> containerOptional() throws ProvisionFailedException {
         if (objectsContainer != null) {
-            return Optional.of(objectsContainer.create());
+            return Optional.of(objectsContainer.get());
         } else {
             return Optional.empty();
         }
     }
 
-    protected ObjectCollection containerRequired() throws CreateException {
+    protected ObjectCollection containerRequired() throws ProvisionFailedException {
         return containerOptional()
                 .orElseThrow(
                         () ->
-                                new CreateException(
+                                new ProvisionFailedException(
                                         "An objects-container must be defined for this provider"));
     }
 }

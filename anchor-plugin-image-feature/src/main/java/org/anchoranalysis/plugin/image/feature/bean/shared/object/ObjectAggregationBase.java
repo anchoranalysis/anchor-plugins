@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -82,8 +82,8 @@ public abstract class ObjectAggregationBase<T extends FeatureInputEnergy>
 
     private ObjectCollection createObjects() throws FeatureCalculationException {
         try {
-            return objects.create();
-        } catch (CreateException e) {
+            return objects.get();
+        } catch (ProvisionFailedException e) {
             throw new FeatureCalculationException(e);
         }
     }

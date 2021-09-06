@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.intensity;
 
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -44,7 +44,7 @@ public class NormalizeObjectIntensity extends UnaryWithObjectsBase {
 
     @Override
     protected Channel createFromChannel(Channel channel, ObjectCollection objects)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         Voxels<?> voxels = channel.voxels().any();
 
@@ -63,7 +63,7 @@ public class NormalizeObjectIntensity extends UnaryWithObjectsBase {
                 double scaleFactor = 128 / meanIntensity;
                 voxels.arithmetic().multiplyBy(object, scaleFactor);
             } catch (FeatureCalculationException e) {
-                throw new CreateException(e);
+                throw new ProvisionFailedException(e);
             }
         }
 

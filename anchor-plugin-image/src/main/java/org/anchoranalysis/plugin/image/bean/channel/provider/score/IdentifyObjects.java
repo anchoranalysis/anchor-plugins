@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.channel.provider.score;
 
 import java.util.Optional;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.label.LabelObjects;
@@ -48,9 +49,12 @@ public class IdentifyObjects extends UnaryWithObjectsBase {
             new LabelObjects<>(object -> object, (object, back) -> object.shiftBackBy(back));
 
     @Override
-    protected Channel createFromChannel(Channel channel, ObjectCollection objects)
-            throws CreateException {
-        LABELLER.labelElements(channel, objects.asList(), Optional.empty());
+    protected Channel createFromChannel(Channel channel, ObjectCollection objects) throws ProvisionFailedException {
+        try {
+            LABELLER.labelElements(channel, objects.asList(), Optional.empty());
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
         return channel;
     }
 }

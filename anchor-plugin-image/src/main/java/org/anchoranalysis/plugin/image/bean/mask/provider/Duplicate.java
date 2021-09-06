@@ -26,14 +26,13 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 
 public class Duplicate extends MaskProviderUnary {
 
     @Override
-    public Mask createFromMask(Mask mask) throws CreateException {
+    public Mask createFromMask(Mask mask) {
         return mask.duplicate();
     }
 }

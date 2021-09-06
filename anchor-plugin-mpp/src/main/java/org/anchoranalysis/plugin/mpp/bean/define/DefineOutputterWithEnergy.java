@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -134,22 +135,22 @@ public class DefineOutputterWithEnergy extends DefineOutputter {
 
             return result;
 
-        } catch (InitException | CreateException | OutputWriteFailedException e) {
+        } catch (InitException | ProvisionFailedException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
     }
 
     private EnergyStack createEnergyStack(ImageInitialization initialization, Logger logger)
-            throws InitException, CreateException {
+            throws InitException, ProvisionFailedException {
 
         // Extract the energy stack
         StackProvider stackDuplicated = stackEnergy.duplicateBean();
         stackDuplicated.initRecursive(initialization, logger);
-        EnergyStack stack = new EnergyStack(stackDuplicated.create());
+        EnergyStack stack = new EnergyStack(stackDuplicated.get());
 
         if (dictionary != null) {
             dictionary.initRecursive(initialization.dictionaryInitialization(), logger);
-            stack.setDictionary(dictionary.create());
+            stack.setDictionary(dictionary.get());
         }
         return stack;
     }

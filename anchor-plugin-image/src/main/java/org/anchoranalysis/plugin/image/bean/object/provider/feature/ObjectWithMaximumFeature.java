@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.object.provider.feature;
 
 import java.util.Optional;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -43,9 +43,9 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class ObjectWithMaximumFeature extends ObjectCollectionProviderWithFeature {
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
 
-        Optional<ObjectMask> max = findMaxObj(createSession(), objects);
+        Optional<ObjectMask> max = findMaximum(createSession(), objects);
 
         if (max.isPresent()) {
             return ObjectCollectionFactory.of(max.get());
@@ -54,9 +54,9 @@ public class ObjectWithMaximumFeature extends ObjectCollectionProviderWithFeatur
         }
     }
 
-    private Optional<ObjectMask> findMaxObj(
+    private Optional<ObjectMask> findMaximum(
             FeatureCalculatorSingle<FeatureInputSingleObject> session, ObjectCollection objects)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         try {
             ObjectMask max = null;
@@ -75,7 +75,7 @@ public class ObjectWithMaximumFeature extends ObjectCollectionProviderWithFeatur
             return Optional.ofNullable(max);
 
         } catch (FeatureCalculationException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

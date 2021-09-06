@@ -30,7 +30,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -63,8 +63,8 @@ public class Always extends ObjectMatcher {
     private ObjectMask determineMatch() throws OperationFailedException {
         ObjectCollection objectCollection;
         try {
-            objectCollection = objects.create();
-        } catch (CreateException e) {
+            objectCollection = objects.get();
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
 

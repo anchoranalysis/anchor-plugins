@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -51,7 +51,7 @@ public class IfObjectFilter extends IfPredicateBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected boolean predicate(Mask mask) throws CreateException {
+    protected boolean predicate(Mask mask) throws ProvisionFailedException {
 
         ObjectMask objectMask = new ObjectMask(mask.binaryVoxels());
 
@@ -63,7 +63,7 @@ public class IfObjectFilter extends IfPredicateBase {
                             Optional.empty());
             return objects.size() == 1;
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

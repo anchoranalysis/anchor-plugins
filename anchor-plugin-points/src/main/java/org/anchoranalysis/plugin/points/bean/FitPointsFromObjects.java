@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -63,17 +64,21 @@ public class FitPointsFromObjects extends MarkCollectionProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public MarkCollection create() throws CreateException {
+    public MarkCollection get() throws ProvisionFailedException {
 
-        Dimensions dimensions = pointsFitter.createDim();
-
-        return new MarkCollection(
-                pointsFitter.createObjects().stream()
-                        .mapToListOptional(object -> createMarkFromObject(object, dimensions)));
+        try {
+            Dimensions dimensions = pointsFitter.createDim();
+    
+            return new MarkCollection(
+                    pointsFitter.createObjects().stream()
+                            .mapToListOptional(object -> createMarkFromObject(object, dimensions)));
+        } catch (ProvisionFailedException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 
     private Optional<Mark> createMarkFromObject(ObjectMask object, Dimensions dimensions)
-            throws CreateException {
+            throws ProvisionFailedException {
         try {
             List<Point2i> points = maybeApplyConvexHull(object);
             if (points.isEmpty()) {
@@ -83,7 +88,7 @@ public class FitPointsFromObjects extends MarkCollectionProvider {
             return fitToMark(PointConverter.convert2iTo3f(points), dimensions);
 
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 
@@ -101,7 +106,7 @@ public class FitPointsFromObjects extends MarkCollectionProvider {
     }
 
     private Optional<Mark> fitToMark(List<Point3f> pointsToFit, Dimensions dimensions)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         Mark markOut = markFactory.create();
 
@@ -113,14 +118,14 @@ public class FitPointsFromObjects extends MarkCollectionProvider {
         }
     }
 
-    private Optional<Mark> handleFittingFailure(String errorMsg) throws CreateException {
+    private Optional<Mark> handleFittingFailure(String errorMsg) throws ProvisionFailedException {
         if (ignoreFittingFailure) {
             getLogger()
                     .messageLogger()
                     .logFormatted("Ignoring mark due to a fitting error. %s", errorMsg);
             return Optional.empty();
         } else {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     String.format(
                             "Cannot create mark from points due to fitting error.%n%s", errorMsg));
         }

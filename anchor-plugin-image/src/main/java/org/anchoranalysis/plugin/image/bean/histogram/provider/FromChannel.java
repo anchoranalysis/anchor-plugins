@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
@@ -47,14 +48,18 @@ public class FromChannel extends HistogramProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Histogram create() throws CreateException {
+    public Histogram get() throws ProvisionFailedException {
 
-        Channel channelIn = channel.create();
+        Channel channelIn = channel.get();
 
-        if (mask != null) {
-            return HistogramFromObjectsFactory.create(channelIn, mask.create());
-        } else {
-            return HistogramFromObjectsFactory.create(channelIn);
+        try {
+            if (mask != null) {
+                return HistogramFromObjectsFactory.create(channelIn, mask.get());
+            } else {
+                return HistogramFromObjectsFactory.create(channelIn);
+            }
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
         }
     }
 }

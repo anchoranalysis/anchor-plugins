@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.filter;
 
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
@@ -39,10 +39,10 @@ import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
 public class NotInContainer extends WithContainerBase {
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objectCollection)
-            throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
         ObjectCollection container = containerRequired();
-        return objectCollection.stream().filter(object -> !isObjectInContainer(object, container));
+        return objects.stream().filter(object -> !isObjectInContainer(object, container));
     }
 
     private static boolean isObjectInContainer(ObjectMask object, ObjectCollection container) {

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -48,7 +48,7 @@ public abstract class WithDimensionsBase extends ObjectCollectionProviderUnary {
     @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
     // END BEAN PROPERTIES
 
-    protected Dimensions createDimensions() throws CreateException {
-        return dimensions.create();
+    protected Dimensions createDimensions() throws ProvisionFailedException {
+        return dimensions.get();
     }
 }

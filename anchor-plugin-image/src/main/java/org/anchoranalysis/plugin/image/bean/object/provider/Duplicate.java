@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
@@ -38,7 +37,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 public class Duplicate extends ObjectCollectionProviderUnary {
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) {
         return objects.duplicate();
     }
 }

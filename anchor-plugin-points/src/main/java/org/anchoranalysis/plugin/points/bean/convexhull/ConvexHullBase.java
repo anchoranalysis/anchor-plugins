@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.points.bean.convexhull;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.outline.FindOutline;
@@ -41,9 +41,9 @@ public abstract class ConvexHullBase extends MaskProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromMask(Mask mask) throws CreateException {
+    public Mask createFromMask(Mask mask) throws ProvisionFailedException {
         return createFromMask(mask, FindOutline.outline(mask, 1, true, erodeAtBoundary));
     }
 
-    protected abstract Mask createFromMask(Mask mask, Mask outline) throws CreateException;
+    protected abstract Mask createFromMask(Mask mask, Mask outline) throws ProvisionFailedException;
 }

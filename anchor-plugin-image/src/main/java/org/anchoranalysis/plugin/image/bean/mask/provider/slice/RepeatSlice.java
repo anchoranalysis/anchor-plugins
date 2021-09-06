@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.slice;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -58,9 +58,9 @@ public class RepeatSlice extends MaskProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromMask(Mask mask) throws CreateException {
+    public Mask createFromMask(Mask mask) throws ProvisionFailedException {
 
-        Dimensions dimensionsForOutput = dimensions.create();
+        Dimensions dimensionsForOutput = dimensions.get();
 
         Mask out = createEmptyMask(mask, dimensionsForOutput);
 
@@ -72,10 +72,10 @@ public class RepeatSlice extends MaskProviderUnary {
         return out;
     }
 
-    private Mask createEmptyMask(Mask mask, Dimensions dimensionsForOutput) throws CreateException {
+    private Mask createEmptyMask(Mask mask, Dimensions dimensionsForOutput) throws ProvisionFailedException {
 
         if (!mask.extent().equalsIgnoreZ(dimensionsForOutput.extent())) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     "The slice does not have the same XY extent as specified in dimensions");
         }
 

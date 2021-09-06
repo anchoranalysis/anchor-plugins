@@ -31,6 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -63,22 +64,26 @@ public class ConvertWithHistogram<T> extends ConvertBase {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChannel(final Channel channel) throws CreateException {
+    public Channel createFromChannel(final Channel channel) throws ProvisionFailedException {
 
         ChannelConverterAttached<Histogram, T> converter = convert.createConverter();
 
         try {
             converter.attachObject(createHistogram(channel));
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
 
         return converter.convert(channel, createPolicy());
     }
 
-    private Histogram createHistogram(Channel channel) throws CreateException {
-        return OptionalUtilities.orElseGet(
-                OptionalFactory.create(histogram),
-                () -> HistogramFromObjectsFactory.create(channel));
+    private Histogram createHistogram(Channel channel) throws ProvisionFailedException {
+        try {
+            return OptionalUtilities.orElseGet(
+                    OptionalFactory.create(histogram),
+                    () -> HistogramFromObjectsFactory.create(channel));
+        } catch (CreateException e) {
+           throw new ProvisionFailedException(e);
+        }
     }
 }

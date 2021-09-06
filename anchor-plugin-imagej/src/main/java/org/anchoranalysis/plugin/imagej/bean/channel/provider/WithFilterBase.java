@@ -26,7 +26,7 @@
 package org.anchoranalysis.plugin.imagej.bean.channel.provider;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
@@ -38,11 +38,11 @@ public abstract class WithFilterBase extends WithRadiusBase {
     private int rankFilter;
 
     @Override
-    public Channel createFromChannel(Channel channel, int radius) throws CreateException {
+    public Channel createFromChannel(Channel channel, int radius) throws ProvisionFailedException {
         try {
             return FilterHelper.applyRankFilter(channel, radius, rankFilter);
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

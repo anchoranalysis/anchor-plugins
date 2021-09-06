@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.object.provider.filter;
 
 import java.util.Optional;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
@@ -38,7 +38,7 @@ public class Filter extends ObjectCollectionProviderFilterBase {
             ObjectCollection objects,
             Optional<ObjectCollection> objectsRejected,
             Optional<Dimensions> dim)
-            throws CreateException {
+            throws ProvisionFailedException {
         return filter(objects, dim, objectsRejected);
     }
 }

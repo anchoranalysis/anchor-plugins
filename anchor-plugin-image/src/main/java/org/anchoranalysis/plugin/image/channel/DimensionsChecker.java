@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.channel;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -38,9 +38,9 @@ import org.anchoranalysis.image.core.mask.Mask;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DimensionsChecker {
 
-    public static void check(Channel channel, Mask mask) throws CreateException {
+    public static void check(Channel channel, Mask mask) throws ProvisionFailedException {
         if (!channel.dimensions().equals(mask.dimensions())) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     String.format(
                             "channel (%s) and mask (%s) must have the same dimensions",
                             channel.dimensions().toString(), mask.dimensions().toString()));
@@ -55,11 +55,11 @@ public class DimensionsChecker {
      *     messages
      * @param dimFromChannel the dimensions it must equal from channel (identified as channel in
      *     error messages)
-     * @throws CreateException
+     * @throws ProvisionFailedException
      */
     public static void check(
             Channel channelToCheck, String channelToCheckName, Dimensions dimFromChannel)
-            throws CreateException {
+            throws ProvisionFailedException {
         check(channelToCheck.dimensions(), channelToCheckName, dimFromChannel);
     }
 
@@ -71,11 +71,11 @@ public class DimensionsChecker {
      *     messages
      * @param dimensionsFromChannel the dimensions it must equal from channel (identified as channel
      *     in error messages)
-     * @throws CreateException
+     * @throws ProvisionFailedException
      */
     public static void check(
             Mask maskToCheck, String channelToCheckName, Dimensions dimensionsFromChannel)
-            throws CreateException {
+            throws ProvisionFailedException {
         check(maskToCheck.dimensions(), channelToCheckName, dimensionsFromChannel);
     }
 
@@ -88,13 +88,13 @@ public class DimensionsChecker {
      * @param channelSameSize the channel which it must be the same size as (referred to in error
      *     messages as "channel")
      * @return the newly created channel
-     * @throws CreateException
+     * @throws ProvisionFailedException
      */
     public static Channel createSameSize(
             ChannelProvider provider, String providerName, Channel channelSameSize)
-            throws CreateException {
+            throws ProvisionFailedException {
 
-        Channel channelNew = provider.create();
+        Channel channelNew = provider.get();
         check(channelNew, providerName, channelSameSize.dimensions());
         return channelNew;
     }
@@ -108,13 +108,13 @@ public class DimensionsChecker {
      * @param channelSameSize the channel which it must be the same size as (referred to in error
      *     messages as "channel")
      * @return the newly created channel
-     * @throws CreateException
+     * @throws ProvisionFailedException
      */
     public static Mask createSameSize(
             MaskProvider provider, String providerName, Channel channelSameSize)
-            throws CreateException {
+            throws ProvisionFailedException {
 
-        Mask mask = provider.create();
+        Mask mask = provider.get();
         check(mask, providerName, channelSameSize.dimensions());
         return mask;
     }
@@ -123,9 +123,9 @@ public class DimensionsChecker {
             Dimensions dimensionsToCheck,
             String channelToCheckName,
             Dimensions dimensionsFromChannel)
-            throws CreateException {
+            throws ProvisionFailedException {
         if (!dimensionsFromChannel.equals(dimensionsToCheck)) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     String.format(
                             "channel (%s) and %s (%s) must have the same dimensions",
                             dimensionsFromChannel.toString(),

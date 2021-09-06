@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.outline.FindOutline;
@@ -52,7 +52,7 @@ public class Outline extends MaskProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromMask(Mask mask) throws CreateException {
+    public Mask createFromMask(Mask mask) throws ProvisionFailedException {
         return FindOutline.outlineGuess3D(mask, 1, flatten, outlineAtBoundary);
     }
 }

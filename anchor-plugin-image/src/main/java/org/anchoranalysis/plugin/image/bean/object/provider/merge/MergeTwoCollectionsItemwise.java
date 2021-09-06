@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -56,13 +56,13 @@ public class MergeTwoCollectionsItemwise extends ObjectCollectionProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection create() throws CreateException {
+    public ObjectCollection get() throws ProvisionFailedException {
 
-        ObjectCollection first = objects1.create();
-        ObjectCollection second = objects2.create();
+        ObjectCollection first = objects1.get();
+        ObjectCollection second = objects2.get();
 
         if (first.size() != second.size()) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     String.format(
                             "Both object-providers must have the same number of items, currently %d and %d",
                             first.size(), second.size()));

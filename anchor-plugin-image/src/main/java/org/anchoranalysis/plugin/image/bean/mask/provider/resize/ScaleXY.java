@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
@@ -50,18 +50,23 @@ public class ScaleXY extends MaskProviderUnary {
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
     // END BEAN PROPERTIES
 
+    @Override
+    public Mask createFromMask(Mask mask) throws ProvisionFailedException {
+        return scale(mask, scaleCalculator, getInitialization().getSuggestedResize());
+    }
+    
     public static Mask scale(
             Mask mask,
             ScaleCalculator scaleCalculator,
             Optional<ImageSizeSuggestion> suggestedResize)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         ScaleFactor scaleFactor;
         try {
             scaleFactor =
                     scaleCalculator.calculate(Optional.of(mask.dimensions()), suggestedResize);
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
 
         if (scaleFactor.isNoScale()) {
@@ -70,10 +75,5 @@ public class ScaleXY extends MaskProviderUnary {
         }
 
         return mask.scaleXY(scaleFactor);
-    }
-
-    @Override
-    public Mask createFromMask(Mask mask) throws CreateException {
-        return scale(mask, scaleCalculator, getInitialization().getSuggestedResize());
     }
 }

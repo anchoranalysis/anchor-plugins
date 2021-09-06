@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
@@ -65,7 +66,7 @@ public class Erode extends ObjectCollectionProviderMorphological {
 
     @Override
     protected ObjectMask applyMorphologicalOperation(ObjectMask object, Optional<Extent> extent)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         AcceptIterationList acceptConditionsDilation = new AcceptIterationList();
         if (rejectIterationIfAllLow) {
@@ -75,7 +76,11 @@ public class Erode extends ObjectCollectionProviderMorphological {
             acceptConditionsDilation.add(new RejectIterationIfLowDisconnected());
         }
 
-        return MorphologicalErosion.erode(
-                object, getIterations(), isDo3D(), Optional.of(acceptConditionsDilation));
+        try {
+            return MorphologicalErosion.erode(
+                    object, getIterations(), isDo3D(), Optional.of(acceptConditionsDilation));
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 }

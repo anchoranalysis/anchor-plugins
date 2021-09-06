@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.object;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
@@ -56,11 +56,11 @@ public abstract class LevelPerObjectBase extends ChannelProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
 
         Channel output =
                 ChannelFactory.instance().create(channel.dimensions(), channel.getVoxelDataType());
-        writeLevelsForObjects(channel, objects.create(), output);
+        writeLevelsForObjects(channel, objects.get(), output);
         return output;
     }
 
@@ -71,8 +71,8 @@ public abstract class LevelPerObjectBase extends ChannelProviderUnary {
      *     variously for particular objects
      * @param objects the objects
      * @param output the channel where the calculated-levels are written (for each object)
-     * @throws CreateException
+     * @throws ProvisionFailedException
      */
     protected abstract void writeLevelsForObjects(
-            Channel input, ObjectCollection objects, Channel output) throws CreateException;
+            Channel input, ObjectCollection objects, Channel output) throws ProvisionFailedException;
 }

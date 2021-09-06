@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.dimensions.provider;
 
 import java.util.Set;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
@@ -48,22 +48,22 @@ public class GuessDimensions extends DimensionsProvider {
     private Dimensions dimensions;
 
     @Override
-    public Dimensions create() throws CreateException {
+    public Dimensions get() throws ProvisionFailedException {
 
         if (dimensions == null) {
-            dimensions = takeDimFromStackCollection(getInitialization().stacks());
+            dimensions = takeDimensionFromStackCollection(getInitialization().stacks());
         }
 
         return dimensions;
     }
 
-    private Dimensions takeDimFromStackCollection(NamedProviderStore<Stack> stackCollection)
-            throws CreateException {
+    private Dimensions takeDimensionFromStackCollection(NamedProviderStore<Stack> stackCollection)
+            throws ProvisionFailedException {
 
         Set<String> keys = stackCollection.keys();
 
         if (!keys.contains(StackIdentifiers.INPUT_IMAGE)) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     String.format(
                             "No input-image (%s) exists so cannot guess Image Dimensions. Please set the dimensions explicitly.",
                             StackIdentifiers.INPUT_IMAGE));
@@ -73,17 +73,17 @@ public class GuessDimensions extends DimensionsProvider {
     }
 
     /** Takes the ImageDim from a particular stack in the collection */
-    private Dimensions dimensionsFromSpecificStack(String keyThatExists) throws CreateException {
+    private Dimensions dimensionsFromSpecificStack(String keyThatExists) throws ProvisionFailedException {
         Stack stack;
         try {
             stack = getInitialization().stacks().getException(keyThatExists);
         } catch (NamedProviderGetException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
 
         Channel channel = stack.getChannel(0);
         if (channel == null) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     String.format(
                             "Stack %s has no channels, so dimensions cannot be inferred.",
                             keyThatExists));

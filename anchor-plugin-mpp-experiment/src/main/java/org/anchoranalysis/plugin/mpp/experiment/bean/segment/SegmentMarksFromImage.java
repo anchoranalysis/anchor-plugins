@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -169,8 +170,8 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
     private Optional<Dictionary> createDictionary() throws JobExecutionException {
         try {
             return OptionalUtilities.map(
-                    Optional.ofNullable(dictionary), DictionaryProvider::create);
-        } catch (CreateException e) {
+                    Optional.ofNullable(dictionary), DictionaryProvider::get);
+        } catch (ProvisionFailedException e) {
             throw new JobExecutionException("An error occurred creating the dictionary.", e);
         }
     }

@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -76,9 +76,9 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         // The first time, we establish the binaryImage
         if (maskCreated == null) {
             try {
-                maskCreated = mask.create();
+                maskCreated = mask.get();
                 channel = maskCreated.channel();
-            } catch (CreateException e) {
+            } catch (ProvisionFailedException e) {
                 throw new OperationFailedException(e);
             }
         }

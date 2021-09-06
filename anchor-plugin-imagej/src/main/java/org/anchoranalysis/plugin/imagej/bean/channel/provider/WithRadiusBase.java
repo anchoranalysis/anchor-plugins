@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Resolution;
@@ -48,15 +48,15 @@ public abstract class WithRadiusBase extends ChannelProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
         return createFromChannel(
                 channel, radiusInVoxels(channel.resolution().map(Resolution::unitConvert)));
     }
 
     protected abstract Channel createFromChannel(Channel channel, int radius)
-            throws CreateException;
+            throws ProvisionFailedException;
 
-    private int radiusInVoxels(Optional<UnitConverter> converter) throws CreateException {
+    private int radiusInVoxels(Optional<UnitConverter> converter) throws ProvisionFailedException {
         if (radiusInMeters) {
             if (converter.isPresent()) {
                 // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care
@@ -64,7 +64,7 @@ public abstract class WithRadiusBase extends ChannelProviderUnary {
                 // later)
                 return (int) Math.round(converter.get().fromPhysicalDistance(radius));
             } else {
-                throw new CreateException(
+                throw new ProvisionFailedException(
                         "Radius is specified in meters but no image-resolution information is available");
             }
         } else {
