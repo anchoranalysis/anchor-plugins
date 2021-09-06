@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider;
 
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 public class Empty extends ObjectCollectionProvider {
 
     @Override
-    public ObjectCollection create() throws CreateException {
+    public ObjectCollection get() throws ProvisionFailedException {
         return ObjectCollectionFactory.empty();
     }
 }

@@ -26,14 +26,13 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.mask;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 
 public class FromMask extends FromMaskBase {
 
     @Override
-    protected Channel createFromMask(Mask mask) throws CreateException {
+    protected Channel createFromMask(Mask mask) {
         return mask.channel();
     }
 }

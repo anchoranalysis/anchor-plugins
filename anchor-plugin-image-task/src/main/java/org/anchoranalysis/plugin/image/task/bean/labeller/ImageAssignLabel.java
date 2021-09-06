@@ -33,6 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
@@ -155,8 +156,8 @@ public class ImageAssignLabel<T>
         try {
             provider.initRecursive(
                     InitializationFactory.createWithStacks(stack, context), context.getLogger());
-            return provider.create();
-        } catch (InitException | OperationFailedException e) {
+            return provider.get();
+        } catch (OperationFailedException | ProvisionFailedException | InitException e) {
             throw new CreateException(e);
         }
     }

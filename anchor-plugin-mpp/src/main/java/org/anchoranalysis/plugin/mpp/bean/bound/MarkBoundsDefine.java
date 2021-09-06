@@ -31,7 +31,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.mpp.bean.provider.MarkBoundsProvider;
 
@@ -44,7 +43,7 @@ public class MarkBoundsDefine extends MarkBoundsProvider {
     // END BEAN FIELDS
 
     @Override
-    public MarkBounds create() throws CreateException {
+    public MarkBounds get() {
         return markBounds;
     }
 }

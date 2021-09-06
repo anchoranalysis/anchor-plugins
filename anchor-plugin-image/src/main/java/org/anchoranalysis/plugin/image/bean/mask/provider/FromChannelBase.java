@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
@@ -47,8 +48,12 @@ public abstract class FromChannelBase extends MaskProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask create() throws CreateException {
-        return createFromSource(channel.create());
+    public Mask get() throws ProvisionFailedException {
+        try {
+            return createFromSource(channel.get());
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 
     protected abstract Mask createFromSource(Channel source) throws CreateException;

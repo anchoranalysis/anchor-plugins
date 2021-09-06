@@ -32,7 +32,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -73,13 +73,13 @@ public class IncludeRandomObjects extends PointsProposer {
         List<Point3i> out = new ArrayList<>();
 
         try {
-            ObjectCollection objectCollection = objects.create();
+            ObjectCollection objectCollection = objects.get();
 
             for (ObjectMask object : objectCollection) {
                 maybeAddToList(object, out, randomNumberGenerator);
             }
 
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             errorNode.add(e);
             return Optional.empty();
         }

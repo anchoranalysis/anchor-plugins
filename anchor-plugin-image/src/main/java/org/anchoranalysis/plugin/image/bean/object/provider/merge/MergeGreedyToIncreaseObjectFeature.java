@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -61,7 +61,7 @@ public class MergeGreedyToIncreaseObjectFeature extends MergeWithOptionalDistanc
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objectsSource)
-            throws CreateException {
+            throws ProvisionFailedException {
         try {
             NaiveGreedyMerge merger =
                     new NaiveGreedyMerge(
@@ -74,7 +74,7 @@ public class MergeGreedyToIncreaseObjectFeature extends MergeWithOptionalDistanc
             return mergeMultiplex(objectsSource, merger::tryMerge);
 
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.IterateVoxelsMask;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -50,7 +49,7 @@ public class SubtractMean extends UnaryWithMaskBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask) {
 
         Voxels<UnsignedByteBuffer> voxelsIntensity = channel.voxels().asByte();
 

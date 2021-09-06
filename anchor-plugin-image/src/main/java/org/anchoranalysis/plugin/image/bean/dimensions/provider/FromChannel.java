@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
@@ -69,20 +69,20 @@ public class FromChannel extends DimensionsProvider {
     }
 
     @Override
-    public Dimensions create() throws CreateException {
+    public Dimensions get() throws ProvisionFailedException {
         return selectChannel().dimensions();
     }
 
-    private Channel selectChannel() throws CreateException {
+    private Channel selectChannel() throws ProvisionFailedException {
 
         if (!id.isEmpty()) {
             return selectChannelForId(id);
         }
 
-        return channel.create();
+        return channel.get();
     }
 
-    private Channel selectChannelForId(String id) throws CreateException {
+    private Channel selectChannelForId(String id) throws ProvisionFailedException {
 
         try {
             return OptionalUtilities.orFlat(
@@ -94,13 +94,13 @@ public class FromChannel extends DimensionsProvider {
                                             .map(FromChannel::firstChannel))
                     .orElseThrow(
                             () ->
-                                    new CreateException(
+                                    new ProvisionFailedException(
                                             String.format(
                                                     "Failed to find either a channel or stack with id `%s`",
                                                     id)));
 
         } catch (NamedProviderGetException e) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     String.format("A error occurred while retrieving channel `%s`", id), e);
         }
     }

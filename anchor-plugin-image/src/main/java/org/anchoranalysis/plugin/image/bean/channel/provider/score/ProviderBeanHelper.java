@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.Provider;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ProviderBeanHelper {
@@ -41,9 +41,9 @@ class ProviderBeanHelper {
      *
      * @param in input-list
      * @return a newly-created list containing the newly created items
-     * @throws CreateException if a provider fails to create
+     * @throws ProvisionFailedException if an object cannot be provided
      */
-    public static <T> List<T> listFromBeans(List<? extends Provider<T>> in) throws CreateException {
+    public static <T> List<T> listFromBeans(List<? extends Provider<T>> in) throws ProvisionFailedException {
         List<T> out = new ArrayList<>();
         addFromBeanList(in, out);
         return out;
@@ -54,12 +54,12 @@ class ProviderBeanHelper {
      *
      * @param in input-list
      * @param out output-list
-     * @throws CreateException if a provider fails to create
+     * @throws ProvisionFailedException if an object cannot be provided
      */
     private static <T> void addFromBeanList(List<? extends Provider<T>> in, List<T> out)
-            throws CreateException {
+            throws ProvisionFailedException {
         for (Provider<T> provider : in) {
-            out.add(provider.create());
+            out.add(provider.get());
         }
     }
 }

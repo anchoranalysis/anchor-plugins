@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.intensity;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
@@ -71,16 +72,21 @@ public class IfVoxelZero extends ChannelProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
 
-        Channel ifZero =
-                DimensionsChecker.createSameSize(channelIfVoxelZero, "channelIfVoxelZero", channel);
-
-        VoxelDataType combinedType =
-                CombineTypes.combineTypes(channel.getVoxelDataType(), ifZero.getVoxelDataType());
-
-        double multFact = (double) combinedType.maxValue() / channel.getVoxelDataType().maxValue();
-        return mergeViaZeroCheck(channel, ifZero, combinedType, multFact);
+        try {
+            Channel ifZero =
+                    DimensionsChecker.createSameSize(channelIfVoxelZero, "channelIfVoxelZero", channel);
+    
+            VoxelDataType combinedType =
+                    CombineTypes.combineTypes(channel.getVoxelDataType(), ifZero.getVoxelDataType());
+    
+            double multFact = (double) combinedType.maxValue() / channel.getVoxelDataType().maxValue();
+            return mergeViaZeroCheck(channel, ifZero, combinedType, multFact);
+            
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 
     /**

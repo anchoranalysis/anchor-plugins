@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -62,10 +62,10 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
             throws OperationFailedException {
         super.start(dimensions, objectsToFilter);
         try {
-            intersectionGreater = objectsGreater.create();
-            intersectionLesser = objectsLesser.create();
+            intersectionGreater = objectsGreater.get();
+            intersectionLesser = objectsLesser.get();
 
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

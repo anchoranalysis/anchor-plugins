@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.mask;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -42,7 +41,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class ZeroOutsideMask extends UnaryWithMaskBase {
 
     @Override
-    protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask) {
 
         Channel channelOut =
                 ChannelFactory.instance().create(channel.dimensions(), channel.getVoxelDataType());

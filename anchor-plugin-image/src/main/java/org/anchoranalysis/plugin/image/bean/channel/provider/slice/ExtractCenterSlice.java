@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.slice;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 
@@ -38,7 +37,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 public class ExtractCenterSlice extends ChannelProviderUnary {
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) {
         int z = (channel.dimensions().z() - 1) / 2;
         return channel.extractSlice(z);
     }

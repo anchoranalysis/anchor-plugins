@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -56,7 +56,7 @@ public class HOGDescriptor extends FeatureListProvider<FeatureInputStack> {
     // END BEAN PROPERTIES
 
     @Override
-    public FeatureList<FeatureInputStack> create() throws CreateException {
+    public FeatureList<FeatureInputStack> get() throws ProvisionFailedException {
         return FeatureListFactory.mapFromRange(
                 0, params.sizeDescriptor(resizeTo.asExtent()), this::featureFor);
     }

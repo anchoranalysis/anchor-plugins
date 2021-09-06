@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.object;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -52,7 +53,7 @@ public class LevelPerObjectIndependently extends LevelPerObjectBase {
     @Override
     protected void writeLevelsForObjects(
             Channel channelIntensity, ObjectCollection objects, Channel output)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         try {
             LevelResultCollection results =
@@ -69,7 +70,7 @@ public class LevelPerObjectIndependently extends LevelPerObjectBase {
             }
 
         } catch (CreateException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

@@ -30,12 +30,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ColorProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
  * Generates colors to match the size of an object-collection
@@ -51,19 +50,11 @@ public class GenerateToMatchObjects extends ColorProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public ColorList create() throws CreateException {
-
-        ObjectCollection objectsCreated;
+    public ColorList get() throws ProvisionFailedException {
         try {
-            objectsCreated = objects.create();
-        } catch (CreateException e) {
-            throw new CreateException(e);
-        }
-
-        try {
-            return colorScheme.createList(objectsCreated.size());
+            return colorScheme.createList(objects.get().size());
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

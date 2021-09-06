@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.gradient;
 
+import org.anchoranalysis.image.core.channel.Channel;
+
 /**
- * Gradient in x and y axes
+ * Calculates a {@link Channel}'s gradient along the x and y axes.
  *
- * <p>Out-of-bounds strategy = mirror
- *
- * <p>Note the z-dimension is not considered..
+ * <p>Note the z-dimension is not considered.
  *
  * @author Owen Feehan
  */

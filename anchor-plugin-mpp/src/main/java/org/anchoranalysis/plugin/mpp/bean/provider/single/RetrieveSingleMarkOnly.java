@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -49,15 +49,15 @@ public class RetrieveSingleMarkOnly extends SingleMarkProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<Mark> create() throws CreateException {
-        MarkCollection marksCreated = marks.create();
+    public Optional<Mark> get() throws ProvisionFailedException {
+        MarkCollection marksCreated = marks.get();
 
         if (marksCreated.size() == 0) {
-            throw new CreateException("Mark-collection is empty. It must have exactly one item");
+            throw new ProvisionFailedException("Mark-collection is empty. It must have exactly one item");
         }
 
         if (marksCreated.size() > 1) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     "Mark-collection has multiple marks. It must have exactly one item");
         }
 

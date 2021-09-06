@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -65,7 +65,7 @@ class FeatureListCustomNameHelper {
             NamedFeatureStore<T> featuresNamed = storeFactory.createNamedFeatureList(features);
             return copyFeaturesCreateCustomName(featuresNamed);
 
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

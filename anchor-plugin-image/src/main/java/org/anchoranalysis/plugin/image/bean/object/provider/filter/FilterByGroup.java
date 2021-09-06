@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -50,11 +51,11 @@ public class FilterByGroup extends ObjectCollectionProviderFilterBase {
             ObjectCollection objects,
             Optional<ObjectCollection> objectsRejected,
             Optional<Dimensions> dim)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         List<MatchedObject> matchList =
                 MatcherIntersectionHelper.matchIntersectingObjects(
-                        objectsGrouped.create(), objects);
+                        objectsGrouped.get(), objects);
 
         return ObjectCollectionFactory.flatMapFromCollection(
                 matchList.stream().map(MatchedObject::getMatches),

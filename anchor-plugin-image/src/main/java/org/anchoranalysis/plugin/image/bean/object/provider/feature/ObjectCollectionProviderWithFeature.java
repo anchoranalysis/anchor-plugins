@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.feature;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
@@ -43,11 +43,11 @@ public abstract class ObjectCollectionProviderWithFeature extends ObjectCollecti
     // END BEAN PROPERTIES
 
     protected FeatureCalculatorSingle<FeatureInputSingleObject> createSession()
-            throws CreateException {
+            throws ProvisionFailedException {
         try {
             return featureEvaluator.createFeatureSession();
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

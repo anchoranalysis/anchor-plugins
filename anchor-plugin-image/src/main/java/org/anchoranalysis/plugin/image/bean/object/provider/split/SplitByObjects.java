@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -58,9 +58,9 @@ public class SplitByObjects extends WithDimensionsBase {
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objectCollection)
-            throws CreateException {
+            throws ProvisionFailedException {
 
-        ObjectCollection objectsSplitByCollection = objectsSplitBy.create();
+        ObjectCollection objectsSplitByCollection = objectsSplitBy.get();
 
         Dimensions dimensions = createDimensions();
 

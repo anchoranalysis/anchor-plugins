@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
@@ -59,16 +60,21 @@ public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
     @Override
     public ChannelConverter<UnsignedByteBuffer> createConverter() throws CreateException {
 
-        Dictionary dictionaryCreated = dictionary.create();
-
-        int min = getScaled(dictionaryCreated, keyLower, scaleLower);
-        int max = getScaled(dictionaryCreated, keyUpper, scaleUpper);
-
-        getLogger()
-                .messageLogger()
-                .logFormatted("ChannelConverter: scale with min=%d max=%d%n", min, max);
-
-        return new ToUnsignedByteScaleByMinMaxValue(min, max);
+        try {
+            Dictionary dictionaryCreated = dictionary.get();
+    
+            int min = getScaled(dictionaryCreated, keyLower, scaleLower);
+            int max = getScaled(dictionaryCreated, keyUpper, scaleUpper);
+    
+            getLogger()
+                    .messageLogger()
+                    .logFormatted("ChannelConverter: scale with min=%d max=%d%n", min, max);
+    
+            return new ToUnsignedByteScaleByMinMaxValue(min, max);
+            
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
+        }
     }
 
     private static int getScaled(Dictionary dictionary, String key, double scale)

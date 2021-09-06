@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -49,6 +50,10 @@ public class ColoredObjects extends ColoredBaseWithGenerator {
     @Override
     protected ObjectCollection objectsToDraw(Dimensions backgroundDimensions)
             throws CreateException {
-        return objects.create();
+        try {
+            return objects.get();
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
+        }
     }
 }

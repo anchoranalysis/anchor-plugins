@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -41,7 +40,7 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 public class Invert extends ChannelProviderUnary {
 
     @Override
-    public Channel createFromChannel(Channel channel) throws CreateException {
+    public Channel createFromChannel(Channel channel) {
 
         VoxelsWrapper voxels = channel.voxels();
 

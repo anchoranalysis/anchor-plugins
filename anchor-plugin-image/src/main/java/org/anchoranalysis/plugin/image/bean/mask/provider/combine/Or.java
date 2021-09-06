@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.combine;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.combine.MaskOr;
 
@@ -39,7 +38,7 @@ import org.anchoranalysis.image.core.mask.combine.MaskOr;
 public class Or extends CombineBase {
 
     @Override
-    protected Mask createFromTwoMasks(Mask maskToModify, Mask maskOther) throws CreateException {
+    protected Mask createFromTwoMasks(Mask maskToModify, Mask maskOther) {
         MaskOr.apply(maskToModify, maskOther);
         return maskToModify;
     }

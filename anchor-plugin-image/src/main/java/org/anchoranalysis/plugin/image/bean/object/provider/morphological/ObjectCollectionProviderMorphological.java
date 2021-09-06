@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -46,15 +46,15 @@ public abstract class ObjectCollectionProviderMorphological extends WithOptional
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
         Optional<Extent> extent = deriveExtent();
         return objects.stream().map(objectMask -> applyMorphologicalOperation(objectMask, extent));
     }
 
     protected abstract ObjectMask applyMorphologicalOperation(
-            ObjectMask object, Optional<Extent> extent) throws CreateException;
+            ObjectMask object, Optional<Extent> extent) throws ProvisionFailedException;
 
-    protected Optional<Extent> deriveExtent() throws CreateException {
+    protected Optional<Extent> deriveExtent() throws ProvisionFailedException {
         return createDims().map(Dimensions::extent);
     }
 }

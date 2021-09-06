@@ -37,6 +37,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
@@ -67,12 +68,12 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     @Override
     protected void writeLevelsForObjects(
             Channel channelIntensity, ObjectCollection objects, Channel output)
-            throws CreateException {
+            throws ProvisionFailedException {
         try {
             setAgainstNeighbor(channelIntensity, output, objects, distance);
 
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

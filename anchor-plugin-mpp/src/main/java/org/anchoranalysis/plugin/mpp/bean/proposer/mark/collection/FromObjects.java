@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -72,8 +73,8 @@ public class FromObjects extends MarkCollectionProposer {
 
         ObjectCollection objectsCreated;
         try {
-            objectsCreated = objects.create();
-        } catch (CreateException e) {
+            objectsCreated = objects.get();
+        } catch (ProvisionFailedException e) {
             throw new ProposalAbnormalFailureException("Failed to create objects", e);
         }
 

@@ -31,7 +31,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.ProviderAsStack;
@@ -51,19 +51,19 @@ public class Concatenate extends StackProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Stack create() throws CreateException {
+    public Stack get() throws ProvisionFailedException {
 
         try {
             Stack out = new Stack();
 
             for (ProviderAsStack provider : list) {
-                out.addChannelsFrom(provider.createAsStack());
+                out.addChannelsFrom(provider.getAsStack());
             }
 
             return out;
 
         } catch (IncorrectImageSizeException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

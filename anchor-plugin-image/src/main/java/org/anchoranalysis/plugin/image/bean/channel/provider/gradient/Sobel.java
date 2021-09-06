@@ -34,6 +34,7 @@ import net.imglib2.outofbounds.OutOfBounds;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
@@ -51,12 +52,16 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 public class Sobel extends GradientBase {
 
     @Override
-    public Channel createFromChannel(Channel channelIn) throws CreateException {
+    public Channel createFromChannel(Channel channelIn) throws ProvisionFailedException {
 
         Channel intermediate = createNewFloat(channelIn.dimensions());
 
-        processMultiplexInputType(
-                channelIn, ConvertToNativeImg.fromFloat(intermediate.voxels().asFloat()));
+        try {
+            processMultiplexInputType(
+                    channelIn, ConvertToNativeImg.fromFloat(intermediate.voxels().asFloat()));
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
 
         // convert to our output from the float
         return convertToOutputType(intermediate);

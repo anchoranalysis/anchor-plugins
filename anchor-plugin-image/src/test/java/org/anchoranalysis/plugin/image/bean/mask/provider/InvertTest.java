@@ -30,7 +30,7 @@ import static org.anchoranalysis.test.image.MaskFixture.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -45,22 +45,22 @@ class InvertTest {
     private static final Point3i CORNER_MASK = addHalfHeightInY(CORNER_RECTANGLE);
 
     @Test
-    void testWithoutMask2d() throws CreateException {
+    void testWithoutMask2d() throws ProvisionFailedException {
         testRectangle(false, false, expectedNumberVoxelsAfterWithoutRestriction(false));
     }
 
     @Test
-    void testWithoutMask3d() throws CreateException {
+    void testWithoutMask3d() throws ProvisionFailedException {
         testRectangle(true, false, expectedNumberVoxelsAfterWithoutRestriction(true));
     }
 
     @Test
-    void testWithMask2d() throws CreateException {
+    void testWithMask2d() throws ProvisionFailedException {
         testRectangle(false, true, 240);
     }
 
     @Test
-    void testWithMask3d() throws CreateException {
+    void testWithMask3d() throws ProvisionFailedException {
         testRectangle(true, true, 720);
     }
 
@@ -73,7 +73,7 @@ class InvertTest {
     }
 
     private static void testRectangle(boolean do3D, boolean mask, long expectedNumberVoxelsAfter)
-            throws CreateException {
+            throws ProvisionFailedException {
 
         Mask maskBefore = create(CORNER_RECTANGLE, do3D);
 
@@ -81,14 +81,13 @@ class InvertTest {
 
         assertVoxelsOn("before", expectedNumberVoxelsBefore(do3D), maskBefore);
 
-        Mask maskAfter = createProviderInvert(maskBefore, restrictTo).create();
+        Mask maskAfter = createProviderInvert(maskBefore, restrictTo).get();
 
         assertVoxelsOn("after", expectedNumberVoxelsAfter, maskAfter);
     }
 
-    private static Optional<Mask> createRestrictTo(boolean flag, boolean do3D)
-            throws CreateException {
-        return OptionalUtilities.createFromFlagChecked(flag, () -> create(CORNER_MASK, do3D));
+    private static Optional<Mask> createRestrictTo(boolean flag, boolean do3D) {
+        return OptionalUtilities.createFromFlag(flag, () -> create(CORNER_MASK, do3D));
     }
 
     private static MaskProvider createProviderInvert(Mask mask, Optional<Mask> restrictTo) {

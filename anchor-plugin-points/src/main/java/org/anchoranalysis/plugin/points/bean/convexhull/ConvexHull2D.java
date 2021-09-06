@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.points.bean.convexhull;
 
 import java.util.List;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -47,7 +48,7 @@ import org.anchoranalysis.spatial.point.Point2i;
 public class ConvexHull2D extends ConvexHullBase {
 
     @Override
-    protected Mask createFromMask(Mask mask, Mask outline) throws CreateException {
+    protected Mask createFromMask(Mask mask, Mask outline) throws ProvisionFailedException {
         try {
             List<Point2i> pointsOnConvexHull =
                     ConvexHullUtilities.convexHull2D(PointsFromMask.listFrom2i(outline));
@@ -55,8 +56,8 @@ public class ConvexHull2D extends ConvexHullBase {
             // Reuse the channel-created for the outline, to output the results
             changeMaskToShowPointsOnly(outline, pointsOnConvexHull);
             return outline;
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
+        } catch (OperationFailedException | CreateException e) {
+            throw new ProvisionFailedException(e);
         }
     }
 

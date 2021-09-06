@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -56,7 +57,11 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
             NamedFeatureStoreFactory storeFactory,
             boolean suppressErrors)
             throws CreateException {
-        return createFeatures(storeFactory.createNamedFeatureList(list));
+        try {
+            return createFeatures(storeFactory.createNamedFeatureList(list));
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
+        }
     }
 
     public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(

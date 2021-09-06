@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -99,14 +99,14 @@ public class ThreeChannels extends StackProvider {
 
     private static void addToStack(
             Stack stack, Channel channel, Dimensions dimensions, VoxelDataType outputChannelType)
-            throws IncorrectImageSizeException, CreateException {
+            throws IncorrectImageSizeException, ProvisionFailedException {
 
         if (channel == null) {
             channel = ChannelFactory.instance().create(dimensions, outputChannelType);
         }
 
         if (!outputChannelType.equals(channel.getVoxelDataType())) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     String.format(
                             "Channel has a different type (%s) that the expected output-type (%s)",
                             channel.getVoxelDataType(), outputChannelType));
@@ -125,7 +125,7 @@ public class ThreeChannels extends StackProvider {
 
     // Chooses the output type of the data
     private static VoxelDataType chooseOutputDataType(
-            Channel channelRed, Channel channelGreen, Channel channelBlue) throws CreateException {
+            Channel channelRed, Channel channelGreen, Channel channelBlue) throws ProvisionFailedException {
 
         VoxelDataType dataType = null;
 
@@ -146,7 +146,7 @@ public class ThreeChannels extends StackProvider {
                                     voxelDataTypeString(channelRed),
                                     voxelDataTypeString(channelGreen),
                                     voxelDataTypeString(channelBlue));
-                    throw new CreateException(s);
+                    throw new ProvisionFailedException(s);
                 }
             }
         }
@@ -160,11 +160,11 @@ public class ThreeChannels extends StackProvider {
     }
 
     @Override
-    public Stack create() throws CreateException {
+    public Stack get() throws ProvisionFailedException {
 
-        Channel channelRed = red != null ? red.create() : null;
-        Channel channelGreen = green != null ? green.create() : null;
-        Channel channelBlue = blue != null ? blue.create() : null;
+        Channel channelRed = red != null ? red.get() : null;
+        Channel channelGreen = green != null ? green.get() : null;
+        Channel channelBlue = blue != null ? blue.get() : null;
 
         VoxelDataType outputType = chooseOutputDataType(channelRed, channelGreen, channelBlue);
 
@@ -173,7 +173,7 @@ public class ThreeChannels extends StackProvider {
 
     public static Stack createRGBStack(
             Channel channelRed, Channel channelGreen, Channel channelBlue, VoxelDataType outputType)
-            throws CreateException {
+            throws ProvisionFailedException {
         try {
             Dimensions dimensions = createDimensions(channelRed, channelGreen, channelBlue);
 
@@ -183,7 +183,7 @@ public class ThreeChannels extends StackProvider {
             addToStack(out, channelBlue, dimensions, outputType);
             return out;
         } catch (IncorrectImageSizeException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

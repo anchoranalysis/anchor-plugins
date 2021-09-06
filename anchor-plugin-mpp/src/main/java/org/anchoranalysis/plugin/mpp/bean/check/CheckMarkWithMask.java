@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.mpp.bean.check;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.mpp.feature.bean.mark.CheckMark;
@@ -50,8 +50,8 @@ public abstract class CheckMarkWithMask extends CheckMark {
 
     protected Mask createChannel() throws CheckException {
         try {
-            return mask.create();
-        } catch (CreateException e) {
+            return mask.get();
+        } catch (ProvisionFailedException e) {
             throw new CheckException(
                     String.format("Cannot create binary image (from provider %s)", mask), e);
         }

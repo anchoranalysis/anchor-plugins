@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.provider.collection;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -41,9 +41,9 @@ public class FromSingleMark extends MarkCollectionProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public MarkCollection create() throws CreateException {
+    public MarkCollection get() throws ProvisionFailedException {
         MarkCollection marks = new MarkCollection();
-        markProvider.create().ifPresent(marks::add);
+        markProvider.get().ifPresent(marks::add);
         return marks;
     }
 }

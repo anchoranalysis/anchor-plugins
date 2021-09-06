@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.value.Dictionary;
@@ -74,7 +74,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
     public void start(EnergyStack energyStack) throws OperationFailedException {
 
         try {
-            Feature<T> featureCreated = feature.create();
+            Feature<T> featureCreated = feature.get();
 
             Dictionary dictionaryCreated = createDictionary();
 
@@ -85,7 +85,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
                             sharedFeatureSet,
                             getLogger());
 
-        } catch (CreateException | InitException e) {
+        } catch (InitException | ProvisionFailedException e) {
             featureCalculator = null;
             throw new OperationFailedException(e);
         }
@@ -115,9 +115,9 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
     protected abstract T createFeatureCalcParams(
             Mark mark, RegionMap regionMap, EnergyStack energyStack);
 
-    private Dictionary createDictionary() throws CreateException {
+    private Dictionary createDictionary() throws ProvisionFailedException {
         if (dictionary != null) {
-            return dictionary.create();
+            return dictionary.get();
         } else {
             return new Dictionary();
         }

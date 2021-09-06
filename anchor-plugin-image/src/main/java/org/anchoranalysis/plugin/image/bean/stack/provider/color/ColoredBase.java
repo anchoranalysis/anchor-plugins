@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -84,9 +85,13 @@ public abstract class ColoredBase extends StackProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Stack create() throws CreateException {
-        DisplayStack unflattened = createUnflattenedBackground();
-        return drawOnBackground(coloredObjectsToDraw(unflattened.dimensions()), unflattened);
+    public Stack get() throws ProvisionFailedException {
+        try {
+            DisplayStack unflattened = createUnflattenedBackground();
+            return drawOnBackground(coloredObjectsToDraw(unflattened.dimensions()), unflattened);
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 
     /**
@@ -113,7 +118,11 @@ public abstract class ColoredBase extends StackProvider {
     }
 
     private DisplayStack createUnflattenedBackground() throws CreateException {
-        return DisplayStack.create(background.createAsStack());
+        try {
+            return DisplayStack.create(background.getAsStack());
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
+        }
     }
 
     /**

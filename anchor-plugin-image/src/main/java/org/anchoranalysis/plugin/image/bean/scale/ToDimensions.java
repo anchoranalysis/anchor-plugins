@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
@@ -98,9 +98,9 @@ public class ToDimensions extends ScaleCalculator {
             try {
                 return ResizeExtentUtilities.relativeScale(
                         dimensionsCombined.get().extent(),
-                        dimensions.create().extent(),
+                        dimensions.get().extent(),
                         preserveAspectRatio);
-            } catch (CreateException e) {
+            } catch (ProvisionFailedException e) {
                 throw new OperationFailedException(e);
             }
         } else {
@@ -112,8 +112,8 @@ public class ToDimensions extends ScaleCalculator {
             throws OperationFailedException {
         if (dimensionsSourceFallback != null) {
             try {
-                return Optional.of(dimensionsSourceFallback.create());
-            } catch (CreateException e) {
+                return Optional.of(dimensionsSourceFallback.get());
+            } catch (ProvisionFailedException e) {
                 throw new OperationFailedException(e);
             }
         } else {
