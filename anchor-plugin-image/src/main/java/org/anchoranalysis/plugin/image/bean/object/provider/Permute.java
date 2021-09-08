@@ -88,7 +88,8 @@ public class Permute extends ObjectCollectionProvider {
         try {
             setter.setPermutation(provider, propVal);
         } catch (PermutationSetterException e) {
-            throw new ProvisionFailedException("Cannot set permutation on an object-mask-provider", e);
+            throw new ProvisionFailedException(
+                    "Cannot set permutation on an object-mask-provider", e);
         }
 
         // We init after the permutation, as we might be changing a reference

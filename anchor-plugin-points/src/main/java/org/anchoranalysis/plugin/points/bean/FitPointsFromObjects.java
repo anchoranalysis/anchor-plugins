@@ -68,7 +68,7 @@ public class FitPointsFromObjects extends MarkCollectionProvider {
 
         try {
             Dimensions dimensions = pointsFitter.createDim();
-    
+
             return new MarkCollection(
                     pointsFitter.createObjects().stream()
                             .mapToListOptional(object -> createMarkFromObject(object, dimensions)));

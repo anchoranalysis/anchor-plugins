@@ -62,7 +62,7 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
             for (InputManager<T> inputManager : list) {
                 listOut.addAll(inputManager.inputs(params).inputs());
 
-                progressMultiple.incrementWorker();
+                progressMultiple.incrementChild();
             }
             return new InputsWithDirectory<>(listOut);
         }

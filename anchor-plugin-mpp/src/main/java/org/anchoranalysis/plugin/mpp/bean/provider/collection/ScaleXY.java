@@ -31,8 +31,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -61,7 +61,7 @@ public class ScaleXY extends MarkCollectionProvider {
         MarkCollection marksCreated = marks.get().deepCopy();
         try {
             marksCreated.scaleXY(scaleFactor);
-        } catch (OptionalOperationUnsupportedException e) {
+        } catch (CheckedUnsupportedOperationException e) {
             throw new ProvisionFailedException(e);
         }
         return marksCreated;

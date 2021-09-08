@@ -86,7 +86,8 @@ public class ScoreObjects extends UnaryWithObjectsBase {
         }
     }
 
-    private EnergyStackWithoutParams createEnergyStack(Channel channel) throws ProvisionFailedException {
+    private EnergyStackWithoutParams createEnergyStack(Channel channel)
+            throws ProvisionFailedException {
         EnergyStackWithoutParams energyStack = new EnergyStackWithoutParams(channel);
 
         // add other channels

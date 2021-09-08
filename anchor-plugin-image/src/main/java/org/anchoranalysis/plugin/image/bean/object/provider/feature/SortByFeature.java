@@ -64,7 +64,8 @@ public class SortByFeature extends ObjectCollectionProviderWithFeature {
     }
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
 
         try {
             FeatureCalculatorSingle<FeatureInputSingleObject> featureSession = createSession();

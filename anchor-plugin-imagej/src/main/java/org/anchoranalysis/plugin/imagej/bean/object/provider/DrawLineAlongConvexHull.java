@@ -51,7 +51,8 @@ import org.anchoranalysis.spatial.point.PointConverter;
 public class DrawLineAlongConvexHull extends ObjectCollectionProviderUnary {
 
     @Override
-    protected ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    protected ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
         return objects.stream().map(this::transform);
     }
 

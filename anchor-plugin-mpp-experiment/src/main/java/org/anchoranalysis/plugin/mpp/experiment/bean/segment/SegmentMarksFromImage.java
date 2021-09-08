@@ -169,8 +169,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
     private Optional<Dictionary> createDictionary() throws JobExecutionException {
         try {
-            return OptionalUtilities.map(
-                    Optional.ofNullable(dictionary), DictionaryProvider::get);
+            return OptionalUtilities.map(Optional.ofNullable(dictionary), DictionaryProvider::get);
         } catch (ProvisionFailedException e) {
             throw new JobExecutionException("An error occurred creating the dictionary.", e);
         }

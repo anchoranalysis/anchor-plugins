@@ -74,7 +74,7 @@ class WalkToDepth extends DirectoryWalker<File> {
     protected boolean handleDirectory(File directory, int depth, Collection<File> results) {
 
         if (depth == 1) {
-            progressMultiple.incrementWorker();
+            progressMultiple.incrementChild();
         }
 
         if (depth == exactDepth) {

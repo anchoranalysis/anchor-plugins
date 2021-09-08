@@ -54,8 +54,7 @@ public class FilterByGroup extends ObjectCollectionProviderFilterBase {
             throws ProvisionFailedException {
 
         List<MatchedObject> matchList =
-                MatcherIntersectionHelper.matchIntersectingObjects(
-                        objectsGrouped.get(), objects);
+                MatcherIntersectionHelper.matchIntersectingObjects(objectsGrouped.get(), objects);
 
         return ObjectCollectionFactory.flatMapFromCollection(
                 matchList.stream().map(MatchedObject::getMatches),

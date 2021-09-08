@@ -62,16 +62,16 @@ public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
 
         try {
             Dictionary dictionaryCreated = dictionary.get();
-    
+
             int min = getScaled(dictionaryCreated, keyLower, scaleLower);
             int max = getScaled(dictionaryCreated, keyUpper, scaleUpper);
-    
+
             getLogger()
                     .messageLogger()
                     .logFormatted("ChannelConverter: scale with min=%d max=%d%n", min, max);
-    
+
             return new ToUnsignedByteScaleByMinMaxValue(min, max);
-            
+
         } catch (ProvisionFailedException e) {
             throw new CreateException(e);
         }

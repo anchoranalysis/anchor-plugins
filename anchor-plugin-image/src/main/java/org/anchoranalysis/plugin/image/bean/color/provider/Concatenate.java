@@ -38,6 +38,7 @@ import org.anchoranalysis.image.bean.provider.ColorProvider;
 public class Concatenate extends ColorProvider {
 
     // START BEAN PROPERTIES
+    /** A list of {@link ColorProvider} to be concatenated. */
     @BeanField @Getter @Setter private List<ColorProvider> list = new ArrayList<>();
     // END BEAN PROPERTIES
 

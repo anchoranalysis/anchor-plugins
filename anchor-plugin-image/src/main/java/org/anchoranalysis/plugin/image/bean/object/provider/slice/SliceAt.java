@@ -41,7 +41,8 @@ public class SliceAt extends ObjectCollectionProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
         return objects.stream()
                 .filterAndMap(
                         objectMask -> objectMask.boundingBox().contains().z(index),

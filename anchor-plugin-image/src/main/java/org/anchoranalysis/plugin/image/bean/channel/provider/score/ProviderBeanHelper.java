@@ -43,7 +43,8 @@ class ProviderBeanHelper {
      * @return a newly-created list containing the newly created items
      * @throws ProvisionFailedException if an object cannot be provided
      */
-    public static <T> List<T> listFromBeans(List<? extends Provider<T>> in) throws ProvisionFailedException {
+    public static <T> List<T> listFromBeans(List<? extends Provider<T>> in)
+            throws ProvisionFailedException {
         List<T> out = new ArrayList<>();
         addFromBeanList(in, out);
         return out;

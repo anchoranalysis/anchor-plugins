@@ -63,7 +63,8 @@ public class IfParamEqual extends ObjectCollectionProvider {
         Optional<String> dictionaryValue = dictionary.get().getAsString(key);
 
         if (!dictionaryValue.isPresent()) {
-            throw new ProvisionFailedException(String.format("Dictionary key does not exist: %s", key));
+            throw new ProvisionFailedException(
+                    String.format("Dictionary key does not exist: %s", key));
         }
 
         if (dictionaryValue.get().equals(value)) {

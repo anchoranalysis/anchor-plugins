@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
-import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -71,7 +70,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
 
             Iterator<T> iterator = inputs.iterator();
 
-            progressMultiple.incrementWorker();
+            progressMultiple.incrementChild();
 
             List<T> tempList = new ArrayList<>();
             while (iterator.hasNext()) {
@@ -80,8 +79,8 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
 
             List<AnnotationComparisonInput<T>> outList =
                     createListInputWithAnnotationPath(
-                            tempList, new ProgressOneOfMany(progressMultiple));
-            progressMultiple.incrementWorker();
+                            tempList, progressMultiple.trackCurrentChild());
+            progressMultiple.incrementChild();
             return inputs.withInputs(outList);
         }
     }

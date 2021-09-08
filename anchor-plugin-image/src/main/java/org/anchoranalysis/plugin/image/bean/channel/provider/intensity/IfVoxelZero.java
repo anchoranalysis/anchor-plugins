@@ -76,14 +76,17 @@ public class IfVoxelZero extends ChannelProviderUnary {
 
         try {
             Channel ifZero =
-                    DimensionsChecker.createSameSize(channelIfVoxelZero, "channelIfVoxelZero", channel);
-    
+                    DimensionsChecker.createSameSize(
+                            channelIfVoxelZero, "channelIfVoxelZero", channel);
+
             VoxelDataType combinedType =
-                    CombineTypes.combineTypes(channel.getVoxelDataType(), ifZero.getVoxelDataType());
-    
-            double multFact = (double) combinedType.maxValue() / channel.getVoxelDataType().maxValue();
+                    CombineTypes.combineTypes(
+                            channel.getVoxelDataType(), ifZero.getVoxelDataType());
+
+            double multFact =
+                    (double) combinedType.maxValue() / channel.getVoxelDataType().maxValue();
             return mergeViaZeroCheck(channel, ifZero, combinedType, multFact);
-            
+
         } catch (CreateException e) {
             throw new ProvisionFailedException(e);
         }

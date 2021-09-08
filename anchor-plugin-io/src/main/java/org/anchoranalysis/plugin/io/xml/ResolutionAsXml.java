@@ -34,7 +34,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.serialize.XMLUtilities;
+import org.anchoranalysis.core.serialize.XMLParser;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.output.xml.XMLWriter;
@@ -79,7 +79,7 @@ public class ResolutionAsXml {
     public static Resolution readResolutionXml(File file) throws ImageIOException {
 
         try {
-            Document document = XMLUtilities.parse(file);
+            Document document = XMLParser.parse(file);
             document.getDocumentElement().normalize();
 
             NodeList allResolutionElements = document.getElementsByTagName(ELEMENT_NAME_RESOLUTION);
@@ -106,7 +106,7 @@ public class ResolutionAsXml {
             throws ImageIOException {
 
         try {
-            Document document = XMLUtilities.createNewDocument();
+            Document document = XMLParser.createNewDocument();
 
             // create the root element and add it to the document
             Element root = document.createElement(ELEMENT_NAME_ROOT);
