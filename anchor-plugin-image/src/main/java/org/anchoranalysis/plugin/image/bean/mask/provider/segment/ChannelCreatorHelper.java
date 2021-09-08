@@ -48,7 +48,8 @@ import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
 class ChannelCreatorHelper {
 
     public static Optional<Channel> createOptionalCheckSize(
-            ChannelProvider provider, String providerName, Dimensions dim) throws ProvisionFailedException {
+            ChannelProvider provider, String providerName, Dimensions dim)
+            throws ProvisionFailedException {
         Optional<Channel> channel = OptionalFactory.create(provider);
         if (channel.isPresent()) {
             DimensionsChecker.check(channel.get(), providerName, dim);
@@ -57,7 +58,8 @@ class ChannelCreatorHelper {
     }
 
     public static Optional<Mask> createOptionalCheckSize(
-            MaskProvider provider, String providerName, Dimensions dim) throws ProvisionFailedException {
+            MaskProvider provider, String providerName, Dimensions dim)
+            throws ProvisionFailedException {
         Optional<Mask> mask = OptionalFactory.create(provider);
         if (mask.isPresent()) {
             DimensionsChecker.check(mask.get(), providerName, dim);

@@ -65,7 +65,7 @@ public abstract class ColorConverterBase extends StackProviderUnary {
             Mat matBGR = ConvertToMat.makeRGBStack(stackRGB, true);
 
             Mat matHSV = convertColorSpace(stackRGB.extent(), matBGR, colorSpaceCode());
-            
+
             return ConvertFromMat.toStack(matHSV);
         } catch (OperationFailedException | CreateException e) {
             throw new ProvisionFailedException(e);
@@ -73,7 +73,7 @@ public abstract class ColorConverterBase extends StackProviderUnary {
     }
 
     /**
-     * The color space conversion code to use from OpenCV
+     * The color space conversion code to use from OpenCV.
      *
      * <p>Assume that the inputted image is provided is a 3 channel stack in BGR order
      */

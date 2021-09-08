@@ -63,7 +63,8 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
     }
 
     @Override
-    protected PermuteFeature<Integer, T> createDelegate(Feature<T> feature) throws ProvisionFailedException {
+    protected PermuteFeature<Integer, T> createDelegate(Feature<T> feature)
+            throws ProvisionFailedException {
 
         PermuteFeature<Integer, T> delegate = new PermuteFeature<>();
 

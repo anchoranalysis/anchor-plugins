@@ -73,7 +73,8 @@ public class GuessDimensions extends DimensionsProvider {
     }
 
     /** Takes the ImageDim from a particular stack in the collection */
-    private Dimensions dimensionsFromSpecificStack(String keyThatExists) throws ProvisionFailedException {
+    private Dimensions dimensionsFromSpecificStack(String keyThatExists)
+            throws ProvisionFailedException {
         Stack stack;
         try {
             stack = getInitialization().stacks().getException(keyThatExists);

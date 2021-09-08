@@ -53,7 +53,8 @@ public class RetrieveSingleMarkOnly extends SingleMarkProvider {
         MarkCollection marksCreated = marks.get();
 
         if (marksCreated.size() == 0) {
-            throw new ProvisionFailedException("Mark-collection is empty. It must have exactly one item");
+            throw new ProvisionFailedException(
+                    "Mark-collection is empty. It must have exactly one item");
         }
 
         if (marksCreated.size() > 1) {

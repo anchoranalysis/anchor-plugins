@@ -57,7 +57,8 @@ public class SegmentChannelByObject extends UnaryWithChannelBase {
 
     @Override
     public ObjectCollection createFromObjects(
-            ObjectCollection objectsSource, Channel channelToSegment) throws ProvisionFailedException {
+            ObjectCollection objectsSource, Channel channelToSegment)
+            throws ProvisionFailedException {
         try {
             return objectsSource.stream()
                     .flatMap(

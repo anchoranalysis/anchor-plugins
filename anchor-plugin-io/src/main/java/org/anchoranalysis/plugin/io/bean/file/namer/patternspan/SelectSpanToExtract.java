@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.index.IndexRange;
+import org.anchoranalysis.core.index.range.IndexRangeNegative;
 
 /**
  * Selects which elements to extract from a {@link Pattern}.
@@ -49,7 +49,7 @@ class SelectSpanToExtract {
      * If specifies, determines which variable elements mark the start and end of the extracted
      * span.
      */
-    private Optional<IndexRange> nameSubrange;
+    private Optional<IndexRangeNegative> nameSubrange;
 
     /**
      * Selects which parts of the pattern are included in a {@link ExtractVariableSpan}.

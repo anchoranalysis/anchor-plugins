@@ -63,7 +63,7 @@ class InferenceHelper {
             Mat image, ConcurrentModelPool<Net> modelPool, InferenceContext context)
             throws Throwable {
         Stream<LabelledWithConfidence<ObjectMask>> objects =
-                modelPool.excuteOrWait(model -> performInference(model, image, context));
+                modelPool.executeOrWait(model -> performInference(model, image, context));
         return new SegmentedObjects(objects);
     }
 

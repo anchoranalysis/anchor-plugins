@@ -53,7 +53,8 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public class ExtendInZ extends WithDimensionsBase {
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
 
         Dimensions dimensions = createDimensions();
 

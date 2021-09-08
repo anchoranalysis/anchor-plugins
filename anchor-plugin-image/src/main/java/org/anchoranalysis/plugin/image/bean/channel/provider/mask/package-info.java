@@ -2,7 +2,7 @@
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,30 +23,8 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.plugin.image.bean.mask.provider;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.image.bean.provider.DimensionsProvider;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
-
-public abstract class FromDimensionsBase extends MaskProvider {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
-    // END BEAN PROPERTIES
-
-    @Override
-    public Mask get() throws ProvisionFailedException {
-        return createFromDimensions(dimensions.get());
-    }
-
-    protected abstract Mask createFromDimensions(Dimensions dimensions)
-            throws ProvisionFailedException;
-}
+/**
+ * Implementations of {@link org.anchoranalysis.image.bean.provider.ChannelProvider} that involve
+ * conversion from or application of {@link org.anchoranalysis.image.core.mask.Mask}s.
+ */
+package org.anchoranalysis.plugin.image.bean.channel.provider.mask;

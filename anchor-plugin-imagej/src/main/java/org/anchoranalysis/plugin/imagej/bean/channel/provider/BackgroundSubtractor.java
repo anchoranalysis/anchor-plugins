@@ -38,7 +38,8 @@ import org.anchoranalysis.spatial.Extent;
 public class BackgroundSubtractor extends WithRadiusBase {
 
     @Override
-    protected Channel createFromChannel(Channel channel, int radius) throws ProvisionFailedException {
+    protected Channel createFromChannel(Channel channel, int radius)
+            throws ProvisionFailedException {
         try {
             ImagePlus image = ConvertToImagePlus.from(channel);
             subtractBackground(image, channel.extent(), radius);

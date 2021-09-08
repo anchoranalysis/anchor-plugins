@@ -51,7 +51,8 @@ import org.opencv.core.Mat;
  */
 public class DecodeText extends DecodeInstanceSegmentation {
 
-    private static final double[] MEAN_SUBTRACTION_CONSTANTS = new double[]{123.68, 116.78, 103.94};
+    private static final double[] MEAN_SUBTRACTION_CONSTANTS =
+            new double[] {123.68, 116.78, 103.94};
 
     private static final String OUTPUT_SCORES = "feature_fusion/Conv_7/Sigmoid";
     private static final String OUTPUT_GEOMETRY = "feature_fusion/concat_3";

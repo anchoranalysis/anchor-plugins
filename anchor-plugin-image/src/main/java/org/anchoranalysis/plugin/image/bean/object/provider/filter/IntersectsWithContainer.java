@@ -47,7 +47,8 @@ public class IntersectsWithContainer extends WithContainerBase {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
 
         ObjectCollection objectsContainer = containerRequired();
 

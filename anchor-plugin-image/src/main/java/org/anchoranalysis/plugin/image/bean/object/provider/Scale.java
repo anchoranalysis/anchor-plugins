@@ -56,7 +56,8 @@ public class Scale extends WithDimensionsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
 
         Dimensions dimensions = createDimensions();
 
@@ -74,7 +75,8 @@ public class Scale extends WithDimensionsBase {
     }
 
     private ObjectCollection scaleObjects(
-            ObjectCollection objects, ScaleFactor factor, Extent extent) throws ProvisionFailedException {
+            ObjectCollection objects, ScaleFactor factor, Extent extent)
+            throws ProvisionFailedException {
         try {
             ScaledElements<ObjectMask> scaledObjects = Scaler.scaleObjects(objects, factor, extent);
             return ObjectCollectionFactory.of(scaledObjects.asCollectionOrderNotPreserved());
