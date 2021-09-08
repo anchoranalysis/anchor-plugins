@@ -91,7 +91,8 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
     }
 
     @Override
-    protected FeatureList<T> createPermutedFeaturesFor(Feature<T> feature) throws ProvisionFailedException {
+    protected FeatureList<T> createPermutedFeaturesFor(Feature<T> feature)
+            throws ProvisionFailedException {
 
         // Create many copies of 'item' with properties adjusted
         List<Feature<T>> list = createInitialList(feature).asList();

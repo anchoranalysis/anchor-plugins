@@ -26,7 +26,7 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -78,7 +78,7 @@ class ObjectScaledConverter {
         // Scale the marks up
         try {
             mark.scale(scaleFactor);
-        } catch (OptionalOperationUnsupportedException e) {
+        } catch (CheckedUnsupportedOperationException e) {
             throw new AnchorImpossibleSituationException();
         }
         // Then derive an {@link ObjectMask} representation.

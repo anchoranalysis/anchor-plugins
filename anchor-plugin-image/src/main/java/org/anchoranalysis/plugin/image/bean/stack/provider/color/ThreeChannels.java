@@ -125,7 +125,8 @@ public class ThreeChannels extends StackProvider {
 
     // Chooses the output type of the data
     private static VoxelDataType chooseOutputDataType(
-            Channel channelRed, Channel channelGreen, Channel channelBlue) throws ProvisionFailedException {
+            Channel channelRed, Channel channelGreen, Channel channelBlue)
+            throws ProvisionFailedException {
 
         VoxelDataType dataType = null;
 

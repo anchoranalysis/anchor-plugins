@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.index.IndexRange;
+import org.anchoranalysis.core.index.range.IndexRangeNegative;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.io.input.bean.namer.FileNamer;
 import org.anchoranalysis.io.input.file.FileNamerContext;
@@ -78,11 +78,11 @@ public class SubsetRangeIfRequested extends FileNamer {
     }
 
     private NamedFile subsetFile(
-            NamedFile namedFile, IndexRange range, ErrorReporter errorReporter) {
+            NamedFile namedFile, IndexRangeNegative range, ErrorReporter errorReporter) {
         return namedFile.mapIdentifier((name, file) -> subsetName(name, range, errorReporter));
     }
 
-    private String subsetName(String name, IndexRange range, ErrorReporter errorReporter) {
+    private String subsetName(String name, IndexRangeNegative range, ErrorReporter errorReporter) {
         List<String> groups = splitName(name);
         try {
             List<String> subset = range.extract(groups);

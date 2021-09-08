@@ -32,7 +32,6 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
-import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
@@ -117,17 +116,16 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
         return getDelegate().numberFrames();
     }
 
-    private TimeSequence convert(Progress progress, NamedChannelsInput input, int seriesIndex)
+    private TimeSequence convert(Progress progressParent, NamedChannelsInput input, int seriesIndex)
             throws OperationFailedException {
 
-        try (ProgressMultiple progressMultiple = new ProgressMultiple(progress, 2)) {
+        try (ProgressMultiple progress = new ProgressMultiple(progressParent, 2)) {
 
             NamedChannelsForSeries channels =
-                    input.createChannelsForSeries(
-                            seriesIndex, new ProgressOneOfMany(progressMultiple));
-            progressMultiple.incrementWorker();
+                    input.createChannelsForSeries(seriesIndex, progress.trackCurrentChild());
+            progress.incrementChild();
 
-            return new TimeSequence(stackFromChannels(channels, progressMultiple));
+            return new TimeSequence(stackFromChannels(channels, progress));
 
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);
@@ -182,6 +180,6 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
     private Channel extractChannel(
             NamedChannelsForSeries channels, String channelName, ProgressMultiple progress)
             throws GetOperationFailedException {
-        return channels.getChannel(channelName, timeIndex, new ProgressOneOfMany(progress));
+        return channels.getChannel(channelName, timeIndex, progress.trackCurrentChild());
     }
 }

@@ -51,7 +51,8 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
         return createFromObjects(objects, OptionalFactory.create(objectsRejected), createDims());
     }
 

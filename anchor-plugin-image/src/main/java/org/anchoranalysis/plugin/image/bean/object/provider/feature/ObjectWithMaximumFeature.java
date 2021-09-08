@@ -43,7 +43,8 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class ObjectWithMaximumFeature extends ObjectCollectionProviderWithFeature {
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
 
         Optional<ObjectMask> max = findMaximum(createSession(), objects);
 

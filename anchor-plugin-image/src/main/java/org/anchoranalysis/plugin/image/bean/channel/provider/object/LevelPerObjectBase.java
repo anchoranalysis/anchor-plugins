@@ -74,5 +74,6 @@ public abstract class LevelPerObjectBase extends ChannelProviderUnary {
      * @throws ProvisionFailedException
      */
     protected abstract void writeLevelsForObjects(
-            Channel input, ObjectCollection objects, Channel output) throws ProvisionFailedException;
+            Channel input, ObjectCollection objects, Channel output)
+            throws ProvisionFailedException;
 }

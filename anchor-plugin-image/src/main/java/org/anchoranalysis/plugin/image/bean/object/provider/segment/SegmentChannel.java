@@ -59,7 +59,8 @@ public class SegmentChannel extends WithChannelBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected ObjectCollection createFromChannel(Channel channelSource) throws ProvisionFailedException {
+    protected ObjectCollection createFromChannel(Channel channelSource)
+            throws ProvisionFailedException {
 
         Optional<ObjectMask> maskAsObject = createObjectMask();
 
@@ -78,7 +79,8 @@ public class SegmentChannel extends WithChannelBase {
     }
 
     private Optional<SeedCollection> createSeeds(
-            Dimensions dimensions, Optional<ObjectMask> maskAsObject) throws ProvisionFailedException {
+            Dimensions dimensions, Optional<ObjectMask> maskAsObject)
+            throws ProvisionFailedException {
         return OptionalUtilities.map(
                 OptionalFactory.create(objectsSeeds),
                 objects -> createSeeds(objects, maskAsObject, dimensions));

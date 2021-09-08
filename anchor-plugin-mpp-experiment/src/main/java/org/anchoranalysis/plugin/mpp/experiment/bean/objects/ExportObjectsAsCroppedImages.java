@@ -193,7 +193,10 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
                     createGenerator(dimensions, stacks, stacksProjected),
                     maybeExtendZObjects(inputs(initialization, logger), dimensions.z()),
                     context.getOutputter().getChecked());
-        } catch (CreateException | InitException | OutputWriteFailedException | ProvisionFailedException e) {
+        } catch (CreateException
+                | InitException
+                | OutputWriteFailedException
+                | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

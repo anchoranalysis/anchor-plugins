@@ -83,7 +83,8 @@ public class MontageSlices extends StackProviderUnary {
                                     firstSlice(),
                                     lastSlice(numberSlices)));
         } catch (OperationFailedException e) {
-            throw new ProvisionFailedException("Failed to execute map operation on a particular channel", e);
+            throw new ProvisionFailedException(
+                    "Failed to execute map operation on a particular channel", e);
         }
     }
 

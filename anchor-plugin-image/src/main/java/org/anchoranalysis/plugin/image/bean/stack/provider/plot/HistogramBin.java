@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.stack.provider.plot;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.core.index.IndexGetter;
+import org.anchoranalysis.core.index.AssociatedIndex;
 
 /**
  * One particular bin in a histogram
@@ -36,7 +36,7 @@ import org.anchoranalysis.core.index.IndexGetter;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class HistogramBin implements IndexGetter {
+class HistogramBin implements AssociatedIndex {
 
     private int index;
     @Getter private int count;

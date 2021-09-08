@@ -48,8 +48,8 @@ import org.opencv.core.Mat;
  */
 public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
 
-    private static final double[] MEAN_SUBTRACTION_CONSTANTS = new double[]{0.0, 0.0, 0.0};
-    
+    private static final double[] MEAN_SUBTRACTION_CONSTANTS = new double[] {0.0, 0.0, 0.0};
+
     /** Name of model output for encoded bounding-boxes. */
     private static final String OUTPUT_FINAL = "detection_out_final";
 

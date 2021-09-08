@@ -47,5 +47,6 @@ public abstract class FromDimensionsBase extends ChannelProvider {
         return createFromDimensions(dimensions.get());
     }
 
-    protected abstract Channel createFromDimensions(Dimensions dimensions) throws ProvisionFailedException;
+    protected abstract Channel createFromDimensions(Dimensions dimensions)
+            throws ProvisionFailedException;
 }

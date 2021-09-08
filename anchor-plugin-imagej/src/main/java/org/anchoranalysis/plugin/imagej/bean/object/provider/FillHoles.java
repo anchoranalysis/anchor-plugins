@@ -62,7 +62,8 @@ public class FillHoles extends ObjectCollectionProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
 
         Optional<Mask> maskChannel = OptionalFactory.create(mask);
 

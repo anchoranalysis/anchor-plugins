@@ -128,7 +128,9 @@ public class XYOrientationExtendToZ extends PointsProposer {
                             .generatePoints(pointsXY);
             return Optional.of(lastPointsAll);
 
-        } catch (ProvisionFailedException | OperationFailedException | TraverseOutlineException e1) {
+        } catch (ProvisionFailedException
+                | OperationFailedException
+                | TraverseOutlineException e1) {
             errorNode.add(e1);
             return Optional.empty();
         }

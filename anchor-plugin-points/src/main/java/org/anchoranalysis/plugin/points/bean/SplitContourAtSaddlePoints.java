@@ -64,11 +64,13 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
         return objects.stream().flatMap(CreateException.class, this::splitContoursFromObject);
     }
 
-    private ObjectCollection splitContoursFromObject(ObjectMask object) throws ProvisionFailedException {
+    private ObjectCollection splitContoursFromObject(ObjectMask object)
+            throws ProvisionFailedException {
 
         if (object.boundingBox().extent().z() > 1) {
             throw new ProvisionFailedException("Only objects with z-slices > 1 are allowed");

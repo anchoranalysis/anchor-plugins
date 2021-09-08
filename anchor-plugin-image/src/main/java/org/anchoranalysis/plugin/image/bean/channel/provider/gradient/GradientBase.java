@@ -36,15 +36,13 @@ import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.channel.convert.ToUnsignedByte;
 import org.anchoranalysis.image.core.channel.convert.ToUnsignedShort;
 
-
 /**
  * Base class to calculate the gradient of the voxels in a {@link Channel}.
- * 
- * <p>If the existing channel has appropriate voxel data-type, its voxels are replaced, otherwise new voxels
- * are assigned.
- * 
- * @author Owen Feehan
  *
+ * <p>If the existing channel has appropriate voxel data-type, its voxels are replaced, otherwise
+ * new voxels are assigned.
+ *
+ * @author Owen Feehan
  */
 public abstract class GradientBase extends ChannelProviderUnary {
 

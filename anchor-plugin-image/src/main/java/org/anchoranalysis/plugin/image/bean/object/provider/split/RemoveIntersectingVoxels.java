@@ -48,7 +48,8 @@ public class RemoveIntersectingVoxels extends WithDimensionsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
 
         try {
             return ObjectIntersectionRemover.removeIntersectingVoxels(
