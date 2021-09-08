@@ -51,7 +51,8 @@ public class AssignFromChannel extends UnaryWithMaskBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws ProvisionFailedException {
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask)
+            throws ProvisionFailedException {
 
         assign(
                 channel,

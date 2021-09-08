@@ -61,20 +61,20 @@ public class Always extends ObjectMatcher {
     }
 
     private ObjectMask determineMatch() throws OperationFailedException {
-        ObjectCollection objectCollection;
+        ObjectCollection collection;
         try {
-            objectCollection = objects.get();
+            collection = objects.get();
         } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
 
-        if (objectCollection.size() == 0) {
+        if (collection.size() == 0) {
             throw new OperationFailedException("No objects provided");
         }
-        if (objectCollection.size() > 1) {
+        if (collection.size() > 1) {
             throw new OperationFailedException("More than one objects provided");
         }
 
-        return objectCollection.get(0);
+        return collection.get(0);
     }
 }

@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import javax.xml.parsers.ParserConfigurationException;
-import org.anchoranalysis.core.serialize.XMLUtilities;
+import org.anchoranalysis.core.serialize.XMLParser;
 import org.anchoranalysis.io.generator.xml.XMLGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -59,7 +59,7 @@ class CSVRowXMLGenerator extends XMLGenerator<CSVRow> {
 
     private static Document csvRowAsXml(CSVRow element) throws OutputWriteFailedException {
         try {
-            Document document = XMLUtilities.createNewDocument();
+            Document document = XMLParser.createNewDocument();
 
             // create the root element and add it to the document
             Element root = document.createElement("identify");

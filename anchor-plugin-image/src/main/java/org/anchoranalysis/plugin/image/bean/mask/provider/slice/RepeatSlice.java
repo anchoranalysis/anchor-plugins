@@ -72,7 +72,8 @@ public class RepeatSlice extends MaskProviderUnary {
         return out;
     }
 
-    private Mask createEmptyMask(Mask mask, Dimensions dimensionsForOutput) throws ProvisionFailedException {
+    private Mask createEmptyMask(Mask mask, Dimensions dimensionsForOutput)
+            throws ProvisionFailedException {
 
         if (!mask.extent().equalsIgnoreZ(dimensionsForOutput.extent())) {
             throw new ProvisionFailedException(

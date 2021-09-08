@@ -65,7 +65,7 @@ public abstract class ColorConverterBase extends StackProviderUnary {
             Mat matBGR = ConvertToMat.makeRGBStack(stackRGB, true);
 
             Mat matHSV = convertColorSpace(stackRGB.extent(), matBGR, colorSpaceCode());
-            
+
             return ConvertFromMat.toStack(matHSV);
         } catch (OperationFailedException | CreateException e) {
             throw new ProvisionFailedException(e);

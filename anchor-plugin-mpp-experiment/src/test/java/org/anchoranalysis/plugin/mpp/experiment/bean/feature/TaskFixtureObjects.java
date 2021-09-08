@@ -72,7 +72,8 @@ class TaskFixtureObjects
             throws CreateException {
         FromObjects<FeatureInputSingleObject> source = new FromObjects<>();
         try {
-            source.setDefine(DefineFixture.create(energyStack, Optional.of(featureLoader.shared())));
+            source.setDefine(
+                    DefineFixture.create(energyStack, Optional.of(featureLoader.shared())));
         } catch (ProvisionFailedException e) {
             throw new CreateException(e);
         }

@@ -48,8 +48,7 @@ public class Intersection extends ObjectMatcher {
             throws OperationFailedException {
 
         try {
-            return MatcherIntersectionHelper.matchIntersectingObjects(
-                    sourceObjects, objects.get());
+            return MatcherIntersectionHelper.matchIntersectingObjects(sourceObjects, objects.get());
         } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }

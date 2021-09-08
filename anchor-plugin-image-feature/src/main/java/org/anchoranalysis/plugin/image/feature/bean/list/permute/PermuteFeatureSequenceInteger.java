@@ -66,7 +66,8 @@ public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputParams
     }
 
     @Override
-    protected FeatureList<T> createPermutedFeaturesFor(Feature<T> feature) throws ProvisionFailedException {
+    protected FeatureList<T> createPermutedFeaturesFor(Feature<T> feature)
+            throws ProvisionFailedException {
         PermuteFeature<Integer, T> delegate = createDelegate(feature);
 
         configurePermutePropertyOnDelegate(delegate);

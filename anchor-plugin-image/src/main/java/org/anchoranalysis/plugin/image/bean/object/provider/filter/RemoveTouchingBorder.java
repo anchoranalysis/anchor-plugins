@@ -48,7 +48,8 @@ public class RemoveTouchingBorder extends WithDimensionsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
 
         Dimensions dimensions = createDimensions();
 

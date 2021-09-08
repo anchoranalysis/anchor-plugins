@@ -62,7 +62,8 @@ public class ObjectWithMaximumFeatureFromEachMatchedCollection
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
 
         FeatureCalculatorSingle<FeatureInputSingleObject> session = createSession();
 

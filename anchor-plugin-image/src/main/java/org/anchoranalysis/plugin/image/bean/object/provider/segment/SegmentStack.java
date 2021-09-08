@@ -55,8 +55,7 @@ public class SegmentStack<T> extends ObjectCollectionProvider {
     @Override
     public ObjectCollection get() throws ProvisionFailedException {
         try {
-            return segment.segment(stack.getAsStack(), new ExecutionTimeStatistics())
-                    .asObjects();
+            return segment.segment(stack.getAsStack(), new ExecutionTimeStatistics()).asObjects();
         } catch (SegmentationFailedException e) {
             throw new ProvisionFailedException(e);
         }

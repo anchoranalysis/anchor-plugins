@@ -91,18 +91,19 @@ public class ScoreVoxels extends ChannelProvider {
 
         VoxelsFromScoreCreator creator =
                 new VoxelsFromScoreCreator(voxelsCreated, dictionaryCreated, histogramsCreated);
-        
+
         try {
             Voxels<UnsignedByteBuffer> voxelsPixelScore =
                     creator.createVoxelsFromPixelScore(score, object);
-    
+
             return new ChannelFactoryByte().create(voxelsPixelScore, intensityCreated.resolution());
         } catch (CreateException e) {
             throw new ProvisionFailedException(e);
         }
     }
 
-    private VoxelsWrapperList createVoxelsList(Channel channelIntensity) throws ProvisionFailedException {
+    private VoxelsWrapperList createVoxelsList(Channel channelIntensity)
+            throws ProvisionFailedException {
 
         VoxelsWrapperList out = new VoxelsWrapperList();
 

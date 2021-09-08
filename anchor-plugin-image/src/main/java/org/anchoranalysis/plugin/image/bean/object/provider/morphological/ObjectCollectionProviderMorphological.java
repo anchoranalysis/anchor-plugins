@@ -46,7 +46,8 @@ public abstract class ObjectCollectionProviderMorphological extends WithOptional
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
         Optional<Extent> extent = deriveExtent();
         return objects.stream().map(objectMask -> applyMorphologicalOperation(objectMask, extent));
     }

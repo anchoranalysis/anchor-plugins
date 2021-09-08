@@ -40,7 +40,8 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class RejectIfNotConnected extends ObjectCollectionProviderUnary {
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
 
         for (ObjectMask objectMask : objects) {
             if (!objectMask.checkIfConnected()) {

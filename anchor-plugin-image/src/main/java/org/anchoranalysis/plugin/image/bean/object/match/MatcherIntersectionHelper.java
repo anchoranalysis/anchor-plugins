@@ -50,7 +50,7 @@ public class MatcherIntersectionHelper {
     }
 
     private static ObjectCollection searchObjectsThatIntersectWith(
-            ObjectCollection searchObjects, ObjectMask objToIntersectWith) {
-        return searchObjects.stream().filter(objToIntersectWith::hasIntersectingVoxels);
+            ObjectCollection searchObjects, ObjectMask toIntersectWith) {
+        return searchObjects.stream().filter(toIntersectWith::hasIntersectingVoxels);
     }
 }

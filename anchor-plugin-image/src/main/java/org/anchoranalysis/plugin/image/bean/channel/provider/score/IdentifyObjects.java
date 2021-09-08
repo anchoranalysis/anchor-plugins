@@ -49,7 +49,8 @@ public class IdentifyObjects extends UnaryWithObjectsBase {
             new LabelObjects<>(object -> object, (object, back) -> object.shiftBackBy(back));
 
     @Override
-    protected Channel createFromChannel(Channel channel, ObjectCollection objects) throws ProvisionFailedException {
+    protected Channel createFromChannel(Channel channel, ObjectCollection objects)
+            throws ProvisionFailedException {
         try {
             LABELLER.labelElements(channel, objects.asList(), Optional.empty());
         } catch (CreateException e) {

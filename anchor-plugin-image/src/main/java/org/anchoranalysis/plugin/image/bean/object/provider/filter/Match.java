@@ -44,7 +44,8 @@ public class Match extends ObjectCollectionProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws ProvisionFailedException {
+    public ObjectCollection createFromObjects(ObjectCollection objects)
+            throws ProvisionFailedException {
         try {
             return ObjectCollectionFactory.flatMapFrom(
                     matcher.findMatch(objects), MatchedObject::getMatches);

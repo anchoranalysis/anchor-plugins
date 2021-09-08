@@ -83,7 +83,7 @@ public class ConvertWithHistogram<T> extends ConvertBase {
                     OptionalFactory.create(histogram),
                     () -> HistogramFromObjectsFactory.create(channel));
         } catch (CreateException e) {
-           throw new ProvisionFailedException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }

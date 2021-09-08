@@ -33,14 +33,14 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 
-
 /**
- * Like {@link GradientBase} but allows an arbitrary constant to be added to voxels storing the gradient.
- * 
- * <p>An out-of-bounds strategy of <i>mirror</i> is used for calculating the gradient for voxels lying at the boundary.
- * 
- * @author Owen Feehan
+ * Like {@link GradientBase} but allows an arbitrary constant to be added to voxels storing the
+ * gradient.
  *
+ * <p>An out-of-bounds strategy of <i>mirror</i> is used for calculating the gradient for voxels
+ * lying at the boundary.
+ *
+ * @author Owen Feehan
  */
 public abstract class GradientBaseAddSum extends GradientBase {
 

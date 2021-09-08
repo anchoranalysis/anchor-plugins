@@ -242,7 +242,8 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     }
 
     private Channel scaleChannelAsMask(
-            Channel channel, Optional<ImageSizeSuggestion> suggestedResize) throws ProvisionFailedException {
+            Channel channel, Optional<ImageSizeSuggestion> suggestedResize)
+            throws ProvisionFailedException {
         Mask mask = new Mask(channel);
         Mask maskScaled =
                 org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(

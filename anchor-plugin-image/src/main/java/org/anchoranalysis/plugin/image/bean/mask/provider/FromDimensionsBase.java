@@ -47,5 +47,6 @@ public abstract class FromDimensionsBase extends MaskProvider {
         return createFromDimensions(dimensions.get());
     }
 
-    protected abstract Mask createFromDimensions(Dimensions dimensions) throws ProvisionFailedException;
+    protected abstract Mask createFromDimensions(Dimensions dimensions)
+            throws ProvisionFailedException;
 }

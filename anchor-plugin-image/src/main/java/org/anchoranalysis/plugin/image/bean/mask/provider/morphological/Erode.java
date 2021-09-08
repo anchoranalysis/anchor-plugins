@@ -43,12 +43,13 @@ import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 public class Erode extends MorphologicalOperatorBase {
 
     @Override
-    protected void applyMorphologicalOperation(Mask source, boolean do3D) throws ProvisionFailedException {
+    protected void applyMorphologicalOperation(Mask source, boolean do3D)
+            throws ProvisionFailedException {
         try {
             BinaryVoxels<UnsignedByteBuffer> out =
                     MorphologicalErosion.erode(
                             source.binaryVoxels(), getIterations(), do3D, precondition());
-            
+
             source.replaceBy(out);
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();

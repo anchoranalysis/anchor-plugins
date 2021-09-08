@@ -41,7 +41,6 @@ import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
-import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
@@ -69,13 +68,13 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
-        try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
+        try (ProgressMultiple progress = new ProgressMultiple(params.getProgress(), 2)) {
 
             InputsWithDirectory<NamedChannelsInputPart> inputs = input.inputs(params);
 
             Iterator<NamedChannelsInputPart> iterator = inputs.iterator();
 
-            progressMultiple.incrementWorker();
+            progress.incrementChild();
 
             List<NamedChannelsInputPart> listTemp = new ArrayList<>();
             while (iterator.hasNext()) {
@@ -84,11 +83,9 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
             List<NamedChannelsInputPart> outList =
                     createOutList(
-                            listTemp,
-                            new ProgressOneOfMany(progressMultiple),
-                            params.isDebugModeActivated());
+                            listTemp, progress.trackCurrentChild(), params.isDebugModeActivated());
 
-            progressMultiple.incrementWorker();
+            progress.incrementChild();
 
             return inputs.withInputs(outList);
         }

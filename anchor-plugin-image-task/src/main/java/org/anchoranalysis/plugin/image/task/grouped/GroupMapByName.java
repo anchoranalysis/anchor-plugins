@@ -85,7 +85,7 @@ public abstract class GroupMapByName<S, T> {
         MultiName identifier = MultiNameFactory.create(groupIdentifier, nonGroupIdentifier);
 
         try {
-            addTo(itemToAdd, map.getOrCreateNew(identifier));
+            addTo(itemToAdd, map.computeIfAbsent(identifier));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(
