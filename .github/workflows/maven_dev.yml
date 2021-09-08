@@ -30,12 +30,12 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
-    - name: Cache Maven packages
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-jdk${{ matrix.java }}
-        restore-keys: ${{ runner.os }}-m2
+#    - name: Cache Maven packages
+#      uses: actions/cache@v2
+#      with:
+#        path: ~/.m2
+#        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-jdk${{ matrix.java }}
+#        restore-keys: ${{ runner.os }}-m2
     - name: Create settings.xml for Maven
       uses: s4u/maven-settings-action@v2.2.0
       with:
