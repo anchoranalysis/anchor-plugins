@@ -73,7 +73,7 @@ public abstract class ColorConverterBase extends StackProviderUnary {
     }
 
     /**
-     * The color space conversion code to use from OpenCV
+     * The color space conversion code to use from OpenCV.
      *
      * <p>Assume that the inputted image is provided is a 3 channel stack in BGR order
      */
