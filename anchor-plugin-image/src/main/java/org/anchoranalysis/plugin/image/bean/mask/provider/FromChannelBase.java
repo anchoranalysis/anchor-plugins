@@ -37,7 +37,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 
 /**
- * Base-class for mask-providers that accept a channel as input
+ * Base-class for {@link MaskProvider}s that accept a {@link Channel} as input.
  *
  * @author Owen Feehan
  */

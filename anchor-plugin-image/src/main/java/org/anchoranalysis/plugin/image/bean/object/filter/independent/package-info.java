@@ -1,3 +1,8 @@
+/**
+ * Implementations of {@link org.anchoranalysis.image.bean.object.ObjectFilter} that <b>independently</b> assess each element in a collection.
+ * 
+ * <p>This is a more strict condition than in {@code org.anchoranalysis.plugin.image.bean.object.filter.collective} where each element is considered collectively with others.
+ */
 package org.anchoranalysis.plugin.image.bean.object.filter.independent;
 /*-
  * #%L

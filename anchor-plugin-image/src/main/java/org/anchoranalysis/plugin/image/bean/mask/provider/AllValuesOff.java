@@ -1,9 +1,8 @@
-package org.anchoranalysis.plugin.image.bean.object.filter.dependent;
 /*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,3 +23,22 @@ package org.anchoranalysis.plugin.image.bean.object.filter.dependent;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.plugin.image.bean.mask.provider;
+
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.mask.MaskFactory;
+
+/**
+ * Creates a new mask of particular dimensionality where all values are <i>off</i>.
+ *
+ * @author Owen Feehan
+ */
+public class AllValuesOff extends FromDimensionsBase {
+
+    @Override
+    protected Mask createFromDimensions(Dimensions dimensions) {
+        return MaskFactory.createMaskOff(dimensions);
+    }
+}
