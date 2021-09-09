@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.mask.provider.resize;
+package org.anchoranalysis.plugin.image.bean.mask.provider;
 
 import java.util.Optional;
 import lombok.Getter;

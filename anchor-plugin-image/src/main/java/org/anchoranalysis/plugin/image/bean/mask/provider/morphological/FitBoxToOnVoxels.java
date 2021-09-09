@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.mask.provider.resize;
+package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -41,9 +41,9 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.PointRange;
 
 /**
- * Fits a box around the ON pixels.
+ * Fits a box around the <i>on</i> voxels.
  *
- * <p>The minimally-fitting (i.e. tightest) box that fits is always used
+ * <p>The minimally-fitting (i.e. tightest) box that fits is always used.
  *
  * @author Owen Feehan
  */
