@@ -31,9 +31,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.math.relation.GreaterThan;
-import org.anchoranalysis.math.relation.LessThan;
-import org.anchoranalysis.math.relation.RelationToValue;
 
 /**
  * Similar to {@link Difference} but calculates the width as the standard-deviation of the histogram
@@ -41,9 +38,6 @@ import org.anchoranalysis.math.relation.RelationToValue;
  * @author Owen Feehan
  */
 public class DifferenceCalculateLevelStandardDeviation extends CalculateLevelBase {
-
-    private static final RelationToValue RELATION_LESS_THAN = new LessThan();
-    private static final RelationToValue RELATION_GREATER_THAN = new GreaterThan();
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int minDifference = 0;
@@ -57,8 +51,8 @@ public class DifferenceCalculateLevelStandardDeviation extends CalculateLevelBas
     @Override
     protected void beforeCalcSetup(Histogram histogram, int level) throws OperationFailedException {
 
-        Histogram lessThan = histogram.threshold(RELATION_LESS_THAN, level);
-        Histogram greaterThan = histogram.threshold(RELATION_GREATER_THAN, level);
+        Histogram lessThan = histogram.threshold( bin -> bin < level);
+        Histogram greaterThan = histogram.threshold( bin -> bin > level);
 
         this.widthLessThan = lessThan.standardDeviation() * widthFactor;
         this.widthGreaterThan = greaterThan.standardDeviation() * widthFactor;

@@ -32,14 +32,13 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.math.relation.GreaterThan;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 /**
- * Only takes pixels where indexNonZero has a nonzero pixel
+ * Only considers voxels with non-zero intensity.
  *
  * <p>This involves a trick where we count how many pixels exist in our object-mask and we take the
- * highest number pixels to match this from our initial histogram
+ * highest number pixels to match this from our initial histogram.
  */
 @EqualsAndHashCode(callSuper = true)
 public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
@@ -50,7 +49,7 @@ public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
         Histogram index = histogramForAllSlices(mark, false);
         Histogram nonZero = histogramForAllSlices(mark, true);
 
-        long numNonZero = nonZero.countThreshold(new GreaterThan(), 0);
+        long numNonZero = nonZero.countMatching( value -> value > 0);
 
         return new VoxelStatisticsFromHistogram(histogramExtractedFromRight(index, numNonZero));
     }
@@ -66,7 +65,7 @@ public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
 
     private static Histogram histogramExtractedFromRight(Histogram index, long numNonZero) {
         Histogram out = index.duplicate();
-        out = out.extractValuesFromRight(numNonZero);
+        out = out.cropRemoveSmallerValues(numNonZero);
         return out;
     }
 }

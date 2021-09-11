@@ -38,7 +38,7 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterRelation;
 
 /**
@@ -77,7 +77,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim, RelationToValue relation)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dim, DoubleBiPredicate relation)
             throws OperationFailedException {
 
         double value;
@@ -87,7 +87,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
             throw new OperationFailedException(e);
         }
 
-        boolean matched = relation.isRelationToValueTrue(value, threshold);
+        boolean matched = relation.test(value, threshold);
 
         if (debug) {
             if (matched) {

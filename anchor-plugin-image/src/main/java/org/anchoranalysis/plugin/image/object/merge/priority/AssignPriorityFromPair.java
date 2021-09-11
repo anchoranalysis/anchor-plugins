@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
 
 /**
@@ -46,7 +46,7 @@ public class AssignPriorityFromPair extends AssignPriority {
 
     private final FeatureCalculatorSingle<FeatureInputPairObjects> featureCalculator;
     private final double threshold;
-    private final RelationToValue relation;
+    private final DoubleBiPredicate relation;
 
     @Override
     public PrioritisedVertex assignPriorityToEdge(
@@ -61,7 +61,7 @@ public class AssignPriorityFromPair extends AssignPriority {
                         createInput(source, destination, merged), errorReporter);
 
         return new PrioritisedVertex(
-                merged, 0, resultPair, relation.isRelationToValueTrue(resultPair, threshold));
+                merged, 0, resultPair, relation.test(resultPair, threshold));
     }
 
     private FeatureInputPairObjects createInput(

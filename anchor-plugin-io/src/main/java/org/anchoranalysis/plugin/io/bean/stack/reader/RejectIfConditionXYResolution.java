@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 /**
  * If the XY resolution of an opened-image meets a certain condition then the resolution is scaled
@@ -67,7 +67,7 @@ public class RejectIfConditionXYResolution extends StackReader {
     private static class MaybeRejectProcessor
             implements OpenedRasterAlterDimensions.ConsiderUpdatedImageResolution {
 
-        private RelationToValue relation;
+        private DoubleBiPredicate relation;
         private double value;
 
         @Override
@@ -83,7 +83,7 @@ public class RejectIfConditionXYResolution extends StackReader {
                 throw new ImageIOException("X and Y pixel-sizes are different. They must be equal");
             }
 
-            if (relation.isRelationToValueTrue(resolution.get().x(), value)) {
+            if (relation.test(resolution.get().x(), value)) {
                 throw new ImageIOException("XY-resolution fufills condition, and is thus rejected");
             } else {
                 return Optional.empty();

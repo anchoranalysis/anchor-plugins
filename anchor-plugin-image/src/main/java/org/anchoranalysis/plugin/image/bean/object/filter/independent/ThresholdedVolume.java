@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.unitvalue.extent.volume.UnitValueVolume;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterRelation;
 
 /**
@@ -62,8 +62,8 @@ public class ThresholdedVolume extends ObjectFilterRelation {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim, RelationToValue relation) {
-        return relation.isRelationToValueTrue(object.numberVoxelsOn(), thresholdResolved);
+    protected boolean match(ObjectMask object, Optional<Dimensions> dim, DoubleBiPredicate relation) {
+        return relation.test(object.numberVoxelsOn(), thresholdResolved);
     }
 
     private int resolveThreshold(Optional<Dimensions> dim) throws OperationFailedException {

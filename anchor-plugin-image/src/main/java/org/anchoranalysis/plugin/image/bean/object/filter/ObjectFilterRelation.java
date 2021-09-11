@@ -36,7 +36,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 /**
  * An independent object-filter that uses a relation in its predicate.
@@ -49,7 +49,7 @@ public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
     @BeanField @Getter @Setter private RelationBean relation = new GreaterThanEqualToBean();
     // END BEAN PROPERTIES
 
-    private RelationToValue relationResolved;
+    private DoubleBiPredicate relationResolved;
 
     @Override
     protected boolean precondition(ObjectCollection objectsToFilter) {
@@ -69,7 +69,7 @@ public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
     }
 
     protected abstract boolean match(
-            ObjectMask object, Optional<Dimensions> dim, RelationToValue relation)
+            ObjectMask object, Optional<Dimensions> dim, DoubleBiPredicate relation)
             throws OperationFailedException;
 
     @Override

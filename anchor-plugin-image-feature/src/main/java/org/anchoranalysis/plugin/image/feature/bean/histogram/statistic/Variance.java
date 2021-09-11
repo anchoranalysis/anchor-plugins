@@ -26,13 +26,19 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
 public class Variance extends FeatureHistogramStatistic {
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) {
-        return histogram.variance();
+    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+        try {
+            return histogram.variance();
+        } catch (OperationFailedException e) {
+            throw new FeatureCalculationException(e);
+        }
     }
 }
