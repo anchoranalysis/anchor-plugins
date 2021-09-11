@@ -33,9 +33,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
+import org.anchoranalysis.bean.define.DefineAddException;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -64,29 +63,24 @@ public class VisualizeOnBackground extends DefineAdderBean {
     // END BEAN PROPERTIES
 
     @Override
-    public void addTo(Define define) throws BeanXmlException {
+    public void addTo(Define define) throws DefineAddException {
 
         // We first add, so we can see what's been added
-        Define def = fromDelegate();
+        Define delegate = fromDelegate();
 
-        try {
-            // We add all the existing definitions
-            define.addAll(def);
+        // We add all the existing definitions
+        define.addAll(delegate);
 
-            CreateVisualizatonHelper creator =
-                    new CreateVisualizatonHelper(backgroundID, outlineWidth, stackBackground);
+        CreateVisualizatonHelper creator =
+                new CreateVisualizatonHelper(backgroundID, outlineWidth, stackBackground);
 
-            // Now we add visualizations for the mask and object-collection providers
-            addVisualizationFor(def, define, MaskProvider.class, creator::mask);
-            addVisualizationFor(def, define, ObjectCollectionProvider.class, creator::objects);
-            addVisualizationFor(def, define, MarkCollectionProvider.class, creator::marks);
-
-        } catch (OperationFailedException e) {
-            throw new BeanXmlException(e);
-        }
+        // Now we add visualizations for the mask and object-collection providers
+        addVisualizationFor(delegate, define, MaskProvider.class, creator::mask);
+        addVisualizationFor(delegate, define, ObjectCollectionProvider.class, creator::objects);
+        addVisualizationFor(delegate, define, MarkCollectionProvider.class, creator::marks);
     }
 
-    private Define fromDelegate() throws BeanXmlException {
+    private Define fromDelegate() throws DefineAddException {
         Define def = new Define();
         add.addTo(def);
         return def;
@@ -100,20 +94,20 @@ public class VisualizeOnBackground extends DefineAdderBean {
      * @param listType a particular class-type that filters which NamedBeans provide visualizations
      * @param createVisualization creates the visualization given the ID of the provider it is based
      *     on
-     * @throws OperationFailedException
+     * @throws DefineAddException
      */
     private void addVisualizationFor(
             Define in,
             Define out,
             Class<?> listType,
             Function<String, StackProvider> createVisualization)
-            throws OperationFailedException {
+            throws DefineAddException {
 
-        Stream<String> beanNames = in.getList(listType).stream().map(NamedBean::getName);
+        Stream<String> beanNames = in.listFor(listType).stream().map(NamedBean::getName);
 
         CheckedStream.forEach(
                 beanNames,
-                OperationFailedException.class,
+                DefineAddException.class,
                 name -> out.add(visualizationBean(createVisualization, name)));
     }
 

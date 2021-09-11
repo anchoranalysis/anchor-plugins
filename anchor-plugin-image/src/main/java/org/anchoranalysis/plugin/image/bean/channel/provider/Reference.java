@@ -31,6 +31,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -72,7 +73,7 @@ public class Reference extends ChannelProvider {
             } else {
                 return existing;
             }
-        } catch (NamedProviderGetException e) {
+        } catch (NamedProviderGetException | InitializeException e) {
             throw new ProvisionFailedException(e);
         }
     }

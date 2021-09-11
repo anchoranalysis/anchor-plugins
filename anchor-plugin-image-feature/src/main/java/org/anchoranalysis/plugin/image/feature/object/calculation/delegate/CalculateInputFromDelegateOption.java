@@ -94,7 +94,7 @@ public abstract class CalculateInputFromDelegateOption<
         }
 
         // We select an appropriate cache for calculating the feature (should be the same as
-        // selected in init())
+        // selected in initialize())
         return input.forChild().calculate(feature, inputForDelegate.get(), cacheName);
     }
 }

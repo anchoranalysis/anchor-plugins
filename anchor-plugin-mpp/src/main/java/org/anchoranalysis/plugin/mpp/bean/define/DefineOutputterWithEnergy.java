@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.Logger;
@@ -135,21 +135,21 @@ public class DefineOutputterWithEnergy extends DefineOutputter {
 
             return result;
 
-        } catch (InitException | ProvisionFailedException | OutputWriteFailedException e) {
+        } catch (InitializeException | ProvisionFailedException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
     }
 
     private EnergyStack createEnergyStack(ImageInitialization initialization, Logger logger)
-            throws InitException, ProvisionFailedException {
+            throws InitializeException, ProvisionFailedException {
 
         // Extract the energy stack
         StackProvider stackDuplicated = stackEnergy.duplicateBean();
-        stackDuplicated.initRecursive(initialization, logger);
+        stackDuplicated.initializeRecursive(initialization, logger);
         EnergyStack stack = new EnergyStack(stackDuplicated.get());
 
         if (dictionary != null) {
-            dictionary.initRecursive(initialization.dictionaryInitialization(), logger);
+            dictionary.initializeRecursive(initialization.dictionaryInitialization(), logger);
             stack.setDictionary(dictionary.get());
         }
         return stack;

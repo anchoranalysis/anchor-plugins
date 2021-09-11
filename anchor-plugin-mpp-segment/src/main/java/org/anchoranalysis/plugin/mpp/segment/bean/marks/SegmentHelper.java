@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.marks;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
@@ -55,9 +55,9 @@ class SegmentHelper {
             EnergySchemeCreator energySchemeCreator,
             FeaturesInitialization featureInit,
             Logger logger)
-            throws InitException {
+            throws InitializeException {
 
-        energySchemeCreator.initRecursive(featureInit, logger);
+        energySchemeCreator.initializeRecursive(featureInit, logger);
 
         try {
             EnergyScheme energyScheme = energySchemeCreator.create();
@@ -65,7 +65,7 @@ class SegmentHelper {
             return new EnergySchemeWithSharedFeatures(
                     energyScheme, featureInit.getSharedFeatures(), logger);
         } catch (CreateException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 
@@ -86,9 +86,9 @@ class SegmentHelper {
             MarkWithIdentifierFactory markFactory,
             MarksInitialization initialization,
             Logger logger)
-            throws InitException {
+            throws InitializeException {
         // The initial initiation to establish the kernelProposer
-        kernelProposer.init();
+        kernelProposer.initialize();
         kernelProposer.initWithProposerSharedObjects(initialization, logger);
 
         // Check that the kernelProposer is compatible with our marks

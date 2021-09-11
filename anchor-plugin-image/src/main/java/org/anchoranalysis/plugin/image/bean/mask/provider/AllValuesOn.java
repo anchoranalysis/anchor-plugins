@@ -24,17 +24,21 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.mask.provider.dimensions;
+package org.anchoranalysis.plugin.image.bean.mask.provider;
 
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFactory;
-import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
 
-public class AllValuesOff extends FromDimensionsBase {
+/**
+ * Creates a new mask of particular dimensionality where all values are <i>on</i>.
+ *
+ * @author Owen Feehan
+ */
+public class AllValuesOn extends FromDimensionsBase {
 
     @Override
     protected Mask createFromDimensions(Dimensions dimensions) {
-        return MaskFactory.createMaskOff(dimensions);
+        return MaskFactory.createMaskOn(dimensions);
     }
 }

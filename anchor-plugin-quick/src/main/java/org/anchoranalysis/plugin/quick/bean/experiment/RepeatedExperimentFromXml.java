@@ -31,8 +31,8 @@ import java.nio.file.Paths;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.bean.xml.BeanXMLLoader;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
-import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
+import org.anchoranalysis.core.system.path.ResolvePathAbsolute;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
@@ -80,7 +80,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
             String folderDataset,
             String beanExtension,
             JobProcessor<T, S> taskProcessor) {
-        delegate.init(xmlConfiguration, taskProcessor);
+        delegate.initialize(xmlConfiguration, taskProcessor);
 
         // The folder where the datasets are stored
         pathDatasetDirectory = getCombinedPath(folderDataset);
@@ -126,7 +126,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
         try {
             U bean = BeanXMLLoader.loadBean(path); // NOSONAR
             return bean;
-        } catch (BeanXmlException e) {
+        } catch (BeanXMLException e) {
             throw new BeanStrangeException(
                     String.format(
                             "Cannot create %s in QuickMultiDatasetExperiment (opening \"%s\")",
@@ -157,7 +157,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
         Path pathDataset = pathDirectory.resolve(datasetName.concat(beanExtension));
         try {
             return BeanXMLLoader.loadBean(pathDataset);
-        } catch (BeanXmlException e) {
+        } catch (BeanXMLException e) {
             throw new ExperimentExecutionException(
                     String.format("Cannot create bean for dataset '%s'", pathDataset), e);
         }
@@ -165,6 +165,6 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
 
     private Path getCombinedPath(String relativePath) {
         assert (beanLocalPath != null);
-        return BeanPathUtilities.combine(beanLocalPath, Paths.get(relativePath));
+        return ResolvePathAbsolute.resolve(beanLocalPath, Paths.get(relativePath));
     }
 }

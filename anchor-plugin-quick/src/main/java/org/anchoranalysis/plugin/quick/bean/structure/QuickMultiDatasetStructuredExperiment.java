@@ -30,9 +30,9 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -153,9 +153,9 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
     }
 
     @Override
-    public void associateXml(XMLConfiguration xmlConfiguration) {
-        super.associateXml(xmlConfiguration);
-        delegate.associateXml(xmlConfiguration);
+    public void associateXML(XMLConfiguration xmlConfiguration) {
+        super.associateXML(xmlConfiguration);
+        delegate.associateXML(xmlConfiguration);
     }
 
     @Override

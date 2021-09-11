@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Optional;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
@@ -64,7 +64,7 @@ class FeatureListMarksTest {
     }
 
     @Test
-    void testNoParams() throws InitException, NamedFeatureCalculateException, CreateException {
+    void testNoParams() throws InitializeException, NamedFeatureCalculateException, CreateException {
         assertThrows(
                 NamedFeatureCalculateException.class,
                 () -> testConstantsInList((FeatureInput) null, (FeatureInput) null));
@@ -72,7 +72,7 @@ class FeatureListMarksTest {
 
     @Test
     void testArbitraryParams()
-            throws InitException, NamedFeatureCalculateException, CreateException {
+            throws InitializeException, NamedFeatureCalculateException, CreateException {
 
         MarkCollectionFixture marksFixture = new MarkCollectionFixture(DIMENSIONS);
 
@@ -84,7 +84,7 @@ class FeatureListMarksTest {
     }
 
     @Test
-    void testMark() throws InitException, CreateException, NamedFeatureCalculateException {
+    void testMark() throws InitializeException, CreateException, NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputMark> session =
                 createAndStart(FeatureListMarksFixture.mark());
@@ -115,7 +115,7 @@ class FeatureListMarksTest {
 
     @Test
     void testMarks()
-            throws InitException, CreateException, FeatureCalculationException,
+            throws InitializeException, CreateException, FeatureCalculationException,
                     NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputMarkCollection> session =
@@ -152,12 +152,12 @@ class FeatureListMarksTest {
     }
 
     private static <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart(
-            FeatureList<T> features) throws InitException {
+            FeatureList<T> features) throws InitializeException {
         return FeatureSession.with(features, LoggingFixture.suppressedLogger());
     }
 
     private void testConstantsInList(FeatureInput params1, FeatureInput params2)
-            throws CreateException, InitException, NamedFeatureCalculateException {
+            throws CreateException, InitializeException, NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInput> session =
                 createAndStart(ConstantsInListFixture.create());

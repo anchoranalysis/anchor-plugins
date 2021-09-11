@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
@@ -60,7 +60,7 @@ class MergePairsTest {
      */
     @Test
     void testAllMerge()
-            throws BeanMisconfiguredException, CreateException, InitException,
+            throws BeanMisconfiguredException, CreateException, InitializeException,
                     OperationFailedException {
         testLinear(EXPECTED_RESULT_ALL_INTERSECTING_MERGED, 26, 14, 1);
     }
@@ -72,7 +72,7 @@ class MergePairsTest {
      */
     @Test
     void testSomeMerge()
-            throws BeanMisconfiguredException, CreateException, InitException,
+            throws BeanMisconfiguredException, CreateException, InitializeException,
                     OperationFailedException {
         testLinear(EXPECTED_RESULT_FIRST_THREE_NOT_MERGING, 22, 12, 300);
     }

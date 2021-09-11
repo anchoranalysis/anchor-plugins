@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
@@ -57,13 +57,13 @@ public class MaskAsSingleObject<T extends FeatureInputEnergy>
     private Mask createdMask;
 
     @Override
-    protected void beforeCalcWithInitialization(ImageInitialization params) throws InitException {
-        mask.initRecursive(params, getLogger());
+    protected void beforeCalcWithInitialization(ImageInitialization params) throws InitializeException {
+        mask.initializeRecursive(params, getLogger());
 
         try {
             createdMask = mask.get();
         } catch (ProvisionFailedException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 

@@ -34,7 +34,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.shared.path.RootPath;
 import org.anchoranalysis.bean.xml.BeanXMLLoader;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.core.system.path.SplitPath;
@@ -110,7 +110,7 @@ public class RootPathMap {
                 assert (!contains(rp));
                 add(rp);
             }
-        } catch (BeanXmlException e) {
+        } catch (BeanXMLException e) {
 
             throw new OperationFailedException(
                     String.format("An error occurred loading bean XML from %s", path), e);

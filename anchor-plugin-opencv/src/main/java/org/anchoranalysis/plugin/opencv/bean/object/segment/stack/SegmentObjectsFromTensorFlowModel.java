@@ -38,7 +38,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModel;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.core.concurrency.CreateModelFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
@@ -101,7 +104,7 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
     // END BEAN PROPERTIES
 
     @Override
-    public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan) {
+    public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan) throws CreateModelFailedException {
         // We disable all GPU inference as the current OpenCV library (from org.openpnp) does not
         // support it
 
@@ -160,21 +163,26 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
      *     inference with the model.
      * @return a newly created model
      */
-    private ConcurrentModel<Net> readPrepareModel(boolean useGPU) {
+    private ConcurrentModel<Net> readPrepareModel(boolean useGPU) throws CreateModelFailedException {
 
-        Path model = resolve(modelBinaryPath);
-
-        Optional<Path> textGraph = OptionalFactory.create(modelTextGraphPath).map(this::resolve);
-
-        CVInit.blockUntilLoaded();
-
-        Net net = readNet(model, textGraph);
-
-        if (useGPU) {
-            net.setPreferableBackend(Dnn.DNN_BACKEND_CUDA);
-            net.setPreferableTarget(Dnn.DNN_TARGET_CUDA);
+        try {
+            Path model = resolve(modelBinaryPath);
+    
+            Optional<Path> textGraph = OptionalUtilities.map( OptionalFactory.create(modelTextGraphPath), this::resolve);
+    
+            CVInit.blockUntilLoaded();
+    
+            Net net = readNet(model, textGraph);
+    
+            if (useGPU) {
+                net.setPreferableBackend(Dnn.DNN_BACKEND_CUDA);
+                net.setPreferableTarget(Dnn.DNN_TARGET_CUDA);
+            }
+            return new ConcurrentModel<>(net, useGPU);
+            
+        } catch (InitializeException e) {
+            throw new CreateModelFailedException(e);
         }
-        return new ConcurrentModel<>(net, useGPU);
     }
 
     /**
@@ -220,15 +228,19 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
     /** A list of ordered object-class labels, if a class-labels file is specified. */
     private Optional<List<String>> classLabels() throws IOException {
         if (!classLabelsPath.isEmpty()) {
-            Path filename = resolve(classLabelsPath);
-            return Optional.of(TextFileReader.readLinesAsList(filename));
+            try {
+                Path filename = resolve(classLabelsPath);
+                return Optional.of(TextFileReader.readLinesAsList(filename));
+            } catch (InitializeException e) {
+                throw new IOException(e);
+            }
         } else {
             return Optional.empty();
         }
     }
 
     /** Resolves a relative-filename (to the model directory) into a path. */
-    private Path resolve(String filename) {
+    private Path resolve(String filename) throws InitializeException {
         return getInitialization().getModelDirectory().resolve(filename);
     }
 

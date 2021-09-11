@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -236,7 +236,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
             return results;
 
-        } catch (InitException | FeatureCalculationException | OperationFailedException e) {
+        } catch (InitializeException | FeatureCalculationException | OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
     }

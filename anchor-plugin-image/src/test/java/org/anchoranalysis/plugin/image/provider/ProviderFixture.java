@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
@@ -111,11 +111,11 @@ public class ProviderFixture {
         try {
             provider.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
-            provider.init(
+            provider.initialize(
                     ImageInitializationFactory.create(InputOutputContextFixture.withLogger(logger)),
                     logger);
 
-        } catch (BeanMisconfiguredException | InitException e) {
+        } catch (BeanMisconfiguredException | InitializeException e) {
             throw new CreateException(e);
         }
     }

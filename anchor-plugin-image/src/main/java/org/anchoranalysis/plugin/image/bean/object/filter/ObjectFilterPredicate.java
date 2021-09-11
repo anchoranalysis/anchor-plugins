@@ -53,13 +53,13 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
 
         start(dimensions, objectsToFilter);
 
-        ObjectCollection dup =
+        ObjectCollection filtered =
                 objectsToFilter.stream()
                         .filter(object -> match(object, dimensions), objectsRejected);
 
         end();
 
-        return dup;
+        return filtered;
     }
 
     /** A precondition, which if evaluates to false, cancels the filter i.e. nothing is removed */

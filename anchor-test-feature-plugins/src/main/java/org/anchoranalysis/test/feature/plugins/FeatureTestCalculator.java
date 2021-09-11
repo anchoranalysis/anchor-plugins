@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -121,7 +121,7 @@ public class FeatureTestCalculator {
                             LoggingFixture.suppressedLogger());
 
             return calculator.calculate(params);
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new FeatureCalculationException(e);
         }
     }

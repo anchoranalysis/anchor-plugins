@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 import org.anchoranalysis.core.log.Logger;
@@ -230,7 +230,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
 
                 processRows(mapGroup.get(groupName), groupName, writer, groupContext);
             }
-        } catch (InitException | ProvisionFailedException e) {
+        } catch (InitializeException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -256,9 +256,9 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
         // Get our background-stack and objects. We duplicate to avoid threading issues
         StackProvider providerCopy = stack.duplicateBean();
         try {
-            providerCopy.initRecursive(params, logger);
+            providerCopy.initializeRecursive(params, logger);
             return DisplayStack.create(providerCopy.get());
-        } catch (CreateException | InitException | ProvisionFailedException e) {
+        } catch (CreateException | InitializeException | ProvisionFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }

@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedUnaryOperator;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -74,24 +75,24 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
         Interpolator interpolator = createInterpolator();
 
-        ScaleFactor scaleFactor =
-                determineScaleFactor(
-                        channel.dimensions(), getInitialization().getSuggestedResize());
-
-        Extent extent = channel.extent();
-
-        // Perform segmentation on scaled versions of the channel, mask and seeds
-        ObjectCollection scaledSegmentationResult =
-                upstreamSegmentation.segment(
-                        scaleChannel(channel, scaleFactor, interpolator),
-                        scaleMask(objectMask, scaleFactor, extent),
-                        scaleSeeds(seeds, scaleFactor, extent));
-
-        // Segment and scale results back up to original-scale
         try {
+            ScaleFactor scaleFactor =
+                    determineScaleFactor(
+                            channel.dimensions(), getInitialization().getSuggestedResize());
+    
+            Extent extent = channel.extent();
+    
+            // Perform segmentation on scaled versions of the channel, mask and seeds
+            ObjectCollection scaledSegmentationResult =
+                    upstreamSegmentation.segment(
+                            scaleChannel(channel, scaleFactor, interpolator),
+                            scaleMask(objectMask, scaleFactor, extent),
+                            scaleSeeds(seeds, scaleFactor, extent));
+
+            // Segment and scale results back up to original-scale
             return scaleResultToOriginalScale(
                     scaledSegmentationResult, scaleFactor, channel.dimensions().extent());
-        } catch (OperationFailedException e) {
+        } catch (OperationFailedException | InitializeException e) {
             throw new SegmentationFailedException(e);
         }
     }

@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 
 import java.util.Arrays;
-import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
+import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInputParams;

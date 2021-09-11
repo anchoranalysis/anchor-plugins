@@ -40,7 +40,7 @@ public abstract class UnchangedBase extends NumberIterationsBase {
     private int repeatsUnchanged = 0;
 
     @Override
-    public void init() {
+    public void initialize() {
         this.repeatsUnchanged = 0;
     }
 

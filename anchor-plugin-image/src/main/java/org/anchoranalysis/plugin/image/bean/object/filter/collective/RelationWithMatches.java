@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.object.filter.dependent;
+package org.anchoranalysis.plugin.image.bean.object.filter.collective;
 
 import java.util.List;
 import java.util.Map;

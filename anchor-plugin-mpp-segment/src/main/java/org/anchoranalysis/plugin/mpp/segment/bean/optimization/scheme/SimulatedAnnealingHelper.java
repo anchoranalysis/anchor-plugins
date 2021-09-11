@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.mpp.bean.AnnealScheme;
@@ -75,7 +75,7 @@ class SimulatedAnnealingHelper {
 
         try {
             kernelProposer.initBeforeCalc(context.getKernelCalcContext());
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new OptimizationTerminatedEarlyException("Init failed", e);
         }
 

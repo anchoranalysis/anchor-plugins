@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
@@ -56,14 +56,14 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputEnergy
     // END BEAN PROPERTIES
 
     @Override
-    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+    protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         super.beforeCalc(initialization);
         beforeCalcWithInitialization(
                 new ImageInitialization(initialization.sharedObjectsRequired()));
     }
 
     protected abstract void beforeCalcWithInitialization(ImageInitialization initialization)
-            throws InitException;
+            throws InitializeException;
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {

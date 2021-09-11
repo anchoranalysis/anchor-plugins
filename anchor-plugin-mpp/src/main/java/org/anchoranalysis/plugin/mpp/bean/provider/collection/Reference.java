@@ -32,6 +32,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -48,7 +49,7 @@ public class Reference extends MarkCollectionProvider {
     public MarkCollection get() throws ProvisionFailedException {
         try {
             return getInitialization().marks().getException(id);
-        } catch (NamedProviderGetException e) {
+        } catch (NamedProviderGetException | InitializeException e) {
             throw new ProvisionFailedException(e);
         }
     }

@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.mpp.bean.provider.MarkBoundsProvider;
@@ -46,6 +47,8 @@ public class MarkBoundsReference extends MarkBoundsProvider {
             return getInitialization().markBounds().getException(id);
         } catch (NamedProviderGetException e) {
             throw new ProvisionFailedException(e.summarize());
+        } catch (InitializeException e) {
+            throw new ProvisionFailedException(e);
         }
     }
 }

@@ -35,8 +35,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
+import org.anchoranalysis.bean.define.DefineAddException;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -74,7 +74,7 @@ class DefineFixture {
             for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : sharedFeatures.get()) {
                 try {
                     define.add(namedBean);
-                } catch (OperationFailedException e) {
+                } catch (DefineAddException e) {
                     throw new ProvisionFailedException(e);
                 }
             }

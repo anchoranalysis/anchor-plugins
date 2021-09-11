@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.value.TypedValue;
@@ -124,7 +124,7 @@ public class SharedStateFilteredImageOutput<T> {
             //  to give to the filter.
             try {
                 initFilterOutputters(input.pathForBindingRequired());
-            } catch (InitException | InputReadFailedException e) {
+            } catch (InitializeException | InputReadFailedException e) {
                 throw new OperationFailedException(e);
             }
             groupIdentifierForCalled = true;
@@ -138,14 +138,14 @@ public class SharedStateFilteredImageOutput<T> {
         return outputters.map(outputter -> outputter.getOutputterFor(groupIdentifier));
     }
 
-    public T getFilterInitialization(Path pathForBinding) throws InitException {
+    public T getFilterInitialization(Path pathForBinding) throws InitializeException {
         if (initialization == null) {
-            initialization = filter.init(pathForBinding);
+            initialization = filter.initialize(pathForBinding);
         }
         return initialization;
     }
 
-    private void initFilterOutputters(Path pathForBinding) throws InitException {
+    private void initFilterOutputters(Path pathForBinding) throws InitializeException {
         Optional<Outputter> outputterLabelsSubdirectory =
                 baseOutputter
                         .writerSelective()

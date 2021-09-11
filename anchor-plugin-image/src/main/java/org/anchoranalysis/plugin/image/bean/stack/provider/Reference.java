@@ -32,6 +32,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -81,20 +83,20 @@ public class Reference extends StackProvider {
             return OptionalUtilities.orElseGetFlat(
                     OptionalUtilities.orElseGetFlat(fromStacks(), this::fromChannels),
                     this::fromMasks);
-        } catch (NamedProviderGetException e) {
+        } catch (AnchorCheckedException e) {
             throw new ProvisionFailedException(e);
         }
     }
 
-    private Optional<Stack> fromStacks() throws NamedProviderGetException {
+    private Optional<Stack> fromStacks() throws NamedProviderGetException, InitializeException {
         return getInitialization().stacks().getOptional(id);
     }
 
-    private Optional<Stack> fromChannels() throws NamedProviderGetException {
+    private Optional<Stack> fromChannels() throws NamedProviderGetException, InitializeException {
         return getInitialization().channels().getOptional(id).map(Stack::new);
     }
 
-    private Optional<Stack> fromMasks() throws NamedProviderGetException {
+    private Optional<Stack> fromMasks() throws NamedProviderGetException, InitializeException {
         return getInitialization().masks().getOptional(id).map(mask -> new Stack(mask.channel()));
     }
 }

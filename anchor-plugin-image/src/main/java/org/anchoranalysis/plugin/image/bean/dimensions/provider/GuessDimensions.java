@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.bean.dimensions.provider;
 
 import java.util.Set;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
@@ -51,7 +52,11 @@ public class GuessDimensions extends DimensionsProvider {
     public Dimensions get() throws ProvisionFailedException {
 
         if (dimensions == null) {
-            dimensions = takeDimensionFromStackCollection(getInitialization().stacks());
+            try {
+                dimensions = takeDimensionFromStackCollection(getInitialization().stacks());
+            } catch (InitializeException e) {
+                throw new ProvisionFailedException(e);
+            }
         }
 
         return dimensions;
@@ -78,7 +83,7 @@ public class GuessDimensions extends DimensionsProvider {
         Stack stack;
         try {
             stack = getInitialization().stacks().getException(keyThatExists);
-        } catch (NamedProviderGetException e) {
+        } catch (NamedProviderGetException | InitializeException e) {
             throw new ProvisionFailedException(e);
         }
 

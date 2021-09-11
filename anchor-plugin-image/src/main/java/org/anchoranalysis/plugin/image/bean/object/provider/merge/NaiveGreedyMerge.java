@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
@@ -103,8 +103,8 @@ class NaiveGreedyMerge {
             throws OperationFailedException {
 
         try {
-            afterCondition.init(logger);
-        } catch (InitException e) {
+            afterCondition.initialize(logger);
+        } catch (InitializeException e) {
             throw new OperationFailedException(e);
         }
 

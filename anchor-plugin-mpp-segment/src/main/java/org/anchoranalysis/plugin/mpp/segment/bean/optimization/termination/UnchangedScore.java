@@ -52,8 +52,8 @@ public class UnchangedScore extends UnchangedBase {
     private double previousScore = 0;
 
     @Override
-    public void init() {
-        super.init();
+    public void initialize() {
+        super.initialize();
         this.previousScore = 0;
         this.toleranceRaised = Math.pow(10.0, tolerance);
     }

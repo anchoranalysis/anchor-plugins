@@ -12,8 +12,8 @@
 				<direction axis="x" config-class="org.anchoranalysis.image.bean.spatial.direction.AxisAlignedUnitVector"/>
 			</feature>
 			<permutation config-class="org.anchoranalysis.bean.permute.property.PermutePropertyStringSet" propertyPath="item.axis">
-				<values items="x,y,z" config-class="org.anchoranalysis.bean.StringSet" config-factory="stringSet"/>
-				<additionalPropertyPaths items="direction.axis" config-class="org.anchoranalysis.bean.StringSet" config-factory="stringSet"/>
+				<values items="x,y,z" config-class="org.anchoranalysis.bean.primitive.StringSet" config-factory="stringSet"/>
+				<additionalPropertyPaths items="direction.axis" config-class="org.anchoranalysis.bean.primitive.StringSet" config-factory="stringSet"/>
 			</permutation>
 		</item>
 	</item>

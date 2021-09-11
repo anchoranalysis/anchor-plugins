@@ -32,7 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.test.TestDataInitException;
+import org.anchoranalysis.test.TestDataInitializeException;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 import org.apache.commons.exec.CommandLine;
@@ -176,7 +176,7 @@ public class ExperimentLauncherFromShell {
                 loader.copyToDirectory(temporaryDirectory);
             }
         } catch (IOException e) {
-            throw new TestDataInitException(e);
+            throw new TestDataInitializeException(e);
         }
     }
 

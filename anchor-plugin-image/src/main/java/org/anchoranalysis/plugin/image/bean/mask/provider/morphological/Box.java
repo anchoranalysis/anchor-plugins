@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.mask.provider.dimensions;
+package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -37,29 +37,29 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 
 /**
- * Creates a binary img-channel where all pixels are 'on' within a certain x, y, z coordinate range
+ * Creates a {@link Mask} where all pixels are <i>on</i> within a box region.
  *
- * <p>This effectively creates a mask that is a box
+ * <p>The box region is identified by certain minimum and maximum x, y, z coordinates.
  */
-public class InsideBoxOn extends FromDimensionsBase {
+public class Box extends FromDimensionsBase {
 
     // START BEAN PROPERTIES
-    /** Minimum X coordinate inclusive */
+    /** Minimum X coordinate inclusive. */
     @BeanField @Getter @Setter private int minX = 0;
 
-    /** Maximum X coordinate inclusive */
+    /** Maximum X coordinate inclusive. */
     @BeanField @Getter @Setter private int maxX = Integer.MAX_VALUE;
 
-    /** Minimum Y coordinate inclusive */
+    /** Minimum Y coordinate inclusive. */
     @BeanField @Getter @Setter private int minY = 0;
 
-    /** Maximum Y coordinate inclusive */
+    /** Maximum Y coordinate inclusive. */
     @BeanField @Getter @Setter private int maxY = Integer.MAX_VALUE;
 
-    /** Minimum Z coordinate inclusive */
+    /** Minimum Z coordinate inclusive. */
     @BeanField @Getter @Setter private int minZ = 0;
 
-    /** Maximum Z coordinate inclusive */
+    /** Maximum Z coordinate inclusive. */
     @BeanField @Getter @Setter private int maxZ = Integer.MAX_VALUE;
     // END BEAN PROPERTIES
 

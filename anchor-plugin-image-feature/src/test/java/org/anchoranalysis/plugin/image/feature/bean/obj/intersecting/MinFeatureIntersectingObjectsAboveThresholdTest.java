@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
@@ -42,12 +42,12 @@ class MinFeatureIntersectingObjectsAboveThresholdTest {
      * We expect always the same number of pixels apart from the last object which has 0 neighbors
      *
      * @throws FeatureCalculationException
-     * @throws InitException
+     * @throws InitializeException
      * @throws OperationFailedException
      */
     @Test
     void testSameSizes()
-            throws FeatureCalculationException, InitException, OperationFailedException {
+            throws FeatureCalculationException, InitializeException, OperationFailedException {
         InteresectingObjectsTestHelper.testPositions(
                 "sameSize",
                 FEATURE,
@@ -62,12 +62,12 @@ class MinFeatureIntersectingObjectsAboveThresholdTest {
      * We expect a growing number of pixels apart from the last object which has 0 neighbors
      *
      * @throws FeatureCalculationException
-     * @throws InitException
+     * @throws InitializeException
      * @throws OperationFailedException
      */
     @Test
     void testDifferentSizes()
-            throws FeatureCalculationException, InitException, OperationFailedException {
+            throws FeatureCalculationException, InitializeException, OperationFailedException {
         InteresectingObjectsTestHelper.testPositions(
                 "differentSize",
                 FEATURE,
