@@ -49,7 +49,7 @@ public class RatioThreshold extends FeatureHistogramStatistic {
 
         assert (histogram.size() > 0);
 
-        long count = histogram.countThreshold(threshold.relation(), threshold.threshold());
+        long count = histogram.countMatching(threshold.asPredicateInt());
         return (((double) count) / histogram.size());
     }
 

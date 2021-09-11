@@ -39,7 +39,7 @@ public class PrincipalAxisLength extends SpecificAxisBase {
     @Override
     protected double calculateFromSpecificMoment(EigenvalueAndVector moment)
             throws FeatureCalculationException {
-        return moment.eigenvalueNormalizedAsAxisLength();
+        return AxisLengthEstimator.fromNormalizedEigenvalue(moment.getEigenvalue());
     }
 
     @Override

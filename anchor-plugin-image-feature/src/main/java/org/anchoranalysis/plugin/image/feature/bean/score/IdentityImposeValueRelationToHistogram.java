@@ -62,7 +62,7 @@ public class IdentityImposeValueRelationToHistogram extends VoxelScore {
 
         double pxlValue = voxelIntensities[energyChannelIndexCheck];
 
-        if (relation.create().isRelationToValueTrue(pxlValue, histogramMax)) {
+        if (relation.create().test(pxlValue, histogramMax)) {
             return value;
         } else {
             return voxelIntensities[energyChannelIndexFail];

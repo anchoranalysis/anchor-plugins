@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.statistics.moment.ImageMoments;
 
 /**
- * Calculates the ratio of prinicpal-axis length using Image Moments
+ * Calculates the ratio of prinicpal-axis length using Image Moments.
  *
  * <p>Specifically this is the highest-magnitude eigen-value (normalized) to second-highest
  * (normalized) eigen-value.
@@ -52,8 +52,8 @@ public class RatioPrincipalAxisLength extends ImageMomentsBase {
 
         moments.removeClosestToUnitZ();
 
-        double moments0 = moments.get(0).eigenvalueNormalizedAsAxisLength();
-        double moments1 = moments.get(1).eigenvalueNormalizedAsAxisLength();
+        double moments0 = estimateAxisLength(moments, 0);
+        double moments1 = estimateAxisLength(moments, 1);
 
         if (moments0 == 0.0 && moments1 == 0.0) {
             return 1.0;
@@ -69,5 +69,9 @@ public class RatioPrincipalAxisLength extends ImageMomentsBase {
     @Override
     protected String errorMessageIfTooFewPixels() {
         return "Too few voxels to determine principal axes and therefore ratio of principal-axis length";
+    }
+    
+    private static double estimateAxisLength(ImageMoments moments, int axis) {
+        return AxisLengthEstimator.fromNormalizedEigenvalue(moments.get(axis).getEigenvalue());
     }
 }

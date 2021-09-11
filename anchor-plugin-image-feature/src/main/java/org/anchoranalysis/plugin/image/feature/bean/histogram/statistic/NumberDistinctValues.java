@@ -29,24 +29,29 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.math.relation.EqualTo;
 
-// Number of unique values in histogram i.e. how many non-zero bins
+/**
+ * Number of unique values in histogram.
+ * 
+ *<p>i.e. how many non-zero bins.
+ *
+ * @author Owen Feehan
+ *
+ */
 public class NumberDistinctValues extends FeatureHistogramStatistic {
-
+    
     @Override
     protected double calculateStatisticFrom(Histogram histogram)
             throws FeatureCalculationException {
-        int numUniqueValues = 0;
+        int numberUniqueValues = 0;
 
         for (int v = 0; v < 255; v++) {
-            long cnt = histogram.countThreshold(new EqualTo(), v);
-
-            if (cnt != 0) {
-                numUniqueValues++;
+            long count = histogram.getCount(v);
+            if (count != 0) {
+                numberUniqueValues++;
             }
         }
 
-        return numUniqueValues;
+        return numberUniqueValues;
     }
 }

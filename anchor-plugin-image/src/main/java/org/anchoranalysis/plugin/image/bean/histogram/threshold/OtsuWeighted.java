@@ -97,7 +97,7 @@ public class OtsuWeighted extends CalculateLevel {
 
         for (int level = minIntensity; level <= maxIntensity; level++) { // Avoid min and max
 
-            running.add(histogram.getCount(level), level);
+            running.add(level, histogram.getCount(level));
 
             double score = weightedSumClassVariances(running, total);
 
@@ -113,7 +113,7 @@ public class OtsuWeighted extends CalculateLevel {
     private static VarianceCalculator varianceCalculatorFirstBin(
             Histogram histogram, int firstBin) {
         VarianceCalculator running = new VarianceCalculator(0, 0, 0);
-        running.add(histogram.getCount(firstBin), firstBin);
+        running.add(firstBin, histogram.getCount(firstBin));
         return running;
     }
 
@@ -125,7 +125,6 @@ public class OtsuWeighted extends CalculateLevel {
     }
 
     private double weightedSumClassVariances(VarianceCalculator running, VarianceCalculator total) {
-        assert (total.greaterEqualThan(running));
 
         double varianceBackground = running.variance();
         double varianceForeground = total.subtract(running).variance();
