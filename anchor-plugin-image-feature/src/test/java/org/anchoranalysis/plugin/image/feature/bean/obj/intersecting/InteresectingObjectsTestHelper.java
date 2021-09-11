@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.CommonContext;
@@ -64,7 +64,7 @@ class InteresectingObjectsTestHelper {
      * @param expectedLast expected-result for object in last position
      * @throws OperationFailedException
      * @throws FeatureCalculationException
-     * @throws InitException
+     * @throws InitializeException
      */
     public static void testPositions(
             String messagePrefix,
@@ -74,7 +74,7 @@ class InteresectingObjectsTestHelper {
             int expectedSecond,
             int expectedSecondLast,
             int expectedLast)
-            throws OperationFailedException, FeatureCalculationException, InitException {
+            throws OperationFailedException, FeatureCalculationException, InitializeException {
 
         ObjectCollection objects =
                 IntersectingCircleObjectsFixture.generateIntersectingObjects(
@@ -113,7 +113,7 @@ class InteresectingObjectsTestHelper {
      *     removed at index) and the remainder that form a set of objects to intersect with
      * @param index index of object in collection to remove and use as parameter
      * @param expectedResult expected result from test
-     * @throws InitException
+     * @throws InitializeException
      * @throws FeatureCalculationException
      * @throws OperationFailedException
      */
@@ -123,7 +123,7 @@ class InteresectingObjectsTestHelper {
             ObjectCollection objects,
             int index,
             int expectedResult)
-            throws OperationFailedException, FeatureCalculationException, InitException {
+            throws OperationFailedException, FeatureCalculationException, InitializeException {
 
         // We take the second object in the collection, as one that should intersect with 2 others
         ObjectMask objectMask = objects.get(index);

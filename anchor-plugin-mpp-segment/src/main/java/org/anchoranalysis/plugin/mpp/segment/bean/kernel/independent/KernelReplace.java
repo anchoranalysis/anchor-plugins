@@ -54,7 +54,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T, UpdatableMarksLis
     private boolean hasBeenInit = false;
 
     /** Must be called before makeProposal */
-    protected void init(KernelBirth<T> kernelBirth, KernelDeath<T> kernelDeath) {
+    protected void initialize(KernelBirth<T> kernelBirth, KernelDeath<T> kernelDeath) {
         this.kernelBirth = kernelBirth;
         this.kernelDeath = kernelDeath;
         assert (kernelDeath != null);

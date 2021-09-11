@@ -30,7 +30,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
@@ -49,12 +49,12 @@ public class Reference extends PointsFitter {
     private PointsFitter pointsFitter;
 
     @Override
-    public void onInit(PointsInitialization so) throws InitException {
-        super.onInit(so);
+    public void onInitialization(PointsInitialization so) throws InitializeException {
+        super.onInitialization(so);
         try {
             this.pointsFitter = getInitialization().getPointFitters().getException(id);
         } catch (NamedProviderGetException e) {
-            throw new InitException(e.summarize());
+            throw new InitializeException(e.summarize());
         }
     }
 

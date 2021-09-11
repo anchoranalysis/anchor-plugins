@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 
 import java.util.Optional;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -53,7 +53,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     @Override
     public void beforeCreateObject(
             RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
-            throws InitException {
+            throws InitializeException {
         // NOTHING TO DO
     }
 
@@ -62,7 +62,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
             Point3i root,
             Optional<Resolution> resolution,
             RandomNumberGenerator randomNumberGenerator)
-            throws InitException {
+            throws InitializeException {
         this.root = root;
     }
 

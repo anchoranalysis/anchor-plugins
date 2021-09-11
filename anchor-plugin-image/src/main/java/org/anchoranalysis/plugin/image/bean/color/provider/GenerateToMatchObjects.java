@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.provider.ColorProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 
 /**
- * Generates colors to match the size of an object-collection
+ * Generates colors to match the size of an object-collection.
  *
  * @author Owen Feehan
  */

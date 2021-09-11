@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -106,7 +106,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
             throws NamedFeatureCalculateException {
         try {
             return factory.calculatorForAll(features).calculate(new FeatureInputStack());
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new NamedFeatureCalculateException(e);
         }
     }

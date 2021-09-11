@@ -1,8 +1,14 @@
+/**
+ * Implementations of {@link org.anchoranalysis.image.bean.object.ObjectFilter} that assess each element in a collection <b>collectively</b>.
+ * 
+ * <p>This is a less strict condition than in {@code org.anchoranalysis.plugin.image.bean.object.filter.independent} where each element is considered in isolation of others.
+ */
+package org.anchoranalysis.plugin.image.bean.object.filter.collective;
 /*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +29,3 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.plugin.image.bean.mask.provider.dimensions;
-
-import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.core.mask.MaskFactory;
-import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
-
-/**
- * Creates a new mask of particular dimensionality where all values are ON
- *
- * @author Owen Feehan
- */
-public class AllValuesOn extends FromDimensionsBase {
-
-    @Override
-    protected Mask createFromDimensions(Dimensions dimensions) {
-        return MaskFactory.createMaskOn(dimensions);
-    }
-}

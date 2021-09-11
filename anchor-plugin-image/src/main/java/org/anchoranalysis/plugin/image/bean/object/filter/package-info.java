@@ -1,3 +1,6 @@
+/**
+ * Implementations of {@link org.anchoranalysis.image.bean.object.ObjectFilter}.
+ */
 package org.anchoranalysis.plugin.image.bean.object.filter;
 /*-
  * #%L

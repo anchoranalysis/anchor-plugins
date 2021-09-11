@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.shared;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
@@ -59,7 +59,7 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
     private double value;
 
     @Override
-    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+    protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         super.beforeCalc(initialization);
 
         ImageInitialization image = new ImageInitialization(initialization.sharedObjectsRequired());
@@ -68,7 +68,7 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
             this.value = dictionary.getAsDouble(key);
 
         } catch (NamedProviderGetException e) {
-            throw new InitException(e.summarize());
+            throw new InitializeException(e.summarize());
         }
     }
 

@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -103,6 +104,8 @@ public class FromStack extends ChannelProvider {
                 return getInitialization().stacks().getException(stackProviderID);
             } catch (NamedProviderGetException e) {
                 throw new ProvisionFailedException(e.summarize());
+            } catch (InitializeException e) {
+                throw new ProvisionFailedException(e);
             }
         }
     }

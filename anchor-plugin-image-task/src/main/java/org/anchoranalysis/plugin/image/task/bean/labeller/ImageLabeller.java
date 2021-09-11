@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
 import java.nio.file.Path;
 import java.util.Set;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -50,7 +50,7 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
      *
      * @param pathForBinding a path that can be used by the labeller to make filePath decisions
      */
-    public abstract T init(Path pathForBinding) throws InitException;
+    public abstract T initialize(Path pathForBinding) throws InitializeException;
 
     /**
      * A set of identifiers for all groups that can be outputted by the labeller. Should be callable

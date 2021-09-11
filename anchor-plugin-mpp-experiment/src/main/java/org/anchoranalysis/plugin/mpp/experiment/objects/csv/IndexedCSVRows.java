@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.objects.csv;
 
 import java.util.Set;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.ReadByLine;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
@@ -57,7 +57,7 @@ public class IndexedCSVRows {
             columnDefinition.initHeaders(headers);
 
             processLines(csvFile, columnDefinition);
-        } catch (CSVReaderException | InitException e) {
+        } catch (CSVReaderException | InitializeException e) {
             throw new CreateException(e);
         }
     }

@@ -117,7 +117,7 @@ public class SimulatedAnnealing<S, T, U> extends OptimizationScheme<S, U, Updata
         TerminationCondition termConditionAll =
                 new TerminationConditionListOr(
                         termination, initContext.getTriggerTerminationCondition());
-        termConditionAll.init();
+        termConditionAll.initialize();
         return termConditionAll;
     }
 }

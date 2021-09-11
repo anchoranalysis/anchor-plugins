@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
@@ -75,7 +75,7 @@ class CalculateGradientFromChannels
 
         if (energyIndexX == -1 || energyIndexY == -1) {
             throw new FeatureCalculationException(
-                    new InitException("energyIndexX and energyIndexY must both be nonZero"));
+                    new InitializeException("energyIndexX and energyIndexY must both be nonZero"));
         }
 
         // create a list of points

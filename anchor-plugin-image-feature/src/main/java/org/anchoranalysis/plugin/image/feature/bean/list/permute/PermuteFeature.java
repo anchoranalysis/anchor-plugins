@@ -32,19 +32,19 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.initializable.CheckMisconfigured;
-import org.anchoranalysis.bean.permute.ApplyPermutations;
+import org.anchoranalysis.bean.permute.PermutedCopyCreator;
+import org.anchoranalysis.bean.permute.assign.PermutationAssigner;
+import org.anchoranalysis.bean.permute.assign.AssignPermutationException;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
-import org.anchoranalysis.bean.permute.setter.PermutationSetter;
-import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
+import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -96,19 +96,19 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
 
         // Create many copies of 'item' with properties adjusted
         List<Feature<T>> list = createInitialList(feature).asList();
-        for (PermuteProperty<S> pp : permutationsAsList()) {
+        for (PermuteProperty<S> permute : permutationsAsList()) {
 
             try {
-                PermutationSetter permutationSetter = pp.createSetter(feature);
+                PermutationAssigner assigner = permute.createSetter(feature);
 
                 list =
-                        new ApplyPermutations<Feature<T>>(
+                        new PermutedCopyCreator<Feature<T>>(
                                         Feature::getCustomName,
                                         (feat, name) -> feat.setCustomName(name))
-                                .applyPermutationsToCreateDuplicates(list, pp, permutationSetter);
-            } catch (PermutationSetterException e) {
+                                .createPermutedCopies(list, permute, assigner);
+            } catch (AssignPermutationException e) {
                 throw new ProvisionFailedException(
-                        String.format("Cannot create a permutation-setter for %s", pp), e);
+                        String.format("Cannot create a permutation-setter for %s", permute), e);
             } catch (CreateException e) {
                 throw new ProvisionFailedException(e);
             }
@@ -118,15 +118,15 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
     }
 
     @Override
-    public void onInit(FeaturesInitialization so) throws InitException {
-        super.onInit(so);
+    public void onInitialization(FeaturesInitialization so) throws InitializeException {
+        super.onInitialization(so);
         if (referencesFeatureListCreator != null && so != null) {
             for (String s : referencesFeatureListCreator.set()) {
 
                 try {
                     getInitialization().getFeatureListSet().getException(s);
                 } catch (NamedProviderGetException e) {
-                    throw new InitException(e.summarize());
+                    throw new InitializeException(e.summarize());
                 }
             }
         }

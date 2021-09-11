@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
@@ -125,7 +125,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         } catch (CSVReaderException
                 | BeanDuplicateException
                 | OperationFailedException
-                | InitException e) {
+                | InitializeException e) {
             throw new NamedFeatureCalculateException(e);
         }
     }
@@ -137,11 +137,11 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         HistogramProvider providerDuplicated = histogram.duplicateBean();
 
         try {
-            providerDuplicated.initRecursive(
+            providerDuplicated.initializeRecursive(
                     createImageInitialization(inputtedHistogram, context), context.getLogger());
 
             return providerDuplicated.get();
-        } catch (ProvisionFailedException | InitException | OperationFailedException e) {
+        } catch (ProvisionFailedException | InitializeException | OperationFailedException e) {
             throw new OperationFailedException("Cannot retrieve a histogram from the provider", e);
         }
     }
@@ -156,7 +156,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
     private static FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(
             FeatureList<FeatureInputHistogram> features, Path modelDirectory, Logger logger)
-            throws InitException {
+            throws InitializeException {
         return FeatureSession.with(
                 features,
                 new FeatureInitialization(),

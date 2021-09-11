@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.mpp.bean.bound.BoundUnitless;
 import org.anchoranalysis.mpp.bean.bound.rotation.BoundRotation2D;
 import org.anchoranalysis.mpp.bean.bound.rotation.BoundRotation3D;
@@ -53,14 +53,14 @@ class SimulatedAnnealingTest {
 
     @Test
     void testOverlappingEllipses()
-            throws OptimizationTerminatedEarlyException, CreateException, InitException,
+            throws OptimizationTerminatedEarlyException, CreateException, InitializeException,
                     BeanMisconfiguredException {
         runTest(false, 26, 4847.0, false);
     }
 
     @Test
     void testOverlappingEllipsoids()
-            throws OptimizationTerminatedEarlyException, CreateException, InitException,
+            throws OptimizationTerminatedEarlyException, CreateException, InitializeException,
                     BeanMisconfiguredException {
         runTest(true, 18, 4159, false);
     }
@@ -74,11 +74,11 @@ class SimulatedAnnealingTest {
      *     for debugging), otherwise suppressed
      * @throws OptimizationTerminatedEarlyException
      * @throws CreateException
-     * @throws InitException
+     * @throws InitializeException
      */
     private void runTest(
             boolean use3D, int expectedSize, double expectedEnergy, boolean logToConsole)
-            throws OptimizationTerminatedEarlyException, CreateException, InitException {
+            throws OptimizationTerminatedEarlyException, CreateException, InitializeException {
 
         OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy, UpdatableMarksList>
                 scheme =

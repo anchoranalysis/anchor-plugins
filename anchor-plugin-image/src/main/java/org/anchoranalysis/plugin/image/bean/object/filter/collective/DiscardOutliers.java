@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.object.filter.dependent;
+package org.anchoranalysis.plugin.image.bean.object.filter.collective;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;

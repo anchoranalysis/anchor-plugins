@@ -50,7 +50,7 @@ public class KernelReplacePartition extends KernelReplace<MarksFromPartition> {
         }
 
         if (!hasBeenInit()) {
-            init(createBirthKernel(getBirthRepeats()), new KernelDeathPartition());
+            initialize(createBirthKernel(getBirthRepeats()), new KernelDeathPartition());
         }
 
         return super.makeProposal(existing, context);

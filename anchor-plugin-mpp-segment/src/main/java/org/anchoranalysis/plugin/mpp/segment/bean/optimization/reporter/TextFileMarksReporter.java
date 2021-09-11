@@ -44,7 +44,7 @@ public class TextFileMarksReporter extends PeriodicSubdirectoryReporter<MarkColl
         super.reportBegin(initialization);
 
         try {
-            init(new ObjectAsStringGenerator<>());
+            initialize(new ObjectAsStringGenerator<>());
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }

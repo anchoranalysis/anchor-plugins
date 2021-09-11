@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
@@ -59,7 +59,7 @@ class VoxelsFromScoreCreator {
 
         // Sets up the Feature
         try {
-            init(pixelScore, object);
+            initialize(pixelScore, object);
 
             Extent extent = listVoxels.getFirstExtent();
 
@@ -74,14 +74,14 @@ class VoxelsFromScoreCreator {
             }
             return voxelsOut;
 
-        } catch (InitException | FeatureCalculationException e) {
+        } catch (InitializeException | FeatureCalculationException e) {
             throw new CreateException(e);
         }
     }
 
     /** Initializes the pixel-score */
-    private void init(VoxelScore pixelScore, Optional<ObjectMask> object) throws InitException {
-        pixelScore.init(createHistograms(object), dictionary);
+    private void initialize(VoxelScore pixelScore, Optional<ObjectMask> object) throws InitializeException {
+        pixelScore.initialize(createHistograms(object), dictionary);
     }
 
     private List<Histogram> createHistograms(Optional<ObjectMask> object) {

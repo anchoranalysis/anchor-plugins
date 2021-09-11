@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider;
 
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -45,12 +45,12 @@ public class FromInput extends ChannelProvider {
     private Stack inputStack;
 
     @Override
-    public void onInit(ImageInitialization initialization) throws InitException {
-        super.onInit(initialization);
+    public void onInitialization(ImageInitialization initialization) throws InitializeException {
+        super.onInitialization(initialization);
         try {
             inputStack = initialization.stacks().getException(StackIdentifiers.INPUT_IMAGE);
         } catch (NamedProviderGetException e) {
-            throw InitException.createOrReuse(e.summarize());
+            throw InitializeException.createOrReuse(e.summarize());
         }
     }
 

@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.object.merge.condition;
 
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -44,13 +44,13 @@ public class IncreaseFeatureCondition implements AfterCondition {
     private FeatureCalculatorSingle<FeatureInputSingleObject> session;
 
     @Override
-    public void init(Logger logger) throws InitException {
+    public void initialize(Logger logger) throws InitializeException {
 
         if (featureEvaluator != null) {
             try {
                 session = featureEvaluator.createFeatureSession();
             } catch (OperationFailedException e) {
-                throw new InitException(e);
+                throw new InitializeException(e);
             }
         } else {
             session = null;

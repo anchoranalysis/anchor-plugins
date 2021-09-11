@@ -246,7 +246,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
             throws ProvisionFailedException {
         Mask mask = new Mask(channel);
         Mask maskScaled =
-                org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(
+                org.anchoranalysis.plugin.image.bean.mask.provider.ScaleXY.scale(
                         mask, scaleCalculator, suggestedResize);
         return maskScaled.channel();
     }
