@@ -50,11 +50,11 @@ public class CutBelowThreshold extends HistogramProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Histogram createFromHistogram(Histogram h) throws CreateException {
+    public Histogram createFromHistogram(Histogram histogram) throws CreateException {
 
-        for (int i = threshold; i <= h.getMaxBin(); i++) {
-            h.transferValue(i, threshold - 1);
+        for (int i = threshold; i <= histogram.getMaxValue(); i++) {
+            histogram.transferCount(i, threshold - 1);
         }
-        return h;
+        return histogram;
     }
 }

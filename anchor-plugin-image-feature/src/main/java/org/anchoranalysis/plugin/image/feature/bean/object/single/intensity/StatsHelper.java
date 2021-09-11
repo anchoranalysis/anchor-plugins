@@ -101,8 +101,8 @@ class StatsHelper {
 
         Histogram histogramCut =
                 highest
-                        ? histogram.extractValuesFromRight(numberVoxels)
-                        : histogram.extractValuesFromLeft(numberVoxels);
+                        ? histogram.cropRemoveSmallerValues(numberVoxels)
+                        : histogram.cropRemoveLargerValues(numberVoxels);
 
         return histogramCut.mean();
     }

@@ -31,13 +31,10 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.math.relation.GreaterThan;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 public class MaxNonZero extends IndexedRegionBase {
-
-    private static final GreaterThan RELATION = new GreaterThan();
 
     @Override
     protected VoxelStatistics createStatisticsFor(
@@ -56,7 +53,7 @@ public class MaxNonZero extends IndexedRegionBase {
                 throw new CreateException(e);
             }
 
-            long num = histogram.countThreshold(RELATION, 0);
+            long num = histogram.countMatching( value -> value > 0);
 
             if (num > maxNonZero) {
                 maxNonZero = num;

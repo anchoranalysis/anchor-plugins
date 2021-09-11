@@ -90,7 +90,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
             int size = 0;
             for (int z = 0; z < extent.z(); z++) {
                 VoxelStatistics stats = pxlMarkMemo.voxelized().statisticsFor(maskIndex, 0, z);
-                if (stats.histogram().hasAboveZero()) {
+                if (stats.histogram().hasNonZeroCount(1)) {
                     size +=
                             voxelsOutline
                                     .extract()

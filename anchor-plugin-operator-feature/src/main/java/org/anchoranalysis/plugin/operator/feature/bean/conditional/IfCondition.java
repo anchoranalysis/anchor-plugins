@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 /**
  * The result of featureCondition is compared to a threshold, and then either the underlying feature
@@ -60,9 +60,9 @@ public class IfCondition<T extends FeatureInput> extends FeatureUnaryGeneric<T> 
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         double featureConditionResult = input.calculate(featureCondition);
-        RelationToValue relation = threshold.relation();
+        DoubleBiPredicate relation = threshold.relation();
 
-        if (relation.isRelationToValueTrue(featureConditionResult, threshold.threshold())) {
+        if (relation.test(featureConditionResult, threshold.threshold())) {
             return input.calculate(super.getItem());
         } else {
             return input.calculate(featureElse);
