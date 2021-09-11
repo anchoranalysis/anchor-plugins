@@ -34,7 +34,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.math.relation.GreaterThan;
 
 /**
  * Clamps the input-histogram to a certain maximum value, and then delegates the calculate-level.
@@ -43,8 +42,6 @@ import org.anchoranalysis.math.relation.GreaterThan;
  */
 @EqualsAndHashCode(callSuper = true)
 public class ClampHistogramMax extends CalculateLevelOne {
-
-    private static final GreaterThan RELATION = new GreaterThan();
 
     // START BEAN
     @BeanField @Getter @Setter private int max;
@@ -56,12 +53,12 @@ public class ClampHistogramMax extends CalculateLevelOne {
     }
 
     private static Histogram createClamped(Histogram histogram, int maxVal) {
-        Preconditions.checkArgument(maxVal <= histogram.getMaxBin());
+        Preconditions.checkArgument(maxVal <= histogram.getMaxValue());
 
-        long numAbove = histogram.countThreshold(RELATION, maxVal);
+        long numAbove = histogram.countMatching( value -> value > maxVal);
 
-        Histogram out = new Histogram(histogram.getMaxBin());
-        histogram.iterateBinsUntil(maxVal, out::incrementValueBy);
+        Histogram out = new Histogram(histogram.getMaxValue());
+        histogram.iterateValuesUntil(maxVal, out::incrementValueBy);
         out.incrementValueBy(maxVal, numAbove);
         return out;
     }

@@ -77,7 +77,7 @@ public class RequireFeatureRelationThreshold extends SingleMarkProvider {
 
         double featureVal = calculateInput(featureCreated, mark);
 
-        return relation.create().isRelationToValueTrue(featureVal, threshold);
+        return relation.create().test(featureVal, threshold);
     }
 
     private Optional<Dimensions> dimensions() throws ProvisionFailedException {

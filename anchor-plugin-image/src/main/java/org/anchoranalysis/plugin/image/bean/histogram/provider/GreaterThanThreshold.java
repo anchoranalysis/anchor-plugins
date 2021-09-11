@@ -50,9 +50,9 @@ public class GreaterThanThreshold extends HistogramProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Histogram createFromHistogram(Histogram source) throws CreateException {
+    public Histogram createFromHistogram(Histogram histogram) throws CreateException {
         try {
-            return HistogramThresholder.withCalculateLevel(source, calculateLevel);
+            return HistogramThresholder.withCalculateLevel(histogram, calculateLevel);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

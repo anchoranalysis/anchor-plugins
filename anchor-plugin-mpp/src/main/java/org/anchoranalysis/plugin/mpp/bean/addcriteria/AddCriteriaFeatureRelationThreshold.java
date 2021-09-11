@@ -71,7 +71,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
                             .calculate(params, FeatureListFactory.from(feature))
                             .get(0);
 
-            return relation.create().isRelationToValueTrue(featureVal, threshold);
+            return relation.create().test(featureVal, threshold);
 
         } catch (NamedFeatureCalculateException e) {
             throw new IncludeMarksFailureException(e);

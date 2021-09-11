@@ -45,7 +45,7 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterRelation;
 
 /**
@@ -103,7 +103,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim, RelationToValue relation)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dim, DoubleBiPredicate relation)
             throws OperationFailedException {
         try {
             double val = evaluatorForSource.calculate(new FeatureInputSingleObject(object));
@@ -122,14 +122,14 @@ public class RelationWithMatches extends ObjectFilterRelation {
     }
 
     private boolean doesMatchAllAssociatedObjects(
-            double val, ObjectCollection matches, RelationToValue relation)
+            double val, ObjectCollection matches, DoubleBiPredicate relation)
             throws FeatureCalculationException {
 
         for (ObjectMask match : matches) {
 
             double valMatch = evaluatorForMatch.calculate(new FeatureInputSingleObject(match));
 
-            if (!relation.isRelationToValueTrue(val, valMatch)) {
+            if (!relation.test(val, valMatch)) {
                 return false;
             }
         }

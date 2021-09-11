@@ -32,13 +32,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.math.relation.EqualTo;
 
 //
 // Ratio of number of non-mode pixels to number of pixels
 //
 public class RatioNonMode extends FeatureHistogramStatistic {
-
+    
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean ignoreZero = false;
     // END BEAN PROPERTIES
@@ -52,26 +51,25 @@ public class RatioNonMode extends FeatureHistogramStatistic {
             int mode = findMode(histogram, startV);
 
             // Calculate number of non-modal
-            int totalCnt = 0;
-            int nonModalCnt = 0;
+            int totalCount = 0;
+            int nonModalCount = 0;
 
-            for (int v = startV; v < 255; v++) {
+            for (int value = startV; value < 255; value++) {
+                long count = histogram.getCount(value);
 
-                long cnt = histogram.countThreshold(new EqualTo(), v);
-
-                if (cnt != 0) {
-                    if (v != mode) {
-                        nonModalCnt += cnt;
+                if (count != 0) {
+                    if (value != mode) {
+                        nonModalCount += count;
                     }
-                    totalCnt += cnt;
+                    totalCount += count;
                 }
             }
 
-            if (totalCnt == 0) {
+            if (totalCount == 0) {
                 return Double.POSITIVE_INFINITY;
             }
 
-            return ((double) nonModalCnt) / totalCnt;
+            return ((double) nonModalCount) / totalCount;
         } catch (IndexOutOfBoundsException e) {
             throw new FeatureCalculationException(e);
         }
@@ -82,13 +80,13 @@ public class RatioNonMode extends FeatureHistogramStatistic {
         // Find mode
         int maxIndex = -1;
         long maxValue = -1;
-        for (int v = startV; v < 255; v++) {
+        for (int value = startV; value < 255; value++) {
 
-            long cnt = histogram.countThreshold(new EqualTo(), v);
+            long count = histogram.getCount(value);
 
-            if (cnt > maxValue) {
-                maxValue = cnt;
-                maxIndex = v;
+            if (count > maxValue) {
+                maxValue = count;
+                maxIndex = value;
             }
         }
         return maxIndex;

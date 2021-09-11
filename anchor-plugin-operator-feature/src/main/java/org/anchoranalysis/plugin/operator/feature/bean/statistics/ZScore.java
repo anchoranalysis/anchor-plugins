@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.statistics;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
+import org.anchoranalysis.math.statistics.ZScoreCalculator;
 import org.anchoranalysis.plugin.operator.feature.statistics.FeatureResultSupplier;
 
 // Z-score of a value
@@ -37,7 +37,6 @@ public class ZScore<T extends FeatureInput> extends StatisticalBase<T> {
     @Override
     protected double deriveScore(double featureValue, double mean, FeatureResultSupplier stdDev)
             throws FeatureCalculationException {
-
-        return FirstSecondOrderStatistic.calculateZScore(featureValue, mean, stdDev.get());
+        return ZScoreCalculator.calculateZScore(featureValue, mean, stdDev.get());
     }
 }
