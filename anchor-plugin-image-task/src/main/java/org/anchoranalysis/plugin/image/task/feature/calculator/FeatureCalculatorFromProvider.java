@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.task.feature.calculator;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.cache.CachedSupplier;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
@@ -107,14 +107,14 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
 
             return createSingleCalculator(
                     feature, initialization.featuresInitialization().getSharedFeatures());
-        } catch (InitException | FeatureCalculationException e) {
+        } catch (InitializeException | FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
     }
 
     /** Calculates all image-features in the feature-store */
     public FeatureCalculatorMulti<T> calculatorForAll(FeatureList<T> features)
-            throws InitException {
+            throws InitializeException {
         return createMultiCalculator(
                 features, initialization.featuresInitialization().getSharedFeatures());
     }
@@ -133,14 +133,14 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
     }
 
     private FeatureCalculatorMulti<T> createMultiCalculator(
-            FeatureList<T> features, SharedFeatureMulti sharedFeatures) throws InitException {
+            FeatureList<T> features, SharedFeatureMulti sharedFeatures) throws InitializeException {
         return new FeatureCalculatorMultiChangeInput<>(
                 FeatureSession.with(features, new FeatureInitialization(), sharedFeatures, logger),
                 input -> input.setEnergyStack(energyStack));
     }
 
     private FeatureCalculatorSingle<T> createSingleCalculator(
-            Feature<T> feature, SharedFeatureMulti sharedFeatures) throws InitException {
+            Feature<T> feature, SharedFeatureMulti sharedFeatures) throws InitializeException {
         return new FeatureCalculatorSingleChangeInput<>(
                 FeatureSession.with(feature, new FeatureInitialization(), sharedFeatures, logger),
                 input -> input.setEnergyStack(energyStack));

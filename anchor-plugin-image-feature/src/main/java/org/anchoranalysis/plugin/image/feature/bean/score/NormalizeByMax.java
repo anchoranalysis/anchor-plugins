@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.score;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -43,12 +43,12 @@ public class NormalizeByMax extends SingleChannel {
     private double maxEdge;
 
     @Override
-    public void init(List<Histogram> histograms, Optional<Dictionary> dictionary)
-            throws InitException {
+    public void initialize(List<Histogram> histograms, Optional<Dictionary> dictionary)
+            throws InitializeException {
         try {
             maxEdge = histograms.get(getEnergyChannelIndex()).calculateMaximum();
         } catch (OperationFailedException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 

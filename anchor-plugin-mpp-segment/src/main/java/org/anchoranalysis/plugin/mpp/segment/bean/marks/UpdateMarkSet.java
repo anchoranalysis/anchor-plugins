@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.marks;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
@@ -60,7 +60,7 @@ class UpdateMarkSet {
                         initialization.feature().getSharedFeatures());
                 updatableMarks.add(pair);
             }
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new OperationFailedException(e);
         } catch (NamedProviderGetException e) {
             throw new OperationFailedException(e.summarize());

@@ -42,7 +42,7 @@ public class NumberIterations extends NumberIterationsBase {
     }
 
     @Override
-    public void init() {
+    public void initialize() {
         // NOTHING TO DO
     }
 

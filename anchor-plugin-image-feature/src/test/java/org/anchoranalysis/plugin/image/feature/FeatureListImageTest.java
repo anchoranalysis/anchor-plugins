@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
@@ -85,7 +85,7 @@ class FeatureListImageTest {
 
     @Test
     void testHistogram()
-            throws InitException, FeatureCalculationException, CreateException,
+            throws InitializeException, FeatureCalculationException, CreateException,
                     NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputHistogram> session =
@@ -112,7 +112,7 @@ class FeatureListImageTest {
 
     @Test
     void testImage()
-            throws InitException, NamedFeatureCalculateException, CreateException,
+            throws InitializeException, NamedFeatureCalculateException, CreateException,
                     FeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInputSingleObject> session =
@@ -156,7 +156,7 @@ class FeatureListImageTest {
     }
 
     private <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart(
-            FeatureList<T> features) throws InitException {
+            FeatureList<T> features) throws InitializeException {
         return FeatureSession.with(features, LoggingFixture.suppressedLogger());
     }
 

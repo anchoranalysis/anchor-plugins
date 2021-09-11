@@ -54,8 +54,8 @@ class RepeatedExperiment<T extends InputFromManager, S> {
     }
 
     // Should be called after the constructor, before any other methods
-    public void init(XMLConfiguration xmlConfiguration, JobProcessor<T, S> taskProcessor) {
-        delegate.associateXml(xmlConfiguration);
+    public void initialize(XMLConfiguration xmlConfiguration, JobProcessor<T, S> taskProcessor) {
+        delegate.associateXML(xmlConfiguration);
         this.taskProcessor = taskProcessor;
     }
 

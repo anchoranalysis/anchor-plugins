@@ -32,9 +32,9 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
@@ -58,13 +58,13 @@ public class FromChannel extends DimensionsProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public void onInit(ImageInitialization initialization) throws InitException {
-        super.onInit(initialization);
+    public void onInitialization(ImageInitialization initialization) throws InitializeException {
+        super.onInitialization(initialization);
         if (id.isEmpty() && channel == null) {
-            throw new InitException("One of either channelProvider or id must be set");
+            throw new InitializeException("One of either channelProvider or id must be set");
         }
         if (!id.isEmpty() && channel != null) {
-            throw new InitException("Only one -not both- of channelProvider and id should be set");
+            throw new InitializeException("Only one -not both- of channelProvider and id should be set");
         }
     }
 
@@ -99,7 +99,7 @@ public class FromChannel extends DimensionsProvider {
                                                     "Failed to find either a channel or stack with id `%s`",
                                                     id)));
 
-        } catch (NamedProviderGetException e) {
+        } catch (AnchorCheckedException e) {
             throw new ProvisionFailedException(
                     String.format("A error occurred while retrieving channel `%s`", id), e);
         }

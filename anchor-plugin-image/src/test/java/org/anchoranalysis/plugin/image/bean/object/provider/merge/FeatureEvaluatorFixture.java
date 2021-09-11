@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -45,8 +45,8 @@ class FeatureEvaluatorFixture {
         FeatureEvaluator<T> evaluator = new FeatureEvaluator<>();
         evaluator.setFeature(feature);
         try {
-            evaluator.init(FeaturesInitialization.create(logger, modelDirectory), logger);
-        } catch (InitException e) {
+            evaluator.initialize(FeaturesInitialization.create(logger, modelDirectory), logger);
+        } catch (InitializeException e) {
             throw new CreateException(e);
         }
         return evaluator;

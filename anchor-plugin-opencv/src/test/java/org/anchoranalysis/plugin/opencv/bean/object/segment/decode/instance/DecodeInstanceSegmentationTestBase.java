@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import java.nio.file.Path;
 import java.util.List;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -58,7 +58,7 @@ abstract class DecodeInstanceSegmentationTestBase {
     private WriteIntoDirectory writer;
 
     @BeforeEach
-    void setup() throws InitException {
+    void setup() throws InitializeException {
         writer = new WriteIntoDirectory(temporaryDirectory, false);
         segmenter = createSegmenter();
         initSegmenter(segmenter);
@@ -104,9 +104,9 @@ abstract class DecodeInstanceSegmentationTestBase {
     }
 
     private static void initSegmenter(SegmentStackIntoObjectsPooled<?> segmenter)
-            throws InitException {
+            throws InitializeException {
         Path root = TestLoader.createFromMavenWorkingDirectory().getRoot();
         InputOutputContext context = InputOutputContextFixture.withSuppressedLogger(root);
-        segmenter.initRecursive(ImageInitializationFactory.create(context), context.getLogger());
+        segmenter.initializeRecursive(ImageInitializationFactory.create(context), context.getLogger());
     }
 }

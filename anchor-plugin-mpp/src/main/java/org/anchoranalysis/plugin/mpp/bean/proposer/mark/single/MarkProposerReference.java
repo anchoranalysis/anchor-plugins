@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.init.MarksInitialization;
@@ -47,12 +47,12 @@ public class MarkProposerReference extends MarkProposer {
     private MarkProposer delegate = null;
 
     @Override
-    public void onInit(MarksInitialization pso) throws InitException {
-        super.onInit(pso);
+    public void onInitialization(MarksInitialization pso) throws InitializeException {
+        super.onInitialization(pso);
         try {
             delegate = getInitialization().markProposers().getException(id);
         } catch (NamedProviderGetException e) {
-            throw new InitException(e.summarize());
+            throw new InitializeException(e.summarize());
         }
     }
 

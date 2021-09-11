@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.GreaterThanEqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -117,7 +117,7 @@ public class MergePairs extends MergeWithFeature {
             return maybeWrapWithEnergyStack(
                     new FeatureCalculatorSingleFromMulti<>(session), energyStack);
 
-        } catch (OperationFailedException | InitException e) {
+        } catch (OperationFailedException | InitializeException e) {
             throw new CreateException(e);
         }
     }

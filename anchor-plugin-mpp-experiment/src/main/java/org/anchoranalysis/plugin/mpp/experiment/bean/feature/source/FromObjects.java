@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -139,7 +139,7 @@ public class FromObjects<T extends FeatureInput>
                     combine.createFeatures(features, STORE_FACTORY, suppressErrors);
             return SharedStateExportFeatures.createForFeatures(
                     outputNames, tableCalculator, metadataHeaders, context);
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new CreateException(e);
         }
     }

@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.define.Define;
+import org.anchoranalysis.bean.define.DefineAddException;
 import org.anchoranalysis.bean.define.adder.DefineAdderWithPrefixBean;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
@@ -65,7 +65,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
     // END BEAN PROPERTIES
 
     @Override
-    public void addTo(Define define) throws BeanXmlException {
+    public void addTo(Define define) throws DefineAddException {
 
         if (median) {
             addFilterType(define, NAME_MEDIAN, createMedian());
@@ -77,7 +77,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
     }
 
     private void addFilterType(Define define, String filterName, AnchorBean<?> filterProvider)
-            throws BeanXmlException {
+            throws DefineAddException {
         addWithName(define, filterName, filterProvider);
         new GradientsForFilter(filterName).addTo(define);
     }
@@ -87,7 +87,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 
         private String filterName;
 
-        public void addTo(Define define) throws BeanXmlException {
+        public void addTo(Define define) throws DefineAddException {
 
             addForFilter(define, "_Gradient_Magnitude", edgeFilter(filterName));
 
@@ -102,7 +102,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         }
 
         private void addForFilter(Define define, String suffix, AnchorBean<?> item)
-                throws BeanXmlException {
+                throws DefineAddException {
             addWithName(define, filterName + suffix, item);
         }
 

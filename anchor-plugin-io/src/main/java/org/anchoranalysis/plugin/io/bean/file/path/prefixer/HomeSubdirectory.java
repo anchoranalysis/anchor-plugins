@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.io.output.bean.path.prefixer.IncrementingNumber;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
@@ -60,7 +60,7 @@ public class HomeSubdirectory extends PathPrefixer {
             throws PathPrefixerException {
         try {
             initIfPossible();
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new PathPrefixerException(e);
         }
         return delegate.outFilePrefix(path, expName, context);
@@ -71,13 +71,13 @@ public class HomeSubdirectory extends PathPrefixer {
             Optional<String> expName, PathPrefixerContext context) throws PathPrefixerException {
         try {
             initIfPossible();
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new PathPrefixerException(e);
         }
         return delegate.rootDirectoryPrefix(expName, context);
     }
 
-    private void initIfPossible() throws InitException {
+    private void initIfPossible() throws InitializeException {
         if (delegate == null) {
 
             Path pathAnchorDirectory = createSubdirectoryIfNecessary(homeDirectory(), directory);
@@ -88,16 +88,16 @@ public class HomeSubdirectory extends PathPrefixer {
             try {
                 delegate.localise(pathAnchorDirectory);
             } catch (BeanMisconfiguredException e) {
-                throw new InitException(e);
+                throw new InitializeException(e);
             }
         }
     }
 
-    private Path homeDirectory() throws InitException {
+    private Path homeDirectory() throws InitializeException {
         String string = System.getProperty("user.home");
 
         if (string == null || string.isEmpty()) {
-            throw new InitException("No user.home environmental variable");
+            throw new InitializeException("No user.home environmental variable");
         }
 
         Path path = Paths.get(string);
@@ -105,20 +105,20 @@ public class HomeSubdirectory extends PathPrefixer {
         if (path.toFile().exists()) {
             return path;
         } else {
-            throw new InitException(
+            throw new InitializeException(
                     String.format("User home directory '%s' does not exist", string));
         }
     }
 
     private Path createSubdirectoryIfNecessary(Path pathHomeDir, String relativePathSubdirectory)
-            throws InitException {
+            throws InitializeException {
         Path resolvedPath = pathHomeDir.resolve(relativePathSubdirectory);
         try {
             if (!resolvedPath.toFile().exists()) {
                 Files.createDirectory(resolvedPath);
             }
         } catch (IOException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
         return resolvedPath;
     }

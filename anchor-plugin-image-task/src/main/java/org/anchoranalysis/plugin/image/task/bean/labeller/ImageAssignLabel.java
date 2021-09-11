@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -154,10 +154,10 @@ public class ImageAssignLabel<T>
             StackProvider provider, ProvidesStackInput stack, InitializationContext context)
             throws CreateException {
         try {
-            provider.initRecursive(
+            provider.initializeRecursive(
                     InitializationFactory.createWithStacks(stack, context), context.getLogger());
             return provider.get();
-        } catch (OperationFailedException | ProvisionFailedException | InitException e) {
+        } catch (OperationFailedException | ProvisionFailedException | InitializeException e) {
             throw new CreateException(e);
         }
     }

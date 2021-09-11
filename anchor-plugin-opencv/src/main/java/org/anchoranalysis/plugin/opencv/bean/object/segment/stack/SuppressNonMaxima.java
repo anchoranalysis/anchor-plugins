@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.core.concurrency.CreateModelFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -74,7 +75,7 @@ public class SuppressNonMaxima<T> extends SegmentStackIntoObjectsPooled<T> {
     }
 
     @Override
-    public ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan) {
+    public ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan) throws CreateModelFailedException {
         return segment.createModelPool(plan);
     }
 

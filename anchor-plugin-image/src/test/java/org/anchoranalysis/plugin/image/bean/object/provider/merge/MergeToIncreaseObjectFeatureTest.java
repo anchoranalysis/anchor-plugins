@@ -31,7 +31,7 @@ import java.util.function.ToDoubleFunction;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -57,7 +57,7 @@ class MergeToIncreaseObjectFeatureTest {
      */
     @Test
     void testMaximalNumPixels()
-            throws BeanMisconfiguredException, InitException, OperationFailedException,
+            throws BeanMisconfiguredException, InitializeException, OperationFailedException,
                     CreateException {
         testLinear(
                 MergeTestHelper.EXPECTED_RESULT_ALL_INTERSECTING_MERGED,
@@ -76,7 +76,7 @@ class MergeToIncreaseObjectFeatureTest {
      */
     @Test
     void testConvergeNumPixels()
-            throws BeanMisconfiguredException, InitException, OperationFailedException,
+            throws BeanMisconfiguredException, InitializeException, OperationFailedException,
                     CreateException {
         testLinear(8, 23, MergeToIncreaseObjectFeatureTest::convergeTo900);
     }

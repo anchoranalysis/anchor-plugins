@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.mpp.segment.bean.optimization.OptimizationScheme;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelProposer;
@@ -84,7 +84,7 @@ public class UniformProposal<S, V> extends OptimizationScheme<S, S, V> {
                     best = proposal.get();
                 }
             }
-        } catch (KernelCalculateEnergyException | InitException e) {
+        } catch (KernelCalculateEnergyException | InitializeException e) {
             throw new OptimizationTerminatedEarlyException("Optimization terminated early", e);
         }
 

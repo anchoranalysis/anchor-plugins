@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
@@ -43,13 +43,13 @@ public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 
     public abstract void beforeCreateObject(
             RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
-            throws InitException;
+            throws InitializeException;
 
     public abstract void afterCreateObject(
             Point3i root,
             Optional<Resolution> resolution,
             RandomNumberGenerator randomNumberGenerator)
-            throws InitException;
+            throws InitializeException;
 
     public abstract boolean considerVisit(
             Point3i point, int distanceAlongContour, ObjectMask object);

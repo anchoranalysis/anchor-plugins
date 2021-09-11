@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
@@ -65,8 +65,8 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
     private FeatureCalculatorSingle<T> featureCalculator;
 
     @Override
-    public void onInit(MarksInitialization initialization) throws InitException {
-        super.onInit(initialization);
+    public void onInitialization(MarksInitialization initialization) throws InitializeException {
+        super.onInitialization(initialization);
         sharedFeatureSet = initialization.feature().getSharedFeatures();
     }
 
@@ -85,7 +85,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
                             sharedFeatureSet,
                             getLogger());
 
-        } catch (InitException | ProvisionFailedException e) {
+        } catch (InitializeException | ProvisionFailedException e) {
             featureCalculator = null;
             throw new OperationFailedException(e);
         }

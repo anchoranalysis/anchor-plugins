@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -67,17 +67,17 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy, Updatabl
     @Getter @Setter private RandomCollection<IdentifiablePair<Mark>> pairCollection;
 
     @Override
-    public void onInit(MarksInitialization pso) throws InitException {
-        super.onInit(pso);
+    public void onInitialization(MarksInitialization pso) throws InitializeException {
+        super.onInitialization(pso);
 
         try {
             pairCollection = getInitialization().markPairs().getException(simplePairCollectionID);
         } catch (NamedProviderGetException e) {
-            throw new InitException(e.summarize());
+            throw new InitializeException(e.summarize());
         }
 
         if (pairCollection == null) {
-            throw new InitException(
+            throw new InitializeException(
                     String.format("pairCollection '%s' not found", simplePairCollectionID));
         }
     }

@@ -32,13 +32,13 @@ import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -194,7 +194,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
                     maybeExtendZObjects(inputs(initialization, logger), dimensions.z()),
                     context.getOutputter().getChecked());
         } catch (CreateException
-                | InitException
+                | InitializeException
                 | OutputWriteFailedException
                 | ProvisionFailedException e) {
             throw new OperationFailedException(e);
@@ -212,8 +212,8 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
         for (NamedBean<StackProvider> namedStackProvider : providers) {
 
             try {
-                namedStackProvider.getValue().initRecursive(initalization, logger);
-            } catch (InitException e) {
+                namedStackProvider.getValue().initializeRecursive(initalization, logger);
+            } catch (InitializeException e) {
                 // NB if we cannot create a particular channel provider, we simply skip.  We use
                 // this as a means to provide for channels
                 //  that might not always be present

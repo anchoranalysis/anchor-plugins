@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -118,7 +118,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
             throws TraverseOutlineException {
         try {
             visitScheduler.beforeCreateObject(randomNumberGenerator, resolution);
-        } catch (InitException e1) {
+        } catch (InitializeException e1) {
             throw new TraverseOutlineException(
                     "Failure to call beforeCreateObject on visitScheduler", e1);
         }
@@ -138,7 +138,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
                 BoundingBox.relativePositionTo(root, objectOutline.boundingBox().cornerMin());
         try {
             visitScheduler.afterCreateObject(rootRelToMask, resolution, randomNumberGenerator);
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new TraverseOutlineException(
                     "Cannot call afterCreateObject on visitScheduler", e);
         }

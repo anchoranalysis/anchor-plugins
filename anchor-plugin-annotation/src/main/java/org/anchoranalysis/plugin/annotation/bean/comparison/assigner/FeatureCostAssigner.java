@@ -32,7 +32,7 @@ import org.anchoranalysis.annotation.io.assignment.AssignmentObjectFactory;
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -88,7 +88,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
         try {
             FeaturesInitialization soFeature =
                     FeaturesInitialization.create(context.getLogger(), context.getModelDirectory());
-            featureEvaluator.initRecursive(soFeature, context.getLogger());
+            featureEvaluator.initializeRecursive(soFeature, context.getLogger());
 
             AssignmentObjectFactory assignmentCreator =
                     new AssignmentObjectFactory(featureEvaluator, useMIP);
@@ -113,7 +113,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
                             assignmentCreator::getCosts);
 
             return assignment;
-        } catch (FeatureCalculationException | InitException e) {
+        } catch (FeatureCalculationException | InitializeException e) {
             throw new CreateException(e);
         }
     }

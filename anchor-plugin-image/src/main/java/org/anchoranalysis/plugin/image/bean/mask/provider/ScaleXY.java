@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
@@ -52,7 +53,11 @@ public class ScaleXY extends MaskProviderUnary {
 
     @Override
     public Mask createFromMask(Mask mask) throws ProvisionFailedException {
-        return scale(mask, scaleCalculator, getInitialization().getSuggestedResize());
+        try {
+            return scale(mask, scaleCalculator, getInitialization().getSuggestedResize());
+        } catch (InitializeException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 
     public static Mask scale(

@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.plugin.image.object.merge.condition;
 
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public interface AfterCondition {
 
-    void init(Logger logger) throws InitException;
+    void initialize(Logger logger) throws InitializeException;
 
     boolean accept(ObjectMask source, ObjectMask destination, ObjectMask merged)
             throws OperationFailedException;

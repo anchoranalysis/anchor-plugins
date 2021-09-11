@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -69,7 +70,7 @@ public class Scale extends WithDimensionsBase {
         try {
             return scaleCalculator.calculate(
                     Optional.of(dimensions), getInitialization().getSuggestedResize());
-        } catch (OperationFailedException e) {
+        } catch (OperationFailedException | InitializeException e) {
             throw new ProvisionFailedException(e);
         }
     }

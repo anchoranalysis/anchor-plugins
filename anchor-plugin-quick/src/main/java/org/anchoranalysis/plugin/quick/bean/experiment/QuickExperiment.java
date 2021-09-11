@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.BeanXMLLoader;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
-import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
+import org.anchoranalysis.bean.xml.factory.BeanPathCalculator;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -109,9 +109,9 @@ public class QuickExperiment<S> extends Experiment {
     @Override
     public void executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
-        delegate.associateXml(getXMLConfiguration());
+        delegate.associateXML(getXMLConfiguration());
 
-        Path combinedFileFilter = BeanPathUtilities.pathRelativeToBean(this, fileInput);
+        Path combinedFileFilter = BeanPathCalculator.pathFromBean(this, fileInput);
 
         if (NonImageFileFormat.XML.matches(combinedFileFilter)) {
             createFromXMLBean(combinedFileFilter);
@@ -174,7 +174,7 @@ public class QuickExperiment<S> extends Experiment {
             throws ExperimentExecutionException {
         try {
             return BeanXMLLoader.loadBean(beanPath);
-        } catch (BeanXmlException e) {
+        } catch (BeanXMLException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -203,7 +203,7 @@ public class QuickExperiment<S> extends Experiment {
 
     private DirectoryStructure createFilePathResolver(Path baseDirectory) {
 
-        Path pathDirectoryOut = BeanPathUtilities.pathRelativeToBean(this, directoryOutput);
+        Path pathDirectoryOut = BeanPathCalculator.pathFromBean(this, directoryOutput);
 
         DirectoryStructure resolver = new DirectoryStructure();
         resolver.setPrefixToRemove(baseDirectory.toString());

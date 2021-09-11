@@ -37,10 +37,12 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.core.concurrency.CreateModelFailedException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.progress.ProgressIgnore;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -199,7 +201,7 @@ public class SegmentInstanceWithModel<T>
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);
             return new SharedStateSegmentInstance<>(
                     modelPool, tableCalculator(), headers, params.getContext());
-        } catch (CreateException | InitException e) {
+        } catch (CreateModelFailedException | InitializeException | CreateException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -212,10 +214,8 @@ public class SegmentInstanceWithModel<T>
 
             Stack stack = inputStack(input);
 
-            SegmentedObjects segments =
-                    input.getContextExperiment()
-                            .getExecutionTimeRecorder()
-                            .recordExecutionTime(
+            ExecutionTimeRecorder recorder = input.getContextExperiment().getExecutionTimeRecorder();
+            SegmentedObjects segments = recorder.recordExecutionTime(
                                     EXECUTION_TIME_SEGMENTATION,
                                     () ->
                                             segment.segment(
@@ -225,9 +225,7 @@ public class SegmentInstanceWithModel<T>
                                                             .getExecutionTimeRecorder()));
 
             if (!segments.isEmpty() || !ignoreNoObjects) {
-                input.getContextExperiment()
-                        .getExecutionTimeRecorder()
-                        .recordExecutionTime(
+                recorder.recordExecutionTime(
                                 EXECUTION_TIME_OUTPUTS,
                                 () -> {
                                     DisplayStack background =
@@ -238,9 +236,7 @@ public class SegmentInstanceWithModel<T>
                                             background,
                                             input.getContextJob().getOutputter());
                                 });
-                input.getContextExperiment()
-                        .getExecutionTimeRecorder()
-                        .recordExecutionTime(
+                recorder.recordExecutionTime(
                                 EXECUTION_TIME_FEATURES,
                                 () -> calculateFeaturesForImage(input, stack, segments.asList()));
             }
@@ -248,7 +244,7 @@ public class SegmentInstanceWithModel<T>
         } catch (SegmentationFailedException
                 | OperationFailedException
                 | CreateException
-                | InitException e) {
+                | InitializeException e) {
             throw new JobExecutionException(e);
         }
     }
@@ -381,9 +377,9 @@ public class SegmentInstanceWithModel<T>
                         });
     }
 
-    private void initializeBeans(InitializationContext context) throws InitException {
+    private void initializeBeans(InitializationContext context) throws InitializeException {
         ImageInitialization params = InitializationFactory.createWithoutStacks(context);
-        segment.initRecursive(params, context.getLogger());
+        segment.initializeRecursive(params, context.getLogger());
     }
 
     private FeatureTableCalculator<FeatureInputSingleObject> tableCalculator()

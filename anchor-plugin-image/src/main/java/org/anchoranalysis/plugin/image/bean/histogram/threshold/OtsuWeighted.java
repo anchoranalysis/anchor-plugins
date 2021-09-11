@@ -38,7 +38,7 @@ import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
 
 /**
- * Similar to Otsu, but weighs the variances differently of background and foreground
+ * Similar to Otsu, but weighs the variances differently of background and foreground.
  *
  * <p>The standard otsu method seeks both foreground and background to have similar variance. But
  * many for real world cases (e.g. fluorescent microscopy) one expects the background to be have
@@ -93,17 +93,17 @@ public class OtsuWeighted extends CalculateLevel {
         VarianceCalculator total = varianceCalculatorTotal(histogram);
         VarianceCalculator running = varianceCalculatorFirstBin(histogram, minIntensity - 1);
 
-        double bcvMin = Double.POSITIVE_INFINITY;
+        double scoreMin = Double.POSITIVE_INFINITY;
 
-        for (int k = minIntensity; k <= maxIntensity; k++) { // Avoid min and max
+        for (int level = minIntensity; level <= maxIntensity; level++) { // Avoid min and max
 
-            running.add(histogram.getCount(k), k);
+            running.add(histogram.getCount(level), level);
 
-            double bcv = weightedSumClassVariances(running, total);
+            double score = weightedSumClassVariances(running, total);
 
-            if (bcv <= bcvMin && !Double.isNaN(bcv)) {
-                bcvMin = bcv;
-                bestThreshold = k;
+            if (score <= scoreMin && !Double.isNaN(score)) {
+                scoreMin = score;
+                bestThreshold = level;
             }
         }
 
@@ -127,14 +127,12 @@ public class OtsuWeighted extends CalculateLevel {
     private double weightedSumClassVariances(VarianceCalculator running, VarianceCalculator total) {
         assert (total.greaterEqualThan(running));
 
-        double varBg = running.variance();
-
-        VarianceCalculator sub = total.subtract(running);
-        double varFg = sub.variance();
+        double varianceBackground = running.variance();
+        double varianceForeground = total.subtract(running).variance();
 
         double prob1 = ((double) running.getCount()) / total.getCount();
         double prob2 = 1 - prob1;
 
-        return (prob1 * varBg * weightBackground + prob2 * varFg * weightForeground);
+        return (prob1 * varianceBackground * weightBackground + prob2 * varianceForeground * weightForeground);
     }
 }
