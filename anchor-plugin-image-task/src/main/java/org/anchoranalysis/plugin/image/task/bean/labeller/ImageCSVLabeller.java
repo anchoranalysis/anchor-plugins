@@ -31,7 +31,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
@@ -54,7 +54,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitializati
     // END BEAN PROPERTIES
 
     @Override
-    public ImageCSVLabellerInitialization init(Path pathForBinding) throws InitException {
+    public ImageCSVLabellerInitialization initialize(Path pathForBinding) throws InitializeException {
 
         try {
             Path csvPath = pathLabel.deriveFrom(pathForBinding, false);
@@ -62,7 +62,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitializati
             return new ImageCSVLabellerInitialization(FileLabelMap.readFromCSV(csvPath, false));
 
         } catch (CSVReaderException | DerivePathException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.convert;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
@@ -47,13 +47,13 @@ public class FromStackChannel extends MaskProvider {
     private Channel channel;
 
     @Override
-    public void onInit(ImageInitialization initialization) throws InitException {
-        super.onInit(initialization);
+    public void onInitialization(ImageInitialization initialization) throws InitializeException {
+        super.onInitialization(initialization);
         try {
             channel =
                     initialization.stacks().getException(stackProviderID).getChannel(channelIndex);
         } catch (NamedProviderGetException e) {
-            throw InitException.createOrReuse(e.summarize());
+            throw InitializeException.createOrReuse(e.summarize());
         }
     }
 

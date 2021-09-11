@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
@@ -55,7 +55,7 @@ public class FeatureInputPairTester {
             Feature<FeatureInputPairObjects> feature,
             double expectedDifferentSize,
             double expectedSameSize)
-            throws FeatureCalculationException, InitException {
+            throws FeatureCalculationException, InitializeException {
 
         testOverlappingCirclesDoubleSize(feature, expectedSameSize, true);
         testOverlappingCirclesDoubleSize(feature, expectedDifferentSize, false);
@@ -71,7 +71,7 @@ public class FeatureInputPairTester {
             Feature<FeatureInputPairObjects> feature,
             int expectedSameSize,
             int expectedDifferentSize)
-            throws FeatureCalculationException, InitException {
+            throws FeatureCalculationException, InitializeException {
 
         testOverlappingCirclesIntSize(feature, expectedSameSize, true);
         testOverlappingCirclesIntSize(feature, expectedDifferentSize, false);
@@ -84,10 +84,10 @@ public class FeatureInputPairTester {
      * @param feature
      * @param expected
      * @throws FeatureCalculationException
-     * @throws InitException
+     * @throws InitializeException
      */
     public static void testSimpleInt(Feature<FeatureInputPairObjects> feature, int expected)
-            throws FeatureCalculationException, InitException {
+            throws FeatureCalculationException, InitializeException {
         FeatureTestCalculator.assertIntResult(
                 "simple",
                 feature,
@@ -102,10 +102,10 @@ public class FeatureInputPairTester {
      * @param feature
      * @param expected
      * @throws FeatureCalculationException
-     * @throws InitException
+     * @throws InitializeException
      */
     public static void testSimpleDouble(Feature<FeatureInputPairObjects> feature, double expected)
-            throws FeatureCalculationException, InitException {
+            throws FeatureCalculationException, InitializeException {
         FeatureTestCalculator.assertDoubleResult(
                 "simple",
                 feature,
@@ -115,7 +115,7 @@ public class FeatureInputPairTester {
 
     private static void testOverlappingCirclesDoubleSize(
             Feature<FeatureInputPairObjects> feature, double expected, boolean sameSize)
-            throws FeatureCalculationException, InitException {
+            throws FeatureCalculationException, InitializeException {
         FeatureTestCalculatorDuo.assertDoubleResult(
                 message(sameSize),
                 feature,
@@ -127,7 +127,7 @@ public class FeatureInputPairTester {
 
     public static void testOverlappingCirclesIntSize(
             Feature<FeatureInputPairObjects> feature, int expected, boolean sameSize)
-            throws FeatureCalculationException, InitException {
+            throws FeatureCalculationException, InitializeException {
         FeatureTestCalculatorDuo.assertIntResult(
                 message(sameSize),
                 feature,

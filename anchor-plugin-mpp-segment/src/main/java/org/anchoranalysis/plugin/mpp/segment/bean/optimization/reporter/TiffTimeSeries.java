@@ -83,7 +83,7 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
                                 sourceObject -> addColor(sourceObject.getMarks(), initialization)));
 
         try {
-            init(iterableCombined);
+            initialize(iterableCombined);
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }

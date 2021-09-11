@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
@@ -181,12 +181,12 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             InputOutputContext context)
             throws OperationFailedException {
         try {
-            init(initialization, context.getLogger());
+            initialize(initialization, context.getLogger());
 
             new EnergyStackWriter(energyStack, context.getOutputter()).writeEnergyStack();
 
             // We initialize the feedback receiver
-            feedbackReceiver.initRecursive(initialization, context.getLogger());
+            feedbackReceiver.initializeRecursive(initialization, context.getLogger());
 
             MemoryUtilities.logMemoryUsage("Before findOpt", context.getMessageReporter());
 
@@ -214,7 +214,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             MarksWithTotalEnergy marks = findOptimum(updatableMarks, initContext);
             return marks.getMarks().deepCopy();
 
-        } catch (InitException
+        } catch (InitializeException
                 | CreateException
                 | SegmentationFailedException
                 | OutputWriteFailedException e) {
@@ -222,8 +222,8 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         }
     }
 
-    private void init(MarksInitialization initialization, Logger logger) throws InitException {
-        markFactory.initRecursive(logger);
+    private void initialize(MarksInitialization initialization, Logger logger) throws InitializeException {
+        markFactory.initializeRecursive(logger);
 
         energySchemeShared =
                 SegmentHelper.initEnergy(energySchemeCreator, initialization.feature(), logger);

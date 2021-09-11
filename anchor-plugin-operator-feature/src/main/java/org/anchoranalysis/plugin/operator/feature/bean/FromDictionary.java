@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -86,7 +86,7 @@ public class FromDictionary<T extends FeatureInputParams> extends FeatureOperato
     }
 
     @Override
-    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+    protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         super.beforeCalc(initialization);
         keyAggregated = keyAggregated();
     }

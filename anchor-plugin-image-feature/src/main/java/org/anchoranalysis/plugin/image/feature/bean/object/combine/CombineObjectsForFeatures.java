@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.core.log.Logger;
@@ -87,7 +87,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> featuresSingleObject,
             NamedFeatureStoreFactory storeFactory,
             boolean suppressErrors)
-            throws CreateException, InitException;
+            throws CreateException, InitializeException;
 
     /** Generates a unique identifier for a particular input */
     public abstract String uniqueIdentifierFor(T input);

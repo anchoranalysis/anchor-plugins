@@ -34,7 +34,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.xml.BeanXMLLoader;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -53,7 +53,7 @@ public class FeaturesFromXmlFixture {
             FeatureList<T> features = provider.get();
             assertTrue(!features.isEmpty());
             return features;
-        } catch (BeanXmlException | ProvisionFailedException e) {
+        } catch (BeanXMLException | ProvisionFailedException e) {
             throw new CreateException(e);
         }
     }
@@ -66,7 +66,7 @@ public class FeaturesFromXmlFixture {
             List<NamedBean<FeatureListProvider<T>>> list = BeanXMLLoader.loadBean(pathStatic);
             assertTrue(!list.isEmpty());
             return list;
-        } catch (BeanXmlException e) {
+        } catch (BeanXMLException e) {
             throw new CreateException(e);
         }
     }

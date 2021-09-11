@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
@@ -51,13 +51,13 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
     @Override
     public void beforeCreateObject(
             RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
-            throws InitException {
+            throws InitializeException {
         try {
             maxDistance = maxDistanceProposer.propose(randomNumberGenerator, resolution);
 
             assert (maxDistance > 0);
         } catch (OperationFailedException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 
@@ -73,7 +73,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
             Point3i root,
             Optional<Resolution> resolution,
             RandomNumberGenerator randomNumberGenerator)
-            throws InitException {
+            throws InitializeException {
         // NOTHING TO DO
     }
 

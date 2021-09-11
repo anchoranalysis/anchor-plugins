@@ -38,6 +38,7 @@ import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationExcep
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
+import org.anchoranalysis.test.CompareXML;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -69,7 +70,7 @@ class AnchorMetadataXmlTest {
 
         TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
         Document docGroundTruth = loader.openXmlFromTestPath(pathSerializedMock01);
-        assertTrue(TestLoader.areXmlEqual(docFromFileSystem, docGroundTruth));
+        assertTrue(CompareXML.areDocumentsEqual(docFromFileSystem, docGroundTruth));
     }
 
     private static Resolution createMockResolution() {

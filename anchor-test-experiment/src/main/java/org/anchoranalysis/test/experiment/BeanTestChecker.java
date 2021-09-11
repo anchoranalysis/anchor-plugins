@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.log.Logger;
 
@@ -79,8 +79,8 @@ public class BeanTestChecker {
             T bean, P params, Logger logger) {
         check(bean);
         try {
-            bean.initRecursive(params, logger);
-        } catch (InitException e) {
+            bean.initializeRecursive(params, logger);
+        } catch (InitializeException e) {
             throw new AnchorFriendlyRuntimeException(e);
         }
         return bean;

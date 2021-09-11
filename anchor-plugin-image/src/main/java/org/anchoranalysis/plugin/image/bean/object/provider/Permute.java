@@ -34,13 +34,12 @@ import java.util.stream.StreamSupport;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.permute.assign.PermutationAssigner;
+import org.anchoranalysis.bean.permute.assign.AssignPermutationException;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
-import org.anchoranalysis.bean.permute.setter.PermutationSetter;
-import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -67,35 +66,41 @@ public class Permute extends ObjectCollectionProvider {
     public ObjectCollection get() throws ProvisionFailedException {
 
         try {
-            PermutationSetter ps = permuteProperty.createSetter(objects);
+            PermutationAssigner ps = permuteProperty.createSetter(objects);
+            
+            Iterator<?> valuesToPermute = permuteProperty.propertyValues();
+            
+            if (!valuesToPermute.hasNext()) {
+                throw new ProvisionFailedException("No values exist to assign during permutation.");
+            }
 
-            return createPermutedObjects(ps, streamFromIterator(permuteProperty.propertyValues()));
-        } catch (PermutationSetterException | OperationFailedException e1) {
+            return createPermutedObjects(ps, streamFromIterator(valuesToPermute));
+        } catch (AssignPermutationException e1) {
             throw new ProvisionFailedException("Cannot create a permutation setter", e1);
         }
     }
 
-    private ObjectCollection createPermutedObjects(PermutationSetter setter, Stream<?> propVals)
+    private ObjectCollection createPermutedObjects(PermutationAssigner setter, Stream<?> propVals)
             throws ProvisionFailedException {
         return ObjectCollectionFactory.flatMapFrom(
                 propVals, CreateException.class, propVal -> objectsForPermutation(setter, propVal));
     }
 
-    private ObjectCollection objectsForPermutation(PermutationSetter setter, Object propVal)
+    private ObjectCollection objectsForPermutation(PermutationAssigner setter, Object propVal)
             throws ProvisionFailedException {
         // We permute a duplicate, so as to keep the original values
         ObjectCollectionProvider provider = objects.duplicateBean();
         try {
-            setter.setPermutation(provider, propVal);
-        } catch (PermutationSetterException e) {
+            setter.assignValue(provider, propVal);
+        } catch (AssignPermutationException e) {
             throw new ProvisionFailedException(
                     "Cannot set permutation on an object-mask-provider", e);
         }
 
         // We init after the permutation, as we might be changing a reference
         try {
-            provider.initRecursive(getInitialization(), getLogger());
-        } catch (InitException e) {
+            provider.initializeRecursive(getInitialization(), getLogger());
+        } catch (InitializeException e) {
             throw new ProvisionFailedException(e);
         }
 

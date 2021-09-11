@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
@@ -48,8 +48,8 @@ public abstract class CalculateLevelBase extends SingleChannel {
     private int level;
 
     @Override
-    public void init(List<Histogram> histograms, Optional<Dictionary> dictionary)
-            throws InitException {
+    public void initialize(List<Histogram> histograms, Optional<Dictionary> dictionary)
+            throws InitializeException {
 
         try {
             Histogram histogram = histograms.get(histogramChannelIndex);
@@ -57,7 +57,7 @@ public abstract class CalculateLevelBase extends SingleChannel {
 
             beforeCalcSetup(histogram, level);
         } catch (OperationFailedException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 

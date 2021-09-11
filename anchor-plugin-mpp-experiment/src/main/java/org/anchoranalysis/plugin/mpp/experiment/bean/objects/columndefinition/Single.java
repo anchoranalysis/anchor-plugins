@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition;
 
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.voxel.object.IntersectingObjects;
@@ -40,7 +40,7 @@ public class Single extends ColumnDefinition {
     private ObjectInCsvColumn column;
 
     @Override
-    public void initHeaders(String[] headers) throws InitException {
+    public void initHeaders(String[] headers) throws InitializeException {
         super.initHeaders(headers);
 
         // We resolve each of our columnNames to an index

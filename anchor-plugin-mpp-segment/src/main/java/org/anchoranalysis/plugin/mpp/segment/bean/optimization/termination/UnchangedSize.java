@@ -37,8 +37,8 @@ public class UnchangedSize extends UnchangedBase {
     private int previousSize = -1;
 
     @Override
-    public void init() {
-        super.init();
+    public void initialize() {
+        super.initialize();
         this.previousSize = -1;
     }
 

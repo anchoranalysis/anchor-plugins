@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.direction;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
@@ -50,7 +50,7 @@ public abstract class FeatureMarkDirection extends FeatureMark {
     private Vector3d vectorInDirection;
 
     @Override
-    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+    protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         super.beforeCalc(initialization);
         this.vectorInDirection = direction.createVector().createVector3d();
     }

@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -53,11 +53,11 @@ public class ReferenceOrElse extends ObjectCollectionProvider {
     private ObjectCollection objects;
 
     @Override
-    public void onInit(ImageInitialization initialization) throws InitException {
+    public void onInitialization(ImageInitialization initialization) throws InitializeException {
         try {
             objects = initialization.objects().getException(id);
         } catch (NamedProviderGetException e) {
-            throw new InitException(e.summarize());
+            throw new InitializeException(e.summarize());
         }
     }
 

@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.core.concurrency.CreateModelFailedException;
 import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -57,10 +58,14 @@ public abstract class SegmentStackIntoObjectsPooled<T>
      */
     public SegmentedObjects segment(Stack stack, ExecutionTimeStatistics executionTimeStatistics)
             throws SegmentationFailedException {
-        return segment(
-                stack,
-                createModelPool(ConcurrencyPlan.singleCPUProcessor(0)),
-                executionTimeStatistics);
+        try {
+            return segment(
+                    stack,
+                    createModelPool(ConcurrencyPlan.singleCPUProcessor(0)),
+                    executionTimeStatistics);
+        } catch (CreateModelFailedException e) {
+            throw new SegmentationFailedException("Cannot create model for segmentaiton", e);
+        }
     }
 
     /**
@@ -68,8 +73,9 @@ public abstract class SegmentStackIntoObjectsPooled<T>
      *
      * @param plan the number and types of processors available for concurrent execution
      * @return the newly created model pool
+     * @throws CreateModelFailedException if a model cannot be created.
      */
-    public abstract ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan);
+    public abstract ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan) throws CreateModelFailedException;
 
     /**
      * Segments a stack to produce an object-collection.

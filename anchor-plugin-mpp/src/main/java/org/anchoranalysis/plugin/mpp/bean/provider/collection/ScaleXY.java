@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
@@ -54,7 +55,7 @@ public class ScaleXY extends MarkCollectionProvider {
             scaleFactor =
                     scaleCalculator.calculate(
                             Optional.empty(), getInitialization().image().getSuggestedResize());
-        } catch (OperationFailedException e1) {
+        } catch (OperationFailedException | InitializeException e1) {
             throw new ProvisionFailedException(e1);
         }
 

@@ -28,30 +28,30 @@ package org.anchoranalysis.plugin.image.feature.bean.score;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.math.histogram.Histogram;
 
 public abstract class FromDictionaryBase extends SingleChannel {
 
     @Override
-    public void init(List<Histogram> histograms, Optional<Dictionary> dictionary)
-            throws InitException {
+    public void initialize(List<Histogram> histograms, Optional<Dictionary> dictionary)
+            throws InitializeException {
 
         if (!dictionary.isPresent()) {
-            throw new InitException(
+            throw new InitializeException(
                     "This pixel-score required key-value-params to be present, but they are not");
         }
 
         setupParams(dictionary.get());
     }
 
-    protected abstract void setupParams(Dictionary dictionary) throws InitException;
+    protected abstract void setupParams(Dictionary dictionary) throws InitializeException;
 
     protected static double extractAsDouble(Dictionary dictionary, String key)
-            throws InitException {
+            throws InitializeException {
         if (!dictionary.containsKey(key)) {
-            throw new InitException(String.format("Key '%s' does not exist", key));
+            throw new InitializeException(String.format("Key '%s' does not exist", key));
         }
 
         return dictionary.getAsDouble(key);

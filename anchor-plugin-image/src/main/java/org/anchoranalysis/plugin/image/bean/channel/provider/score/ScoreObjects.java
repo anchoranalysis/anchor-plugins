@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.functional.checked.CheckedToIntFunction;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -81,7 +81,7 @@ public class ScoreObjects extends UnaryWithObjectsBase {
                     objects,
                     object -> valueToAssignForObject(object, calculator, energyStack));
 
-        } catch (FeatureCalculationException | InitException e) {
+        } catch (FeatureCalculationException | InitializeException e) {
             throw new ProvisionFailedException(e);
         }
     }
@@ -110,7 +110,7 @@ public class ScoreObjects extends UnaryWithObjectsBase {
     }
 
     private FeatureCalculatorSingle<FeatureInputSingleObject> createSession(
-            Feature<FeatureInputSingleObject> feature) throws InitException {
+            Feature<FeatureInputSingleObject> feature) throws InitializeException {
         return FeatureSession.with(
                 feature,
                 new FeatureInitialization(),

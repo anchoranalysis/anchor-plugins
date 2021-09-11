@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
@@ -42,7 +42,7 @@ class NumberIntersectingObjectsAboveThresholdTest {
 
     @Test
     void testSameSizes()
-            throws FeatureCalculationException, InitException, OperationFailedException {
+            throws FeatureCalculationException, InitializeException, OperationFailedException {
         InteresectingObjectsTestHelper.testPositions(
                 "sameSize",
                 FEATURE,
@@ -55,7 +55,7 @@ class NumberIntersectingObjectsAboveThresholdTest {
 
     @Test
     void testDifferentSizes()
-            throws FeatureCalculationException, InitException, OperationFailedException {
+            throws FeatureCalculationException, InitializeException, OperationFailedException {
         InteresectingObjectsTestHelper.testPositions(
                 "differentSize",
                 FEATURE,

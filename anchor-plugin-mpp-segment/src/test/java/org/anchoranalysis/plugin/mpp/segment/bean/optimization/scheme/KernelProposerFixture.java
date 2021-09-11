@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 import java.util.Arrays;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -56,10 +56,10 @@ class KernelProposerFixture {
      * @param markProposer mark-proposer to use when making births
      * @return
      * @throws CreateException
-     * @throws InitException
+     * @throws InitializeException
      */
     public static KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> createBirthAndDeath(
-            MarkProposer markProposer) throws CreateException, InitException {
+            MarkProposer markProposer) throws CreateException, InitializeException {
 
         InputOutputContext context = InputOutputContextFixture.withSuppressedLogger();
 
@@ -72,7 +72,7 @@ class KernelProposerFixture {
                         createInitialKernel(initialization, context.getLogger()),
                         createBirthKernel(markProposer, initialization, context.getLogger()),
                         new KernelDeathPixelized());
-        kernelProposer.init();
+        kernelProposer.initialize();
         return BeanTestChecker.check(kernelProposer);
     }
 

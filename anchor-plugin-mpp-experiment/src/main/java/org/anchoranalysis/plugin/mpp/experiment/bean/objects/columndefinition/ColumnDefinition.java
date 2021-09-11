@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.voxel.object.IntersectingObjects;
@@ -58,7 +58,7 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
     private int indexGroup;
     protected int indexUniquePixel;
 
-    public void initHeaders(String[] headers) throws InitException {
+    public void initHeaders(String[] headers) throws InitializeException {
         // We resolve each of our columnNames to an index
         indexFileID = findHeaderIndex(headers, columnID);
         indexGroup = findHeaderIndex(headers, columnGroup);
@@ -85,12 +85,12 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
      * @param headers the headers
      * @param columnName the column whose index to find
      * @return the index of the first column to be equal (case-sensitive) to {@code columnName}
-     * @throws InitException if the column-name does not exist in the headers
+     * @throws InitializeException if the column-name does not exist in the headers
      */
-    private static int findHeaderIndex(String[] headers, String columnName) throws InitException {
+    private static int findHeaderIndex(String[] headers, String columnName) throws InitializeException {
         int index = ArrayUtils.indexOf(headers, columnName);
         if (index == ArrayUtils.INDEX_NOT_FOUND) {
-            throw new InitException(
+            throw new InitializeException(
                     String.format("Cannot find column '%s' among CSV file headers", columnName));
         }
         return index;

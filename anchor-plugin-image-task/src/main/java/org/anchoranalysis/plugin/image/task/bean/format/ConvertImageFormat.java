@@ -280,7 +280,7 @@ public class ConvertImageFormat
     private ChannelGetter maybeAddFilter(
             NamedChannelsForSeries channels, InputOutputContext context) {
         if (channelFilter != null) {
-            channelFilter.init(channels, context);
+            channelFilter.initialize(channels, context);
             return channelFilter;
         } else {
             return channels;

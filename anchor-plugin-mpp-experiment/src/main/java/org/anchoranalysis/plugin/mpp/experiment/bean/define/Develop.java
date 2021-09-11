@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -137,8 +137,8 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
         for (OutputFeatureTable outputFeatureTable : featureTables) {
 
             try {
-                outputFeatureTable.initRecursive(initialization, context.getLogger());
-            } catch (InitException e) {
+                outputFeatureTable.initializeRecursive(initialization, context.getLogger());
+            } catch (InitializeException e) {
                 throw new IOException(e);
             }
             outputFeatureTable.output(context);

@@ -31,8 +31,8 @@ import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
+import org.anchoranalysis.core.system.path.ResolvePathAbsolute;
 import org.anchoranalysis.core.system.path.SplitPath;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
@@ -81,7 +81,7 @@ public class Rooted extends DerivePath {
         Path pathOut = item.deriveFrom(pathInWithoutRoot.getRemainder(), debugMode);
 
         if (suppressRootOut) {
-            pathOut = BeanPathUtilities.combine(getLocalPath(), pathOut);
+            pathOut = ResolvePathAbsolute.resolve(getLocalPath(), pathOut);
         } else {
             pathOut = pathInWithoutRoot.getRoot().resolve(pathOut);
         }

@@ -32,7 +32,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
@@ -57,7 +57,7 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
     @Override
     public void beforeCreateObject(
             RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
-            throws InitException {
+            throws InitializeException {
         selected = randomNumberGenerator.sampleFromList(list);
         selected.beforeCreateObject(randomNumberGenerator, resolution);
     }
@@ -67,7 +67,7 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
             Point3i root,
             Optional<Resolution> resolution,
             RandomNumberGenerator randomNumberGenerator)
-            throws InitException {
+            throws InitializeException {
         selected.afterCreateObject(root, resolution, randomNumberGenerator);
     }
 
