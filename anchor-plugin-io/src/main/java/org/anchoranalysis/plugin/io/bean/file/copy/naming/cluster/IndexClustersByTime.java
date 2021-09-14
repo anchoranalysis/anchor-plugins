@@ -1,7 +1,6 @@
 package org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import org.anchoranalysis.spatial.rtree.IntervalRTree;
@@ -16,8 +15,6 @@ import org.anchoranalysis.spatial.rtree.IntervalRTree;
  */
 class IndexClustersByTime {
 
-    private static final ZoneOffset ZONE_OFFSET = OffsetDateTime.now().getOffset();
-
     /** The R-Tree, indexing clusters by <i>minutes since the epoch</i>. */
     private final IntervalRTree<ClusterIdentifier> tree;
 
@@ -27,7 +24,7 @@ class IndexClustersByTime {
      * @param identifiers the identifiers.
      */
     public IndexClustersByTime(List<ClusterIdentifier> identifiers) {
-        tree = new IntervalRTree<>(identifiers.size());
+        this.tree = new IntervalRTree<>(identifiers.size());
         for (ClusterIdentifier identifier : identifiers) {
             tree.add(
                     epochMinute(identifier.getMinInstant()),
@@ -48,7 +45,9 @@ class IndexClustersByTime {
         LocalDateTime startDay = identifier.getMinTime().toLocalDate().atTime(0, 0, 0);
         LocalDateTime endDay = identifier.getMaxTime().toLocalDate().atTime(23, 59, 59);
 
-        return usesRangeExclusively(epochMinute(startDay), epochMinute(endDay));
+        return usesRangeExclusively(
+                epochMinute(startDay, identifier.getOffset()),
+                epochMinute(endDay, identifier.getOffset()));
     }
 
     /**
@@ -76,8 +75,8 @@ class IndexClustersByTime {
     }
 
     /** Number of minutes since the epoch for {@link LocalDateTime}. */
-    private static long epochMinute(LocalDateTime timestamp) {
-        return epochMinute(timestamp.toEpochSecond(ZONE_OFFSET));
+    private long epochMinute(LocalDateTime timestamp, ZoneOffset offset) {
+        return epochMinute(timestamp.toEpochSecond(offset));
     }
 
     /** Number of minutes since the epoch for <i>seconds since the epoch</i>. */

@@ -78,11 +78,12 @@ class EstablishClusterNames {
             ClusterIdentifier identifier, DateStyle dateStyle, IndexClustersByTime tree) {
 
         String name =
-                TimeIntervalNamer.nameFor(
-                        identifier.getMinTime(),
-                        identifier.getMaxTime(),
-                        dateStyle,
-                        timeStyle(identifier, tree));
+                new TimeIntervalNamer(identifier.getOffset())
+                        .nameFor(
+                                identifier.getMinTime(),
+                                identifier.getMaxTime(),
+                                dateStyle,
+                                timeStyle(identifier, tree));
         identifier.assignName(name);
         return name;
     }
