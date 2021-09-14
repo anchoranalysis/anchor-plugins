@@ -89,10 +89,9 @@ class TimestampedFile implements Clusterable {
     private long associateDateTime(File file, ZoneOffset offset) throws IOException {
 
         if (ImageFileFormat.JPEG.matchesEnd(file.getName())) {
-            try {
-                return readEXIFCreationTime(file);
-            } catch (ServiceException | IOException e) {
-                // Ignore any errors occur reading the EXIF and continue
+            Optional<Long> exifTimestamp = readEXIFCreationTime(file);
+            if (exifTimestamp.isPresent()) {
+                return exifTimestamp.get();
             }
         }
 
@@ -136,9 +135,18 @@ class TimestampedFile implements Clusterable {
     }
 
     /** Reads the creation-time from an EXIF header if it is available. */
-    private static long readEXIFCreationTime(File file) throws ServiceException, IOException {
+    private static Optional<Long> readEXIFCreationTime(File file) {
         EXIFServiceImpl exif = new EXIFServiceImpl();
-        exif.initialize(file.toString());
-        return exif.getCreationDate().toInstant().getEpochSecond();
+        try {
+            exif.initialize(file.toString());
+        } catch (ServiceException | IOException e) {
+            return Optional.empty();
+        }
+        
+        if (exif.getCreationDate()!=null) {
+            return Optional.of(exif.getCreationDate().toInstant().getEpochSecond());
+        } else {
+            return Optional.empty();
+        }
     }
 }
