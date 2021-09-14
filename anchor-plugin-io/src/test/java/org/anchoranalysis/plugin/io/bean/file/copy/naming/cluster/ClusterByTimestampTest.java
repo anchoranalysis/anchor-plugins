@@ -41,16 +41,16 @@ class ClusterByTimestampTest {
     private TestLoader testLoader =
             TestLoader.createFromMavenWorkingDirectory("toCluster/timestamp");
 
-    private static final List<String> EXPECTED_DESTINATION_PATHS =
+    private static final List<Path> EXPECTED_DESTINATION_PATHS =
             Arrays.asList(
-                    "Aug-01 18.45\\IMG_3812.JPG",
-                    "Aug-01 18.45\\IMG_3813.JPG",
-                    "Jul-31\\IMG_3620.JPG",
-                    "Aug-01 15.06 to 15.21\\IMG_3765.JPG",
-                    "Aug-01 18.45\\IMG_3815.JPG",
-                    "Jul-31\\IMG_3622.JPG",
-                    "Aug-01 15.06 to 15.21\\IMG_3767.JPG",
-                    "Aug-01 15.06 to 15.21\\IMG_3770.JPG");
+                    Paths.get("Aug-01 18.45", "IMG_3812.JPG"),
+                    Paths.get("Aug-01 18.45", "IMG_3813.JPG"),
+                    Paths.get("Jul-31", "IMG_3620.JPG"),
+                    Paths.get("Aug-01 15.06 to 15.21", "IMG_3765.JPG"),
+                    Paths.get("Aug-01 18.45", "IMG_3815.JPG"),
+                    Paths.get("Jul-31", "IMG_3622.JPG"),
+                    Paths.get("Aug-01 15.06 to 15.21", "IMG_3767.JPG"),
+                    Paths.get("Aug-01 15.06 to 15.21", "IMG_3770.JPG"));
 
     /** Check if the same set of paths are produced as expected. */
     @Test
@@ -110,6 +110,6 @@ class ClusterByTimestampTest {
 
     /** The paths expected as an output after clustering. */
     private static Set<Path> expectedPaths() {
-        return EXPECTED_DESTINATION_PATHS.stream().map(Paths::get).collect(Collectors.toSet());
+        return EXPECTED_DESTINATION_PATHS.stream().collect(Collectors.toSet());
     }
 }
