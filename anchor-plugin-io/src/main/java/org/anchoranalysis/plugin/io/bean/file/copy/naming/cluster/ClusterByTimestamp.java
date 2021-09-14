@@ -1,0 +1,168 @@
+package org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.plugin.io.bean.file.copy.naming.CopyFilesNaming;
+import org.anchoranalysis.plugin.io.bean.file.pattern.TimestampPattern;
+import org.anchoranalysis.plugin.io.file.copy.ClusterMembership;
+import org.anchoranalysis.plugin.io.file.copy.PathOperations;
+import org.anchoranalysis.plugin.io.input.path.CopyContext;
+
+/**
+ * Associates particular timestamp with each file, and clusters.
+ *
+ * <p>The timestamp is chosen, in this order of priority:
+ *
+ * <ul>
+ *   <li>A date / time string extracted from the filename, if exists in particular patterns, falling
+ *       back to creation-time, if none exists.
+ *   <li>Original photo-taken time from EXIF metadata if available, and the file has a <i>jpg</i> or <i>jpeg
+ *       extension.</i>
+ *   <li><i>File creation time.</i>
+ * </ul>
+ *
+ * <p>Timezones are assumed to be the current time-zone, if not otherwise indicated.
+ *
+ * <p><i>File modification time</i> is <u>not</u> considered.
+ *
+ * <p>The clustered are named 01, 02, 03 etc. depending on the number of clusters.
+ *
+ * <p>The <a href="https://en.wikipedia.org/wiki/DBSCAN">DBSCAN algorithm</a> is used for
+ * clustering.
+ *
+ * <p>A special cluster {@link #OUTLIER_CLUSTER_IDENTIFIER} may also be created, for points that
+ * were not density-reachable by others, and aren't part of any cluster in particular.
+ *
+ * <p>The relative-path of files are preserved, being added relative to the cluster subdirectory.
+ *
+ * @author Owen Feehan
+ */
+public class ClusterByTimestamp extends CopyFilesNaming<ClusterMembership> {
+
+    /** The name of the cluster for any files considered as outliers by the clustering algorithm. */
+    private static final String OUTLIER_CLUSTER_IDENTIFIER = "outliers";
+
+    // START BEAN ARGUMENTS
+    /**
+     * Files whose creation-time differs {@code <=} this parameter are joined into the same cluster.
+     *
+     * <p>This is the principle parameter for affecting the sensitivity of the clustering. It is
+     * specified in <i>hours</i> between the date-time of two files.
+     *
+     * <p>A larger value encourages a smaller total number of clusters (or larger cluster-size). A
+     * smaller values encourages the opposite.
+     */
+    @BeanField @Getter @Setter private double thresholdHours = 1.0;
+
+    /** The minimum number of files that must exist for a cluster. */
+    @BeanField @Getter @Setter private int minimumPerCluster = 1;
+
+    /**
+     * If true, the entire relative-path is used when copying files into the cluster directory. If
+     * false, only the file-name is used.
+     */
+    @BeanField @Getter @Setter private boolean preserveSubdirectories = false;
+
+    /** The patterns which can be used to extract a date-time from a filename. */
+    @BeanField @Getter @Setter
+    private List<TimestampPattern> timestampPatterns = defaultDateTimePatterns();
+
+    /**
+     * If {@code >= 0}, sets a specific time-offset in hours. If {@code == -1}, then the offset is
+     * taken from the current system time-zone settings.
+     */
+    @BeanField @Getter @Setter private int timeZoneOffset = -1;
+    // END BEAN ARGUMENTS
+
+    @Override
+    public ClusterMembership beforeCopying(
+            Path destinationDirectory, List<FileWithDirectoryInput> inputs)
+            throws OperationFailedException {
+
+        ZoneOffset offset = offset();
+
+        ClusterMembership membership =
+                new ClusterMembership(new ClusterIdentifier(OUTLIER_CLUSTER_IDENTIFIER, offset));
+
+        DeriveTimestampedFiles derive = new DeriveTimestampedFiles(timestampPatterns);
+
+        List<TimestampedFile> timestampedFiles = derive.derive(inputs, offset);
+
+        PopulateClusterMembership populate = new PopulateClusterMembership(membership, offset);
+        populate.populateFrom(
+                timestampedFiles, derive.getScaler(), offset, thresholdHours, minimumPerCluster);
+        return membership;
+    }
+
+    @Override
+    public Optional<Path> destinationPathRelative(
+            File file,
+            DirectoryWithPrefix outputTarget,
+            int index,
+            CopyContext<ClusterMembership> context)
+            throws OutputWriteFailedException {
+        try {
+            return pathForFile(
+                    context.getSourceDirectory(),
+                    file.toPath(),
+                    context.getSharedState().clusterFor(file));
+
+        } catch (PathDifferenceException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
+
+    /** The relative-path to copy a file to, relative to the output directory. */
+    private Optional<Path> pathForFile(
+            Path sourceDirectory, Path file, ClusterIdentifier clusterIdentifier)
+            throws PathDifferenceException {
+        Path relative = PathOperations.filePathDifference(sourceDirectory, file);
+        if (!preserveSubdirectories) {
+            relative = relative.getFileName();
+        }
+        try {
+            return Optional.of(Paths.get(clusterIdentifier.name()).resolve(relative));
+        } catch (OperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+    }
+
+    /** The timezone to use. */
+    private ZoneOffset offset() {
+        if (timeZoneOffset == -1) {
+            return OffsetDateTime.now().getOffset();
+        }
+        if (timeZoneOffset >= 0) {
+            return ZoneOffset.ofHours(timeZoneOffset);
+        } else {
+            throw new AnchorImpossibleSituationException();
+        }
+    }
+
+    /**
+     * The default list of date-time patterns to use, if none additionally have been set.
+     *
+     * <p>It includes a single pattern in the form: {@code yyyy-mm-dd hh:mm:ss}
+     */
+    private static List<TimestampPattern> defaultDateTimePatterns() {
+        TimestampPattern pattern =
+                new TimestampPattern(
+                        ".*(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d) (\\d\\d)\\.(\\d\\d)\\.(\\d\\d).*");
+        return Arrays.asList(pattern);
+    }
+}

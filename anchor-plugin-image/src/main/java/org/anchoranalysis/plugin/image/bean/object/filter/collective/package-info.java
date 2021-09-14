@@ -1,7 +1,10 @@
 /**
- * Implementations of {@link org.anchoranalysis.image.bean.object.ObjectFilter} that assess each element in a collection <b>collectively</b>.
- * 
- * <p>This is a less strict condition than in {@code org.anchoranalysis.plugin.image.bean.object.filter.independent} where each element is considered in isolation of others.
+ * Implementations of {@link org.anchoranalysis.image.bean.object.ObjectFilter} that assess each
+ * element in a collection <b>collectively</b>.
+ *
+ * <p>This is a less strict condition than in {@code
+ * org.anchoranalysis.plugin.image.bean.object.filter.independent} where each element is considered
+ * in isolation of others.
  */
 package org.anchoranalysis.plugin.image.bean.object.filter.collective;
 /*-

@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.plugin.image.bean.params.DictionaryCondition;
+import org.anchoranalysis.plugin.image.bean.dictionary.DictionaryCondition;
 
 // If a param is equal to a particular value, do something
 public class IfParamEquals extends ChannelProviderUnary {

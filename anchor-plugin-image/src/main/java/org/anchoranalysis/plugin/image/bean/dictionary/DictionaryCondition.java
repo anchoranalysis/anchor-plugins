@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.params;
+package org.anchoranalysis.plugin.image.bean.dictionary;
 
 import lombok.Getter;
 import lombok.Setter;

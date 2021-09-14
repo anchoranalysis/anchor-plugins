@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.math.statistics.VarianceCalculator;
+import org.anchoranalysis.math.statistics.VarianceCalculatorLong;
 
 /**
  * Similar to Otsu, but weighs the variances differently of background and foreground.
@@ -90,8 +90,8 @@ public class OtsuWeighted extends CalculateLevel {
 
         int bestThreshold = 0;
 
-        VarianceCalculator total = varianceCalculatorTotal(histogram);
-        VarianceCalculator running = varianceCalculatorFirstBin(histogram, minIntensity - 1);
+        VarianceCalculatorLong total = varianceCalculatorTotal(histogram);
+        VarianceCalculatorLong running = varianceCalculatorFirstBin(histogram, minIntensity - 1);
 
         double scoreMin = Double.POSITIVE_INFINITY;
 
@@ -110,21 +110,22 @@ public class OtsuWeighted extends CalculateLevel {
         return bestThreshold;
     }
 
-    private static VarianceCalculator varianceCalculatorFirstBin(
+    private static VarianceCalculatorLong varianceCalculatorFirstBin(
             Histogram histogram, int firstBin) {
-        VarianceCalculator running = new VarianceCalculator(0, 0, 0);
+        VarianceCalculatorLong running = new VarianceCalculatorLong(0, 0, 0);
         running.add(firstBin, histogram.getCount(firstBin));
         return running;
     }
 
-    private static VarianceCalculator varianceCalculatorTotal(Histogram histogram) {
-        return new VarianceCalculator(
+    private static VarianceCalculatorLong varianceCalculatorTotal(Histogram histogram) {
+        return new VarianceCalculatorLong(
                 histogram.calculateSum(),
                 histogram.calculateSumSquares(),
                 histogram.getTotalCount());
     }
 
-    private double weightedSumClassVariances(VarianceCalculator running, VarianceCalculator total) {
+    private double weightedSumClassVariances(
+            VarianceCalculatorLong running, VarianceCalculatorLong total) {
 
         double varianceBackground = running.variance();
         double varianceForeground = total.subtract(running).variance();
@@ -132,6 +133,7 @@ public class OtsuWeighted extends CalculateLevel {
         double prob1 = ((double) running.getCount()) / total.getCount();
         double prob2 = 1 - prob1;
 
-        return (prob1 * varianceBackground * weightBackground + prob2 * varianceForeground * weightForeground);
+        return (prob1 * varianceBackground * weightBackground
+                + prob2 * varianceForeground * weightForeground);
     }
 }

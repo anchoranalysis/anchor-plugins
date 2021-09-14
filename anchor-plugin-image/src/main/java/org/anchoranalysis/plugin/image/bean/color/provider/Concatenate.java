@@ -37,12 +37,11 @@ import org.anchoranalysis.image.bean.provider.ColorProvider;
 
 /**
  * Combines one or more {@link ColorProvider}s into a unitary {@link ColorProvider}.
- * 
- * <p>The combined unitary provider aggregates elements from all the child lists, preserving
- * element order, as they are added with {@link #setList(List)}.
-
- * @author Owen Feehan
  *
+ * <p>The combined unitary provider aggregates elements from all the child lists, preserving element
+ * order, as they are added with {@link #setList(List)}.
+ *
+ * @author Owen Feehan
  */
 public class Concatenate extends ColorProvider {
 

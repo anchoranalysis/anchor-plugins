@@ -38,9 +38,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
 
-/** 
- * Creates a {@link Mask} from a collection of object-masks.
- */
+/** Creates a {@link Mask} from a collection of object-masks. */
 public class FromObjects extends FromDimensionsBase {
 
     // START BEAN

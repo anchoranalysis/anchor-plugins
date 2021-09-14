@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.plugin.io.file.copy.PathOperations;
 
 /**
  * Rejects files that fail to match a particular regular-expression
@@ -58,7 +59,7 @@ public class FilterWithRegularExpression extends RegularExpressionBase {
     }
 
     private boolean acceptPath(Path path, String regex) {
-        boolean matches = NamingUtilities.convertToString(path).matches(regex);
+        boolean matches = PathOperations.convertToString(path).matches(regex);
 
         if (invert) {
             return !matches;

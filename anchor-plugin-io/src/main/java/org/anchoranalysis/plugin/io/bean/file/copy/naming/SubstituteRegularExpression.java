@@ -32,6 +32,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.plugin.io.file.copy.PathOperations;
 
 /**
  * A regular expression substitution (replaceAll) is applied to the relative-path
@@ -46,8 +47,7 @@ public class SubstituteRegularExpression extends RegularExpressionBase {
 
     @Override
     protected Optional<Path> destinationPathRelative(Path path, String regex) {
-        String pathAfterRegEx =
-                NamingUtilities.convertToString(path).replaceAll(regex, replacement);
+        String pathAfterRegEx = PathOperations.convertToString(path).replaceAll(regex, replacement);
         return Optional.of(Paths.get(pathAfterRegEx));
     }
 }

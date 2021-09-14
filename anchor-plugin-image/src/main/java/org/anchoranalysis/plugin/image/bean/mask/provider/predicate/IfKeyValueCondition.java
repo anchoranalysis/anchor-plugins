@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.plugin.image.bean.params.DictionaryCondition;
+import org.anchoranalysis.plugin.image.bean.dictionary.DictionaryCondition;
 
 /**
  * The current {@code mask} is returned if a condition on key-values is satisfied otherwise {@code
