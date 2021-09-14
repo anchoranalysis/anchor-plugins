@@ -34,8 +34,8 @@ import java.util.stream.StreamSupport;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.permute.assign.PermutationAssigner;
 import org.anchoranalysis.bean.permute.assign.AssignPermutationException;
+import org.anchoranalysis.bean.permute.assign.PermutationAssigner;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
@@ -67,9 +67,9 @@ public class Permute extends ObjectCollectionProvider {
 
         try {
             PermutationAssigner ps = permuteProperty.createSetter(objects);
-            
+
             Iterator<?> valuesToPermute = permuteProperty.propertyValues();
-            
+
             if (!valuesToPermute.hasNext()) {
                 throw new ProvisionFailedException("No values exist to assign during permutation.");
             }

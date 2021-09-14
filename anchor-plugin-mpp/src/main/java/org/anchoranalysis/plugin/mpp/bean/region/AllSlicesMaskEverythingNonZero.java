@@ -49,7 +49,7 @@ public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
         Histogram index = histogramForAllSlices(mark, false);
         Histogram nonZero = histogramForAllSlices(mark, true);
 
-        long numNonZero = nonZero.countMatching( value -> value > 0);
+        long numNonZero = nonZero.countMatching(value -> value > 0);
 
         return new VoxelStatisticsFromHistogram(histogramExtractedFromRight(index, numNonZero));
     }

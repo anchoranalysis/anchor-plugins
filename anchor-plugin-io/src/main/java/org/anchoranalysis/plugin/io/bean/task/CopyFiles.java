@@ -121,10 +121,10 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
             List<FileWithDirectoryInput> inputs,
             ParametersExperiment params)
             throws ExperimentExecutionException {
-        T namingSharedState =
-                naming.beforeCopying(params.getOutputter().getOutputDirectory(), inputs.size());
-
         try {
+            T namingSharedState =
+                    naming.beforeCopying(params.getOutputter().getOutputDirectory(), inputs);
+
             return new RecordingCounter<>(new Counter(), outputter, namingSharedState);
         } catch (OperationFailedException e) {
             throw new ExperimentExecutionException(e);
@@ -177,12 +177,12 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
             Optional<Path> destinationFile =
                     naming.destinationPath(file, outputTarget, index, context);
 
+            recordingCounter.recordCopiedOutput(
+                    file.toPath().toAbsolutePath().normalize(), destinationFile, index);
+
             if (destinationFile.isPresent() && copyEnabled) {
                 method.makeCopy(file.toPath(), destinationFile.get());
             }
-
-            recordingCounter.recordCopiedOutput(
-                    file.toPath().toAbsolutePath().normalize(), destinationFile, index);
 
         } catch (OutputWriteFailedException | CreateException e) {
             throw new OperationFailedException(e);

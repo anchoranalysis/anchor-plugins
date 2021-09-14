@@ -37,7 +37,7 @@ import org.anchoranalysis.math.histogram.Histogram;
 // Ratio of number of non-mode pixels to number of pixels
 //
 public class RatioNonMode extends FeatureHistogramStatistic {
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean ignoreZero = false;
     // END BEAN PROPERTIES

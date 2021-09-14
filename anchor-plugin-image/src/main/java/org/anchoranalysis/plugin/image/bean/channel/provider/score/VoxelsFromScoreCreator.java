@@ -80,7 +80,8 @@ class VoxelsFromScoreCreator {
     }
 
     /** Initializes the pixel-score */
-    private void initialize(VoxelScore pixelScore, Optional<ObjectMask> object) throws InitializeException {
+    private void initialize(VoxelScore pixelScore, Optional<ObjectMask> object)
+            throws InitializeException {
         pixelScore.initialize(createHistograms(object), dictionary);
     }
 

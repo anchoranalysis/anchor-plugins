@@ -28,8 +28,11 @@ package org.anchoranalysis.plugin.io.bean.file.copy.naming;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.plugin.io.input.path.CopyContext;
@@ -47,9 +50,10 @@ public abstract class CopyFilesNaming<T> extends AnchorBean<CopyFilesNaming<T>> 
      * DirectoryWithPrefix, int, CopyContext)}.
      *
      * @param destinationDirectory the directory to which files are copied.
-     * @param totalNumberFiles the total number of files to copy.
+     * @param inputs the total number of files to copy.
      */
-    public abstract T beforeCopying(Path destinationDirectory, int totalNumberFiles);
+    public abstract T beforeCopying(Path destinationDirectory, List<FileWithDirectoryInput> inputs)
+            throws OperationFailedException;
 
     /**
      * Returns the output path (destination to to be copied to) for a given single file.

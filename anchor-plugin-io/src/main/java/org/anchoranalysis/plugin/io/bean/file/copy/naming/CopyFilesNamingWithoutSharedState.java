@@ -26,7 +26,10 @@
 package org.anchoranalysis.plugin.io.bean.file.copy.naming;
 
 import java.nio.file.Path;
+import java.util.List;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.task.NoSharedState;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 
 /**
  * Base class for implementations of {@link CopyFilesNaming} where each file is copied independently
@@ -37,7 +40,9 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 public abstract class CopyFilesNamingWithoutSharedState extends CopyFilesNaming<NoSharedState> {
 
     @Override
-    public NoSharedState beforeCopying(Path destinationDirectory, int totalNumberFiles) {
+    public NoSharedState beforeCopying(
+            Path destinationDirectory, List<FileWithDirectoryInput> inputs)
+            throws OperationFailedException {
         // NOTHING TO DO
         return NoSharedState.INSTANCE;
     }

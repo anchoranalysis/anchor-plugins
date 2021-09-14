@@ -70,7 +70,7 @@ public class RatioPrincipalAxisLength extends ImageMomentsBase {
     protected String errorMessageIfTooFewPixels() {
         return "Too few voxels to determine principal axes and therefore ratio of principal-axis length";
     }
-    
+
     private static double estimateAxisLength(ImageMoments moments, int axis) {
         return AxisLengthEstimator.fromNormalizedEigenvalue(moments.get(axis).getEigenvalue());
     }

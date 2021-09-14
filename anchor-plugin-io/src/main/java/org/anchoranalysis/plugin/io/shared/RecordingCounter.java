@@ -26,7 +26,9 @@
 package org.anchoranalysis.plugin.io.shared;
 
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
@@ -79,6 +81,9 @@ public class RecordingCounter<T> {
 
     @Getter private final T namingSharedState;
 
+    /** Tracks all destination paths to make sure no duplications occur. */
+    private Set<Path> destinationPaths = new HashSet<>();
+
     public RecordingCounter(Counter counter, Outputter outputter, T namingSharedState)
             throws OperationFailedException {
         this.counter = counter;
@@ -108,12 +113,25 @@ public class RecordingCounter<T> {
     /**
      * Records an copy operation in the log / CSV path mapping.
      *
+     * <p>This also performs a check that multiple files are writing to the same output destination.
+     *
      * @param source source-path for copying operation
      * @param destination destination-path for copying operation
      * @param index the index of file (an integer number uniquely assigned to each operation)
+     * @throws OperationFailedException if this method has been previously called with an identical
+     *     {@code destination} (only if it's not-empty).
      */
-    public void recordCopiedOutput(Path source, Optional<Path> destination, int index) {
+    public void recordCopiedOutput(Path source, Optional<Path> destination, int index)
+            throws OperationFailedException {
         if (destination.isPresent()) {
+
+            if (!destinationPaths.add(destination.get())) {
+                throw new OperationFailedException(
+                        String.format(
+                                "A file with destination %s has already been copied. There is a duplicate destination-path for two different files!",
+                                destination.get()));
+            }
+
             logger.logFormatted("Copying %s to %s", source, destination.get().toString());
             pathMapping.maybeWriteRow(source, destination.get(), index);
         } else {

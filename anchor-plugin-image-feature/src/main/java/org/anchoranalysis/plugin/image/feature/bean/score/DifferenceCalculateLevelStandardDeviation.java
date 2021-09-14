@@ -51,8 +51,8 @@ public class DifferenceCalculateLevelStandardDeviation extends CalculateLevelBas
     @Override
     protected void beforeCalcSetup(Histogram histogram, int level) throws OperationFailedException {
 
-        Histogram lessThan = histogram.threshold( bin -> bin < level);
-        Histogram greaterThan = histogram.threshold( bin -> bin > level);
+        Histogram lessThan = histogram.threshold(bin -> bin < level);
+        Histogram greaterThan = histogram.threshold(bin -> bin > level);
 
         this.widthLessThan = lessThan.standardDeviation() * widthFactor;
         this.widthGreaterThan = greaterThan.standardDeviation() * widthFactor;

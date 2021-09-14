@@ -75,7 +75,8 @@ public abstract class SegmentStackIntoObjectsPooled<T>
      * @return the newly created model pool
      * @throws CreateModelFailedException if a model cannot be created.
      */
-    public abstract ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan) throws CreateModelFailedException;
+    public abstract ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan)
+            throws CreateModelFailedException;
 
     /**
      * Segments a stack to produce an object-collection.

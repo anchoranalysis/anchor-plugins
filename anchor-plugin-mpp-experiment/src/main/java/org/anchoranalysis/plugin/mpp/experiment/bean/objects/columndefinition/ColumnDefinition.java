@@ -87,7 +87,8 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
      * @return the index of the first column to be equal (case-sensitive) to {@code columnName}
      * @throws InitializeException if the column-name does not exist in the headers
      */
-    private static int findHeaderIndex(String[] headers, String columnName) throws InitializeException {
+    private static int findHeaderIndex(String[] headers, String columnName)
+            throws InitializeException {
         int index = ArrayUtils.indexOf(headers, columnName);
         if (index == ArrayUtils.INDEX_NOT_FOUND) {
             throw new InitializeException(

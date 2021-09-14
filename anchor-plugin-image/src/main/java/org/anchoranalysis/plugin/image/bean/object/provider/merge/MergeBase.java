@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
 
-/** A base class for algorithms that merge object-masks */
+/** A base class for algorithms that merge object-masks. */
 public abstract class MergeBase extends WithContainerBase {
 
     // START BEAN PROPERTIES

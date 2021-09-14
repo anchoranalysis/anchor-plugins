@@ -64,7 +64,8 @@ public class FromChannel extends DimensionsProvider {
             throw new InitializeException("One of either channelProvider or id must be set");
         }
         if (!id.isEmpty() && channel != null) {
-            throw new InitializeException("Only one -not both- of channelProvider and id should be set");
+            throw new InitializeException(
+                    "Only one -not both- of channelProvider and id should be set");
         }
     }
 
@@ -85,7 +86,7 @@ public class FromChannel extends DimensionsProvider {
     private Channel selectChannelForId(String id) throws ProvisionFailedException {
 
         try {
-            return OptionalUtilities.orFlat(
+            return OptionalUtilities.orFlatSupplier(
                             () -> getInitialization().channels().getOptional(id),
                             () ->
                                     getInitialization()

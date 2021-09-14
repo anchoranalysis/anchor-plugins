@@ -28,11 +28,14 @@ package org.anchoranalysis.plugin.io.bean.file.copy.naming;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.experiment.task.NoSharedState;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.plugin.io.file.copy.PathOperations;
 import org.anchoranalysis.plugin.io.input.path.CopyContext;
 
 /**
@@ -44,7 +47,8 @@ import org.anchoranalysis.plugin.io.input.path.CopyContext;
 public class PreserveName extends CopyFilesNamingWithoutSharedState {
 
     @Override
-    public NoSharedState beforeCopying(Path destinationDirectory, int totalNumberFiles) {
+    public NoSharedState beforeCopying(
+            Path destinationDirectory, List<FileWithDirectoryInput> inputs) {
         // NOTHING TO DO
         return NoSharedState.INSTANCE;
     }
@@ -58,8 +62,7 @@ public class PreserveName extends CopyFilesNamingWithoutSharedState {
             throws OutputWriteFailedException {
         try {
             return Optional.of(
-                    NamingUtilities.filePathDifference(
-                            context.getSourceDirectory(), file.toPath()));
+                    PathOperations.filePathDifference(context.getSourceDirectory(), file.toPath()));
         } catch (PathDifferenceException e) {
             throw new OutputWriteFailedException(e);
         }

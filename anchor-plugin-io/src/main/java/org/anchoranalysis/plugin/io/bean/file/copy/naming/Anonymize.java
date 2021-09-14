@@ -37,6 +37,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.plugin.io.input.path.CopyContext;
@@ -44,19 +45,20 @@ import org.anchoranalysis.plugin.io.shared.AnonymizeSharedState;
 import org.anchoranalysis.plugin.io.shared.NumberToStringConverter;
 
 /**
- * Copies files to a number 001 002 etc. in the same order they are inputted.
+ * Copies files to a number {@code 001, 002} etc. in the same order they are inputted.
  *
  * <p>No shuffling occurs.
  *
- * @author feehano
+ * @author Owen Feehan
  */
 public class Anonymize extends CopyFilesNaming<AnonymizeSharedState> {
 
     @Override
-    public AnonymizeSharedState beforeCopying(Path destinationDirectory, int totalNumberFiles) {
+    public AnonymizeSharedState beforeCopying(
+            Path destinationDirectory, List<FileWithDirectoryInput> inputs) {
+        int size = inputs.size();
         return new AnonymizeSharedState(
-                new NumberToStringConverter(totalNumberFiles),
-                createMappingToShuffledIndices(totalNumberFiles));
+                new NumberToStringConverter(size), createMappingToShuffledIndices(size));
     }
 
     @Override
