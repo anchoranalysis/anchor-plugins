@@ -24,33 +24,45 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.channel.provider;
+package org.anchoranalysis.plugin.image.bean.dictionary;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.plugin.image.bean.dictionary.DictionaryCondition;
+import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.image.bean.ImageBean;
 
-// If a param is equal to a particular value, do something
-public class IfParamEquals extends ChannelProviderUnary {
+/**
+ * Checks if a value in a {@link Dictionary} is equal to an expected-value.
+ *
+ * @author Owen Feehan
+ */
+public class DictionaryCondition extends ImageBean<DictionaryCondition> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private DictionaryCondition condition;
+    /** The dictionary to provide a value to check. */
+    @BeanField @Getter @Setter private DictionaryProvider dictionary;
+
+    /** The key in the dictionary whose value is checked. */
+    @BeanField @Getter @Setter private String key = "";
+
+    /**
+     * The value the key should have in the dictionary, in order for the condition to be fulfilled.
+     */
+    @BeanField @Getter @Setter private String value = "";
     // END BEAN PROPERTIES
 
-    @BeanField @Getter @Setter private ChannelProvider channelElse;
-    // END BEAN PROPERTIES
-
-    @Override
-    public Channel createFromChannel(Channel channel) throws ProvisionFailedException {
-        if (condition.isConditionTrue()) {
-            return channel;
-        } else {
-            return channelElse.get();
-        }
+    public boolean isConditionTrue() throws ProvisionFailedException {
+        Dictionary dictionaryCreated = dictionary.get();
+        String valueToMatch =
+                dictionaryCreated
+                        .getAsString(key)
+                        .orElseThrow(
+                                () ->
+                                        new ProvisionFailedException(
+                                                "No dictionary value exists for: " + key));
+        return value.equals(valueToMatch);
     }
 }
