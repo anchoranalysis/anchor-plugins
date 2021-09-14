@@ -75,7 +75,8 @@ public class SuppressNonMaxima<T> extends SegmentStackIntoObjectsPooled<T> {
     }
 
     @Override
-    public ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan) throws CreateModelFailedException {
+    public ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan)
+            throws CreateModelFailedException {
         return segment.createModelPool(plan);
     }
 

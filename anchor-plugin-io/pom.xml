@@ -97,6 +97,19 @@
 		    <version>${native-lib-loader.version}</version>
 		</dependency>
 		
+		<!--  One dependency from Bioformats -->
+		<dependency>
+	      <groupId>ome</groupId>
+	      <artifactId>formats-bsd</artifactId>
+	      <version>${bio-formats.version}</version>
+		  <exclusions>
+            <exclusion>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+            </exclusion>
+        </exclusions>	      
+	    </dependency>
+		
 		<dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>

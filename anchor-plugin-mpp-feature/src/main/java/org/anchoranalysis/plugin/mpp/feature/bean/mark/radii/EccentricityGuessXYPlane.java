@@ -118,7 +118,7 @@ public class EccentricityGuessXYPlane extends FeatureMarkEccentricity {
     //	angle between vectors (we don't bother with the arccos), as we are just finding the minimum
     // anyway
     private static double cosAngleBetweenVectors(Vector3d vec1, Vector3d vec2) {
-        double num = vec1.dot(vec2);
+        double num = vec1.dotProduct(vec2);
         double dem = vec1.length() * vec2.length();
         return num / dem;
     }

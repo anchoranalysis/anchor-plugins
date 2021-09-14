@@ -55,7 +55,7 @@ public class ClampHistogramMax extends CalculateLevelOne {
     private static Histogram createClamped(Histogram histogram, int maxVal) {
         Preconditions.checkArgument(maxVal <= histogram.getMaxValue());
 
-        long numAbove = histogram.countMatching( value -> value > maxVal);
+        long numAbove = histogram.countMatching(value -> value > maxVal);
 
         Histogram out = new Histogram(histogram.getMaxValue());
         histogram.iterateValuesUntil(maxVal, out::incrementValueBy);

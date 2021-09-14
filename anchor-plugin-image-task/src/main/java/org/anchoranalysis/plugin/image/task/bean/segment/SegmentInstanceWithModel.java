@@ -214,31 +214,33 @@ public class SegmentInstanceWithModel<T>
 
             Stack stack = inputStack(input);
 
-            ExecutionTimeRecorder recorder = input.getContextExperiment().getExecutionTimeRecorder();
-            SegmentedObjects segments = recorder.recordExecutionTime(
-                                    EXECUTION_TIME_SEGMENTATION,
-                                    () ->
-                                            segment.segment(
-                                                    stack,
-                                                    input.getSharedState().getModelPool(),
-                                                    input.getContextExperiment()
-                                                            .getExecutionTimeRecorder()));
+            ExecutionTimeRecorder recorder =
+                    input.getContextExperiment().getExecutionTimeRecorder();
+            SegmentedObjects segments =
+                    recorder.recordExecutionTime(
+                            EXECUTION_TIME_SEGMENTATION,
+                            () ->
+                                    segment.segment(
+                                            stack,
+                                            input.getSharedState().getModelPool(),
+                                            input.getContextExperiment()
+                                                    .getExecutionTimeRecorder()));
 
             if (!segments.isEmpty() || !ignoreNoObjects) {
                 recorder.recordExecutionTime(
-                                EXECUTION_TIME_OUTPUTS,
-                                () -> {
-                                    DisplayStack background =
-                                            DisplayStack.create(stack.extractUpToThreeChannels());
-                                    writeOutputsForImage(
-                                            stack,
-                                            segments.asObjects(),
-                                            background,
-                                            input.getContextJob().getOutputter());
-                                });
+                        EXECUTION_TIME_OUTPUTS,
+                        () -> {
+                            DisplayStack background =
+                                    DisplayStack.create(stack.extractUpToThreeChannels());
+                            writeOutputsForImage(
+                                    stack,
+                                    segments.asObjects(),
+                                    background,
+                                    input.getContextJob().getOutputter());
+                        });
                 recorder.recordExecutionTime(
-                                EXECUTION_TIME_FEATURES,
-                                () -> calculateFeaturesForImage(input, stack, segments.asList()));
+                        EXECUTION_TIME_FEATURES,
+                        () -> calculateFeaturesForImage(input, stack, segments.asList()));
             }
 
         } catch (SegmentationFailedException

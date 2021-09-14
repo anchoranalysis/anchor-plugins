@@ -107,6 +107,7 @@ abstract class DecodeInstanceSegmentationTestBase {
             throws InitializeException {
         Path root = TestLoader.createFromMavenWorkingDirectory().getRoot();
         InputOutputContext context = InputOutputContextFixture.withSuppressedLogger(root);
-        segmenter.initializeRecursive(ImageInitializationFactory.create(context), context.getLogger());
+        segmenter.initializeRecursive(
+                ImageInitializationFactory.create(context), context.getLogger());
     }
 }

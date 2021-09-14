@@ -53,7 +53,7 @@ public class MaxNonZero extends IndexedRegionBase {
                 throw new CreateException(e);
             }
 
-            long num = histogram.countMatching( value -> value > 0);
+            long num = histogram.countMatching(value -> value > 0);
 
             if (num > maxNonZero) {
                 maxNonZero = num;

@@ -54,7 +54,7 @@ import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriorityFromPair;
 
 /**
- * Merges objects if a <i>pair</i> feature value satisfies a condition
+ * Merges objects if a <i>pair</i> feature value satisfies a condition.
  *
  * <p>The pair feature is calculated on all combinations of any two neighboring objects (but only
  * once for each pair, unidirectionally).

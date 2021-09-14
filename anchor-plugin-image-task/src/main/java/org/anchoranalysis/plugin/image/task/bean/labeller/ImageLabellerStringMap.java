@@ -55,7 +55,8 @@ public class ImageLabellerStringMap<T>
     // END BEAN PROPERTIES
 
     @Override
-    public ImageLabellerStringMapInitialization<T> initialize(Path pathForBinding) throws InitializeException {
+    public ImageLabellerStringMapInitialization<T> initialize(Path pathForBinding)
+            throws InitializeException {
         return new ImageLabellerStringMapInitialization<>(
                 map.create(), filter.initialize(pathForBinding));
     }

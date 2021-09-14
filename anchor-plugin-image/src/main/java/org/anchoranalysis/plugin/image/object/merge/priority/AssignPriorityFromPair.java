@@ -60,8 +60,7 @@ public class AssignPriorityFromPair extends AssignPriority {
                 featureCalculator.calculateSuppressErrors(
                         createInput(source, destination, merged), errorReporter);
 
-        return new PrioritisedVertex(
-                merged, 0, resultPair, relation.test(resultPair, threshold));
+        return new PrioritisedVertex(merged, 0, resultPair, relation.test(resultPair, threshold));
     }
 
     private FeatureInputPairObjects createInput(

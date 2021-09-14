@@ -32,14 +32,13 @@ import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Number of unique values in histogram.
- * 
- *<p>i.e. how many non-zero bins.
+ *
+ * <p>i.e. how many non-zero bins.
  *
  * @author Owen Feehan
- *
  */
 public class NumberDistinctValues extends FeatureHistogramStatistic {
-    
+
     @Override
     protected double calculateStatisticFrom(Histogram histogram)
             throws FeatureCalculationException {

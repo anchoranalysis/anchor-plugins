@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.file.copy.naming;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import org.anchoranalysis.plugin.io.file.copy.PathOperations;
 
 /**
  * Removes any whitespace characters from the path
@@ -39,7 +40,7 @@ public class RemoveWhitespace extends CopyFilesNamingOne {
 
     @Override
     public Optional<Path> destinationPathRelative(Path path) {
-        String pathMinusWhiteSpace = NamingUtilities.convertToString(path).replaceAll("\\s", "");
+        String pathMinusWhiteSpace = PathOperations.convertToString(path).replaceAll("\\s", "");
 
         return Optional.of(Paths.get(pathMinusWhiteSpace));
     }

@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Operations involving color-spaces and OpenCV. */
+/** Operations involving color-spaces and <a href="https://opencv.org/">OpenCV</a>. */
 package org.anchoranalysis.plugin.opencv.bean.color;

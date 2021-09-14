@@ -104,7 +104,8 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
     // END BEAN PROPERTIES
 
     @Override
-    public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan) throws CreateModelFailedException {
+    public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan)
+            throws CreateModelFailedException {
         // We disable all GPU inference as the current OpenCV library (from org.openpnp) does not
         // support it
 
@@ -163,23 +164,26 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
      *     inference with the model.
      * @return a newly created model
      */
-    private ConcurrentModel<Net> readPrepareModel(boolean useGPU) throws CreateModelFailedException {
+    private ConcurrentModel<Net> readPrepareModel(boolean useGPU)
+            throws CreateModelFailedException {
 
         try {
             Path model = resolve(modelBinaryPath);
-    
-            Optional<Path> textGraph = OptionalUtilities.map( OptionalFactory.create(modelTextGraphPath), this::resolve);
-    
+
+            Optional<Path> textGraph =
+                    OptionalUtilities.map(
+                            OptionalFactory.create(modelTextGraphPath), this::resolve);
+
             CVInit.blockUntilLoaded();
-    
+
             Net net = readNet(model, textGraph);
-    
+
             if (useGPU) {
                 net.setPreferableBackend(Dnn.DNN_BACKEND_CUDA);
                 net.setPreferableTarget(Dnn.DNN_TARGET_CUDA);
             }
             return new ConcurrentModel<>(net, useGPU);
-            
+
         } catch (InitializeException e) {
             throw new CreateModelFailedException(e);
         }

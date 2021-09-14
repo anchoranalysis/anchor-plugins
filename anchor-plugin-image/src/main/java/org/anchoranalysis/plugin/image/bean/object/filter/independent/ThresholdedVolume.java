@@ -62,7 +62,8 @@ public class ThresholdedVolume extends ObjectFilterRelation {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim, DoubleBiPredicate relation) {
+    protected boolean match(
+            ObjectMask object, Optional<Dimensions> dim, DoubleBiPredicate relation) {
         return relation.test(object.numberVoxelsOn(), thresholdResolved);
     }
 
