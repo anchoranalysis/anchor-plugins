@@ -1,7 +1,6 @@
 package org.anchoranalysis.plugin.io.bean.file.pattern;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -22,8 +21,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
  */
 @NoArgsConstructor
 public class TimestampPattern extends AnchorBean<TimestampPattern> {
-
-    private static final ZoneOffset ZONE_OFFSET = OffsetDateTime.now().getOffset();
 
     // START BEAN PROPERTIES
     /**
@@ -75,8 +72,14 @@ public class TimestampPattern extends AnchorBean<TimestampPattern> {
         this.regularExpression = regularExpression;
     }
 
-    /** Matches certain times. */
-    public Optional<Long> match(String fileName) {
+    /**
+     * Matches certain times.
+     *
+     * @param fileName the fileName to try and match against the pattern.
+     * @param offset the offset to assume the time-stamp belongs in.
+     * @return if the string matches, the number of seconds since the epoch.
+     */
+    public Optional<Long> match(String fileName, ZoneOffset offset) {
         Matcher matcher = getPatternMemo().matcher(fileName);
         if (matcher.matches()) {
             int year = extractInt(matcher, indexYear);
@@ -86,7 +89,7 @@ public class TimestampPattern extends AnchorBean<TimestampPattern> {
             int minutes = extractInt(matcher, indexMinutes);
             int seconds = extractInt(matcher, indexSeconds);
             LocalDateTime dateTime = LocalDateTime.of(year, month, day, hours, minutes, seconds);
-            return Optional.of(dateTime.toEpochSecond(ZONE_OFFSET));
+            return Optional.of(dateTime.toEpochSecond(offset));
         } else {
             return Optional.empty();
         }

@@ -3,6 +3,8 @@ package org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -79,6 +81,12 @@ public class ClusterByTimestamp extends CopyFilesNaming<ClusterMembership> {
     /** The patterns which can be used to extract a date-time from a filename. */
     @BeanField @Getter @Setter
     private List<TimestampPattern> timestampPatterns = defaultDateTimePatterns();
+
+    /**
+     * If {@code >= 0}, sets a specific time-offset in hours. If {@code == -1}, then the offset is
+     * taken from the current system time-zone settings.
+     */
+    @BeanField @Getter @Setter private int timeZoneOffset = -1;
     // END BEAN ARGUMENTS
 
     @Override
@@ -86,16 +94,18 @@ public class ClusterByTimestamp extends CopyFilesNaming<ClusterMembership> {
             Path destinationDirectory, List<FileWithDirectoryInput> inputs)
             throws OperationFailedException {
 
+        ZoneOffset offset = offset();
+
         ClusterMembership membership =
-                new ClusterMembership(new ClusterIdentifier(OUTLIER_CLUSTER_IDENTIFIER));
+                new ClusterMembership(new ClusterIdentifier(OUTLIER_CLUSTER_IDENTIFIER, offset));
 
         DeriveTimestampedFiles derive = new DeriveTimestampedFiles(timestampPatterns);
 
-        List<TimestampedFile> timestampedFiles = derive.derive(inputs);
+        List<TimestampedFile> timestampedFiles = derive.derive(inputs, offset);
 
-        PopulateClusterMembership populate = new PopulateClusterMembership(membership);
+        PopulateClusterMembership populate = new PopulateClusterMembership(membership, offset);
         populate.populateFrom(
-                timestampedFiles, derive.getScaler(), thresholdHours, minimumPerCluster);
+                timestampedFiles, derive.getScaler(), offset, thresholdHours, minimumPerCluster);
         return membership;
     }
 
@@ -128,6 +138,18 @@ public class ClusterByTimestamp extends CopyFilesNaming<ClusterMembership> {
         try {
             return Optional.of(Paths.get(clusterIdentifier.name()).resolve(relative));
         } catch (OperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+    }
+
+    /** The timezone to use. */
+    private ZoneOffset offset() {
+        if (timeZoneOffset == -1) {
+            return OffsetDateTime.now().getOffset();
+        }
+        if (timeZoneOffset >= 0) {
+            return ZoneOffset.ofHours(timeZoneOffset);
+        } else {
             throw new AnchorImpossibleSituationException();
         }
     }

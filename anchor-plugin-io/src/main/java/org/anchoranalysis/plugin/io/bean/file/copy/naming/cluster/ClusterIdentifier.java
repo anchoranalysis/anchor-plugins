@@ -1,7 +1,6 @@
 package org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 import lombok.Getter;
@@ -18,12 +17,6 @@ import org.anchoranalysis.core.exception.OperationFailedException;
  * @author Owen Feehan
  */
 public class ClusterIdentifier {
-
-    /**
-     * A timezone is needed for certain time conversions. We always assume the zone is that of the
-     * current VM.
-     */
-    private static final ZoneOffset ZONE_OFFSET = OffsetDateTime.now().getOffset();
 
     /**
      * The unique-name of the cluster-identifier, or {@link Optional#empty} if no name has been
@@ -45,22 +38,30 @@ public class ClusterIdentifier {
     /** A maximum {@link LocalDateTime}, converted from {@code maxInstant} when first accessed. */
     private LocalDateTime maxDateTime;
 
+    /** The offset to assume the time-stamp belongs in. */
+    @Getter private final ZoneOffset offset;
+
     /**
      * Creates with no name.
      *
      * <p>The name is subsequently derived from the contents of the cluster.
+     *
+     * @param offset the offset to assume the time-stamp belongs in.
      */
-    public ClusterIdentifier() {
+    public ClusterIdentifier(ZoneOffset offset) {
         this.name = Optional.empty();
+        this.offset = offset;
     }
 
     /**
      * Creates with a constant-name.
      *
      * @param name the unique name for the cluster.
+     * @param offset the offset to assume the time-stamp belongs in.
      */
-    public ClusterIdentifier(String name) {
+    public ClusterIdentifier(String name, ZoneOffset offset) {
         this.name = Optional.of(name);
+        this.offset = offset;
     }
 
     /**
@@ -130,7 +131,7 @@ public class ClusterIdentifier {
     }
 
     /** Converts the instant (seconds from the epoch) to a {@link LocalDateTime}. */
-    private static LocalDateTime toDate(long instant) {
-        return LocalDateTime.ofEpochSecond(instant, 0, ZONE_OFFSET);
+    private LocalDateTime toDate(long instant) {
+        return LocalDateTime.ofEpochSecond(instant, 0, offset);
     }
 }

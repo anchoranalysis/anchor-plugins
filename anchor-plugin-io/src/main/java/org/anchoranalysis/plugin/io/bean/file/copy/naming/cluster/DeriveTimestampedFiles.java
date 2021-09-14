@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster;
 
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +34,11 @@ class DeriveTimestampedFiles {
      * Derives the timestamps for the inputs.
      *
      * @param inputs the inputs to derive from.
+     * @param offset the offset to assume the time-stamp belongs in.
      * @return a newly created list of timestamped files.
      * @throws OperationFailedException
      */
-    public List<TimestampedFile> derive(List<FileWithDirectoryInput> inputs)
+    public List<TimestampedFile> derive(List<FileWithDirectoryInput> inputs, ZoneOffset offset)
             throws OperationFailedException {
         VarianceCalculatorDouble varianceCalculator = new VarianceCalculatorDouble();
 
@@ -47,7 +49,10 @@ class DeriveTimestampedFiles {
                             CreateException.class,
                             input ->
                                     new TimestampedFile(
-                                            input.getFile(), varianceCalculator, dateTimePatterns));
+                                            input.getFile(),
+                                            varianceCalculator,
+                                            dateTimePatterns,
+                                            offset));
             scaler = deriveScaler(varianceCalculator);
             extracted.forEach(attributes -> attributes.normalize(scaler));
             return extracted;
@@ -60,7 +65,7 @@ class DeriveTimestampedFiles {
      * The mean-and-scale calculated from all {@code inputs}.
      *
      * @return the scaler.
-     * @throws OperationFailedException if {@link #derive(List)} has not yet been called.
+     * @throws OperationFailedException if {@link #derive(List,ZoneOffset)} has not yet been called.
      */
     public MeanScale getScaler() throws OperationFailedException {
         return Optional.ofNullable(scaler)

@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster;
 
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,11 +26,15 @@ class PopulateClusterMembership {
     /** The {@link ClusterMembership} that is populated. */
     private ClusterMembership membership;
 
+    /** The offset to assume the time-stamp belongs in. */
+    private ZoneOffset offset;
+
     /**
      * Establishes cluster-membership for the following files.
      *
      * @param files the files.
      * @param scaler the mean-scale associated with {@code files}.
+     * @param offset the offset to assume the time-stamp belongs in.
      * @param thresholdHours files whose creation-time differs {@code <=} this parameter are joined
      *     into the same cluster.
      * @param minimumPerCluster the minimum number of neighbours that must exist to form a cluster
@@ -39,6 +44,7 @@ class PopulateClusterMembership {
     public void populateFrom(
             List<TimestampedFile> files,
             MeanScale scaler,
+            ZoneOffset offset,
             double thresholdHours,
             int minimumPerCluster)
             throws OperationFailedException {
@@ -46,13 +52,14 @@ class PopulateClusterMembership {
             addAfterClustering(
                     files, calculateEps(thresholdHours, scaler.getScale()), minimumPerCluster);
         } else {
-            addToSingleCluster(files);
+            addToSingleCluster(files, offset);
         }
     }
 
     /** Add all files to a single-cluster in {@code mapping}. */
-    private void addToSingleCluster(List<TimestampedFile> files) throws OperationFailedException {
-        ClusterIdentifier identifier = new ClusterIdentifier();
+    private void addToSingleCluster(List<TimestampedFile> files, ZoneOffset offset)
+            throws OperationFailedException {
+        ClusterIdentifier identifier = new ClusterIdentifier(offset);
         for (TimestampedFile file : files) {
             membership.associateFileWithCluster(file.getFile(), file.getTimestamp(), identifier);
         }
@@ -90,7 +97,7 @@ class PopulateClusterMembership {
     /** Adds one {@link Cluster} to {@code mapping}. */
     private ClusterIdentifier addClusterToMapping(Cluster<TimestampedFile> cluster)
             throws OperationFailedException {
-        ClusterIdentifier clusterIdentifier = new ClusterIdentifier();
+        ClusterIdentifier clusterIdentifier = new ClusterIdentifier(offset);
         for (TimestampedFile file : cluster.getPoints()) {
             membership.associateFileWithCluster(
                     file.getFile(), file.getTimestamp(), clusterIdentifier);

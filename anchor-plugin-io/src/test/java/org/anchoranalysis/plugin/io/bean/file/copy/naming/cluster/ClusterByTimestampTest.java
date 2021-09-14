@@ -71,6 +71,11 @@ class ClusterByTimestampTest {
         Set<Path> paths = new HashSet<>();
 
         ClusterByTimestamp cluster = new ClusterByTimestamp();
+
+        // The timezone is explicitly fixed, so the the test always produces the same results,
+        //   irrespective of the system settings.
+        cluster.setTimeZoneOffset(2);
+
         ClusterMembership sharedState = cluster.beforeCopying(directory, inputs);
         CopyContext<ClusterMembership> context =
                 new CopyContext<ClusterMembership>(testLoader.getRoot(), directory, sharedState);
@@ -94,7 +99,7 @@ class ClusterByTimestampTest {
 
         return createFiles(source).inputs(params).inputs();
     }
-    
+
     /** Create the files to be used as inputs. */
     private static NamedFilesWithDirectory createFiles(Path source) {
         NamedFilesWithDirectory files = new NamedFilesWithDirectory();

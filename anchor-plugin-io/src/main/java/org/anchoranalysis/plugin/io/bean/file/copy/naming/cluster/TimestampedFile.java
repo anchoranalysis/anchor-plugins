@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -60,17 +61,19 @@ class TimestampedFile implements Clusterable {
      * @param varianceCreationTime a running-sum style calculator for variance, to which the
      *     date-time is added.
      * @param filenamePatterns patterns that can extract a date-time from a filename.
+     * @param offset the offset to assume the time-stamp belongs in.
      * @throws CreateException if an IO error occurs accessing the file.
      */
     public TimestampedFile(
             File file,
             VarianceCalculatorDouble varianceCreationTime,
-            List<TimestampPattern> filenamePatterns)
+            List<TimestampPattern> filenamePatterns,
+            ZoneOffset offset)
             throws CreateException {
         try {
             this.file = file;
             this.filenamePatterns = filenamePatterns;
-            this.timestamp = associateDateTime(file);
+            this.timestamp = associateDateTime(file, offset);
             varianceCreationTime.add(timestamp);
         } catch (IOException e) {
             throw new CreateException(e);
@@ -83,7 +86,7 @@ class TimestampedFile implements Clusterable {
      * <p>Preference is given to a date-time that can be extracted from the filename, falling
      * backing to file creation-time.
      */
-    private long associateDateTime(File file) throws IOException {
+    private long associateDateTime(File file, ZoneOffset offset) throws IOException {
 
         if (ImageFileFormat.JPEG.matchesEnd(file.getName())) {
             try {
@@ -93,7 +96,7 @@ class TimestampedFile implements Clusterable {
             }
         }
 
-        Optional<Long> extractedTime = extractTimeFromFilename(file.getName());
+        Optional<Long> extractedTime = extractTimeFromFilename(file.getName(), offset);
 
         if (extractedTime.isPresent()) {
             return extractedTime.get();
@@ -117,9 +120,9 @@ class TimestampedFile implements Clusterable {
     }
 
     /** Matches certain times. */
-    private Optional<Long> extractTimeFromFilename(String fileName) {
+    private Optional<Long> extractTimeFromFilename(String fileName, ZoneOffset offset) {
         Stream<Optional<Long>> extractedDateTime =
-                filenamePatterns.stream().map(pattern -> pattern.match(fileName));
+                filenamePatterns.stream().map(pattern -> pattern.match(fileName, offset));
         return OptionalUtilities.orFlat(extractedDateTime);
     }
 

@@ -1,21 +1,20 @@
 package org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 /**
  * Derives a human-friendly name for a time-interval.
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 class TimeIntervalNamer {
 
-    private static final ZoneOffset ZONE_OFFSET = OffsetDateTime.now().getOffset();
+    /** The offset to assume the time-stamp belongs in. */
+    private ZoneOffset offset;
 
     /**
      * Derives a name from the time-range in the cluster and some parameters.
@@ -29,7 +28,7 @@ class TimeIntervalNamer {
      * @param timeStyle how to style the time in the name.
      * @return the name.
      */
-    public static String nameFor(
+    public String nameFor(
             LocalDateTime start, LocalDateTime end, DateStyle dateStyle, TimeStyle timeStyle) {
         // Spans a single day only
         boolean singleDay = coversSingleDay(start, end);
@@ -56,7 +55,7 @@ class TimeIntervalNamer {
      * Like {@link #join(LocalDateTime, LocalDateTime, DateTimeFormatter)} but uses a time-only
      * format.
      */
-    private static String joinTime(
+    private String joinTime(
             LocalDateTime start, LocalDateTime end, DateStyle dateStyle, TimeStyle timeStyle) {
 
         DateTimeFormatter formatter = timeStyle.patternWithDate(dateStyle);
@@ -94,9 +93,9 @@ class TimeIntervalNamer {
      *
      * @return true iff the start and end timestamps exist in the same minute (since the epoch).
      */
-    private static boolean spansSameMinute(LocalDateTime start, LocalDateTime end) {
-        long startInstant = start.toEpochSecond(ZONE_OFFSET);
-        long endInstant = end.toEpochSecond(ZONE_OFFSET);
+    private boolean spansSameMinute(LocalDateTime start, LocalDateTime end) {
+        long startInstant = start.toEpochSecond(offset);
+        long endInstant = end.toEpochSecond(offset);
         return (startInstant / 60) == (endInstant / 60);
     }
 }
