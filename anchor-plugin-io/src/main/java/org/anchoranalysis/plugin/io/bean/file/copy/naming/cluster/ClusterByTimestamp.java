@@ -31,7 +31,7 @@ import org.anchoranalysis.plugin.io.input.path.CopyContext;
  * <ul>
  *   <li>A date / time string extracted from the filename, if exists in particular patterns, falling
  *       back to creation-time, if none exists.
- *   <li>Original photo-taken time from EXIF metadata if available, and the file has a jpg or jpeg
+ *   <li>Original photo-taken time from EXIF metadata if available, and the file has a <i>jpg</i> or <i>jpeg
  *       extension.</i>
  *   <li><i>File creation time.</i>
  * </ul>
