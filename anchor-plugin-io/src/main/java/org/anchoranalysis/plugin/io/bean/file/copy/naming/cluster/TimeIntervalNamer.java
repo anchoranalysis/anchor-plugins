@@ -79,6 +79,7 @@ class TimeIntervalNamer {
         return String.join(" to ", first, second);
     }
 
+    /** Whether the cluster entirely spans a single day. */
     private static boolean coversSingleDay(LocalDateTime min, LocalDateTime max) {
         return min.toLocalDate().equals(max.toLocalDate());
     }
