@@ -222,7 +222,8 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         }
     }
 
-    private void initialize(MarksInitialization initialization, Logger logger) throws InitializeException {
+    private void initialize(MarksInitialization initialization, Logger logger)
+            throws InitializeException {
         markFactory.initializeRecursive(logger);
 
         energySchemeShared =

@@ -5,11 +5,10 @@ import lombok.NoArgsConstructor;
 
 /**
  * Estimates axis-length from an eigen-value.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class AxisLengthEstimator {
 
     /**

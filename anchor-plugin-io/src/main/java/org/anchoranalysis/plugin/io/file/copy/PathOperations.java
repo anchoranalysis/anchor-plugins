@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.file.copy.naming;
+package org.anchoranalysis.plugin.io.file.copy;
 
 import java.nio.file.Path;
 import lombok.AccessLevel;
@@ -33,16 +33,34 @@ import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.core.system.path.PathDifference;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
 
+/**
+ * Helper routines for performing operations on {@link Path}s.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class NamingUtilities {
+public class PathOperations {
 
+    /**
+     * Finds the difference between a path and a base.
+     *
+     * @param baseDirectoryPath path to a base directory.
+     * @param filePath the path to resolve.
+     * @return the difference between the paths.
+     * @throws PathDifferenceException if the canonical file cannot be found.
+     */
     public static Path filePathDifference(Path baseDirectoryPath, Path filePath)
             throws PathDifferenceException {
-        PathDifference filePathDiff = PathDifference.differenceFrom(baseDirectoryPath, filePath);
-        return filePathDiff.combined();
+        PathDifference difference = PathDifference.differenceFrom(baseDirectoryPath, filePath);
+        return difference.combined();
     }
 
-    // Converts a path to a string, making sure it's first UNIX style
+    /**
+     * Converts a path to a string, making sure it uses UNIX-style separators.
+     *
+     * @param path the path to convert.
+     * @return a converted path, with UNIX-style separators.
+     */
     public static String convertToString(Path path) {
         return FilePathToUnixStyleConverter.toStringUnixStyle(path);
     }

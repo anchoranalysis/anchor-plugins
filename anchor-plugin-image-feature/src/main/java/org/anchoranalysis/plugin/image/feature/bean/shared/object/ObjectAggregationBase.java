@@ -60,7 +60,8 @@ public abstract class ObjectAggregationBase<T extends FeatureInputEnergy>
     private ObjectCollection createdObjects;
 
     @Override
-    protected void beforeCalcWithInitialization(ImageInitialization params) throws InitializeException {
+    protected void beforeCalcWithInitialization(ImageInitialization params)
+            throws InitializeException {
         objects.initializeRecursive(params, getLogger());
     }
 

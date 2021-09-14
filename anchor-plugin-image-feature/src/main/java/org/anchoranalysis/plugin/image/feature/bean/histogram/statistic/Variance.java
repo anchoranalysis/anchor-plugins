@@ -34,7 +34,8 @@ import org.anchoranalysis.math.histogram.Histogram;
 public class Variance extends FeatureHistogramStatistic {
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             return histogram.variance();
         } catch (OperationFailedException e) {

@@ -64,7 +64,8 @@ class FeatureListMarksTest {
     }
 
     @Test
-    void testNoParams() throws InitializeException, NamedFeatureCalculateException, CreateException {
+    void testNoParams()
+            throws InitializeException, NamedFeatureCalculateException, CreateException {
         assertThrows(
                 NamedFeatureCalculateException.class,
                 () -> testConstantsInList((FeatureInput) null, (FeatureInput) null));

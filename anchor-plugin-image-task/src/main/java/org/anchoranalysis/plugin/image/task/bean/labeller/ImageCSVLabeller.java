@@ -54,7 +54,8 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitializati
     // END BEAN PROPERTIES
 
     @Override
-    public ImageCSVLabellerInitialization initialize(Path pathForBinding) throws InitializeException {
+    public ImageCSVLabellerInitialization initialize(Path pathForBinding)
+            throws InitializeException {
 
         try {
             Path csvPath = pathLabel.deriveFrom(pathForBinding, false);

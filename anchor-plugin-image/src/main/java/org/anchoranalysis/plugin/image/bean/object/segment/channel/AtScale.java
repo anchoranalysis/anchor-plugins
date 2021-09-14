@@ -79,9 +79,9 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             ScaleFactor scaleFactor =
                     determineScaleFactor(
                             channel.dimensions(), getInitialization().getSuggestedResize());
-    
+
             Extent extent = channel.extent();
-    
+
             // Perform segmentation on scaled versions of the channel, mask and seeds
             ObjectCollection scaledSegmentationResult =
                     upstreamSegmentation.segment(

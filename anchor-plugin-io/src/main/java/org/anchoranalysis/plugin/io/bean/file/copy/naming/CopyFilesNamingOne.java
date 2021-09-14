@@ -28,12 +28,15 @@ package org.anchoranalysis.plugin.io.bean.file.copy.naming;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.task.NoSharedState;
+import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.plugin.io.input.path.CopyContext;
@@ -45,9 +48,11 @@ public abstract class CopyFilesNamingOne extends CopyFilesNamingWithoutSharedSta
     // END BEAN PROPERTIES
 
     @Override
-    public NoSharedState beforeCopying(Path destinationDirectory, int totalNumberFiles) {
-        copyFilesNaming.beforeCopying(destinationDirectory, totalNumberFiles);
-        return super.beforeCopying(destinationDirectory, totalNumberFiles);
+    public NoSharedState beforeCopying(
+            Path destinationDirectory, List<FileWithDirectoryInput> inputs)
+            throws OperationFailedException {
+        copyFilesNaming.beforeCopying(destinationDirectory, inputs);
+        return super.beforeCopying(destinationDirectory, inputs);
     }
 
     @Override
