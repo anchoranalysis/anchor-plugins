@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.plugin.io.naming.interval.DateStyle;
+import org.anchoranalysis.plugin.io.naming.interval.TimeIntervalNamer;
+import org.anchoranalysis.plugin.io.naming.interval.TimeStyle;
 
 /**
  * Establishes names for the clusters.
