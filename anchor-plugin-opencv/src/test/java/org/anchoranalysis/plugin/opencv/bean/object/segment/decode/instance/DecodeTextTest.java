@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import java.util.Arrays;
 import java.util.List;
+import org.anchoranalysis.bean.primitive.DoubleList;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -61,6 +62,7 @@ class DecodeTextTest extends DecodeInstanceSegmentationTestBase {
         segment.setDecode(new DecodeText());
         segment.setModelBinaryPath("frozen_east_text_detection.pb");
         segment.setScaleInput(createScaleInput());
+        segment.setSubtractMean( new DoubleList(123.68,116.78,103.94));
         return new SuppressNonMaxima<>(segment, new ConditionallyMergeOverlappingObjects(), false);
     }
 

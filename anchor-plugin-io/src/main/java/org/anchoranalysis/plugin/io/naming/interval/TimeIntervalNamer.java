@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster;
+package org.anchoranalysis.plugin.io.naming.interval;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class TimeIntervalNamer {
+public class TimeIntervalNamer {
 
     /** The offset to assume the time-stamp belongs in. */
     private ZoneOffset offset;

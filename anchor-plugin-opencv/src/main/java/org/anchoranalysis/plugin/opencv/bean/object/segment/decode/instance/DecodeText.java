@@ -51,9 +51,6 @@ import org.opencv.core.Mat;
  */
 public class DecodeText extends DecodeInstanceSegmentation {
 
-    private static final double[] MEAN_SUBTRACTION_CONSTANTS =
-            new double[] {123.68, 116.78, 103.94};
-
     private static final String OUTPUT_SCORES = "feature_fusion/Conv_7/Sigmoid";
     private static final String OUTPUT_GEOMETRY = "feature_fusion/concat_3";
 
@@ -65,11 +62,6 @@ public class DecodeText extends DecodeInstanceSegmentation {
     @Override
     public List<String> expectedOutputs() {
         return Arrays.asList(OUTPUT_SCORES, OUTPUT_GEOMETRY);
-    }
-
-    @Override
-    public double[] meanSubtractionConstants() {
-        return MEAN_SUBTRACTION_CONSTANTS;
     }
 
     @Override
