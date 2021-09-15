@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Non-beans pertaining to bounding-boxes. */
+/** Non-beans pertaining to {@link org.anchoranalysis.spatial.box.BoundingBox}es. */
 package org.anchoranalysis.plugin.image.box;

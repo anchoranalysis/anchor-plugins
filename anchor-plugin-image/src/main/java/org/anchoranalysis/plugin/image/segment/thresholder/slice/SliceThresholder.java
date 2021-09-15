@@ -27,11 +27,18 @@
 package org.anchoranalysis.plugin.image.segment.thresholder.slice;
 
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
+/**
+ * Segmenting a z-{@link Stack} slice-by-slice.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
 public abstract class SliceThresholder {
 

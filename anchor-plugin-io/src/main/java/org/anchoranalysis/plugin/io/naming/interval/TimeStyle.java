@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster;
+package org.anchoranalysis.plugin.io.naming.interval;
 
 import java.time.format.DateTimeFormatter;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
