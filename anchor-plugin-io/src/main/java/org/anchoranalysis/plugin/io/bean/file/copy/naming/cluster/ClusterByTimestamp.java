@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -31,8 +32,8 @@ import org.anchoranalysis.plugin.io.input.path.CopyContext;
  * <ul>
  *   <li>A date / time string extracted from the filename, if exists in particular patterns, falling
  *       back to creation-time, if none exists.
- *   <li>Original photo-taken time from EXIF metadata if available, and the file has a <i>jpg</i> or <i>jpeg
- *       extension.</i>
+ *   <li>Original photo-taken time from EXIF metadata if available, and the file has a <i>jpg</i> or
+ *       <i>jpeg extension.</i>
  *   <li><i>File creation time.</i>
  * </ul>
  *
@@ -49,6 +50,14 @@ import org.anchoranalysis.plugin.io.input.path.CopyContext;
  * were not density-reachable by others, and aren't part of any cluster in particular.
  *
  * <p>The relative-path of files are preserved, being added relative to the cluster subdirectory.
+ * 
+ * <p>The default-patterns for matching filenames are:
+ * 
+ * <ul>
+ * <li>{@code yyyy-mm-dd hh:mm:ss}
+ * <li>{@code yyyymmdd_hhmmss}
+ * <li>{@code yyyymmdd hhmmss}
+ * </ul>
  *
  * @author Owen Feehan
  */
@@ -156,13 +165,15 @@ public class ClusterByTimestamp extends CopyFilesNaming<ClusterMembership> {
 
     /**
      * The default list of date-time patterns to use, if none additionally have been set.
-     *
-     * <p>It includes a single pattern in the form: {@code yyyy-mm-dd hh:mm:ss}
+     * 
+     * <p>See the class-level Javadoc for a human-readable description of these patterns.
      */
     private static List<TimestampPattern> defaultDateTimePatterns() {
-        TimestampPattern pattern =
-                new TimestampPattern(
-                        ".*(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d) (\\d\\d)\\.(\\d\\d)\\.(\\d\\d).*");
-        return Arrays.asList(pattern);
+        List<String> patterns = Arrays.asList(
+                ".*(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d) (\\d\\d)\\.(\\d\\d)\\.(\\d\\d).*",
+                ".*(\\d\\d\\d\\d)(\\d\\d)(\\d\\d)_(\\d\\d)(\\d\\d)(\\d\\d)\\D.*",
+                ".*(\\d\\d\\d\\d)(\\d\\d)(\\d\\d) (\\d\\d)(\\d\\d)(\\d\\d)\\D.*");
+        
+        return FunctionalList.mapToList(patterns, TimestampPattern::new);
     }
 }
