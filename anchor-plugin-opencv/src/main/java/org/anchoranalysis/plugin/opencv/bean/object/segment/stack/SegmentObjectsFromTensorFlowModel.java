@@ -35,6 +35,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.primitive.DoubleList;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModel;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
@@ -56,6 +58,7 @@ import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance.DecodeInstanceSegmentation;
 import org.anchoranalysis.plugin.opencv.segment.InferenceContext;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.apache.commons.collections.IteratorUtils;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
@@ -101,6 +104,15 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
 
     /** Decodes inference output into segmented objects. */
     @BeanField @Getter @Setter private DecodeInstanceSegmentation decode;
+
+    /**
+     * A constant intensity for each respective channel to be subtracted before performing
+     * inference.
+     *
+     * <p>If set, this should create an list, with as many elements as channels inputted to the
+     * inference model.
+     */
+    @BeanField @OptionalBean @Getter @Setter private DoubleList subtractMean;
     // END BEAN PROPERTIES
 
     @Override
@@ -139,7 +151,8 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
 
             ScaleFactor upfactor = pair._2().invert();
 
-            InferenceHelper helper = new InferenceHelper(decode);
+            InferenceHelper helper =
+                    new InferenceHelper(decode, subtractMeanArray(stack.getNumberChannels()));
             return helper.queueInference(
                     pair._1(),
                     modelPool,
@@ -154,6 +167,33 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
             throw new SegmentationFailedException(e);
         } catch (Throwable e) {
             throw new SegmentationFailedException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private double[] subtractMeanArray(int numberChannels) throws SegmentationFailedException {
+
+        if (subtractMean != null) {
+            List<Double> list = (List<Double>) IteratorUtils.toList(subtractMean.iterator());
+
+            if (list.size() != numberChannels) {
+                throw new SegmentationFailedException(
+                        String.format(
+                                "There are %d channels in the input stack for inference, but %d constants were supplied for mean-subtraction.",
+                                numberChannels, list.size()));
+            }
+
+            double[] out = new double[list.size()];
+            for (int i = 0; i < out.length; i++) {
+                out[i] = list.get(i);
+            }
+            return out;
+        } else {
+            double[] out = new double[numberChannels];
+            for (int i = 0; i < out.length; i++) {
+                out[i] = 0.0;
+            }
+            return out;
         }
     }
 

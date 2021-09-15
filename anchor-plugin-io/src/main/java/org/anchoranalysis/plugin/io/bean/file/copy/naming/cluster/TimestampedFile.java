@@ -28,8 +28,8 @@ import org.apache.commons.math3.ml.clustering.Clusterable;
  * <ul>
  *   <li>A date / time string extracted from the filename, if exists in particular patterns, falling
  *       back to creation-time, if none exists.
- *   <li>Original photo-taken time from EXIF metadata if available, and the file has a <i>jpg</i> or <i>jpeg
- *       extension.</i>
+ *   <li>Original photo-taken time from EXIF metadata if available, and the file has a <i>jpg</i> or
+ *       <i>jpeg extension.</i>
  *   <li><i>File creation time.</i>
  * </ul>
  *
@@ -142,8 +142,8 @@ class TimestampedFile implements Clusterable {
         } catch (ServiceException | IOException e) {
             return Optional.empty();
         }
-        
-        if (exif.getCreationDate()!=null) {
+
+        if (exif.getCreationDate() != null) {
             return Optional.of(exif.getCreationDate().toInstant().getEpochSecond());
         } else {
             return Optional.empty();

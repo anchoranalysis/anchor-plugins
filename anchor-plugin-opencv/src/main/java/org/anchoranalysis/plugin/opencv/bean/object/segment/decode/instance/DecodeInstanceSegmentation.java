@@ -59,10 +59,4 @@ public abstract class DecodeInstanceSegmentation extends AnchorBean<DecodeInstan
      * inference.
      */
     public abstract List<String> expectedOutputs();
-
-    /**
-     * A constant intensity for each respective channel to be subtracted before performing
-     * inference.
-     */
-    public abstract double[] meanSubtractionConstants();
 }

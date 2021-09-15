@@ -49,6 +49,9 @@ class InferenceHelper {
     /** Decodes inference output into segmented objects. */
     private final DecodeInstanceSegmentation decode;
 
+    /** Subtract mean before channels. */
+    private final double[] subtractMean;
+
     /**
      * Performs inference, and decodes the {@link Mat} into segmented-objects.
      *
@@ -91,12 +94,7 @@ class InferenceHelper {
         try {
             Mat blob =
                     Dnn.blobFromImage(
-                            image,
-                            1.0,
-                            image.size(),
-                            new Scalar(decode.meanSubtractionConstants()),
-                            false,
-                            false);
+                            image, 1.0, image.size(), new Scalar(subtractMean), false, false);
             model.getModel().setInput(blob);
         } finally {
             recorder.recordPre();
