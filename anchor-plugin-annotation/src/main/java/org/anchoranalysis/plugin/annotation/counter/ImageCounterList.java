@@ -24,54 +24,56 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.annotation.comparison;
+package org.anchoranalysis.plugin.annotation.counter;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-public class AnnotationGroupList<T extends Assignment>
-        implements Iterable<AnnotationGroup<T>>, AddAnnotation<T> {
+/**
+ * Allows operations to be applied to several {@link ImageCounter}s collectively.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> the payload-type of each {@link ImageCounter}.
+ */
+public class ImageCounterList<T extends Assignment<ObjectMask>>
+        implements Iterable<ImageCounter<T>>, ImageCounter<T> {
 
-    private List<AnnotationGroup<T>> delegate = new ArrayList<>();
+    private List<ImageCounter<T>> delegate = new ArrayList<>();
 
-    public AnnotationGroup<T> first() {
-        return delegate.get(0);
-    }
-
-    public boolean add(AnnotationGroup<T> e) {
+    public boolean add(ImageCounter<T> e) {
         return delegate.add(e);
     }
 
-    public boolean addAll(Collection<AnnotationGroup<T>> e) {
+    public <S extends ImageCounter<T>> boolean addAll(Collection<S> e) {
         return delegate.addAll(e);
     }
 
     @Override
-    public void addSkippedAnnotationImage() {
-        for (AnnotationGroup<T> group : delegate) {
-            group.addSkippedAnnotationImage();
-        }
-    }
-
-    @Override
     public void addUnannotatedImage() {
-        for (AnnotationGroup<T> group : delegate) {
+        for (ImageCounter<T> group : delegate) {
             group.addUnannotatedImage();
         }
     }
 
     @Override
-    public void addAcceptedAnnotation(T assignment) {
-        for (AnnotationGroup<T> group : delegate) {
-            group.addAcceptedAnnotation(assignment);
+    public void addAnnotatedImage(T payload) {
+        for (ImageCounter<T> group : delegate) {
+            group.addAnnotatedImage(payload);
         }
     }
 
     @Override
-    public Iterator<AnnotationGroup<T>> iterator() {
+    public Iterator<ImageCounter<T>> iterator() {
         return delegate.iterator();
+    }
+
+    public Stream<ImageCounter<T>> stream() {
+        return delegate.stream();
     }
 }

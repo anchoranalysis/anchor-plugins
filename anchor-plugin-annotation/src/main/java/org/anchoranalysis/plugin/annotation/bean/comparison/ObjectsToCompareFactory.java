@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -39,16 +38,16 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
+import org.anchoranalysis.plugin.annotation.counter.ImageCounter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ObjectsToCompareFactory {
 
     public static Optional<ObjectsToCompare> create(
             AnnotationComparisonInput<ProvidesStackInput> input,
-            AddAnnotation<?> addAnnotation,
+            ImageCounter<?> addAnnotation,
             Dimensions dimensions,
             InputOutputContext context)
             throws JobExecutionException {
@@ -63,7 +62,7 @@ class ObjectsToCompareFactory {
     private static Optional<ObjectCollection> createObjects(
             boolean left,
             String objName,
-            AddAnnotation<?> addAnnotation,
+            ImageCounter<?> addAnnotation,
             AnnotationComparisonInput<ProvidesStackInput> input,
             Dimensions dimensions,
             InputOutputContext context)
@@ -76,9 +75,9 @@ class ObjectsToCompareFactory {
     private static Optional<ObjectCollection> foundOrLogAddUnnannotated(
             Findable<ObjectCollection> objects,
             String objName,
-            AddAnnotation<?> addAnnotation,
+            ImageCounter<?> addAnnotation,
             Logger logger) {
-        Optional<ObjectCollection> found = objects.getFoundOrLog(objName, logger);
+        Optional<ObjectCollection> found = objects.getOrLog(objName, logger);
         if (!found.isPresent()) {
             addAnnotation.addUnannotatedImage();
         }
@@ -93,8 +92,8 @@ class ObjectsToCompareFactory {
             throws JobExecutionException {
         try {
             return input.getComparerMultiplex(left)
-                    .createObjects(input.pathForBindingRequired(), dimensions, debugMode);
-        } catch (CreateException | InputReadFailedException e) {
+                    .loadAsObjects(input.pathForBindingRequired(), dimensions, debugMode);
+        } catch (InputReadFailedException e) {
             throw new JobExecutionException(e);
         }
     }

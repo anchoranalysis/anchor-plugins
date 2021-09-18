@@ -24,15 +24,23 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.annotation.comparison;
+package org.anchoranalysis.plugin.annotation.counter;
 
-import org.anchoranalysis.annotation.io.assignment.Assignment;
+/**
+ * Counts images on aggregate, some with associated annotations, others without.
+ * 
+ * <p>An arbitrary payload may be associated with an annotated-image, as suits
+ * the needs of the implementing sub-class.</p>
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> pay-load type.
+ */
+public interface ImageCounter<T> {
 
-public interface AddAnnotation<T extends Assignment> {
-
-    void addSkippedAnnotationImage();
-
+    /** Add an image that did not have an associated annotation. */
     void addUnannotatedImage();
 
-    void addAcceptedAnnotation(T assignment);
+    /** Add an image that had an associated annotation. */
+    void addAnnotatedImage(T payload);
 }

@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.io.bean.file.copy.method;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.system.path.DirectoryCreator;
 
 /**
  * A method used for copying files (e.g. bytewise or activating compression etc.).
@@ -48,7 +48,7 @@ public abstract class CopyFilesMethod extends AnchorBean<CopyFilesMethod> {
      */
     public void makeCopy(Path source, Path destination) throws CreateException {
         try {
-            Files.createDirectories(destination.getParent());
+            DirectoryCreator.createNecessaryDirectories(destination.getParent());
         } catch (IOException e) {
             throw new CreateException(e);
         }

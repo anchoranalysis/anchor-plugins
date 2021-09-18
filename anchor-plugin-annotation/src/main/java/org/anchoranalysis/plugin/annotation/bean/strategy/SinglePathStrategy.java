@@ -31,23 +31,31 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 
+
+/**
+ * A base class for implementations of {@link AnnotatorStrategy} where a single unique path exists for every annotation.
+ * 
+ * @author Owen Feehan
+ */
 public abstract class SinglePathStrategy extends AnnotatorStrategy {
 
     // START BEAN PROPERTIES
+    /** Derives the path to the corresponding annotation files, given a path to the image to be annotated. */
     @BeanField @Getter @Setter private DerivePath pathAnnotation;
     // END BEAN PROPERTIES
 
     @Override
-    public Path annotationPathFor(ProvidesStackInput item) throws InputReadFailedException {
+    public Path pathFor(ProvidesStackInput input) throws OperationFailedException {
         try {
-            return PathFromGenerator.derivePath(pathAnnotation, item.pathForBindingRequired());
-        } catch (DerivePathException e) {
-            throw new InputReadFailedException(e);
+            return PathFromGenerator.derivePath(pathAnnotation, input.pathForBindingRequired());
+        } catch (DerivePathException | InputReadFailedException e) {
+            throw new OperationFailedException(e);
         }
     }
 }
