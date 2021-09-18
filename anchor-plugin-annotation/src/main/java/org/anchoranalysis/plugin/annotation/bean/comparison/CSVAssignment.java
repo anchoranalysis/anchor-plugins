@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.annotation.io.assignment.Assignment;
+import org.anchoranalysis.annotation.io.comparer.StatisticsToExport;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
@@ -53,7 +53,6 @@ class CSVAssignment {
             boolean includeDescriptiveSplit,
             int maxSplitGroups)
             throws OutputWriteFailedException {
-        super();
         this.includeDescriptiveSplit = includeDescriptiveSplit;
         this.maxSplitGroups = maxSplitGroups;
 
@@ -61,7 +60,7 @@ class CSVAssignment {
     }
 
     public synchronized void writeStatisticsForImage(
-            Assignment assignment, SplitString descriptiveSplit, InputFromManager input)
+            StatisticsToExport comparison, SplitString descriptiveSplit, InputFromManager input)
             throws OperationFailedException {
 
         if (!writer.isPresent() || !writer.get().isOutputEnabled()) {
@@ -71,15 +70,15 @@ class CSVAssignment {
         if (firstRow) {
             firstRow = false;
 
-            writer.get().writeHeaders(createHeaders(assignment));
+            writer.get().writeHeaders(createHeaders(comparison));
         }
 
-        writer.get().writeRow(createValues(assignment, input, descriptiveSplit)); // NOSONAR
+        writer.get().writeRow(createValues(comparison, input, descriptiveSplit)); // NOSONAR
     }
 
-    private List<String> createHeaders(Assignment assignment) {
+    private List<String> createHeaders(StatisticsToExport statistics) {
         List<String> base = createBaseHeaders();
-        base.addAll(assignment.createStatisticsHeaderNames());
+        base.addAll(statistics.getNames());
         return base;
     }
 
@@ -98,10 +97,10 @@ class CSVAssignment {
     }
 
     private List<TypedValue> createValues(
-            Assignment assignment, InputFromManager input, SplitString descriptiveSplit)
+            StatisticsToExport comparison, InputFromManager input, SplitString descriptiveSplit)
             throws OperationFailedException {
         List<TypedValue> base = createBaseValues(input, descriptiveSplit);
-        base.addAll(assignment.createStatistics());
+        base.addAll(comparison.getValues());
         return base;
     }
 

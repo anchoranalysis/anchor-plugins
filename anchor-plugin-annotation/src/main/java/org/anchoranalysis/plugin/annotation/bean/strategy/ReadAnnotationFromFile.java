@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
-import org.anchoranalysis.annotation.io.image.WholeImageLabelAnnotationReader;
+import org.anchoranalysis.annotation.io.image.ImageLabelAnnotationReader;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -49,7 +49,7 @@ public class ReadAnnotationFromFile {
 
     public static Optional<ImageLabelAnnotation> readAssumeExists(Path path)
             throws InputReadFailedException {
-        WholeImageLabelAnnotationReader reader = new WholeImageLabelAnnotationReader();
+        ImageLabelAnnotationReader reader = new ImageLabelAnnotationReader();
         return reader.read(path);
     }
 }

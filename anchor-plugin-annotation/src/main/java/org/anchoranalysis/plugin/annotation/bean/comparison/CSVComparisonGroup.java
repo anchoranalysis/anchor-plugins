@@ -28,24 +28,18 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.annotation.io.assignment.Assignment;
+import org.anchoranalysis.annotation.io.comparer.StatisticsToExport;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupList;
 
 @AllArgsConstructor
-class CSVComparisonGroup<T extends Assignment> {
+class CSVComparisonGroup {
 
-    private final AnnotationGroupList<T> annotationGroupList;
+    private final Iterable<StatisticsToExport> statisticsForGroups;
 
     /** What output-name to use for the CSV written. */
     private final String outputName;
-
-    private void writeGroupStatsForGroup(AnnotationGroup<T> annotationGroup, CSVWriter writer) {
-        writer.writeRow(annotationGroup.createValues());
-    }
 
     public void writeGroupStats(Outputter outputter) throws OutputWriteFailedException {
 
@@ -57,10 +51,14 @@ class CSVComparisonGroup<T extends Assignment> {
         }
 
         try {
-            writer.get().writeHeaders(annotationGroupList.first().createHeaders());
-
-            for (AnnotationGroup<T> group : annotationGroupList) {
-                writeGroupStatsForGroup(group, writer.get());
+            boolean first = true;
+            for (StatisticsToExport statistics : statisticsForGroups) {
+                
+                if (first) {
+                    writer.get().writeHeaders(statistics.getNames());        
+                    first = false;
+                }
+                writer.get().writeRow(statistics.getValues());
             }
 
         } finally {

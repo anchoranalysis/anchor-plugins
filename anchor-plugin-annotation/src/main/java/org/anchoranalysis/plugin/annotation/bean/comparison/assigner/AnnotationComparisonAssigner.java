@@ -30,12 +30,20 @@ import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
+import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
 
-public abstract class AnnotationComparisonAssigner<T extends Assignment>
+/**
+ * Compares elements in an annotation to elements from an experiment.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T>
+ */
+public abstract class AnnotationComparisonAssigner<T extends Assignment<ObjectMask>>
         extends AnchorBean<AnnotationComparisonAssigner<T>> {
 
     public abstract T createAssignment(
@@ -45,7 +53,7 @@ public abstract class AnnotationComparisonAssigner<T extends Assignment>
             InputOutputContext context)
             throws CreateException;
 
-    public abstract AnnotationGroup<T> groupForKey(String key);
+    public abstract ImageCounterWithStatistics<T> groupForKey(String key);
 
     /** Can more than one object exist? */
     public abstract boolean moreThanOneObject();

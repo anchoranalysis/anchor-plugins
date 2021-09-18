@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.annotation.comparison;
 
 import io.vavr.Tuple2;
 import lombok.Getter;
-import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
+import org.anchoranalysis.annotation.io.bean.comparer.ComparableSource;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
@@ -36,13 +36,13 @@ import org.anchoranalysis.io.input.InputFromManagerDelegate;
 public class AnnotationComparisonInput<T extends InputFromManager>
         extends InputFromManagerDelegate<T> {
 
-    @Getter private final Tuple2<Comparer, Comparer> comparers;
+    @Getter private final Tuple2<ComparableSource, ComparableSource> comparers;
     @Getter private final Tuple2<String, String> names;
     @Getter private final StackReader stackReader;
 
     public AnnotationComparisonInput(
             T input,
-            Tuple2<Comparer, Comparer> comparers,
+            Tuple2<ComparableSource, ComparableSource> comparers,
             Tuple2<String, String> names,
             StackReader stackReader) {
         super(input);
@@ -52,7 +52,7 @@ public class AnnotationComparisonInput<T extends InputFromManager>
     }
 
     // Uses a boolean flag to multiplex between comparerLeft and comparerRight
-    public Comparer getComparerMultiplex(boolean left) {
+    public ComparableSource getComparerMultiplex(boolean left) {
         if (left) {
             return comparers._1();
         } else {

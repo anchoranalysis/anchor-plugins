@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
+import org.anchoranalysis.annotation.io.bean.comparer.ComparableSource;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.Progress;
@@ -55,9 +55,9 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
 
     @BeanField @Getter @Setter private String nameRight;
 
-    @BeanField @Getter @Setter private Comparer comparerLeft;
+    @BeanField @Getter @Setter private ComparableSource comparerLeft;
 
-    @BeanField @Getter @Setter private Comparer comparerRight;
+    @BeanField @Getter @Setter private ComparableSource comparerRight;
     // END BEAN PROPERTIES
 
     @Override

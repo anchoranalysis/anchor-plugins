@@ -30,15 +30,15 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
-import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -104,9 +104,9 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
     private Optional<ImageAnnotation> createFromInput(AnnotationWithStrategy<S> input)
             throws JobExecutionException {
         try {
-            return input.labelForAggregation()
+            return input.label()
                     .map(label -> new ImageAnnotation(input.identifier(), label));
-        } catch (InputReadFailedException exc) {
+        } catch (OperationFailedException exc) {
             throw new JobExecutionException(exc);
         }
     }
