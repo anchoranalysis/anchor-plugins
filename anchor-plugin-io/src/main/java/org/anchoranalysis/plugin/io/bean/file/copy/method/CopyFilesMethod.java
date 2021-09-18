@@ -48,7 +48,7 @@ public abstract class CopyFilesMethod extends AnchorBean<CopyFilesMethod> {
      */
     public void makeCopy(Path source, Path destination) throws CreateException {
         try {
-            DirectoryCreator.createNecessaryDirectories(destination.getParent());
+            DirectoryCreator.createNecessaryDirectories(destination);
         } catch (IOException e) {
             throw new CreateException(e);
         }
