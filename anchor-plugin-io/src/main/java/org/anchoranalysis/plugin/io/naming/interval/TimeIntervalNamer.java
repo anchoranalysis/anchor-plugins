@@ -33,6 +33,10 @@ public class TimeIntervalNamer {
         // Spans a single day only
         boolean singleDay = coversSingleDay(start, end);
         if (timeStyle == TimeStyle.OMIT) {
+            if (dateStyle == DateStyle.OMIT) {
+                // Change the dateStyle so at least one of the date and time is shown
+                dateStyle = DateStyle.IGNORE_YEAR;
+            }
             if (singleDay) {
                 return formatted(start, dateStyle.formatter());
             } else {
