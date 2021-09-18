@@ -29,65 +29,46 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
 import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
+import org.anchoranalysis.annotation.io.bean.comparer.ComparableSource;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
-import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
-import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
-import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public class MarksComparer extends Comparer {
+/**
+ * An {@link ObjectCollection} to be compared against something else.
+ *
+ * @author Owen Feehan
+ */
+public class Objects extends ComparableSource {
 
     // START BEAN PROPERTIES
+    /** Where to find the objects to compare, as a function of the source file-path. */
     @BeanField @Getter @Setter private DerivePath derivePath;
     // END BEAN PROPERTIES
 
-    private static final RegionMembershipWithFlags REGION_MEMBERSHIP =
-            RegionMapSingleton.instance()
-                    .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE);
-
     @Override
-    public Findable<ObjectCollection> createObjects(
-            Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException {
+    public Findable<ObjectCollection> loadAsObjects(
+            Path filePathSource, Dimensions dimensions, boolean debugMode) throws InputReadFailedException {
 
-        Path path = path(filePathSource);
-
-        if (!path.toFile().exists()) {
-            // There's nothing to annotate against
-            return new NotFound<>(path, "No marks exist at path");
-        }
-
-        return new Found<>(createObjects(path, dimensions));
-    }
-
-    private Path path(Path filePathSource) throws CreateException {
         try {
-            return derivePath.deriveFrom(filePathSource, false);
-        } catch (DerivePathException e) {
-            throw new CreateException(e);
-        }
-    }
+            Path objectsPath = derivePath.deriveFrom(filePathSource, debugMode);
 
-    private ObjectCollection createObjects(Path filePath, Dimensions dimensions)
-            throws CreateException {
-        MarkCollectionDeserializer deserialized = new MarkCollectionDeserializer();
-        MarkCollection marks;
-        try {
-            marks = deserialized.deserialize(filePath);
-        } catch (DeserializationFailedException e) {
-            throw new CreateException(e);
-        }
+            if (!objectsPath.toFile().exists()) {
+                return new NotFound<>(objectsPath, "No objects exist");
+            }
 
-        return marks.deriveObjects(dimensions, REGION_MEMBERSHIP).withoutProperties();
+            return new Found<>(ObjectCollectionReader.createFromPath(objectsPath));
+
+        } catch (DerivePathException | DeserializationFailedException e) {
+            throw new InputReadFailedException(e);
+        }
     }
 }

@@ -32,12 +32,19 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.plugin.annotation.bean.label.AnnotationLabel;
 import org.anchoranalysis.plugin.annotation.bean.label.GroupedAnnotationLabels;
 
-public class WholeImageLabelStrategy extends SinglePathStrategy {
+/**
+ * Assigns a single label per image, as a whole.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ImageLabelStrategy extends SinglePathStrategy {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private List<AnnotationLabel> labels;
@@ -47,9 +54,13 @@ public class WholeImageLabelStrategy extends SinglePathStrategy {
 
     @Override
     public Optional<String> annotationLabelFor(ProvidesStackInput item)
-            throws InputReadFailedException {
-        return ReadAnnotationFromFile.readCheckExists(annotationPathFor(item))
-                .map(ImageLabelAnnotation::getLabel);
+            throws OperationFailedException {
+        try {
+            return ReadAnnotationFromFile.readCheckExists(pathFor(item))
+                    .map(ImageLabelAnnotation::getLabel);
+        } catch (InputReadFailedException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     // This is actually called twice during a typically opening of an annotation

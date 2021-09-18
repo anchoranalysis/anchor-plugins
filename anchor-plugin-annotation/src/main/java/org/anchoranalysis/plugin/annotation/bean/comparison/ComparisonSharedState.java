@@ -26,52 +26,58 @@
 
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Function;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
-import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupList;
+import org.anchoranalysis.annotation.io.comparer.StatisticsToExport;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.plugin.annotation.counter.ImageCounter;
+import org.anchoranalysis.plugin.annotation.counter.ImageCounterList;
+import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
+import lombok.Getter;
 
-class SharedState<T extends Assignment> {
+public class ComparisonSharedState<T extends Assignment<ObjectMask>> {
 
-    private CSVAssignment assignmentCSV;
-    private AnnotationGroup<T> groupAll;
-    private HashMap<String, AnnotationGroup<T>>[] groupsMap;
-    private int numLevelsGrouping;
-    private Function<String, AnnotationGroup<T>> funcCreateGroup;
+    @Getter private CSVAssignment assignmentCSV;
+    private ImageCounterWithStatistics<T> groupAll;
+    private HashMap<String, ImageCounterWithStatistics<T>>[] groupsMap;
+    private int numberLevelsGrouping;
+    private Function<String, ImageCounterWithStatistics<T>> funcCreateGroup;
 
     @SuppressWarnings("unchecked")
-    public SharedState(
+    public ComparisonSharedState(
             CSVAssignment assignmentCSV,
-            int numLevelsGrouping,
-            Function<String, AnnotationGroup<T>> funcCreateGroup) {
+            int numberLevelsGrouping,
+            Function<String, ImageCounterWithStatistics<T>> funcCreateGroup) {
         this.assignmentCSV = assignmentCSV;
-        this.numLevelsGrouping = numLevelsGrouping;
+        this.numberLevelsGrouping = numberLevelsGrouping;
         this.funcCreateGroup = funcCreateGroup;
 
-        groupsMap = new HashMap[numLevelsGrouping];
-        for (int i = 0; i < numLevelsGrouping; i++) {
+        groupsMap = new HashMap[numberLevelsGrouping];
+        for (int i = 0; i < numberLevelsGrouping; i++) {
             groupsMap[i] = new HashMap<>();
         }
 
         groupAll = funcCreateGroup.apply("all");
     }
 
-    public AnnotationGroupList<T> allGroups() {
-        AnnotationGroupList<T> list = new AnnotationGroupList<>();
-        list.add(groupAll);
+    public List<StatisticsToExport> statisticsForAllGroups() {
+        List<StatisticsToExport> list = new ArrayList<>();
+        list.add(groupAll.comparison());
 
-        for (int i = 0; i < numLevelsGrouping; i++) {
-            list.addAll(groupsMap[i].values());
+        for (int i = 0; i < numberLevelsGrouping; i++) {
+            for( ImageCounterWithStatistics<T> counter : groupsMap[i].values()) {
+                list.add(counter.comparison());    
+            }
         }
-
         return list;
     }
 
-    private AnnotationGroup<T> getOrCreate(int level, String key) {
+    private ImageCounterWithStatistics<T> getOrCreate(int level, String key) {
 
-        AnnotationGroup<T> item = groupsMap[level].get(key);
+        ImageCounterWithStatistics<T> item = groupsMap[level].get(key);
         if (item == null) {
             item = funcCreateGroup.apply(key);
             groupsMap[level].put(key, item);
@@ -80,13 +86,13 @@ class SharedState<T extends Assignment> {
     }
 
     // descriptiveSplit can be null
-    public AddAnnotation<T> groupsForImage(SplitString descriptiveSplit) {
-        AnnotationGroupList<T> list = new AnnotationGroupList<>();
+    public ImageCounter<T> groupsForImage(SplitString descriptiveSplit) {
+        ImageCounterList<T> list = new ImageCounterList<>();
         list.add(groupAll);
 
         if (descriptiveSplit != null) {
 
-            for (int i = 0; i < numLevelsGrouping; i++) {
+            for (int i = 0; i < numberLevelsGrouping; i++) {
                 // We extract a String describing each level, and retrieve it from the list, adding
                 // it
                 //   if it doesn't already exist
@@ -98,9 +104,5 @@ class SharedState<T extends Assignment> {
         }
 
         return list;
-    }
-
-    public CSVAssignment getAssignmentCSV() {
-        return assignmentCSV;
     }
 }

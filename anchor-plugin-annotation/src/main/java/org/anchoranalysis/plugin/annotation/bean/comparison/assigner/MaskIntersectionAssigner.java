@@ -26,15 +26,15 @@
 
 package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
 
-import org.anchoranalysis.annotation.io.assignment.AssignmentMaskIntersection;
+import org.anchoranalysis.annotation.io.assignment.ObjectVoxelIntersection;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
+import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
 
 /**
  * No outputs are produced.
@@ -42,24 +42,24 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
  * @author Owen Feehan
  */
 public class MaskIntersectionAssigner
-        extends AnnotationComparisonAssigner<AssignmentMaskIntersection> {
+        extends AnnotationComparisonAssigner<ObjectVoxelIntersection> {
 
     @Override
-    public AssignmentMaskIntersection createAssignment(
+    public ObjectVoxelIntersection createAssignment(
             ObjectsToCompare objectsToCompare,
             Dimensions dimensions,
             boolean useMIP,
             InputOutputContext context)
             throws CreateException {
 
-        return new AssignmentMaskIntersection(
+        return new ObjectVoxelIntersection(
                 extractSingleObject("left", objectsToCompare.getLeft()),
                 extractSingleObject("right", objectsToCompare.getRight()));
     }
 
     @Override
-    public AnnotationGroup<AssignmentMaskIntersection> groupForKey(String key) {
-        return new AnnotationGroup<>(key);
+    public ImageCounterWithStatistics<ObjectVoxelIntersection> groupForKey(String key) {
+        return new GroupWithImageCount<>(key);
     }
 
     @Override

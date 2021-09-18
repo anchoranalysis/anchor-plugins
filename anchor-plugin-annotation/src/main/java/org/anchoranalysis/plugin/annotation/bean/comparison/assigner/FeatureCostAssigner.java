@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.assignment.AssignmentObjectFactory;
-import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
+import org.anchoranalysis.annotation.io.assignment.AssignOverlappingObjects;
+import org.anchoranalysis.annotation.io.assignment.OverlappingObjects;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
@@ -40,9 +40,8 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObject;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
+import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
 
 /**
  * Assigns an objects from one set of objects to another based upon a cost (degree of overlap).
@@ -64,7 +63,7 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
  *
  * @author Owen Feehan
  */
-public class FeatureCostAssigner extends AnnotationComparisonAssigner<AssignmentOverlapFromPairs> {
+public class FeatureCostAssigner extends AnnotationComparisonAssigner<OverlappingObjects> {
 
     private static final String OUTPUT_COST_MATRIX = "costMatrix";
 
@@ -79,7 +78,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
     // END BEAN PROPERTIES
 
     @Override
-    public AssignmentOverlapFromPairs createAssignment(
+    public OverlappingObjects createAssignment(
             ObjectsToCompare objectsToCompare,
             Dimensions dimensions,
             boolean useMIP,
@@ -90,10 +89,10 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
                     FeaturesInitialization.create(context.getLogger(), context.getModelDirectory());
             featureEvaluator.initializeRecursive(soFeature, context.getLogger());
 
-            AssignmentObjectFactory assignmentCreator =
-                    new AssignmentObjectFactory(featureEvaluator, useMIP);
+            AssignOverlappingObjects assignmentCreator =
+                    new AssignOverlappingObjects(featureEvaluator, useMIP);
 
-            AssignmentOverlapFromPairs assignment =
+            OverlappingObjects assignment =
                     assignmentCreator.createAssignment(
                             objectsToCompare.getLeft(),
                             objectsToCompare.getRight(),
@@ -119,8 +118,8 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
     }
 
     @Override
-    public AnnotationGroup<AssignmentOverlapFromPairs> groupForKey(String key) {
-        return new AnnotationGroupObject(key);
+    public ImageCounterWithStatistics<OverlappingObjects> groupForKey(String key) {
+        return new FeatureCostGroup(key);
     }
 
     @Override
