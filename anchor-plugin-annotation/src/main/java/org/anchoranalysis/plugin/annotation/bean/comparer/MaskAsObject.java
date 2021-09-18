@@ -29,13 +29,12 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
 import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
+import org.anchoranalysis.annotation.io.bean.comparer.ComparableSource;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -44,25 +43,36 @@ import org.anchoranalysis.image.io.stack.input.MaskReader;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 
-public class MaskComparer extends Comparer {
+
+/**
+ * Loads {@link Mask} to compared, converting it into an {@link ObjectMask}.
+ *
+ * @author Owen Feehan
+ */
+public class MaskAsObject extends ComparableSource {
 
     // START BEAN PROPERTIES
+    /** Where to find the {@link Mask} to compare, as a function of the source file-path. */
     @BeanField @Getter @Setter private DerivePath derivePath;
 
+    /** How to read the {@link Mask} from the file-system. */
     @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
+    /** If true the {@link Mask} is inverted before conversion into an {@link ObjectCollection}. */
     @BeanField @Getter @Setter private boolean invert = false;
     // END BEAN PROPERTIES
 
     @Override
-    public Findable<ObjectCollection> createObjects(
-            Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException {
+    public Findable<ObjectCollection> loadAsObjects(
+            Path reference, Dimensions dimensions, boolean debugMode) throws InputReadFailedException {
 
         try {
-            Path maskPath = derivePath.deriveFrom(filePathSource, debugMode);
+            Path maskPath = derivePath.deriveFrom(reference, debugMode);
 
             if (!maskPath.toFile().exists()) {
                 return new NotFound<>(maskPath, "No mask exists");
@@ -73,7 +83,7 @@ public class MaskComparer extends Comparer {
             return new Found<>(convertToObjects(mask));
 
         } catch (DerivePathException | ImageIOException e) {
-            throw new CreateException(e);
+            throw new InputReadFailedException(e);
         }
     }
 

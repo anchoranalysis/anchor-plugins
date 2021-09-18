@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
-import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
-import org.anchoranalysis.core.concurrency.CreateModelFailedException;
 import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
+import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
 import org.anchoranalysis.spatial.Extent;
 
 /**

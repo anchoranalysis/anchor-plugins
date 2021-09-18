@@ -33,11 +33,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
-import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
+import org.anchoranalysis.annotation.io.assignment.generator.DrawColoredObjects;
+import org.anchoranalysis.annotation.io.assignment.generator.AssignmentColorPool;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.VeryBright;
-import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -51,14 +51,16 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
-import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
+import org.anchoranalysis.plugin.annotation.counter.ImageCounter;
 
 /**
  * Task to compare a set of annotations to a segmentation or another set of annotations.
@@ -80,10 +82,10 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
  * </table>
  *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> assignment-type.
  */
-public class CompareAnnotations<T extends Assignment>
-        extends Task<AnnotationComparisonInput<ProvidesStackInput>, SharedState<T>> {
+public class CompareAnnotations<T extends Assignment<ObjectMask>>
+        extends Task<AnnotationComparisonInput<ProvidesStackInput>, ComparisonSharedState<T>> {
 
     private static final String OUTPUT_BY_IMAGE = "byImage";
 
@@ -92,17 +94,20 @@ public class CompareAnnotations<T extends Assignment>
     private static final String OUTPUT_OUTLINE = "outline";
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String backgroundChannelName = "Image";
+    /** The name of the stack to use as background to the annotations. */
+    @BeanField @Getter @Setter private String background = "Image";
 
-    // If a non-empty string it is used to split the descriptive name into groups
-    @BeanField @Getter @Setter private String splitDescriptiveNameRegex = "";
+    /** If non-empty, the string (a regular-expression) is used to split the file's identifier into groups. */
+    @BeanField @Getter @Setter private String splitIdentifierRegex = "";
 
     @BeanField @Getter @Setter private int maxSplitGroups = 5;
 
     @BeanField @Getter @Setter private int numberLevelsGrouping = 0;
 
-    @BeanField @Getter @Setter private boolean useMIP = false;
+    /** If true, a maximum-intensity-projection is first applied to any 3D objects into a 2D plane, before comparison. */
+    @BeanField @Getter @Setter private boolean flatten = false;
 
+    /** How many pixels should the outline be around objects. */
     @BeanField @Getter @Setter private int outlineWidth = 1;
 
     @BeanField @Getter @Setter private AnnotationComparisonAssigner<T> assigner;
@@ -113,7 +118,7 @@ public class CompareAnnotations<T extends Assignment>
     // END BEAN PROPERTIES
 
     @Override
-    public SharedState<T> beforeAnyJobIsExecuted(
+    public ComparisonSharedState<T> beforeAnyJobIsExecuted(
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<AnnotationComparisonInput<ProvidesStackInput>> inputs,
@@ -124,7 +129,7 @@ public class CompareAnnotations<T extends Assignment>
             CSVAssignment assignmentCSV =
                     new CSVAssignment(
                             outputter, OUTPUT_BY_IMAGE, hasDescriptiveSplit(), maxSplitGroups);
-            return new SharedState<>(assignmentCSV, numberLevelsGrouping, assigner::groupForKey);
+            return new ComparisonSharedState<>(assignmentCSV, numberLevelsGrouping, assigner::groupForKey);
         } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -132,28 +137,28 @@ public class CompareAnnotations<T extends Assignment>
 
     @Override
     public void doJobOnInput(
-            InputBound<AnnotationComparisonInput<ProvidesStackInput>, SharedState<T>> params)
+            InputBound<AnnotationComparisonInput<ProvidesStackInput>, ComparisonSharedState<T>> params)
             throws JobExecutionException {
 
         AnnotationComparisonInput<ProvidesStackInput> input = params.getInput();
 
         // Create the background.
-        DisplayStack background = createBackground(input);
+        DisplayStack backgroundStack = createBackground(input);
 
         // We only do a descriptive split if it's allowed.
         SplitString descriptiveSplit = createSplitString(input);
 
         // Now do whatever comparison is necessary to update the assignment.
-        Optional<Assignment> assignment =
+        Optional<Assignment<ObjectMask>> assignment =
                 compareAndUpdate(
                         input,
-                        background,
+                        backgroundStack,
                         descriptiveSplit,
                         params.getContextJob(),
                         params.getSharedState());
 
         if (assignment.isPresent()) {
-            writeOutlineStack(params.getOutputter(), input, assignment.get(), background);
+            writeOutlineStack(params.getOutputter(), input, assignment.get(), backgroundStack);
         }
     }
 
@@ -163,14 +168,14 @@ public class CompareAnnotations<T extends Assignment>
     }
 
     @Override
-    public void afterAllJobsAreExecuted(SharedState<T> sharedState, InputOutputContext context)
+    public void afterAllJobsAreExecuted(ComparisonSharedState<T> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
 
         sharedState.getAssignmentCSV().end();
 
         // Write group statistics
         try {
-            new CSVComparisonGroup<>(sharedState.allGroups(), OUTPUT_BY_GROUP)
+            new CSVComparisonGroup(sharedState.statisticsForAllGroups(), OUTPUT_BY_GROUP)
                     .writeGroupStats(context.getOutputter());
         } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
@@ -188,16 +193,16 @@ public class CompareAnnotations<T extends Assignment>
                 .addEnabledOutputFirst(OUTPUT_BY_IMAGE, OUTPUT_BY_GROUP, OUTPUT_OUTLINE);
     }
 
-    private Optional<Assignment> compareAndUpdate(
+    private Optional<Assignment<ObjectMask>> compareAndUpdate(
             AnnotationComparisonInput<ProvidesStackInput> input,
             DisplayStack background,
             SplitString descriptiveSplit,
             InputOutputContext context,
-            SharedState<T> sharedState)
+            ComparisonSharedState<T> sharedState)
             throws JobExecutionException {
 
         // Get a matching set of groups for this image
-        AddAnnotation<T> addAnnotation = sharedState.groupsForImage(descriptiveSplit);
+        ImageCounter<T> addAnnotation = sharedState.groupsForImage(descriptiveSplit);
 
         Optional<ObjectsToCompare> objectsToCompare =
                 ObjectsToCompareFactory.create(
@@ -217,7 +222,7 @@ public class CompareAnnotations<T extends Assignment>
 
     private SplitString createSplitString(AnnotationComparisonInput<ProvidesStackInput> input) {
         return hasDescriptiveSplit()
-                ? new SplitString(input.identifier(), splitDescriptiveNameRegex)
+                ? new SplitString(input.identifier(), splitIdentifierRegex)
                 : null;
     }
 
@@ -227,7 +232,7 @@ public class CompareAnnotations<T extends Assignment>
         try {
             NamedStacks stacks = new NamedStacks();
             input.getInput().addToStoreInferNames(stacks);
-            return DisplayStack.create(stacks.getException(backgroundChannelName));
+            return DisplayStack.create(stacks.getException(background));
 
         } catch (CreateException | OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -236,12 +241,12 @@ public class CompareAnnotations<T extends Assignment>
         }
     }
 
-    private Assignment processAcceptedAnnotation(
+    private Assignment<ObjectMask> processAcceptedAnnotation(
             AnnotationComparisonInput<ProvidesStackInput> input,
             DisplayStack background,
             ObjectsToCompare objectsToCompare,
-            AddAnnotation<T> addAnnotation,
-            SharedState<T> sharedStateC,
+            ImageCounter<T> counter,
+            ComparisonSharedState<T> sharedState,
             SplitString descriptiveSplit,
             InputOutputContext context)
             throws JobExecutionException {
@@ -251,14 +256,14 @@ public class CompareAnnotations<T extends Assignment>
         try {
             T assignment =
                     assigner.createAssignment(
-                            objectsToCompare, background.dimensions(), useMIP, context);
+                            objectsToCompare, background.dimensions(), flatten, context);
 
-            addAnnotation.addAcceptedAnnotation(assignment);
+            counter.addAnnotatedImage(assignment);
 
             // Statistics row in file
-            sharedStateC
+            sharedState
                     .getAssignmentCSV()
-                    .writeStatisticsForImage(assignment, descriptiveSplit, input);
+                    .writeStatisticsForImage(assignment.statistics(), descriptiveSplit, input);
 
             return assignment;
 
@@ -268,13 +273,13 @@ public class CompareAnnotations<T extends Assignment>
     }
 
     private boolean hasDescriptiveSplit() {
-        return splitDescriptiveNameRegex != null && !splitDescriptiveNameRegex.isEmpty();
+        return splitIdentifierRegex != null && !splitIdentifierRegex.isEmpty();
     }
 
     private void writeOutlineStack(
             Outputter outputter,
             AnnotationComparisonInput<ProvidesStackInput> input,
-            Assignment assignment,
+            Assignment<ObjectMask> assignment,
             DisplayStack background) {
 
         outputter
@@ -293,17 +298,16 @@ public class CompareAnnotations<T extends Assignment>
             DisplayStack background,
             ColorScheme colorSchemeFromSettings,
             Tuple2<String, String> names) {
+        DrawColoredObjects drawer = new DrawColoredObjects(background, flatten, outlineWidth);
         return new AssignmentGenerator(
-                background,
+                drawer,
                 numberPaired -> createColorPool(numberPaired, colorSchemeFromSettings),
-                useMIP,
                 names,
-                assigner.moreThanOneObject(),
-                outlineWidth);
+                assigner.moreThanOneObject());
     }
 
-    private ColorPool createColorPool(int numberPaired, ColorScheme colorSchemeFromSettings) {
-        return new ColorPool(
+    private AssignmentColorPool createColorPool(int numberPaired, ColorScheme colorSchemeFromSettings) {
+        return new AssignmentColorPool(
                 numberPaired, colorSchemeFromSettings, colorsUnpaired, replaceMatchesWithSolids);
     }
 }

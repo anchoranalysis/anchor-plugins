@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.annotation.bean.file;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
@@ -54,7 +55,7 @@ public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProviderW
         try {
             List<AnnotationWithStrategy<T>> inputs = annotations.inputs(params).inputs();
             return FunctionalList.flatMapToList(
-                    inputs, input -> input.deriveAssociatedFiles().stream());
+                    inputs, input -> input.allAssociatedPaths().stream().map(Path::toFile));
         } catch (InputReadFailedException e) {
             throw new FilesProviderException(e);
         }

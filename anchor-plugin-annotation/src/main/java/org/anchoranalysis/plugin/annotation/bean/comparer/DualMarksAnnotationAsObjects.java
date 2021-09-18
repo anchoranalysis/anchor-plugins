@@ -30,49 +30,47 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
+import org.anchoranalysis.annotation.io.bean.comparer.ComparableSource;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
-import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
+import org.anchoranalysis.annotation.io.mark.DualMarksAnnotationReader;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
+import org.anchoranalysis.mpp.mark.Mark;
 
 /**
+ * Loads a {@link DualMarksAnnotation} to compared, converting each {@link Mark} into an {@link ObjectMask}.
+ * 
  * @author Owen Feehan
  * @param <T> rejection-reason
  */
-public class AnnotationMarksComparer<T> extends Comparer {
+public class DualMarksAnnotationAsObjects<T> extends ComparableSource {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DerivePath derivePath;
     // END BEAN PROPERTIES
 
     @Override
-    public Findable<ObjectCollection> createObjects(
-            Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException {
+    public Findable<ObjectCollection> loadAsObjects(
+            Path reference, Dimensions dimensions, boolean debugMode) throws InputReadFailedException {
 
         Path filePath;
         try {
-            filePath = derivePath.deriveFrom(filePathSource, false);
+            filePath = derivePath.deriveFrom(reference, false);
         } catch (DerivePathException e1) {
-            throw new CreateException(e1);
+            throw new InputReadFailedException(e1);
         }
 
-        MarkAnnotationReader<T> annotationReader = new MarkAnnotationReader<>(false);
-        Optional<DualMarksAnnotation<T>> annotation;
-        try {
-            annotation = annotationReader.read(filePath);
-        } catch (InputReadFailedException e) {
-            throw new CreateException(e);
-        }
+        DualMarksAnnotationReader<T> annotationReader = new DualMarksAnnotationReader<>(false);
+        Optional<DualMarksAnnotation<T>> annotation = annotationReader.read(filePath);
 
         if (annotation.isPresent()) {
             return objectsFromAnnotation(annotation.get(), filePath, dimensions);

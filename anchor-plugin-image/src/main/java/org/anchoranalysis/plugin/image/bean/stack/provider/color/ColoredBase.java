@@ -64,7 +64,7 @@ public abstract class ColoredBase extends StackProvider {
     // START BEAN PROPERTIES
     /**
      * If true, objects and the background are flattened in the z dimension (via maximum intensity
-     * projection), so that a 2D image is produced
+     * projection), so that a 2D image is produced.
      */
     @BeanField @Getter @Setter private boolean flatten = false;
 
