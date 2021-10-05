@@ -37,16 +37,19 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 
-
 /**
- * A base class for implementations of {@link AnnotatorStrategy} where a single unique path exists for every annotation.
- * 
+ * A base class for implementations of {@link AnnotatorStrategy} where a single unique path exists
+ * for every annotation.
+ *
  * @author Owen Feehan
  */
 public abstract class SinglePathStrategy extends AnnotatorStrategy {
 
     // START BEAN PROPERTIES
-    /** Derives the path to the corresponding annotation files, given a path to the image to be annotated. */
+    /**
+     * Derives the path to the corresponding annotation files, given a path to the image to be
+     * annotated.
+     */
     @BeanField @Getter @Setter private DerivePath pathAnnotation;
     // END BEAN PROPERTIES
 

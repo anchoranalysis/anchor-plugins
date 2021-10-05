@@ -33,14 +33,13 @@ import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
 
 /**
  * A unique group that counts images and measures the success of an assignment for statistics.
- * 
- * <p>It is intended to be used together with {@link FeatureCostAssigner}.
- * 
- * @author Owen Feehan
  *
+ * <p>It is intended to be used together with {@link FeatureCostAssigner}.
+ *
+ * @author Owen Feehan
  */
 class FeatureCostGroup implements ImageCounterWithStatistics<OverlappingObjects> {
-    
+
     private int countMatched = 0;
     private int countUnmatchedLeft = 0;
     private int countUnmatchedRight = 0;
@@ -48,7 +47,7 @@ class FeatureCostGroup implements ImageCounterWithStatistics<OverlappingObjects>
 
     private RunningSumExtrema percentLeftMatched = new RunningSumExtrema();
     private RunningSumExtrema percentRightMatched = new RunningSumExtrema();
-    
+
     private GroupWithImageCount<OverlappingObjects> imageCount;
 
     public FeatureCostGroup(String identifier) {
@@ -67,21 +66,21 @@ class FeatureCostGroup implements ImageCounterWithStatistics<OverlappingObjects>
         percentLeftMatched.add(payload.percentLeftAssigned());
         percentRightMatched.add(payload.percentRightAssigned());
     }
-    
+
     @Override
     public StatisticsToExport comparison() {
 
         StatisticsToExport comparison = new StatisticsToExport();
-        comparison.append( imageCount.comparison() );
-        
+        comparison.append(imageCount.comparison());
+
         comparison.addDouble("percentMatchesInAnnotation", percentLeftMatched());
         comparison.addDouble("percentMatchesInResult", percentRightMatched());
-        
+
         comparison.addInt("matches", countMatched);
-        
+
         comparison.addInt("unmatchedAnnotation", countUnmatchedLeft);
         comparison.addInt("numItemsInAnnotation", leftSize());
-        
+
         comparison.addInt("unmatchedResult", countUnmatchedRight);
         comparison.addInt("numberItemsInResult", rightSize());
 

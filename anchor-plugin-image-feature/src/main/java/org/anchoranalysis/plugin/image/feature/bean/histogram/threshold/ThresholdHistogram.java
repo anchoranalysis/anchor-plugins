@@ -39,7 +39,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 
 /**
  * Thresholds the histogram (using a weightedOtsu) and then applies a feature to the thresholded
- * version
+ * version.
  *
  * @author feehano
  */

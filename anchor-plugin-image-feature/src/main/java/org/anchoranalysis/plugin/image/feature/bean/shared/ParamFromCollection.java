@@ -26,12 +26,13 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.shared;
 
+import java.util.Dictionary;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
@@ -40,7 +41,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
 /**
- * Retrieves a parameter from a collection in shared-objects.
+ * Retrieves a parameter as stored in a {@link org.anchoranalysis.core.value.Dictionary} in {@link
+ * org.anchoranalysis.core.identifier.provider.store.SharedObjects}.
  *
  * <p>This differs from {@link org.anchoranalysis.plugin.operator.feature.bean.FromDictionary} which
  * reads the parameter from the energy-stack, whereas this from a specific parameters collection.
@@ -51,8 +53,10 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String collectionID = "";
+    /** The name of the {@link Dictionary} that will be retrieved from {@link SharedObjects}. */
+    @BeanField @Getter @Setter private String dictionary = "";
 
+    /** The name of the key in the dictionary, whose corresponding value will be returned. */
     @BeanField @Getter @Setter private String key = "";
     // END BEAN PROPERTIES
 
@@ -64,8 +68,7 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
 
         ImageInitialization image = new ImageInitialization(initialization.sharedObjectsRequired());
         try {
-            Dictionary dictionary = image.dictionaries().getException(collectionID);
-            this.value = dictionary.getAsDouble(key);
+            this.value = image.dictionaries().getException(dictionary).getAsDouble(key);
 
         } catch (NamedProviderGetException e) {
             throw new InitializeException(e.summarize());

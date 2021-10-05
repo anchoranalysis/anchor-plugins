@@ -50,13 +50,13 @@ import org.anchoranalysis.plugin.io.input.path.CopyContext;
  * were not density-reachable by others, and aren't part of any cluster in particular.
  *
  * <p>The relative-path of files are preserved, being added relative to the cluster subdirectory.
- * 
+ *
  * <p>The default-patterns for matching filenames are:
- * 
+ *
  * <ul>
- * <li>{@code yyyy-mm-dd hh:mm:ss}
- * <li>{@code yyyymmdd_hhmmss}
- * <li>{@code yyyymmdd hhmmss}
+ *   <li>{@code yyyy-mm-dd hh:mm:ss}
+ *   <li>{@code yyyymmdd_hhmmss}
+ *   <li>{@code yyyymmdd hhmmss}
  * </ul>
  *
  * @author Owen Feehan
@@ -165,15 +165,16 @@ public class ClusterByTimestamp extends CopyFilesNaming<ClusterMembership> {
 
     /**
      * The default list of date-time patterns to use, if none additionally have been set.
-     * 
+     *
      * <p>See the class-level Javadoc for a human-readable description of these patterns.
      */
     private static List<TimestampPattern> defaultDateTimePatterns() {
-        List<String> patterns = Arrays.asList(
-                ".*(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d) (\\d\\d)\\.(\\d\\d)\\.(\\d\\d).*",
-                ".*(\\d\\d\\d\\d)(\\d\\d)(\\d\\d)_(\\d\\d)(\\d\\d)(\\d\\d)\\D.*",
-                ".*(\\d\\d\\d\\d)(\\d\\d)(\\d\\d) (\\d\\d)(\\d\\d)(\\d\\d)\\D.*");
-        
+        List<String> patterns =
+                Arrays.asList(
+                        ".*(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d) (\\d\\d)\\.(\\d\\d)\\.(\\d\\d).*",
+                        ".*(\\d\\d\\d\\d)(\\d\\d)(\\d\\d)_(\\d\\d)(\\d\\d)(\\d\\d)\\D.*",
+                        ".*(\\d\\d\\d\\d)(\\d\\d)(\\d\\d) (\\d\\d)(\\d\\d)(\\d\\d)\\D.*");
+
         return FunctionalList.mapToList(patterns, TimestampPattern::new);
     }
 }

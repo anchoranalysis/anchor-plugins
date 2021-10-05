@@ -35,19 +35,18 @@ import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
 
 /**
  * A unique group that collects counts of how many images are annotated or not.
- * 
+ *
  * <p>The payload to {@link #addAnnotatedImage} is ignored and irrelevant.
- * 
- * @param <T> the payload-type for {@link #addAnnotatedImage}, unused, but perhaps
- * convenient for type-consistency.
- * 
+ *
+ * @param <T> the payload-type for {@link #addAnnotatedImage}, unused, but perhaps convenient for
+ *     type-consistency.
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 class GroupWithImageCount<T> implements ImageCounterWithStatistics<T> {
-    
+
     // START REQUIRED ARGUMENTS
     /** The identifier of the group. */
     @Getter @EqualsAndHashCode.Include private final String identifier;
@@ -68,10 +67,9 @@ class GroupWithImageCount<T> implements ImageCounterWithStatistics<T> {
     public void addAnnotatedImage(T payload) {
         countWithAnnotations++;
     }
-    
+
     public int numberImagesTotal() {
-        return countWithAnnotations
-                + countWithoutAnnotations;
+        return countWithAnnotations + countWithoutAnnotations;
     }
 
     public int numberImagesAnnotations() {
@@ -85,12 +83,12 @@ class GroupWithImageCount<T> implements ImageCounterWithStatistics<T> {
     @Override
     public StatisticsToExport comparison() {
         StatisticsToExport out = new StatisticsToExport();
-        
+
         out.addString("name", identifier());
         out.addDouble("percentAnnotated", percentAnnotatedImages());
         out.addInt("countImages", numberImagesTotal());
         out.addInt("countImagesAnnotations", countWithAnnotations());
         out.addInt("countImagesWithoutAnnotations", countWithoutAnnotations());
-        return out;     
+        return out;
     }
 }

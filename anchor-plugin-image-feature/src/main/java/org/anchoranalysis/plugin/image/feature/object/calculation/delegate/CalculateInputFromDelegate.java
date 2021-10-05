@@ -36,14 +36,13 @@ import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A base class for Cached-Calculations that generate a Params for feature-calculation using an
- * existing "delegate" calculation
+ * A base class for Cached-Calculations that derive from an existing "delegate" calculation.
  *
  * <p>These types of calculations involve two steps:
  *
  * <ul>
- *   <li>Calculating from an existing cached-calculation
- *   <li>Applying a transform to generate parameters
+ *   <li>Calculating from an existing cached-calculation.
+ *   <li>Applying a transform to generate parameters.
  * </ul>
  *
  * @author Owen Feehan
@@ -56,7 +55,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U>
         extends FeatureCalculation<S, T> {
 
-    private final ResolvedCalculation<U, T> ccDelegate;
+    private final ResolvedCalculation<U, T> delegate;
 
     protected CalculateInputFromDelegate(
             FeatureCalculation<U, T> ccDelegate, CalculationResolver<T> cache) {
@@ -65,14 +64,12 @@ public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U>
 
     @Override
     public S execute(T input) throws FeatureCalculationException {
-
-        U delegate = ccDelegate.getOrCalculate(input);
-        return deriveFromDelegate(input, delegate);
+        return deriveFromDelegate(input, delegate.getOrCalculate(input));
     }
 
     protected abstract S deriveFromDelegate(T input, U delegate);
 
     protected ResolvedCalculation<U, T> getDelegate() {
-        return ccDelegate;
+        return delegate;
     }
 }
