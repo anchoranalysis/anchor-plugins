@@ -36,19 +36,19 @@ import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A base class for Cached-Calculations that derive from an existing "delegate" calculation.
+ * A base class for {@link FeatureCalculation}s that derive from an existing "delegate" calculation.
  *
  * <p>These types of calculations involve two steps:
  *
  * <ul>
- *   <li>Calculating from an existing cached-calculation.
+ *   <li>Calculating from an existing {@link FeatureCalculation}.
  *   <li>Applying a transform to generate parameters.
  * </ul>
  *
  * @author Owen Feehan
- * @param <S> final-type of CachedCalculation
- * @param <T> feature input-type as input to cached-calculations
- * @param <U> delegate-type of CachedCalculation
+ * @param <S> final-type of {@link FeatureCalculation}.
+ * @param <T> feature input-type as input to cached-calculations.
+ * @param <U> delegate-type of {@link FeatureCalculation}.
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
@@ -58,8 +58,8 @@ public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U>
     private final ResolvedCalculation<U, T> delegate;
 
     protected CalculateInputFromDelegate(
-            FeatureCalculation<U, T> ccDelegate, CalculationResolver<T> cache) {
-        this(cache.search(ccDelegate));
+            FeatureCalculation<U, T> delegate, CalculationResolver<T> cache) {
+        this(cache.search(delegate));
     }
 
     @Override

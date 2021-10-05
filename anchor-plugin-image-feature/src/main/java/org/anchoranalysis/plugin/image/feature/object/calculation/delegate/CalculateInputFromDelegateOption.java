@@ -38,12 +38,12 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Like {@link CalculateInputFromDelegate} except assumes optional return value and no parameters
+ * Like {@link CalculateInputFromDelegate} except assumes optional return value and no parameters.
  *
  * @author Owen Feehan
- * @param <S> optional final-type of {@link ResolvedCalculation}.
+ * @param <S> optional final-type of {@link FeatureCalculation}.
  * @param <T> feature input-type as input to cached-calculations.
- * @param <U> delegate-type of CachedCalculation
+ * @param <U> delegate-type of {@link FeatureCalculation}.
  */
 @EqualsAndHashCode(callSuper = true)
 public abstract class CalculateInputFromDelegateOption<
@@ -89,12 +89,12 @@ public abstract class CalculateInputFromDelegateOption<
 
         Optional<S> inputForDelegate = input.calculate(paramsDerived);
 
-        if (!inputForDelegate.isPresent()) {
+        if (inputForDelegate.isPresent()) {
+            // We select an appropriate cache for calculating the feature (should be the same as
+            // selected in initialize())
+            return input.forChild().calculate(feature, inputForDelegate.get(), cacheName);            
+        } else {
             return emptyValue;
         }
-
-        // We select an appropriate cache for calculating the feature (should be the same as
-        // selected in initialize())
-        return input.forChild().calculate(feature, inputForDelegate.get(), cacheName);
     }
 }
