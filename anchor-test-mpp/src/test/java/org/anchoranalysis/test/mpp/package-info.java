@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * Reusable test classes involving data-objects from the anchor-mpp module.
- */
+/** Reusable test classes involving data-objects from the anchor-mpp module. */
 package org.anchoranalysis.test.mpp;

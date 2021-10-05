@@ -1,3 +1,11 @@
+/**
+ * Features that calculate how many other objects an {@link
+ * org.anchoranalysis.image.voxel.object.ObjectMask} directly neighbors.
+ *
+ * <p>When an {@link org.anchoranalysis.image.voxel.object.ObjectMask} has at least one voxel that
+ * neighbours the voxel of another {@link org.anchoranalysis.image.voxel.object.ObjectMask} we deem
+ * them as <i>touching</i>.
+ */
 package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 /*-
  * #%L

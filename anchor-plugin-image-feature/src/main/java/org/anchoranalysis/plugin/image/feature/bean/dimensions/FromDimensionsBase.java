@@ -33,6 +33,8 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 
 /**
+ * Base class for features that are calculated from {@link Dimensions}.
+ *
  * @author Owen Feehan
  * @param <T> feature-input-type
  */

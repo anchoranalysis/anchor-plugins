@@ -56,7 +56,8 @@ public class Objects extends ComparableSource {
 
     @Override
     public Findable<ObjectCollection> loadAsObjects(
-            Path filePathSource, Dimensions dimensions, boolean debugMode) throws InputReadFailedException {
+            Path filePathSource, Dimensions dimensions, boolean debugMode)
+            throws InputReadFailedException {
 
         try {
             Path objectsPath = derivePath.deriveFrom(filePathSource, debugMode);

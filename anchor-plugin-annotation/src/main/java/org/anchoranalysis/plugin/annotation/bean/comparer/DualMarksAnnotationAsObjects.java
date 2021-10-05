@@ -47,8 +47,9 @@ import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**
- * Loads a {@link DualMarksAnnotation} to compared, converting each {@link Mark} into an {@link ObjectMask}.
- * 
+ * Loads a {@link DualMarksAnnotation} to compared, converting each {@link Mark} into an {@link
+ * ObjectMask}.
+ *
  * @author Owen Feehan
  * @param <T> rejection-reason
  */
@@ -60,7 +61,8 @@ public class DualMarksAnnotationAsObjects<T> extends ComparableSource {
 
     @Override
     public Findable<ObjectCollection> loadAsObjects(
-            Path reference, Dimensions dimensions, boolean debugMode) throws InputReadFailedException {
+            Path reference, Dimensions dimensions, boolean debugMode)
+            throws InputReadFailedException {
 
         Path filePath;
         try {

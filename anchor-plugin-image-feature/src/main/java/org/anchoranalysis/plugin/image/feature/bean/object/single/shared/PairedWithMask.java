@@ -44,7 +44,7 @@ import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
- * Evaluates the object as a pair-feature together with the binary-mask from the shard objects.
+ * Evaluates the object as a pair-feature together with the binary-mask from the shared objects.
  *
  * @author Owen Feehan
  */

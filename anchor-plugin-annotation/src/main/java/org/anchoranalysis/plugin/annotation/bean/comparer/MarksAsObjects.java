@@ -49,7 +49,8 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
- * Loads a {@link MarkCollection} to compared, converting each {@link Mark} into an {@link ObjectMask}.
+ * Loads a {@link MarkCollection} to compared, converting each {@link Mark} into an {@link
+ * ObjectMask}.
  *
  * @author Owen Feehan
  */
@@ -65,7 +66,8 @@ public class MarksAsObjects extends ComparableSource {
 
     @Override
     public Findable<ObjectCollection> loadAsObjects(
-            Path reference, Dimensions dimensions, boolean debugMode) throws InputReadFailedException {
+            Path reference, Dimensions dimensions, boolean debugMode)
+            throws InputReadFailedException {
 
         Path path = path(reference);
 

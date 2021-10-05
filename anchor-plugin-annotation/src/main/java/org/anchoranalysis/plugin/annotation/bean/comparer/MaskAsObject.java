@@ -48,7 +48,6 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 
-
 /**
  * Loads {@link Mask} to compared, converting it into an {@link ObjectMask}.
  *
@@ -69,7 +68,8 @@ public class MaskAsObject extends ComparableSource {
 
     @Override
     public Findable<ObjectCollection> loadAsObjects(
-            Path reference, Dimensions dimensions, boolean debugMode) throws InputReadFailedException {
+            Path reference, Dimensions dimensions, boolean debugMode)
+            throws InputReadFailedException {
 
         try {
             Path maskPath = derivePath.deriveFrom(reference, debugMode);
