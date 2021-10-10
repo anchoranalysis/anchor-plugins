@@ -39,7 +39,7 @@ import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
- * Names of the channels from the metadata if it exists, or after RGB, or by index
+ * Names of the channels from the metadata if it exists, or after RGB, or by index.
  *
  * <p>Naming rules - in order of priority:
  *
