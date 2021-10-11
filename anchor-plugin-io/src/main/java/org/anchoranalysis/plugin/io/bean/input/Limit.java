@@ -42,7 +42,7 @@ import org.anchoranalysis.io.input.bean.InputManagerUnary;
  * <p>If there's more input-objects than the maximum, the first maxNumItems are chosen
  *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> input-type.
  */
 public class Limit<T extends InputFromManager> extends InputManagerUnary<T> {
 
@@ -54,11 +54,11 @@ public class Limit<T extends InputFromManager> extends InputManagerUnary<T> {
     protected InputsWithDirectory<T> inputsFromDelegate(
             InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
-        int i = 0;
+        int count = 0;
 
         ListIterator<T> itr = fromDelegate.listIterator();
         while (itr.hasNext()) {
-            if (i++ >= maxNumberItems) {
+            if (count++ >= maxNumberItems) {
                 itr.remove();
             }
         }

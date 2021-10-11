@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.Collections;
-import java.util.Iterator;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -40,15 +39,19 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
- * Uses one input-manager normally, but a different one if in debug mode
+ * Uses one input-manager normally, but a different one if in debug mode.
  *
  * @author Owen Feehan
- * @param <T> input-object type
+ * @param <T> input type
  */
 public class BranchIfDebug<T extends InputFromManager> extends InputManagerUnary<T> {
 
     // START BEAN PROPERTIES
-    // If set to null and we are in debug mode, we take the first item from the normal input
+    /** 
+     * If defined, this provides an input to the manager when in debug-mode, rather than than otherwise {@code inputs}.
+     *
+     * <p>Note that only the first item is ever read from this input-manager.
+     */
     @BeanField @OptionalBean @Getter @Setter private InputManager<T> inputDebug;
     // END BEAN PROPERTIES
 
@@ -57,14 +60,13 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManagerUnary
             InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException {
         if (params.isDebugModeActivated()) {
-            if (inputDebug == null) {
-                // We pick the first
-                Iterator<T> all = fromDelegate.iterator();
-                T firstItem = all.next();
+            if (inputDebug != null) {
+                return inputDebug.inputs(params);
+            } else {
+                // We pick the first item
+                T firstItem = fromDelegate.iterator().next();
                 return fromDelegate.withInputs(Collections.singletonList(firstItem));
             }
-
-            return inputDebug.inputs(params);
         }
         return fromDelegate;
     }
