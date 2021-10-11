@@ -26,16 +26,13 @@
 
 package org.anchoranalysis.plugin.io.bean.input;
 
-import java.util.Collections;
-import java.util.List;
-import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
- * Randomly shuffles the order of an input-manager
+ * Randomly shuffles the order of the inputs.
  *
  * @author Owen Feehan
  * @param <T> input-object type
@@ -45,16 +42,7 @@ public class Shuffle<T extends InputFromManager> extends InputManagerUnary<T> {
     @Override
     protected InputsWithDirectory<T> inputsFromDelegate(
             InputsWithDirectory<T> fromDelegate, InputManagerParams params) {
-        shuffleInputs(fromDelegate.inputs(), params);
+        ShuffleHelper.shuffleInputs(fromDelegate.inputs(), params);
         return fromDelegate;
-    }
-
-    static <T extends InputFromManager> List<T> shuffleInputs(
-            List<T> inputs, InputManagerParams params) {
-        MessageLogger logger = params.getLogger().messageLogger();
-        logger.log("Shuffling input order.");
-        logger.logEmptyLine();
-        Collections.shuffle(inputs);
-        return inputs;
     }
 }

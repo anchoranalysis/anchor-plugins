@@ -32,8 +32,15 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
+import org.anchoranalysis.io.input.file.FileInput;
 import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 
+/**
+ * Like {@link NamedFiles} but rather accepts a {@link FileWithDirectoryInput} rather than a {@link FileInput}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class NamedFilesWithDirectory extends NamedFilesBase<FileWithDirectoryInput> {
 
     // START BEAN PROPERTIES

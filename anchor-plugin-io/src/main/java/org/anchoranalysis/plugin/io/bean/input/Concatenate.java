@@ -39,14 +39,15 @@ import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 
 /**
- * Concatenates several input-managers
+ * Concatenates the inputs from multiple {@link InputManager}s that all provide the same input-type.
  *
  * @author Owen Feehan
- * @param <T> input-object type
+ * @param <T> input type
  */
 public class Concatenate<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
+    /** The list of {@link InputManager}s that will be concatenated. */
     @BeanField @Getter @Setter private List<InputManager<T>> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
@@ -57,14 +58,14 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
         try (ProgressMultiple progressMultiple =
                 new ProgressMultiple(params.getProgress(), list.size())) {
 
-            ArrayList<T> listOut = new ArrayList<>();
+            ArrayList<T> out = new ArrayList<>();
 
             for (InputManager<T> inputManager : list) {
-                listOut.addAll(inputManager.inputs(params).inputs());
+                out.addAll(inputManager.inputs(params).inputs());
 
                 progressMultiple.incrementChild();
             }
-            return new InputsWithDirectory<>(listOut);
+            return new InputsWithDirectory<>(out);
         }
     }
 }
