@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,20 +24,37 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.bean.outline;
+package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
-import org.anchoranalysis.core.exception.AnchorCheckedException;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.outline.FindOutline;
 
-public class TraverseOutlineException extends AnchorCheckedException {
+/**
+ * Finds the exterior <i>outer</i> contour for a {@link Mask} that forms its outline.
+ *  
+ * <p>It always creates a new mask for the result, without consuming the input.
+ *
+ * @author feehano
+ */
+public class ExteriorContour extends MaskProviderUnary {
 
-    /** */
-    private static final long serialVersionUID = 4293810593116687378L;
+    // START BEAN PROPERTIES
+    /**
+     * If true, any 3D mask is flattened in the z-dimension (maximum intensity projection) to make
+     * it 2D
+     */
+    @BeanField @Getter @Setter private boolean flatten = false;
 
-    public TraverseOutlineException(String message) {
-        super(message);
-    }
+    @BeanField @Getter @Setter private boolean outlineAtBoundary = true;
+    // END BEAN PROPERTIES
 
-    public TraverseOutlineException(String message, Throwable cause) {
-        super(message, cause);
+    @Override
+    public Mask createFromMask(Mask mask) throws ProvisionFailedException {
+        return FindOutline.outlineGuess3D(mask, 1, flatten, outlineAtBoundary);
     }
 }

@@ -24,18 +24,22 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline;
+package org.anchoranalysis.plugin.mpp.bean.contour;
 
-import java.util.Optional;
-import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.spatial.point.Point3d;
+import java.util.List;
+import org.anchoranalysis.core.random.RandomNumberGenerator;
+import org.anchoranalysis.mpp.bean.points.PointsBean;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/** Finds a pixel on the outline of an object in a particular direction */
-public abstract class FindPointOnOutline extends NullParamsBean<FindPointOnOutline> {
+/**
+ * Traverses the pixels on the exterior <i>outer</i> contour of an {@link org.anchoranalysis.image.voxel.object.ObjectMask}.
+ *  
+ * @author Owen Feehan
+ *
+ */
+public abstract class TraverseOuterCounter extends PointsBean<TraverseOuterCounter> {
 
-    public abstract Optional<Point3i> pointOnOutline(Point3d centerPoint, Orientation orientation)
-            throws OperationFailedException;
+    public abstract void traverse(
+            Point3i root, List<Point3i> listOut, RandomNumberGenerator randomNumberGenerator)
+            throws TraverseContourException;
 }

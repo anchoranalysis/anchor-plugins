@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
+import org.anchoranalysis.plugin.mpp.bean.contour.TraverseContourException;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -50,7 +50,7 @@ public class MergeLists extends PointsFromOrientationProposer {
             boolean do3D,
             RandomNumberGenerator randomNumberGenerator,
             boolean forwardDirectionOnly)
-            throws TraverseOutlineException {
+            throws TraverseContourException {
 
         List<List<Point3i>> listOfLists =
                 pointsFromOrientationProposer.calculatePoints(

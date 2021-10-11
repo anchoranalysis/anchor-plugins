@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline;
+package org.anchoranalysis.plugin.mpp.bean.proposer.points.contour;
 
 import java.util.Optional;
 import lombok.Getter;
@@ -47,8 +47,10 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
-/** Walks in a particular direction until the outline is found. */
-public class FindPointOnOutlineWalk extends FindPointOnOutline {
+/** 
+ * Walks incrementally in a particular direction until the contour is found.
+ */
+public class FindPointOnContourWalk extends FindPointOnContour {
 
     // START BEANS
     @BeanField @Getter @Setter private Provider<Mask> mask;
@@ -60,7 +62,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
     private Channel channel;
 
     @Override
-    public Optional<Point3i> pointOnOutline(Point3d centerPoint, Orientation orientation)
+    public Optional<Point3i> pointOnContour(Point3d centerPoint, Orientation orientation)
             throws OperationFailedException { // NOSONAR
 
         createMaskIfNecessary();
