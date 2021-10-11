@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
+package org.anchoranalysis.plugin.mpp.bean.contour.visitscheduler;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;

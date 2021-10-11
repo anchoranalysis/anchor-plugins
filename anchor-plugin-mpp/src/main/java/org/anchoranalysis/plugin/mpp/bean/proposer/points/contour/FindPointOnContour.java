@@ -24,16 +24,18 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.bean.outline;
+package org.anchoranalysis.plugin.mpp.bean.proposer.points.contour;
 
-import java.util.List;
-import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.mpp.bean.points.PointsBean;
+import java.util.Optional;
+import org.anchoranalysis.bean.NullParamsBean;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.core.orientation.Orientation;
+import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
-public abstract class OutlinePixelsRetriever extends PointsBean<OutlinePixelsRetriever> {
+/** Finds a pixel in a particular direction on the exterior <i>outer</i> contour of an object. */
+public abstract class FindPointOnContour extends NullParamsBean<FindPointOnContour> {
 
-    public abstract void traverse(
-            Point3i root, List<Point3i> listOut, RandomNumberGenerator randomNumberGenerator)
-            throws TraverseOutlineException;
+    public abstract Optional<Point3i> pointOnContour(Point3d centerPoint, Orientation orientation)
+            throws OperationFailedException;
 }

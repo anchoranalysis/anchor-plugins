@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.bean.outline;
+package org.anchoranalysis.plugin.mpp.bean.contour;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,21 +42,26 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.outline.traverser.OutlineTraverser;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler.VisitScheduler;
+import org.anchoranalysis.plugin.mpp.bean.contour.visitscheduler.VisitScheduler;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.Tuple3i;
 
-// Traverses a pixel location
-public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
+/**
+ * Implementation of {@link TraverseOuterCounter} that uses a {@link VisitScheduler} for determining which pixels are traversed.
+ *  
+ * @author Owen Feehan
+ *
+ */
+public class TraverseOuterContourOnImage extends TraverseOuterCounter {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private VisitScheduler visitScheduler;
 
     @BeanField @Getter @Setter private boolean bigNeighborhood = true;
 
-    @BeanField @Getter @Setter private Provider<Mask> maskOutline;
+    @BeanField @Getter @Setter private Provider<Mask> maskContour;
 
     @BeanField @Getter @Setter private Provider<Mask> maskFilled;
 
@@ -69,7 +74,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
     @Override
     public void traverse(
             Point3i root, List<Point3i> listOut, RandomNumberGenerator randomNumberGenerator)
-            throws TraverseOutlineException {
+            throws TraverseContourException {
 
         Mask outline = createOutline();
         Mask filled = createFilled();
@@ -87,44 +92,44 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         traverseOutline(root, listOut);
     }
 
-    private Mask createOutline() throws TraverseOutlineException {
+    private Mask createOutline() throws TraverseContourException {
         try {
-            return maskOutline.get();
+            return maskContour.get();
         } catch (ProvisionFailedException e) {
-            throw new TraverseOutlineException(
+            throw new TraverseContourException(
                     "Unable to create binaryImgChannelProviderOutline", e);
         }
     }
 
-    private Mask createFilled() throws TraverseOutlineException {
+    private Mask createFilled() throws TraverseContourException {
         try {
             return maskFilled.get();
         } catch (ProvisionFailedException e) {
-            throw new TraverseOutlineException(
+            throw new TraverseContourException(
                     "Unable to create binaryImgChannelProviderFilled", e);
         }
     }
 
     private void checkDimensions(Dimensions dimOutline, Dimensions dimFilled)
-            throws TraverseOutlineException {
+            throws TraverseContourException {
         if (!dimOutline.equals(dimFilled)) {
-            throw new TraverseOutlineException(
+            throw new TraverseContourException(
                     String.format("Dimensions %s and %s are not equal", dimOutline, dimFilled));
         }
     }
 
     private void callBefore(
             Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
-            throws TraverseOutlineException {
+            throws TraverseContourException {
         try {
             visitScheduler.beforeCreateObject(randomNumberGenerator, resolution);
         } catch (InitializeException e1) {
-            throw new TraverseOutlineException(
+            throw new TraverseContourException(
                     "Failure to call beforeCreateObject on visitScheduler", e1);
         }
     }
 
-    private ObjectMask objectForFilled(Point3i root, Mask mask) throws TraverseOutlineException {
+    private ObjectMask objectForFilled(Point3i root, Mask mask) throws TraverseContourException {
         // Important, so we can use the contains function later
         return createObjectForPoint(root, mask).shiftToOrigin();
     }
@@ -133,19 +138,19 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
             Point3i root,
             Optional<Resolution> resolution,
             RandomNumberGenerator randomNumberGenerator)
-            throws TraverseOutlineException {
+            throws TraverseContourException {
         Point3i rootRelToMask =
                 BoundingBox.relativePositionTo(root, objectOutline.boundingBox().cornerMin());
         try {
             visitScheduler.afterCreateObject(rootRelToMask, resolution, randomNumberGenerator);
         } catch (InitializeException e) {
-            throw new TraverseOutlineException(
+            throw new TraverseContourException(
                     "Cannot call afterCreateObject on visitScheduler", e);
         }
     }
 
     private void traverseOutline(Point3i root, List<Point3i> listOut)
-            throws TraverseOutlineException {
+            throws TraverseContourException {
         try {
             new OutlineTraverser(
                             objectOutline,
@@ -155,12 +160,12 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
                             bigNeighborhood)
                     .applyGlobal(root, listOut);
         } catch (OperationFailedException e) {
-            throw new TraverseOutlineException("Cannot traverse outline", e);
+            throw new TraverseContourException("Cannot traverse outline", e);
         }
     }
 
     private ObjectMask createObjectForPoint(Point3i root, Mask mask)
-            throws TraverseOutlineException {
+            throws TraverseContourException {
 
         try {
             Tuple3i maxDistance =
@@ -181,7 +186,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
             return mask.region(box, false);
 
         } catch (OperationFailedException | CreateException e) {
-            throw new TraverseOutlineException(
+            throw new TraverseContourException(
                     "Unable to create an object-mask for the outline", e);
         }
     }
