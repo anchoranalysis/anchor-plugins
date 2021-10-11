@@ -154,7 +154,6 @@ class ReduceObjectsGraph {
      * @param element1 the first element to merge.
      * @param element2 the second element to merge.
      * @param merged the merged element that replaces {@code element1} and {@code element2}.
-     * @throws OperationFailedException
      */
     public void mergeVertices(
             LabelledWithConfidence<ObjectMask> element1,
