@@ -37,6 +37,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
@@ -53,12 +54,14 @@ import org.anchoranalysis.plugin.io.bean.file.namer.LastDirectories;
 import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.anchoranalysis.plugin.io.bean.stack.reader.MultiFileReader;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
-import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
+import org.anchoranalysis.plugin.io.multifile.OpenedMultiFile;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
 
 /**
- * An input-manager that can group together files to form stacks or time-series based on finding
- * patterns in the file path (via regular expressions)
+ * An {@link InputManagerWithStackReader} that can group together files to form {@link Stack}s based on finding
+ * patterns in the file path (via regular expressions).
+ * 
+ * <p>A time-series of {@link Stack}s may also be formed.
  *
  * <p>The manager applies a regular expression on a set of input file paths, and identifies one or
  * more groups: One group is the image key (something that uniquely identifies each image) One group
@@ -127,7 +130,7 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
             throws InputReadFailedException {
 
         List<File> files = new ArrayList<>();
-        List<MultiFileReaderOpenedRaster> openedFiles = new ArrayList<>();
+        List<OpenedMultiFile> openedFiles = new ArrayList<>();
 
         // Process the hash-map by key
         for (String key : map.keySet()) {
@@ -136,7 +139,7 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
             // If we have a condition to check against
             if (checkParsedFilePathBag == null || checkParsedFilePathBag.accept(bag)) {
                 files.add(Paths.get(key).toFile());
-                openedFiles.add(new MultiFileReaderOpenedRaster(getStackReader(), bag));
+                openedFiles.add(new OpenedMultiFile(getStackReader(), bag));
             }
         }
 
@@ -145,10 +148,10 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
     }
 
     private List<NamedChannelsInput> zipIntoGrouping(
-            List<NamedFile> files, List<MultiFileReaderOpenedRaster> openedFiles) {
+            List<NamedFile> files, List<OpenedMultiFile> openedFiles) {
 
         Iterator<NamedFile> iterator1 = files.iterator();
-        Iterator<MultiFileReaderOpenedRaster> iterator2 = openedFiles.iterator();
+        Iterator<OpenedMultiFile> iterator2 = openedFiles.iterator();
 
         List<NamedChannelsInput> result = new ArrayList<>();
         while (iterator1.hasNext() && iterator2.hasNext()) {

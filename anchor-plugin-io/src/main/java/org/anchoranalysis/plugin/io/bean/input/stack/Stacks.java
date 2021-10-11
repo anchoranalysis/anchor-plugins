@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -39,7 +40,9 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.file.FileInput;
 
 /**
- * Each file gives either: * a single stack * a time-series of stacks
+ * An {@link org.anchoranalysis.io.input.bean.InputManager} where each file provides one or more {@link Stack}s.
+ * 
+ * Specifically, each file provides either a single {@link Stack} or a time-series of {@link Stack}.
  *
  * @author Owen Feehan
  */
