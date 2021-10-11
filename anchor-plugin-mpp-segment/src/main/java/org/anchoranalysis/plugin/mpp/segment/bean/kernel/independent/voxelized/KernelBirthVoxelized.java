@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.pixelized;
+package org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.voxelized;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -49,13 +49,13 @@ import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationConte
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.KernelBirth;
 
 /**
- * As an example, this is like sampling WITH replacement.
+ * As an example, this is like sampling <b>with</b> replacement.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class KernelBirthPixelized extends KernelBirth<VoxelizedMarksWithEnergy> {
+public class KernelBirthVoxelized extends KernelBirth<VoxelizedMarksWithEnergy> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MarkProposer markProposer;

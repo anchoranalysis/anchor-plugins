@@ -41,7 +41,7 @@ import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyE
 import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
 
 /**
- * Adds a new mark (a "birth") to create a proposal
+ * Adds a new mark (a "birth") to create a proposal.
  *
  * @author Owen Feehan
  * @param <T> proposal-type

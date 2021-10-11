@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.mpp.segment.bean.marks.voxelized;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.segment.optimization.ToPixelized;
+import org.anchoranalysis.plugin.mpp.segment.optimization.ToVoxelized;
 
-public class RetrieveSourceFromVoxelized<T> extends StateTransformerBean<ToPixelized<T>, T> {
+public class RetrieveSourceFromVoxelized<T> extends StateTransformerBean<ToVoxelized<T>, T> {
 
     @Override
-    public T transform(ToPixelized<T> in, TransformationContext context)
+    public T transform(ToVoxelized<T> in, TransformationContext context)
             throws OperationFailedException {
         return in.getSource();
     }

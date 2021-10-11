@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.segment.optimization.ToPixelized;
+import org.anchoranalysis.plugin.mpp.segment.optimization.ToVoxelized;
 
 /**
  * Converts a Marks to a MarksToPixelized using a transformer
@@ -44,7 +44,7 @@ import org.anchoranalysis.plugin.mpp.segment.optimization.ToPixelized;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class VoxelizeWithTransform<T> extends StateTransformerBean<T, ToPixelized<T>> {
+public class VoxelizeWithTransform<T> extends StateTransformerBean<T, ToVoxelized<T>> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
@@ -52,8 +52,8 @@ public class VoxelizeWithTransform<T> extends StateTransformerBean<T, ToPixelize
     // END BEAN PROPERTIES
 
     @Override
-    public ToPixelized<T> transform(T in, TransformationContext context)
+    public ToVoxelized<T> transform(T in, TransformationContext context)
             throws OperationFailedException {
-        return new ToPixelized<>(in, transformer.transform(in, context));
+        return new ToVoxelized<>(in, transformer.transform(in, context));
     }
 }

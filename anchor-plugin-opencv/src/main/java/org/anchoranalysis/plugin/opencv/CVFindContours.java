@@ -44,7 +44,9 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
-/** Wrapper around Open CV's findContours function */
+/** 
+ * Wrapper around OpenCV's <a href="https://docs.opencv.org/3.4.15/df/d0d/tutorial_find_contours.html">findContours</a> function.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CVFindContours {
 

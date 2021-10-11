@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.pixelized;
+package org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.voxelized;
 
 import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -37,7 +37,7 @@ import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.KernelDeath;
 
-public class KernelDeathPixelized extends KernelDeath<VoxelizedMarksWithEnergy> {
+public class KernelDeathVoxelized extends KernelDeath<VoxelizedMarksWithEnergy> {
 
     @Override
     protected Optional<MarkAnd<Mark, VoxelizedMarksWithEnergy>> removeAndUpdateEnergy(
@@ -58,10 +58,10 @@ public class KernelDeathPixelized extends KernelDeath<VoxelizedMarksWithEnergy> 
     }
 
     private static Optional<MarkAnd<Mark, VoxelizedMarksWithEnergy>> removeMarkAndUpdateEnergy(
-            VoxelizedMarksWithEnergy exst, ProposerContext propContext)
+            VoxelizedMarksWithEnergy existing, ProposerContext propContext)
             throws KernelCalculateEnergyException {
 
-        int index = selectIndexToRmv(exst.getMarks().getMarks(), propContext);
+        int index = selectIndexToRmv(existing.getMarks().getMarks(), propContext);
 
         if (index == -1) {
             return Optional.empty();
@@ -69,15 +69,15 @@ public class KernelDeathPixelized extends KernelDeath<VoxelizedMarksWithEnergy> 
 
         return Optional.of(
                 new MarkAnd<>(
-                        exst.getMemoForIndex(index).getMark(),
-                        updatedEnergyAfterRemoval(index, exst, propContext)));
+                        existing.getMemoForIndex(index).getMark(),
+                        updatedEnergyAfterRemoval(index, existing, propContext)));
     }
 
     private static VoxelizedMarksWithEnergy updatedEnergyAfterRemoval(
-            int index, VoxelizedMarksWithEnergy exst, ProposerContext propContext)
+            int index, VoxelizedMarksWithEnergy existing, ProposerContext propContext)
             throws KernelCalculateEnergyException {
         // We calculate a new Energy by exchanging our marks
-        VoxelizedMarksWithEnergy newEnergy = exst.shallowCopy();
+        VoxelizedMarksWithEnergy newEnergy = existing.shallowCopy();
 
         try {
             newEnergy.remove(index, propContext.getEnergyStack().withoutParams());
