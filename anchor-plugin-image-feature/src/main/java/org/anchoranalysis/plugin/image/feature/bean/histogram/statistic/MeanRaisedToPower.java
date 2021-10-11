@@ -31,7 +31,9 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
-/*** The mean of the intensity raised to power */
+/***
+ * Calculates the mean value in a histogram, and raises it to a power.
+ */
 public class MeanRaisedToPower extends FeatureHistogramStatistic {
 
     // START BEAN PROPERTIES

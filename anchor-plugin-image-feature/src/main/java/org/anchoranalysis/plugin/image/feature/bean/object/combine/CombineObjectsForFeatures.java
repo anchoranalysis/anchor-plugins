@@ -66,7 +66,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
         extends AnchorBean<CombineObjectsForFeatures<T>> {
 
     /**
-     * Generates a thumbnail representation of one or more objects combine, as form a single input
+     * Generates a thumbnail representation of one or more combined objects, as form a single input.
      */
     @BeanField @Getter @Setter
     private ThumbnailFromObjects thumbnail = new OutlinePreserveRelativeSize();

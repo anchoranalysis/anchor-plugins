@@ -30,13 +30,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
+import lombok.Getter;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.annotation.io.comparer.StatisticsToExport;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.annotation.counter.ImageCounter;
 import org.anchoranalysis.plugin.annotation.counter.ImageCounterList;
 import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
-import lombok.Getter;
 
 public class ComparisonSharedState<T extends Assignment<ObjectMask>> {
 
@@ -68,8 +68,8 @@ public class ComparisonSharedState<T extends Assignment<ObjectMask>> {
         list.add(groupAll.comparison());
 
         for (int i = 0; i < numberLevelsGrouping; i++) {
-            for( ImageCounterWithStatistics<T> counter : groupsMap[i].values()) {
-                list.add(counter.comparison());    
+            for (ImageCounterWithStatistics<T> counter : groupsMap[i].values()) {
+                list.add(counter.comparison());
             }
         }
         return list;

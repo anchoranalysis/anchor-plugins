@@ -44,10 +44,17 @@ public abstract class ConicFitterBase extends PointsFitter {
     @BeanField @Getter @Setter private float inputPointShift = 0.0f;
     // END BEAN
 
-    public void duplicateHelper(ConicFitterBase out) {
-        out.shellRad = shellRad;
-        out.subtractRadii = subtractRadii;
-        out.inputPointShift = inputPointShift;
-        out.scaleRadii = scaleRadii;
+    /**
+     * Copies fields in this (base) class to {@code target}.
+     *
+     * <p>This is intended to be called by sub-classes to help when duplicating.
+     *
+     * @param target the object fields are assigned to.
+     */
+    protected void assignTo(ConicFitterBase target) {
+        target.shellRad = shellRad;
+        target.subtractRadii = subtractRadii;
+        target.inputPointShift = inputPointShift;
+        target.scaleRadii = scaleRadii;
     }
 }

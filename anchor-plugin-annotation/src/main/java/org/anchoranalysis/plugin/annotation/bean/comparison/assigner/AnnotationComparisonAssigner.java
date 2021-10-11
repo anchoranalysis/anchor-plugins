@@ -38,9 +38,8 @@ import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
 
 /**
  * Compares elements in an annotation to elements from an experiment.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T>
  */
 public abstract class AnnotationComparisonAssigner<T extends Assignment<ObjectMask>>

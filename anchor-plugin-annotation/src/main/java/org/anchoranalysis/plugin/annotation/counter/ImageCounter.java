@@ -28,12 +28,11 @@ package org.anchoranalysis.plugin.annotation.counter;
 
 /**
  * Counts images on aggregate, some with associated annotations, others without.
- * 
- * <p>An arbitrary payload may be associated with an annotated-image, as suits
- * the needs of the implementing sub-class.</p>
- * 
- * @author Owen Feehan
  *
+ * <p>An arbitrary payload may be associated with an annotated-image, as suits the needs of the
+ * implementing sub-class.
+ *
+ * @author Owen Feehan
  * @param <T> pay-load type.
  */
 public interface ImageCounter<T> {

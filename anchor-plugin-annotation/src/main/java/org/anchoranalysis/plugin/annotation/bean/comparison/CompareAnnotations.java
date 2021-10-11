@@ -32,9 +32,9 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
+import org.anchoranalysis.annotation.io.assignment.generator.AssignmentColorPool;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
 import org.anchoranalysis.annotation.io.assignment.generator.DrawColoredObjects;
-import org.anchoranalysis.annotation.io.assignment.generator.AssignmentColorPool;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.VeryBright;
@@ -97,14 +97,20 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
     /** The name of the stack to use as background to the annotations. */
     @BeanField @Getter @Setter private String background = "Image";
 
-    /** If non-empty, the string (a regular-expression) is used to split the file's identifier into groups. */
+    /**
+     * If non-empty, the string (a regular-expression) is used to split the file's identifier into
+     * groups.
+     */
     @BeanField @Getter @Setter private String splitIdentifierRegex = "";
 
     @BeanField @Getter @Setter private int maxSplitGroups = 5;
 
     @BeanField @Getter @Setter private int numberLevelsGrouping = 0;
 
-    /** If true, a maximum-intensity-projection is first applied to any 3D objects into a 2D plane, before comparison. */
+    /**
+     * If true, a maximum-intensity-projection is first applied to any 3D objects into a 2D plane,
+     * before comparison.
+     */
     @BeanField @Getter @Setter private boolean flatten = false;
 
     /** How many pixels should the outline be around objects. */
@@ -129,7 +135,8 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
             CSVAssignment assignmentCSV =
                     new CSVAssignment(
                             outputter, OUTPUT_BY_IMAGE, hasDescriptiveSplit(), maxSplitGroups);
-            return new ComparisonSharedState<>(assignmentCSV, numberLevelsGrouping, assigner::groupForKey);
+            return new ComparisonSharedState<>(
+                    assignmentCSV, numberLevelsGrouping, assigner::groupForKey);
         } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -137,7 +144,8 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
 
     @Override
     public void doJobOnInput(
-            InputBound<AnnotationComparisonInput<ProvidesStackInput>, ComparisonSharedState<T>> params)
+            InputBound<AnnotationComparisonInput<ProvidesStackInput>, ComparisonSharedState<T>>
+                    params)
             throws JobExecutionException {
 
         AnnotationComparisonInput<ProvidesStackInput> input = params.getInput();
@@ -168,7 +176,8 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
     }
 
     @Override
-    public void afterAllJobsAreExecuted(ComparisonSharedState<T> sharedState, InputOutputContext context)
+    public void afterAllJobsAreExecuted(
+            ComparisonSharedState<T> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
 
         sharedState.getAssignmentCSV().end();
@@ -306,7 +315,8 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
                 assigner.moreThanOneObject());
     }
 
-    private AssignmentColorPool createColorPool(int numberPaired, ColorScheme colorSchemeFromSettings) {
+    private AssignmentColorPool createColorPool(
+            int numberPaired, ColorScheme colorSchemeFromSettings) {
         return new AssignmentColorPool(
                 numberPaired, colorSchemeFromSettings, colorsUnpaired, replaceMatchesWithSolids);
     }

@@ -53,9 +53,9 @@ class CSVComparisonGroup {
         try {
             boolean first = true;
             for (StatisticsToExport statistics : statisticsForGroups) {
-                
+
                 if (first) {
-                    writer.get().writeHeaders(statistics.getNames());        
+                    writer.get().writeHeaders(statistics.getNames());
                     first = false;
                 }
                 writer.get().writeRow(statistics.getValues());
