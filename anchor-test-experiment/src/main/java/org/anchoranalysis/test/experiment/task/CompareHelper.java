@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.test.experiment.task;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
