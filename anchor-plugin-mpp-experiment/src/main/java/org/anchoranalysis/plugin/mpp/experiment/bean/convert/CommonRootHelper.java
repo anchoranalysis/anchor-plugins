@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.mpp.experiment.bean;
+package org.anchoranalysis.plugin.mpp.experiment.bean.convert;
 
 import com.owenfeehan.pathpatternfinder.commonpath.FindCommonPathElements;
 import com.owenfeehan.pathpatternfinder.commonpath.PathElements;

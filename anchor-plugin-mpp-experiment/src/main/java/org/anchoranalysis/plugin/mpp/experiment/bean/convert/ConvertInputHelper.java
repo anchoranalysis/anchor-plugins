@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.mpp.experiment.bean;
+package org.anchoranalysis.plugin.mpp.experiment.bean.convert;
 
 import java.nio.file.Path;
 import java.util.Optional;

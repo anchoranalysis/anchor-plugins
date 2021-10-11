@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.mpp.experiment;
+package org.anchoranalysis.plugin.mpp.experiment.shared;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.plugin.mpp.experiment.bean.ConvertNamedChannels;
+import org.anchoranalysis.plugin.mpp.experiment.bean.convert.ConvertNamedChannels;
 
 /**
  * Shared-state that remembers converted inputs for corresponding unconverted inputs.

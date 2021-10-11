@@ -42,7 +42,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  * @author Owen Feehan
  */
 @Value
-class ObjectInCsvColumn {
+class ObjectInCSVColumn {
 
     /** The index of a column describing a unique-pixel within an object. */
     @Getter private final int indexColumnUniqueVoxel;
