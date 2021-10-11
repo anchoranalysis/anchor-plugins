@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 
 /**
- * Transforms a kernel-to-state and vice versa
+ * Transforms a kernel-to-state and vice versa.
  *
  * @author Owen Feehan
  * @param <U> kernel-type

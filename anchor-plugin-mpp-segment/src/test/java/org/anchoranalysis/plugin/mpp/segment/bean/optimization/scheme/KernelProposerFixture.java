@@ -42,8 +42,8 @@ import org.anchoranalysis.mpp.segment.bean.optimization.kernel.Kernel;
 import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelProposer;
 import org.anchoranalysis.plugin.mpp.bean.proposer.mark.collection.CreateNew;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.KernelInitialMarksVoxelized;
-import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.pixelized.KernelBirthPixelized;
-import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.pixelized.KernelDeathPixelized;
+import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.voxelized.KernelBirthVoxelized;
+import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.voxelized.KernelDeathVoxelized;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.proposer.KernelProposerOptionSingle;
 import org.anchoranalysis.test.experiment.BeanTestChecker;
 import org.anchoranalysis.test.image.InputOutputContextFixture;
@@ -71,7 +71,7 @@ class KernelProposerFixture {
                 createProposerTwoEqual(
                         createInitialKernel(initialization, context.getLogger()),
                         createBirthKernel(markProposer, initialization, context.getLogger()),
-                        new KernelDeathPixelized());
+                        new KernelDeathVoxelized());
         kernelProposer.initialize();
         return BeanTestChecker.check(kernelProposer);
     }
@@ -94,9 +94,9 @@ class KernelProposerFixture {
                 new KernelInitialMarksVoxelized(new CreateNew()), params, logger);
     }
 
-    private static KernelBirthPixelized createBirthKernel(
+    private static KernelBirthVoxelized createBirthKernel(
             MarkProposer markProposer, MarksInitialization initialization, Logger logger) {
         return BeanTestChecker.checkAndInit(
-                new KernelBirthPixelized(markProposer), initialization, logger);
+                new KernelBirthVoxelized(markProposer), initialization, logger);
     }
 }

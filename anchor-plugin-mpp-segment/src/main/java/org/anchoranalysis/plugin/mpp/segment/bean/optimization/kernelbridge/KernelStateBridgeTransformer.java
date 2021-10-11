@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
-import org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode.TransformMapOptional;
+import org.anchoranalysis.plugin.mpp.segment.bean.optimization.TransformMapOptional;
 
 public class KernelStateBridgeTransformer<U, T> extends KernelStateBridge<U, T> {
 

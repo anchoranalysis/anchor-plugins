@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.plugin.mpp.segment.bean.marks.voxelized.RetrieveDestinationFromVoxelized;
 import org.anchoranalysis.plugin.mpp.segment.bean.marks.voxelized.RetrieveSourceFromVoxelized;
-import org.anchoranalysis.plugin.mpp.segment.optimization.ToPixelized;
+import org.anchoranalysis.plugin.mpp.segment.optimization.ToVoxelized;
 
 /**
  * Assumes we are interested in {@link VoxelizedMarksWithEnergy} as reporting type, and our
@@ -48,7 +48,7 @@ import org.anchoranalysis.plugin.mpp.segment.optimization.ToPixelized;
  * @param <T>
  */
 public class StateReporterToPixelized<T>
-        extends StateReporter<ToPixelized<T>, VoxelizedMarksWithEnergy> {
+        extends StateReporter<ToVoxelized<T>, VoxelizedMarksWithEnergy> {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter
@@ -56,13 +56,13 @@ public class StateReporterToPixelized<T>
     // END BEAN PROPERTIES
 
     @Override
-    public StateTransformer<ToPixelized<T>, VoxelizedMarksWithEnergy> primaryReport() {
+    public StateTransformer<ToVoxelized<T>, VoxelizedMarksWithEnergy> primaryReport() {
         return new RetrieveDestinationFromVoxelized<>();
     }
 
     @Override
-    public Optional<StateTransformer<ToPixelized<T>, VoxelizedMarksWithEnergy>> secondaryReport() {
-        StateTransformer<ToPixelized<T>, VoxelizedMarksWithEnergy> compose =
+    public Optional<StateTransformer<ToVoxelized<T>, VoxelizedMarksWithEnergy>> secondaryReport() {
+        StateTransformer<ToVoxelized<T>, VoxelizedMarksWithEnergy> compose =
                 new Compose<>(new RetrieveSourceFromVoxelized<>(), secondary);
         return Optional.of(compose);
     }

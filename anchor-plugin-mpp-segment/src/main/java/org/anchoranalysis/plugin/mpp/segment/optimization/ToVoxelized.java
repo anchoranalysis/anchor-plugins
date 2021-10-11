@@ -37,7 +37,7 @@ import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
  */
 @AllArgsConstructor
 @Value
-public class ToPixelized<T> {
+public class ToVoxelized<T> {
 
     private T source;
     private VoxelizedMarksWithEnergy destination;

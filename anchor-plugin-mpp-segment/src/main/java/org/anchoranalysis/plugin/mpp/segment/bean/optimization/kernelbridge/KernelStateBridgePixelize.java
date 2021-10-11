@@ -35,8 +35,8 @@ import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.plugin.mpp.segment.bean.marks.voxelized.RetrieveSourceFromVoxelized;
 import org.anchoranalysis.plugin.mpp.segment.bean.marks.voxelized.VoxelizeWithTransform;
-import org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode.TransformMapOptional;
-import org.anchoranalysis.plugin.mpp.segment.optimization.ToPixelized;
+import org.anchoranalysis.plugin.mpp.segment.bean.optimization.TransformMapOptional;
+import org.anchoranalysis.plugin.mpp.segment.optimization.ToVoxelized;
 
 /**
  * State derived from the kernel takes the form of {@code ToPixelized<T>}
@@ -44,7 +44,7 @@ import org.anchoranalysis.plugin.mpp.segment.optimization.ToPixelized;
  * @author Owen Feehan
  * @param <T>
  */
-public class KernelStateBridgePixelize<T> extends KernelStateBridge<T, ToPixelized<T>> {
+public class KernelStateBridgePixelize<T> extends KernelStateBridge<T, ToVoxelized<T>> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
@@ -52,12 +52,12 @@ public class KernelStateBridgePixelize<T> extends KernelStateBridge<T, ToPixeliz
     // END BEAN PROPERTIES
 
     @Override
-    public StateTransformer<Optional<T>, Optional<ToPixelized<T>>> kernelToState() {
+    public StateTransformer<Optional<T>, Optional<ToVoxelized<T>>> kernelToState() {
         return new TransformMapOptional<>(new VoxelizeWithTransform<>(transformer));
     }
 
     @Override
-    public StateTransformer<Optional<ToPixelized<T>>, Optional<T>> stateToKernel() {
+    public StateTransformer<Optional<ToVoxelized<T>>, Optional<T>> stateToKernel() {
         return new TransformMapOptional<>(new RetrieveSourceFromVoxelized<>());
     }
 }
