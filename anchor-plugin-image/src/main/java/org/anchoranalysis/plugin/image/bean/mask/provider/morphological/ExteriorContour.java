@@ -36,7 +36,7 @@ import org.anchoranalysis.image.core.outline.FindOutline;
 
 /**
  * Finds the exterior <i>outer</i> contour for a {@link Mask} that forms its outline.
- *  
+ *
  * <p>It always creates a new mask for the result, without consuming the input.
  *
  * @author feehano

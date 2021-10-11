@@ -49,10 +49,10 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.Tuple3i;
 
 /**
- * Implementation of {@link TraverseOuterCounter} that uses a {@link VisitScheduler} for determining which pixels are traversed.
- *  
- * @author Owen Feehan
+ * Implementation of {@link TraverseOuterCounter} that uses a {@link VisitScheduler} for determining
+ * which pixels are traversed.
  *
+ * @author Owen Feehan
  */
 public class TraverseOuterContourOnImage extends TraverseOuterCounter {
 

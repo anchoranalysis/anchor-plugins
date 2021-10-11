@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * Implementations of {@link org.anchoranalysis.io.input.bean.files.FilesProvider}.
- */
+/** Implementations of {@link org.anchoranalysis.io.input.bean.files.FilesProvider}. */
 package org.anchoranalysis.plugin.io.bean.input.files.provider;

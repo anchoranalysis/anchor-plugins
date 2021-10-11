@@ -47,9 +47,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
-/** 
- * Walks incrementally in a particular direction until the contour is found.
- */
+/** Walks incrementally in a particular direction until the contour is found. */
 public class FindPointOnContourWalk extends FindPointOnContour {
 
     // START BEANS

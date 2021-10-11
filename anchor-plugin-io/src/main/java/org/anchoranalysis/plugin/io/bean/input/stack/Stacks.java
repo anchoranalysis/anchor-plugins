@@ -40,9 +40,11 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.file.FileInput;
 
 /**
- * An {@link org.anchoranalysis.io.input.bean.InputManager} where each file provides one or more {@link Stack}s.
- * 
- * Specifically, each file provides either a single {@link Stack} or a time-series of {@link Stack}.
+ * An {@link org.anchoranalysis.io.input.bean.InputManager} where each file provides one or more
+ * {@link Stack}s.
+ *
+ * <p>Specifically, each file provides either a single {@link Stack} or a time-series of {@link
+ * Stack}.
  *
  * @author Owen Feehan
  */
