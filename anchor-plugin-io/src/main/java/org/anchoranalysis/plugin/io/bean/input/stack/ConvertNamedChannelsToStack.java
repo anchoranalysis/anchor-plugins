@@ -39,7 +39,7 @@ import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 
 /**
- * Manager that converts (one channel) {@link NamedChannelsInput} to {@link StackSequenceInput}
+ * Manager that converts (one channel) {@link NamedChannelsInput} to {@link StackSequenceInput}.
  *
  * @author Owen Feehan
  */

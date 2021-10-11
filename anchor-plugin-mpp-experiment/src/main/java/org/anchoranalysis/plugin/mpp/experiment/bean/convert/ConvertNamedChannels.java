@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean;
+package org.anchoranalysis.plugin.mpp.experiment.bean.convert;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.mpp.experiment.SharedStateRememberConverted;
+import org.anchoranalysis.plugin.mpp.experiment.shared.SharedStateRememberConverted;
 
 /**
  * Converts {@link NamedChannelsInput} to a variety of others to match a delegate task.

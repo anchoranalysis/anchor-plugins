@@ -37,14 +37,14 @@ import org.w3c.dom.Element;
 
 public class Pairwise extends ColumnDefinition {
 
-    private ObjectInCsvColumn columnFirst;
-    private ObjectInCsvColumn columnSecond;
+    private ObjectInCSVColumn columnFirst;
+    private ObjectInCSVColumn columnSecond;
 
     @Override
     public void initHeaders(String[] headers) throws InitializeException {
         super.initHeaders(headers);
-        columnFirst = new ObjectInCsvColumn(indexUniquePixel, true);
-        columnSecond = new ObjectInCsvColumn(indexUniquePixel, false);
+        columnFirst = new ObjectInCSVColumn(indexUniquePixel, true);
+        columnSecond = new ObjectInCSVColumn(indexUniquePixel, false);
     }
 
     @Override
