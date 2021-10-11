@@ -1,3 +1,7 @@
+/**
+ * Features that calculate the degree of overlap between two {@link
+ * org.anchoranalysis.image.voxel.object.ObjectMask}s.
+ */
 package org.anchoranalysis.plugin.image.feature.bean.object.pair.overlap;
 /*-
  * #%L

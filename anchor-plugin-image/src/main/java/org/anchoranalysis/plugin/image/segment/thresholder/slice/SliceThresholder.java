@@ -35,9 +35,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
  * Segmenting a z-{@link Stack} slice-by-slice.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public abstract class SliceThresholder {

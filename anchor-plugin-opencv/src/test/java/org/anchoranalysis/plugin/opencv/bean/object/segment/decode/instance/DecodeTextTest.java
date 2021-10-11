@@ -62,7 +62,7 @@ class DecodeTextTest extends DecodeInstanceSegmentationTestBase {
         segment.setDecode(new DecodeText());
         segment.setModelBinaryPath("frozen_east_text_detection.pb");
         segment.setScaleInput(createScaleInput());
-        segment.setSubtractMean( new DoubleList(123.68,116.78,103.94));
+        segment.setSubtractMean(new DoubleList(123.68, 116.78, 103.94));
         return new SuppressNonMaxima<>(segment, new ConditionallyMergeOverlappingObjects(), false);
     }
 

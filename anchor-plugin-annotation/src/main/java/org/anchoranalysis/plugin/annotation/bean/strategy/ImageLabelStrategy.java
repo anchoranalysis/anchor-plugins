@@ -40,9 +40,8 @@ import org.anchoranalysis.plugin.annotation.bean.label.GroupedAnnotationLabels;
 
 /**
  * Assigns a single label per image, as a whole.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ImageLabelStrategy extends SinglePathStrategy {
 

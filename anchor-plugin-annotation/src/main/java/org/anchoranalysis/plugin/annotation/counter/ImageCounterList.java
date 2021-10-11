@@ -36,9 +36,8 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Allows operations to be applied to several {@link ImageCounter}s collectively.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> the payload-type of each {@link ImageCounter}.
  */
 public class ImageCounterList<T extends Assignment<ObjectMask>>
