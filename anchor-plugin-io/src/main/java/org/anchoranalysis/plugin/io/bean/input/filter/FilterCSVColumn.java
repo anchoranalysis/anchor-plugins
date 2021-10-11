@@ -53,7 +53,7 @@ import org.anchoranalysis.io.input.path.DerivePathException;
  * @author Owen Feehan
  * @param <T> InputType
  */
-public class FilterCsvColumn<T extends InputFromManager> extends InputManagerUnary<T> {
+public class FilterCSVColumn<T extends InputFromManager> extends InputManagerUnary<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DerivePath csvFilePath;

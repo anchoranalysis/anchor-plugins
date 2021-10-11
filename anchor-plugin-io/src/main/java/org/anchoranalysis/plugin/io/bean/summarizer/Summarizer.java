@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * Summarizes a set of elements by outputting a descriptive string
+ * Summarizes a set of elements by outputting a descriptive string.
  *
  * @author Owen Feehan
  * @param <T> type of element to be summarized

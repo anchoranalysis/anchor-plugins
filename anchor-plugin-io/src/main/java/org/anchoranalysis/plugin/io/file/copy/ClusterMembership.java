@@ -8,7 +8,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster.ClusterIdentifier;
 
 /**
- * A mapping of files to cluister-membership.
+ * A mapping of files to membership of particular clusters.
  *
  * @author Owen Feehan
  */

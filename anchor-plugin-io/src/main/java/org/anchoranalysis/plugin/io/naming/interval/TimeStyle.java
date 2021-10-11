@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 
 /**
- * How to style the time in the name.
+ * How to style a time in a file-name.
  *
  * @author Owen Feehan
  */
