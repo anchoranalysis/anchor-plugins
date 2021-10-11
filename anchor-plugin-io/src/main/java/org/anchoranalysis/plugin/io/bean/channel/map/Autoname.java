@@ -44,9 +44,9 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
  * <p>Naming rules - in order of priority:
  *
  * <ol>
- *   <li>The channel name from the metadata
- *   <li>red, green or blue if it's RGB
- *   <li>channel-%d where %d is the index of the channel
+ *   <li>The channel name from the metadata.
+ *   <li>red, green or blue if it's RGB.
+ *   <li>channel-%d where %d is the index of the channel.
  * </ol>
  *
  * @author Owen Feehan
