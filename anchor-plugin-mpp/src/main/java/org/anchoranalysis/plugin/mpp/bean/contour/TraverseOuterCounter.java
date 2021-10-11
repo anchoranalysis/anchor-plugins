@@ -32,10 +32,10 @@ import org.anchoranalysis.mpp.bean.points.PointsBean;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Traverses the pixels on the exterior <i>outer</i> contour of an {@link org.anchoranalysis.image.voxel.object.ObjectMask}.
- *  
- * @author Owen Feehan
+ * Traverses the pixels on the exterior <i>outer</i> contour of an {@link
+ * org.anchoranalysis.image.voxel.object.ObjectMask}.
  *
+ * @author Owen Feehan
  */
 public abstract class TraverseOuterCounter extends PointsBean<TraverseOuterCounter> {
 

@@ -58,9 +58,9 @@ import org.anchoranalysis.plugin.io.multifile.OpenedMultiFile;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
 
 /**
- * An {@link InputManagerWithStackReader} that can group together files to form {@link Stack}s based on finding
- * patterns in the file path (via regular expressions).
- * 
+ * An {@link InputManagerWithStackReader} that can group together files to form {@link Stack}s based
+ * on finding patterns in the file path (via regular expressions).
+ *
  * <p>A time-series of {@link Stack}s may also be formed.
  *
  * <p>The manager applies a regular expression on a set of input file paths, and identifies one or

@@ -39,9 +39,9 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
  * A {@link OpenedImageFile} where the image is formed from more than one file on the file-system.
- * 
+ *
  * <p>It ignores multiple series.
- * 
+ *
  * @author Owen Feehan
  */
 @RequiredArgsConstructor

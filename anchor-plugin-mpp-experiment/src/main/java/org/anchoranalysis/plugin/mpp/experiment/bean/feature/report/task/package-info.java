@@ -23,7 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * Tasks that calculate and export {@link org.anchoranalysis.io.output.bean.ReportFeature}s.
- */
+/** Tasks that calculate and export {@link org.anchoranalysis.io.output.bean.ReportFeature}s. */
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report.task;
