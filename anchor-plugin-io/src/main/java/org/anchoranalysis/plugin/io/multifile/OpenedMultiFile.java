@@ -37,9 +37,15 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
-// Ignores multiple series
+/**
+ * A {@link OpenedImageFile} where the image is formed from more than one file on the file-system.
+ * 
+ * <p>It ignores multiple series.
+ * 
+ * @author Owen Feehan
+ */
 @RequiredArgsConstructor
-public class MultiFileReaderOpenedRaster implements OpenedImageFile {
+public class OpenedMultiFile implements OpenedImageFile {
 
     // START REQUIRED ARGUMENTS
     private final StackReader stackReader;
