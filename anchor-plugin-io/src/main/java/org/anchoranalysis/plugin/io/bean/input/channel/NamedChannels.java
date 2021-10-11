@@ -39,7 +39,7 @@ import org.anchoranalysis.io.input.file.FileInput;
 import org.anchoranalysis.plugin.io.bean.channel.map.Autoname;
 
 /**
- * An image viewed as a named set of channels
+ * An image viewed as a set of channels, each with a unique name.
  *
  * @author Owen Feehan
  */

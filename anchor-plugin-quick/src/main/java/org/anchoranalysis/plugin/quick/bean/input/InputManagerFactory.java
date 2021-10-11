@@ -36,7 +36,7 @@ import org.anchoranalysis.io.input.bean.namer.FileNamer;
 import org.anchoranalysis.io.input.file.FileInput;
 import org.anchoranalysis.plugin.io.bean.file.provider.Rooted;
 import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
-import org.anchoranalysis.plugin.io.bean.input.filter.FilterCsvColumn;
+import org.anchoranalysis.plugin.io.bean.input.filter.FilterCSVColumn;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -57,7 +57,7 @@ class InputManagerFactory {
             return filesCreated;
         }
 
-        FilterCsvColumn<FileInput> filterManager = new FilterCsvColumn<>();
+        FilterCSVColumn<FileInput> filterManager = new FilterCSVColumn<>();
         filterManager.setInput(filesCreated);
         filterManager.setMatch(filterFilesCsv.getMatch());
         filterManager.setCsvFilePath(

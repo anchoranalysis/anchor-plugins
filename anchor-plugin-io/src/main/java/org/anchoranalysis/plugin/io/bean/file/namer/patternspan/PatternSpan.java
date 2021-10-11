@@ -45,8 +45,10 @@ import org.anchoranalysis.io.input.file.NamedFile;
 import org.apache.commons.io.IOCase;
 
 /**
- * Finds a pattern in the descriptive name, and uses the region from the first variable to the
- * last-variable as the descriptive-name.
+ * Finds a pattern in the file-path, and uses a portion of the file-path in that pattern to form the name.
+ * 
+ * <p>The portion used spans from the first variable to the last-variable in the pattern, including any
+ * non-variable portions of the file-path.
  *
  * <p>In the special case that a single file is passed, its filename is extracted without any
  * extension.

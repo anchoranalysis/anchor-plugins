@@ -40,7 +40,7 @@ import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.plugin.io.bean.file.group.parser.FilePathParser;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
-import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
+import org.anchoranalysis.plugin.io.multifile.OpenedMultiFile;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -87,7 +87,7 @@ public class MultiFileReader extends StackReader {
             }
         }
 
-        return new MultiFileReaderOpenedRaster(stackReader, bag);
+        return new OpenedMultiFile(stackReader, bag);
     }
 
     private File folderFromFile(Path filePath) {
