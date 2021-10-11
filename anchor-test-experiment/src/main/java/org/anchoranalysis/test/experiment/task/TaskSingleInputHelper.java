@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.test.experiment.task;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -62,7 +62,7 @@ import org.anchoranalysis.test.image.io.OutputManagerForImagesFixture;
 import org.anchoranalysis.test.image.io.OutputterFixture;
 
 /**
- * Executes a task on a single-input outputting into a specific directory
+ * Executes a task on a single-input outputting into a specific directory.
  *
  * @author Owen Feehan
  */
@@ -70,7 +70,7 @@ import org.anchoranalysis.test.image.io.OutputterFixture;
 public class TaskSingleInputHelper {
 
     /**
-     * Executes a task on a single-input
+     * Executes a task on a single-input.
      *
      * @param <T> input type
      * @param <S> shared-state type

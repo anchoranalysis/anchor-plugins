@@ -27,19 +27,19 @@
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.extract;
 
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ExtractScoreSize;
-import org.anchoranalysis.plugin.mpp.segment.optimization.ToPixelized;
+import org.anchoranalysis.plugin.mpp.segment.optimization.ToVoxelized;
 
-public class ToPixelizedExtracter<T> extends ExtractScoreSize<ToPixelized<T>> {
+public class ToPixelizedExtracter<T> extends ExtractScoreSize<ToVoxelized<T>> {
 
     private FromVoxelizedMarksWithEnergy helper = new FromVoxelizedMarksWithEnergy();
 
     @Override
-    public double extractScore(ToPixelized<T> item) {
+    public double extractScore(ToVoxelized<T> item) {
         return helper.extractScore(item.getDestination());
     }
 
     @Override
-    public int extractSize(ToPixelized<T> item) {
+    public int extractSize(ToVoxelized<T> item) {
         return helper.extractSize(item.getDestination());
     }
 }

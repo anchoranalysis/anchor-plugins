@@ -31,7 +31,7 @@ import lombok.Getter;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
- * A subset of a marks (as extracted during a partition)
+ * A subset of a marks (as extracted during a partition).
  *
  * @author Owen Feehan
  */

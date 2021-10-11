@@ -32,13 +32,14 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
+import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.bean.namer.FileNamer;
 import org.anchoranalysis.io.input.file.FileInput;
 
 /**
- * File-paths
+ * Implementation of {@link NamedFilesBase} that is an {@link InputManager} that accepts {@link FileInput} as input and derives a name.
  *
  * @author Owen Feehan
  */

@@ -36,6 +36,7 @@ import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
 import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.test.experiment.task.TaskSingleInputHelper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;

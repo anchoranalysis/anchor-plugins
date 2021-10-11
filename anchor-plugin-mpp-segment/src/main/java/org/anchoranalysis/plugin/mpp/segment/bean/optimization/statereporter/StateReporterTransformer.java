@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.StateReporter;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
-import org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode.TransformMapOptional;
+import org.anchoranalysis.plugin.mpp.segment.bean.optimization.TransformMapOptional;
 
 public class StateReporterTransformer<T, S> extends StateReporter<Optional<T>, Optional<S>> {
 
