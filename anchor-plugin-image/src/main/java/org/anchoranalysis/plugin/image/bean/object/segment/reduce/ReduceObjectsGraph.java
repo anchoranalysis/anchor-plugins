@@ -159,8 +159,7 @@ class ReduceObjectsGraph {
     public void mergeVertices(
             LabelledWithConfidence<ObjectMask> element1,
             LabelledWithConfidence<ObjectMask> element2,
-            LabelledWithConfidence<ObjectMask> merged)
-            throws OperationFailedException {
+            LabelledWithConfidence<ObjectMask> merged) {
         graph.mergeVertices(element1, element2, merged);
 
         // This involves two linear searches
