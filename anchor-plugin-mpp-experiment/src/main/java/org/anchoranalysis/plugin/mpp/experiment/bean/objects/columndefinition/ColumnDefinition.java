@@ -43,7 +43,6 @@ import org.w3c.dom.Element;
 public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
 
     // START BEAN PROPERTIES
-
     /** Name of CSV column with the file identifier */
     @BeanField @Getter @Setter private String columnID = "id";
 

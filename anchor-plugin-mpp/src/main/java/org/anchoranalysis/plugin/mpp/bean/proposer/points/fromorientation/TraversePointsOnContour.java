@@ -36,21 +36,21 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.plugin.mpp.bean.outline.OutlinePixelsRetriever;
-import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
-import org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline.FindPointOnOutline;
+import org.anchoranalysis.plugin.mpp.bean.contour.TraverseContourException;
+import org.anchoranalysis.plugin.mpp.bean.contour.TraverseOuterCounter;
+import org.anchoranalysis.plugin.mpp.bean.proposer.points.contour.FindPointOnContour;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
 public class TraversePointsOnContour extends PointsFromOrientationProposer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FindPointOnOutline findOutlinePixelAngle;
+    @BeanField @Getter @Setter private FindPointOnContour findOutlinePixelAngle;
 
-    @BeanField @Getter @Setter private OutlinePixelsRetriever outlinePixelsRetriever;
+    @BeanField @Getter @Setter private TraverseOuterCounter outlinePixelsRetriever;
 
     @BeanField @OptionalBean @Getter @Setter
-    private OutlinePixelsRetriever outlinePixelsRetrieverReverse;
+    private TraverseOuterCounter outlinePixelsRetrieverReverse;
     // END BEAN PROPERTIES
 
     private List<Point3i> lastPointsForward = new ArrayList<>();
@@ -64,7 +64,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
             boolean do3D,
             RandomNumberGenerator randomNumberGenerator,
             boolean forwardDirectionOnly)
-            throws TraverseOutlineException {
+            throws TraverseContourException {
 
         lastPointsForward.clear();
         lastPointsReverse.clear();
@@ -78,7 +78,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
                 randomNumberGenerator);
 
         if (!forwardDirectionOnly) {
-            OutlinePixelsRetriever reverseRetriever =
+            TraverseOuterCounter reverseRetriever =
                     outlinePixelsRetrieverReverse != null
                             ? outlinePixelsRetrieverReverse
                             : outlinePixelsRetriever;
@@ -92,13 +92,13 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
                     randomNumberGenerator);
 
             if (lastPointsForward.isEmpty() && lastPointsReverse.isEmpty()) {
-                throw new TraverseOutlineException(
+                throw new TraverseContourException(
                         "Cannot find forward or reverse point to traverse");
             }
         }
 
         if (lastPointsForward.isEmpty() && lastPointsReverse.isEmpty()) {
-            throw new TraverseOutlineException("Cannot find outline point");
+            throw new TraverseContourException("Cannot find outline point");
         }
 
         List<List<Point3i>> combinedLists = new ArrayList<>();
@@ -112,14 +112,14 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
     private Optional<Point3i> addPointsFromOrientation(
             Point3d centerPoint,
             Orientation orientation,
-            FindPointOnOutline find,
-            OutlinePixelsRetriever traverseOutline,
+            FindPointOnContour find,
+            TraverseOuterCounter traverseOutline,
             List<Point3i> listOut,
             RandomNumberGenerator randomNumberGenerator)
-            throws TraverseOutlineException {
+            throws TraverseContourException {
 
         try {
-            Optional<Point3i> foundPoint = find.pointOnOutline(centerPoint, orientation);
+            Optional<Point3i> foundPoint = find.pointOnContour(centerPoint, orientation);
 
             if (foundPoint.isPresent()) {
                 traverseOutline.traverse(foundPoint.get(), listOut, randomNumberGenerator);
@@ -128,7 +128,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
             return foundPoint;
 
         } catch (OperationFailedException e) {
-            throw new TraverseOutlineException("Unable to add points from orientation", e);
+            throw new TraverseContourException("Unable to add points from orientation", e);
         }
     }
 }

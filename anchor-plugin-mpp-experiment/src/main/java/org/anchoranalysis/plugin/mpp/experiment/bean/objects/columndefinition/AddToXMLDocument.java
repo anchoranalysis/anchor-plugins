@@ -49,7 +49,7 @@ class AddToXMLDocument {
      * @param array array of elements, some of whom describe an object-mask
      * @param indices indices of which elements describe the object-mask
      */
-    public void addObjectMask(String suffix, String[] array, ObjectInCsvColumn indices) {
+    public void addObjectMask(String suffix, String[] array, ObjectInCSVColumn indices) {
         addPoint(
                 ELEMENT_NAME_POINT + suffix,
                 ArrayExtracter.getAsPoint(

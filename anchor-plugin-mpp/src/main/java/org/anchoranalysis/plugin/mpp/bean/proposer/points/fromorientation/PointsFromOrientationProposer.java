@@ -30,7 +30,7 @@ import java.util.List;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
+import org.anchoranalysis.plugin.mpp.bean.contour.TraverseContourException;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -44,5 +44,5 @@ public abstract class PointsFromOrientationProposer
             boolean do3D,
             RandomNumberGenerator randomNumberGenerator,
             boolean forwardDirectionOnly)
-            throws TraverseOutlineException;
+            throws TraverseContourException;
 }
