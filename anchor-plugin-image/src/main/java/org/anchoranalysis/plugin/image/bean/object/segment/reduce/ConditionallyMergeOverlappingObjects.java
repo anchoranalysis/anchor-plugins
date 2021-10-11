@@ -138,13 +138,9 @@ public class ConditionallyMergeOverlappingObjects extends ReduceElementsGreedy {
             ReduceObjectsGraph graph) {
         ObjectMask merged = ObjectMaskMerger.merge(source.getElement(), other.getElement());
         // Use the confidence from the source
-        try {
-            LabelledWithConfidence<ObjectMask> mergedWithConfidence =
-                    new LabelledWithConfidence<>(merged, source.getConfidence(), source.getLabel());
-            graph.mergeVertices(source, other, mergedWithConfidence);
-            return true;
-        } catch (OperationFailedException e) {
-            throw new AnchorImpossibleSituationException();
-        }
+        LabelledWithConfidence<ObjectMask> mergedWithConfidence =
+                new LabelledWithConfidence<>(merged, source.getConfidence(), source.getLabel());
+        graph.mergeVertices(source, other, mergedWithConfidence);
+        return true;
     }
 }
