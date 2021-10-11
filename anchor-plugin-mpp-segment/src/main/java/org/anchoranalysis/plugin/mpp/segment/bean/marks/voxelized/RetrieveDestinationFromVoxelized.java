@@ -30,13 +30,13 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.segment.optimization.ToPixelized;
+import org.anchoranalysis.plugin.mpp.segment.optimization.ToVoxelized;
 
 public class RetrieveDestinationFromVoxelized<T>
-        extends StateTransformerBean<ToPixelized<T>, VoxelizedMarksWithEnergy> {
+        extends StateTransformerBean<ToVoxelized<T>, VoxelizedMarksWithEnergy> {
 
     @Override
-    public VoxelizedMarksWithEnergy transform(ToPixelized<T> in, TransformationContext context)
+    public VoxelizedMarksWithEnergy transform(ToVoxelized<T> in, TransformationContext context)
             throws OperationFailedException {
         return in.getDestination();
     }

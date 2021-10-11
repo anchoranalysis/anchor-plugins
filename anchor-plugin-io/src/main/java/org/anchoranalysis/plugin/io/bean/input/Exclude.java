@@ -34,21 +34,19 @@ import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
-import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
- * Excludes all inputs that match a regular expression
+ * Excludes all inputs whose identifiers match a regular expression.
  *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> input-type.
  */
 public class Exclude<T extends InputFromManager> extends InputManagerUnary<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private InputManager<T> input;
-
+    /** A regular-expression to be matched against the identifiers of inputs. */
     @BeanField @Getter @Setter private RegEx regEx;
     // END BEAN PROPERITES
 

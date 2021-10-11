@@ -46,7 +46,7 @@ public class ShuffleIfRequested<T extends InputFromManager> extends InputManager
             throws InputReadFailedException {
 
         if (params.getInputContext().isShuffle()) {
-            Shuffle.shuffleInputs(fromDelegate.inputs(), params);
+            ShuffleHelper.shuffleInputs(fromDelegate.inputs(), params);
         }
         return fromDelegate;
     }

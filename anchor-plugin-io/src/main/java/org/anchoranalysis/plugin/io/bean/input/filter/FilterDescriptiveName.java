@@ -41,7 +41,7 @@ import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsCont
 /**
  * Filters all the input objects for only those with certain types of descriptive-names.
  *
- * <p>Either or both <i>equals</i> or <i>contains</i> conditions are possible
+ * <p>Either or both <i>equals</i> or <i>contains</i> conditions are possible.
  *
  * @author Owen Feehan
  * @param <T> input-type
@@ -66,6 +66,6 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
                 new FilterDescriptiveNameEqualsContains(equals, contains);
 
         List<T> inputsFiltered = filter.removeNonMatching(fromDelegate.inputs());
-        return fromDelegate.withInputs(inputsFiltered); // Existing collection
+        return fromDelegate.withInputs(inputsFiltered);
     }
 }

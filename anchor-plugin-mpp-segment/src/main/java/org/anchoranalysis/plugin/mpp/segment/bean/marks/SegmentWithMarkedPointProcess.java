@@ -69,10 +69,10 @@ import org.anchoranalysis.mpp.segment.optimization.DualStack;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationContext;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationTerminatedEarlyException;
 import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterWithEnergy;
-import org.anchoranalysis.plugin.mpp.segment.SegmentMarksState;
+import org.anchoranalysis.plugin.mpp.segment.shared.SegmentMarksState;
 
 /**
- * Segments a channel with marked pointed processes.
+ * Segments a channel with a <a href="https://www.anchoranalysis.org/user_guide_advanced_marked_point_processes.html">Marked Point Process</a>.
  *
  * <p>Different operations occur on a set of marks (a <i>configuration</i>), with each operation
  * termed a <i>kernel</i>. These operations can, for example:
