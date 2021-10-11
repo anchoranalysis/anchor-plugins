@@ -46,7 +46,7 @@ import org.anchoranalysis.io.input.file.FileInput;
 @RequiredArgsConstructor
 class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
-    /** The root object that is used to provide the input-name and pathForBinding */
+    /** The root object that is used to provide the input-name and {@code pathForBinding}. */
     private final FileInput delegate;
 
     @Getter private final StackReader stackReader;

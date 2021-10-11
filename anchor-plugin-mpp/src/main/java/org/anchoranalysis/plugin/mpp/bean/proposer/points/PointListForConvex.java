@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler.VisitSchedulerConvexAboutRoot;
+import org.anchoranalysis.plugin.mpp.bean.contour.visitscheduler.VisitSchedulerConvexAboutRoot;
 import org.anchoranalysis.spatial.point.Point3i;
 
 class PointListForConvex {

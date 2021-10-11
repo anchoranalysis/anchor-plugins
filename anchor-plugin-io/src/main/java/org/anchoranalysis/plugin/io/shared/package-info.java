@@ -23,5 +23,8 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Objects used in shared-state in {@link org.anchoranalysis.experiment.bean.task.Task}s in this plugin. */
+/**
+ * Objects used in shared-state in {@link org.anchoranalysis.experiment.bean.task.Task}s in this
+ * plugin.
+ */
 package org.anchoranalysis.plugin.io.shared;

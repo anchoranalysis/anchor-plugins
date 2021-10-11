@@ -48,7 +48,7 @@ import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
+import org.anchoranalysis.plugin.mpp.bean.contour.TraverseContourException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
 import org.anchoranalysis.spatial.axis.AxisType;
 import org.anchoranalysis.spatial.point.Point3d;
@@ -130,7 +130,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 
         } catch (ProvisionFailedException
                 | OperationFailedException
-                | TraverseOutlineException e1) {
+                | TraverseContourException e1) {
             errorNode.add(e1);
             return Optional.empty();
         }

@@ -92,7 +92,7 @@ public abstract class CalculateInputFromDelegateOption<
         if (inputForDelegate.isPresent()) {
             // We select an appropriate cache for calculating the feature (should be the same as
             // selected in initialize())
-            return input.forChild().calculate(feature, inputForDelegate.get(), cacheName);            
+            return input.forChild().calculate(feature, inputForDelegate.get(), cacheName);
         } else {
             return emptyValue;
         }

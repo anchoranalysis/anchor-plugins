@@ -37,14 +37,14 @@ import org.w3c.dom.Element;
 
 public class Single extends ColumnDefinition {
 
-    private ObjectInCsvColumn column;
+    private ObjectInCSVColumn column;
 
     @Override
     public void initHeaders(String[] headers) throws InitializeException {
         super.initHeaders(headers);
 
         // We resolve each of our columnNames to an index
-        column = new ObjectInCsvColumn(indexUniquePixel, true);
+        column = new ObjectInCSVColumn(indexUniquePixel, true);
     }
 
     @Override
