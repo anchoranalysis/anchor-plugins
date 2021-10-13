@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3f;
 
 /**

@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Contour;
+import org.anchoranalysis.spatial.point.Contour;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.object.TestLoaderObjects;
 import org.junit.jupiter.api.Test;

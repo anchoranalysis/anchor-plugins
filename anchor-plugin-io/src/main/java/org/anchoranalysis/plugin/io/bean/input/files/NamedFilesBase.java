@@ -52,7 +52,8 @@ import org.anchoranalysis.io.input.file.FilesProviderException;
 import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
- * Base class for an {@link InputManager} that produces inputs that are created from a {@link NamedFile}.
+ * Base class for an {@link InputManager} that produces inputs that are created from a {@link
+ * NamedFile}.
  *
  * @author Owen Feehan
  * @param <T> input-type

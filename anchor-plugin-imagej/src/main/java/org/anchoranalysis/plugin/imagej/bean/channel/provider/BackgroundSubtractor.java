@@ -33,7 +33,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 public class BackgroundSubtractor extends WithRadiusBase {
 

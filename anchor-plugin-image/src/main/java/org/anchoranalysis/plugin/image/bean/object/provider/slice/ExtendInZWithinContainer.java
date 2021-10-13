@@ -34,8 +34,8 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**

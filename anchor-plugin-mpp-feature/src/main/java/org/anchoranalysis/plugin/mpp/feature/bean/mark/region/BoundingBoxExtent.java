@@ -37,9 +37,9 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.orientation.DirectionVector;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
-import org.anchoranalysis.spatial.axis.AxisType;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
-import org.anchoranalysis.spatial.axis.AxisTypeException;
+import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.axis.AxisConversionException;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 public class BoundingBoxExtent extends FeatureMarkRegion {
@@ -60,8 +60,8 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
 
         try {
             return resolveDistance(
-                    box, dimensions.resolution(), AxisTypeConverter.createFromString(axis));
-        } catch (AxisTypeException e) {
+                    box, dimensions.resolution(), AxisConverter.createFromString(axis));
+        } catch (AxisConversionException e) {
             throw new FeatureCalculationException(e);
         }
     }
@@ -71,21 +71,21 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
         return String.format("%s", axis);
     }
 
-    private double resolveDistance(BoundingBox box, Optional<Resolution> res, AxisType axisType)
+    private double resolveDistance(BoundingBox box, Optional<Resolution> res, Axis axis)
             throws FeatureCalculationException {
         try {
             return unit.resolveDistance(
-                    box.extent().valueByDimension(axisType),
+                    box.extent().valueByDimension(axis),
                     res,
-                    unitVector(AxisTypeConverter.dimensionIndexFor(axisType)));
-        } catch (AxisTypeException e) {
+                    unitVector(AxisConverter.dimensionIndexFor(axis)));
+        } catch (AxisConversionException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }
     }
 
-    private DirectionVector unitVector(int dimIndex) {
+    private DirectionVector unitVector(int dimensionIndex) {
         DirectionVector dirVector = new DirectionVector();
-        dirVector.setIndex(dimIndex, 1);
+        dirVector.setIndex(dimensionIndex, 1);
         return dirVector;
     }
 }

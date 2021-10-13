@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class TransformMapOptional<W, X> implements StateTransformer<Optional<W>, Optional<X>> {

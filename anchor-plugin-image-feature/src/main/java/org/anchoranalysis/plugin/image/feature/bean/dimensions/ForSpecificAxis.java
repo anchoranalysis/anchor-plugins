@@ -32,9 +32,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.axis.AxisType;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
-import org.anchoranalysis.spatial.axis.AxisTypeException;
+import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.axis.AxisConversionException;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 
 /**
  * Dimensions-calculation for one specific axis only.
@@ -51,13 +51,13 @@ public abstract class ForSpecificAxis<T extends FeatureInputEnergy> extends From
     @Override
     protected double calculateFromDimensions(Dimensions dim) throws FeatureCalculationException {
         try {
-            return calculateForAxis(dim, AxisTypeConverter.createFromString(axis));
-        } catch (AxisTypeException e) {
+            return calculateForAxis(dim, AxisConverter.createFromString(axis));
+        } catch (AxisConversionException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }
     }
 
-    protected abstract double calculateForAxis(Dimensions dimensions, AxisType axis)
+    protected abstract double calculateForAxis(Dimensions dimensions, Axis axis)
             throws FeatureCalculationException;
 
     @Override

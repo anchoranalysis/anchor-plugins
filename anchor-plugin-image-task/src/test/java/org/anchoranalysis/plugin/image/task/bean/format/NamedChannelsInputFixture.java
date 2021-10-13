@@ -33,7 +33,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.test.image.StackFixture;
 import org.anchoranalysis.test.image.rasterwriter.ChannelSpecification;
 

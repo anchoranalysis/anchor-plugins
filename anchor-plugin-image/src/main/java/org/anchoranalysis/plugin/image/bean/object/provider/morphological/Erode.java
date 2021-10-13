@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationList;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.RejectIterationIfAllHigh;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.RejectIterationIfLowDisconnected;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Erodes each object in the collection, growing bounding-boxes as necessary in relevant dimensions.

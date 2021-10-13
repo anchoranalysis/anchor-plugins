@@ -55,9 +55,13 @@ public class GradientMagnitude extends IntensityGradientBase {
 
         for (Point3d point : points) {
             // Calculate the norm of the point
-            sum += point.l2norm();
+            sum += magnitude(point);
         }
 
         return sum / points.size();
+    }
+    
+    private static double magnitude(Point3d point) {
+        return Math.sqrt((point.x() * point.x()) + (point.y() * point.y()) + (point.z() * point.z()));
     }
 }

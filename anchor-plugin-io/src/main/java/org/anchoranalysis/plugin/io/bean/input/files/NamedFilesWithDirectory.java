@@ -36,10 +36,10 @@ import org.anchoranalysis.io.input.file.FileInput;
 import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 
 /**
- * Like {@link NamedFiles} but rather accepts a {@link FileWithDirectoryInput} rather than a {@link FileInput}.
- * 
- * @author Owen Feehan
+ * Like {@link NamedFiles} but rather accepts a {@link FileWithDirectoryInput} rather than a {@link
+ * FileInput}.
  *
+ * @author Owen Feehan
  */
 public class NamedFilesWithDirectory extends NamedFilesBase<FileWithDirectoryInput> {
 

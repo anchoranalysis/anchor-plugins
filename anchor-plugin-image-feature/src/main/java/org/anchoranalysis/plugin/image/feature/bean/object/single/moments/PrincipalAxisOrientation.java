@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.statistics.moment.EigenvalueAndVector;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
-import org.anchoranalysis.spatial.axis.AxisTypeException;
+import org.anchoranalysis.spatial.axis.AxisConversionException;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 
 /**
  * An element from orientation of a principal-axis (as defined by Image Moments).
@@ -50,10 +50,9 @@ public class PrincipalAxisOrientation extends SpecificAxisBase {
     protected double calculateFromSpecificMoment(EigenvalueAndVector moment)
             throws FeatureCalculationException {
         try {
-            int axisIndex =
-                    AxisTypeConverter.dimensionIndexFor(AxisTypeConverter.createFromString(axis));
+            int axisIndex = AxisConverter.dimensionIndexFor(AxisConverter.createFromString(axis));
             return moment.getEigenvector().get(axisIndex);
-        } catch (AxisTypeException e) {
+        } catch (AxisConversionException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }
     }

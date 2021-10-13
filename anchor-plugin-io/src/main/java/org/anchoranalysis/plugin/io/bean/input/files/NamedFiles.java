@@ -39,7 +39,8 @@ import org.anchoranalysis.io.input.bean.namer.FileNamer;
 import org.anchoranalysis.io.input.file.FileInput;
 
 /**
- * Implementation of {@link NamedFilesBase} that is an {@link InputManager} that accepts {@link FileInput} as input and derives a name.
+ * Implementation of {@link NamedFilesBase} that is an {@link InputManager} that accepts {@link
+ * FileInput} as input and derives a name.
  *
  * @author Owen Feehan
  */

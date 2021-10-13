@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.direction;
 
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
@@ -46,16 +48,20 @@ public class DotProductOrientationToVector extends FeatureMarkDirection {
 
         double minDot = Double.POSITIVE_INFINITY;
 
-        for (int d = 0; d < 3; d++) {
-            Point3d vec = rotMatrix.column(d);
-
-            double dot = Math.acos(directionVector.dotProduct(vec));
-
-            if (dot < minDot) {
-                minDot = dot;
+        try {
+            for (int dimension = 0; dimension < 3; dimension++) {
+                Point3d vec = rotMatrix.column(dimension);
+    
+                double dot = Math.acos(directionVector.dotProduct(vec));
+    
+                if (dot < minDot) {
+                    minDot = dot;
+                }
             }
+        } catch (OperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
         }
-
+            
         return minDot;
     }
 }
