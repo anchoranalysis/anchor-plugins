@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Extracts slices from {@code sliceStart} (inclusive) to {@code sliceEnd} (inclusive).

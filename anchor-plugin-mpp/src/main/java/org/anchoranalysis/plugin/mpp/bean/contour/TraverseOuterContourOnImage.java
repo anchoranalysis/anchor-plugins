@@ -43,8 +43,8 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.outline.traverser.OutlineTraverser;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.mpp.bean.contour.visitscheduler.VisitScheduler;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.Tuple3i;
 
@@ -140,7 +140,7 @@ public class TraverseOuterContourOnImage extends TraverseOuterCounter {
             RandomNumberGenerator randomNumberGenerator)
             throws TraverseContourException {
         Point3i rootRelToMask =
-                BoundingBox.relativePositionTo(root, objectOutline.boundingBox().cornerMin());
+                Point3i.immutableSubtract(root, objectOutline.boundingBox().cornerMin());
         try {
             visitScheduler.afterCreateObject(rootRelToMask, resolution, randomNumberGenerator);
         } catch (InitializeException e) {

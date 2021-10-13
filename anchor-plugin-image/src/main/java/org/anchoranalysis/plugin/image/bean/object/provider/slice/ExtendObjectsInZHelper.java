@@ -34,8 +34,8 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtendObjectsInZHelper {
@@ -76,7 +76,7 @@ class ExtendObjectsInZHelper {
         boolean andMode = true;
         boolean writtenOneSlice = false;
 
-        int volumeXY = extent.volumeXY();
+        int volumeXY = extent.areaXY();
 
         // Start in the mid point, and go upwards
         Iterator<Integer> itr = zRange.iterator();
@@ -106,7 +106,7 @@ class ExtendObjectsInZHelper {
                 }
 
             } else {
-                setBufferLow(extent.volumeXY(), bufferExisting, objectNew.binaryValuesByte());
+                setBufferLow(extent.areaXY(), bufferExisting, objectNew.binaryValuesByte());
             }
         }
 

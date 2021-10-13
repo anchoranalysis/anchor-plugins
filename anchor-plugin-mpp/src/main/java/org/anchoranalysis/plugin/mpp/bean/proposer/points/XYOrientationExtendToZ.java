@@ -50,7 +50,7 @@ import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.plugin.mpp.bean.contour.TraverseContourException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -149,7 +149,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
         return (int)
                 Math.round(
                         distanceZEndIfEmpty.resolveForAxis(
-                                resolution.map(Resolution::unitConvert), AxisType.Z));
+                                resolution.map(Resolution::unitConvert), Axis.Z));
     }
 
     private Optional<Mask> channelFilled() throws ProvisionFailedException {

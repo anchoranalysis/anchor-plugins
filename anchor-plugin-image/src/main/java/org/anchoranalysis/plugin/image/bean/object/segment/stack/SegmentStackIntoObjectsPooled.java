@@ -34,7 +34,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * A base class for algorithms to segment a stack into one or more objects - using a pool of models

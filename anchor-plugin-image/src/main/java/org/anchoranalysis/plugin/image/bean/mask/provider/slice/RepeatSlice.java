@@ -37,7 +37,7 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Creates a new mask with specific dimensions that repeatedly duplicates a slice from an existing

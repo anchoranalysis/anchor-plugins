@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
-import org.anchoranalysis.spatial.Contour;
+import org.anchoranalysis.spatial.point.Contour;
 import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.Point3i;
 import umontreal.ssj.functionfit.SmoothingCubicSpline;

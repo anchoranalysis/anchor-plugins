@@ -32,7 +32,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateIncrementalOperationMap;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 @EqualsAndHashCode(callSuper = true)
 public class CalculateErosionMap extends CalculateIncrementalOperationMap {

@@ -34,7 +34,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactorInt;
 import org.opencv.core.Mat;
 
@@ -66,7 +66,7 @@ class EastMarkExtracter {
             double minConfidence) {
         List<LabelledWithConfidence<Mark>> list = new ArrayList<>();
 
-        int rowsByCols = extent.volumeXY();
+        int rowsByCols = extent.areaXY();
 
         float[] scoresData = MatExtracter.extractFloatArray(scores, 0, rowsByCols);
         float[][] geometryArrs = splitGeometryIntoFiveArrays(geometry, rowsByCols);
@@ -93,21 +93,21 @@ class EastMarkExtracter {
      * <p>As the Java interface to OpenCV only supports 2 dimensional matrices (rather than n
      * dimensional) it is necessary to reshape the matrix to be 2 dimensions only
      *
-     * @param geometry matrix to reshape
-     * @return the reshaped-matrix
+     * @param geometry matrix to reshape.
+     * @return the reshaped-matrix.
      */
     private static Mat reshapeGeometry(Mat geometry) {
         return geometry.reshape(1, 5);
     }
 
     /**
-     * Reshapes the scores matrix from 4d into 2d and derives the numCols/numRows
+     * Reshapes the scores matrix from 4d into 2d and derives the number of columns and rows.
      *
      * <p>As the Java interface to OpenCV only supports 2 dimensional matrices (rather than n
-     * dimensional) it is necessary to reshape the matrix to be 2 dimensions only
+     * dimensional) it is necessary to reshape the matrix to be 2 dimensions only.
      *
      * @param scores matrix to reshape
-     * @return the reshaped-matrix and the numbers of rows and columns
+     * @return the reshaped-matrix and the numbers of rows and columns.
      */
     private static Tuple2<Mat, Extent> reshapeScores(Mat scores) {
 

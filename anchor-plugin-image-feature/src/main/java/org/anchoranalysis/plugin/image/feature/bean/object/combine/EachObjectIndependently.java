@@ -41,8 +41,8 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Simply selects features directly from the list, and objects directly from the list passed.

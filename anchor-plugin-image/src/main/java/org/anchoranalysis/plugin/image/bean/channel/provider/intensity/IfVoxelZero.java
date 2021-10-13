@@ -137,7 +137,7 @@ public class IfVoxelZero extends ChannelProviderUnary {
             VoxelsWrapper voxelsIfZero,
             double multFactorIfNonZero) {
 
-        int volumeXY = voxelsIn.extent().volumeXY();
+        int volumeXY = voxelsIn.extent().areaXY();
 
         for (int z = 0; z < voxelsOut.extent().z(); z++) {
 

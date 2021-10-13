@@ -44,8 +44,8 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.condition.AfterCondition;
 import org.anchoranalysis.plugin.image.object.merge.condition.BeforeCondition;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
@@ -157,7 +157,7 @@ class NaiveGreedyMerge {
         if (replaceWithMidpoint) {
             Point3i pointNew =
                     PointConverter.intFromDoubleFloor(
-                            Point3d.midPointBetween(
+                            midPointBetween(
                                     source.boundingBox().midpoint(),
                                     destination.boundingBox().midpoint()));
             return createSinglePixelObject(pointNew);
@@ -180,5 +180,13 @@ class NaiveGreedyMerge {
             objects.remove(i);
             objects.remove(j);
         }
+    }
+    
+    private static Point3d midPointBetween(Point3d point1, Point3d point2) {
+        // We create a new object of 1x1x1 between the two merged seeds
+        Point3d pointNew = new Point3d(point1);
+        pointNew.add(point2);
+        pointNew.scale(0.5);
+        return pointNew;
     }
 }

@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.border;
 
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 
 public class AtBorderXY extends AtBorderBase {
 

@@ -27,8 +27,8 @@ package org.anchoranalysis.plugin.image.bean.object.provider.split;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**

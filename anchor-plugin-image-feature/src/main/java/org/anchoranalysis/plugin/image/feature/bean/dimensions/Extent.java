@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.dimensions;
 
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
 
 /**
  * Width/height/depth of energy-stack in pixels depending on axis
@@ -39,7 +39,7 @@ import org.anchoranalysis.spatial.axis.AxisType;
 public class Extent<T extends FeatureInputEnergy> extends ForSpecificAxis<T> {
 
     @Override
-    protected double calculateForAxis(Dimensions dimensions, AxisType axis) {
+    protected double calculateForAxis(Dimensions dimensions, Axis axis) {
         return dimensions.extent().valueByDimension(axis);
     }
 }

@@ -62,7 +62,7 @@ final class BoundingBoxMap {
                 (pointRange, index) ->
                         matS.extract()
                                 .voxelsEqualTo(index + 1)
-                                .deriveObject(pointRange.deriveBoundingBox()));
+                                .deriveObject(pointRange.toBoundingBox()));
     }
 
     public int addPointForValue(Point3i point, int val) {

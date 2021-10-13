@@ -42,8 +42,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
-import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Only keep objects where at least one voxel (on a particular channel) has intensity greater or
@@ -122,8 +122,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
     private int threshold(Optional<Dimensions> dim) throws OperationFailedException {
         return (int)
-                Math.ceil(
-                        threshold.resolveForAxis(dim.flatMap(Dimensions::unitConvert), AxisType.X));
+                Math.ceil(threshold.resolveForAxis(dim.flatMap(Dimensions::unitConvert), Axis.X));
     }
 
     @Override

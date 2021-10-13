@@ -31,8 +31,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 class ObjectCollectionFixture {
@@ -71,7 +71,7 @@ class ObjectCollectionFixture {
 
         ObjectMask object = new ObjectMask(new BoundingBox(corner, extent));
 
-        int volumeXY = extent.volumeXY();
+        int volumeXY = extent.areaXY();
         for (int z = 0; z < extent.z(); z++) {
 
             UnsignedByteBuffer buffer = object.sliceBufferLocal(z);

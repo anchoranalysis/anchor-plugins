@@ -174,7 +174,8 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
     private double[] subtractMeanArray(int numberChannels) throws SegmentationFailedException {
 
         if (subtractMean != null) {
-            List<Double> list = (List<Double>) IteratorUtils.toList(subtractMean.iterator());   // NOSONAR
+            List<Double> list =
+                    (List<Double>) IteratorUtils.toList(subtractMean.iterator()); // NOSONAR
 
             if (list.size() != numberChannels) {
                 throw new SegmentationFailedException(

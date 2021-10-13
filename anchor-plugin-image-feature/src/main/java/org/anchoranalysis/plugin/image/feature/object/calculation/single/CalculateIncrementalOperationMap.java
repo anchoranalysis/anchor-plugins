@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationMap;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateIncrementalOperationMap

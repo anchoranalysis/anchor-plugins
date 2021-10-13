@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 // Performs a thresholding that accepts only channel values with intensities
 //   greater than the minimum bound

@@ -48,9 +48,9 @@ import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundedList;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Create a thumbnail by drawing an outline of an object at a particular-scale, and placing it

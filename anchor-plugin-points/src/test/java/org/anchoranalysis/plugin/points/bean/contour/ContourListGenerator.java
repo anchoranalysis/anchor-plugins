@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.mark.points.PointList;
 import org.anchoranalysis.mpp.mark.points.PointListFactory;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
-import org.anchoranalysis.spatial.Contour;
+import org.anchoranalysis.spatial.point.Contour;
 
 class ContourListGenerator
         extends RasterGeneratorDelegateToRaster<ColoredMarksWithDisplayStack, List<Contour>> {

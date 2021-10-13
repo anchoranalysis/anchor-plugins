@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 
