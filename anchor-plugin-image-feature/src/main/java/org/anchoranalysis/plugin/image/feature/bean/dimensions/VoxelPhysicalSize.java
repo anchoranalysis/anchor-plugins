@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
 
 /**
  * The physical size of a pixel in a specific dimension.
@@ -51,7 +51,7 @@ public class VoxelPhysicalSize<T extends FeatureInputEnergy> extends ForSpecific
     // END BEAN FIELDS
 
     @Override
-    protected double calculateForAxis(Dimensions dimensions, AxisType axis)
+    protected double calculateForAxis(Dimensions dimensions, Axis axis)
             throws FeatureCalculationException {
         if (dimensions.resolution().isPresent()) {
             return dimensions.resolution().get().valueByDimension(axis); // NOSONAR

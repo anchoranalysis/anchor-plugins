@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**

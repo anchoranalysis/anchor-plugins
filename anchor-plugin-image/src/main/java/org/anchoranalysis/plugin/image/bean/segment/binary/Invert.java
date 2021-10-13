@@ -61,7 +61,7 @@ public class Invert extends BinarySegmentationOne {
 
         BinaryValuesByte bv = voxels.binaryValues().createByte();
 
-        int volumeXY = voxels.extent().volumeXY();
+        int volumeXY = voxels.extent().areaXY();
 
         // We invert each item in the voxels
         for (int z = 0; z < voxels.extent().z(); z++) {

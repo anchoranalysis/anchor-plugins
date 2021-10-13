@@ -31,8 +31,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**

@@ -48,7 +48,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.thresholder.slice.SliceThresholder;
 import org.anchoranalysis.plugin.image.segment.thresholder.slice.SliceThresholderMask;
 import org.anchoranalysis.plugin.image.segment.thresholder.slice.SliceThresholderWithoutMask;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Thresholds each voxels by comparing against another channel that has per-voxel thresholds

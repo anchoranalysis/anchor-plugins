@@ -40,7 +40,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Procedure to calculate an area of intersection between two objects (termed first and second)

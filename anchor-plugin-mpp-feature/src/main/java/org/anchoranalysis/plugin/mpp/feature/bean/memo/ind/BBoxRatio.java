@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
+import java.util.Arrays;
 import java.util.Optional;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
@@ -36,6 +37,7 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 
 public class BBoxRatio extends FeatureSingleMemo {
 
@@ -55,12 +57,22 @@ public class BBoxRatio extends FeatureSingleMemo {
     private static int[] markExtent(ConicBase markCast, Dimensions dimensions) {
 
         BoundingBox bb = markCast.box(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE);
-        int[] extent = bb.extent().asOrderedArray();
+        int[] extent = extractAscendingSizes(bb.extent());
 
         // Let's change the z-dimension to include the relative-resolution
         extent[2] = zExtent(bb.extent().z(), dimensions.resolution());
 
         return extent;
+    }
+    
+
+    /**
+     * Extracts the sizes of the dimensions in {@code extent} in ascencing order of magnitude.
+     */
+    private static int[] extractAscendingSizes(Extent extent) {
+        int[] extents = extent.toArray();
+        Arrays.sort(extents);
+        return extents;
     }
 
     private static int zExtent(int zVoxelExtent, Optional<Resolution> resolution) {

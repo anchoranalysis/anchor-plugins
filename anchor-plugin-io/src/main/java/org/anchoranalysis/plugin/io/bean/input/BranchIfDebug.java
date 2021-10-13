@@ -47,8 +47,9 @@ import org.anchoranalysis.io.input.bean.InputManagerUnary;
 public class BranchIfDebug<T extends InputFromManager> extends InputManagerUnary<T> {
 
     // START BEAN PROPERTIES
-    /** 
-     * If defined, this provides an input to the manager when in debug-mode, rather than than otherwise {@code inputs}.
+    /**
+     * If defined, this provides an input to the manager when in debug-mode, rather than than
+     * otherwise {@code inputs}.
      *
      * <p>Note that only the first item is ever read from this input-manager.
      */

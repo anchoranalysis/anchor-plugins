@@ -33,8 +33,8 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
-import org.anchoranalysis.spatial.axis.AxisTypeException;
+import org.anchoranalysis.spatial.axis.AxisConversionException;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -65,8 +65,8 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
 
     private double calculateAxisValue(ReadableTuple3i point) throws FeatureCalculationException {
         try {
-            return point.byDimension(AxisTypeConverter.createFromString(axis));
-        } catch (AxisTypeException e) {
+            return point.valueByDimension(AxisConverter.createFromString(axis));
+        } catch (AxisConversionException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }
     }

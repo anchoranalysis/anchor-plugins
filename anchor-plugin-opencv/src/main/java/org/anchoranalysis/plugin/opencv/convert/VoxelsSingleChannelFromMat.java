@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -58,21 +58,21 @@ class VoxelsSingleChannelFromMat {
     }
 
     private static Voxels<UnsignedByteBuffer> unsignedByteFromMat(Mat mat, Extent extent) {
-        UnsignedByteBuffer buffer = UnsignedByteBuffer.allocate(extent.volumeXY());
+        UnsignedByteBuffer buffer = UnsignedByteBuffer.allocate(extent.areaXY());
         mat.get(0, 0, buffer.array());
         return VoxelsFactory.getUnsignedByte()
                 .createForVoxelBuffer(VoxelBufferWrap.unsignedByteBuffer(buffer), extent);
     }
 
     private static Voxels<UnsignedShortBuffer> unsignedShortFromMat(Mat mat, Extent extent) {
-        UnsignedShortBuffer buffer = UnsignedShortBuffer.allocate(extent.volumeXY());
+        UnsignedShortBuffer buffer = UnsignedShortBuffer.allocate(extent.areaXY());
         mat.get(0, 0, buffer.array());
         return VoxelsFactory.getUnsignedShort()
                 .createForVoxelBuffer(VoxelBufferWrap.unsignedShortBuffer(buffer), extent);
     }
 
     private static Voxels<FloatBuffer> floatFromMat(Mat mat, Extent extent) {
-        FloatBuffer buffer = FloatBuffer.allocate(extent.volumeXY());
+        FloatBuffer buffer = FloatBuffer.allocate(extent.areaXY());
         mat.get(0, 0, buffer.array());
         return VoxelsFactory.getFloat()
                 .createForVoxelBuffer(VoxelBufferWrap.floatBuffer(buffer), extent);

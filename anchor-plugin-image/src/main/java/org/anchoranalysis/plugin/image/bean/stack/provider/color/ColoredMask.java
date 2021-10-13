@@ -56,7 +56,7 @@ public class ColoredMask extends ColoredBase {
             throws CreateException {
         try {
             ObjectMask maskAsObject = new ObjectMask(mask.get().binaryVoxels());
-            return new ColoredObjectCollection(maskAsObject, color.rgbColor());
+            return new ColoredObjectCollection(maskAsObject, color.toRGBColor());
         } catch (ProvisionFailedException e) {
             throw new CreateException(e);
         }

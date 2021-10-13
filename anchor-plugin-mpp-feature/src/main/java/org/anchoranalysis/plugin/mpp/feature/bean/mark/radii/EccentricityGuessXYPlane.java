@@ -64,18 +64,21 @@ public class EccentricityGuessXYPlane extends FeatureMarkEccentricity {
     }
 
     private static double angleForDimension(
-            int dimIndex, RotationMatrix rotMatrix, Vector3d unitVectorZ, Vector3d unitVectorZRev) {
+            int dimensionIndex,
+            RotationMatrix rotMatrix,
+            Vector3d unitVectorZ,
+            Vector3d unitVectorZRev) {
 
-        Vector3d rot = new Vector3d(rotMatrix.rotatedPoint(unitVectorInDirection(dimIndex)));
+        Vector3d rot = new Vector3d(rotMatrix.rotatedPoint(unitVectorInDirection(dimensionIndex)));
 
         return Math.min(
                 cosAngleBetweenVectors(rot, unitVectorZ),
                 cosAngleBetweenVectors(rot, unitVectorZRev));
     }
 
-    private static Point3d unitVectorInDirection(int dimIndex) {
+    private static Point3d unitVectorInDirection(int dimensionIndex) {
         Point3d zeroVector = new Point3d();
-        zeroVector.setValueByDimension(dimIndex, 1);
+        zeroVector.setValueByDimension(dimensionIndex, 1);
         return zeroVector;
     }
 

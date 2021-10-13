@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.object.factory.SingleObjectFromPointsFactor
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Contour;
+import org.anchoranalysis.spatial.point.Contour;
 import org.anchoranalysis.spatial.point.PointConverter;
 
 /**

@@ -30,9 +30,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.spatial.axis.AxisType;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
-import org.anchoranalysis.spatial.axis.AxisTypeException;
+import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.axis.AxisConversionException;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 
 /**
  * Extracts the gradient in the direction of a particular axis (identified by an index)
@@ -48,7 +48,7 @@ public class GradientForAxis extends GradientBaseAddSum {
 
     @Override
     protected boolean[] createAxisArray() throws ProvisionFailedException {
-        switch (axisType()) {
+        switch (axis()) {
             case X:
                 return new boolean[] {true, false, false};
             case Y:
@@ -60,10 +60,10 @@ public class GradientForAxis extends GradientBaseAddSum {
         }
     }
 
-    private AxisType axisType() throws ProvisionFailedException {
+    private Axis axis() throws ProvisionFailedException {
         try {
-            return AxisTypeConverter.createFromString(axis);
-        } catch (AxisTypeException e) {
+            return AxisConverter.createFromString(axis);
+        } catch (AxisConversionException e) {
             throw new ProvisionFailedException(e.friendlyMessageHierarchy());
         }
     }

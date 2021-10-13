@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.image.feature.bean.object.single.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
 
 /**
  * Creates certain hard-coded features to describe a segmented-object.
@@ -48,9 +48,9 @@ class FeaturesCreator {
      */
     public static NamedFeatureStore<FeatureInputSingleObject> defaultInstanceSegmentation() {
         NamedFeatureStore<FeatureInputSingleObject> store = new NamedFeatureStore<>();
-        store.add("centerOfGravity.x", new CenterOfGravity(AxisType.X));
-        store.add("centerOfGravity.y", new CenterOfGravity(AxisType.Y));
-        store.add("centerOfGravity.z", new CenterOfGravity(AxisType.Z));
+        store.add("centerOfGravity.x", new CenterOfGravity(Axis.X));
+        store.add("centerOfGravity.y", new CenterOfGravity(Axis.Y));
+        store.add("centerOfGravity.z", new CenterOfGravity(Axis.Z));
         store.add("numberVoxels", new NumberVoxels());
         return store;
     }

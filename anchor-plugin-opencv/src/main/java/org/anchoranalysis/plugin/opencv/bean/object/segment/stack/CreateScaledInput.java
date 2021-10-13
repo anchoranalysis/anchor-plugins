@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;

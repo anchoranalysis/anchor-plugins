@@ -36,7 +36,9 @@ import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.segment.bean.ExperimentState;
 import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelProposer;
 
-/** State that only needs to be initialized once can be shared across many calls to the algorithm. */
+/**
+ * State that only needs to be initialized once can be shared across many calls to the algorithm.
+ */
 @AllArgsConstructor
 public class SegmentMarksState implements ExperimentState {
 
