@@ -36,7 +36,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
-import org.anchoranalysis.spatial.Contour;
+import org.anchoranalysis.spatial.point.Contour;
 import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.opencv.core.Mat;
@@ -44,8 +44,10 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
-/** 
- * Wrapper around OpenCV's <a href="https://docs.opencv.org/3.4.15/df/d0d/tutorial_find_contours.html">findContours</a> function.
+/**
+ * Wrapper around OpenCV's <a
+ * href="https://docs.opencv.org/3.4.15/df/d0d/tutorial_find_contours.html">findContours</a>
+ * function.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CVFindContours {

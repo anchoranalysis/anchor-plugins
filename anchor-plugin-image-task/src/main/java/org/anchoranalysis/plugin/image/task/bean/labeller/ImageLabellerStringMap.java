@@ -33,6 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.StringMap;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
@@ -57,8 +58,12 @@ public class ImageLabellerStringMap<T>
     @Override
     public ImageLabellerStringMapInitialization<T> initialize(Path pathForBinding)
             throws InitializeException {
-        return new ImageLabellerStringMapInitialization<>(
-                map.create(), filter.initialize(pathForBinding));
+        try {
+            return new ImageLabellerStringMapInitialization<>(
+                    map.create(), filter.initialize(pathForBinding));
+        } catch (CreateException e) {
+            throw new InitializeException(e);
+        }
     }
 
     @Override

@@ -33,8 +33,8 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.arithmetic.RunningSum;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntensityMeanCalculator {

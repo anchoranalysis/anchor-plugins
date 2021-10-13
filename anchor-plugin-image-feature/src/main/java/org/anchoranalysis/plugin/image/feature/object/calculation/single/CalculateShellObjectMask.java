@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilation;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateErosion;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)

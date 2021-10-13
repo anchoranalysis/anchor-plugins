@@ -352,7 +352,7 @@ public class SegmentInstanceWithModel<T>
             return DrawObjectsGenerator.outlineVariedColors(objectsSize, outlineWidth, background);
         } else {
             return DrawObjectsGenerator.outlineSingleColor(
-                    outlineWidth, background, outlineColor.rgbColor());
+                    outlineWidth, background, outlineColor.toRGBColor());
         }
     }
 

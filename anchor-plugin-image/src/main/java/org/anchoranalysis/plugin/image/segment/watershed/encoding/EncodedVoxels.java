@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 @AllArgsConstructor
@@ -81,7 +81,7 @@ public final class EncodedVoxels {
     }
 
     public boolean hasTemporary() {
-        int volumeXY = extent().volumeXY();
+        int volumeXY = extent().areaXY();
 
         for (int z = 0; z < extent().z(); z++) {
             EncodedIntBuffer buffer = getPixelsForPlane(z);

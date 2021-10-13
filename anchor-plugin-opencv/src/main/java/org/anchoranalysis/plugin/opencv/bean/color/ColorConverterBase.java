@@ -34,7 +34,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;

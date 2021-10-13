@@ -35,9 +35,9 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
-import org.anchoranalysis.spatial.axis.AxisType;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
-import org.anchoranalysis.spatial.axis.AxisTypeException;
+import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.axis.AxisConversionException;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
@@ -64,12 +64,13 @@ public class ArbitraryInsidePoint extends FeatureSingleObject {
             throws FeatureCalculationException {
 
         try {
-            AxisType axisType = AxisTypeConverter.createFromString(axis);
+            Axis axisObj = AxisConverter.createFromString(axis);
 
             Optional<Point3i> arbPoint = input.get().getObject().findArbitraryOnVoxel();
-            return arbPoint.map(point -> (double) point.byDimension(axisType)).orElse(emptyValue);
+            return arbPoint.map(point -> (double) point.valueByDimension(axisObj))
+                    .orElse(emptyValue);
 
-        } catch (AxisTypeException e) {
+        } catch (AxisConversionException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }
     }

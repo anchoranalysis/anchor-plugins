@@ -34,7 +34,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.core.points.PointsNeighborChecker;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Contour;
+import org.anchoranalysis.spatial.point.Contour;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.object.TestLoaderObjects;

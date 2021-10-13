@@ -83,7 +83,7 @@ public class FitBoxToOnVoxels extends MaskProviderUnary {
                 voxels.voxels(), binaryValues.getOnByte(), pointRange::add);
 
         try {
-            return pointRange.deriveBoundingBox();
+            return pointRange.toBoundingBox();
         } catch (OperationFailedException e) {
             throw new ProvisionFailedException(e);
         }
