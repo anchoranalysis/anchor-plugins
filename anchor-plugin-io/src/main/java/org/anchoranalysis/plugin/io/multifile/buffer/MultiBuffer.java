@@ -33,7 +33,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.plugin.io.multifile.SizeExtents;
@@ -114,7 +114,7 @@ class MultiBuffer {
     }
 
     @SuppressWarnings("unchecked")
-    private void copyAllBuffersTo(int t, int c, VoxelsWrapper voxels) {
+    private void copyAllBuffersTo(int t, int c, VoxelsUntyped voxels) {
         for (int z = 0; z < size.getRangeZ().getSize(); z++) {
             voxels.any().replaceSlice(z, buffers[t][c][z]);
         }

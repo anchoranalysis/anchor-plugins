@@ -45,7 +45,7 @@ public class MaxIntensityProjectionPair {
     /**
      * Counts intersecting (i.e. voxels that are part of the same region) voxels.
      *
-     * <p>Relies on the binary voxel buffer ON being 255.
+     * <p>Relies on the binary voxel buffer <i>on</i> being 255.
      */
     private final CountIntersectingVoxels counter = new CountIntersectingVoxels((byte) 1);
 
@@ -97,7 +97,7 @@ public class MaxIntensityProjectionPair {
             }
         }
 
-        return BinaryVoxelsFactory.reuseByte(voxelsOut, binaryValues.createInt());
+        return BinaryVoxelsFactory.reuseByte(voxelsOut, binaryValues.asInt());
     }
 
     private static void maybeOutputByte(

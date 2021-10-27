@@ -51,24 +51,25 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     // START BEAN PROPERTIES
-    /** The number of dilations and erosions to apply and whether to do in the Z dimension */
+    /** The number of dilations and erosions to apply and whether to do in the Z dimension. */
     @BeanField @Getter @Setter
     private MorphologicalIterations iterations = new MorphologicalIterations();
 
     /**
      * Iff true, calculates instead on the inverse of the object-mask (what's left when the shell is
-     * removed)
+     * removed).
      */
     @BeanField @Getter @Setter private boolean inverse = false;
 
     /**
      * A channel of the energyStack that is used as an additional mask using default byte values for
-     * ON and OFF
+     * <i>on</i> and <i>off</i>.
      */
     @BeanField @Getter @Setter private int energyIndexMask = -1;
 
+    /** If true, uses the inverse of the passed mask. */
     @BeanField @Getter @Setter
-    private boolean inverseMask = false; // Uses the inverse of the passed mask
+    private boolean inverseMask = false; 
 
     @BeanField @Getter @Setter private double emptyValue = 255;
     // END BEAN PROPERTIES
@@ -83,6 +84,15 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
         }
     }
 
+    @Override
+    public String describeParams() {
+        return String.format(
+                "%s,%s,inverse=%s",
+                super.describeParams(),
+                iterations.describePropertiesFriendly(),
+                inverse ? "true" : "false");
+    }
+    
     @Override
     protected double calculateForChannel(
             SessionInput<FeatureInputSingleObject> input, Channel channel)
@@ -106,6 +116,9 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
         return calculateForShell(objectShell, channel);
     }
 
+    protected abstract double calculateForShell(ObjectMask shell, Channel channel)
+            throws FeatureCalculationException;
+    
     private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         return input.calculate(
@@ -117,9 +130,6 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
         return object.intersect(createEnergyMask(energyStack), energyStack.extent());
     }
 
-    protected abstract double calculateForShell(ObjectMask shell, Channel channel)
-            throws FeatureCalculationException;
-
     private ObjectMask createEnergyMask(EnergyStackWithoutParams energyStack) {
         return new ObjectMask(
                 new BoundingBox(energyStack.extent()),
@@ -127,14 +137,5 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
                 inverseMask
                         ? BinaryValues.getDefault().createInverted()
                         : BinaryValues.getDefault());
-    }
-
-    @Override
-    public String describeParams() {
-        return String.format(
-                "%s,%s,inverse=%s",
-                super.describeParams(),
-                iterations.describePropertiesFriendly(),
-                inverse ? "true" : "false");
     }
 }

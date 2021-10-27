@@ -62,7 +62,7 @@ class MakePlateauLowerComplete {
         }
 
         @Override
-        public void initSource(int sourceVal, int sourceOffsetXY) {
+        public void initSource(int sourceValue, int sourceOffsetXY) {
             foundPoints.clear();
         }
 
@@ -74,17 +74,15 @@ class MakePlateauLowerComplete {
         }
 
         @Override
-        public boolean processPoint(
-                int xChange, int yChange, int x1, int y1, int objectMaskOffset) {
+        public void processPoint(
+                int xChange, int yChange, int x, int y, int objectMaskOffset) {
 
-            Point3i pointRel = new Point3i(x1, y1, z1);
+            Point3i pointRel = new Point3i(x, y, z1);
             foundPoints.add(pointRel);
             buffer.putRaw(objectMaskOffset, maskValueOff);
 
             // We point this value in the direction opposite to which it came
             matS.setPointDirection(pointRel, xChange * -1, yChange * -1, zChange * -1);
-
-            return true;
         }
 
         @Override

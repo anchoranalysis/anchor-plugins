@@ -46,8 +46,7 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.feature.bean.VoxelScore;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.VoxelsWrapperList;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -112,7 +111,7 @@ public class ScoreVoxels extends ChannelProvider {
         OptionalFactory.create(gradient).map(Channel::voxels).ifPresent(out::add);
 
         for (ChannelProvider channelProvider : channelsExtra) {
-            VoxelsWrapper voxelsExtra =
+            VoxelsUntyped voxelsExtra =
                     channelProvider != null ? channelProvider.get().voxels() : null;
             out.add(voxelsExtra);
         }

@@ -68,9 +68,9 @@ final class FindEqualVoxels {
         }
 
         @Override
-        public void initSource(int sourceVal, int sourceOffsetXY) {
-            super.initSource(sourceVal, sourceOffsetXY);
-            this.lowestNeighborVal = sourceVal;
+        public void initSource(int sourceValue, int sourceOffsetXY) {
+            super.initSource(sourceValue, sourceOffsetXY);
+            this.lowestNeighborVal = sourceValue;
             this.lowestNeighborIndex = -1;
         }
 
@@ -92,7 +92,7 @@ final class FindEqualVoxels {
         }
 
         @Override
-        public boolean processPoint(int xChange, int yChange, int x1, int y1) {
+        public void processPoint(int xChange, int yChange, int x1, int y1) {
 
             int offset = changedOffset(xChange, yChange);
             int valPoint = getInt(offset);
@@ -107,30 +107,26 @@ final class FindEqualVoxels {
                     lowestNeighborVal = valPoint;
                     lowestNeighborIndex =
                             EncodedVoxels.ENCODING.encodeDirection(xChange, yChange, zChange);
-                    return false;
                 } else {
                     if (valPoint < lowestNeighborVal) {
                         lowestNeighborVal = valPoint;
                         lowestNeighborIndex =
                                 EncodedVoxels.ENCODING.encodeDirection(xChange, yChange, zChange);
                     }
-                    return false;
                 }
             }
 
-            if (valPoint == sourceVal) {
+            if (valPoint == sourceValue) {
                 stack.push(new Point3i(x1, y1, z1));
-                return true;
             } else {
                 // We test if the neighbor is less
                 // NB we also force a check that it's less than the value to find, as this value
                 //   might have been forced up by the connected component
-                if (valPoint < sourceVal && valPoint < lowestNeighborVal) {
+                if (valPoint < sourceValue && valPoint < lowestNeighborVal) {
                     lowestNeighborVal = valPoint;
                     lowestNeighborIndex =
                             EncodedVoxels.ENCODING.encodeDirection(xChange, yChange, zChange);
                 }
-                return false;
             }
         }
     }

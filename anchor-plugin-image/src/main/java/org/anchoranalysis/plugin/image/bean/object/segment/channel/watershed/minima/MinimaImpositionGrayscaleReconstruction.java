@@ -36,7 +36,7 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFromObjects;
 import org.anchoranalysis.image.core.object.seed.SeedCollection;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -70,7 +70,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
         // We duplicate the channel so we are not manipulating the original
         channel = channel.duplicate();
 
-        VoxelsWrapper voxelsIntensity = channel.voxels();
+        VoxelsUntyped voxelsIntensity = channel.voxels();
 
         VoxelsAssigner zeroAssigner = voxelsIntensity.assignValue(0);
 
@@ -86,21 +86,21 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
                     .toObject(containingMask.get());
         }
 
-        VoxelsWrapper markerForReconstruction =
+        VoxelsUntyped markerForReconstruction =
                 createMarkerImageFromGradient(markerMask, voxelsIntensity);
 
-        VoxelsWrapper reconBuffer =
+        VoxelsUntyped reconBuffer =
                 grayscaleReconstruction.reconstruction(
                         voxelsIntensity, markerForReconstruction, containingMask);
 
         return ChannelFactory.instance().create(reconBuffer.any(), channel.resolution());
     }
 
-    private VoxelsWrapper createMarkerImageFromGradient(Mask marker, VoxelsWrapper gradientImage) {
+    private VoxelsUntyped createMarkerImageFromGradient(Mask marker, VoxelsUntyped gradientImage) {
 
-        VoxelsWrapper out =
+        VoxelsUntyped out =
                 VoxelsFactory.instance()
-                        .create(gradientImage.any().extent(), gradientImage.getVoxelDataType());
+                        .createEmpty(gradientImage.any().extent(), gradientImage.getVoxelDataType());
         out.assignValue((int) gradientImage.getVoxelDataType().maxValue()).toAll();
 
         ObjectMask object = new ObjectMask(marker.binaryVoxels());

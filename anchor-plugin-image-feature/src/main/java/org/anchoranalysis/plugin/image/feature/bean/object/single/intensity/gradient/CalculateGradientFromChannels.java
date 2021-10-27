@@ -104,7 +104,7 @@ class CalculateGradientFromChannels
         Extent extent = voxels.extent();
         Extent extentMask = box.extent();
 
-        BinaryValuesByte binaryValuesMask = binaryValues.binaryValues().createByte();
+        BinaryValuesByte binaryValuesMask = binaryValues.binaryValues().asByte();
 
         // Tracks where are writing to on the output list.
         int pointIndex = 0;

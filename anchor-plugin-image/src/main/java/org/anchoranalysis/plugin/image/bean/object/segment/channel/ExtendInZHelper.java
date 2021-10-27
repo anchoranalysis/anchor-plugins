@@ -69,7 +69,7 @@ class ExtendInZHelper {
         ReadableTuple3i max = newBBox.calculateCornerMax();
         Point3i point = new Point3i();
 
-        BinaryValuesByte binaryValues = mask3D.binaryValues().createByte();
+        BinaryValuesByte binaryValues = mask3D.binaryValues().asByte();
 
         UnsignedByteBuffer bufferIn2D = obj2D.voxels().sliceBuffer(0);
 

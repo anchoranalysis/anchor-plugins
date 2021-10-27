@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUna
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -101,7 +101,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
         Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
         Voxels<UnsignedByteBuffer> stackBinary = voxels.duplicate();
-        return segmentStack.segment(new VoxelsWrapper(stackBinary), params, Optional.empty());
+        return segmentStack.segment(new VoxelsUntyped(stackBinary), params, Optional.empty());
     }
 
     private static SeedCollection flattenSeedsInZ(SeedCollection seeds) {

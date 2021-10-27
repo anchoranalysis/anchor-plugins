@@ -70,7 +70,7 @@ public class SplitByObjects extends WithDimensionsBase {
                         object ->
                                 splitObject(
                                         object,
-                                        objectsSplitByCollection.findObjectsWithIntersectingBBox(
+                                        findObjectsWithIntersectingBoundingBox(objectsSplitByCollection,
                                                 object),
                                         dimensions.extent()));
     }
@@ -102,9 +102,9 @@ public class SplitByObjects extends WithDimensionsBase {
     }
 
     /**
-     * Perform a flood fill for each number, pretending it's a binary image of 0 and i
+     * Perform a flood fill for each number, exposing it like a binary image of {@code 0} and {@code i}.
      *
-     * <p>The code will not change pixels that don't match ON
+     * <p>The code will not change pixels that don't match <i>on</i>.
      */
     private ObjectCollection floodFillEachIdentifier(
             int count, BoundedVoxels<UnsignedIntBuffer> voxelsWithIdentifiers) {
@@ -123,5 +123,14 @@ public class SplitByObjects extends WithDimensionsBase {
         return CONNECTED_COMPONENTS_CREATOR
                 .createUnsignedInt(binaryVoxels)
                 .shiftBy(voxels.cornerMin());
+    }
+    
+    private static ObjectCollection findObjectsWithIntersectingBoundingBox(ObjectCollection objects, ObjectMask toIntersectWith) {
+        return objects.stream()
+                .filter(
+                        object ->
+                                object.boundingBox()
+                                        .intersection()
+                                        .existsWith(toIntersectWith.boundingBox()));
     }
 }

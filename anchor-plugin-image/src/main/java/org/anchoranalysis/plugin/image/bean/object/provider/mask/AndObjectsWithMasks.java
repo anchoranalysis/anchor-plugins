@@ -73,7 +73,7 @@ public class AndObjectsWithMasks extends ObjectCollectionProviderUnary {
         MaskAnd.apply(
                 object.binaryVoxels().voxels(),
                 objectPortion.binaryVoxels().voxels(),
-                object.binaryVoxels().binaryValues().createByte(),
-                objectPortion.binaryVoxels().binaryValues().createByte());
+                object.binaryVoxels().binaryValues().asByte(),
+                objectPortion.binaryVoxels().binaryValues().asByte());
     }
 }

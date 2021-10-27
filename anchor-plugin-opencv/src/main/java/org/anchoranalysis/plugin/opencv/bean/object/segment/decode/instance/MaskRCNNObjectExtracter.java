@@ -198,7 +198,7 @@ class MaskRCNNObjectExtracter {
         // Scale and interpolate voxels to march the bounding-box
         maskVoxels = maskVoxels.extract().resizedXY(boxExtent.x(), boxExtent.y(), INTERPOLATOR);
 
-        return VoxelsThresholder.thresholdForLevelFloat(
+        return VoxelsThresholder.thresholdFloat(
                 maskVoxels, maskMinValue, BinaryValuesByte.getDefault());
     }
 
