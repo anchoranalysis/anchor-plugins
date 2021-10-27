@@ -101,7 +101,7 @@ class PointsFromInsideHelper {
             int successiveEmptySlices,
             int skipAfterSuccessiveEmptySlices,
             Consumer<Point3i> processPoint) {
-        BinaryValuesByte binaryValues = mask.binaryValues().createByte();
+        BinaryValuesByte binaryValues = mask.binaryValues().asByte();
 
         Voxels<UnsignedByteBuffer> voxels = mask.channel().voxels().asByte();
         Extent extent = voxels.extent();

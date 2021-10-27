@@ -33,7 +33,7 @@ import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
 
 /**
  * Creates a mask from an existing channel, reusing the channel's buffer and considering all 0
- * values as OFF, and 255 values as ON
+ * values as <i>off</i>, and 255 values as <i>on</i>.
  *
  * <p>No check occurs to see if the channel contains voxels that are neither 0 nor 255 but the user
  * should not pass such a channel, as behaviour is undefined.

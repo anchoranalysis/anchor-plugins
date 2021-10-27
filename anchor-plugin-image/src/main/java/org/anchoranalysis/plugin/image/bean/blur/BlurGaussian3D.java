@@ -30,7 +30,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 
 /**
@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 public class BlurGaussian3D extends BlurStrategy {
 
     @Override
-    public void blur(VoxelsWrapper voxels, Dimensions dimensions, MessageLogger logger)
+    public void blur(VoxelsUntyped voxels, Dimensions dimensions, MessageLogger logger)
             throws OperationFailedException {
 
         double sigma = calculateSigma(dimensions, logger);

@@ -52,7 +52,7 @@ public class Dilate extends ObjectCollectionProviderMorphological {
     protected ObjectMask applyMorphologicalOperation(ObjectMask object, Optional<Extent> extent)
             throws ProvisionFailedException {
         try {
-            return MorphologicalDilation.createDilatedObject(
+            return MorphologicalDilation.dilate(
                     object, extent, isDo3D(), getIterations(), bigNeighborhood);
         } catch (CreateException e) {
             throw new ProvisionFailedException(e);

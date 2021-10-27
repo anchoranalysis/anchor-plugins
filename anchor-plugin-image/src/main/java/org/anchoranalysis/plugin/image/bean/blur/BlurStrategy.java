@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 
 /**
  * A method for applying blurring to an image
@@ -50,7 +50,7 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
     private boolean sigmaInMeters = false; // Treats sigma if it's microns
     // END BEAN PROPERTIES
 
-    public abstract void blur(VoxelsWrapper voxels, Dimensions dimensions, MessageLogger logger)
+    public abstract void blur(VoxelsUntyped voxels, Dimensions dimensions, MessageLogger logger)
             throws OperationFailedException;
 
     protected double calculateSigma(Dimensions dimensions, MessageLogger logger)

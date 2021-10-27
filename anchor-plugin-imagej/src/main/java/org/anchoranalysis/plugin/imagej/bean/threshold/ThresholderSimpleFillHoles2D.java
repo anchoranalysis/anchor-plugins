@@ -35,7 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -59,7 +59,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
 
     @Override
     public BinaryVoxels<UnsignedByteBuffer> threshold(
-            VoxelsWrapper inputBuffer,
+            VoxelsUntyped inputBuffer,
             BinaryValuesByte bvOut,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask)
@@ -70,7 +70,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
         }
 
         BinaryVoxels<UnsignedByteBuffer> thresholded =
-                VoxelsThresholder.thresholdForLevel(
+                VoxelsThresholder.threshold(
                         inputBuffer, minIntensity, bvOut, objectMask, false);
 
         ApplyImageJMorphologicalOperation.applyOperation(thresholded, "fill", 1);

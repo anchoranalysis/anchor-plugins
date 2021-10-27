@@ -79,15 +79,32 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
     protected boolean match(ObjectMask object, Optional<Dimensions> dimensions)
             throws OperationFailedException {
 
-        int cntGreater = intersectionGreater.countIntersectingVoxels(object);
-        int cntLesser = intersectionLesser.countIntersectingVoxels(object);
+        int countGreater = countIntersectingVoxels(intersectionGreater, object);
+        int countLesser = countIntersectingVoxels(intersectionLesser, object);
 
-        return cntGreater >= cntLesser;
+        return countGreater >= countLesser;
     }
 
     @Override
     protected void end() throws OperationFailedException {
         intersectionGreater = null;
         intersectionLesser = null;
+    }
+    
+    /**
+     * The count the number of intersecting voxels between all the objects in this collection and another {@code toIntersectWith}.
+     * 
+     * <p>This is the sum of the number of intersecting voxels for each object independently with {@code toIntersectWith}.
+     * 
+     * @param toIntersectWith the object to count the intersection with.
+     * @return the total number of intersecting voxels, as per the above definition, or 0 if no intersection occurs.
+     */
+    private static int countIntersectingVoxels(ObjectCollection objects, ObjectMask toIntersectWith) {
+
+        int count = 0;
+        for (ObjectMask other : objects) {
+            count += other.countIntersectingVoxels(toIntersectWith);
+        }
+        return count;
     }
 }

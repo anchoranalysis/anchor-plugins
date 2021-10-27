@@ -88,7 +88,7 @@ public class Invert extends MaskProviderUnary {
 
     private void invertWithMask(Mask maskToInvert, Mask restricted) {
 
-        BinaryValuesByte invertedIndex = maskToInvert.binaryValues().createByte();
+        BinaryValuesByte invertedIndex = maskToInvert.binaryValues().asByte();
         final byte byteOn = invertedIndex.getOnByte();
         final byte byteOff = invertedIndex.getOffByte();
 

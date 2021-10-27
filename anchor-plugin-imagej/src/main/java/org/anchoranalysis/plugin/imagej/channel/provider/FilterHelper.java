@@ -33,7 +33,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
@@ -71,7 +71,7 @@ public class FilterHelper {
      */
     public static void processEachSlice(Channel channel, Consumer<ImageProcessor> consumer)
             throws ImageJConversionException {
-        VoxelsWrapper voxels = channel.voxels();
+        VoxelsUntyped voxels = channel.voxels();
         channel.extent()
                 .iterateOverZ(
                         z -> {

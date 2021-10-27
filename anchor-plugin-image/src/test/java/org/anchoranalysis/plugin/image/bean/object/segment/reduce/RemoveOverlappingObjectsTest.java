@@ -61,7 +61,7 @@ class RemoveOverlappingObjectsTest {
     /**
      * All the objects that are reduced during the test.
      *
-     * @param invert if true, the object's ON pixels are 0. if false, they are 255.
+     * @param invert if true, the object's <i>on</i> pixels are 0. if false, they are 255.
      * @return a list of 4 objects to be used in the test.
      */
     private static List<LabelledWithConfidence<ObjectMask>> allObjects(boolean invert) {
@@ -79,7 +79,7 @@ class RemoveOverlappingObjectsTest {
      * @param coordinate the minimum point in the object-mask in all dimensions.
      * @param extent the size of the box that forms the object-mask in all dimensions.
      * @param confidence the confidence to associate with the object-mask
-     * @param invert if true, the object's ON pixels are 0. if false, they are 255.
+     * @param invert if true, the object's <i>on</i> pixels are 0. if false, they are 255.
      * @return a newly created {@link ObjectMask} with associated confidence.
      */
     private static LabelledWithConfidence<ObjectMask> object(

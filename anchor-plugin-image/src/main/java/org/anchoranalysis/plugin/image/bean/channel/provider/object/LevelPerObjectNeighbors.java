@@ -52,7 +52,7 @@ import org.anchoranalysis.math.histogram.Histogram;
  * Calculates a threshold-level for each object collectively based on other objects
  *
  * <p>A neighborhood-graph is compiled of objects that touch each other. The threshold for each
- * objects is determined by the object itself and neigbours e.g. neighborhoodDistance==1 are all the
+ * objects is determined by the object itself and neigbors e.g. neighborhoodDistance==1 are all the
  * immediate neighbors
  */
 public class LevelPerObjectNeighbors extends LevelPerObjectBase {

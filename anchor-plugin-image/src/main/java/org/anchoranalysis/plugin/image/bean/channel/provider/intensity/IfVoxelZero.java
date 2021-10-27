@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -132,9 +132,9 @@ public class IfVoxelZero extends ChannelProviderUnary {
     }
 
     private static void processVoxels(
-            VoxelsWrapper voxelsOut,
-            VoxelsWrapper voxelsIn,
-            VoxelsWrapper voxelsIfZero,
+            VoxelsUntyped voxelsOut,
+            VoxelsUntyped voxelsIn,
+            VoxelsUntyped voxelsIfZero,
             double multFactorIfNonZero) {
 
         int volumeXY = voxelsIn.extent().areaXY();

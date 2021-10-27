@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.mi
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -53,16 +53,16 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
     private static final byte OUT_ON = BinaryValuesByte.getDefault().getOnByte();
 
     @Override
-    public VoxelsWrapper reconstruction(
-            VoxelsWrapper mask, VoxelsWrapper marker, Optional<ObjectMask> containingMask) {
+    public VoxelsUntyped reconstruction(
+            VoxelsUntyped mask, VoxelsUntyped marker, Optional<ObjectMask> containingMask) {
 
         // We flip everything because what occurs is erosion by Dilation, whereas we want
         // reconstruction by Erosion
         marker.subtractFromMaxValue();
         mask.subtractFromMaxValue();
 
-        VoxelsWrapper reconstructed =
-                new VoxelsWrapper(reconstructionByDilation(mask, marker.any(), containingMask));
+        VoxelsUntyped reconstructed =
+                new VoxelsUntyped(reconstructionByDilation(mask, marker.any(), containingMask));
         reconstructed.subtractFromMaxValue();
         return reconstructed;
     }
@@ -74,7 +74,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
      * <p>All pixels are either 0 or their final value (from channel).
      */
     private <T> Voxels<?> reconstructionByDilation(
-            VoxelsWrapper mask, Voxels<T> marker, Optional<ObjectMask> containingMask) {
+            VoxelsUntyped mask, Voxels<T> marker, Optional<ObjectMask> containingMask) {
 
         // We use this to track if something has been finalized or not
         Voxels<UnsignedByteBuffer> voxelsFinalized =

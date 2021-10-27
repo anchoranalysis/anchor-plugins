@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -44,7 +44,7 @@ public class Repeat extends BinarySegmentationOne {
 
     // START BEAN PROPERTIES
     /**
-     * The maximum number of iterations. If the mask no longer has ON voxels after fewer iterations,
+     * The maximum number of iterations. If the mask no longer has <i>on</i> voxels after fewer iterations,
      * it will terminate earlier
      */
     @BeanField @Positive @Getter @Setter private int iterations = 10;
@@ -52,7 +52,7 @@ public class Repeat extends BinarySegmentationOne {
 
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segmentFromExistingSegmentation(
-            VoxelsWrapper voxels,
+            VoxelsUntyped voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)

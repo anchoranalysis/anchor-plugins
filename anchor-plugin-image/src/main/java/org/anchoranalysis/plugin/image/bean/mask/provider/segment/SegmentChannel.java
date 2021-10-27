@@ -52,7 +52,7 @@ import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
  *
  * <p>Optionally, a mask restricts which part of the channel the algorithm is applied to. In this
  * case, the remainder of the channel is unaltered in the output-mask, and no check occurs to ensure
- * it containlys only the valid binary-values for OFF and ON.
+ * it containlys only the valid binary-values for <i>off</i> and <i>on</i>.
  *
  * <p>Optionally a histogram of voxel intensity values is passed to the segmentation algorithm.
  *
@@ -69,7 +69,7 @@ public class SegmentChannel extends FromChannelBase {
 
     /**
      * An optional mask which restricts the algorithm to only parts of the channel where the mask
-     * has an ON voxel
+     * has an <i>on</i> voxel
      */
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
     // END BEAN PROPERTIES

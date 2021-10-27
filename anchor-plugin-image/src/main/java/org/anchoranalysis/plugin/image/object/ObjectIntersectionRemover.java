@@ -95,7 +95,7 @@ public class ObjectIntersectionRemover {
     }
 
     /**
-     * Sets voxels to be OFF if they match a (a certain part of a) a second-mask
+     * Sets voxels to be <i>off</i> if they match a (a certain part of a) a second-mask
      *
      * @param object the object-mask
      * @param restrictTo only consider this part of the mask (expressed in global coordinates, and

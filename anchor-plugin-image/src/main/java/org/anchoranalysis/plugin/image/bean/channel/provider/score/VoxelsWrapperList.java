@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image
+ * anchor-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,33 +24,42 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.mask.provider.predicate;
+package org.anchoranalysis.plugin.image.bean.channel.provider.score;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitializeException;
-import org.anchoranalysis.image.core.mask.Mask;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.spatial.box.Extent;
 
-/**
- * The current {@code mask} is a particular stack exists (at least one <i>on</i> voxel) otherwise {@code
- * maskElse} is returned.
- *
- * @author Owen Feehan
- */
-public class IfStackExists extends IfPredicateBase {
+class VoxelsWrapperList implements Iterable<VoxelsUntyped> {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String stackID = "";
-    // END BEAN PROPERTIES
+    private List<VoxelsUntyped> list = new ArrayList<>();
+
+    public boolean add(VoxelsUntyped voxels) {
+        return list.add(voxels);
+    }
 
     @Override
-    protected boolean predicate(Mask mask) throws ProvisionFailedException {
-        try {
-            return getInitialization().channels().keys().contains(stackID);
-        } catch (InitializeException e) {
-            throw new ProvisionFailedException(e);
-        }
+    public Iterator<VoxelsUntyped> iterator() {
+        return list.iterator();
+    }
+
+    public Extent getFirstExtent() {
+        return list.get(0).any().extent();
+    }
+
+    public <T> List<VoxelBuffer<T>> bufferListForSlice(int sliceNum) {
+        return FunctionalList.mapToList(list, item -> item.slice(sliceNum));
+    }
+
+    public VoxelsUntyped get(int index) {
+        return list.get(index);
+    }
+
+    public int size() {
+        return list.size();
     }
 }
