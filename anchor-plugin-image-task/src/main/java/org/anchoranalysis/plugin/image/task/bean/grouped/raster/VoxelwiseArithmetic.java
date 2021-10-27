@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedBufferAsInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
@@ -48,7 +48,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class VoxelwiseArithmetic {
 
-    public static void divide(Voxels<UnsignedIntBuffer> voxels, int count, VoxelsWrapper out)
+    public static void divide(Voxels<UnsignedIntBuffer> voxels, int count, VoxelsUntyped out)
             throws OperationFailedException {
 
         VoxelDataType outputType = out.getVoxelDataType();
@@ -62,7 +62,7 @@ class VoxelwiseArithmetic {
         }
     }
 
-    public static void add(Voxels<UnsignedIntBuffer> voxels, VoxelsWrapper toAdd)
+    public static void add(Voxels<UnsignedIntBuffer> voxels, VoxelsUntyped toAdd)
             throws OperationFailedException {
 
         VoxelDataType toAddType = toAdd.getVoxelDataType();

@@ -74,7 +74,7 @@ class InterpolatorImageJ implements Interpolator {
     }
 
     @Override
-    public boolean isNewValuesPossible() {
+    public boolean canValueRangeChange() {
         return true;
     }
 }

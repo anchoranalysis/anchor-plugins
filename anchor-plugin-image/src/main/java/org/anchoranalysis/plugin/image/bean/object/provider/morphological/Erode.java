@@ -37,8 +37,6 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationList;
-import org.anchoranalysis.image.voxel.object.morphological.predicate.RejectIterationIfAllHigh;
-import org.anchoranalysis.image.voxel.object.morphological.predicate.RejectIterationIfLowDisconnected;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**

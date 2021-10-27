@@ -61,7 +61,7 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments, FeatureInp
      * Creates a point-matrix with the distance of each point in each dimension to the origin of the
      * bounding-box
      *
-     * @param object object whose ON voxels form the points in the matrix
+     * @param object object whose <i>on</i> voxels form the points in the matrix
      * @return newly created matrix
      */
     private static DoubleMatrix2D createPointMatrixFromObject(ObjectMask object) {

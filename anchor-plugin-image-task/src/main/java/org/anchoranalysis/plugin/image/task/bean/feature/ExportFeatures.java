@@ -109,19 +109,20 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     @BeanField @Getter @Setter private FeatureSource<T, S, U> source;
 
     /**
-     * If non-null this file-path is used to determine the group of the file If null, no group is
-     * included.
+     * If non-null, this file-path is used to determine the group of the file.
+     * 
+     * <p>If null, no group is included.
      */
     @BeanField @OptionalBean @Getter @Setter private DerivePath group;
 
-    /** Translates an input file name to a unique ID */
+    /** Translates an input file name to a unique ID. */
     @BeanField @OptionalBean @Getter @Setter private DerivePath id;
 
-    /** The features to be exported (after possibly some manipulation or augmentation) */
+    /** The features to be exported (after possibly some manipulation or augmentation). */
     @BeanField @NonEmpty @Getter @Setter
     private List<NamedBean<FeatureListProvider<U>>> features = new ArrayList<>();
 
-    /** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
+    /** Features applied to each group to aggregate values (accepting {@link FeatureInputResults}). */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate;
     // END BEAN PROPERTIES
@@ -210,7 +211,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
                 STORE_FACTORY_AGGREGATE::createNamedFeatureList);
     }
 
-    /** Determines the group name corresponding to an inputPath and the group-generator */
+    /** Determines the group name corresponding to an {@code inputPath} and the group-generator. */
     private Optional<String> extractGroupNameFromGenerator(Path inputPath, boolean debugMode)
             throws DerivePathException {
         return filePathAsIdentifier(Optional.ofNullable(group), inputPath, debugMode);

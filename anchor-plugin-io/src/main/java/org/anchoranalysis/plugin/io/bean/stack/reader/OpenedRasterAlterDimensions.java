@@ -68,7 +68,7 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
 
         for (Stack stack : sequence) {
             Optional<Resolution> res = processor.maybeUpdatedResolution(stack.resolution());
-            res.ifPresent(stack::updateResolution);
+            res.ifPresent(stack::assignResolution);
         }
         return sequence;
     }

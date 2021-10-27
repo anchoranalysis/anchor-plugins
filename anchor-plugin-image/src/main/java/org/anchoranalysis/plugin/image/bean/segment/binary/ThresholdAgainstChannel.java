@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -68,7 +68,7 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
 
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segment(
-            VoxelsWrapper voxels, BinarySegmentationParameters params, Optional<ObjectMask> object)
+            VoxelsUntyped voxels, BinarySegmentationParameters params, Optional<ObjectMask> object)
             throws SegmentationFailedException {
 
         Voxels<?> voxelsIn = voxels.any();
@@ -82,7 +82,7 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
                 createThresholdedVoxels(voxels.any().extent()),
                 createOutputVoxels(voxels));
 
-        return BinaryVoxelsFactory.reuseByte(voxelsOut, binaryValues.createInt());
+        return BinaryVoxelsFactory.reuseByte(voxelsOut, binaryValues.asInt());
     }
 
     private SliceThresholder createThresholder(
@@ -123,7 +123,7 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
      * @param voxels
      * @return
      */
-    private Voxels<UnsignedByteBuffer> createOutputVoxels(VoxelsWrapper voxels) {
+    private Voxels<UnsignedByteBuffer> createOutputVoxels(VoxelsUntyped voxels) {
 
         if (voxels.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             return voxels.asByte();

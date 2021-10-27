@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.mi
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public abstract class GrayscaleReconstructionByErosion
         extends AnchorBean<GrayscaleReconstructionByErosion> {
 
     // Reconstruction of maskImg from markerImg    mask<=markerImg  (but only inside containingMask)
-    public abstract VoxelsWrapper reconstruction(
-            VoxelsWrapper mask, VoxelsWrapper marker, Optional<ObjectMask> containingMask)
+    public abstract VoxelsUntyped reconstruction(
+            VoxelsUntyped mask, VoxelsUntyped marker, Optional<ObjectMask> containingMask)
             throws OperationFailedException;
 }
