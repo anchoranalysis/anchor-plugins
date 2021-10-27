@@ -31,14 +31,14 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Performs a segmentation and inverts and ON and OFF bytes
+ * Performs a segmentation and inverts and <i>on</i> and <i>off</i> bytes
  *
  * @author Owen Feehan
  */
@@ -46,7 +46,7 @@ public class Invert extends BinarySegmentationOne {
 
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segmentFromExistingSegmentation(
-            VoxelsWrapper voxels,
+            VoxelsUntyped voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)
@@ -59,7 +59,7 @@ public class Invert extends BinarySegmentationOne {
 
     private void invertVoxels(BinaryVoxels<UnsignedByteBuffer> voxels) {
 
-        BinaryValuesByte bv = voxels.binaryValues().createByte();
+        BinaryValuesByte bv = voxels.binaryValues().asByte();
 
         int volumeXY = voxels.extent().areaXY();
 

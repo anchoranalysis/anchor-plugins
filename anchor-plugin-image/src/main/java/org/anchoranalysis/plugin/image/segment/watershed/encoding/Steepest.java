@@ -53,29 +53,25 @@ public final class Steepest {
         }
 
         @Override
-        public void initSource(int sourceVal, int sourceOffsetXY) {
-            super.initSource(sourceVal, sourceOffsetXY);
-            this.value = sourceVal;
+        public void initSource(int sourceValue, int sourceOffsetXY) {
+            super.initSource(sourceValue, sourceOffsetXY);
+            this.value = sourceValue;
             this.direction = WatershedEncoding.CODE_MINIMA;
         }
 
         @Override
-        public boolean processPoint(int xChange, int yChange, int x1, int y1) {
+        public void processPoint(int xChange, int yChange, int x1, int y1) {
 
             int gValNeighborhood = getInt(xChange, yChange);
 
-            if (gValNeighborhood == sourceVal) {
+            if (gValNeighborhood == sourceValue) {
                 direction = WatershedEncoding.CODE_PLATEAU;
-                return true;
             }
 
             if (gValNeighborhood < value) {
                 value = gValNeighborhood;
                 direction = encoder.encodeDirection(xChange, yChange, zChange);
-                return true;
             }
-
-            return false;
         }
 
         /** The steepest direction */
@@ -90,15 +86,17 @@ public final class Steepest {
     private final Neighborhood neighborhood;
 
     /**
-     * @param rbb
+     * Create for a specific buffer.
+     * 
+     * @param buffer the buffer.
      * @param encoder
      * @param do3D
-     * @param bigNeighborhood iff true we use 8-Connectivity instead of 4, and 26-connectivity
-     *     instead of 6 in 3D
+     * @param bigNeighborhood if true, use 8-Connectivity instead of 4 in 2D, and 26-connectivity
+     *     instead of 6 in 3D, as per {@link NeighborhoodFactory}.
      * @param objectMask
      */
     public Steepest(
-            SlidingBuffer<?> rbb,
+            SlidingBuffer<?> buffer,
             WatershedEncoding encoder,
             boolean do3D,
             boolean bigNeighborhood,
@@ -106,7 +104,7 @@ public final class Steepest {
         this.do3D = do3D;
         this.process =
                 ProcessVoxelNeighborFactory.within(
-                        objectMask, rbb.extent(), new PointEvaluator(encoder, rbb));
+                        objectMask, buffer.extent(), new PointEvaluator(encoder, buffer));
         this.neighborhood = NeighborhoodFactory.of(bigNeighborhood);
     }
 

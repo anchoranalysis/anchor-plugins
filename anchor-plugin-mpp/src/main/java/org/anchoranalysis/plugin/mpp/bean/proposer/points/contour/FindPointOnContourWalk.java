@@ -87,7 +87,7 @@ public class FindPointOnContourWalk extends FindPointOnContour {
     private Optional<Point3i> pointOnOutline( // NOSONAR
             Point3d centerPoint, Point3d step, boolean useZ) throws OperationFailedException {
 
-        BinaryValuesByte binaryValues = maskCreated.binaryValues().createByte();
+        BinaryValuesByte binaryValues = maskCreated.binaryValues().asByte();
 
         Point3d pointDouble = new Point3d(centerPoint);
         while (true) {

@@ -38,7 +38,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 
 /**
@@ -82,7 +82,7 @@ class GradientCalculator {
      * @param signalIn where to calculate gradient from
      * @param gradientOut where to output the gradient to
      */
-    public void gradient(VoxelsWrapper signalIn, Voxels<FloatBuffer> gradientOut) {
+    public void gradient(VoxelsUntyped signalIn, Voxels<FloatBuffer> gradientOut) {
         gradientImgLib2(
                 ConvertToImg.from(signalIn), // Input channel
                 ConvertToImg.fromFloat(gradientOut) // Output channel

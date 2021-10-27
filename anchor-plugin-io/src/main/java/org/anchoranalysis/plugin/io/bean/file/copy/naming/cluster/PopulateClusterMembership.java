@@ -37,7 +37,7 @@ class PopulateClusterMembership {
      * @param offset the offset to assume the time-stamp belongs in.
      * @param thresholdHours files whose creation-time differs {@code <=} this parameter are joined
      *     into the same cluster.
-     * @param minimumPerCluster the minimum number of neighbours that must exist to form a cluster
+     * @param minimumPerCluster the minimum number of neighbors that must exist to form a cluster
      *     (so 1 means 2 files are the minimum for a viable cluster).
      * @throws OperationFailedException
      */

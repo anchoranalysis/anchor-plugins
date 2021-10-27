@@ -63,7 +63,7 @@ public class LevelResultCollectionFactory {
             // Optional dilation
             if (numDilations != 0) {
                 objectForCalculateLevel =
-                        MorphologicalDilation.createDilatedObject(
+                        MorphologicalDilation.dilate(
                                 objectMask,
                                 Optional.of(channel.extent()),
                                 channel.dimensions().z() > 1,

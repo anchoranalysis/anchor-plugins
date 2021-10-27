@@ -34,7 +34,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -64,7 +64,7 @@ public class QuantileStretch extends ChannelProviderUnary {
     private static void histogramStretch(Channel channel, double quantile)
             throws OperationFailedException {
 
-        VoxelsWrapper voxels = channel.voxels();
+        VoxelsUntyped voxels = channel.voxels();
 
         Histogram histogram = HistogramFactory.create(voxels);
 

@@ -52,7 +52,7 @@ public abstract class FeatureMarkDirection extends FeatureMark {
     @Override
     protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         super.beforeCalc(initialization);
-        this.vectorInDirection = direction.createVector().createVector3d();
+        this.vectorInDirection = direction.createVector().asVector3d();
     }
 
     @Override

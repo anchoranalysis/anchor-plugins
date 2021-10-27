@@ -181,7 +181,7 @@ class FlattenAndScaler {
      */
     private Channel flattenScaleAndRemoveResolutionFromChannel(Channel channel) {
         Channel scaled = channel.projectMax().scaleXY(scaleFactor, interpolator);
-        scaled.updateResolution(Optional.empty());
+        scaled.assignResolution(Optional.empty());
         return scaled;
     }
 

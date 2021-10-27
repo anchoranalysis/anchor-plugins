@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.predicate;
 import org.anchoranalysis.image.core.mask.Mask;
 
 /**
- * The current {@code mask} is returned if it's non-empty (at least one ON voxel) otherwise {@code
+ * The current {@code mask} is returned if it's non-empty (at least one <i>on</i> voxel) otherwise {@code
  * maskElse} is returned.
  *
  * @author Owen Feehan

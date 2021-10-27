@@ -95,7 +95,7 @@ class WalkShortestPath {
             drawLineOnVoxelBuffer(
                     object.binaryVoxels().slice(point1.z() - box.cornerMin().z()),
                     object.binaryVoxels().extent(),
-                    object.binaryVoxels().binaryValues().createByte(),
+                    object.binaryVoxels().binaryValues().asByte(),
                     point1,
                     point2,
                     box.cornerMin());

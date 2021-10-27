@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
- * A constant value for thresholding
+ * A constant value for thresholding.
  *
  * @author Owen Feehan
  */

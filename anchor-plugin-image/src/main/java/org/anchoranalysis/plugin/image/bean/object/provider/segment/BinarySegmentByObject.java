@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameter
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -73,7 +73,7 @@ public class BinarySegmentByObject extends UnaryWithChannelBase {
 
         BinaryVoxels<UnsignedByteBuffer> binaryValues =
                 binarySgmn.segment(
-                        new VoxelsWrapper(voxels),
+                        new VoxelsUntyped(voxels),
                         new BinarySegmentationParameters(),
                         Optional.of(new ObjectMask(object.voxels())));
 

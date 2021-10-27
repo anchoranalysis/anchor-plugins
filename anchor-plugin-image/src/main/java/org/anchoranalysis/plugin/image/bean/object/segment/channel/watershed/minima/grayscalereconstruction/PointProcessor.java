@@ -70,7 +70,7 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
     }
 
     @Override
-    public boolean processPoint(int xChange, int yChange, int x1, int y1) {
+    public void processPoint(int xChange, int yChange, int x1, int y1) {
 
         // We can replace with local index changes
         int index = changedOffset(xChange, yChange);
@@ -82,7 +82,7 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
             // get value from mask
             int maskVal = bufferMask.getInt(index);
 
-            int valToWrite = Math.min(maskVal, sourceVal);
+            int valToWrite = Math.min(maskVal, sourceValue);
 
             // write this value to the output image
             putInt(index, valToWrite);
@@ -92,11 +92,7 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
 
             // point as finalized
             bufferFinalized.buffer().putRaw(index, binaryValues.getOnByte());
-
-            return true;
         }
-
-        return false;
     }
 
     @Override
