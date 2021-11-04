@@ -247,7 +247,8 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
                 generator, dimensions, getPadding(), keepEntireImage);
     }
 
-    private ObjectCollection maybeExtendZObjects(ObjectCollection objects, int sizeZ) throws OperationFailedException {
+    private ObjectCollection maybeExtendZObjects(ObjectCollection objects, int sizeZ)
+            throws OperationFailedException {
         if (extendInZ) {
             return extendObjectsInZ(objects, sizeZ);
         } else {
@@ -255,7 +256,8 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
         }
     }
 
-    private static ObjectCollection extendObjectsInZ(ObjectCollection objects, int sz) throws OperationFailedException {
+    private static ObjectCollection extendObjectsInZ(ObjectCollection objects, int sz)
+            throws OperationFailedException {
         return objects.stream().map(objectMask -> objectMask.flattenZ().growToZ(sz));
     }
 }

@@ -64,11 +64,8 @@ public class BBoxRatio extends FeatureSingleMemo {
 
         return extent;
     }
-    
 
-    /**
-     * Extracts the sizes of the dimensions in {@code extent} in ascencing order of magnitude.
-     */
+    /** Extracts the sizes of the dimensions in {@code extent} in ascencing order of magnitude. */
     private static int[] extractAscendingSizes(Extent extent) {
         int[] extents = extent.toArray();
         Arrays.sort(extents);

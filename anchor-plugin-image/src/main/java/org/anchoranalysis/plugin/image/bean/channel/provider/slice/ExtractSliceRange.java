@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -77,7 +77,7 @@ public class ExtractSliceRange extends ChannelProviderUnary {
     @Override
     public Channel createFromChannel(Channel channel) {
 
-        ChannelFactoryByte factory = new ChannelFactoryByte();
+        ChannelFactoryUnsignedByte factory = new ChannelFactoryUnsignedByte();
 
         Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 

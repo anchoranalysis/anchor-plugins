@@ -27,31 +27,28 @@
 package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.nio.file.Path;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReaderUnary;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
  * Combines all series and frames returned by a reader by converting them into multiple channels in
- * the same image
+ * the same image.
  *
- * <p>It assumes that the underlying stackReader will only return images with: 1. a constant number
- * of channels 2. a constant number of frames
+ * <p>It assumes that the underlying stackReader will only return images with:
+ *
+ * <ol>
+ *   <li>a constant number of channels.
+ *   <li>a constant number of frames.
+ * </ol>
  *
  * @author Owen Feehan
  */
-public class FlattenAsChannel extends StackReader {
-
-    // START BEAN PROPERTIES
-    /** Reads the image that is subsequently flattened. */
-    @BeanField @Getter @Setter private StackReader stackReader;
-    // END BEAN PROPERTIES
+public class FlattenAsChannel extends StackReaderUnary {
 
     @Override
-    public OpenedImageFile openFile(Path path) throws ImageIOException {
-        return new OpenedFlattenAsChannel(stackReader.openFile(path));
+    protected OpenedImageFile wrapOpenedFile(Path path, OpenedImageFile openedFileFromDelegate)
+            throws ImageIOException {
+        return new OpenedFlattenAsChannel(openedFileFromDelegate);
     }
 }

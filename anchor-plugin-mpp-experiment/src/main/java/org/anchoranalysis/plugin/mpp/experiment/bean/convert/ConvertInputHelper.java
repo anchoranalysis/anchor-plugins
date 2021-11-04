@@ -31,7 +31,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -62,7 +64,8 @@ class ConvertInputHelper {
             return new ConvertNamedChannelsInputToStack(input);
         } else if (inputTypesExpected.doesClassInheritFromAny(FileWithDirectoryInput.class)) {
             return convertToFileWithDirectory(input, directory);
-
+        } else if (inputTypesExpected.doesClassInheritFromAny(ImageMetadataInput.class)) {
+            return convertToImageMetadata(input);
         } else {
             throw new ExperimentExecutionException(
                     String.format(
@@ -71,6 +74,20 @@ class ConvertInputHelper {
         }
     }
 
+    /**
+     * Adds all the input-types that can exist after conversion.
+     *
+     * @param expected where the input-types are added to.
+     */
+    public static void addSupportedConversionInputTypes(InputTypesExpected expected) {
+        // Add the other types we'll consider converting
+        expected.add(MultiInput.class);
+        expected.add(StackSequenceInput.class);
+        expected.add(FileWithDirectoryInput.class);
+        expected.add(ImageMetadataInput.class);
+    }
+
+    /** Converts to a {@link FileWithDirectoryInput}. */
     private static <T extends NamedChannelsInput> FileWithDirectoryInput convertToFileWithDirectory(
             T input, Optional<Path> directory) throws ExperimentExecutionException {
         try {
@@ -78,6 +95,16 @@ class ConvertInputHelper {
                     new NamedFile(input.identifier(), input.pathForBindingRequired().toFile());
             return new FileWithDirectoryInput(namedFile, directory.get()); // NOSONAR
         } catch (InputReadFailedException e) {
+            throw new ExperimentExecutionException(e);
+        }
+    }
+
+    /** Converts to a {@link ImageMetadataInput}. */
+    private static <T extends NamedChannelsInput> ImageMetadataInput convertToImageMetadata(T input)
+            throws ExperimentExecutionException {
+        try {
+            return new ImageMetadataInput(input.asFile(), input.metadata(0));
+        } catch (ImageIOException | InputReadFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }

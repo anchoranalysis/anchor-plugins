@@ -31,7 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 import org.anchoranalysis.spatial.box.Extent;
@@ -53,7 +53,7 @@ public class ApplyImageJMorphologicalOperation {
             BinaryVoxels<UnsignedByteBuffer> voxels, String command, int iterations)
             throws OperationFailedException {
 
-        if (!voxels.binaryValues().equals(BinaryValues.getDefault())) {
+        if (!voxels.binaryValues().equals(BinaryValuesInt.getDefault())) {
             throw new OperationFailedException("On byte must be 255, and off byte must be 0");
         }
 

@@ -31,7 +31,7 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -134,7 +134,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
             Point3d point,
             VoxelsExtracter<UnsignedByteBuffer> extracter,
             Extent extent,
-            BinaryValues binaryValues) {
+            BinaryValuesInt binaryValues) {
 
         Point3i pointInt = PointConverter.intFromDoubleFloor(point);
 

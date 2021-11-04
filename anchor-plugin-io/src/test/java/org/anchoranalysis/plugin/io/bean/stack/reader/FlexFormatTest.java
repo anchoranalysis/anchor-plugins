@@ -28,16 +28,25 @@ package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.nio.file.Path;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
+import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
-import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests reading the {@code .flex} file format with the {@link BioformatsReader}.
+ *
+ * @author Owen Feehan
+ */
 class FlexFormatTest {
 
-    private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
+    static {
+        ConfigureBioformatsLogging.instance().makeSureConfigured();
+    }
+
+    private OpenImageFileHelper loader =
+            new OpenImageFileHelper("exampleFormats", new BioformatsReader());
 
     /**
      * Tests the numChannels and numFrames from a known file, as it sometimes incorrectly reports as
@@ -53,11 +62,7 @@ class FlexFormatTest {
      */
     @Test
     void testSizeCAndT() throws ImageIOException {
-
-        Path path = loader.resolveTestPath("exampleFormats/001001007.flex");
-
-        BioformatsReader reader = new BioformatsReader();
-        OpenedImageFile openedFile = reader.openFile(path);
+        OpenedImageFile openedFile = loader.openFile("001001007.flex");
 
         assertEquals(1, openedFile.numberChannels());
         assertEquals(1, openedFile.numberSeries());

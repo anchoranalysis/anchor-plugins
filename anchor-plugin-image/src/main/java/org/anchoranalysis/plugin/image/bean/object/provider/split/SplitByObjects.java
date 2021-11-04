@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -70,8 +70,8 @@ public class SplitByObjects extends WithDimensionsBase {
                         object ->
                                 splitObject(
                                         object,
-                                        findObjectsWithIntersectingBoundingBox(objectsSplitByCollection,
-                                                object),
+                                        findObjectsWithIntersectingBoundingBox(
+                                                objectsSplitByCollection, object),
                                         dimensions.extent()));
     }
 
@@ -102,7 +102,8 @@ public class SplitByObjects extends WithDimensionsBase {
     }
 
     /**
-     * Perform a flood fill for each number, exposing it like a binary image of {@code 0} and {@code i}.
+     * Perform a flood fill for each number, exposing it like a binary image of {@code 0} and {@code
+     * i}.
      *
      * <p>The code will not change pixels that don't match <i>on</i>.
      */
@@ -116,7 +117,7 @@ public class SplitByObjects extends WithDimensionsBase {
     private static ObjectCollection createObjectForIndex(
             int voxelEqualTo, BoundedVoxels<UnsignedIntBuffer> voxels) {
         BinaryVoxels<UnsignedIntBuffer> binaryVoxels =
-                BinaryVoxelsFactory.reuseInt(voxels.voxels(), new BinaryValues(0, voxelEqualTo));
+                BinaryVoxelsFactory.reuseInt(voxels.voxels(), new BinaryValuesInt(0, voxelEqualTo));
 
         // for every object we add the objToSplit Bounding Box corner, to restore it to global
         // coordinates
@@ -124,8 +125,9 @@ public class SplitByObjects extends WithDimensionsBase {
                 .createUnsignedInt(binaryVoxels)
                 .shiftBy(voxels.cornerMin());
     }
-    
-    private static ObjectCollection findObjectsWithIntersectingBoundingBox(ObjectCollection objects, ObjectMask toIntersectWith) {
+
+    private static ObjectCollection findObjectsWithIntersectingBoundingBox(
+            ObjectCollection objects, ObjectMask toIntersectWith) {
         return objects.stream()
                 .filter(
                         object ->

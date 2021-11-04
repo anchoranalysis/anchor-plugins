@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
@@ -68,8 +68,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
     @BeanField @Getter @Setter private int energyIndexMask = -1;
 
     /** If true, uses the inverse of the passed mask. */
-    @BeanField @Getter @Setter
-    private boolean inverseMask = false; 
+    @BeanField @Getter @Setter private boolean inverseMask = false;
 
     @BeanField @Getter @Setter private double emptyValue = 255;
     // END BEAN PROPERTIES
@@ -92,7 +91,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
                 iterations.describePropertiesFriendly(),
                 inverse ? "true" : "false");
     }
-    
+
     @Override
     protected double calculateForChannel(
             SessionInput<FeatureInputSingleObject> input, Channel channel)
@@ -118,7 +117,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     protected abstract double calculateForShell(ObjectMask shell, Channel channel)
             throws FeatureCalculationException;
-    
+
     private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         return input.calculate(
@@ -135,7 +134,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
                 new BoundingBox(energyStack.extent()),
                 energyStack.getChannel(energyIndexMask).voxels().asByte(),
                 inverseMask
-                        ? BinaryValues.getDefault().createInverted()
-                        : BinaryValues.getDefault());
+                        ? BinaryValuesInt.getDefault().createInverted()
+                        : BinaryValuesInt.getDefault());
     }
 }

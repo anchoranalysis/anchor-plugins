@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
@@ -43,24 +44,27 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.bean.thumbnail.stack.ScaleToSize;
 import org.anchoranalysis.plugin.image.bean.thumbnail.stack.ThumbnailFromStack;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculatorFromProvider;
 
-/** An image that produces one row of features. */
+/**
+ * Calculates features from a single image.
+ *
+ * <p>Each image produces a single row of features.
+ */
 public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInputStack> {
 
     // START BEAN PROPERTIES
     /**
      * Optionally defines a energy-stack for feature calculation (if not set, the energy-stack is
-     * considered to be the input stacks)
+     * considered to be the input stacks).
      */
     @BeanField @OptionalBean @Getter @Setter private StackProvider stackEnergy;
 
-    /** Method to generate a thumbnail for images */
+    /** Method to generate a thumbnail for images. */
     @BeanField @Getter @Setter private ThumbnailFromStack thumbnail = new ScaleToSize();
     // END BEAN PROPERTIES
 
@@ -84,10 +88,12 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
             throws NamedFeatureCalculateException {
 
         FeatureCalculatorFromProvider<FeatureInputStack> calculator =
-                createCalculator(input, context.getContext());
+                createCalculator(input, context);
 
         // Calculate the results for the current stack
-        ResultsVector results = calculateResults(calculator, context.getRowSource());
+        ResultsVector results =
+                calculateResults(
+                        calculator, context.getRowSource(), context.getExecutionTimeRecorder());
 
         thumbnail.start();
 
@@ -102,13 +108,21 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
     private ResultsVector calculateResults(
             FeatureCalculatorFromProvider<FeatureInputStack> factory,
-            FeatureList<FeatureInputStack> features)
+            FeatureList<FeatureInputStack> features,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws NamedFeatureCalculateException {
-        try {
-            return factory.calculatorForAll(features).calculate(new FeatureInputStack());
-        } catch (InitializeException e) {
-            throw new NamedFeatureCalculateException(e);
-        }
+        return executionTimeRecorder.recordExecutionTime(
+                "Calculating features",
+                () -> {
+                    try {
+                        // The energy-stack will be added later, so we do not need to intialize it
+                        // in the FeatureInputStack
+                        return factory.calculatorForAll(features)
+                                .calculate(new FeatureInputStack());
+                    } catch (InitializeException e) {
+                        throw new NamedFeatureCalculateException(e);
+                    }
+                });
     }
 
     private Optional<DisplayStack> extractThumbnail(EnergyStack energyStack, boolean thumbnails)
@@ -121,11 +135,17 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
     }
 
     private FeatureCalculatorFromProvider<FeatureInputStack> createCalculator(
-            ProvidesStackInput input, InputOutputContext context)
+            ProvidesStackInput input, InputProcessContext<FeatureList<FeatureInputStack>> context)
             throws NamedFeatureCalculateException {
         try {
-            return new FeatureCalculatorFromProvider<>(
-                    input, Optional.ofNullable(getStackEnergy()), context);
+            return context.getExecutionTimeRecorder()
+                    .recordExecutionTime(
+                            "Loading images",
+                            () ->
+                                    new FeatureCalculatorFromProvider<>(
+                                            input,
+                                            Optional.ofNullable(stackEnergy),
+                                            context.getContext()));
         } catch (OperationFailedException e) {
             throw new NamedFeatureCalculateException(e);
         }
