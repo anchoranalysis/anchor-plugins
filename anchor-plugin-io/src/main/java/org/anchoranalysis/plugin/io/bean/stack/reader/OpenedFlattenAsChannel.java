@@ -37,6 +37,12 @@ import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
+/**
+ * Like a {@link OpenedImageFile} but considers frames and series as if they were instead additional
+ * channels.
+ *
+ * @author Owen Feehan
+ */
 class OpenedFlattenAsChannel implements OpenedImageFile {
 
     private final OpenedImageFile delegate;
@@ -118,20 +124,20 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
         return delegate.dimensionsForSeries(seriesIndex);
     }
 
-    private List<Stack> extractStacksAndVerify(TimeSequence ts) throws ImageIOException {
+    private List<Stack> extractStacksAndVerify(TimeSequence sequence) throws ImageIOException {
 
-        if (ts.size() != expectedNumberFrames) {
+        if (sequence.size() != expectedNumberFrames) {
             throw new ImageIOException(
                     String.format(
                             "This bean expects %d frames to always be returned from the stackReader to only return images with a single time-frame, but it returned an image with %d frames",
-                            expectedNumberFrames, ts.size()));
+                            expectedNumberFrames, sequence.size()));
         }
 
         List<Stack> out = new ArrayList<>();
 
-        for (int i = 0; i < ts.size(); i++) {
+        for (int i = 0; i < sequence.size(); i++) {
 
-            Stack stack = ts.get(i);
+            Stack stack = sequence.get(i);
 
             if (stack.getNumberChannels() != expectedNumberChannels) {
                 throw new ImageIOException(

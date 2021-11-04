@@ -30,8 +30,8 @@ import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
@@ -66,12 +66,12 @@ public class MaxIntensityProjectionPair {
         int count1 =
                 voxelsProjected1
                         .extract()
-                        .voxelsEqualTo(BinaryValues.getDefault().getOnInt())
+                        .voxelsEqualTo(BinaryValuesInt.getDefault().getOnInt())
                         .count();
         int count2 =
                 voxelsProjected2
                         .extract()
-                        .voxelsEqualTo(BinaryValues.getDefault().getOnInt())
+                        .voxelsEqualTo(BinaryValuesInt.getDefault().getOnInt())
                         .count();
         return Math.min(count1, count2);
     }

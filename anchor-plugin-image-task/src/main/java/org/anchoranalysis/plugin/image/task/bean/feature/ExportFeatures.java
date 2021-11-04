@@ -110,7 +110,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     /**
      * If non-null, this file-path is used to determine the group of the file.
-     * 
+     *
      * <p>If null, no group is included.
      */
     @BeanField @OptionalBean @Getter @Setter private DerivePath group;
@@ -122,7 +122,9 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     @BeanField @NonEmpty @Getter @Setter
     private List<NamedBean<FeatureListProvider<U>>> features = new ArrayList<>();
 
-    /** Features applied to each group to aggregate values (accepting {@link FeatureInputResults}). */
+    /**
+     * Features applied to each group to aggregate values (accepting {@link FeatureInputResults}).
+     */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate;
     // END BEAN PROPERTIES
@@ -156,7 +158,10 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
             InputProcessContext<S> inputProcessContext =
                     input.getSharedState()
-                            .createInputProcessContext(groupName, input.getContextJob());
+                            .createInputProcessContext(
+                                    groupName,
+                                    input.getContextExperiment().getExecutionTimeRecorder(),
+                                    input.getContextJob());
 
             source.processInput(input.getInput(), inputProcessContext);
 

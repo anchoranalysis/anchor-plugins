@@ -34,6 +34,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
@@ -45,37 +46,41 @@ import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.input.path.PathSupplier;
 
 /**
- * Appends another channel to an existing NamedChannelInputBase
+ * Appends an additional channel to an existing {@link NamedChannelsInputPart}.
  *
  * @author Owen Feehan
  */
 class AppendPart extends NamedChannelsInputPart {
 
-    private final NamedChannelsInputPart delegate;
+    /** The existing {@link NamedChannelsInputPart} to append to. */
+    private final NamedChannelsInputPart toAppendTo;
+
+    /** The additional channel to append. */
     private final AdditionalChannel additionalChannel;
+
     private final StackReader stackReader;
 
     private OpenedImageFile openedFileMemo;
 
     public AppendPart(
-            NamedChannelsInputPart delegate,
+            NamedChannelsInputPart toAppendTo,
             String channelName,
             int channelIndex,
             PathSupplier filePath,
             StackReader stackReader) {
-        this.delegate = delegate;
+        this.toAppendTo = toAppendTo;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
         this.stackReader = stackReader;
     }
 
     @Override
     public int numberSeries() throws ImageIOException {
-        return delegate.numberSeries();
+        return toAppendTo.numberSeries();
     }
 
     @Override
     public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
-        return delegate.dimensions(stackIndexInSeries);
+        return toAppendTo.dimensions(stackIndexInSeries);
     }
 
     @Override
@@ -84,14 +89,14 @@ class AppendPart extends NamedChannelsInputPart {
         if (additionalChannel.getName().equals(channelName)) {
             return true;
         }
-        return delegate.hasChannel(channelName);
+        return toAppendTo.hasChannel(channelName);
     }
 
     @Override
     public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
             throws ImageIOException {
 
-        NamedChannelsForSeries existing = delegate.createChannelsForSeries(seriesIndex, progress);
+        NamedChannelsForSeries existing = toAppendTo.createChannelsForSeries(seriesIndex, progress);
 
         openRasterIfNecessary();
 
@@ -101,6 +106,66 @@ class AppendPart extends NamedChannelsInputPart {
                 new NamedChannelsForSeriesMap(
                         openedFileMemo, additionalChannel.createChannelMap(), seriesIndex));
         return out;
+    }
+
+    @Override
+    public String identifier() {
+        return toAppendTo.identifier();
+    }
+
+    @Override
+    public List<Path> pathForBindingForAllChannels() throws OperationFailedException {
+        try {
+            List<Path> list = toAppendTo.pathForBindingForAllChannels();
+            list.add(additionalChannel.getFilePath());
+            return list;
+
+        } catch (DerivePathException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    @Override
+    public Optional<Path> pathForBinding() {
+        return toAppendTo.pathForBinding();
+    }
+
+    @Override
+    public File getFile() {
+        return toAppendTo.getFile();
+    }
+
+    @Override
+    public int numberChannels() throws ImageIOException {
+        return toAppendTo.numberChannels() + 1;
+    }
+
+    @Override
+    public int bitDepth() throws ImageIOException {
+        return toAppendTo.bitDepth();
+    }
+
+    @Override
+    public ImageMetadata metadata(int seriesIndex) throws ImageIOException {
+        ImageMetadata existing = toAppendTo.metadata(seriesIndex);
+        return new ImageMetadata(
+                existing.getDimensions(),
+                existing.getNumberChannels() + 1,
+                existing.getNumberFrames(),
+                false,
+                existing.getBitDepth());
+    }
+
+    @Override
+    public void close(ErrorReporter errorReporter) {
+        if (openedFileMemo != null) {
+            try {
+                openedFileMemo.close();
+            } catch (ImageIOException e) {
+                errorReporter.recordError(AppendPart.class, e);
+            }
+        }
+        toAppendTo.close(errorReporter);
     }
 
     private void openRasterIfNecessary() throws ImageIOException {
@@ -114,54 +179,5 @@ class AppendPart extends NamedChannelsInputPart {
         } catch (DerivePathException e) {
             throw new ImageIOException(e);
         }
-    }
-
-    @Override
-    public String identifier() {
-        return delegate.identifier();
-    }
-
-    @Override
-    public List<Path> pathForBindingForAllChannels() throws OperationFailedException {
-        try {
-            List<Path> list = delegate.pathForBindingForAllChannels();
-            list.add(additionalChannel.getFilePath());
-            return list;
-
-        } catch (DerivePathException e) {
-            throw new OperationFailedException(e);
-        }
-    }
-
-    @Override
-    public Optional<Path> pathForBinding() {
-        return delegate.pathForBinding();
-    }
-
-    @Override
-    public File getFile() {
-        return delegate.getFile();
-    }
-
-    @Override
-    public int numberChannels() throws ImageIOException {
-        return delegate.numberChannels();
-    }
-
-    @Override
-    public int bitDepth() throws ImageIOException {
-        return delegate.bitDepth();
-    }
-
-    @Override
-    public void close(ErrorReporter errorReporter) {
-        if (openedFileMemo != null) {
-            try {
-                openedFileMemo.close();
-            } catch (ImageIOException e) {
-                errorReporter.recordError(AppendPart.class, e);
-            }
-        }
-        delegate.close(errorReporter);
     }
 }

@@ -87,7 +87,7 @@ public final class Steepest {
 
     /**
      * Create for a specific buffer.
-     * 
+     *
      * @param buffer the buffer.
      * @param encoder
      * @param do3D

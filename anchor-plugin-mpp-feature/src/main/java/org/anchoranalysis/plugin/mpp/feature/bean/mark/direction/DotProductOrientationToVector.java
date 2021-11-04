@@ -51,9 +51,9 @@ public class DotProductOrientationToVector extends FeatureMarkDirection {
         try {
             for (int dimension = 0; dimension < 3; dimension++) {
                 Point3d vec = rotMatrix.column(dimension);
-    
+
                 double dot = Math.acos(directionVector.dotProduct(vec));
-    
+
                 if (dot < minDot) {
                     minDot = dot;
                 }
@@ -61,7 +61,7 @@ public class DotProductOrientationToVector extends FeatureMarkDirection {
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
-            
+
         return minDot;
     }
 }

@@ -37,6 +37,12 @@ import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
+/**
+ * An {@link OpenedImageFile} whose dimensions will be altered from those specified in the
+ * image-file.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 class OpenedRasterAlterDimensions implements OpenedImageFile {
 
@@ -44,11 +50,11 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
     public static interface ConsiderUpdatedImageResolution {
 
         /**
-         * A possibly-updated image resolution
+         * A possibly-updated image resolution.
          *
-         * @param resolution the existing image resolution
-         * @return a new image resolution or empty if no change should occur
-         * @throws ImageIOException
+         * @param resolution the existing image resolution.
+         * @return a new image resolution or {@link Optional#empty} if no change should occur.
+         * @throws ImageIOException if reading to / writing from the file-system fails.
          */
         Optional<Resolution> maybeUpdatedResolution(Optional<Resolution> resolution)
                 throws ImageIOException;
@@ -67,8 +73,8 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
         TimeSequence sequence = delegate.open(seriesIndex, progress);
 
         for (Stack stack : sequence) {
-            Optional<Resolution> res = processor.maybeUpdatedResolution(stack.resolution());
-            res.ifPresent(stack::assignResolution);
+            Optional<Resolution> resolution = processor.maybeUpdatedResolution(stack.resolution());
+            resolution.ifPresent(stack::assignResolution);
         }
         return sequence;
     }
@@ -88,10 +94,10 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
 
         Dimensions dimensions = delegate.dimensionsForSeries(seriesIndex);
 
-        Optional<Resolution> res = processor.maybeUpdatedResolution(dimensions.resolution());
+        Optional<Resolution> resolution = processor.maybeUpdatedResolution(dimensions.resolution());
 
-        if (res.isPresent()) {
-            return dimensions.duplicateChangeResolution(res);
+        if (resolution.isPresent()) {
+            return dimensions.duplicateChangeResolution(resolution);
         } else {
             return dimensions;
         }

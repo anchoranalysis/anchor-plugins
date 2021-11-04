@@ -119,7 +119,9 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
                 features, initialization.featuresInitialization().getSharedFeatures());
     }
 
-    /** Calculates a energy-stack from a provider if it's available, or otherwise uses a fallback */
+    /**
+     * Calculates a energy-stack from a provider if it's available, or otherwise uses a fallback.
+     */
     private EnergyStack energyStackFromProviderOrElse(
             Optional<StackProvider> stackEnergy,
             CachedSupplier<Stack, OperationFailedException> fallback,

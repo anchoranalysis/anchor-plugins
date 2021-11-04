@@ -1,0 +1,1 @@
+Files for testing reading the EXIF orientation property.

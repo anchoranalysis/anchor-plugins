@@ -44,6 +44,8 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
+import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
@@ -56,8 +58,17 @@ import org.anchoranalysis.plugin.mpp.experiment.shared.SharedStateRememberConver
 /**
  * Converts {@link NamedChannelsInput} to a variety of others to match a delegate task.
  *
+ * <p>The other types, to which a {@link NamedChannelsInput} will be converted are:
+ *
+ * <ol>
+ *   <li>{@link MultiInput}
+ *   <li>{@link StackSequenceInput}
+ *   <li>{@link FileWithDirectoryInput}
+ *   <li>{@link ImageMetadataInput}
+ * </ol>
+ *
  * <p>Note that the presence of {@link ReplaceTask} gives special behavior to this task in the
- * {@link JobProcessor}
+ * {@link JobProcessor}.
  *
  * @author Owen Feehan
  * @param <T> the named-channels-input we expect to receive
@@ -106,8 +117,7 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
     @Override
     public InputTypesExpected inputTypesExpected() {
         InputTypesExpected expected = new InputTypesExpected(NamedChannelsInput.class);
-        // Add the other types we'll consider converting
-        expected.add(MultiInput.class);
+        ConvertInputHelper.addSupportedConversionInputTypes(expected);
         return expected;
     }
 

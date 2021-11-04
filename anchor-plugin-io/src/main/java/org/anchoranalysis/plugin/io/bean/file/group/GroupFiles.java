@@ -58,15 +58,23 @@ import org.anchoranalysis.plugin.io.multifile.OpenedMultiFile;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
 
 /**
- * An {@link InputManagerWithStackReader} that can group together files to form {@link Stack}s based
- * on finding patterns in the file path (via regular expressions).
+ * An {@link InputManagerWithStackReader} that can unify separate images in separate files to form a
+ * single {@link Stack}.
  *
  * <p>A time-series of {@link Stack}s may also be formed.
  *
- * <p>The manager applies a regular expression on a set of input file paths, and identifies one or
- * more groups: One group is the image key (something that uniquely identifies each image) One group
- * is the slice-identifier (identifies the z slice, must be positive integer) One group is the
- * channel-identifier (identifies the channel, must be positive integer)
+ * <p>The criteria on how to unify is defined by a pattern in the file path (via regular
+ * expressions).
+ *
+ * <p>A regular expression is applied on the set of input file paths, to identify one or more
+ * groups:
+ *
+ * <ol>
+ *   <li>One group is the <b>image key</b> (something that uniquely identifies each image).
+ *   <li>One group is the <b>slice-identifier</b> (identifies the z slice, must be positive integer.
+ *   <li>One group is the <b>channel-identifier</b> (identifies the channel, must be positive
+ *       integer).
+ * </ol>
  *
  * <p>For each image key, an image is loaded using the slice and channel-identifiers.
  *

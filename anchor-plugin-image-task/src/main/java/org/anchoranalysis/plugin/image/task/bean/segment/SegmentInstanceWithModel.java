@@ -299,7 +299,9 @@ public class SegmentInstanceWithModel<T>
                         true,
                         input.getSharedState()
                                 .createInputProcessContext(
-                                        Optional.empty(), input.getContextJob()));
+                                        Optional.empty(),
+                                        input.getContextJob().getExecutionTimeRecorder(),
+                                        input.getContextJob()));
         calculator.calculateFeaturesForObjects(
                 deriveObjects(segments),
                 energyStack,
