@@ -36,6 +36,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -49,7 +50,7 @@ import org.anchoranalysis.io.input.file.FileInput;
 /**
  * Provides a set of channels as an input, each of which has a name.
  *
- * <p>The standard implementation of {@link NamedChannelsInputPart}
+ * <p>This is the standard implementation of {@link NamedChannelsInputPart}.
  *
  * @author Owen Feehan
  */
@@ -75,7 +76,7 @@ class MapPart extends NamedChannelsInputPart {
 
     @Override
     public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
-        return openedFiles().dimensionsForSeries(stackIndexInSeries);
+        return openedFile().dimensionsForSeries(stackIndexInSeries);
     }
 
     @Override
@@ -83,7 +84,7 @@ class MapPart extends NamedChannelsInputPart {
         if (useLastSeriesIndexOnly) {
             return 1;
         } else {
-            return openedFiles().numberSeries();
+            return openedFile().numberSeries();
         }
     }
 
@@ -99,10 +100,10 @@ class MapPart extends NamedChannelsInputPart {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
-            seriesIndex = openedFiles().numberSeries() - 1;
+            seriesIndex = openedFile().numberSeries() - 1;
         }
 
-        return new NamedChannelsForSeriesMap(openedFiles(), channelMap(), seriesIndex);
+        return new NamedChannelsForSeriesMap(openedFile(), channelMap(), seriesIndex);
     }
 
     @Override
@@ -129,35 +130,12 @@ class MapPart extends NamedChannelsInputPart {
 
     @Override
     public int numberChannels() throws ImageIOException {
-        return openedFiles().numberChannels();
+        return openedFile().numberChannels();
     }
 
     @Override
     public int bitDepth() throws ImageIOException {
-        return openedFiles().bitDepth();
-    }
-
-    private NamedEntries channelMap() throws ImageIOException {
-        openedFiles();
-        return channelMap;
-    }
-
-    private OpenedImageFile openedFiles() throws ImageIOException {
-        if (openedFileMemo == null) {
-            openedFileMemo =
-                    stackReader.openFile(
-                            delegate.pathForBinding()
-                                    .orElseThrow(
-                                            () ->
-                                                    new ImageIOException(
-                                                            "A binding-path is needed in the delegate.")));
-            try {
-                channelMap = channelMapCreator.createMap(openedFileMemo);
-            } catch (CreateException e) {
-                throw new ImageIOException(e);
-            }
-        }
-        return openedFileMemo;
+        return openedFile().bitDepth();
     }
 
     @Override
@@ -171,5 +149,39 @@ class MapPart extends NamedChannelsInputPart {
             }
         }
         delegate.close(errorReporter);
+    }
+
+    @Override
+    public ImageMetadata metadata(int seriesIndex) throws ImageIOException {
+        return openedFile().metadata(seriesIndex);
+    }
+
+    /** Create a channel-map, reusing the existing map, if it already exists. */
+    private NamedEntries channelMap() throws ImageIOException {
+        if (channelMap == null) {
+            try {
+                channelMap = channelMapCreator.createMap(openedFileMemo);
+            } catch (CreateException e) {
+                throw new ImageIOException(e);
+            }
+        }
+        return channelMap;
+    }
+
+    /**
+     * Opens the file to create a {@link OpenedImageFile}, reusing the existing opened-file, if it
+     * already exists.
+     */
+    private OpenedImageFile openedFile() throws ImageIOException {
+        if (openedFileMemo == null) {
+            openedFileMemo =
+                    stackReader.openFile(
+                            delegate.pathForBinding()
+                                    .orElseThrow(
+                                            () ->
+                                                    new ImageIOException(
+                                                            "A binding-path is needed in the delegate.")));
+        }
+        return openedFileMemo;
     }
 }

@@ -100,7 +100,8 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 
         VoxelsUntyped out =
                 VoxelsFactory.instance()
-                        .createEmpty(gradientImage.any().extent(), gradientImage.getVoxelDataType());
+                        .createEmpty(
+                                gradientImage.any().extent(), gradientImage.getVoxelDataType());
         out.assignValue((int) gradientImage.getVoxelDataType().maxValue()).toAll();
 
         ObjectMask object = new ObjectMask(marker.binaryVoxels());

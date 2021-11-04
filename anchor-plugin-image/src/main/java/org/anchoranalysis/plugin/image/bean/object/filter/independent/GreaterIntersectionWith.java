@@ -90,16 +90,20 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
         intersectionGreater = null;
         intersectionLesser = null;
     }
-    
+
     /**
-     * The count the number of intersecting voxels between all the objects in this collection and another {@code toIntersectWith}.
-     * 
-     * <p>This is the sum of the number of intersecting voxels for each object independently with {@code toIntersectWith}.
-     * 
+     * The count the number of intersecting voxels between all the objects in this collection and
+     * another {@code toIntersectWith}.
+     *
+     * <p>This is the sum of the number of intersecting voxels for each object independently with
+     * {@code toIntersectWith}.
+     *
      * @param toIntersectWith the object to count the intersection with.
-     * @return the total number of intersecting voxels, as per the above definition, or 0 if no intersection occurs.
+     * @return the total number of intersecting voxels, as per the above definition, or 0 if no
+     *     intersection occurs.
      */
-    private static int countIntersectingVoxels(ObjectCollection objects, ObjectMask toIntersectWith) {
+    private static int countIntersectingVoxels(
+            ObjectCollection objects, ObjectMask toIntersectWith) {
 
         int count = 0;
         for (ObjectMask other : objects) {

@@ -33,7 +33,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 
@@ -69,11 +69,11 @@ class HistogramExtracter {
         }
     }
 
-    private BinaryValues createMaskBinaryValues() throws JobExecutionException {
+    private BinaryValuesInt createMaskBinaryValues() throws JobExecutionException {
         if (maskValue == 255) {
-            return new BinaryValues(0, 255);
+            return new BinaryValuesInt(0, 255);
         } else if (maskValue == 0) {
-            return new BinaryValues(255, 0);
+            return new BinaryValuesInt(255, 0);
         } else {
             throw new JobExecutionException("Only mask-values of 255 or 0 are current supported");
         }

@@ -28,7 +28,9 @@ package org.anchoranalysis.plugin.image.task.bean.format;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
@@ -82,5 +84,17 @@ class NamedChannelsInputFixture extends NamedChannelsInput {
     public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
             throws ImageIOException {
         return new NamedChannelsForSeriesFixture(stack);
+    }
+
+    @Override
+    public ImageMetadata metadata(int seriesIndex) throws ImageIOException {
+        NamedChannelsForSeries channels =
+                createChannelsForSeries(seriesIndex, ProgressIgnore.get());
+        return new ImageMetadata(
+                channels.dimensions(),
+                numberChannels(),
+                numberFrames(),
+                channels.isRGB(),
+                bitDepth());
     }
 }

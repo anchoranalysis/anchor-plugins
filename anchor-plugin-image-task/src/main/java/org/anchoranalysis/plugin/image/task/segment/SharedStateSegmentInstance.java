@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
@@ -68,8 +69,11 @@ public class SharedStateSegmentInstance<T> {
     }
 
     public InputProcessContext<FeatureTableCalculator<FeatureInputSingleObject>>
-            createInputProcessContext(Optional<String> groupName, InputOutputContext context) {
-        return features.createInputProcessContext(groupName, context);
+            createInputProcessContext(
+                    Optional<String> groupName,
+                    ExecutionTimeRecorder executionTimeRecorder,
+                    InputOutputContext context) {
+        return features.createInputProcessContext(groupName, executionTimeRecorder, context);
     }
 
     public void closeAnyOpenIO() throws IOException {

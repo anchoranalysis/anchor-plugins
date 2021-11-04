@@ -60,8 +60,9 @@ public class GradientMagnitude extends IntensityGradientBase {
 
         return sum / points.size();
     }
-    
+
     private static double magnitude(Point3d point) {
-        return Math.sqrt((point.x() * point.x()) + (point.y() * point.y()) + (point.z() * point.z()));
+        return Math.sqrt(
+                (point.x() * point.x()) + (point.y() * point.y()) + (point.z() * point.z()));
     }
 }

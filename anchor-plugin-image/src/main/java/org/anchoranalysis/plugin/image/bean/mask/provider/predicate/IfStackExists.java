@@ -34,8 +34,8 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.image.core.mask.Mask;
 
 /**
- * The current {@code mask} is a particular stack exists (at least one <i>on</i> voxel) otherwise {@code
- * maskElse} is returned.
+ * The current {@code mask} is a particular stack exists (at least one <i>on</i> voxel) otherwise
+ * {@code maskElse} is returned.
  *
  * @author Owen Feehan
  */

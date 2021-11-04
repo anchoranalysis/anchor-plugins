@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithValueBase;
 
@@ -41,7 +41,7 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithValueBase;
  */
 public abstract class ArithmeticWithConstantBase extends UnaryWithValueBase {
 
-    private static final ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
+    private static final ChannelFactorySingleType FACTORY = new ChannelFactoryUnsignedByte();
 
     @Override
     public Channel createFromChannelWithConstant(Channel channel, double value)

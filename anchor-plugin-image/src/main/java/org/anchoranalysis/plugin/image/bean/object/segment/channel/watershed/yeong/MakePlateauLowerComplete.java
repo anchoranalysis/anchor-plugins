@@ -74,8 +74,7 @@ class MakePlateauLowerComplete {
         }
 
         @Override
-        public void processPoint(
-                int xChange, int yChange, int x, int y, int objectMaskOffset) {
+        public void processPoint(int xChange, int yChange, int x, int y, int objectMaskOffset) {
 
             Point3i pointRel = new Point3i(x, y, z1);
             foundPoints.add(pointRel);

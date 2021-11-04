@@ -48,6 +48,11 @@ public abstract class CheckMarkWithMask extends CheckMark {
     @BeanField @Getter @Setter private boolean acceptOutsideScene = false;
     // END BEAN PROPERTIES
 
+    @Override
+    public boolean isCompatibleWith(Mark testMark) {
+        return true;
+    }
+
     protected Mask createChannel() throws CheckException {
         try {
             return mask.get();
@@ -58,18 +63,13 @@ public abstract class CheckMarkWithMask extends CheckMark {
     }
 
     protected boolean isPointOnMask(
-            Point3d cp, EnergyStack energyStack, Function<Point3d, Point3i> deriveFunc)
+            Point3d point, EnergyStack energyStack, Function<Point3d, Point3i> deriveFunc)
             throws CheckException {
 
-        if (!energyStack.dimensions().contains(cp)) {
+        if (!energyStack.dimensions().contains(point)) {
             return acceptOutsideScene;
         }
 
-        return createChannel().isPointOn(deriveFunc.apply(cp));
-    }
-
-    @Override
-    public boolean isCompatibleWith(Mark testMark) {
-        return true;
+        return createChannel().isPointOn(deriveFunc.apply(point));
     }
 }

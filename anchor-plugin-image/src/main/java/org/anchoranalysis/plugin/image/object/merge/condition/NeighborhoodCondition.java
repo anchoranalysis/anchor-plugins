@@ -76,8 +76,7 @@ public class NeighborhoodCondition implements UpdatableBeforeCondition {
         try {
             if (requireTouching) {
                 objectGrown =
-                        MorphologicalDilation.dilate(
-                                source, Optional.empty(), true, 1, false);
+                        MorphologicalDilation.dilate(source, Optional.empty(), true, 1, false);
             } else {
                 objectGrown = null;
             }
