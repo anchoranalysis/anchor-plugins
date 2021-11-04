@@ -70,8 +70,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
         }
 
         BinaryVoxels<UnsignedByteBuffer> thresholded =
-                VoxelsThresholder.threshold(
-                        inputBuffer, minIntensity, bvOut, objectMask, false);
+                VoxelsThresholder.threshold(inputBuffer, minIntensity, bvOut, objectMask, false);
 
         ApplyImageJMorphologicalOperation.applyOperation(thresholded, "fill", 1);
 

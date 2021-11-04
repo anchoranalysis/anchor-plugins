@@ -26,11 +26,12 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.dimensions;
 
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.feature.input.FeatureInputEnergy;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInputDimensions;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 
 /**
  * Base class for features that are calculated from {@link Dimensions}.
@@ -38,11 +39,16 @@ import org.anchoranalysis.image.feature.bean.FeatureEnergy;
  * @author Owen Feehan
  * @param <T> feature-input-type
  */
-public abstract class FromDimensionsBase<T extends FeatureInputEnergy> extends FeatureEnergy<T> {
+public abstract class FromDimensionsBase<T extends FeatureInputDimensions> extends Feature<T> {
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-        return calculateFromDimensions(input.get().dimensionsRequired());
+        return calculateFromDimensions(input.get().dimensions());
+    }
+
+    @Override
+    public Class<? extends FeatureInput> inputType() {
+        return FeatureInputDimensions.class;
     }
 
     protected abstract double calculateFromDimensions(Dimensions dimensions)

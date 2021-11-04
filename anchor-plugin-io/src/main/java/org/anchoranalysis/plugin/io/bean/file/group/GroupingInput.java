@@ -32,7 +32,9 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
@@ -92,17 +94,29 @@ class GroupingInput extends NamedChannelsInput {
     }
 
     @Override
+    public int bitDepth() throws ImageIOException {
+        return openedFile.bitDepth();
+    }
+
+    @Override
+    public ImageMetadata metadata(int seriesIndex) throws ImageIOException {
+        NamedChannelsForSeries channels =
+                createChannelsForSeries(seriesIndex, ProgressIgnore.get());
+        return new ImageMetadata(
+                channels.dimensions(),
+                numberChannels(),
+                numberFrames(),
+                channels.isRGB(),
+                bitDepth());
+    }
+
+    @Override
     public void close(ErrorReporter errorReporter) {
         try {
             openedFile.close();
         } catch (ImageIOException e) {
             errorReporter.recordError(GroupingInput.class, e);
         }
-    }
-
-    @Override
-    public int bitDepth() throws ImageIOException {
-        return openedFile.bitDepth();
     }
 
     private void ensureChannelMapExists() throws ImageIOException {

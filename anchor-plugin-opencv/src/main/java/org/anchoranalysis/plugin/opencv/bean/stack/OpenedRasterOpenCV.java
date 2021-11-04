@@ -43,7 +43,14 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
- * An implementation of {@link OpenedImageFile} for reading using OpenCV.
+ * An opened-image file using the OpenCV library.
+ *
+ * <p>Note that when <i>reading image metadata</i> only, this is computionally slow, as the entire
+ * image must be loaded into memory to determine the width and height. Users are recommended to use
+ * another library for this purpose.
+ *
+ * <p>However, unlike many other libraries, OpenCV has the advantage of automatically correcting the
+ * orientation (to give correct widths and heights) where EXIF rotation information is present.
  *
  * @author Owen Feehan
  */

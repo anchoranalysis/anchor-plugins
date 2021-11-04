@@ -44,8 +44,8 @@ public class Repeat extends BinarySegmentationOne {
 
     // START BEAN PROPERTIES
     /**
-     * The maximum number of iterations. If the mask no longer has <i>on</i> voxels after fewer iterations,
-     * it will terminate earlier
+     * The maximum number of iterations. If the mask no longer has <i>on</i> voxels after fewer
+     * iterations, it will terminate earlier
      */
     @BeanField @Positive @Getter @Setter private int iterations = 10;
     // END BEAN PROPERTIES

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -113,7 +113,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     }
 
     private static BinaryVoxels<UnsignedByteBuffer> extractSlice(
-            VoxelsExtracter<UnsignedByteBuffer> extracter, int z, BinaryValues binaryValues) {
+            VoxelsExtracter<UnsignedByteBuffer> extracter, int z, BinaryValuesInt binaryValues) {
         return BinaryVoxelsFactory.reuseByte(extracter.slice(z), binaryValues);
     }
 

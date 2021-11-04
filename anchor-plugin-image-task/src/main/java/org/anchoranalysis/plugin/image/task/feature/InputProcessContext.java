@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -51,6 +52,9 @@ public class InputProcessContext<S> {
 
     @Getter Optional<String> groupGeneratorName;
 
+    /** Records the execution-time of particular operations. */
+    @Getter ExecutionTimeRecorder executionTimeRecorder;
+
     @Getter InputOutputContext context;
     // END REQUIRED ARGUMENTS
 
@@ -61,12 +65,13 @@ public class InputProcessContext<S> {
             S rowSource,
             FeatureNameList featureNames,
             Optional<String> groupGeneratorName,
+            ExecutionTimeRecorder executionTimeRecorder,
             InputOutputContext context) {
-        super();
         this.adder = adder;
         this.rowSource = rowSource;
         this.featureNames = featureNames;
         this.groupGeneratorName = groupGeneratorName;
+        this.executionTimeRecorder = executionTimeRecorder;
         this.context = context;
         this.thumbnailsEnabled = areThumbnailsEnabled(context);
     }

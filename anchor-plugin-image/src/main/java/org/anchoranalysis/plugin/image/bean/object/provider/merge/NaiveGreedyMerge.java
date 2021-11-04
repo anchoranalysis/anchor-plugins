@@ -181,7 +181,7 @@ class NaiveGreedyMerge {
             objects.remove(j);
         }
     }
-    
+
     private static Point3d midPointBetween(Point3d point1, Point3d point2) {
         // We create a new object of 1x1x1 between the two merged seeds
         Point3d pointNew = new Point3d(point1);

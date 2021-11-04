@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -189,9 +190,16 @@ public class SharedStateExportFeatures<S> {
     }
 
     public InputProcessContext<S> createInputProcessContext(
-            Optional<String> groupName, InputOutputContext context) {
+            Optional<String> groupName,
+            ExecutionTimeRecorder executionTimeRecorder,
+            InputOutputContext context) {
         return new InputProcessContext<>(
-                addResultsFor(), rowSource.get(), featureNames, groupName, context);
+                addResultsFor(),
+                rowSource.get(),
+                featureNames,
+                groupName,
+                executionTimeRecorder,
+                context);
     }
 
     /**

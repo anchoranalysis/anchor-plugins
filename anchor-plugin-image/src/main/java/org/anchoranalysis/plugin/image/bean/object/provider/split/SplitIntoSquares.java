@@ -49,8 +49,8 @@ import org.anchoranalysis.spatial.box.Extent;
  * <p>The cuts are mostly squares, but sometimes cuts are rectangles in the leftover space, which
  * are never larger in any dimension than {@code squareSize}
  *
- * <p>An optional minimim number of <i>on</i> voxels is applied to any object (after it has been cut) to
- * exist in the created collection.
+ * <p>An optional minimim number of <i>on</i> voxels is applied to any object (after it has been
+ * cut) to exist in the created collection.
  *
  * @author Owen Feehan
  */

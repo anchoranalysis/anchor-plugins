@@ -41,7 +41,7 @@ import org.anchoranalysis.image.core.mask.MaskFromObjects;
 import org.anchoranalysis.image.core.mask.combine.MaskAnd;
 import org.anchoranalysis.image.core.mask.combine.MaskOr;
 import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.imagej.mask.ApplyImageJMorphologicalOperation;
@@ -66,7 +66,7 @@ public class FillHoles extends MaskProviderUnary {
                     filterObjectsFromMask(maskDuplicated),
                     mask,
                     mask.dimensions(),
-                    BinaryValues.getDefault());
+                    BinaryValuesInt.getDefault());
         } catch (UnitValueException e) {
             throw new ProvisionFailedException(e);
         }
@@ -130,7 +130,7 @@ public class FillHoles extends MaskProviderUnary {
             ObjectCollection filled,
             Mask source,
             Dimensions dimensions,
-            BinaryValues binaryValuesOut) {
+            BinaryValuesInt binaryValuesOut) {
         Mask maskFromObjects =
                 MaskFromObjects.createFromObjects(filled, dimensions, binaryValuesOut);
         MaskOr.apply(maskFromObjects, source);

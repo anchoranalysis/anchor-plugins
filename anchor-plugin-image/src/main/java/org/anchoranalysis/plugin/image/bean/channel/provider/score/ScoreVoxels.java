@@ -42,7 +42,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.feature.bean.VoxelScore;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -95,7 +95,8 @@ public class ScoreVoxels extends ChannelProvider {
             Voxels<UnsignedByteBuffer> voxelsPixelScore =
                     creator.createVoxelsFromPixelScore(score, object);
 
-            return new ChannelFactoryByte().create(voxelsPixelScore, intensityCreated.resolution());
+            return new ChannelFactoryUnsignedByte()
+                    .create(voxelsPixelScore, intensityCreated.resolution());
         } catch (CreateException e) {
             throw new ProvisionFailedException(e);
         }
