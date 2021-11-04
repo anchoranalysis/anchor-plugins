@@ -33,7 +33,7 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderUnary {
             throws ImageIOException {
 
         Optional<OrientationCorrectionNeeded> rotation =
-                EXIFOrientationReader.rotationNeededClockwise(path);
+                EXIFOrientationReader.determineOrientationCorrection(path);
 
         return openedFileFromDelegate;
     }

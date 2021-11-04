@@ -34,10 +34,17 @@ class EXIFOrientationReaderTest {
                 "exif_present_no_rotation_needed.jpg",
                 Optional.of(OrientationCorrectionNeeded.NO_ROTATION));
     }
+    
+    @Test
+    void testWithExifRotation() throws ImageIOException {
+        test(
+                "exif_present_rotation_needed.jpg",
+                Optional.of(OrientationCorrectionNeeded.ROTATE_90_CLOCKWISE));
+    }
 
     private void test(String filename, Optional<OrientationCorrectionNeeded> expectedOrientation)
             throws ImageIOException {
         Path path = loader.resolveTestPath(SUBDIRECTORY_NAME + "/" + filename);
-        assertEquals(expectedOrientation, EXIFOrientationReader.rotationNeededClockwise(path));
+        assertEquals(expectedOrientation, EXIFOrientationReader.determineOrientationCorrection(path));
     }
 }

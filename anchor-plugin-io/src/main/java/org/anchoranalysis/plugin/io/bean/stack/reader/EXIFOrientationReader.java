@@ -30,7 +30,7 @@ class EXIFOrientationReader {
      *     orientation tag is present.
      * @throws ImageIOException if the EXIF orientation tag is present, but unsupported.
      */
-    public static Optional<OrientationCorrectionNeeded> rotationNeededClockwise(Path path)
+    public static Optional<OrientationCorrectionNeeded> determineOrientationCorrection(Path path)
             throws ImageIOException {
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(path.toFile());
