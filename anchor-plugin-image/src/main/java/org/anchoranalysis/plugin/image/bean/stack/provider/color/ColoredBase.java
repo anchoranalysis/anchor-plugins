@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -37,6 +38,7 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
@@ -68,19 +70,19 @@ public abstract class ColoredBase extends StackProvider {
      */
     @BeanField @Getter @Setter private boolean flatten = false;
 
-    /** If true, an outline is drawn around the entries. If false, a filled-in shape is drawn */
+    /** If true, an outline is drawn around the entries. If false, a filled-in shape is drawn. */
     @BeanField @Getter @Setter private boolean outline = true;
 
-    /** The width of the outline (only relevant if {@code outline==true} */
+    /** The width of the outline (only relevant if {@code outline==true}. */
     @BeanField @Getter @Setter @Positive private int outlineWidth = 1;
 
     /**
      * if true, the outline is suppressed in the z-dimension i.e. a boundary only in z-dimension is
-     * not outlined (only relevant if {@code outline==true}
+     * not outlined (only relevant if {@code outline==true}.
      */
     @BeanField @Getter @Setter private boolean suppressOutlineZ = true;
 
-    /** The background. Either {@code stackBackground} or this should be defined but not both */
+    /** The background. Either {@code stackBackground} or this should be defined but not both. */
     @BeanField @Getter @Setter private ProviderAsStack background;
     // END BEAN PROPERTIES
 
@@ -95,10 +97,10 @@ public abstract class ColoredBase extends StackProvider {
     }
 
     /**
-     * Creates colored-objects to be drawn
+     * Creates colored-objects to be drawn.
      *
-     * @param backgroundDimensions dimensions of the background on which objects are drawn
-     * @return a colored object collection describing the objects to be drawn
+     * @param backgroundDimensions dimensions of the background on which objects are drawn.
+     * @return a colored object collection describing the objects to be drawn.
      */
     protected abstract ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions)
             throws CreateException;
@@ -106,7 +108,9 @@ public abstract class ColoredBase extends StackProvider {
     private Stack drawOnBackground(ColoredObjectCollection objects, DisplayStack background)
             throws CreateException {
         return drawOnBackgroundAfterFlattening(
-                maybeFlatten(objects.getObjects()), maybeFlatten(background), objects.getColors());
+                maybeFlatten(objects.getObjects()),
+                maybeFlatten(background),
+                Optional.of(objects.getColors()));
     }
 
     private DrawObject createDrawer() {
@@ -125,25 +129,18 @@ public abstract class ColoredBase extends StackProvider {
         }
     }
 
-    /**
-     * @param objects
-     * @param background
-     * @param colors list of colors. If null, it is automatically generated.
-     * @return
-     * @throws CreateException
-     */
     private Stack drawOnBackgroundAfterFlattening(
-            ObjectCollection objects, DisplayStack background, ColorList colors)
+            ObjectCollection objects, DisplayStack background, Optional<ColorList> colors)
             throws CreateException {
 
         try {
-            if (colors == null) {
-                colors = DEFAULT_COLOR_SET_GENERATOR.createList(objects.size());
-            }
+            ColorList colorsSelected =
+                    OptionalUtilities.orElseGet(
+                            colors, () -> DEFAULT_COLOR_SET_GENERATOR.createList(objects.size()));
 
             DrawObjectsGenerator generator =
                     DrawObjectsGenerator.withBackgroundAndColors(
-                            createDrawer(), background, colors);
+                            createDrawer(), background, colorsSelected);
             return generator.transform(new ObjectCollectionWithProperties(objects));
 
         } catch (OutputWriteFailedException | OperationFailedException e) {

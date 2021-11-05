@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.channel.input.OrientationCorrectionNeeded;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 
@@ -30,21 +30,20 @@ class EXIFOrientationReaderTest {
 
     @Test
     void testWithExifNoRotation() throws ImageIOException {
-        test(
-                "exif_present_no_rotation_needed.jpg",
-                Optional.of(OrientationCorrectionNeeded.NO_ROTATION));
+        test("exif_present_no_rotation_needed.jpg", Optional.of(OrientationChange.KEEP_UNCHANGED));
     }
-    
+
     @Test
     void testWithExifRotation() throws ImageIOException {
         test(
                 "exif_present_rotation_needed.jpg",
-                Optional.of(OrientationCorrectionNeeded.ROTATE_90_CLOCKWISE));
+                Optional.of(OrientationChange.ROTATE_90_CLOCKWISE));
     }
 
-    private void test(String filename, Optional<OrientationCorrectionNeeded> expectedOrientation)
+    private void test(String filename, Optional<OrientationChange> expectedOrientation)
             throws ImageIOException {
         Path path = loader.resolveTestPath(SUBDIRECTORY_NAME + "/" + filename);
-        assertEquals(expectedOrientation, EXIFOrientationReader.determineOrientationCorrection(path));
+        assertEquals(
+                expectedOrientation, EXIFOrientationReader.determineOrientationCorrection(path));
     }
 }

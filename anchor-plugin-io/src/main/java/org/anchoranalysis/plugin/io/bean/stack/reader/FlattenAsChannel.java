@@ -27,8 +27,11 @@
 package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.reader.StackReaderUnary;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
@@ -44,11 +47,15 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
  *
  * @author Owen Feehan
  */
-public class FlattenAsChannel extends StackReaderUnary {
+public class FlattenAsChannel extends StackReader {
+
+    // START BEAN PROPERTIES
+    /** Reads the image that is subsequently flattened. */
+    @BeanField @Getter @Setter private StackReader stackReader;
+    // END BEAN PROPERTIES
 
     @Override
-    protected OpenedImageFile wrapOpenedFile(Path path, OpenedImageFile openedFileFromDelegate)
-            throws ImageIOException {
-        return new OpenedFlattenAsChannel(openedFileFromDelegate);
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
+        return new OpenedFlattenAsChannel(stackReader.openFile(path));
     }
 }

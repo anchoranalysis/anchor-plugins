@@ -31,7 +31,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
@@ -103,8 +102,8 @@ class ConvertInputHelper {
     private static <T extends NamedChannelsInput> ImageMetadataInput convertToImageMetadata(T input)
             throws ExperimentExecutionException {
         try {
-            return new ImageMetadataInput(input.asFile(), input.metadata(0));
-        } catch (ImageIOException | InputReadFailedException e) {
+            return new ImageMetadataInput(input.asFile(), () -> input.metadata(0));
+        } catch (InputReadFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }

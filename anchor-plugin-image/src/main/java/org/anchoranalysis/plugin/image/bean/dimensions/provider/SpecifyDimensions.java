@@ -36,7 +36,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Specify dimensions via a bean.
+ * Specifies dimensions explicitly via bean properties.
  *
  * <p>No resolution information is assigned.
  *
