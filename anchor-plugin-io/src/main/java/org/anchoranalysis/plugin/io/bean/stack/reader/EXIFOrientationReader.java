@@ -10,8 +10,8 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 
 /**
  * Reads the EXIF orientation, if specified, from an image-file.
@@ -69,18 +69,31 @@ class EXIFOrientationReader {
      */
     private static OrientationChange decodeOrientationTag(int orientation) throws ImageIOException {
         switch (orientation) {
+            case 0:
             case 1:
                 // Already matching our voxels, so no need to rotate further.
                 return OrientationChange.KEEP_UNCHANGED;
+                
+            case 2:
+                return OrientationChange.MIRROR_WITHOUT_ROTATION;
 
             case 3:
                 return OrientationChange.ROTATE_180;
+                
+            case 4:
+                return OrientationChange.ROTATE_180_MIRROR;                
 
+            case 5:
+                return OrientationChange.ROTATE_90_ANTICLOCKWISE_MIRROR;
+                
             case 6:
-                return OrientationChange.ROTATE_90_CLOCKWISE;
+                return OrientationChange.ROTATE_90_ANTICLOCKWISE;
+                
+            case 7:
+                return OrientationChange.ROTATE_90_CLOCKWISE_MIRROR;
 
             case 8:
-                return OrientationChange.ROTATE_270_CLOCKWISE;
+                return OrientationChange.ROTATE_90_CLOCKWISE;
 
             default:
                 throw unsupportedOrientationFlagException(orientation);

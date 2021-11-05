@@ -1,11 +1,11 @@
 package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.nio.file.Path;
+import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.test.TestLoader;
 
 /**
