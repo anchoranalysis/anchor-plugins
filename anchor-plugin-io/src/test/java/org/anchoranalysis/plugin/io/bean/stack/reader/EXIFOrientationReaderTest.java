@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +37,7 @@ class EXIFOrientationReaderTest {
     void testWithExifRotation() throws ImageIOException {
         test(
                 "exif_present_rotation_needed.jpg",
-                Optional.of(OrientationChange.ROTATE_90_CLOCKWISE));
+                Optional.of(OrientationChange.ROTATE_90_ANTICLOCKWISE));
     }
 
     private void test(String filename, Optional<OrientationChange> expectedOrientation)
