@@ -75,9 +75,9 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
 
             for (int i = 0; i < numberSeries; i++) {
 
-                TimeSequence ts = delegate.open(seriesIndex, progress);
+                TimeSequence sequence = delegate.open(seriesIndex, progress);
 
-                addStack(extractStacksAndVerify(ts), out);
+                addStack(extractStacksAndVerify(sequence), out);
             }
 
             return new TimeSequence(out);
