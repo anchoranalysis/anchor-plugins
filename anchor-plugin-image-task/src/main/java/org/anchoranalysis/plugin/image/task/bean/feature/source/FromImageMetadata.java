@@ -10,7 +10,9 @@ import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.feature.input.FeatureInputImageMetadata;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
@@ -55,6 +57,10 @@ public class FromImageMetadata
                             new SharedFeatureMulti(),
                             context.getLogger());
 
+            ImageMetadata metadata =
+                    context.getExecutionTimeRecorder()
+                            .recordExecutionTime("Reading image metadata", input::metadata);
+
             // Calculate the results for the current stack
             ResultsVector results =
                     context.getExecutionTimeRecorder()
@@ -62,11 +68,10 @@ public class FromImageMetadata
                                     "Calculating features",
                                     () ->
                                             calculator.calculate(
-                                                    new FeatureInputImageMetadata(
-                                                            input.getMetadata())));
+                                                    new FeatureInputImageMetadata(metadata)));
 
             return new ResultsVectorWithThumbnail(results, Optional.empty());
-        } catch (InitializeException e) {
+        } catch (InitializeException | ImageIOException e) {
             throw new NamedFeatureCalculateException(e);
         }
     }

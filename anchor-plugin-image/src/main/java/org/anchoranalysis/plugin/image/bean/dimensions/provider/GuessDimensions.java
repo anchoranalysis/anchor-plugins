@@ -38,9 +38,11 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.StackIdentifiers;
 
 /**
- * Guesses dimensions from the input-image if it exists.
+ * Guesses dimensions from an <i>input-image</i> if it exists.
  *
- * <p>Otherwise throws an exception indicating they should be set explicitly.
+ * <p>Otherwise, throws an exception indicating they should be set explicitly.
+ *
+ * <p>The <i>input-image</i> is a stack with the identifier {@link StackIdentifiers#INPUT_IMAGE}.
  *
  * @author Owen Feehan
  */
@@ -70,7 +72,7 @@ public class GuessDimensions extends DimensionsProvider {
         if (!keys.contains(StackIdentifiers.INPUT_IMAGE)) {
             throw new ProvisionFailedException(
                     String.format(
-                            "No input-image (%s) exists so cannot guess Image Dimensions. Please set the dimensions explicitly.",
+                            "No input-image (%s) exists so cannot guess image dimensions. Please set the dimensions explicitly.",
                             StackIdentifiers.INPUT_IMAGE));
         }
 

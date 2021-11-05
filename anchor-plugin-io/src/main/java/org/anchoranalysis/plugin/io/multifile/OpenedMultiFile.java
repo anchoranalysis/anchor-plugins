@@ -125,23 +125,24 @@ public class OpenedMultiFile implements OpenedImageFile {
     private void addDetailsFromBag(MultiFile multiFile, int seriesIndex, Progress progress)
             throws ImageIOException {
 
-        for (FileDetails fd : fileBag) {
+        for (FileDetails details : fileBag) {
 
-            OpenedImageFile or = stackReader.openFile(fd.getPath());
+            OpenedImageFile imageFile = stackReader.openFile(details.getPath());
             try {
-                TimeSequence ts = or.open(seriesIndex, progress);
+                TimeSequence timeSequence = imageFile.open(seriesIndex, progress);
                 multiFile.add(
-                        ts.get(0),
-                        fd.getChannelIndex(),
-                        fd.getSliceIndex(),
-                        fd.getTimeIndex(),
-                        fd.getPath());
+                        timeSequence.get(0),
+                        details.getChannelIndex(),
+                        details.getSliceIndex(),
+                        details.getTimeIndex(),
+                        details.getPath());
             } catch (Exception e) {
                 throw new ImageIOException(
-                        String.format("Could not open '%s'. Abandoning MultiFile.", fd.getPath()),
+                        String.format(
+                                "Could not open '%s'. Abandoning MultiFile.", details.getPath()),
                         e);
             } finally {
-                or.close();
+                imageFile.close();
             }
         }
     }

@@ -11,7 +11,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.channel.input.OrientationCorrectionNeeded;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 
 /**
  * Reads the EXIF orientation, if specified, from an image-file.
@@ -30,7 +30,7 @@ class EXIFOrientationReader {
      *     orientation tag is present.
      * @throws ImageIOException if the EXIF orientation tag is present, but unsupported.
      */
-    public static Optional<OrientationCorrectionNeeded> determineOrientationCorrection(Path path)
+    public static Optional<OrientationChange> determineOrientationCorrection(Path path)
             throws ImageIOException {
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(path.toFile());
@@ -44,9 +44,12 @@ class EXIFOrientationReader {
             if (directory == null) {
                 return Optional.empty();
             }
-
-            int orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
-            return Optional.of(decodeOrientationTag(orientation));
+            if (directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                int orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+                return Optional.of(decodeOrientationTag(orientation));
+            } else {
+                return Optional.empty();
+            }
 
         } catch (IOException | ImageProcessingException | MetadataException e) {
             throw new ImageIOException(e);
@@ -64,21 +67,20 @@ class EXIFOrientationReader {
      *     to left-upwards.
      * @throws ImageIOException if the specified orientation flag is unsupported.
      */
-    private static OrientationCorrectionNeeded decodeOrientationTag(int orientation)
-            throws ImageIOException {
+    private static OrientationChange decodeOrientationTag(int orientation) throws ImageIOException {
         switch (orientation) {
             case 1:
                 // Already matching our voxels, so no need to rotate further.
-                return OrientationCorrectionNeeded.NO_ROTATION;
+                return OrientationChange.KEEP_UNCHANGED;
 
             case 3:
-                return OrientationCorrectionNeeded.ROTATE_180_CLOCKWISE;
+                return OrientationChange.ROTATE_180;
 
             case 6:
-                return OrientationCorrectionNeeded.ROTATE_90_CLOCKWISE;
+                return OrientationChange.ROTATE_90_CLOCKWISE;
 
             case 8:
-                return OrientationCorrectionNeeded.ROTATE_270_CLOCKWISE;
+                return OrientationChange.ROTATE_270_CLOCKWISE;
 
             default:
                 throw unsupportedOrientationFlagException(orientation);
