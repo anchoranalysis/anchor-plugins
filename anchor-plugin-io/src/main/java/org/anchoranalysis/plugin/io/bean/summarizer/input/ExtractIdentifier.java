@@ -24,23 +24,27 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.summarizer.image;
+package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import java.util.Optional;
+import org.anchoranalysis.io.input.InputFromManager;
 
-/** A simple summerizer where there's one summary-item per image (series are ignored!) */
-public abstract class SummarizerNamedChannelsSimple<T> extends SummarizerNamedChannels<T> {
+/**
+ * Extracts the identifier from an {@link InputFromManager} to summarize further.
+ *
+ * @author Owen Feehan
+ * @param <T> input-type.
+ */
+public class ExtractIdentifier<T extends InputFromManager>
+        extends SummarizerInputFromManager<T, String> {
 
     @Override
-    public void add(NamedChannelsInput element) throws OperationFailedException {
-        try {
-            incrementCount(extractKey(element));
-        } catch (ImageIOException e) {
-            throw new OperationFailedException(e);
-        }
+    protected Optional<String> extractFrom(T input) {
+        return Optional.of(input.identifier());
     }
 
-    protected abstract T extractKey(NamedChannelsInput element) throws ImageIOException;
+    @Override
+    public boolean requiresImageMetadata() {
+        return false;
+    }
 }

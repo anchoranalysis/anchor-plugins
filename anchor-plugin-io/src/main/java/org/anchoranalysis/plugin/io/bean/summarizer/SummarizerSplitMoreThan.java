@@ -32,9 +32,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * Multiplexes between two summarizers depending on the total number of count
+ * Multiplexes between two summarizers depending on the total number of count.
  *
- * <p>If the count is greater than a threshold, one summarizer is used, if not another
+ * <p>If the count is greater than a threshold, one summarizer is used, if not another.
  *
  * @author Owen Feehan
  * @param <T> type of element to be summarized
@@ -69,5 +69,11 @@ public class SummarizerSplitMoreThan<T> extends Summarizer<T> {
         Summarizer<T> summarizer =
                 (count > countThreshold) ? summarizerGreaterThan : summarizerElse;
         return summarizer.describe();
+    }
+
+    @Override
+    public boolean requiresImageMetadata() throws OperationFailedException {
+        return summarizerGreaterThan.requiresImageMetadata()
+                || summarizerElse.requiresImageMetadata();
     }
 }

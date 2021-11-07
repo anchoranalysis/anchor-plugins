@@ -48,4 +48,9 @@ public class SummarizerCount<T> extends Summarizer<T> {
     public synchronized String describe() {
         return String.format("Found %s.", LanguageUtilities.prefixPluralizeMaybe(count, "input"));
     }
+
+    @Override
+    public boolean requiresImageMetadata() {
+        return false;
+    }
 }

@@ -31,7 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.arithmetic.RunningSum;
-import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -39,7 +38,7 @@ import org.apache.commons.io.FileUtils;
  *
  * @author Owen Feehan
  */
-public class FileSizeStatistics extends Summarizer<Path> {
+public class FileSizeStatistics extends SummarizerPath {
 
     private RunningSum runningSum = new RunningSum();
     private long min = Long.MAX_VALUE;

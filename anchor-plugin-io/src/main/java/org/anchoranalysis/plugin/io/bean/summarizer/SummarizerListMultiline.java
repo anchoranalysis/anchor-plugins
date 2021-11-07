@@ -29,36 +29,41 @@ package org.anchoranalysis.plugin.io.bean.summarizer;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * Creates a string where each line is an element (the string representation thereof)
+ * Creates a string where each line is an element. (the string representation thereof).
  *
  * @author Owen Feehan
  * @param <T> type of entity to summarize (its string representation is taken)
  */
 public class SummarizerListMultiline<T> extends Summarizer<T> {
 
-    private StringBuilder sb = null;
+    private StringBuilder builder = null;
 
     @Override
     public synchronized void add(T element) throws OperationFailedException {
 
-        if (sb == null) {
+        if (builder == null) {
             // First-line
-            sb = new StringBuilder();
+            builder = new StringBuilder();
         } else {
             // Subsequent lines
-            sb.append(System.lineSeparator());
+            builder.append(System.lineSeparator());
         }
 
-        sb.append(element.toString());
+        builder.append(element.toString());
     }
 
     @Override
     public synchronized String describe() throws OperationFailedException {
 
-        if (sb != null) {
-            return sb.toString();
+        if (builder != null) {
+            return builder.toString();
         } else {
             return "";
         }
+    }
+
+    @Override
+    public boolean requiresImageMetadata() {
+        return false;
     }
 }

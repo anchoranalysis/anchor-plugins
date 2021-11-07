@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.plugin.io.bean.task;
 
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
 import org.anchoranalysis.io.input.InputFromManager;
 
 public class SummarizeInputs<T extends InputFromManager> extends SummarizeBase<T, T> {
@@ -38,6 +40,16 @@ public class SummarizeInputs<T extends InputFromManager> extends SummarizeBase<T
 
     @Override
     public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(InputFromManager.class);
+        // Only request conversion to ImageMetadataInput if necessary.
+        try {
+            if (getSummarizer().requiresImageMetadata()) {
+                return new InputTypesExpected(ImageMetadataInput.class);
+            } else {
+                return new InputTypesExpected(InputFromManager.class);
+            }
+        } catch (OperationFailedException e) {
+            // If it cannot be established assume, that ImageMetdataInput is needed
+            return new InputTypesExpected(ImageMetadataInput.class);
+        }
     }
 }

@@ -28,22 +28,20 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
 
 /**
  * Summarizes the size of images.
  *
  * <p>If there's more than one image in the series, the size of each is considered.
  */
-public class ImageSize extends SummarizerNamedChannels<WrappedImageDim> {
+public class ImageSize extends SummarizerImageMetadata<WrappedImageDim> {
 
     @Override
-    public void add(NamedChannelsInput input) throws OperationFailedException {
+    public void add(ImageMetadataInput input) throws OperationFailedException {
 
         try {
-            for (int i = 0; i < input.numberSeries(); i++) {
-                incrementCount(new WrappedImageDim(input.dimensions(i)));
-            }
+            incrementCount(new WrappedImageDim(input.metadata().getDimensions()));
 
         } catch (ImageIOException exc) {
             throw new OperationFailedException(exc);

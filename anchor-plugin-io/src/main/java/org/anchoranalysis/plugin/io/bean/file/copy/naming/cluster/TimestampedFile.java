@@ -88,7 +88,7 @@ class TimestampedFile implements Clusterable {
      */
     private long associateDateTime(File file, ZoneOffset offset) throws IOException {
 
-        if (ImageFileFormat.JPEG.matchesEnd(file.getName())) {
+        if (ImageFileFormat.JPEG.matches(file.getName())) {
             Optional<Long> exifTimestamp = readEXIFCreationTime(file);
             if (exifTimestamp.isPresent()) {
                 return exifTimestamp.get();
