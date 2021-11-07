@@ -41,15 +41,14 @@ import lombok.Setter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
-import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.apache.commons.io.IOCase;
 
 /**
  * Converts a list of file-paths into a form that tries to find a pattern in the naming style using
- * the path-pattern-finder library
+ * the path-pattern-finder library.
  */
 @NoArgsConstructor
-public class FilePathPattern extends Summarizer<Path> {
+public class FilePathPattern extends SummarizerPath {
 
     // START BEAN PROPERTIES
     /** Iff true, any hidden-path is not considered, and simply ignored */

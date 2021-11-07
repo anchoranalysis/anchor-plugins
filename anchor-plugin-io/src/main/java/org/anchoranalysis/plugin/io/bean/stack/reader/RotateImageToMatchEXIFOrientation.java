@@ -11,6 +11,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
+import org.anchoranalysis.plugin.io.file.EXIFOrientationReader;
 
 /**
  * Rotates an image to match any EXIF orientation information, if it exists.

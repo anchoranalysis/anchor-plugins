@@ -34,6 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -43,6 +44,9 @@ import org.anchoranalysis.experiment.io.ReplaceTask;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.core.stack.ImageMetadata;
+import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
@@ -81,6 +85,12 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
     // START BEAN PROPERTIES
     /** The underlying task that will be called, perhaps with a different input-type. */
     @BeanField @Getter @Setter private Task<U, S> task;
+
+    /** How to read the {@link ImageMetadata} from the file-system. */
+    @DefaultInstance @BeanField @Getter @Setter private ImageMetadataReader imageMetadataReader;
+
+    /** Supplies to the {@code imageMetadataReader} to use, if no other reader is specified. */
+    @DefaultInstance @BeanField @Getter @Setter private StackReader defaultStackReaderForMetadata;
     // END BEAN PROPERTIES
 
     @Override
@@ -158,9 +168,12 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
 
         InputTypesExpected inputTypesExpected = task.inputTypesExpected();
 
+        ConvertInputHelper helper =
+                new ConvertInputHelper(imageMetadataReader, defaultStackReaderForMetadata);
+
         for (T input : inputs) {
             // Convert and put in both the map and the list
-            U converted = (U) ConvertInputHelper.convert(input, inputTypesExpected, directory);
+            U converted = (U) helper.convert(input, inputTypesExpected, directory);
             sharedState.rememberConverted(input, converted);
             out.add(converted);
         }

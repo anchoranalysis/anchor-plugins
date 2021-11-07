@@ -167,7 +167,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     private static Histogram readHistogramFromCsv(FileInput input) throws CSVReaderException {
         File file = input.getFile();
 
-        if (NonImageFileFormat.CSV.matchesEnd(file.getName())) {
+        if (NonImageFileFormat.CSV.matches(file.getName())) {
             return HistogramCSVReader.readHistogramFromFile(file.toPath());
         } else {
             throw new CSVReaderException(

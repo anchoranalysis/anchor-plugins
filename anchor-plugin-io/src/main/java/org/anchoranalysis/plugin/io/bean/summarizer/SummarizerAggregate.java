@@ -55,22 +55,32 @@ public class SummarizerAggregate<T> extends Summarizer<T> {
 
     @Override
     public String describe() throws OperationFailedException {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i < list.size(); i++) {
 
             if (i != 0) {
-                sb.append(System.lineSeparator());
+                builder.append(System.lineSeparator());
             }
 
             if (!(avoidBulletOnFirst && i == 0)) {
-                sb.append(BULLET_POINT);
+                builder.append(BULLET_POINT);
             }
 
             Summarizer<T> element = list.get(i);
-            sb.append(element.describe());
+            builder.append(element.describe());
         }
 
-        return sb.toString();
+        return builder.toString();
+    }
+
+    @Override
+    public boolean requiresImageMetadata() throws OperationFailedException {
+        for (Summarizer<T> summarizer : list) {
+            if (summarizer.requiresImageMetadata()) {
+                return summarizer.requiresImageMetadata();
+            }
+        }
+        return false;
     }
 }

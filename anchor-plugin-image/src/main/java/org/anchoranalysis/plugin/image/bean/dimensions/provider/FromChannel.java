@@ -93,31 +93,33 @@ public class FromChannel extends DimensionsProvider {
         try {
             Optional<Channel> combined =
                     OptionalUtilities.orFlatSupplier(
-                            () -> channelDirectly(identifier),
-                            () -> channelFromStacks(identifier));
-            return combined.orElseThrow( () -> provisionException(identifier) );
+                            () -> channelDirectly(identifier), () -> channelFromStacks(identifier));
+            return combined.orElseThrow(() -> provisionException(identifier));
 
         } catch (AnchorCheckedException e) {
             throw new ProvisionFailedException(
                     String.format("A error occurred while retrieving channel `%s`", identifier), e);
         }
     }
-    
+
     /** Retrieves a {@link Channel} from a collection of named {@link Channel}s. */
-    private Optional<Channel> channelDirectly(String identifier) throws NamedProviderGetException, InitializeException {
+    private Optional<Channel> channelDirectly(String identifier)
+            throws NamedProviderGetException, InitializeException {
         return getInitialization().channels().getOptional(identifier);
     }
-    
+
     /** Retrieves a {@link Channel} from a collection of named {@link Stack}s. */
-    private Optional<Channel> channelFromStacks(String identifier) throws NamedProviderGetException, InitializeException {
-        return getInitialization().stacks().getOptional(identifier).map( stack -> stack.getChannel(0) );
+    private Optional<Channel> channelFromStacks(String identifier)
+            throws NamedProviderGetException, InitializeException {
+        return getInitialization()
+                .stacks()
+                .getOptional(identifier)
+                .map(stack -> stack.getChannel(0));
     }
-    
+
     /** The exception thrown if a channel cannot be found to match {@code identifier}. */
     private static ProvisionFailedException provisionException(String identifier) {
         return new ProvisionFailedException(
-                String.format(
-                        "Failed to find either a channel or stack with id `%s`",
-                        identifier));
+                String.format("Failed to find either a channel or stack with id `%s`", identifier));
     }
 }

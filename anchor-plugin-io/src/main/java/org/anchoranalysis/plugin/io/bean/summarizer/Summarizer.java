@@ -26,8 +26,10 @@
 
 package org.anchoranalysis.plugin.io.bean.summarizer;
 
+import java.util.Collection;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
 
 /**
  * Summarizes a set of elements by outputting a descriptive string.
@@ -37,13 +39,37 @@ import org.anchoranalysis.core.exception.OperationFailedException;
  */
 public abstract class Summarizer<T> extends AnchorBean<Summarizer<T>> {
 
-    /** Adds a element to the summary. Called one-time for each element */
+    /**
+     * Adds the elements to the summary.
+     *
+     * @param elements the elements to add.
+     */
+    public void addAll(Collection<T> elements) throws OperationFailedException {
+        for (T element : elements) {
+            add(element);
+        }
+    }
+
+    /**
+     * Adds a element to the summary.
+     *
+     * @param element the element to add.
+     */
     public abstract void add(T element) throws OperationFailedException;
 
     /**
      * Returns a string summarizing this item
      *
-     * @return
+     * @return the description.
      */
     public abstract String describe() throws OperationFailedException;
+
+    /**
+     * Whether a {@link ImageMetadataInput} is required as an input.
+     *
+     * @return true if the summarize requires {@link ImageMetadataInput} as input, or false if any
+     *     input is acceptable.
+     * @throws OperationFailedException if this cannot be established.
+     */
+    public abstract boolean requiresImageMetadata() throws OperationFailedException;
 }

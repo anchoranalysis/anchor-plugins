@@ -24,31 +24,33 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.summarizer.image;
+package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
-import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
-import org.anchoranalysis.plugin.io.shared.FrequencyMap;
+import java.nio.file.Path;
+import java.util.Optional;
+import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * Summarzes {@link NamedChannelsInput} in different ways
+ * Extracts the identifier and path from an {@link InputFromManager} to summarize further.
+ *
+ * <p>They are combined in the form {@code IDENTIFIER -> PATH}.
  *
  * @author Owen Feehan
- * @param <T> type used for summary in frequency-map
+ * @param <T> input-type.
  */
-public abstract class SummarizerNamedChannels<T> extends Summarizer<NamedChannelsInput> {
-
-    private FrequencyMap<T> map = new FrequencyMap<>();
+public class ExtractIdentifierAndPath<T extends InputFromManager>
+        extends SummarizerInputFromManager<T, String> {
 
     @Override
-    public String describe() throws OperationFailedException {
-        return map.describe(describeNoun());
+    protected Optional<String> extractFrom(T input) {
+        return Optional.of(
+                String.format(
+                        "%s\t -> %s",
+                        input.identifier(), input.pathForBinding().map(Path::toString).orElse("")));
     }
 
-    protected abstract String describeNoun();
-
-    protected void incrementCount(T key) {
-        map.incrementCount(key);
+    @Override
+    public boolean requiresImageMetadata() {
+        return false;
     }
 }

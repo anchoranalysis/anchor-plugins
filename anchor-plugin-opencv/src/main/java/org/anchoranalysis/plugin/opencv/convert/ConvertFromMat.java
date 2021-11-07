@@ -57,7 +57,7 @@ public class ConvertFromMat {
         return new Stack(ChannelFactory.instance().create(voxels));
     }
 
-    private static Stack toRGB(Mat mat) {
+    private static Stack toRGB(Mat mat) throws OperationFailedException {
         Stack stack = createEmptyStack(dimensionsFrom(mat), 3, true);
         VoxelsRGBFromMat.matToRGB(
                 mat, stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
@@ -80,9 +80,15 @@ public class ConvertFromMat {
         return stack;
     }
 
-    private static Dimensions dimensionsFrom(Mat mat) {
+    private static Dimensions dimensionsFrom(Mat mat) throws OperationFailedException {
         int width = mat.size(1);
         int height = mat.size(0);
+
+        if (width == 0 || height == 0) {
+            throw new OperationFailedException(
+                    "This file is specified a 0 width or 0 height, which suggests the data-format is not supported.");
+        }
+
         Preconditions.checkArgument(width > 0);
         Preconditions.checkArgument(height > 0);
         return new Dimensions(width, height, 1);
