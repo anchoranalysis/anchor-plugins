@@ -27,10 +27,13 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.convert;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
+import org.anchoranalysis.image.core.stack.ImageMetadata;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
@@ -46,10 +49,19 @@ import org.anchoranalysis.plugin.io.bean.input.stack.ConvertNamedChannelsInputTo
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 class ConvertInputHelper {
 
-    public static <T extends NamedChannelsInput> InputFromManager convert(
+    /** How to read the {@link ImageMetadata} from the file-system. */
+    private final ImageMetadataReader imageMetadataReader;
+
+    /**
+     * The default {@link StackReader} for {@link ImageMetadataReader} to use, if none other is
+     * specified.
+     */
+    private final StackReader defaultStackReader;
+
+    public <T extends NamedChannelsInput> InputFromManager convert(
             T input, InputTypesExpected inputTypesExpected, Optional<Path> directory)
             throws ExperimentExecutionException {
         Class<? extends InputFromManager> inputClass = input.getClass();
@@ -87,7 +99,7 @@ class ConvertInputHelper {
     }
 
     /** Converts to a {@link FileWithDirectoryInput}. */
-    private static <T extends NamedChannelsInput> FileWithDirectoryInput convertToFileWithDirectory(
+    private <T extends NamedChannelsInput> FileWithDirectoryInput convertToFileWithDirectory(
             T input, Optional<Path> directory) throws ExperimentExecutionException {
         try {
             NamedFile namedFile =
@@ -99,12 +111,21 @@ class ConvertInputHelper {
     }
 
     /** Converts to a {@link ImageMetadataInput}. */
-    private static <T extends NamedChannelsInput> ImageMetadataInput convertToImageMetadata(T input)
+    private <T extends NamedChannelsInput> ImageMetadataInput convertToImageMetadata(T input)
             throws ExperimentExecutionException {
         try {
-            return new ImageMetadataInput(input.asFile(), () -> input.metadata(0));
+            return new ImageMetadataInput(input.asFile(), () -> readImageMetadata(input));
         } catch (InputReadFailedException e) {
             throw new ExperimentExecutionException(e);
+        }
+    }
+
+    private <T extends NamedChannelsInput> ImageMetadata readImageMetadata(T input)
+            throws ImageIOException {
+        try {
+            return imageMetadataReader.openFile(input.pathForBindingRequired(), defaultStackReader);
+        } catch (InputReadFailedException e) {
+            throw new ImageIOException(e);
         }
     }
 }

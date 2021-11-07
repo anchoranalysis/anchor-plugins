@@ -104,14 +104,14 @@ class CompareHelper {
     private static boolean compareForExtra(DualComparer comparer, String relativePath)
             throws OperationFailedException {
         try {
-            if (ImageFileFormat.TIFF.matchesEnd(relativePath)) {
+            if (ImageFileFormat.TIFF.matches(relativePath)) {
                 return comparer.compareTwoImages(relativePath);
-            } else if (NonImageFileFormat.CSV.matchesEnd(relativePath)) {
+            } else if (NonImageFileFormat.CSV.matches(relativePath)) {
                 return comparer.compareTwoCsvFiles(
                         relativePath, CSV_COMPARER, System.out); // NOSONAR
-            } else if (NonImageFileFormat.XML.matchesEnd(relativePath)) {
+            } else if (NonImageFileFormat.XML.matches(relativePath)) {
                 return comparer.compareTwoXmlDocuments(relativePath);
-            } else if (NonImageFileFormat.HDF5.matchesEnd(relativePath)) {
+            } else if (NonImageFileFormat.HDF5.matches(relativePath)) {
                 return comparer.compareTwoObjectCollections(relativePath);
             } else {
                 throw new OperationFailedRuntimeException("Extension not supported");

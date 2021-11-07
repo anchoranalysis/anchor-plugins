@@ -30,10 +30,21 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.io.input.InputFromManager;
 
+/**
+ * Extracts a {@link Path} from an input to summarize further.
+ *
+ * @author Owen Feehan
+ * @param <T> input-type
+ */
 public class ExtractPath<T extends InputFromManager> extends SummarizerInputFromManager<T, Path> {
 
     @Override
     protected Optional<Path> extractFrom(T input) {
         return input.pathForBinding();
+    }
+
+    @Override
+    public boolean requiresImageMetadata() {
+        return false;
     }
 }

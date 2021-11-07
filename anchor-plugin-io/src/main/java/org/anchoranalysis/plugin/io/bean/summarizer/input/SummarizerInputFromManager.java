@@ -36,9 +36,10 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 
 /**
- * Extracts a particular item from an InputManager for summarization downstream
+ * Extracts a particular item from an {@link InputFromManager} for further summarization downstream.
  *
- * <p>Can be used to (effectively) convert summarization from an InputFromManager to another type
+ * <p>It can be used to (effectively) convert summarization from an {@link InputFromManager} to another
+ * type.
  *
  * @author Owen Feehan
  * @param <T> input-type for input-manager
