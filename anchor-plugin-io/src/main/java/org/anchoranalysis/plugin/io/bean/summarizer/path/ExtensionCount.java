@@ -29,11 +29,10 @@ package org.anchoranalysis.plugin.io.bean.summarizer.path;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
-import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.shared.FrequencyMap;
 
 /** Remembers each unique extension, and associated count */
-public class ExtensionCount extends Summarizer<Path> {
+public class ExtensionCount extends SummarizerPath {
 
     private static final String NO_EXTENSION = "NO_EXTENSION";
 

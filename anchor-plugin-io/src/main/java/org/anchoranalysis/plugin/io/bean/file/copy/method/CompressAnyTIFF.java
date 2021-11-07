@@ -47,7 +47,7 @@ public class CompressAnyTIFF extends CopyFilesMethod {
         String fileName = source.getFileName().toString().toLowerCase();
 
         try {
-            if (ImageFileFormat.TIFF.matchesEnd(fileName)) {
+            if (ImageFileFormat.TIFF.matches(fileName)) {
                 CopyTIFFAndCompress.apply(source.toString(), destination);
             } else {
                 simpleCopy.makeCopy(source, destination);

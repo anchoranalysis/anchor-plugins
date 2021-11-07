@@ -24,16 +24,36 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.summarizer.input;
+package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
-import java.util.Optional;
-import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
+import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
+import org.anchoranalysis.plugin.io.shared.FrequencyMap;
 
-public class ExtractDescriptiveName<T extends InputFromManager>
-        extends SummarizerInputFromManager<T, String> {
+/**
+ * Summarizes {@link ImageMetadataInput} in different ways.
+ *
+ * @author Owen Feehan
+ * @param <T> type used for summary in frequency-map
+ */
+public abstract class SummarizerImageMetadata<T> extends Summarizer<ImageMetadataInput> {
+
+    private FrequencyMap<T> map = new FrequencyMap<>();
 
     @Override
-    protected Optional<String> extractFrom(T input) {
-        return Optional.of(input.identifier());
+    public String describe() throws OperationFailedException {
+        return map.describe(describeNoun());
+    }
+
+    protected abstract String describeNoun();
+
+    protected void incrementCount(T key) {
+        map.incrementCount(key);
+    }
+
+    @Override
+    public boolean requiresImageMetadata() {
+        return true;
     }
 }

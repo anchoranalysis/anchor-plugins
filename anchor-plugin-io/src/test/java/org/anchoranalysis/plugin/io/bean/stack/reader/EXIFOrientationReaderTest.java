@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.plugin.io.file.EXIFOrientationReader;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 

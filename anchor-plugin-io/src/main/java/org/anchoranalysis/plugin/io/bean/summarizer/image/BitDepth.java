@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
 
-public class BitDepth extends SummarizerNamedChannelsSimple<Integer> {
+public class BitDepth extends SummarizerImageMetadataSimple<Integer> {
 
     @Override
-    protected Integer extractKey(NamedChannelsInput element) throws ImageIOException {
-        return element.bitDepth();
+    protected Integer extractKey(ImageMetadataInput element) throws ImageIOException {
+        return element.metadata().getBitDepth();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.stack.reader;
+package org.anchoranalysis.plugin.io.file;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -19,7 +19,7 @@ import org.anchoranalysis.image.io.ImageIOException;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class EXIFOrientationReader {
+public class EXIFOrientationReader {
 
     /**
      * Determines the needed correction to orientation for the voxels if an EXIF orientation tag is
@@ -39,6 +39,25 @@ class EXIFOrientationReader {
                 return Optional.empty();
             }
 
+            return determineOrientationCorrection(metadata);
+
+        } catch (IOException | ImageProcessingException e) {
+            throw new ImageIOException(e);
+        }
+    }
+
+    /**
+     * Determines the needed correction to orientation for the voxels if an EXIF orientation tag is
+     * present.
+     *
+     * @param metadata the metadata for the image.
+     * @return the needed correction, if it can be determined, or {@link Optional#empty} if no EXIF
+     *     orientation tag is present.
+     * @throws ImageIOException if the EXIF orientation tag is present, but unsupported.
+     */
+    public static Optional<OrientationChange> determineOrientationCorrection(Metadata metadata)
+            throws ImageIOException {
+        try {
             ExifIFD0Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 
             if (directory == null) {
@@ -51,7 +70,7 @@ class EXIFOrientationReader {
                 return Optional.empty();
             }
 
-        } catch (IOException | ImageProcessingException | MetadataException e) {
+        } catch (MetadataException e) {
             throw new ImageIOException(e);
         }
     }
@@ -73,22 +92,22 @@ class EXIFOrientationReader {
             case 1:
                 // Already matching our voxels, so no need to rotate further.
                 return OrientationChange.KEEP_UNCHANGED;
-                
+
             case 2:
                 return OrientationChange.MIRROR_WITHOUT_ROTATION;
 
             case 3:
                 return OrientationChange.ROTATE_180;
-                
+
             case 4:
-                return OrientationChange.ROTATE_180_MIRROR;                
+                return OrientationChange.ROTATE_180_MIRROR;
 
             case 5:
                 return OrientationChange.ROTATE_90_ANTICLOCKWISE_MIRROR;
-                
+
             case 6:
                 return OrientationChange.ROTATE_90_ANTICLOCKWISE;
-                
+
             case 7:
                 return OrientationChange.ROTATE_90_CLOCKWISE_MIRROR;
 

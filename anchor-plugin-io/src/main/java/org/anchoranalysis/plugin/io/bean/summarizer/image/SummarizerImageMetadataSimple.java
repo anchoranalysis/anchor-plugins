@@ -24,20 +24,27 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.summarizer.input;
+package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
-import java.nio.file.Path;
-import java.util.Optional;
-import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
 
-public class ExtractDescriptiveNameAndPath<T extends InputFromManager>
-        extends SummarizerInputFromManager<T, String> {
+/**
+ * A simple summarizer, where there's one summary-item per image.
+ *
+ * <p>Multiple series are ignored.
+ */
+public abstract class SummarizerImageMetadataSimple<T> extends SummarizerImageMetadata<T> {
 
     @Override
-    protected Optional<String> extractFrom(T input) {
-        return Optional.of(
-                String.format(
-                        "%s\t -> %s",
-                        input.identifier(), input.pathForBinding().map(Path::toString).orElse("")));
+    public void add(ImageMetadataInput element) throws OperationFailedException {
+        try {
+            incrementCount(extractKey(element));
+        } catch (ImageIOException e) {
+            throw new OperationFailedException(e);
+        }
     }
+
+    protected abstract T extractKey(ImageMetadataInput element) throws ImageIOException;
 }
