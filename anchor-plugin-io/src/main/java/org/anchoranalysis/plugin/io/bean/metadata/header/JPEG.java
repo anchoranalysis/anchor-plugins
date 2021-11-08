@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
+import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.io.file.EXIFOrientationReader;
@@ -23,7 +24,7 @@ public class JPEG extends HeaderFormat {
     }
 
     @Override
-    protected Optional<ImageMetadata> populateFromMetadata(Metadata metadata)
+    protected Optional<ImageMetadata> populateFromMetadata(Metadata metadata, ImageFileAttributes timestamps)
             throws ImageIOException {
         Optional<OrientationChange> orientation =
                 EXIFOrientationReader.determineOrientationCorrection(metadata);
@@ -35,7 +36,7 @@ public class JPEG extends HeaderFormat {
                         .map(Dimensions::new);
 
         if (dimensions.isPresent()) {
-            return inferRemainingAttributes(metadata, dimensions.get());
+            return inferRemainingAttributes(metadata, dimensions.get(), timestamps);
         }
 
         return Optional.empty();
@@ -43,7 +44,7 @@ public class JPEG extends HeaderFormat {
 
     /** Infers the remaining needed attributes, once the dimensions are known. */
     private static Optional<ImageMetadata> inferRemainingAttributes(
-            Metadata metadata, Dimensions dimensions) {
+            Metadata metadata, Dimensions dimensions, ImageFileAttributes timestamps) {
 
         // Then infer the number of channels.
         Optional<Integer> numberChannels = inferNumberChannels(metadata);
@@ -61,7 +62,7 @@ public class JPEG extends HeaderFormat {
         boolean rgb = numberChannels.get() == 3;
         return Optional.of(
                 new ImageMetadata(
-                        dimensions, numberChannels.get(), 1, rgb, bitDepth.get())); // NOSONAR
+                        dimensions, numberChannels.get(), 1, rgb, bitDepth.get(), timestamps)); // NOSONAR
     }
 
     /**

@@ -4,7 +4,9 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -13,6 +15,7 @@ import lombok.Setter;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor @AllArgsConstructor
 public class ExportFeaturesStyle extends AnchorBean<ExportFeaturesStyle> {
 
     /**

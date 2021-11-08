@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.format.ImageFileFormat;
+import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 
@@ -37,7 +38,8 @@ public abstract class HeaderFormat extends AnchorBean<HeaderFormat> {
                     return Optional.empty();
                 }
 
-                return populateFromMetadata(metadata);
+                ImageFileAttributes timestamps = ImageFileAttributes.fromPath(path);
+                return populateFromMetadata(metadata, timestamps);
             } else {
                 return Optional.empty();
             }
@@ -60,9 +62,10 @@ public abstract class HeaderFormat extends AnchorBean<HeaderFormat> {
      * Creates a {@link ImageMetadata}, if possible, from {@code metadata}.
      *
      * @param metadata the {@link Metadata} to infer {@link ImageMetadata} from.
+     * @param timestamps TODO
      * @return the inferred metadata, if it was possible to infer it.
      * @throws ImageIOException if the metadata does not meet expectations.
      */
-    protected abstract Optional<ImageMetadata> populateFromMetadata(Metadata metadata)
+    protected abstract Optional<ImageMetadata> populateFromMetadata(Metadata metadata, ImageFileAttributes timestamps)
             throws ImageIOException;
 }

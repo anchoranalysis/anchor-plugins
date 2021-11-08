@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
+import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.spatial.box.Extent;
 
@@ -23,7 +24,7 @@ public class PNG extends HeaderFormat {
     }
 
     @Override
-    protected Optional<ImageMetadata> populateFromMetadata(Metadata metadata)
+    protected Optional<ImageMetadata> populateFromMetadata(Metadata metadata, ImageFileAttributes timestamps)
             throws ImageIOException {
 
         Optional<Directory> directory =
@@ -52,15 +53,15 @@ public class PNG extends HeaderFormat {
             return Optional.empty();
         }
 
-        return Optional.of(createMetadata(extent.get(), numberChannels.get(), bitDepth.get()));
+        return Optional.of(createMetadata(extent.get(), numberChannels.get(), bitDepth.get(), timestamps));
     }
 
     /** Creates the {@link ImageMetadata} given the necessary ingredients. */
-    private static ImageMetadata createMetadata(Extent extent, int numberChannels, int bitDepth) {
+    private static ImageMetadata createMetadata(Extent extent, int numberChannels, int bitDepth, ImageFileAttributes timestamps) {
         // Image resolution is ignored.
         Dimensions dimensions = new Dimensions(extent);
         boolean rgb = numberChannels == 3 || numberChannels == 4;
-        return new ImageMetadata(dimensions, numberChannels, 1, rgb, bitDepth);
+        return new ImageMetadata(dimensions, numberChannels, 1, rgb, bitDepth, timestamps);
     }
 
     private static Optional<Integer> numberOfChannels(Directory directory) throws ImageIOException {
