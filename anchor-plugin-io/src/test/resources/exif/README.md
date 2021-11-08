@@ -29,3 +29,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
+
+## metadata-extractor-images
+
+The file `pngWithExif.png` originates from [metadata-extractor-images](https://github.com/drewnoakes/metadata-extractor-images) by Drew Noakes.
+
+```
+You are free to use these media files however you wish.
+```
+
+

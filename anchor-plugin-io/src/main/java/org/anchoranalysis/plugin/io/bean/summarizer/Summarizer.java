@@ -58,7 +58,7 @@ public abstract class Summarizer<T> extends AnchorBean<Summarizer<T>> {
     public abstract void add(T element) throws OperationFailedException;
 
     /**
-     * Returns a string summarizing this item
+     * A string summarizing this item.
      *
      * @return the description.
      */

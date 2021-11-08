@@ -54,7 +54,7 @@ public abstract class SummarizerInputFromManager<T extends InputFromManager, S>
 
     @Override
     public void add(T element) throws OperationFailedException {
-        OptionalUtilities.ifPresent(extractFrom(element), e -> summarizer.add(e));
+        OptionalUtilities.ifPresent(extractFrom(element), summarizer::add);
     }
 
     @Override
