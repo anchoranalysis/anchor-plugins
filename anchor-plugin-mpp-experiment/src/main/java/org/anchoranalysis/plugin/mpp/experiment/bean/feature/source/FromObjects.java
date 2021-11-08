@@ -44,21 +44,21 @@ import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.name.CombinedName;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.SimpleName;
+import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
-import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
+import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
+import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
+import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.InitializationWithEnergyStack;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
-import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterWithEnergy;
 
@@ -119,6 +119,10 @@ public class FromObjects<T extends FeatureInput>
 
     @BeanField @Getter @Setter private CombineObjectsForFeatures<T> combine;
 
+    /**
+     * When true, exceptions aren't thrown when feature-calculations fail, but rather a log error
+     * message is written.
+     */
     @BeanField @Getter @Setter private boolean suppressErrors = false;
     // END BEAN PROPERTIES
 
@@ -128,25 +132,24 @@ public class FromObjects<T extends FeatureInput>
     }
 
     @Override
-    public SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState(
+    public FeatureExporter<FeatureTableCalculator<T>> createExporter(
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features,
-            ResultsWriterOutputNames outputNames,
-            InputOutputContext context)
+            FeatureOutputNames outputNames,
+            FeatureExporterContext context)
             throws CreateException {
         try {
             FeatureTableCalculator<T> tableCalculator =
                     combine.createFeatures(features, STORE_FACTORY, suppressErrors);
-            return SharedStateExportFeatures.createForFeatures(
-                    outputNames, tableCalculator, metadataHeaders, context);
+            return FeatureExporter.create(outputNames, tableCalculator, metadataHeaders, context);
         } catch (InitializeException e) {
             throw new CreateException(e);
         }
     }
 
     @Override
-    public void processInput(
-            MultiInput input, InputProcessContext<FeatureTableCalculator<T>> context)
+    public void calculateAndOutput(
+            MultiInput input, FeatureCalculationContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
         define.processInput(
                 input,
@@ -167,7 +170,7 @@ public class FromObjects<T extends FeatureInput>
 
     /**
      * If either a group-generator is defined or there's more than one provider, then groups should
-     * be included
+     * be included.
      */
     @Override
     public boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
@@ -181,7 +184,7 @@ public class FromObjects<T extends FeatureInput>
     private int calculateFeaturesForImage(
             String inputName,
             InitializationWithEnergyStack initialization,
-            InputProcessContext<FeatureTableCalculator<T>> context)
+            FeatureCalculationContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
 
         CalculateFeaturesForObjects<T> objectsCalculator =

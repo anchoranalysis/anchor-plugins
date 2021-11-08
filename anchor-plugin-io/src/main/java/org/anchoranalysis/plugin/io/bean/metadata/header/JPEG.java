@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.metadata.header;
 
+import com.drew.metadata.Metadata;
+import com.drew.metadata.jpeg.JpegDirectory;
 import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -7,14 +9,11 @@ import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.io.file.EXIFOrientationReader;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.jpeg.JpegDirectory;
 
 /**
  * The headers found in a JPEG file.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class JPEG extends HeaderFormat {
 
@@ -22,16 +21,18 @@ public class JPEG extends HeaderFormat {
     protected ImageFileFormat format() {
         return ImageFileFormat.JPEG;
     }
-    
+
     @Override
-    protected Optional<ImageMetadata> populateFromMetadata(Metadata metadata) throws ImageIOException {
+    protected Optional<ImageMetadata> populateFromMetadata(Metadata metadata)
+            throws ImageIOException {
         Optional<OrientationChange> orientation =
                 EXIFOrientationReader.determineOrientationCorrection(metadata);
 
         // Infer width and height from the metadata.
         // Image resolution is ignored.
         Optional<Dimensions> dimensions =
-                FromExifIfPossible.inferExtentFromEXIFOr(metadata, orientation).map(Dimensions::new);
+                FromExifIfPossible.inferExtentFromEXIFOr(metadata, orientation)
+                        .map(Dimensions::new);
 
         if (dimensions.isPresent()) {
             return inferRemainingAttributes(metadata, dimensions.get());
@@ -62,7 +63,7 @@ public class JPEG extends HeaderFormat {
                 new ImageMetadata(
                         dimensions, numberChannels.get(), 1, rgb, bitDepth.get())); // NOSONAR
     }
-    
+
     /**
      * Infers the <b>number of channels</i> from the metadata.
      *
@@ -70,7 +71,8 @@ public class JPEG extends HeaderFormat {
      * @return the number of channels.
      */
     private static Optional<Integer> inferNumberChannels(Metadata metadata) {
-        return InferHelper.readInt(metadata, JpegDirectory.class, JpegDirectory.TAG_NUMBER_OF_COMPONENTS);
+        return InferHelper.readInt(
+                metadata, JpegDirectory.class, JpegDirectory.TAG_NUMBER_OF_COMPONENTS);
     }
 
     /**

@@ -16,7 +16,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * <p>It tries first to read from any EXIF header, and if that is absent, then a fallback.
  *
- * All are presumes to describe the image <b><i>before</i></b> any {@link OrientationChange} is
+ * <p>All are presumes to describe the image <b><i>before</i></b> any {@link OrientationChange} is
  * applied.
  *
  * @author Owen Feehan

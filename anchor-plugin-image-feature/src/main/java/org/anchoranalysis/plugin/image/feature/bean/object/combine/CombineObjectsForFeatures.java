@@ -77,8 +77,8 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      *
      * @param featuresSingleObject beans defining features to be applied to single-objects
      * @param storeFactory creates as new {@link NamedFeatureStore} as needed
-     * @param suppressErrors if true exceptions aren't thrown when feature-calculations fail, but
-     *     rather a log error message is writen
+     * @param suppressErrors when true, exceptions aren't thrown when feature-calculations fail, but
+     *     rather a log error message is written.
      * @return a calculator for feature tables that may apply various features derived from {@code
      *     featuresSingleObject}
      * @throws CreateException
