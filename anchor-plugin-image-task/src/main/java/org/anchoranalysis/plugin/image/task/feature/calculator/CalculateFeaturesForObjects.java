@@ -40,8 +40,9 @@ import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.feature.object.ListWithThumbnails;
+import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.InitializationWithEnergyStack;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
+import org.anchoranalysis.plugin.image.task.feature.LabelledResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 
@@ -56,7 +57,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
      */
     private final boolean suppressErrors;
 
-    private final InputProcessContext<FeatureTableCalculator<T>> context;
+    private final FeatureCalculationContext<FeatureTableCalculator<T>> context;
 
     public interface LabelsForInput<T extends FeatureInput> {
 
@@ -74,7 +75,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
             CombineObjectsForFeatures<T> table,
             InitializationWithEnergyStack initialization,
             boolean suppressErrors,
-            InputProcessContext<FeatureTableCalculator<T>> context)
+            FeatureCalculationContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
         this.table = table;
         this.calculator =
@@ -115,28 +116,42 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
             ListWithThumbnails<T, ObjectCollection> listInputs, LabelsForInput<T> labelsForInput)
             throws OperationFailedException {
 
+        for (int i = 0; i < listInputs.size(); i++) {
+
+            T input = listInputs.get(i);
+
+            context.getLogger()
+                    .messageLogger()
+                    .logFormatted(
+                            "Calculating input %d of %d: %s",
+                            i + 1, listInputs.size(), input.toString());
+
+            LabelledResultsVectorWithThumbnail results =
+                    calculateLabelledResults(input, listInputs, labelsForInput, i);
+            context.addResults(results);
+        }
+    }
+
+    private LabelledResultsVectorWithThumbnail calculateLabelledResults(
+            T input,
+            ListWithThumbnails<T, ObjectCollection> listInputs,
+            LabelsForInput<T> labelsForInput,
+            int index)
+            throws OperationFailedException {
+        ResultsVectorWithThumbnail results = calculateResults(input, listInputs);
+        RowLabels labels = labelsForInput.deriveLabels(input, index);
+        return new LabelledResultsVectorWithThumbnail(labels, results);
+    }
+
+    private ResultsVectorWithThumbnail calculateResults(
+            T input, ListWithThumbnails<T, ObjectCollection> listInputs)
+            throws OperationFailedException {
         try {
-            for (int i = 0; i < listInputs.size(); i++) {
-
-                T input = listInputs.get(i);
-
-                context.getLogger()
-                        .messageLogger()
-                        .logFormatted(
-                                "Calculating input %d of %d: %s",
-                                i + 1, listInputs.size(), input.toString());
-
-                context.addResultsFor(
-                        labelsForInput.deriveLabels(input, i),
-                        new ResultsVectorWithThumbnail(
-                                calculator.calculate(
-                                        input, context.getLogger().errorReporter(), suppressErrors),
-                                thumbnailForInput(
-                                        input,
-                                        listInputs.getThumbnailBatch(),
-                                        context.isThumbnailsEnabled())));
-            }
-
+            return new ResultsVectorWithThumbnail(
+                    calculator.calculate(
+                            input, context.getLogger().errorReporter(), suppressErrors),
+                    thumbnailForInput(
+                            input, listInputs.getThumbnailBatch(), context.isThumbnailsEnabled()));
         } catch (NamedFeatureCalculateException | CreateException e) {
             throw new OperationFailedException(e);
         }

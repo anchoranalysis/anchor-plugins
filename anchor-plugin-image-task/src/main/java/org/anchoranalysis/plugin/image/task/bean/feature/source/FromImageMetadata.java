@@ -14,7 +14,7 @@ import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.feature.input.FeatureInputImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.ImageMetadataInput;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
+import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 
 /**
@@ -45,7 +45,7 @@ public class FromImageMetadata
     @Override
     protected ResultsVectorWithThumbnail calculateResultsForInput(
             ImageMetadataInput input,
-            InputProcessContext<FeatureList<FeatureInputImageMetadata>> context)
+            FeatureCalculationContext<FeatureList<FeatureInputImageMetadata>> context)
             throws NamedFeatureCalculateException {
 
         try {

@@ -29,39 +29,50 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedConsumer;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.system.ExecutionTimeRecorder;
-import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
+ * The context in which features are calculated, so as to be later exported as a CSV.
+ *
  * @author Owen Feehan
  * @param <S> row-source that is duplicated for each new thread (to prevent any concurrency issues)
  */
-public class InputProcessContext<S> {
-
-    private static final String OUTPUT_THUMBNAILS = "thumbnails";
+public class FeatureCalculationContext<S> {
 
     // START REQUIRED ARGUMENTS
-    ExportFeatureResultsAdder adder;
+    /** Adds results (a row in a feature-table) for export-features. */
+    private CheckedConsumer<LabelledResultsVectorWithThumbnail, OperationFailedException> adder;
 
-    @Getter S rowSource;
+    @Getter private S rowSource;
 
-    @Getter FeatureNameList featureNames;
+    @Getter private FeatureNameList featureNames;
 
-    @Getter Optional<String> groupGeneratorName;
+    @Getter private Optional<String> groupGeneratorName;
 
     /** Records the execution-time of particular operations. */
-    @Getter ExecutionTimeRecorder executionTimeRecorder;
+    @Getter private ExecutionTimeRecorder executionTimeRecorder;
 
-    @Getter InputOutputContext context;
+    @Getter private InputOutputContext context;
     // END REQUIRED ARGUMENTS
 
-    @Getter boolean thumbnailsEnabled;
+    @Getter private boolean thumbnailsEnabled;
 
-    public InputProcessContext(
-            ExportFeatureResultsAdder adder,
+    /**
+     * Default constructor.
+     *
+     * @param adder adds results (a row in a feature-table) for export-features.
+     * @param rowSource
+     * @param featureNames
+     * @param groupGeneratorName
+     * @param executionTimeRecorder
+     * @param context
+     */
+    public FeatureCalculationContext(
+            CheckedConsumer<LabelledResultsVectorWithThumbnail, OperationFailedException> adder,
             S rowSource,
             FeatureNameList featureNames,
             Optional<String> groupGeneratorName,
@@ -84,12 +95,14 @@ public class InputProcessContext<S> {
         return context.getLogger();
     }
 
-    public void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results)
+    public void addResults(LabelledResultsVectorWithThumbnail results)
             throws OperationFailedException {
-        adder.addResultsFor(labels, results);
+        adder.accept(results);
     }
 
     private boolean areThumbnailsEnabled(InputOutputContext context) {
-        return context.getOutputter().outputsEnabled().isOutputEnabled(OUTPUT_THUMBNAILS);
+        return context.getOutputter()
+                .outputsEnabled()
+                .isOutputEnabled(FeatureExporter.OUTPUT_THUMBNAILS);
     }
 }

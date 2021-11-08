@@ -56,7 +56,7 @@ import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.file.FileInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
+import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 
 /**
@@ -99,12 +99,12 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
     @Override
     protected ResultsVectorWithThumbnail calculateResultsForInput(
-            FileInput input, InputProcessContext<FeatureList<FeatureInputHistogram>> context)
+            FileInput input, FeatureCalculationContext<FeatureList<FeatureInputHistogram>> context)
             throws NamedFeatureCalculateException {
 
         // Reads histogram from filesystem
         try {
-            Histogram histogramRead = readHistogramFromCsv(input);
+            Histogram histogramRead = readHistogramFromCSV(input);
 
             if (histogram != null) {
                 histogramRead = filterHistogramFromProvider(histogramRead, context.getContext());
@@ -164,7 +164,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
                 logger);
     }
 
-    private static Histogram readHistogramFromCsv(FileInput input) throws CSVReaderException {
+    private static Histogram readHistogramFromCSV(FileInput input) throws CSVReaderException {
         File file = input.getFile();
 
         if (NonImageFileFormat.CSV.matches(file.getName())) {

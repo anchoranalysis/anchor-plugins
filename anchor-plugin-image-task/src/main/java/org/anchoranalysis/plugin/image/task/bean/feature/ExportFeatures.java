@@ -51,7 +51,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
+import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
@@ -64,11 +64,12 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
-import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
+import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
+import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
 
 /**
- * Calculates features and exports them as a CSV
+ * Calculates features and exports them as a CSV file.
  *
  * <p>Aggregated-features (based upon a certain grouping) can also be calculated.
  *
@@ -97,15 +98,15 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * @param <U> feature-input type for {@code features} bean-field
  */
 public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInput>
-        extends Task<T, SharedStateExportFeatures<S>> {
+        extends Task<T, FeatureExporter<S>> {
 
     private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE =
             NamedFeatureStoreFactory.bothNameAndParams();
 
-    public static final ResultsWriterOutputNames OUTPUT_RESULTS = new ResultsWriterOutputNames();
+    public static final FeatureOutputNames OUTPUT_RESULTS = new FeatureOutputNames();
 
     // START BEAN PROPERTIES
-    /** Source of feature-values to be exported */
+    /** Source of feature-values to be exported. */
     @BeanField @Getter @Setter private FeatureSource<T, S, U> source;
 
     /**
@@ -127,43 +128,47 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
      */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate;
+
+    /** Visual style for how feature export occurs. */
+    @BeanField @Getter @Setter ExportFeaturesStyle style = new ExportFeaturesStyle();   
     // END BEAN PROPERTIES
 
     @Override
-    public SharedStateExportFeatures<S> beforeAnyJobIsExecuted(
+    public FeatureExporter<S> beforeAnyJobIsExecuted(
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<T> inputs,
             ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            return source.createSharedState(
+            FeatureExporterContext context = style.deriveContext(params.getContext());
+            return source.createExporter(
                     source.headers().createHeaders(isGroupGeneratorDefined()),
                     features,
                     OUTPUT_RESULTS,
-                    params.getContext());
+                    context);
         } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
         }
     }
 
     @Override
-    public void doJobOnInput(InputBound<T, SharedStateExportFeatures<S>> input)
-            throws JobExecutionException {
+    public void doJobOnInput(InputBound<T, FeatureExporter<S>> input) throws JobExecutionException {
         try {
             Optional<String> groupName =
                     extractGroupNameFromGenerator(
                             input.getInput().pathForBindingRequired(),
                             input.getContextJob().isDebugEnabled());
 
-            InputProcessContext<S> inputProcessContext =
+            FeatureCalculationContext<S> calculationContext =
                     input.getSharedState()
-                            .createInputProcessContext(
+                            .createCalculationContext(
                                     groupName,
                                     input.getContextExperiment().getExecutionTimeRecorder(),
                                     input.getContextJob());
 
-            source.processInput(input.getInput(), inputProcessContext);
+            // Process input to calculate and output features.
+            source.calculateAndOutput(input.getInput(), calculationContext);
 
         } catch (OperationFailedException | InputReadFailedException | DerivePathException e) {
             throw new JobExecutionException(e);
@@ -171,14 +176,14 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     }
 
     @Override
-    public void afterAllJobsAreExecuted(
-            SharedStateExportFeatures<S> sharedState, InputOutputContext context)
+    public void afterAllJobsAreExecuted(FeatureExporter<S> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
-
+        // Write the aggregate features
         try {
             sharedState.writeGroupedResults(
                     featuresAggregateAsStore(),
                     source.includeGroupInExperiment(isGroupGeneratorDefined()),
+                    contextForWriter -> style.deriveContext(contextForWriter)::csvWriter,
                     context);
             sharedState.closeAnyOpenIO();
         } catch (OutputWriteFailedException | ProvisionFailedException | IOException e) {
@@ -190,7 +195,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs()
                 .addEnabledOutputFirst(
-                        SharedStateExportFeatures.OUTPUT_THUMBNAILS,
+                        FeatureExporter.OUTPUT_THUMBNAILS,
                         OUTPUT_RESULTS.getCsvFeaturesNonAggregated(),
                         OUTPUT_RESULTS.getCsvFeaturesAggregated().get()); // NOSONAR
     }

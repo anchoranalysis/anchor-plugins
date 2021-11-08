@@ -29,7 +29,7 @@ class InferFromHeaderTest {
     void testJPG() throws ImageIOException {
         test("exif/exif_present_rotation_needed.jpg", 3888, 5184, 3);
     }
-    
+
     @Test
     void testPNGWithExif() throws ImageIOException {
         test("exif/pngWithExif.png", 256, 256, 3);
@@ -60,9 +60,9 @@ class InferFromHeaderTest {
         // The defaultStackReader should never be called during testing, so we pass a null.
         return INSTANCE.openFile(path, null);
     }
-    
+
     private static InferFromHeader createInstance() {
-        List<HeaderFormat> formats = Arrays.asList( new JPEG(), new PNG());
+        List<HeaderFormat> formats = Arrays.asList(new JPEG(), new PNG());
         return new InferFromHeader(new AlwaysReject(), formats);
     }
 }
