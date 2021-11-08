@@ -26,6 +26,7 @@
 package org.anchoranalysis.plugin.opencv.bean.stack;
 
 import com.google.common.base.CharMatcher;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
@@ -69,6 +71,9 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     /** Lazily opened stack. */
     private Stack stack;
+    
+    /** Lazily recorded timestamps. */
+    private ImageFileAttributes timestamps;
 
     /**
      * Create with a specific path.
@@ -150,5 +155,17 @@ class OpenedRasterOpenCV implements OpenedImageFile {
         } catch (OperationFailedException e) {
             throw new ImageIOException(e);
         }
+    }
+
+    @Override
+    public ImageFileAttributes fileAttributes() throws ImageIOException {
+        if (timestamps==null) {
+            try {
+                timestamps = ImageFileAttributes.fromPath(path);
+            } catch (IOException e) {
+                throw new ImageIOException(e);
+            }
+        }
+        return timestamps;
     }
 }

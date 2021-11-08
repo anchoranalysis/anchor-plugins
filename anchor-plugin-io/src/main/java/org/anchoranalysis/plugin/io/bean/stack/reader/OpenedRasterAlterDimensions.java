@@ -32,6 +32,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -118,6 +119,11 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
         return delegate.bitDepth();
     }
 
+    @Override
+    public ImageFileAttributes fileAttributes() throws ImageIOException {
+        return delegate.fileAttributes();
+    }
+    
     @Override
     public void close() throws ImageIOException {
         delegate.close();

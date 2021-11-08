@@ -32,6 +32,7 @@ import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -122,6 +123,11 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
     @Override
     public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
         return delegate.dimensionsForSeries(seriesIndex);
+    }
+    
+    @Override
+    public ImageFileAttributes fileAttributes() throws ImageIOException {
+        return delegate.fileAttributes();
     }
 
     private List<Stack> extractStacksAndVerify(TimeSequence sequence) throws ImageIOException {

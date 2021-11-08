@@ -107,7 +107,9 @@ class GroupingInput extends NamedChannelsInput {
                 numberChannels(),
                 numberFrames(),
                 channels.isRGB(),
-                bitDepth());
+                bitDepth(),
+                openedFile.fileAttributes()
+                );
     }
 
     @Override
