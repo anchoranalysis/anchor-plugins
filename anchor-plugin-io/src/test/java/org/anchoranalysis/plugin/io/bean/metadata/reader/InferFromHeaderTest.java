@@ -4,25 +4,35 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.plugin.io.bean.metadata.header.HeaderFormat;
+import org.anchoranalysis.plugin.io.bean.metadata.header.JPEG;
+import org.anchoranalysis.plugin.io.bean.metadata.header.PNG;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link FromEXIF}.
+ * Tests {@link InferFromHeader}.
  *
  * @author Owen Feehan
  */
-class FromEXIFTest {
+class InferFromHeaderTest {
 
-    private static final FromEXIF INSTANCE = new FromEXIF(new AlwaysReject());
+    private static final InferFromHeader INSTANCE = createInstance();
 
     private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
     @Test
     void testJPG() throws ImageIOException {
         test("exif/exif_present_rotation_needed.jpg", 3888, 5184, 3);
+    }
+    
+    @Test
+    void testPNGWithExif() throws ImageIOException {
+        test("exif/pngWithExif.png", 256, 256, 3);
     }
 
     @Test
@@ -49,5 +59,10 @@ class FromEXIFTest {
 
         // The defaultStackReader should never be called during testing, so we pass a null.
         return INSTANCE.openFile(path, null);
+    }
+    
+    private static InferFromHeader createInstance() {
+        List<HeaderFormat> formats = Arrays.asList( new JPEG(), new PNG());
+        return new InferFromHeader(new AlwaysReject(), formats);
     }
 }

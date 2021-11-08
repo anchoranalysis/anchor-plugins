@@ -1,0 +1,2 @@
+Several image files in tests originate from https://github.com/drewnoakes/metadata-extractor-images by Drew Noakes.
+
