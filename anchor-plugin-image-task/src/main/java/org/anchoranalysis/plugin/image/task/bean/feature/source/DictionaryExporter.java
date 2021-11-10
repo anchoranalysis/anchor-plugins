@@ -56,7 +56,7 @@ class DictionaryExporter {
 
     private static Dictionary convert(
             FeatureNameList featureNames, ResultsVector rv, Logger logger) {
-        assert (featureNames.size() == rv.length());
+        assert (featureNames.size() == rv.size());
 
         Dictionary dictionary = new Dictionary();
         for (int i = 0; i < featureNames.size(); i++) {

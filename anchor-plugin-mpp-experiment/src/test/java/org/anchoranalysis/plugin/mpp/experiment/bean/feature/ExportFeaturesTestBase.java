@@ -35,6 +35,7 @@ import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
+import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesStyle;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.experiment.task.TaskSingleInputHelper;
 import org.junit.jupiter.api.BeforeAll;
@@ -120,6 +121,11 @@ abstract class ExportFeaturesTestBase<
             S input = (S) MultiInputFixture.createInput(taskFixture.energyStack());
 
             ExportFeatures<S, U, T> task = taskFixture.createTask();
+
+            // The saved results were recorded before certain CSV style options became the default,
+            // so
+            // we switch back to the old settings for comparison.
+            task.setStyle(new ExportFeaturesStyle(false, false));
 
             TaskSingleInputHelper.runTaskAndCompareOutputs(
                     input,

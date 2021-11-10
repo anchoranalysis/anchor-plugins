@@ -34,13 +34,12 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
-import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
-import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
+import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
+import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
 
 /**
  * Extracts features from some kind of inputs to produce one or more rows in a feature-table.
@@ -53,11 +52,21 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 public abstract class FeatureSource<T extends InputFromManager, S, U extends FeatureInput>
         extends AnchorBean<FeatureSource<T, S, U>> {
 
-    public abstract SharedStateExportFeatures<S> createSharedState(
+    /**
+     * Creates the {@link FeatureExporter} to be used for calculating and exporting feature-results.
+     *
+     * @param metadataHeaders headers to use for additional "metadata" before feature-results.
+     * @param features the features to calculate.
+     * @param outputNames the names of various kind of outputs.
+     * @param context IO-context.
+     * @return a newly created {@link FeatureExporter} as matches this source of features.
+     * @throws CreateException if it cannot be created.
+     */
+    public abstract FeatureExporter<S> createExporter(
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<U>>> features,
-            ResultsWriterOutputNames outputNames,
-            InputOutputContext context)
+            FeatureOutputNames outputNames,
+            FeatureExporterContext context)
             throws CreateException;
 
     /**
@@ -69,16 +78,21 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
      */
     public abstract boolean includeGroupInExperiment(boolean groupGeneratorDefined);
 
-    public abstract GenerateLabelHeadersForCSV headers();
+    /**
+     * Generate label-headers for the non-feature-result columns in the CSV.
+     *
+     * @return a label-header generator.
+     */
+    public abstract LabelHeaders headers(boolean groupsEnabled);
 
     /**
-     * Processes one input to generate features.
+     * Processes one input to calculate feature-results and output them to the file-system.
      *
      * @param input one particular input that will creates one or more "rows" in a feature-table
      * @param context io-context
      * @throws OperationFailedException
      */
-    public abstract void processInput(T input, InputProcessContext<S> context)
+    public abstract void calculateAndOutput(T input, FeatureCalculationContext<S> context)
             throws OperationFailedException;
 
     /**

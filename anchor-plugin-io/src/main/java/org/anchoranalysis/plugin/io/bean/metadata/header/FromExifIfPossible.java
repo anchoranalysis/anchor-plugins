@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.io.bioformats.metadata.ReadMetadataUtilities;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
@@ -16,7 +17,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * <p>It tries first to read from any EXIF header, and if that is absent, then a fallback.
  *
- * All are presumes to describe the image <b><i>before</i></b> any {@link OrientationChange} is
+ * <p>All are presumes to describe the image <b><i>before</i></b> any {@link OrientationChange} is
  * applied.
  *
  * @author Owen Feehan
@@ -52,7 +53,7 @@ class FromExifIfPossible {
     }
 
     private static Optional<Extent> readExif(Metadata metadata) throws ImageIOException {
-        return InferHelper.readFromWidthHeightTags(
+        return ReadMetadataUtilities.readFromWidthHeightTags(
                 metadata,
                 ExifIFD0Directory.class,
                 ExifIFD0Directory.TAG_IMAGE_WIDTH,
@@ -60,7 +61,7 @@ class FromExifIfPossible {
     }
 
     private static Optional<Extent> readOther(Metadata metadata) throws ImageIOException {
-        return InferHelper.readFromWidthHeightTags(
+        return ReadMetadataUtilities.readFromWidthHeightTags(
                 metadata,
                 JpegDirectory.class,
                 JpegDirectory.TAG_IMAGE_WIDTH,
