@@ -33,6 +33,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.stack.TimeSequence;
@@ -46,6 +47,7 @@ import org.anchoranalysis.io.input.file.FileInput;
 @RequiredArgsConstructor
 class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
+    // START: REQUIRED ARGUMENTS
     /** The root object that is used to provide the input-name and {@code pathForBinding}. */
     private final FileInput delegate;
 
@@ -59,6 +61,9 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
      * our purposes we treat it as if its 0.
      */
     private final boolean useLastSeriesIndexOnly;
+        
+    private final Logger logger;
+    // END: REQUIRED ARGUMENTS
 
     // We cache a certain amount of stacks read for particular series
     private OpenedImageFile openedFileMemo;
@@ -150,7 +155,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                                     .orElseThrow(
                                             () ->
                                                     new ImageIOException(
-                                                            "A binding-path must be associated with this file")));
+                                                            "A binding-path must be associated with this file")), logger);
         }
         return openedFileMemo;
     }

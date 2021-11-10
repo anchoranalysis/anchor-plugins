@@ -35,6 +35,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
 import org.junit.jupiter.api.Test;
@@ -98,7 +99,7 @@ class ObjectCollectionCompressionTest {
                     BindFailedException {
         // Write the objects to the filesystem and read again
         writeObjects(objects, pathRoot, generator(true, true));
-        return readObjects(pathOut);
+        return readObjects(pathOut, LoggingFixture.suppressedLogger());
     }
 
     private static long fileSizeBytes(Path testPath) {

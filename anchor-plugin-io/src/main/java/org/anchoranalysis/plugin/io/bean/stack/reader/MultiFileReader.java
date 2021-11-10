@@ -35,6 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -70,7 +71,7 @@ public class MultiFileReader extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path filePath) throws ImageIOException {
+    public OpenedImageFile openFile(Path filePath, Logger logger) throws ImageIOException {
 
         // We look at all other files in the same folder as our filepath to match our expression
 
@@ -87,7 +88,7 @@ public class MultiFileReader extends StackReader {
             }
         }
 
-        return new OpenedMultiFile(stackReader, bag);
+        return new OpenedMultiFile(stackReader, bag, logger);
     }
 
     private File folderFromFile(Path filePath) {

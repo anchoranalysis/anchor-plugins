@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
@@ -50,9 +51,11 @@ public class DeserializedManifest {
 
     private final File file;
     private final CheckedSupplier<Manifest, OperationFailedException> memoized;
+    private Logger logger;
 
-    public DeserializedManifest(File file, ManifestDeserializer manifestDeserializer) {
+    public DeserializedManifest(File file, ManifestDeserializer manifestDeserializer, Logger logger) {
         this.file = file;
+        this.logger = logger;
         this.memoized = CachedSupplier.cache(() -> getInternal(manifestDeserializer));
     }
 
@@ -72,7 +75,7 @@ public class DeserializedManifest {
                 throw new OperationFailedException(
                         String.format("File %s cannot be found", file.getPath()));
             }
-            return manifestDeserializer.deserializeManifest(file);
+            return manifestDeserializer.deserializeManifest(file, logger);
         } catch (DeserializationFailedException e) {
             throw new OperationFailedException(e);
         }

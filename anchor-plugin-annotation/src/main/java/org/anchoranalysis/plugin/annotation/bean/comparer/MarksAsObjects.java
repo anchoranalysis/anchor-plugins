@@ -34,6 +34,7 @@ import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -66,7 +67,7 @@ public class MarksAsObjects extends ComparableSource {
 
     @Override
     public Findable<ObjectCollection> loadAsObjects(
-            Path reference, Dimensions dimensions, boolean debugMode)
+            Path reference, Dimensions dimensions, boolean debugMode, Logger logger)
             throws InputReadFailedException {
 
         Path path = path(reference);
@@ -76,7 +77,7 @@ public class MarksAsObjects extends ComparableSource {
             return new NotFound<>(path, "No marks exist at path");
         }
 
-        return new Found<>(createObjects(path, dimensions));
+        return new Found<>(createObjects(path, dimensions, logger));
     }
 
     private Path path(Path filePathSource) throws InputReadFailedException {
@@ -87,12 +88,12 @@ public class MarksAsObjects extends ComparableSource {
         }
     }
 
-    private ObjectCollection createObjects(Path filePath, Dimensions dimensions)
+    private ObjectCollection createObjects(Path filePath, Dimensions dimensions, Logger logger)
             throws InputReadFailedException {
         MarkCollectionDeserializer deserialized = new MarkCollectionDeserializer();
         MarkCollection marks;
         try {
-            marks = deserialized.deserialize(filePath);
+            marks = deserialized.deserialize(filePath, logger);
         } catch (DeserializationFailedException e) {
             throw new InputReadFailedException(e);
         }
