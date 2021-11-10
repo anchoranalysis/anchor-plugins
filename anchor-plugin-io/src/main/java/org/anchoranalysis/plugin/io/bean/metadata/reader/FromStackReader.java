@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
@@ -37,12 +37,12 @@ public class FromStackReader extends ImageMetadataReader {
     // END BEAN PROPERTIES
 
     @Override
-    public ImageMetadata openFile(Path path, StackReader defaultStackReader, ErrorReporter errorReporter)
+    public ImageMetadata openFile(Path path, StackReader defaultStackReader, Logger logger)
             throws ImageIOException {
 
         StackReader selectedReader = Optional.ofNullable(stackReader).orElse(defaultStackReader);
 
-        try (OpenedImageFile file = selectedReader.openFile(path)) {
+        try (OpenedImageFile file = selectedReader.openFile(path, logger)) {
             return file.metadata(seriesIndex);
         }
     }

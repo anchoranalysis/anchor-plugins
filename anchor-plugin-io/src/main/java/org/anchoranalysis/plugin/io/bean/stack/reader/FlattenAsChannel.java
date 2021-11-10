@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -55,7 +56,7 @@ public class FlattenAsChannel extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path path) throws ImageIOException {
-        return new OpenedFlattenAsChannel(stackReader.openFile(path));
+    public OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException {
+        return new OpenedFlattenAsChannel(stackReader.openFile(path, logger));
     }
 }

@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.input.channel;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -58,12 +59,14 @@ public class NamedChannels extends NamedChannelsBase {
             throws InputReadFailedException {
         return fileInput
                 .inputs(params)
-                .map(
-                        input ->
-                                new MapPart(
-                                        input,
-                                        getStackReader(),
-                                        channelMap,
-                                        useLastSeriesIndexOnly));
+                .map(input -> createPart(input, params.getLogger()));
+    }
+    
+    private MapPart createPart(FileInput input, Logger logger) {
+        return new MapPart(
+                input,
+                getStackReader(),
+                channelMap,
+                useLastSeriesIndexOnly, logger);
     }
 }

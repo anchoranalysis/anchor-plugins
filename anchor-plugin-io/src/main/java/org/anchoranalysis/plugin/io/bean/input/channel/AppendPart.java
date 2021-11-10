@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -52,6 +53,7 @@ import org.anchoranalysis.io.input.path.PathSupplier;
  */
 class AppendPart extends NamedChannelsInputPart {
 
+    // START: REQUIRED ARGUMENTS
     /** The existing {@link NamedChannelsInputPart} to append to. */
     private final NamedChannelsInputPart toAppendTo;
 
@@ -60,17 +62,21 @@ class AppendPart extends NamedChannelsInputPart {
 
     private final StackReader stackReader;
 
+    private final Logger logger;
+    // END: REQUIRED ARGUMENTS
+    
     private OpenedImageFile openedFileMemo;
-
+    
     public AppendPart(
             NamedChannelsInputPart toAppendTo,
             String channelName,
             int channelIndex,
             PathSupplier filePath,
-            StackReader stackReader) {
+            StackReader stackReader, Logger logger) {
         this.toAppendTo = toAppendTo;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
         this.stackReader = stackReader;
+        this.logger = logger;
     }
 
     @Override
@@ -175,7 +181,7 @@ class AppendPart extends NamedChannelsInputPart {
             Path filePathAdditional = additionalChannel.getFilePath();
 
             if (openedFileMemo == null) {
-                openedFileMemo = stackReader.openFile(filePathAdditional);
+                openedFileMemo = stackReader.openFile(filePathAdditional, logger);
             }
 
         } catch (DerivePathException e) {

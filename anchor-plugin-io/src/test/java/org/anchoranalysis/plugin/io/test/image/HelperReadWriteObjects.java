@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.test.image;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
 import org.anchoranalysis.image.io.object.output.hdf5.HDF5ObjectsGenerator;
@@ -61,10 +62,10 @@ class HelperReadWriteObjects {
         outputter.writerPermissive().write("objects", () -> generator, () -> objects);
     }
 
-    public static ObjectCollection readObjects(Path path) throws DeserializationFailedException {
+    public static ObjectCollection readObjects(Path path, Logger logger) throws DeserializationFailedException {
 
         TestReaderWriterUtilities.ensureStackReader();
 
-        return ObjectCollectionReader.createFromPath(path);
+        return ObjectCollectionReader.createFromPath(path, logger);
     }
 }
