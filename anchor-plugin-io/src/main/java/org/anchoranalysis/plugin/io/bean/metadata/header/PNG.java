@@ -9,6 +9,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.io.bioformats.metadata.ReadMetadataUtilities;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
@@ -28,13 +29,13 @@ public class PNG extends HeaderFormat {
             throws ImageIOException {
 
         Optional<Directory> directory =
-                InferHelper.findDirectoryWithName(metadata, PngDirectory.class, "PNG-IHDR");
+                ReadMetadataUtilities.findDirectoryWithName(metadata, PngDirectory.class, "PNG-IHDR");
         if (!directory.isPresent()) {
             return Optional.empty();
         }
 
         Optional<Extent> extent =
-                InferHelper.readFromWidthHeightTags(
+                ReadMetadataUtilities.readFromWidthHeightTags(
                         directory.get(),
                         PngDirectory.TAG_IMAGE_WIDTH,
                         PngDirectory.TAG_IMAGE_HEIGHT);
@@ -48,7 +49,7 @@ public class PNG extends HeaderFormat {
         }
 
         Optional<Integer> bitDepth =
-                InferHelper.readInt(directory.get(), PngDirectory.TAG_BITS_PER_SAMPLE);
+                ReadMetadataUtilities.readInt(directory.get(), PngDirectory.TAG_BITS_PER_SAMPLE);
         if (!bitDepth.isPresent()) {
             return Optional.empty();
         }
@@ -61,11 +62,11 @@ public class PNG extends HeaderFormat {
         // Image resolution is ignored.
         Dimensions dimensions = new Dimensions(extent);
         boolean rgb = numberChannels == 3 || numberChannels == 4;
-        return new ImageMetadata(dimensions, numberChannels, 1, rgb, bitDepth, timestamps);
+        return new ImageMetadata(dimensions, numberChannels, 1, rgb, bitDepth, timestamps, Optional.empty());
     }
 
     private static Optional<Integer> numberOfChannels(Directory directory) throws ImageIOException {
-        Optional<Integer> colorType = InferHelper.readInt(directory, PngDirectory.TAG_COLOR_TYPE);
+        Optional<Integer> colorType = ReadMetadataUtilities.readInt(directory, PngDirectory.TAG_COLOR_TYPE);
         if (!colorType.isPresent()) {
             return Optional.empty();
         }

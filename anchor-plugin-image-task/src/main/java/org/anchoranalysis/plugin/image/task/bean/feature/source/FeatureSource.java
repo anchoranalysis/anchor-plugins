@@ -40,7 +40,6 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
-import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 
 /**
  * Extracts features from some kind of inputs to produce one or more rows in a feature-table.
@@ -80,11 +79,11 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
     public abstract boolean includeGroupInExperiment(boolean groupGeneratorDefined);
 
     /**
-     * How to generate label-headers for the non-feature-result columns in the CSV.
+     * Generate label-headers for the non-feature-result columns in the CSV.
      *
      * @return a label-header generator.
      */
-    public abstract GenerateLabelHeadersForCSV headers();
+    public abstract LabelHeaders headers(boolean groupsEnabled);
 
     /**
      * Processes one input to calculate feature-results and output them to the file-system.

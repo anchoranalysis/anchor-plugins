@@ -175,4 +175,9 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
                             + NonImageFileFormat.CSV.extensionWithPeriod());
         }
     }
+
+    @Override
+    protected Optional<String[]> additionalLabelsFor(FileInput input) {
+        return Optional.empty();
+    }
 }
