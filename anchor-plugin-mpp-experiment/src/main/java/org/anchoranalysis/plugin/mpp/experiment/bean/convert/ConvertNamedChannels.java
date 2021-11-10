@@ -36,6 +36,8 @@ import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.log.error.ErrorReporterIntoString;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
@@ -92,7 +94,7 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
     /** Supplies to the {@code imageMetadataReader} to use, if no other reader is specified. */
     @DefaultInstance @BeanField @Getter @Setter private StackReader defaultStackReaderForMetadata;
     // END BEAN PROPERTIES
-
+    
     @Override
     public SharedStateRememberConverted<U, S> beforeAnyJobIsExecuted(
             Outputter outputter,
@@ -102,6 +104,7 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
             throws ExperimentExecutionException {
 
         SharedStateRememberConverted<U, S> sharedState = new SharedStateRememberConverted<>();
+        
         List<U> convertedInputs = convertListAndPopulateMap(inputs, sharedState);
         sharedState.setSharedState(
                 task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, convertedInputs, params));
@@ -113,7 +116,7 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
             throws JobExecutionException {
 
         Optional<U> inputConverted =
-                inputBound.getSharedState().findConvertedInputFor(inputBound.getInput());
+                inputBound.getSharedState().findConvertedInputFor(inputBound.getInput(), inputBound.getLogger().messageLogger());
 
         if (inputConverted.isPresent()) {
             task.doJobOnInput(
@@ -172,9 +175,17 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
                 new ConvertInputHelper(imageMetadataReader, defaultStackReaderForMetadata);
 
         for (T input : inputs) {
+
+            // Where to record any errors that occur when converting inputs.
+            
+            // This is preferable than writing to the ExperimentLog, as the errors are associated with
+            // a particular input.
+            StringBuilder conversionMessages = new StringBuilder();
+            ErrorReporter errorReporter = new ErrorReporterIntoString(conversionMessages);
+            
             // Convert and put in both the map and the list
-            U converted = (U) helper.convert(input, inputTypesExpected, directory);
-            sharedState.rememberConverted(input, converted);
+            U converted = (U) helper.convert(input, inputTypesExpected, directory, errorReporter);
+            sharedState.rememberConverted(input, converted, conversionMessages);
             out.add(converted);
         }
         return out;

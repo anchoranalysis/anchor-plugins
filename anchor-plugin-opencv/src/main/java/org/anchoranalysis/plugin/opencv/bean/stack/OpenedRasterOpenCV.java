@@ -153,7 +153,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
         try {
             stack = ConvertFromMat.toStack(image);
         } catch (OperationFailedException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Failed to convert an OpenCV image structure to a stack", e);
         }
     }
 

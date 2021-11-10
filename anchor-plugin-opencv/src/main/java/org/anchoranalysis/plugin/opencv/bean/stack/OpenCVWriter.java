@@ -31,6 +31,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.OneOrThreeChannelsWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.WriterErrorMessageHelper;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -57,7 +58,7 @@ public class OpenCVWriter extends OneOrThreeChannelsWriter {
         try {
             Imgcodecs.imwrite(filePath.toString(), ConvertToMat.fromStack(stack));
         } catch (CreateException e) {
-            throw new ImageIOException(e);
+            throw WriterErrorMessageHelper.generalWriteException(OpenCVWriter.class, filePath, e);
         }
     }
 }

@@ -129,7 +129,7 @@ class GroupingInput extends NamedChannelsInput {
             try {
                 channelMap = channelMapCreator.createMap(openedFile);
             } catch (CreateException e) {
-                throw new ImageIOException(e);
+                throw new ImageIOException("Failed to create a channel-map", e);
             }
         }
     }

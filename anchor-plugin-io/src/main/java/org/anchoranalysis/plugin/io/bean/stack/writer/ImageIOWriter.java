@@ -33,6 +33,7 @@ import org.anchoranalysis.image.core.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.OneOrThreeChannelsWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.WriterErrorMessageHelper;
 
 public class ImageIOWriter extends OneOrThreeChannelsWriter {
 
@@ -41,7 +42,7 @@ public class ImageIOWriter extends OneOrThreeChannelsWriter {
         try {
             ImageIO.write(BufferedImageFactory.create(stack), getExtension(), filePath.toFile());
         } catch (CreateException | IOException e) {
-            throw new ImageIOException(e);
+            throw WriterErrorMessageHelper.generalWriteException(ImageIOWriter.class, filePath, e);
         }
     }
 }

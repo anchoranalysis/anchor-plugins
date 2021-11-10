@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
@@ -47,33 +48,37 @@ public class InferFromHeader extends ImageMetadataReader {
     // END BEAN PROPERTIES
 
     @Override
-    public ImageMetadata openFile(Path path, StackReader defaultStackReader)
+    public ImageMetadata openFile(Path path, StackReader defaultStackReader, ErrorReporter errorReporter)
             throws ImageIOException {
 
         return OptionalUtilities.orElseGet(
-                attemptToPopulateFromMetadata(path),
-                () -> useFallbackReader(path, defaultStackReader));
+                attemptToPopulateFromMetadata(path, errorReporter),
+                () -> useFallbackReader(path, defaultStackReader, errorReporter));
     }
 
     /**
      * Try to infer the needed elements for {@link ImageMetadata} from metadata present in {@code
      * path}.
      */
-    private Optional<ImageMetadata> attemptToPopulateFromMetadata(Path path)
+    private Optional<ImageMetadata> attemptToPopulateFromMetadata(Path path, ErrorReporter errorReporter)
             throws ImageIOException {
         for (HeaderFormat format : formats) {
-            Optional<ImageMetadata> metadata = format.populateFrom(path);
-            if (metadata.isPresent()) {
-                return Optional.of(metadata.get());
+            try {
+                Optional<ImageMetadata> metadata = format.populateFrom(path);
+                if (metadata.isPresent()) {
+                    return Optional.of(metadata.get());
+                }
+            } catch (Exception e) {
+                errorReporter.recordError(InferFromHeader.class, "Switching to fallback, as cannot infer metadata from the header due to the following exception.", e);
             }
         }
         return Optional.empty();
     }
 
     /** Use the fallback {@code ImageMetadataReader} to establish the metadata. */
-    private ImageMetadata useFallbackReader(Path path, StackReader defaultStackReader)
+    private ImageMetadata useFallbackReader(Path path, StackReader defaultStackReader, ErrorReporter errorReporter)
             throws ImageIOException {
-        return fallback.openFile(path, defaultStackReader);
+        return fallback.openFile(path, defaultStackReader, errorReporter);
     }
 
     private static List<HeaderFormat> createDefaultFormats() {

@@ -179,7 +179,7 @@ class AppendPart extends NamedChannelsInputPart {
             }
 
         } catch (DerivePathException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Failed to derive a file-path to open an image part.", e);
         }
     }
 }
