@@ -62,16 +62,19 @@ import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 public abstract class SingleRowPerInput<T extends InputFromManager, S extends FeatureInput>
         extends FeatureSource<T, FeatureList<S>, S> {
 
-    /** The column names (not pertaining to groups), the first of which should refer to an identifier. */
+    /**
+     * The column names (not pertaining to groups), the first of which should refer to an
+     * identifier.
+     */
     private String[] nonGroupHeaders;
-    
+
     /**
      * Creates with a single non-group header that should be describe an identifier.
-     * 
+     *
      * @param headerIdentifier the column-name to describe an identifier.
      */
     protected SingleRowPerInput(String headerIdentifier) {
-        nonGroupHeaders = new String[]{headerIdentifier};
+        nonGroupHeaders = new String[] {headerIdentifier};
     }
 
     @Override
@@ -96,8 +99,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             ResultsVectorWithThumbnail results = calculateResultsForInput(input, context);
             LabelledResultsVectorWithThumbnail labelledResults =
                     new LabelledResultsVectorWithThumbnail(
-                            labelsFor(input, context.getGroupGeneratorName()),
-                            results);
+                            labelsFor(input, context.getGroupGeneratorName()), results);
             context.addResults(labelledResults);
 
         } catch (BeanDuplicateException | NamedFeatureCalculateException e) {
@@ -107,7 +109,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
 
     /**
      * Calculates feature-results for a particular input.
-     * 
+     *
      * @param input the input.
      * @param context context for calculating features.
      * @return the results, with optionally associated thumbnail.
@@ -118,30 +120,36 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             throws NamedFeatureCalculateException;
 
     /**
-     * Additional labels for an input to include (after the identifier, and before any group labels).
-     * 
-     * <p>These should always correspond (when appended to the identifier) exactly to the {@code nonGroupHeaders}.
-     * 
+     * Additional labels for an input to include (after the identifier, and before any group
+     * labels).
+     *
+     * <p>These should always correspond (when appended to the identifier) exactly to the {@code
+     * nonGroupHeaders}.
+     *
      * @param input the input.
      * @return any additional labels for the input.
      */
-    protected abstract Optional<String[]> additionalLabelsFor(T input) throws OperationFailedException;
+    protected abstract Optional<String[]> additionalLabelsFor(T input)
+            throws OperationFailedException;
 
     /** Row-labels for a particular input. */
-    private RowLabels labelsFor(T input, Optional<String> groupGeneratorName) throws OperationFailedException {
+    private RowLabels labelsFor(T input, Optional<String> groupGeneratorName)
+            throws OperationFailedException {
         Optional<String[]> additionalLabels = additionalLabelsFor(input);
         String[] nonGroupLabels = combine(input.identifier(), additionalLabels);
-        if (nonGroupLabels.length!=nonGroupHeaders.length) {
-            throw new OperationFailedException(String.format("There were %d non-group labels, when %d were expected.", nonGroupLabels.length, nonGroupHeaders.length));
+        if (nonGroupLabels.length != nonGroupHeaders.length) {
+            throw new OperationFailedException(
+                    String.format(
+                            "There were %d non-group labels, when %d were expected.",
+                            nonGroupLabels.length, nonGroupHeaders.length));
         }
-        return new RowLabels(
-                Optional.of(nonGroupLabels), groupGeneratorName.map(SimpleName::new));
+        return new RowLabels(Optional.of(nonGroupLabels), groupGeneratorName.map(SimpleName::new));
     }
-    
+
     /** Combines a {@link String} with optional additional others to form an array. */
     private static String[] combine(String identifier, Optional<String[]> others) {
         if (others.isPresent()) {
-            String[] out = new String[others.get().length+1];
+            String[] out = new String[others.get().length + 1];
             out[0] = identifier;
             System.arraycopy(others.get(), 0, out, 1, others.get().length);
             return out;

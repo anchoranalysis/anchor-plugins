@@ -71,7 +71,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     /** Lazily opened stack. */
     private Stack stack;
-    
+
     /** Lazily recorded timestamps. */
     private ImageTimestampsAttributes timestamps;
 
@@ -159,7 +159,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     @Override
     public ImageTimestampsAttributes timestamps() throws ImageIOException {
-        if (timestamps==null) {
+        if (timestamps == null) {
             timestamps = ImageTimestampsAttributesFactory.fromPath(path);
         }
         return timestamps;

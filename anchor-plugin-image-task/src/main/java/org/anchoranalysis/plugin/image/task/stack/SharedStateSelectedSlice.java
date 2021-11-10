@@ -47,7 +47,8 @@ public class SharedStateSelectedSlice {
                             new FeatureCSVMetadata(
                                     "selectedSlices",
                                     Arrays.asList("name", "sliceIndex", "featureOptima")),
-                            baseOutputter, false);
+                            baseOutputter,
+                            false);
         } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
         }

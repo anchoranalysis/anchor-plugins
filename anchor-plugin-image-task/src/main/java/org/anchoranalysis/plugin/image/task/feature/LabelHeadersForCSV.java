@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.io.results.LabelHeaders;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LabelHeadersForCSV {
 
     /**
@@ -49,15 +49,21 @@ public class LabelHeadersForCSV {
      * Creates the label-headers (the headers for columns not associated with features).
      *
      * @param nonGroupHeaders headers that identify the row unrelated to groups.
-     * @param additionalGroupHeader additional group-header used after the {@link #GROUP_HEADER_STANDARD} if groups are enabled.
+     * @param additionalGroupHeader additional group-header used after the {@link
+     *     #GROUP_HEADER_STANDARD} if groups are enabled.
      * @param groupsEnabled whether groups are enabled or not. Iff true, group headers are included.
      * @return the headers.
      */
-    public static LabelHeaders createHeaders(String[] nonGroupHeaders, Optional<String> additionalGroupHeader, boolean groupsEnabled) {
-        return new LabelHeaders(nonGroupHeaders, headersForGroup(additionalGroupHeader, groupsEnabled));
+    public static LabelHeaders createHeaders(
+            String[] nonGroupHeaders,
+            Optional<String> additionalGroupHeader,
+            boolean groupsEnabled) {
+        return new LabelHeaders(
+                nonGroupHeaders, headersForGroup(additionalGroupHeader, groupsEnabled));
     }
 
-    private static String[] headersForGroup(Optional<String> additionalGroupHeader, boolean groupsEnabled) {
+    private static String[] headersForGroup(
+            Optional<String> additionalGroupHeader, boolean groupsEnabled) {
         if (groupsEnabled) {
             if (additionalGroupHeader.isPresent()) {
                 return new String[] {GROUP_HEADER_STANDARD, additionalGroupHeader.get()};

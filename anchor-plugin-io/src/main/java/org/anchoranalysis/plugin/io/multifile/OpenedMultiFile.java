@@ -112,10 +112,11 @@ public class OpenedMultiFile implements OpenedImageFile {
 
         return multiFile.numFrames();
     }
-    
+
     @Override
     public ImageTimestampsAttributes timestamps() throws ImageIOException {
-        throw new ImageIOException("Timestamps are not supported for multi-files, as it is not well-defined which file should be used.");
+        throw new ImageIOException(
+                "Timestamps are not supported for multi-files, as it is not well-defined which file should be used.");
     }
 
     @Override

@@ -181,7 +181,7 @@ public class SegmentInstanceWithModel<T>
      * no objects.
      */
     @BeanField @Getter @Setter private boolean ignoreNoObjects = true;
-    
+
     /** Visual style for how feature export occurs. */
     @BeanField @Getter @Setter ExportFeaturesStyle style = new ExportFeaturesStyle();
     // END BEAN FIELDS
@@ -205,8 +205,7 @@ public class SegmentInstanceWithModel<T>
 
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);
             FeatureExporterContext context = style.deriveContext(params.getContext());
-            return new SharedStateSegmentInstance<>(
-                    modelPool, tableCalculator(), headers, context);
+            return new SharedStateSegmentInstance<>(modelPool, tableCalculator(), headers, context);
         } catch (CreateModelFailedException | InitializeException | CreateException e) {
             throw new ExperimentExecutionException(e);
         }

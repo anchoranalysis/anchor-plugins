@@ -124,7 +124,7 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
     public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
         return delegate.dimensionsForSeries(seriesIndex);
     }
-    
+
     @Override
     public ImageTimestampsAttributes timestamps() throws ImageIOException {
         return delegate.timestamps();

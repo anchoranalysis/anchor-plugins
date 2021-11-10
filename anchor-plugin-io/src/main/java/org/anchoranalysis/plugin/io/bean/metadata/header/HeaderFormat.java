@@ -66,6 +66,6 @@ public abstract class HeaderFormat extends AnchorBean<HeaderFormat> {
      * @return the inferred metadata, if it was possible to infer it.
      * @throws ImageIOException if the metadata does not meet expectations.
      */
-    protected abstract Optional<ImageMetadata> populateFromMetadata(Metadata metadata, ImageFileAttributes timestamps)
-            throws ImageIOException;
+    protected abstract Optional<ImageMetadata> populateFromMetadata(
+            Metadata metadata, ImageFileAttributes timestamps) throws ImageIOException;
 }
