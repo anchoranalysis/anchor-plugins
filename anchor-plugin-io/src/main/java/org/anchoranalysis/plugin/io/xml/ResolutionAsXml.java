@@ -91,7 +91,7 @@ public class ResolutionAsXml {
             return resolutionFromNodes(allResolutionElements.item(0).getChildNodes());
 
         } catch (ParserConfigurationException | SAXException | IOException | CreateException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("An error occurred parsing a file containing image-resolution", e);
         }
     }
 
