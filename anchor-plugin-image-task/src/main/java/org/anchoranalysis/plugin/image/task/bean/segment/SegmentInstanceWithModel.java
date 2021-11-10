@@ -79,8 +79,10 @@ import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackInt
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesStyle;
+import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
+import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
 import org.anchoranalysis.plugin.image.task.feature.InitializationWithEnergyStack;
-import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.segment.SharedStateSegmentInstance;
 import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
@@ -179,6 +181,9 @@ public class SegmentInstanceWithModel<T>
      * no objects.
      */
     @BeanField @Getter @Setter private boolean ignoreNoObjects = true;
+
+    /** Visual style for how feature export occurs. */
+    @BeanField @Getter @Setter ExportFeaturesStyle style = new ExportFeaturesStyle();
     // END BEAN FIELDS
 
     @Override
@@ -199,8 +204,8 @@ public class SegmentInstanceWithModel<T>
             ConcurrentModelPool<T> modelPool = segment.createModelPool(plan);
 
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);
-            return new SharedStateSegmentInstance<>(
-                    modelPool, tableCalculator(), headers, params.getContext());
+            FeatureExporterContext context = style.deriveContext(params.getContext());
+            return new SharedStateSegmentInstance<>(modelPool, tableCalculator(), headers, context);
         } catch (CreateModelFailedException | InitializeException | CreateException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -274,7 +279,7 @@ public class SegmentInstanceWithModel<T>
                         OUTPUT_H5,
                         OUTPUT_MERGED_AS_MASK,
                         OUTPUT_OUTLINE,
-                        SharedStateExportFeatures.OUTPUT_THUMBNAILS,
+                        FeatureExporter.OUTPUT_THUMBNAILS,
                         SharedStateSegmentInstance.OUTPUT_SUMMARY_CSV);
     }
 
@@ -298,8 +303,7 @@ public class SegmentInstanceWithModel<T>
                                 energyStack, input.createInitializationContext()),
                         true,
                         input.getSharedState()
-                                .createInputProcessContext(
-                                        Optional.empty(),
+                                .createCalculationContext(
                                         input.getContextJob().getExecutionTimeRecorder(),
                                         input.getContextJob()));
         calculator.calculateFeaturesForObjects(

@@ -27,7 +27,8 @@
 package org.anchoranalysis.plugin.image.task.feature;
 
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 
 /**
@@ -35,36 +36,34 @@ import org.anchoranalysis.feature.io.results.LabelHeaders;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor
-public class GenerateLabelHeadersForCSV {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class LabelHeadersForCSV {
 
     /**
      * The standard group header that occurs if a groups are enabled (with possibly an additional
-     * group header
+     * group header.
      */
     private static final String GROUP_HEADER_STANDARD = "group";
 
-    // START REQUIRED ARGUMENTS
-    /** Headers that identify the row unrelated to groups */
-    private final String[] nonGroupHeaders;
-
     /**
-     * Additional group-header used after the {@link #GROUP_HEADER_STANDARD} if groups are enabled
-     */
-    private final Optional<String> additionalGroupHeader;
-    // END REQUIRED ARGUMENTS
-
-    /**
-     * Creates the label-headers (the headers for columns not associated with features)
+     * Creates the label-headers (the headers for columns not associated with features).
      *
+     * @param nonGroupHeaders headers that identify the row unrelated to groups.
+     * @param additionalGroupHeader additional group-header used after the {@link
+     *     #GROUP_HEADER_STANDARD} if groups are enabled.
      * @param groupsEnabled whether groups are enabled or not. Iff true, group headers are included.
-     * @return the headers
+     * @return the headers.
      */
-    public LabelHeaders createHeaders(boolean groupsEnabled) {
-        return new LabelHeaders(nonGroupHeaders, headersForGroup(groupsEnabled));
+    public static LabelHeaders createHeaders(
+            String[] nonGroupHeaders,
+            Optional<String> additionalGroupHeader,
+            boolean groupsEnabled) {
+        return new LabelHeaders(
+                nonGroupHeaders, headersForGroup(additionalGroupHeader, groupsEnabled));
     }
 
-    private String[] headersForGroup(boolean groupsEnabled) {
+    private static String[] headersForGroup(
+            Optional<String> additionalGroupHeader, boolean groupsEnabled) {
         if (groupsEnabled) {
             if (additionalGroupHeader.isPresent()) {
                 return new String[] {GROUP_HEADER_STANDARD, additionalGroupHeader.get()};

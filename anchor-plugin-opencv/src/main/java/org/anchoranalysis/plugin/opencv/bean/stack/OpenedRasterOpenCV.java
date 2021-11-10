@@ -37,7 +37,9 @@ import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
+import org.anchoranalysis.io.bioformats.metadata.ImageTimestampsAttributesFactory;
 import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -69,6 +71,9 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     /** Lazily opened stack. */
     private Stack stack;
+
+    /** Lazily recorded timestamps. */
+    private ImageTimestampsAttributes timestamps;
 
     /**
      * Create with a specific path.
@@ -150,5 +155,13 @@ class OpenedRasterOpenCV implements OpenedImageFile {
         } catch (OperationFailedException e) {
             throw new ImageIOException(e);
         }
+    }
+
+    @Override
+    public ImageTimestampsAttributes timestamps() throws ImageIOException {
+        if (timestamps == null) {
+            timestamps = ImageTimestampsAttributesFactory.fromPath(path);
+        }
+        return timestamps;
     }
 }

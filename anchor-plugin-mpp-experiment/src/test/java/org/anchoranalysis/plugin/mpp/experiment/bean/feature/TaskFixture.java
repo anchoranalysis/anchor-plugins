@@ -74,7 +74,7 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
         this.featureLoader = new FeaturesLoader(loader);
     }
 
-    /** Change to using a small energy-stack that causes some features to throw errors */
+    /** Change to using a small energy-stack that causes some features to throw errors. */
     public void useSmallEnergy() {
         this.energyStack = createEnergyStack(false, false, true);
     }

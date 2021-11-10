@@ -30,14 +30,15 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
-import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
-import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
+import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
+import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
 
 /**
  * Shared-state for instance segmentation
@@ -49,33 +50,44 @@ public class SharedStateSegmentInstance<T> {
 
     public static final String OUTPUT_SUMMARY_CSV = "summary";
 
-    private static final ResultsWriterOutputNames OUTPUT_RESULTS =
-            new ResultsWriterOutputNames(OUTPUT_SUMMARY_CSV, false, false);
+    private static final FeatureOutputNames OUTPUT_RESULTS =
+            new FeatureOutputNames(OUTPUT_SUMMARY_CSV, false, false);
 
-    private final SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>>
-            features;
+    private final FeatureExporter<FeatureTableCalculator<FeatureInputSingleObject>> features;
+
     @Getter private final ConcurrentModelPool<T> modelPool;
 
     public SharedStateSegmentInstance(
             ConcurrentModelPool<T> modelPool,
             FeatureTableCalculator<FeatureInputSingleObject> featureTable,
             LabelHeaders identifierHeaders,
-            InputOutputContext context)
+            FeatureExporterContext context)
             throws CreateException {
         this.modelPool = modelPool;
         this.features =
-                SharedStateExportFeatures.createForFeatures(
-                        OUTPUT_RESULTS, featureTable, identifierHeaders, context);
+                FeatureExporter.create(OUTPUT_RESULTS, featureTable, identifierHeaders, context);
     }
 
-    public InputProcessContext<FeatureTableCalculator<FeatureInputSingleObject>>
-            createInputProcessContext(
-                    Optional<String> groupName,
-                    ExecutionTimeRecorder executionTimeRecorder,
-                    InputOutputContext context) {
-        return features.createInputProcessContext(groupName, executionTimeRecorder, context);
+    /**
+     * Creates a {@link FeatureCalculationContext} for calculating features to later use this
+     * exporter.
+     *
+     * @param executionTimeRecorder records execution-times.
+     * @param ioContext IO-context.
+     * @return a newly created context.
+     */
+    public FeatureCalculationContext<FeatureTableCalculator<FeatureInputSingleObject>>
+            createCalculationContext(
+                    ExecutionTimeRecorder executionTimeRecorder, InputOutputContext ioContext) {
+        return features.createCalculationContext(
+                Optional.empty(), executionTimeRecorder, ioContext);
     }
 
+    /**
+     * Closes any open IO and removes redundant structures stored in memory.
+     *
+     * @throws IOException if the close operation cannot successfully complete.
+     */
     public void closeAnyOpenIO() throws IOException {
         features.closeAnyOpenIO();
     }

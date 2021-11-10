@@ -33,7 +33,7 @@ public class BitDepth extends SummarizerImageMetadataSimple<Integer> {
 
     @Override
     protected Integer extractKey(ImageMetadataInput element) throws ImageIOException {
-        return element.metadata().getBitDepth();
+        return element.metadata().getBitDepthPerChannel();
     }
 
     @Override

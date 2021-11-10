@@ -26,10 +26,13 @@
 package org.anchoranalysis.plugin.image.task.bean.format;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -90,11 +93,14 @@ class NamedChannelsInputFixture extends NamedChannelsInput {
     public ImageMetadata metadata(int seriesIndex) throws ImageIOException {
         NamedChannelsForSeries channels =
                 createChannelsForSeries(seriesIndex, ProgressIgnore.get());
+        ZonedDateTime now = ZonedDateTime.now();
         return new ImageMetadata(
                 channels.dimensions(),
                 numberChannels(),
                 numberFrames(),
                 channels.isRGB(),
-                bitDepth());
+                bitDepth(),
+                new ImageFileAttributes(Paths.get("fakePath.png"), now, now),
+                Optional.empty());
     }
 }

@@ -46,7 +46,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.plugin.image.bean.thumbnail.stack.ScaleToSize;
 import org.anchoranalysis.plugin.image.bean.thumbnail.stack.ThumbnailFromStack;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
+import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculatorFromProvider;
 
@@ -84,7 +84,8 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
     @Override
     protected ResultsVectorWithThumbnail calculateResultsForInput(
-            ProvidesStackInput input, InputProcessContext<FeatureList<FeatureInputStack>> context)
+            ProvidesStackInput input,
+            FeatureCalculationContext<FeatureList<FeatureInputStack>> context)
             throws NamedFeatureCalculateException {
 
         FeatureCalculatorFromProvider<FeatureInputStack> calculator =
@@ -135,7 +136,8 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
     }
 
     private FeatureCalculatorFromProvider<FeatureInputStack> createCalculator(
-            ProvidesStackInput input, InputProcessContext<FeatureList<FeatureInputStack>> context)
+            ProvidesStackInput input,
+            FeatureCalculationContext<FeatureList<FeatureInputStack>> context)
             throws NamedFeatureCalculateException {
         try {
             return context.getExecutionTimeRecorder()
@@ -149,5 +151,10 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
         } catch (OperationFailedException e) {
             throw new NamedFeatureCalculateException(e);
         }
+    }
+
+    @Override
+    protected Optional<String[]> additionalLabelsFor(ProvidesStackInput input) {
+        return Optional.empty();
     }
 }
