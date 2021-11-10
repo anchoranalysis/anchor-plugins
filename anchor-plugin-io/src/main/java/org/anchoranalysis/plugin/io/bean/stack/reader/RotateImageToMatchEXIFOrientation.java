@@ -18,6 +18,10 @@ import org.anchoranalysis.io.bioformats.metadata.OrientationReader;
  *
  * <p>The EXIF orientation is read separately from the underlying {@link StackReader}.
  *
+ * <p>If the metadata cannot be successfully read, no rotation occurs, and currently no error message is logged.
+ * 
+ * TODO change the above
+ * 
  * @author Owen Feehan
  */
 @NoArgsConstructor
@@ -42,8 +46,13 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
 
     private static OrientationChange inferNeededOrientationChange(Path path)
             throws ImageIOException {
-        // If no orientation-correction data is available, we proceed, performing no rotation.
-        return OrientationReader.determineOrientationCorrection(path)
-                .orElse(OrientationChange.KEEP_UNCHANGED);
+        try {
+            // If no orientation-correction data is available, we proceed, performing no rotation.
+            return OrientationReader.determineOrientationCorrection(path)
+                    .orElse(OrientationChange.KEEP_UNCHANGED);
+        } catch (ImageIOException e) {
+            // TODO log the exception to the message log
+            return OrientationChange.KEEP_UNCHANGED;
+        }
     }
 }

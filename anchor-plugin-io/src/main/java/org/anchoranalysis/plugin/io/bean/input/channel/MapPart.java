@@ -162,7 +162,7 @@ class MapPart extends NamedChannelsInputPart {
             try {
                 channelMap = channelMapCreator.createMap(openedFileMemo);
             } catch (CreateException e) {
-                throw new ImageIOException(e);
+                throw new ImageIOException("Failed to create channel-map", e);
             }
         }
         return channelMap;

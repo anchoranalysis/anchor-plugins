@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -57,26 +58,32 @@ public class SharedStateRememberConverted<U extends InputFromManager, S> {
      * <p>It is assumed that only one {@link JobProcessor} will ever be using this object
      * simultaneously.
      */
-    private Map<NamedChannelsInput, U> mapConverted = new HashMap<>();
+    private Map<NamedChannelsInput, ConvertedInput<U>> mapConverted = new HashMap<>();
 
     /**
      * Remembers a converted input.
      *
      * @param unconverted the unconverted value
      * @param converted the converted value
+     * @param loggedMesssages any messages logged during the conversion.
      */
-    public void rememberConverted(NamedChannelsInput unconverted, U converted) {
-        mapConverted.put(unconverted, converted);
+    public void rememberConverted(NamedChannelsInput unconverted, U converted, StringBuilder loggedMesssages) {
+        mapConverted.put( unconverted, new ConvertedInput<>(converted, loggedMesssages) );
     }
 
     /**
      * Finds a converted-input that has been remembered.
      *
      * @param unconverted the unconverted input
+     * @param logger where to log any messages that occurred during conversion.
      * @return the corresponding convrted input for {@code unconverted}, if it exists.
      */
-    public Optional<U> findConvertedInputFor(NamedChannelsInput unconverted) {
-        return Optional.ofNullable(mapConverted.get(unconverted));
+    public Optional<U> findConvertedInputFor(NamedChannelsInput unconverted, MessageLogger logger) {
+        Optional<ConvertedInput<U>> converted = Optional.ofNullable(mapConverted.get(unconverted));
+        if (converted.isPresent()) {
+            converted.get().logConversionMessages(logger);
+        }
+        return converted.map(ConvertedInput::getConversion);
     }
 
     /** Forgets all converted inputs. */
