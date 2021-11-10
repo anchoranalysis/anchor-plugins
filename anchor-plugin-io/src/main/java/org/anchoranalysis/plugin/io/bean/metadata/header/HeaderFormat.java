@@ -45,7 +45,7 @@ public abstract class HeaderFormat extends AnchorBean<HeaderFormat> {
             }
 
         } catch (IOException | ImageProcessingException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Failed to establish image-metadata", e);
         }
     }
 

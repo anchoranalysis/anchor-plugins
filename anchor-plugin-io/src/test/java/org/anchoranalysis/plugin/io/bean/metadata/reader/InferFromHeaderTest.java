@@ -57,8 +57,9 @@ class InferFromHeaderTest {
     private ImageMetadata loadMetadata(String filename) throws ImageIOException {
         Path path = loader.resolveTestPath(filename);
 
-        // The defaultStackReader should never be called during testing, so we pass a null.
-        return INSTANCE.openFile(path, null);
+        // The defaultStackReader or errorReporter should never be called during testing, so we pass nulls,
+        // even though this isn't allowed.
+        return INSTANCE.openFile(path, null, null);
     }
 
     private static InferFromHeader createInstance() {

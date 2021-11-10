@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.convert;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
@@ -62,7 +63,7 @@ class ConvertInputHelper {
     private final StackReader defaultStackReader;
 
     public <T extends NamedChannelsInput> InputFromManager convert(
-            T input, InputTypesExpected inputTypesExpected, Optional<Path> directory)
+            T input, InputTypesExpected inputTypesExpected, Optional<Path> directory, ErrorReporter errorReporter)
             throws ExperimentExecutionException {
         Class<? extends InputFromManager> inputClass = input.getClass();
 
@@ -76,7 +77,7 @@ class ConvertInputHelper {
         } else if (inputTypesExpected.doesClassInheritFromAny(FileWithDirectoryInput.class)) {
             return convertToFileWithDirectory(input, directory);
         } else if (inputTypesExpected.doesClassInheritFromAny(ImageMetadataInput.class)) {
-            return convertToImageMetadata(input);
+            return convertToImageMetadata(input, errorReporter);
         } else {
             throw new ExperimentExecutionException(
                     String.format(
@@ -111,21 +112,21 @@ class ConvertInputHelper {
     }
 
     /** Converts to a {@link ImageMetadataInput}. */
-    private <T extends NamedChannelsInput> ImageMetadataInput convertToImageMetadata(T input)
+    private <T extends NamedChannelsInput> ImageMetadataInput convertToImageMetadata(T input, ErrorReporter errorReporter)
             throws ExperimentExecutionException {
         try {
-            return new ImageMetadataInput(input.asFile(), () -> readImageMetadata(input));
+            return new ImageMetadataInput(input.asFile(), () -> readImageMetadata(input, errorReporter));
         } catch (InputReadFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }
 
-    private <T extends NamedChannelsInput> ImageMetadata readImageMetadata(T input)
+    private <T extends NamedChannelsInput> ImageMetadata readImageMetadata(T input, ErrorReporter errorReporter)
             throws ImageIOException {
         try {
-            return imageMetadataReader.openFile(input.pathForBindingRequired(), defaultStackReader);
+            return imageMetadataReader.openFile(input.pathForBindingRequired(), defaultStackReader, errorReporter);
         } catch (InputReadFailedException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Failed to read image-metadata for the input.", e);
         }
     }
 }
