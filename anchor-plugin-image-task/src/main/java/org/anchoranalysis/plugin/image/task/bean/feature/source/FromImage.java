@@ -152,4 +152,9 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
             throw new NamedFeatureCalculateException(e);
         }
     }
+
+    @Override
+    protected Optional<String[]> additionalLabelsFor(ProvidesStackInput input) {
+        return Optional.empty();
+    }
 }

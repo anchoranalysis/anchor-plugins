@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.opencv.bean.stack;
 
 import com.google.common.base.CharMatcher;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -34,12 +33,13 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
+import org.anchoranalysis.io.bioformats.metadata.ImageTimestampsAttributesFactory;
 import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -73,7 +73,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     private Stack stack;
     
     /** Lazily recorded timestamps. */
-    private ImageFileAttributes timestamps;
+    private ImageTimestampsAttributes timestamps;
 
     /**
      * Create with a specific path.
@@ -158,13 +158,9 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     }
 
     @Override
-    public ImageFileAttributes fileAttributes() throws ImageIOException {
+    public ImageTimestampsAttributes timestamps() throws ImageIOException {
         if (timestamps==null) {
-            try {
-                timestamps = ImageFileAttributes.fromPath(path);
-            } catch (IOException e) {
-                throw new ImageIOException(e);
-            }
+            timestamps = ImageTimestampsAttributesFactory.fromPath(path);
         }
         return timestamps;
     }

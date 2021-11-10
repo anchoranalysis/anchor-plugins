@@ -11,7 +11,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.plugin.io.file.EXIFOrientationReader;
+import org.anchoranalysis.io.bioformats.metadata.OrientationReader;
 
 /**
  * Rotates an image to match any EXIF orientation information, if it exists.
@@ -43,7 +43,7 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
     private static OrientationChange inferNeededOrientationChange(Path path)
             throws ImageIOException {
         // If no orientation-correction data is available, we proceed, performing no rotation.
-        return EXIFOrientationReader.determineOrientationCorrection(path)
+        return OrientationReader.determineOrientationCorrection(path)
                 .orElse(OrientationChange.KEEP_UNCHANGED);
     }
 }

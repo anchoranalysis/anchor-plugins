@@ -41,6 +41,7 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
+import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 @RequiredArgsConstructor
@@ -102,13 +103,15 @@ class GroupingInput extends NamedChannelsInput {
     public ImageMetadata metadata(int seriesIndex) throws ImageIOException {
         NamedChannelsForSeries channels =
                 createChannelsForSeries(seriesIndex, ProgressIgnore.get());
+        ImageTimestampsAttributes timestamps = openedFile.timestamps();
         return new ImageMetadata(
                 channels.dimensions(),
                 numberChannels(),
                 numberFrames(),
                 channels.isRGB(),
                 bitDepth(),
-                openedFile.fileAttributes()
+                timestamps.getAttributes(),
+                timestamps.getAcqusitionTime()
                 );
     }
 

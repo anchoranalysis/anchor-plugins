@@ -143,7 +143,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
         try {
             FeatureExporterContext context = style.deriveContext(params.getContext());
             return source.createExporter(
-                    source.headers().createHeaders(isGroupGeneratorDefined()),
+                    source.headers(isGroupGeneratorDefined()),
                     features,
                     OUTPUT_RESULTS,
                     context);

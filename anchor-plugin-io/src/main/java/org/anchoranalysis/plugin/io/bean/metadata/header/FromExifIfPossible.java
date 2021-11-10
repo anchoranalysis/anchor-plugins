@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.io.bioformats.metadata.ReadMetadataUtilities;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
@@ -52,7 +53,7 @@ class FromExifIfPossible {
     }
 
     private static Optional<Extent> readExif(Metadata metadata) throws ImageIOException {
-        return InferHelper.readFromWidthHeightTags(
+        return ReadMetadataUtilities.readFromWidthHeightTags(
                 metadata,
                 ExifIFD0Directory.class,
                 ExifIFD0Directory.TAG_IMAGE_WIDTH,
@@ -60,7 +61,7 @@ class FromExifIfPossible {
     }
 
     private static Optional<Extent> readOther(Metadata metadata) throws ImageIOException {
-        return InferHelper.readFromWidthHeightTags(
+        return ReadMetadataUtilities.readFromWidthHeightTags(
                 metadata,
                 JpegDirectory.class,
                 JpegDirectory.TAG_IMAGE_WIDTH,

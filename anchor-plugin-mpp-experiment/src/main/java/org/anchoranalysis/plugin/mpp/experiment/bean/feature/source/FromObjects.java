@@ -57,7 +57,7 @@ import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
-import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.LabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.InitializationWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterWithEnergy;
@@ -162,10 +162,9 @@ public class FromObjects<T extends FeatureInput>
     }
 
     @Override
-    public GenerateLabelHeadersForCSV headers() {
-        return new GenerateLabelHeadersForCSV(
-                NON_GROUP_HEADERS,
-                moreThanOneProvider() ? Optional.of(ADDITONAL_GROUP_HEADER) : Optional.empty());
+    public LabelHeaders headers(boolean groupsEnabled) {
+        Optional<String> additionalHeader = moreThanOneProvider() ? Optional.of(ADDITONAL_GROUP_HEADER) : Optional.empty(); 
+        return LabelHeadersForCSV.createHeaders(NON_GROUP_HEADERS, additionalHeader, groupsEnabled);
     }
 
     /**

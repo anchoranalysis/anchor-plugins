@@ -32,10 +32,10 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
@@ -114,7 +114,7 @@ public class OpenedMultiFile implements OpenedImageFile {
     }
     
     @Override
-    public ImageFileAttributes fileAttributes() throws ImageIOException {
+    public ImageTimestampsAttributes timestamps() throws ImageIOException {
         throw new ImageIOException("Timestamps are not supported for multi-files, as it is not well-defined which file should be used.");
     }
 
