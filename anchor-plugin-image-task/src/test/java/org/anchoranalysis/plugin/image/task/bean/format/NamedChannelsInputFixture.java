@@ -32,8 +32,8 @@ import java.util.Optional;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.ImageFileAttributes;
+import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
@@ -99,7 +99,8 @@ class NamedChannelsInputFixture extends NamedChannelsInput {
                 numberChannels(),
                 numberFrames(),
                 channels.isRGB(),
-                bitDepth(), new ImageFileAttributes(Paths.get("fakePath.png"), now, now),
+                bitDepth(),
+                new ImageFileAttributes(Paths.get("fakePath.png"), now, now),
                 Optional.empty());
     }
 }

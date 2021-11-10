@@ -27,8 +27,8 @@ public class JPEG extends HeaderFormat {
     }
 
     @Override
-    protected Optional<ImageMetadata> populateFromMetadata(Metadata metadata, ImageFileAttributes timestamps)
-            throws ImageIOException {
+    protected Optional<ImageMetadata> populateFromMetadata(
+            Metadata metadata, ImageFileAttributes timestamps) throws ImageIOException {
         Optional<OrientationChange> orientation =
                 OrientationReader.determineOrientationCorrection(metadata);
 
@@ -60,14 +60,21 @@ public class JPEG extends HeaderFormat {
         if (!bitDepth.isPresent()) {
             return Optional.empty();
         }
-        
-        Optional<ZonedDateTime> acqusitionDate = AcquisitionDateReader.readAcquisitionDate(metadata);
+
+        Optional<ZonedDateTime> acqusitionDate =
+                AcquisitionDateReader.readAcquisitionDate(metadata);
 
         // Assume any image with three channels is RGB encoded.
         boolean rgb = numberChannels.get() == 3;
         return Optional.of(
                 new ImageMetadata(
-                        dimensions, numberChannels.get(), 1, rgb, bitDepth.get(), timestamps, acqusitionDate)); // NOSONAR
+                        dimensions,
+                        numberChannels.get(),
+                        1,
+                        rgb,
+                        bitDepth.get(),
+                        timestamps,
+                        acqusitionDate)); // NOSONAR
     }
 
     /**
@@ -88,6 +95,7 @@ public class JPEG extends HeaderFormat {
      * @return the bit depth.
      */
     private static Optional<Integer> inferBitDepth(Metadata metadata) {
-        return ReadMetadataUtilities.readInt(metadata, JpegDirectory.class, JpegDirectory.TAG_DATA_PRECISION);
+        return ReadMetadataUtilities.readInt(
+                metadata, JpegDirectory.class, JpegDirectory.TAG_DATA_PRECISION);
     }
 }

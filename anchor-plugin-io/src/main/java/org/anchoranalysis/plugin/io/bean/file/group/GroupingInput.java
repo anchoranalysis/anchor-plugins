@@ -111,8 +111,7 @@ class GroupingInput extends NamedChannelsInput {
                 channels.isRGB(),
                 bitDepth(),
                 timestamps.getAttributes(),
-                timestamps.getAcqusitionTime()
-                );
+                timestamps.getAcqusitionTime());
     }
 
     @Override

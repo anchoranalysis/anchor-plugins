@@ -30,24 +30,27 @@ import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
  * possible.
  *
  * <p>Each image's metadata produces a single row of features.
- * 
+ *
  * <p>The columns produced are:
- * 
+ *
  * <ol>
- * <li>an image identifier
- * <li>file extension (or empty if none exists) according to the procedure in {@link ExtensionUtilities}.
- * <li>file creation date
- * <li>file modification date
- * <li><i>the results of each feature.</i>
+ *   <li>an image identifier
+ *   <li>file extension (or empty if none exists) according to the procedure in {@link
+ *       ExtensionUtilities}.
+ *   <li>file creation date
+ *   <li>file modification date
+ *   <li><i>the results of each feature.</i>
  * </ol>
- * 
+ *
  * <p>All dates are expressed in the current time-zone.
  */
 public class FromImageMetadata
         extends SingleRowPerInput<ImageMetadataInput, FeatureInputImageMetadata> {
 
-    private static final String[] NON_GROUP_HEADERS = {"image", "extension", "creationTime", "lastModifiedTime", "acqusitionTime"};
-    
+    private static final String[] NON_GROUP_HEADERS = {
+        "image", "extension", "creationTime", "lastModifiedTime", "acqusitionTime"
+    };
+
     public FromImageMetadata() {
         super(NON_GROUP_HEADERS);
     }
@@ -61,17 +64,19 @@ public class FromImageMetadata
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(ImageMetadataInput.class);
     }
-    
+
     @Override
-    protected Optional<String[]> additionalLabelsFor(ImageMetadataInput input) throws OperationFailedException {
+    protected Optional<String[]> additionalLabelsFor(ImageMetadataInput input)
+            throws OperationFailedException {
         try {
             ImageFileAttributes attributes = input.metadata().getFileAttributes();
-            return Optional.of( new String[] {
-                    attributes.extension().orElse(""),
-                    convertDate(attributes.getCreationTime()),
-                    convertDate(attributes.getModificationTime()),
-                    input.metadata().getAcqusitionTime().map(this::convertDate).orElse("")
-            });
+            return Optional.of(
+                    new String[] {
+                        attributes.extension().orElse(""),
+                        convertDate(attributes.getCreationTime()),
+                        convertDate(attributes.getModificationTime()),
+                        input.metadata().getAcqusitionTime().map(this::convertDate).orElse("")
+                    });
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
@@ -110,7 +115,7 @@ public class FromImageMetadata
             throw new NamedFeatureCalculateException(e);
         }
     }
-        
+
     /** Converts a {@link Date} to an (appropriately-formatted) {@link String}. */
     private String convertDate(ZonedDateTime date) {
         return date.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);

@@ -130,7 +130,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     private List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate;
 
     /** Visual style for how feature export occurs. */
-    @BeanField @Getter @Setter ExportFeaturesStyle style = new ExportFeaturesStyle();   
+    @BeanField @Getter @Setter ExportFeaturesStyle style = new ExportFeaturesStyle();
     // END BEAN PROPERTIES
 
     @Override
@@ -143,10 +143,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
         try {
             FeatureExporterContext context = style.deriveContext(params.getContext());
             return source.createExporter(
-                    source.headers(isGroupGeneratorDefined()),
-                    features,
-                    OUTPUT_RESULTS,
-                    context);
+                    source.headers(isGroupGeneratorDefined()), features, OUTPUT_RESULTS, context);
         } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
         }

@@ -94,16 +94,16 @@ public class FeatureExporter<S> {
      * @throws OutputWriteFailedException
      */
     public FeatureExporter(
-            FeatureOutputMetadata outputMetadata, Supplier<S> rowSource, FeatureExporterContext context)
+            FeatureOutputMetadata outputMetadata,
+            Supplier<S> rowSource,
+            FeatureExporterContext context)
             throws OutputWriteFailedException {
         this.featureNames = outputMetadata.featureNamesNonAggregate();
         this.rowSource = rowSource;
         this.context = context;
-        this.results = FeatureCalculationResultsFactory.create(
-                outputMetadata,
-                context::csvWriter,
-                context.isRemoveNaNColumns()
-        );
+        this.results =
+                FeatureCalculationResultsFactory.create(
+                        outputMetadata, context::csvWriter, context.isRemoveNaNColumns());
     }
 
     /**
@@ -241,7 +241,7 @@ public class FeatureExporter<S> {
     public void closeAnyOpenIO() throws IOException {
         thumbnails.removeStoredThumbnails();
     }
-    
+
     /**
      * An adder for results.
      *

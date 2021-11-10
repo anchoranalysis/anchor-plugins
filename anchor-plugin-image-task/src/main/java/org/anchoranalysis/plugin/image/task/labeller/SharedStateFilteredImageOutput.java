@@ -96,7 +96,8 @@ public class SharedStateFilteredImageOutput<T> {
                     FeatureCSVWriter.create(
                             new FeatureCSVMetadata(
                                     outputNameMapping, Arrays.asList("name", "group")),
-                            baseOutputter, false);
+                            baseOutputter,
+                            false);
         } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
         }

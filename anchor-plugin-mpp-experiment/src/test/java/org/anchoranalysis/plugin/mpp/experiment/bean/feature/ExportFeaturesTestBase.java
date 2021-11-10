@@ -121,10 +121,11 @@ abstract class ExportFeaturesTestBase<
             S input = (S) MultiInputFixture.createInput(taskFixture.energyStack());
 
             ExportFeatures<S, U, T> task = taskFixture.createTask();
-            
-            // The saved results were recorded before certain CSV style options became the default, so
+
+            // The saved results were recorded before certain CSV style options became the default,
+            // so
             // we switch back to the old settings for comparison.
-            task.setStyle( new ExportFeaturesStyle(false, false) );
+            task.setStyle(new ExportFeaturesStyle(false, false));
 
             TaskSingleInputHelper.runTaskAndCompareOutputs(
                     input,

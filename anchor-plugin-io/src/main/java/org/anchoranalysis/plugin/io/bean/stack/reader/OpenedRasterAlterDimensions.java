@@ -123,7 +123,7 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
     public ImageTimestampsAttributes timestamps() throws ImageIOException {
         return delegate.timestamps();
     }
-    
+
     @Override
     public void close() throws ImageIOException {
         delegate.close();
