@@ -53,7 +53,8 @@ public class DeserializedManifest {
     private final CheckedSupplier<Manifest, OperationFailedException> memoized;
     private Logger logger;
 
-    public DeserializedManifest(File file, ManifestDeserializer manifestDeserializer, Logger logger) {
+    public DeserializedManifest(
+            File file, ManifestDeserializer manifestDeserializer, Logger logger) {
         this.file = file;
         this.logger = logger;
         this.memoized = CachedSupplier.cache(() -> getInternal(manifestDeserializer));

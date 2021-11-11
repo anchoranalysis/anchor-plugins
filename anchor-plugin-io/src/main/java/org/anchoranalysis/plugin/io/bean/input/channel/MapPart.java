@@ -69,7 +69,7 @@ class MapPart extends NamedChannelsInputPart {
      * our purposes we treat it as if its 0
      */
     private final boolean useLastSeriesIndexOnly;
-    
+
     private final Logger logger;
     // END REQUIRED ARGUMENTS
 
@@ -177,11 +177,12 @@ class MapPart extends NamedChannelsInputPart {
      */
     private OpenedImageFile openedFile() throws ImageIOException {
         if (openedFileMemo == null) {
-            Path path = delegate.pathForBinding()
-                    .orElseThrow(
-                            () ->
-                                    new ImageIOException(
-                                            "A binding-path is needed in the delegate."));
+            Path path =
+                    delegate.pathForBinding()
+                            .orElseThrow(
+                                    () ->
+                                            new ImageIOException(
+                                                    "A binding-path is needed in the delegate."));
             openedFileMemo = stackReader.openFile(path, logger);
         }
         return openedFileMemo;

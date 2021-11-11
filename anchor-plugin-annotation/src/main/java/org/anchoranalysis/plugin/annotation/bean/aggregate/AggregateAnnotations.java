@@ -102,8 +102,8 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
                         sharedState::getAnnotations);
     }
 
-    private Optional<ImageAnnotation> createFromInput(AnnotationWithStrategy<S> input, Logger logger)
-            throws JobExecutionException {
+    private Optional<ImageAnnotation> createFromInput(
+            AnnotationWithStrategy<S> input, Logger logger) throws JobExecutionException {
         try {
             return input.label(logger).map(label -> new ImageAnnotation(input.identifier(), label));
         } catch (OperationFailedException exc) {

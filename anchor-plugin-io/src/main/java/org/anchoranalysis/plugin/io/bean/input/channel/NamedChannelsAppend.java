@@ -84,7 +84,10 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
             List<NamedChannelsInputPart> outList =
                     createOutList(
-                            listTemp, progress.trackCurrentChild(), params.isDebugModeActivated(), params.getLogger());
+                            listTemp,
+                            progress.trackCurrentChild(),
+                            params.isDebugModeActivated(),
+                            params.getLogger());
 
             progress.incrementChild();
 
@@ -93,7 +96,10 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     }
 
     private List<NamedChannelsInputPart> createOutList(
-            List<NamedChannelsInputPart> listTemp, Progress progress, boolean debugMode, Logger logger)
+            List<NamedChannelsInputPart> listTemp,
+            Progress progress,
+            boolean debugMode,
+            Logger logger)
             throws InputReadFailedException {
         try {
             return FunctionalProgress.mapListOptional(
@@ -104,7 +110,8 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     }
 
     private Optional<NamedChannelsInputPart> maybeAppend(
-            final NamedChannelsInputPart channels, boolean debugMode, Logger logger) throws DerivePathException {
+            final NamedChannelsInputPart channels, boolean debugMode, Logger logger)
+            throws DerivePathException {
         if (ignoreFileNotFoundAppend) {
 
             try {
@@ -119,7 +126,8 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     }
 
     // We assume all the input files are single channel images
-    private NamedChannelsInputPart append(final NamedChannelsInputPart input, boolean debugMode, Logger logger)
+    private NamedChannelsInputPart append(
+            final NamedChannelsInputPart input, boolean debugMode, Logger logger)
             throws DerivePathException {
 
         NamedChannelsInputPart out = input;

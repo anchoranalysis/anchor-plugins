@@ -41,8 +41,7 @@ public class NumberMarksFromManifest extends ReportFeatureForManifest {
             throws OperationFailedException {
 
         FinderSerializedObject<MarkCollection> finder =
-                new FinderSerializedObject<>(
-                        "marks", logger);
+                new FinderSerializedObject<>("marks", logger);
 
         Manifest manifest = param.get();
 

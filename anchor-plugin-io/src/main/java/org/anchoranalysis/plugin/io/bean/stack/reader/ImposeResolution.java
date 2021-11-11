@@ -67,7 +67,8 @@ public class ImposeResolution extends StackReader {
     @Override
     public OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException {
         return new OpenedRasterAlterDimensions(
-                stackReader.openFile(path, logger), existing -> Optional.of(resolutionToAssign(existing)));
+                stackReader.openFile(path, logger),
+                existing -> Optional.of(resolutionToAssign(existing)));
     }
 
     private Resolution resolutionToAssign(Optional<Resolution> existing) throws ImageIOException {

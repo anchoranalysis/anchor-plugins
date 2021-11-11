@@ -68,7 +68,8 @@ class ObjectsToCompareFactory {
             InputOutputContext context)
             throws JobExecutionException {
         Findable<ObjectCollection> findable =
-                createFindable(left, input, dimensions, context.isDebugEnabled(), context.getLogger());
+                createFindable(
+                        left, input, dimensions, context.isDebugEnabled(), context.getLogger());
         return foundOrLogAddUnnannotated(findable, objName, addAnnotation, context.getLogger());
     }
 
@@ -88,7 +89,8 @@ class ObjectsToCompareFactory {
             boolean left,
             AnnotationComparisonInput<ProvidesStackInput> input,
             Dimensions dimensions,
-            boolean debugMode, Logger logger)
+            boolean debugMode,
+            Logger logger)
             throws JobExecutionException {
         try {
             return input.getComparerMultiplex(left)

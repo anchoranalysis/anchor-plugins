@@ -79,7 +79,8 @@ class ObjectCollectionWriterTest {
         ObjectCollection objects = fixture.createMockObjects(2, 7);
         writeObjects(objects, directory, generator(hdf5, false));
 
-        ObjectCollection objectsRead = readObjects(outputPathExpected(hdf5, directory), LoggingFixture.suppressedLogger());
+        ObjectCollection objectsRead =
+                readObjects(outputPathExpected(hdf5, directory), LoggingFixture.suppressedLogger());
 
         assertEquals(objects.size(), objectsRead.size(), "Objects size");
         assertTrue(objects.equalsDeep(objectsRead));

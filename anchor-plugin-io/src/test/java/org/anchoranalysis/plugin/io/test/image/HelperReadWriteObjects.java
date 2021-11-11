@@ -62,7 +62,8 @@ class HelperReadWriteObjects {
         outputter.writerPermissive().write("objects", () -> generator, () -> objects);
     }
 
-    public static ObjectCollection readObjects(Path path, Logger logger) throws DeserializationFailedException {
+    public static ObjectCollection readObjects(Path path, Logger logger)
+            throws DeserializationFailedException {
 
         TestReaderWriterUtilities.ensureStackReader();
 
