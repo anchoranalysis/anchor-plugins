@@ -19,8 +19,9 @@ import org.anchoranalysis.io.bioformats.metadata.OrientationReader;
  *
  * <p>The EXIF orientation is read separately from the underlying {@link StackReader}.
  *
- * <p>If the metadata cannot be successfully read, no rotation occurs, and currently no error message is logged.
- * 
+ * <p>If the metadata cannot be successfully read, no rotation occurs, and currently no error
+ * message is logged.
+ *
  * @author Owen Feehan
  */
 @NoArgsConstructor
@@ -38,7 +39,8 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
     }
 
     @Override
-    public OpenedImageFile openFile(Path path, OrientationChange orientationCorrection, Logger logger)
+    public OpenedImageFile openFile(
+            Path path, OrientationChange orientationCorrection, Logger logger)
             throws ImageIOException {
         return reader.openFile(path, orientationCorrection, logger);
     }
@@ -47,16 +49,21 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
             throws ImageIOException {
         try {
             // If no orientation-correction data is available, we proceed, performing no rotation.
-            OrientationChange change = OrientationReader.determineOrientationCorrection(path)
-                    .orElse(OrientationChange.KEEP_UNCHANGED);
-            
-            if (change!=OrientationChange.KEEP_UNCHANGED) {
+            OrientationChange change =
+                    OrientationReader.determineOrientationCorrection(path)
+                            .orElse(OrientationChange.KEEP_UNCHANGED);
+
+            if (change != OrientationChange.KEEP_UNCHANGED) {
                 logger.messageLogger().log("Reoriented image from EXIF tag: " + change.toString());
             }
-            
+
             return change;
         } catch (ImageIOException e) {
-            logger.errorReporter().recordError(RotateImageToMatchEXIFOrientation.class, "Avoiding any orientation change, as cannot determine orientation from EXIF metadata due to following error.", e);
+            logger.errorReporter()
+                    .recordError(
+                            RotateImageToMatchEXIFOrientation.class,
+                            "Avoiding any orientation change, as cannot determine orientation from EXIF metadata due to following error.",
+                            e);
             return OrientationChange.KEEP_UNCHANGED;
         }
     }

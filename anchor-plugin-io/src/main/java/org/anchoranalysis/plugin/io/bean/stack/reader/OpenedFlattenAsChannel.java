@@ -84,7 +84,8 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
             return new TimeSequence(out);
 
         } catch (IncorrectImageSizeException e) {
-            throw new ImageIOException("An incorrect image size was encountered when opening an image", e);
+            throw new ImageIOException(
+                    "An incorrect image size was encountered when opening an image", e);
         }
     }
 

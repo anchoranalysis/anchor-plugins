@@ -37,16 +37,19 @@ import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 class CachedManifestDeserializer implements ManifestDeserializer {
 
     private LRUCache<File, Manifest> cachedItems;
-    
+
     private Logger logger;
 
     // Cache, last-used gets deleted when the cacheSize is reached
     public CachedManifestDeserializer(final ManifestDeserializer delegate, int cacheSize) {
-        cachedItems = new LRUCache<>(cacheSize, serialized -> delegate.deserializeManifest(serialized, logger));
+        cachedItems =
+                new LRUCache<>(
+                        cacheSize, serialized -> delegate.deserializeManifest(serialized, logger));
     }
 
     @Override
-    public Manifest deserializeManifest(File file, Logger logger) throws DeserializationFailedException {
+    public Manifest deserializeManifest(File file, Logger logger)
+            throws DeserializationFailedException {
         try {
             this.logger = logger;
             return cachedItems.get(file);

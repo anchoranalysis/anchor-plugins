@@ -94,7 +94,8 @@ public class RotateImageToMatchEXIFOrientationTest {
             String filename, int expectedWidth, int expectedHeight, int expectedCornerIntensity)
             throws ImageIOException {
         Extent expectedExtent = new Extent(expectedWidth, expectedHeight, 1);
-        OpenedImageFile openedImageFile = loader.openFile(filename, LoggingFixture.suppressedLogger());
+        OpenedImageFile openedImageFile =
+                loader.openFile(filename, LoggingFixture.suppressedLogger());
         assertEquals(expectedExtent, openedImageFile.dimensionsForSeries(0).extent());
 
         int firstVoxel = openedImageFile.open().get(0).getChannel(0).extract().voxel(0, 0);

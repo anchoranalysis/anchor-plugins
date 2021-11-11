@@ -61,8 +61,8 @@ public class InferFromHeader extends ImageMetadataReader {
      * Try to infer the needed elements for {@link ImageMetadata} from metadata present in {@code
      * path}.
      */
-    private Optional<ImageMetadata> attemptToPopulateFromMetadata(Path path, ErrorReporter errorReporter)
-            throws ImageIOException {
+    private Optional<ImageMetadata> attemptToPopulateFromMetadata(
+            Path path, ErrorReporter errorReporter) throws ImageIOException {
         for (HeaderFormat format : formats) {
             try {
                 Optional<ImageMetadata> metadata = format.populateFrom(path);
@@ -70,15 +70,18 @@ public class InferFromHeader extends ImageMetadataReader {
                     return Optional.of(metadata.get());
                 }
             } catch (Exception e) {
-                errorReporter.recordError(InferFromHeader.class, "Switching to fallback, as cannot infer metadata from the header due to the following exception.", e);
+                errorReporter.recordError(
+                        InferFromHeader.class,
+                        "Switching to fallback, as cannot infer metadata from the header due to the following exception.",
+                        e);
             }
         }
         return Optional.empty();
     }
 
     /** Use the fallback {@code ImageMetadataReader} to establish the metadata. */
-    private ImageMetadata useFallbackReader(Path path, StackReader defaultStackReader, Logger logger)
-            throws ImageIOException {
+    private ImageMetadata useFallbackReader(
+            Path path, StackReader defaultStackReader, Logger logger) throws ImageIOException {
         return fallback.openFile(path, defaultStackReader, logger);
     }
 

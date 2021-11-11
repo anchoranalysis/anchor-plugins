@@ -112,8 +112,8 @@ class ConvertInputHelper {
     }
 
     /** Converts to a {@link ImageMetadataInput}. */
-    private <T extends NamedChannelsInput> ImageMetadataInput convertToImageMetadata(T input, Logger logger)
-            throws ExperimentExecutionException {
+    private <T extends NamedChannelsInput> ImageMetadataInput convertToImageMetadata(
+            T input, Logger logger) throws ExperimentExecutionException {
         try {
             return new ImageMetadataInput(input.asFile(), () -> readImageMetadata(input, logger));
         } catch (InputReadFailedException e) {
@@ -124,7 +124,8 @@ class ConvertInputHelper {
     private <T extends NamedChannelsInput> ImageMetadata readImageMetadata(T input, Logger logger)
             throws ImageIOException {
         try {
-            return imageMetadataReader.openFile(input.pathForBindingRequired(), defaultStackReader, logger);
+            return imageMetadataReader.openFile(
+                    input.pathForBindingRequired(), defaultStackReader, logger);
         } catch (InputReadFailedException e) {
             throw new ImageIOException("Failed to read image-metadata for the input.", e);
         }

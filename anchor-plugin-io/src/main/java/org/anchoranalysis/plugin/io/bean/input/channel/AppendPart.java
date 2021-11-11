@@ -64,15 +64,16 @@ class AppendPart extends NamedChannelsInputPart {
 
     private final Logger logger;
     // END: REQUIRED ARGUMENTS
-    
+
     private OpenedImageFile openedFileMemo;
-    
+
     public AppendPart(
             NamedChannelsInputPart toAppendTo,
             String channelName,
             int channelIndex,
             PathSupplier filePath,
-            StackReader stackReader, Logger logger) {
+            StackReader stackReader,
+            Logger logger) {
         this.toAppendTo = toAppendTo;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
         this.stackReader = stackReader;

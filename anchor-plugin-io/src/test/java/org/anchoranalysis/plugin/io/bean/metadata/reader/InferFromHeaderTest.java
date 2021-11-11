@@ -11,6 +11,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.io.bean.metadata.header.HeaderFormat;
 import org.anchoranalysis.plugin.io.bean.metadata.header.JPEG;
 import org.anchoranalysis.plugin.io.bean.metadata.header.PNG;
+import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 
@@ -57,9 +58,9 @@ class InferFromHeaderTest {
     private ImageMetadata loadMetadata(String filename) throws ImageIOException {
         Path path = loader.resolveTestPath(filename);
 
-        // The defaultStackReader or errorReporter should never be called during testing, so we pass nulls,
+        // The defaultStackReader  should never be called during testing, so we pass a null,
         // even though this isn't allowed.
-        return INSTANCE.openFile(path, null, null);
+        return INSTANCE.openFile(path, null, LoggingFixture.suppressedLogger());
     }
 
     private static InferFromHeader createInstance() {

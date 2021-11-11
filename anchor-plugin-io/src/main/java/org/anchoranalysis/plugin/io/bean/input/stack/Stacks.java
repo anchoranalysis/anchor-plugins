@@ -69,6 +69,9 @@ public class Stacks extends InputManagerWithStackReader<StackSequenceInput> {
                 .map(
                         file ->
                                 new StackCollectionFromFilesInputObject(
-                                        file, getStackReader(), useLastSeriesIndexOnly, params.getLogger()));
+                                        file,
+                                        getStackReader(),
+                                        useLastSeriesIndexOnly,
+                                        params.getLogger()));
     }
 }
