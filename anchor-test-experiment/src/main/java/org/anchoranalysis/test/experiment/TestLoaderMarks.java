@@ -31,6 +31,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 
@@ -48,7 +49,7 @@ public class TestLoaderMarks {
 
         MarkCollectionDeserializer deserializer = new MarkCollectionDeserializer();
         try {
-            return deserializer.deserialize(filePath);
+            return deserializer.deserialize(filePath, LoggingFixture.suppressedLogger());
         } catch (DeserializationFailedException e) {
             throw new TestDataLoadException(e);
         }

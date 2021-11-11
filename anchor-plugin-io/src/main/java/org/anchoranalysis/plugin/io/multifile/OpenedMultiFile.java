@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.multifile;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -51,6 +52,7 @@ public class OpenedMultiFile implements OpenedImageFile {
     // START REQUIRED ARGUMENTS
     private final StackReader stackReader;
     private final ParsedFilePathBag fileBag;
+    private final Logger logger;
     // END REQUIRED ARGUMENTS
 
     // Processed version of the file. If null, not set yet
@@ -134,7 +136,7 @@ public class OpenedMultiFile implements OpenedImageFile {
 
         for (FileDetails details : fileBag) {
 
-            OpenedImageFile imageFile = stackReader.openFile(details.getPath());
+            OpenedImageFile imageFile = stackReader.openFile(details.getPath(), logger);
             try {
                 TimeSequence timeSequence = imageFile.open(seriesIndex, progress);
                 multiFile.add(

@@ -35,6 +35,7 @@ import org.anchoranalysis.annotation.io.bean.comparer.MultipleComparer;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
@@ -83,7 +84,7 @@ public class MarkProposerStrategy extends SinglePathStrategy {
     }
 
     @Override
-    public Optional<String> annotationLabelFor(ProvidesStackInput item) {
+    public Optional<String> annotationLabelFor(ProvidesStackInput item, Logger logger) {
         return Optional.empty();
     }
 }

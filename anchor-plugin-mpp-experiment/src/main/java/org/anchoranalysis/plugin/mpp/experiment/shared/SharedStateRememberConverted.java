@@ -67,8 +67,9 @@ public class SharedStateRememberConverted<U extends InputFromManager, S> {
      * @param converted the converted value
      * @param loggedMesssages any messages logged during the conversion.
      */
-    public void rememberConverted(NamedChannelsInput unconverted, U converted, StringBuilder loggedMesssages) {
-        mapConverted.put( unconverted, new ConvertedInput<>(converted, loggedMesssages) );
+    public void rememberConverted(
+            NamedChannelsInput unconverted, U converted, StringBuilder loggedMesssages) {
+        mapConverted.put(unconverted, new ConvertedInput<>(converted, loggedMesssages));
     }
 
     /**
