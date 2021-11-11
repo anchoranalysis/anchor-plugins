@@ -34,6 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -92,8 +93,8 @@ public class RejectIfConditionXYResolution extends StackReader {
     }
 
     @Override
-    public OpenedImageFile openFile(Path path) throws ImageIOException {
-        OpenedImageFile openedFile = stackReader.openFile(path);
+    public OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException {
+        OpenedImageFile openedFile = stackReader.openFile(path, logger);
         return new OpenedRasterAlterDimensions(
                 openedFile, new MaybeRejectProcessor(relation.relation(), relation.threshold()));
     }

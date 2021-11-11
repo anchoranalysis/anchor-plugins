@@ -32,6 +32,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
+import org.anchoranalysis.test.LoggingFixture;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -62,7 +63,8 @@ class FlexFormatTest {
      */
     @Test
     void testSizeCAndT() throws ImageIOException {
-        OpenedImageFile openedFile = loader.openFile("001001007.flex");
+        OpenedImageFile openedFile =
+                loader.openFile("001001007.flex", LoggingFixture.suppressedLogger());
 
         assertEquals(1, openedFile.numberChannels());
         assertEquals(1, openedFile.numberSeries());

@@ -77,7 +77,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
 
             if (file.exists()) {
                 DeserializedManifest deserializedManifest =
-                        new DeserializedManifest(file, manifestDeserializer);
+                        new DeserializedManifest(file, manifestDeserializer, logger);
                 listCoupledManifests.add(new CoupledManifests(deserializedManifest, 3, logger));
             } else {
                 log.debug(String.format("File %s does not exist", file.getPath()));
@@ -94,7 +94,8 @@ public class ManifestCouplingDefinition implements InputFromManager {
         for (File experimentFile : matchingFiles) {
             // We deserialize each experimental manifest
 
-            Manifest experimentManifest = manifestDeserializer.deserializeManifest(experimentFile);
+            Manifest experimentManifest =
+                    manifestDeserializer.deserializeManifest(experimentFile, logger);
 
             // We look for all experimental files in the manifest
             FinderExperimentFileDirectories finderExperimentFileDirectories =
@@ -148,7 +149,8 @@ public class ManifestCouplingDefinition implements InputFromManager {
             throws DeserializationFailedException {
 
         DeserializedManifest manifestExperiment =
-                new DeserializedManifest(experimentManifestFile(folderWrite), manifestDeserializer);
+                new DeserializedManifest(
+                        experimentManifestFile(folderWrite), manifestDeserializer, logger);
         try {
             return new CoupledManifests(manifestExperimentRecorder, manifestExperiment, logger);
         } catch (PathDifferenceException e) {

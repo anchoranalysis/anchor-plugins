@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -18,10 +19,9 @@ import org.anchoranalysis.io.bioformats.metadata.OrientationReader;
  *
  * <p>The EXIF orientation is read separately from the underlying {@link StackReader}.
  *
- * <p>If the metadata cannot be successfully read, no rotation occurs, and currently no error message is logged.
- * 
- * TODO change the above
- * 
+ * <p>If the metadata cannot be successfully read, no rotation occurs, and currently no error
+ * message is logged.
+ *
  * @author Owen Feehan
  */
 @NoArgsConstructor
@@ -34,24 +34,36 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path path) throws ImageIOException {
-        return openFile(path, inferNeededOrientationChange(path));
+    public OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException {
+        return openFile(path, inferNeededOrientationChange(path, logger), logger);
     }
 
     @Override
-    public OpenedImageFile openFile(Path path, OrientationChange orientationCorrection)
+    public OpenedImageFile openFile(
+            Path path, OrientationChange orientationCorrection, Logger logger)
             throws ImageIOException {
-        return reader.openFile(path, orientationCorrection);
+        return reader.openFile(path, orientationCorrection, logger);
     }
 
-    private static OrientationChange inferNeededOrientationChange(Path path)
+    private static OrientationChange inferNeededOrientationChange(Path path, Logger logger)
             throws ImageIOException {
         try {
             // If no orientation-correction data is available, we proceed, performing no rotation.
-            return OrientationReader.determineOrientationCorrection(path)
-                    .orElse(OrientationChange.KEEP_UNCHANGED);
+            OrientationChange change =
+                    OrientationReader.determineOrientationCorrection(path)
+                            .orElse(OrientationChange.KEEP_UNCHANGED);
+
+            if (change != OrientationChange.KEEP_UNCHANGED) {
+                logger.messageLogger().log("Reoriented image from EXIF tag: " + change.toString());
+            }
+
+            return change;
         } catch (ImageIOException e) {
-            // TODO log the exception to the message log
+            logger.errorReporter()
+                    .recordError(
+                            RotateImageToMatchEXIFOrientation.class,
+                            "Avoiding any orientation change, as cannot determine orientation from EXIF metadata due to following error.",
+                            e);
             return OrientationChange.KEEP_UNCHANGED;
         }
     }
