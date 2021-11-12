@@ -72,7 +72,7 @@ public class RGB extends ChannelConvertStyle {
             Set<String> channelNames, ChannelGetterForTimepoint channelGetter, Logger logger)
             throws OperationFailedException {
 
-        if (!channelNamesAreRGB(channelNames)) {
+        if (!RGBChannelNames.isValidNameSet(channelNames, true)) {
             // Not compatable with RGB
             if (fallback != null) {
                 return fallback.convert(channelNames, channelGetter, logger);
@@ -85,7 +85,7 @@ public class RGB extends ChannelConvertStyle {
         NamedStacks out = new NamedStacks();
 
         try {
-            Stack stack = createRGBStack(channelGetter, logger.messageLogger());
+            Stack stack = createRGBStack(channelGetter, channelNames.size()==4, logger.messageLogger());
 
             // The name is blank as there is a single channel
             out.add("", stack);
@@ -97,12 +97,15 @@ public class RGB extends ChannelConvertStyle {
     }
 
     private static Stack createRGBStack(
-            ChannelGetterForTimepoint channelGetter, MessageLogger logger) throws CreateException {
+            ChannelGetterForTimepoint channelGetter, boolean includeAlpha, MessageLogger logger) throws CreateException {
 
         Stack stackRearranged = new Stack(true);
         addChannelOrBlank(RGBChannelNames.RED, channelGetter, stackRearranged, logger);
         addChannelOrBlank(RGBChannelNames.GREEN, channelGetter, stackRearranged, logger);
         addChannelOrBlank(RGBChannelNames.BLUE, channelGetter, stackRearranged, logger);
+        if (includeAlpha) {
+            addChannelOrBlank(RGBChannelNames.ALPHA, channelGetter, stackRearranged, logger);
+        }
         return stackRearranged;
     }
 
@@ -124,23 +127,5 @@ public class RGB extends ChannelConvertStyle {
                 | GetOperationFailedException e) {
             throw new CreateException(e);
         }
-    }
-
-    private static boolean channelNamesAreRGB(Set<String> channelNames) {
-
-        if (channelNames.size() > 3) {
-            return false;
-        }
-
-        for (String key : channelNames) {
-            // If a key doesn't match one of the expected red-green-blue names
-            if (!(key.equals(RGBChannelNames.RED)
-                    || key.equals(RGBChannelNames.GREEN)
-                    || key.equals(RGBChannelNames.BLUE))) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

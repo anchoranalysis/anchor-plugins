@@ -98,7 +98,7 @@ public class ConvertImageFormat
     private static final String OUTPUT_COPY = "converted";
 
     // START BEAN PROPERTIES
-    /** To convert as RGB or independently or in another way */
+    /** To convert as RGB or independently or in another way. */
     @BeanField @Getter @Setter private ChannelConvertStyle channelConversionStyle = new RGB();
 
     /**
@@ -136,7 +136,7 @@ public class ConvertImageFormat
     }
 
     /**
-     * Sets a new output-sequence for the series
+     * Sets a new output-sequence for the series.
      *
      * <p>It's important to do this here rather than in {@link #beforeAnyJobIsExecuted(Outputter,
      * ConcurrencyPlan, List, ParametersExperiment)} as {@code context} is now bound with the
