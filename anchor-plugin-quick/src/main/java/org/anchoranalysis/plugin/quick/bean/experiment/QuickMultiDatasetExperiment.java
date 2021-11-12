@@ -148,7 +148,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     }
 
     @Override
-    public void executeExperiment(ExecutionArguments arguments)
+    public Optional<Path> executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         delegate.secondInitBeforeExecution(
@@ -156,11 +156,13 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 
         // If there's a replacement manager run it on this
         if (replacementInputManager != null) {
-            delegate.executeForManager(replacementInputManager, arguments, defaultInstances);
-            return;
+            return delegate.executeForManager(replacementInputManager, arguments, defaultInstances);
         }
 
         executeAllDatasets(arguments);
+        
+        // No single output path exists, as multiple datasets were executed.
+        return Optional.empty();
     }
 
     @Override
