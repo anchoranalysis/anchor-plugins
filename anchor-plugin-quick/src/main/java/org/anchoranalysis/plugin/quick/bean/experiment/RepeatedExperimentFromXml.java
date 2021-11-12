@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.quick.bean.experiment;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.bean.xml.BeanXMLLoader;
@@ -105,12 +106,12 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
         delegate.executeForManager(input, expArgs, defaultInstances);
     }
 
-    public void executeForManager(
+    public Optional<Path> executeForManager(
             InputManager<T> inputManager,
             ExecutionArguments expArgs,
             BeanInstanceMap defaultInstances)
             throws ExperimentExecutionException {
-        delegate.executeForManager(inputManager, expArgs, defaultInstances);
+        return delegate.executeForManager(inputManager, expArgs, defaultInstances);
     }
 
     public void setOutput(OutputManager output) {

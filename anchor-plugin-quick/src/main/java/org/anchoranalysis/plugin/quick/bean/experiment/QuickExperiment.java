@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.quick.bean.experiment;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -107,7 +108,7 @@ public class QuickExperiment<S> extends Experiment {
     }
 
     @Override
-    public void executeExperiment(ExecutionArguments arguments)
+    public Optional<Path> executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
         delegate.associateXML(getXMLConfiguration());
 
@@ -129,7 +130,7 @@ public class QuickExperiment<S> extends Experiment {
             throw new ExperimentExecutionException(e);
         }
 
-        delegate.executeExperiment(arguments);
+        return delegate.executeExperiment(arguments);
     }
 
     @Override
