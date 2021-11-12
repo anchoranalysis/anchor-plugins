@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 
 /**
- * Area of the stack (XY dimensions only, Z dimension is not considered)
+ * Area of the stack (XY dimensions only, Z dimension is not considered).
  *
  * @author Owen Feehan
  * @param <T> feature-input-type

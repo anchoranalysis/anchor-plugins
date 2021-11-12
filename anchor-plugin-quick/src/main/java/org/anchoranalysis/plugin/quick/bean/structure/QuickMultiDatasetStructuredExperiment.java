@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.quick.bean.structure;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -113,45 +114,6 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
         delegate.checkMisconfigured(defaultInstances);
     }
 
-    private void populateDelegateIfNeeded() {
-        if (!populatedDelegate) {
-            delegate.setDirectoryDataset(directoryDataset());
-            delegate.setOutput(output());
-            delegate.setLogExperimentPath(loggerPath("Experiment"));
-            delegate.setLogTaskPath(loggerPath("Task"));
-
-            populatedDelegate = true;
-        }
-    }
-
-    private String directoryDataset() {
-        return String.format(
-                "%s../Filesets/For%s/", pathPrefix(), StringUtils.capitalize(experimentType));
-    }
-
-    private String output() {
-        String directory = pathPrefix() + "../IO/OutputManager";
-        return NonImageFileFormat.XML.buildPath(directory, experimentType);
-    }
-
-    private String loggerPath(String suffix) {
-        String directory = pathPrefix() + "include/";
-        String filename = "logger" + StringUtils.capitalize(suffix);
-        return NonImageFileFormat.XML.buildPath(directory, filename);
-    }
-
-    private String pathPrefix() {
-        if (directoryDistance == 0) {
-            return "./";
-        } else {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < directoryDistance; i++) {
-                sb.append("../");
-            }
-            return sb.toString();
-        }
-    }
-
     @Override
     public void associateXML(XMLConfiguration xmlConfiguration) {
         super.associateXML(xmlConfiguration);
@@ -171,10 +133,10 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
     }
 
     @Override
-    public void executeExperiment(ExecutionArguments arguments)
+    public Optional<Path> executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
         populateDelegateIfNeeded();
-        delegate.executeExperiment(arguments);
+        return delegate.executeExperiment(arguments);
     }
 
     @Override
@@ -236,5 +198,44 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
 
     public void setTask(Task<T, S> task) {
         delegate.setTask(task);
+    }
+
+    private void populateDelegateIfNeeded() {
+        if (!populatedDelegate) {
+            delegate.setDirectoryDataset(directoryDataset());
+            delegate.setOutput(output());
+            delegate.setLogExperimentPath(loggerPath("Experiment"));
+            delegate.setLogTaskPath(loggerPath("Task"));
+
+            populatedDelegate = true;
+        }
+    }
+
+    private String directoryDataset() {
+        return String.format(
+                "%s../Filesets/For%s/", pathPrefix(), StringUtils.capitalize(experimentType));
+    }
+
+    private String output() {
+        String directory = pathPrefix() + "../IO/OutputManager";
+        return NonImageFileFormat.XML.buildPath(directory, experimentType);
+    }
+
+    private String loggerPath(String suffix) {
+        String directory = pathPrefix() + "include/";
+        String filename = "logger" + StringUtils.capitalize(suffix);
+        return NonImageFileFormat.XML.buildPath(directory, filename);
+    }
+
+    private String pathPrefix() {
+        if (directoryDistance == 0) {
+            return "./";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < directoryDistance; i++) {
+                sb.append("../");
+            }
+            return sb.toString();
+        }
     }
 }
