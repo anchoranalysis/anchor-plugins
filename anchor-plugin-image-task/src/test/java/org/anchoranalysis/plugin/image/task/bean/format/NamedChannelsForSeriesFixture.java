@@ -65,7 +65,7 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
     @Override
     public boolean hasChannel(String channelName) {
         if (stack.isRGB()) {
-            return RGBChannelNames.isValidName(channelName);
+            return RGBChannelNames.isValidName(channelName, false);
         } else {
             return PATTERN.matcher(channelName).matches();
         }
@@ -120,7 +120,7 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
     @Override
     public Set<String> channelNames() {
         if (stack.isRGB()) {
-            return RGBChannelNames.asSet();
+            return RGBChannelNames.asSet(false);
         } else {
             return channelNamesNumeric(numberChannels());
         }

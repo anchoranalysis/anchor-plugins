@@ -31,6 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.image.io.stack.output.StackRGBState;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
@@ -59,6 +60,9 @@ public class BranchChannels extends StackWriterDelegateBase {
 
     /** Writer employed if a stack is a <b>three-channeled RGB</b> image. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGB;
+    
+    /** Writer employed if a stack is a <b>four-channeled RGBA</b> image. */
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGBAlpha;
 
     /** Writer employed if a stack is a <b>single-channeled binary</b> image. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenBinaryChannel;
@@ -67,8 +71,10 @@ public class BranchChannels extends StackWriterDelegateBase {
     @Override
     protected StackWriter selectDelegate(StackWriteOptions writeOptions) {
         StackWriteAttributes attributes = writeOptions.getAttributes();
-        if (attributes.isRgb()) {
+        if (attributes.getRgb()==StackRGBState.RGB_WITHOUT_ALPHA) {
             return writerOrDefault(whenRGB);
+        } else if (attributes.getRgb()==StackRGBState.RGB_WITH_ALPHA) {
+            return writerOrDefault(whenRGBAlpha);            
         } else if (attributes.isThreeChannels()) {
             return writerOrDefault(whenThreeChannels);
         } else if (attributes.isSingleChannel()) {

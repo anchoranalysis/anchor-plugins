@@ -106,7 +106,8 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     @Override
     public Optional<List<String>> channelNames() throws ImageIOException {
         openStackIfNecessary();
-        return OptionalUtilities.createFromFlag(stack.isRGB(), RGBChannelNames.asList());
+        boolean includeAlpha = numberChannels() == 4;
+        return OptionalUtilities.createFromFlag(stack.isRGB(), RGBChannelNames.asList(includeAlpha));
     }
 
     @Override
@@ -147,6 +148,14 @@ class OpenedRasterOpenCV implements OpenedImageFile {
         return stack.dimensions();
     }
 
+    @Override
+    public ImageTimestampsAttributes timestamps() throws ImageIOException {
+        if (timestamps == null) {
+            timestamps = ImageTimestampsAttributesFactory.fromPath(path);
+        }
+        return timestamps;
+    }
+
     /** Opens the stack if has not already been opened. */
     private void openStackIfNecessary() throws ImageIOException {
         Mat image = Imgcodecs.imread(path.toString());
@@ -155,13 +164,5 @@ class OpenedRasterOpenCV implements OpenedImageFile {
         } catch (OperationFailedException e) {
             throw new ImageIOException("Failed to convert an OpenCV image structure to a stack", e);
         }
-    }
-
-    @Override
-    public ImageTimestampsAttributes timestamps() throws ImageIOException {
-        if (timestamps == null) {
-            timestamps = ImageTimestampsAttributesFactory.fromPath(path);
-        }
-        return timestamps;
     }
 }

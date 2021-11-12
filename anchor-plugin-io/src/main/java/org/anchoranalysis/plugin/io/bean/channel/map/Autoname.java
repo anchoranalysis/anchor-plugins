@@ -53,7 +53,7 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
  */
 public class Autoname extends ChannelMap {
 
-    private static final String[] RGB_CHANNEL_NAMES = RGBChannelNames.asArray();
+    private static final String[] RGB_CHANNEL_NAMES = RGBChannelNames.asArray(true);
 
     @Override
     public NamedEntries createMap(OpenedImageFile openedFile) throws CreateException {
@@ -63,9 +63,9 @@ public class Autoname extends ChannelMap {
         try {
             Optional<List<String>> names = openedFile.channelNames();
 
-            boolean rgb = openedFile.isRGB() && openedFile.numberChannels() == 3;
+            boolean rgb = openedFile.isRGB() && (openedFile.numberChannels() == 3 || openedFile.numberChannels() == 4);
 
-            // The insertion order is critical here to remember R, G, B
+            // The insertion order is critical here to remember R, G, B (and possibly A)
             FunctionalIterate.repeatWithIndex(
                     openedFile.numberChannels(),
                     channelIndex -> addEntryToMap(map, names, rgb, channelIndex));
@@ -94,7 +94,7 @@ public class Autoname extends ChannelMap {
     }
 
     private static String rgbNameFor(int channelIndex) {
-        if (channelIndex < 3) {
+        if (channelIndex < 4) {
             return RGB_CHANNEL_NAMES[channelIndex];
         } else {
             throw new AnchorImpossibleSituationException();
