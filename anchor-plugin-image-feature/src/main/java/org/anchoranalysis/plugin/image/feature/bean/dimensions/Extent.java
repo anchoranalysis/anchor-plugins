@@ -31,7 +31,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.axis.Axis;
 
 /**
- * Width/height/depth of energy-stack in pixels depending on axis
+ * Width/height/depth of energy-stack in pixels depending on axis.
  *
  * @author Owen Feehan
  * @param <T> feature-input-type

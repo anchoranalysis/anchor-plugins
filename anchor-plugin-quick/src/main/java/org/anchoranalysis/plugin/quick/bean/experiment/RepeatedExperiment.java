@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.quick.bean.experiment;
 
+import java.nio.file.Path;
+import java.util.Optional;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -65,9 +67,10 @@ class RepeatedExperiment<T extends InputFromManager, S> {
      * @param inputManager
      * @param expArgs
      * @param defaultInstances
+     * @return the path files written into as <i>output</i>, if such a path exists.
      * @throws ExperimentExecutionException
      */
-    public void executeForManager(
+    public Optional<Path> executeForManager(
             InputManager<T> inputManager,
             ExecutionArguments expArgs,
             BeanInstanceMap defaultInstances)
@@ -77,7 +80,7 @@ class RepeatedExperiment<T extends InputFromManager, S> {
         delegate.setTaskProcessor(taskProcessor);
         checkConfiguration(defaultInstances);
 
-        delegate.executeExperiment(expArgs);
+        return delegate.executeExperiment(expArgs);
     }
 
     private void checkConfiguration(BeanInstanceMap defaultInstances)
