@@ -58,7 +58,7 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
             }
 
             return change;
-        } catch (ImageIOException e) {
+        } catch (Exception e) {
             logger.errorReporter()
                     .recordError(
                             RotateImageToMatchEXIFOrientation.class,
