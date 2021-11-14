@@ -72,7 +72,7 @@ public class RGB extends ChannelConvertStyle {
             Set<String> channelNames, ChannelGetterForTimepoint channelGetter, Logger logger)
             throws OperationFailedException {
 
-        if (!RGBChannelNames.isValidNameSet(channelNames, true)) {
+        if (!RGBChannelNames.isValidNameSet(channelNames)) {
             // Not compatable with RGB
             if (fallback != null) {
                 return fallback.convert(channelNames, channelGetter, logger);
