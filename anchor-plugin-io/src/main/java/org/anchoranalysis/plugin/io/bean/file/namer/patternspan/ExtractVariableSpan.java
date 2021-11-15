@@ -37,10 +37,10 @@ import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
  *
  * <p>The spanning part should contain all variable elements, and optionally adjacent (or in
  * between) constant elements.
- * 
- * <p>It assumes that {@link Pattern} has been derived from a particular list of files,
- * and the <i>spanning part</i> is retrieved for a corresponding index in this list.
- * 
+ *
+ * <p>It assumes that {@link Pattern} has been derived from a particular list of files, and the
+ * <i>spanning part</i> is retrieved for a corresponding index in this list.
+ *
  * <p>It uses saved components {@link Pattern} to efficiently perform this operation.
  *
  * @author Owen Feehan
@@ -84,7 +84,8 @@ class ExtractVariableSpan {
     /**
      * Extracts the spanning-portion from a particular file, ensuring it has UNIX-style path.
      *
-     * @param fileIndex the index of the file (zero-valued) among the strings used for deriving the pattern.
+     * @param fileIndex the index of the file (zero-valued) among the strings used for deriving the
+     *     pattern.
      * @return the spanning-portion of the file-path corresponding to {@code fileIndex}.
      */
     public String extractSpanPortionFor(int fileIndex) {
@@ -94,8 +95,8 @@ class ExtractVariableSpan {
 
     /** Extracts the spanning-portion and trims the constant patterns from both left and right. */
     private String extractTrimmedFromBothSides(int fileIndex) {
-        String[] elements = pattern.valuesAt(fileIndex, indexSpanStart, indexSpanEnd+1);
-        Preconditions.checkArgument(elements.length == (indexSpanEnd-indexSpanStart+1));
+        String[] elements = pattern.valuesAt(fileIndex, indexSpanStart, indexSpanEnd + 1);
+        Preconditions.checkArgument(elements.length == (indexSpanEnd - indexSpanStart + 1));
         return String.join("", elements);
     }
 }

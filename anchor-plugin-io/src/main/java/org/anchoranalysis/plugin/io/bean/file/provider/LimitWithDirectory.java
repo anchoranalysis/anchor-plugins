@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.io.bean.file.provider;
 
-import lombok.Getter;
-import lombok.Setter;
 import java.io.File;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectoryUnary;
 import org.anchoranalysis.io.input.file.FilesProviderException;

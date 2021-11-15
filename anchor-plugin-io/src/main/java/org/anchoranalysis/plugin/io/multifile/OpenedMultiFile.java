@@ -64,7 +64,8 @@ public class OpenedMultiFile implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress, Logger logger)
+            throws ImageIOException {
 
         try {
             progress.open();
@@ -130,7 +131,8 @@ public class OpenedMultiFile implements OpenedImageFile {
         throw new ImageIOException("MultiFileReader doesn't support this operation");
     }
 
-    private void addDetailsFromBag(MultiFile multiFile, int seriesIndex, Progress progress, Logger logger)
+    private void addDetailsFromBag(
+            MultiFile multiFile, int seriesIndex, Progress progress, Logger logger)
             throws ImageIOException {
 
         for (FileDetails details : fileBag) {

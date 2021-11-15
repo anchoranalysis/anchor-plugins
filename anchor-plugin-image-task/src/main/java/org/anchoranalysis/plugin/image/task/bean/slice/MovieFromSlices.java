@@ -124,13 +124,19 @@ public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack
 
         try {
             NamedChannelsForSeries namedChannels =
-                    input.getInput().createChannelsForSeries(0, ProgressIgnore.get(), context.getLogger());
+                    input.getInput()
+                            .createChannelsForSeries(0, ProgressIgnore.get(), context.getLogger());
 
             Progress progress = ProgressIgnore.get();
 
-            Channel red = namedChannels.getChannel(RGBChannelNames.RED, 0, progress, context.getLogger());
-            Channel green = namedChannels.getChannel(RGBChannelNames.GREEN, 0, progress, context.getLogger());
-            Channel blue = namedChannels.getChannel(RGBChannelNames.BLUE, 0, progress, context.getLogger());
+            Channel red =
+                    namedChannels.getChannel(RGBChannelNames.RED, 0, progress, context.getLogger());
+            Channel green =
+                    namedChannels.getChannel(
+                            RGBChannelNames.GREEN, 0, progress, context.getLogger());
+            Channel blue =
+                    namedChannels.getChannel(
+                            RGBChannelNames.BLUE, 0, progress, context.getLogger());
 
             if (!red.dimensions().equals(blue.dimensions())
                     || !blue.dimensions().equals(green.dimensions())) {

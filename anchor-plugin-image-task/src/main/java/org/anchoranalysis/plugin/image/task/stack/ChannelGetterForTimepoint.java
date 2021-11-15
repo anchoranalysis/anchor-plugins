@@ -43,7 +43,8 @@ public class ChannelGetterForTimepoint {
         return getter.hasChannel(channelName);
     }
 
-    public Channel getChannel(String channelName, Logger logger) throws GetOperationFailedException {
+    public Channel getChannel(String channelName, Logger logger)
+            throws GetOperationFailedException {
         return getter.getChannel(channelName, t, ProgressIgnore.get(), logger);
     }
 }

@@ -94,7 +94,8 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress, Logger logger)
+            throws ImageIOException {
         openStackIfNecessary();
         return new TimeSequence(stack);
     }
@@ -108,7 +109,8 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     public Optional<List<String>> channelNames(Logger logger) throws ImageIOException {
         openStackIfNecessary();
         boolean includeAlpha = numberChannels(logger) == 4;
-        return OptionalUtilities.createFromFlag(stack.isRGB(), RGBChannelNames.asList(includeAlpha));
+        return OptionalUtilities.createFromFlag(
+                stack.isRGB(), RGBChannelNames.asList(includeAlpha));
     }
 
     @Override

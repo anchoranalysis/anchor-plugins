@@ -160,7 +160,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
         }
 
         executeAllDatasets(arguments);
-        
+
         // No single output path exists, as multiple datasets were executed.
         return Optional.empty();
     }

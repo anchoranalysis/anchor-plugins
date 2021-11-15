@@ -98,7 +98,10 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stackCollection, int seriesIndex, Progress progress, Logger logger)
+            NamedProviderStore<TimeSequence> stackCollection,
+            int seriesIndex,
+            Progress progress,
+            Logger logger)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }
@@ -108,7 +111,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            Progress progress, Logger logger)
+            Progress progress,
+            Logger logger)
             throws OperationFailedException {
 
         stacks.add(
