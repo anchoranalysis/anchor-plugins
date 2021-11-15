@@ -5,7 +5,6 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.png.PngDirectory;
 import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -56,17 +55,7 @@ public class PNG extends HeaderFormat {
         }
 
         return Optional.of(
-                createMetadata(extent.get(), numberChannels.get(), bitDepth.get(), timestamps));
-    }
-
-    /** Creates the {@link ImageMetadata} given the necessary ingredients. */
-    private static ImageMetadata createMetadata(
-            Extent extent, int numberChannels, int bitDepth, ImageFileAttributes timestamps) {
-        // Image resolution is ignored.
-        Dimensions dimensions = new Dimensions(extent);
-        boolean rgb = numberChannels == 3 || numberChannels == 4;
-        return new ImageMetadata(
-                dimensions, numberChannels, 1, rgb, bitDepth, timestamps, Optional.empty());
+                MetadataFactory.createMetadata(extent.get(), numberChannels.get(), bitDepth.get(), timestamps));
     }
 
     private static Optional<Integer> numberOfChannels(Directory directory) throws ImageIOException {

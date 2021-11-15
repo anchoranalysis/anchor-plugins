@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.io.bean.file.provider;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +42,7 @@ public class SampleWithDirectory extends FilesProviderWithDirectoryUnary {
     // END BEAN PROPERTIES
 
     @Override
-    protected Collection<File> transform(Collection<File> source) throws FilesProviderException {
+    protected List<File> transform(List<File> source) throws FilesProviderException {
         List<File> listSampled = new ArrayList<>();
 
         int count = -1; // So the first item becomes 0

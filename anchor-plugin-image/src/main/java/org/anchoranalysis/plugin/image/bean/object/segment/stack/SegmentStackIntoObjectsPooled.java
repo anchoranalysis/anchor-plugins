@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
 import org.anchoranalysis.core.system.ExecutionTimeRecorder;
-import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
+import org.anchoranalysis.experiment.bean.io.ExecutionTimeStatistics;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
 import org.anchoranalysis.image.core.stack.Stack;

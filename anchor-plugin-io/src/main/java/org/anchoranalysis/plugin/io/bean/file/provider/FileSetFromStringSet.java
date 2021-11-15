@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.file.provider;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -44,7 +44,7 @@ public class FileSetFromStringSet extends FilesProviderWithDirectoryString {
     @BeanField @Getter @Setter private StringSet paths;
     // END BEAN PROPERTIES
 
-    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params) {
+    public List<File> matchingFilesForDirectory(Path directory, InputManagerParams params) {
         return FunctionalList.mapToList(paths.set(), path -> resolvePath(directory, path));
     }
 

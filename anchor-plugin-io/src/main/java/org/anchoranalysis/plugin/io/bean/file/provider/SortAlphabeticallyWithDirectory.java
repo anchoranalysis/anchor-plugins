@@ -27,14 +27,14 @@
 package org.anchoranalysis.plugin.io.bean.file.provider;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.List;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectoryUnary;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 
 public class SortAlphabeticallyWithDirectory extends FilesProviderWithDirectoryUnary {
 
     @Override
-    protected Collection<File> transform(Collection<File> source) throws FilesProviderException {
+    protected List<File> transform(List<File> source) throws FilesProviderException {
         return SortUtilities.sortFiles(source);
     }
 }

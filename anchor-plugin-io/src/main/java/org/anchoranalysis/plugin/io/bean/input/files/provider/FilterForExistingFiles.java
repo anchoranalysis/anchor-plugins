@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.io.bean.input.files.provider;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,7 +47,7 @@ public class FilterForExistingFiles extends FilesProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    protected Collection<File> transform(Collection<File> source, boolean debugMode)
+    protected List<File> transform(List<File> source, boolean debugMode)
             throws FilesProviderException {
         return FunctionalList.filterToList(
                 source, FilesProviderException.class, file -> isFileAccepted(file, debugMode));

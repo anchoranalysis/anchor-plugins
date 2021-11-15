@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.quick.bean.structure;
 
-import java.io.File;
-import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
+import java.io.File;
+import java.util.List;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -158,7 +158,7 @@ public class ExperimentResultsExperimentStructure extends FilesProviderWithoutDi
     }
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
+    public List<File> create(InputManagerParams params) throws FilesProviderException {
         return delegate.create(params);
     }
 

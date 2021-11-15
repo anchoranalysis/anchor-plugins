@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.stack.reader;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
@@ -70,8 +71,8 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
-        TimeSequence sequence = delegate.open(seriesIndex, progress);
+    public TimeSequence open(int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
+        TimeSequence sequence = delegate.open(seriesIndex, progress, logger);
 
         for (Stack stack : sequence) {
             Optional<Resolution> resolution = processor.maybeUpdatedResolution(stack.resolution());
@@ -81,19 +82,19 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
     }
 
     @Override
-    public Optional<List<String>> channelNames() throws ImageIOException {
-        return delegate.channelNames();
+    public Optional<List<String>> channelNames(Logger logger) throws ImageIOException {
+        return delegate.channelNames(logger);
     }
 
     @Override
-    public int numberChannels() throws ImageIOException {
-        return delegate.numberChannels();
+    public int numberChannels(Logger logger) throws ImageIOException {
+        return delegate.numberChannels(logger);
     }
 
     @Override
-    public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
+    public Dimensions dimensionsForSeries(int seriesIndex, Logger logger) throws ImageIOException {
 
-        Dimensions dimensions = delegate.dimensionsForSeries(seriesIndex);
+        Dimensions dimensions = delegate.dimensionsForSeries(seriesIndex, logger);
 
         Optional<Resolution> resolution = processor.maybeUpdatedResolution(dimensions.resolution());
 
@@ -105,8 +106,8 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
     }
 
     @Override
-    public int numberFrames() throws ImageIOException {
-        return delegate.numberFrames();
+    public int numberFrames(Logger logger) throws ImageIOException {
+        return delegate.numberFrames(logger);
     }
 
     @Override
@@ -115,8 +116,8 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
     }
 
     @Override
-    public int bitDepth() throws ImageIOException {
-        return delegate.bitDepth();
+    public int bitDepth(Logger logger) throws ImageIOException {
+        return delegate.bitDepth(logger);
     }
 
     @Override

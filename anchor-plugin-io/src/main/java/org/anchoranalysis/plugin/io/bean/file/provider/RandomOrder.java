@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.io.bean.file.provider;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.anchoranalysis.io.input.bean.files.FilesProviderUnary;
@@ -36,7 +35,7 @@ import org.anchoranalysis.io.input.bean.files.FilesProviderUnary;
 public class RandomOrder extends FilesProviderUnary {
 
     @Override
-    protected Collection<File> transform(Collection<File> source, boolean debugMode) {
+    protected List<File> transform(List<File> source, boolean debugMode) {
         // We need to place the files in a List as a Collection is not supported
         //  by Collections.shuffle
         List<File> out = new ArrayList<>();

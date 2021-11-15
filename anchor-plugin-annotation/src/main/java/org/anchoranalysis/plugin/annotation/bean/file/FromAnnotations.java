@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.annotation.bean.file;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,7 +50,7 @@ public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProviderW
     // END BEAN PROPERTIES
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
+    public List<File> create(InputManagerParams params) throws FilesProviderException {
         try {
             List<AnnotationWithStrategy<T>> inputs = annotations.inputs(params).inputs();
             return FunctionalList.flatMapToList(

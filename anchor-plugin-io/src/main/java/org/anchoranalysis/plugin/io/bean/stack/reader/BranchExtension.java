@@ -32,7 +32,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.primitive.StringSet;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -60,11 +59,11 @@ public class BranchExtension extends StackReader {
     private Set<String> extensionsLowercase;
 
     @Override
-    public OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException {
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
         if (doesPathHaveExtension(path)) {
-            return readerMatching.openFile(path, logger);
+            return readerMatching.openFile(path);
         } else {
-            return readerNotMatching.openFile(path, logger);
+            return readerNotMatching.openFile(path);
         }
     }
 

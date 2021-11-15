@@ -52,7 +52,6 @@ public class OpenedMultiFile implements OpenedImageFile {
     // START REQUIRED ARGUMENTS
     private final StackReader stackReader;
     private final ParsedFilePathBag fileBag;
-    private final Logger logger;
     // END REQUIRED ARGUMENTS
 
     // Processed version of the file. If null, not set yet
@@ -65,11 +64,11 @@ public class OpenedMultiFile implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
 
         try {
             progress.open();
-            return getOrCreateMemo(progress).createSequence();
+            return getOrCreateMemo(progress, logger).createSequence();
 
         } finally {
             progress.close();
@@ -77,13 +76,13 @@ public class OpenedMultiFile implements OpenedImageFile {
     }
 
     @Override
-    public Optional<List<String>> channelNames() {
+    public Optional<List<String>> channelNames(Logger logger) {
         return Optional.empty();
     }
 
     @Override
-    public int numberChannels() throws ImageIOException {
-        MultiFile memo = getOrCreateMemo(ProgressIgnore.get());
+    public int numberChannels(Logger logger) throws ImageIOException {
+        MultiFile memo = getOrCreateMemo(ProgressIgnore.get(), logger);
 
         if (!memo.numChannelDefined()) {
             throw new ImageIOException("Number of channel is not defined");
@@ -93,8 +92,8 @@ public class OpenedMultiFile implements OpenedImageFile {
     }
 
     @Override
-    public int bitDepth() throws ImageIOException {
-        MultiFile memo = getOrCreateMemo(ProgressIgnore.get());
+    public int bitDepth(Logger logger) throws ImageIOException {
+        MultiFile memo = getOrCreateMemo(ProgressIgnore.get(), logger);
         return memo.dataType().bitDepth();
     }
 
@@ -104,9 +103,9 @@ public class OpenedMultiFile implements OpenedImageFile {
     }
 
     @Override
-    public int numberFrames() throws ImageIOException {
+    public int numberFrames(Logger logger) throws ImageIOException {
 
-        MultiFile multiFile = getOrCreateMemo(ProgressIgnore.get());
+        MultiFile multiFile = getOrCreateMemo(ProgressIgnore.get(), logger);
 
         if (!multiFile.numFramesDefined()) {
             throw new ImageIOException("Number of frames is not defined");
@@ -127,18 +126,18 @@ public class OpenedMultiFile implements OpenedImageFile {
     }
 
     @Override
-    public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
+    public Dimensions dimensionsForSeries(int seriesIndex, Logger logger) throws ImageIOException {
         throw new ImageIOException("MultiFileReader doesn't support this operation");
     }
 
-    private void addDetailsFromBag(MultiFile multiFile, int seriesIndex, Progress progress)
+    private void addDetailsFromBag(MultiFile multiFile, int seriesIndex, Progress progress, Logger logger)
             throws ImageIOException {
 
         for (FileDetails details : fileBag) {
 
-            OpenedImageFile imageFile = stackReader.openFile(details.getPath(), logger);
+            OpenedImageFile imageFile = stackReader.openFile(details.getPath());
             try {
-                TimeSequence timeSequence = imageFile.open(seriesIndex, progress);
+                TimeSequence timeSequence = imageFile.open(seriesIndex, progress, logger);
                 multiFile.add(
                         timeSequence.get(0),
                         details.getChannelIndex(),
@@ -156,10 +155,10 @@ public class OpenedMultiFile implements OpenedImageFile {
         }
     }
 
-    private MultiFile getOrCreateMemo(Progress progress) throws ImageIOException {
+    private MultiFile getOrCreateMemo(Progress progress, Logger logger) throws ImageIOException {
         if (multiFileMemo == null) {
             multiFileMemo = new MultiFile(fileBag);
-            addDetailsFromBag(multiFileMemo, 0, progress);
+            addDetailsFromBag(multiFileMemo, 0, progress, logger);
         }
         return multiFileMemo;
     }

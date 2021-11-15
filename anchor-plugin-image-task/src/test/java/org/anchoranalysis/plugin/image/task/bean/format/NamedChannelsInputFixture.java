@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.util.Optional;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -69,37 +70,37 @@ class NamedChannelsInputFixture extends NamedChannelsInput {
     }
 
     @Override
-    public Dimensions dimensions(int seriesIndex) throws ImageIOException {
+    public Dimensions dimensions(int seriesIndex, Logger logger) throws ImageIOException {
         return stack.dimensions();
     }
 
     @Override
-    public int numberChannels() throws ImageIOException {
+    public int numberChannels(Logger logger) throws ImageIOException {
         return stack.getNumberChannels();
     }
 
     @Override
-    public int bitDepth() throws ImageIOException {
+    public int bitDepth(Logger logger) throws ImageIOException {
         return stack.getChannel(0).getVoxelDataType().bitDepth();
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress, Logger logger)
             throws ImageIOException {
         return new NamedChannelsForSeriesFixture(stack);
     }
 
     @Override
-    public ImageMetadata metadata(int seriesIndex) throws ImageIOException {
+    public ImageMetadata metadata(int seriesIndex, Logger logger) throws ImageIOException {
         NamedChannelsForSeries channels =
-                createChannelsForSeries(seriesIndex, ProgressIgnore.get());
+                createChannelsForSeries(seriesIndex, ProgressIgnore.get(), logger);
         ZonedDateTime now = ZonedDateTime.now();
         return new ImageMetadata(
-                channels.dimensions(),
-                numberChannels(),
+                channels.dimensions(logger),
+                numberChannels(logger),
                 numberFrames(),
                 channels.isRGB(),
-                bitDepth(),
+                bitDepth(logger),
                 new ImageFileAttributes(Paths.get("fakePath.png"), now, now),
                 Optional.empty());
     }

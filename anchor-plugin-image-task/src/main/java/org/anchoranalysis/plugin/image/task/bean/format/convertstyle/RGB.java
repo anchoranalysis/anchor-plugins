@@ -35,7 +35,6 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -72,7 +71,7 @@ public class RGB extends ChannelConvertStyle {
             Set<String> channelNames, ChannelGetterForTimepoint channelGetter, Logger logger)
             throws OperationFailedException {
 
-        if (!channelNamesAreRGB(channelNames)) {
+        if (!RGBChannelNames.isValidNameSet(channelNames)) {
             // Not compatable with RGB
             if (fallback != null) {
                 return fallback.convert(channelNames, channelGetter, logger);
@@ -85,7 +84,7 @@ public class RGB extends ChannelConvertStyle {
         NamedStacks out = new NamedStacks();
 
         try {
-            Stack stack = createRGBStack(channelGetter, logger.messageLogger());
+            Stack stack = createRGBStack(channelGetter, channelNames.size()==4, logger);
 
             // The name is blank as there is a single channel
             out.add("", stack);
@@ -97,12 +96,15 @@ public class RGB extends ChannelConvertStyle {
     }
 
     private static Stack createRGBStack(
-            ChannelGetterForTimepoint channelGetter, MessageLogger logger) throws CreateException {
+            ChannelGetterForTimepoint channelGetter, boolean includeAlpha, Logger logger) throws CreateException {
 
         Stack stackRearranged = new Stack(true);
         addChannelOrBlank(RGBChannelNames.RED, channelGetter, stackRearranged, logger);
         addChannelOrBlank(RGBChannelNames.GREEN, channelGetter, stackRearranged, logger);
         addChannelOrBlank(RGBChannelNames.BLUE, channelGetter, stackRearranged, logger);
+        if (includeAlpha) {
+            addChannelOrBlank(RGBChannelNames.ALPHA, channelGetter, stackRearranged, logger);
+        }
         return stackRearranged;
     }
 
@@ -110,13 +112,13 @@ public class RGB extends ChannelConvertStyle {
             String channelName,
             ChannelGetterForTimepoint channelGetter,
             Stack stackRearranged,
-            MessageLogger logger)
+            Logger logger)
             throws CreateException {
         try {
             if (channelGetter.hasChannel(channelName)) {
-                stackRearranged.addChannel(channelGetter.getChannel(channelName));
+                stackRearranged.addChannel(channelGetter.getChannel(channelName, logger));
             } else {
-                logger.logFormatted(String.format("Adding a blank channel for %s", channelName));
+                logger.messageLogger().logFormatted(String.format("Adding a blank channel for %s", channelName));
                 stackRearranged.addBlankChannel();
             }
         } catch (IncorrectImageSizeException
@@ -124,23 +126,5 @@ public class RGB extends ChannelConvertStyle {
                 | GetOperationFailedException e) {
             throw new CreateException(e);
         }
-    }
-
-    private static boolean channelNamesAreRGB(Set<String> channelNames) {
-
-        if (channelNames.size() > 3) {
-            return false;
-        }
-
-        for (String key : channelNames) {
-            // If a key doesn't match one of the expected red-green-blue names
-            if (!(key.equals(RGBChannelNames.RED)
-                    || key.equals(RGBChannelNames.GREEN)
-                    || key.equals(RGBChannelNames.BLUE))) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

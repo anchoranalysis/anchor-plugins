@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.io.bean.file.namer;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,7 +51,7 @@ public class IfRelativeToDirectory extends FileNamer {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedFile> deriveName(Collection<File> files, FileNamerContext context) {
+    public List<NamedFile> deriveName(List<File> files, FileNamerContext context) {
         if (context.isRelativeToDirectory()) {
             return whenRelative.deriveName(files, context);
         } else {

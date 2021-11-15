@@ -41,7 +41,7 @@ public class InitializationFactory {
             ProvidesStackInput input, InitializationContext context)
             throws OperationFailedException {
         ImageInitialization initialization = createWithoutStacks(context);
-        input.addToStoreInferNames(initialization.stacks());
+        input.addToStoreInferNames(initialization.stacks(), context.getLogger());
         return initialization;
     }
 

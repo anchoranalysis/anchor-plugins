@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.channel.map;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
@@ -38,10 +39,10 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 public class FromMetadata extends ChannelMap {
 
     @Override
-    public NamedEntries createMap(OpenedImageFile openedFile) throws CreateException {
+    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger) throws CreateException {
 
         try {
-            Optional<List<String>> names = openedFile.channelNames();
+            Optional<List<String>> names = openedFile.channelNames(logger);
             if (!names.isPresent()) {
                 throw new CreateException(
                         "No channels names are associated with the opened image-file");
