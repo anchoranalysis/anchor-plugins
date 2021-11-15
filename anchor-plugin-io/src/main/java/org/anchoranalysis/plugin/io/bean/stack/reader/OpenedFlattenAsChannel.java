@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.bean.stack.reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -38,7 +39,6 @@ import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import lombok.AllArgsConstructor;
 
 /**
  * Like a {@link OpenedImageFile} but considers frames and series as if they were instead additional
@@ -58,7 +58,8 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress, Logger logger)
+            throws ImageIOException {
         // We open each-series, verify assumptions, and combine the channels
 
         try {
@@ -92,7 +93,9 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
 
     @Override
     public int numberChannels(Logger logger) throws ImageIOException {
-        return delegate.numberChannels(logger) * delegate.numberSeries() * delegate.numberFrames(logger);
+        return delegate.numberChannels(logger)
+                * delegate.numberSeries()
+                * delegate.numberFrames(logger);
     }
 
     @Override
@@ -121,11 +124,12 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
         return delegate.timestamps();
     }
 
-    private List<Stack> extractStacksAndVerify(TimeSequence sequence, Logger logger) throws ImageIOException {
+    private List<Stack> extractStacksAndVerify(TimeSequence sequence, Logger logger)
+            throws ImageIOException {
 
         int expectedNumberChannels = delegate.numberChannels(logger);
         int expectedNumberFrames = delegate.numberFrames(logger);
-        
+
         if (sequence.size() != expectedNumberFrames) {
             throw new ImageIOException(
                     String.format(

@@ -96,7 +96,7 @@ public class FromImageMetadata
                             initialization,
                             new SharedFeatureMulti(),
                             context.getLogger());
-            
+
             ImageMetadata metadata =
                     context.getExecutionTimeRecorder()
                             .recordExecutionTime("Reading image metadata", input::metadata);

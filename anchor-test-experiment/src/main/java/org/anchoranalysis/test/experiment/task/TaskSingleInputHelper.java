@@ -41,10 +41,10 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
-import org.anchoranalysis.experiment.bean.io.ExecutionTimeStatistics;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
@@ -155,7 +155,8 @@ public class TaskSingleInputHelper {
     private static ParametersExperiment createParametersExperiment(
             OutputterChecked outputter, PathPrefixer prefixer, StatefulMessageLogger logger) {
         ExperimentFeedbackContext context =
-                new ExperimentFeedbackContext(logger, false, new ExecutionTimeStatistics());
+                new ExperimentFeedbackContext(
+                        logger, false, ExecutionTimeRecorderIgnore.instance());
         ParametersExperiment params =
                 new ParametersExperiment(
                         new ExecutionArguments(Paths.get(".")),

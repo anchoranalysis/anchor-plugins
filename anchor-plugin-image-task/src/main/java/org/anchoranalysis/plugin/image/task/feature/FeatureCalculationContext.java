@@ -31,7 +31,7 @@ import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedConsumer;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 

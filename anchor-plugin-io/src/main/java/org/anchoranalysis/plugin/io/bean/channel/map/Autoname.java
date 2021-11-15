@@ -57,14 +57,18 @@ public class Autoname extends ChannelMap {
     private static final String[] RGB_CHANNEL_NAMES = RGBChannelNames.asArray(true);
 
     @Override
-    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger) throws CreateException {
+    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger)
+            throws CreateException {
 
         NamedEntries map = new NamedEntries();
 
         try {
             Optional<List<String>> names = openedFile.channelNames(logger);
 
-            boolean rgb = openedFile.isRGB() && (openedFile.numberChannels(logger) == 3 || openedFile.numberChannels(logger) == 4);
+            boolean rgb =
+                    openedFile.isRGB()
+                            && (openedFile.numberChannels(logger) == 3
+                                    || openedFile.numberChannels(logger) == 4);
 
             // The insertion order is critical here to remember R, G, B (and possibly A)
             FunctionalIterate.repeatWithIndex(
