@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
 import org.anchoranalysis.mpp.io.input.ExportSharedObjects;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -45,7 +46,7 @@ public class FromCSVInput extends InputFromManagerDelegate<MultiInput>
     }
 
     @Override
-    public void copyTo(SharedObjects target) throws OperationFailedException {
-        getDelegate().copyTo(target);
+    public void copyTo(SharedObjects target, Logger logger) throws OperationFailedException {
+        getDelegate().copyTo(target, logger);
     }
 }

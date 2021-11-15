@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.core.exception.InitializeException;
-import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
+import org.anchoranalysis.experiment.bean.io.ExecutionTimeStatistics;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageInitializationFactory;

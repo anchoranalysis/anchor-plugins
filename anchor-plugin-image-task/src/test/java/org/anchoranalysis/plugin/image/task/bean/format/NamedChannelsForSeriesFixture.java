@@ -37,6 +37,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -72,10 +73,10 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
     }
 
     @Override
-    public Channel getChannel(String channelName, int timeIndex, Progress progress)
+    public Channel getChannel(String channelName, int timeIndex, Progress progress, Logger logger)
             throws GetOperationFailedException {
 
-        return getChannelOptional(channelName, timeIndex, progress)
+        return getChannelOptional(channelName, timeIndex, progress, logger)
                 .orElseThrow(
                         () ->
                                 new GetOperationFailedException(
@@ -83,7 +84,7 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
     }
 
     @Override
-    public int sizeT(Progress progress) throws ImageIOException {
+    public int sizeT(Progress progress, Logger logger) throws ImageIOException {
         return 1;
     }
 
@@ -99,7 +100,7 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
 
     @Override
     public Optional<Channel> getChannelOptional(
-            String channelName, int timeIndex, Progress progress)
+            String channelName, int timeIndex, Progress progress, Logger logger)
             throws GetOperationFailedException {
         if (timeIndex == 0) {
             if (stack.isRGB()) {
@@ -113,7 +114,7 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
     }
 
     @Override
-    public Dimensions dimensions() throws ImageIOException {
+    public Dimensions dimensions(Logger logger) throws ImageIOException {
         return stack.dimensions();
     }
 
@@ -127,18 +128,18 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
     }
 
     @Override
-    public StoreSupplier<Stack> allChannelsAsStack(int timeIndex) {
+    public StoreSupplier<Stack> allChannelsAsStack(int timeIndex, Logger logger) {
         return StoreSupplier.cache(() -> stack);
     }
 
     @Override
-    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex)
+    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex, Logger logger)
             throws OperationFailedException {
         throwUnsupportedException();
     }
 
     @Override
-    public void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Progress progress)
+    public void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Progress progress, Logger logger)
             throws OperationFailedException {
         throwUnsupportedException();
     }

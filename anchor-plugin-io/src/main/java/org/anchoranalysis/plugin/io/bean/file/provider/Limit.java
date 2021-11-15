@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.file.provider;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -40,7 +40,7 @@ public class Limit extends FilesProviderUnary {
     // END BEANS
 
     @Override
-    protected Collection<File> transform(Collection<File> source, boolean debugMode) {
+    protected List<File> transform(List<File> source, boolean debugMode) {
         return LimitUtilities.apply(source, maxNumberItems);
     }
 }

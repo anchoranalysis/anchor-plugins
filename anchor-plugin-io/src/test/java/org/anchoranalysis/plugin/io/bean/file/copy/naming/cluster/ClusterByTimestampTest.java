@@ -11,8 +11,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.progress.ProgressIgnore;
-import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.SearchDirectory;
@@ -27,7 +25,6 @@ import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.mockito.Mockito;
 
 /**
  * Tests {@link ClusterByTimestamp}.
@@ -92,10 +89,7 @@ class ClusterByTimestampTest {
     private static List<FileWithDirectoryInput> createInputs(Path source)
             throws InputReadFailedException {
         InputManagerParams params =
-                new InputManagerParams(
-                        Mockito.mock(InputContextParams.class),
-                        ProgressIgnore.get(),
-                        LoggingFixture.suppressedLogger());
+                new InputManagerParams(LoggingFixture.suppressedLogger());
 
         return createFiles(source).inputs(params).inputs();
     }

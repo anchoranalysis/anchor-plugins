@@ -32,7 +32,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -65,9 +64,9 @@ public class ImposeResolution extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException {
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
         return new OpenedRasterAlterDimensions(
-                stackReader.openFile(path, logger),
+                stackReader.openFile(path),
                 existing -> Optional.of(resolutionToAssign(existing)));
     }
 
@@ -76,7 +75,7 @@ public class ImposeResolution extends StackReader {
         try {
             return new Resolution(width, height, z);
         } catch (CreateException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("An error occurred assigning an image-resolution.", e);
         }
     }
 }

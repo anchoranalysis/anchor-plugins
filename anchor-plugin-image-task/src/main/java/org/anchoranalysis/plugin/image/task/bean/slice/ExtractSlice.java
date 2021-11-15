@@ -124,7 +124,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                     params.getInput(),
                     energyStack,
                     optimaSliceIndex,
-                    params.getOutputter().getChecked());
+                    params.getOutputter().getChecked(), params.getContextJob().getLogger());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -180,10 +180,10 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
             NamedChannelsInput input,
             EnergyStack energyStack,
             int optimaSliceIndex,
-            OutputterChecked outputter)
+            OutputterChecked outputter, Logger logger)
             throws OperationFailedException {
 
-        NamedStacks stacks = collectionFromInput(input);
+        NamedStacks stacks = collectionFromInput(input, logger);
 
         // Extract slices
         NamedStacks slices =
@@ -197,10 +197,10 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
         }
     }
 
-    private static NamedStacks collectionFromInput(NamedChannelsInput input)
+    private static NamedStacks collectionFromInput(NamedChannelsInput input, Logger logger)
             throws OperationFailedException {
         NamedStacks stackCollection = new NamedStacks();
-        input.addToStoreInferNames(stackCollection);
+        input.addToStoreInferNames(stackCollection, logger);
         return stackCollection;
     }
 

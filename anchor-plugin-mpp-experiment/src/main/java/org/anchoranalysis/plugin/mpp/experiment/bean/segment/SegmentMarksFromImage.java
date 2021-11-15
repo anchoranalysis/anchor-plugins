@@ -144,7 +144,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
         try {
             SharedObjects sharedObjects =
                     new SharedObjects(inputBound.createInitializationContext().common());
-            input.copyTo(sharedObjects);
+            input.copyTo(sharedObjects, inputBound.getLogger());
 
             ImageInitialization initialization = new ImageInitialization(sharedObjects);
 

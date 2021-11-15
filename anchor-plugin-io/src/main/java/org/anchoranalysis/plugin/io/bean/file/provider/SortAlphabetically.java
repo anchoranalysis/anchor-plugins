@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.io.bean.file.provider;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.List;
 import org.anchoranalysis.io.input.bean.files.FilesProviderUnary;
 
 public class SortAlphabetically extends FilesProviderUnary {
 
     @Override
-    protected Collection<File> transform(Collection<File> source, boolean debugMode) {
+    protected List<File> transform(List<File> source, boolean debugMode) {
         return SortUtilities.sortFiles(source);
     }
 }

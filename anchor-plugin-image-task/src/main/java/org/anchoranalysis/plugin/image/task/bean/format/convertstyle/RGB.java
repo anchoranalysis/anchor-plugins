@@ -35,7 +35,6 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -85,7 +84,7 @@ public class RGB extends ChannelConvertStyle {
         NamedStacks out = new NamedStacks();
 
         try {
-            Stack stack = createRGBStack(channelGetter, channelNames.size()==4, logger.messageLogger());
+            Stack stack = createRGBStack(channelGetter, channelNames.size()==4, logger);
 
             // The name is blank as there is a single channel
             out.add("", stack);
@@ -97,7 +96,7 @@ public class RGB extends ChannelConvertStyle {
     }
 
     private static Stack createRGBStack(
-            ChannelGetterForTimepoint channelGetter, boolean includeAlpha, MessageLogger logger) throws CreateException {
+            ChannelGetterForTimepoint channelGetter, boolean includeAlpha, Logger logger) throws CreateException {
 
         Stack stackRearranged = new Stack(true);
         addChannelOrBlank(RGBChannelNames.RED, channelGetter, stackRearranged, logger);
@@ -113,13 +112,13 @@ public class RGB extends ChannelConvertStyle {
             String channelName,
             ChannelGetterForTimepoint channelGetter,
             Stack stackRearranged,
-            MessageLogger logger)
+            Logger logger)
             throws CreateException {
         try {
             if (channelGetter.hasChannel(channelName)) {
-                stackRearranged.addChannel(channelGetter.getChannel(channelName));
+                stackRearranged.addChannel(channelGetter.getChannel(channelName, logger));
             } else {
-                logger.logFormatted(String.format("Adding a blank channel for %s", channelName));
+                logger.messageLogger().logFormatted(String.format("Adding a blank channel for %s", channelName));
                 stackRearranged.addBlankChannel();
             }
         } catch (IncorrectImageSizeException

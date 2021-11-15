@@ -69,8 +69,6 @@ class MapPart extends NamedChannelsInputPart {
      * our purposes we treat it as if its 0
      */
     private final boolean useLastSeriesIndexOnly;
-
-    private final Logger logger;
     // END REQUIRED ARGUMENTS
 
     // We cache a certain amount of stacks read for particular series
@@ -78,8 +76,8 @@ class MapPart extends NamedChannelsInputPart {
     private NamedEntries channelMap = null;
 
     @Override
-    public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
-        return openedFile().dimensionsForSeries(stackIndexInSeries);
+    public Dimensions dimensions(int stackIndexInSeries, Logger logger) throws ImageIOException {
+        return openedFile().dimensionsForSeries(stackIndexInSeries, logger);
     }
 
     @Override
@@ -92,13 +90,13 @@ class MapPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public boolean hasChannel(String channelName) throws ImageIOException {
-        return channelMap().keySet().contains(channelName);
+    public boolean hasChannel(String channelName, Logger logger) throws ImageIOException {
+        return channelMap(logger).keySet().contains(channelName);
     }
 
     // Where most of our time is being taken up when opening a raster
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress, Logger logger)
             throws ImageIOException {
 
         // We always use the last one
@@ -106,7 +104,7 @@ class MapPart extends NamedChannelsInputPart {
             seriesIndex = openedFile().numberSeries() - 1;
         }
 
-        return new NamedChannelsForSeriesMap(openedFile(), channelMap(), seriesIndex);
+        return new NamedChannelsForSeriesMap(openedFile(), channelMap(logger), seriesIndex);
     }
 
     @Override
@@ -132,13 +130,13 @@ class MapPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public int numberChannels() throws ImageIOException {
-        return openedFile().numberChannels();
+    public int numberChannels(Logger logger) throws ImageIOException {
+        return openedFile().numberChannels(logger);
     }
 
     @Override
-    public int bitDepth() throws ImageIOException {
-        return openedFile().bitDepth();
+    public int bitDepth(Logger logger) throws ImageIOException {
+        return openedFile().bitDepth(logger);
     }
 
     @Override
@@ -155,15 +153,15 @@ class MapPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public ImageMetadata metadata(int seriesIndex) throws ImageIOException {
-        return openedFile().metadata(seriesIndex);
+    public ImageMetadata metadata(int seriesIndex, Logger logger) throws ImageIOException {
+        return openedFile().metadata(seriesIndex, logger);
     }
 
     /** Create a channel-map, reusing the existing map, if it already exists. */
-    private NamedEntries channelMap() throws ImageIOException {
+    private NamedEntries channelMap(Logger logger) throws ImageIOException {
         if (channelMap == null) {
             try {
-                channelMap = channelMapCreator.createMap(openedFileMemo);
+                channelMap = channelMapCreator.createMap(openedFileMemo, logger);
             } catch (CreateException e) {
                 throw new ImageIOException("Failed to create channel-map", e);
             }
@@ -183,7 +181,7 @@ class MapPart extends NamedChannelsInputPart {
                                     () ->
                                             new ImageIOException(
                                                     "A binding-path is needed in the delegate."));
-            openedFileMemo = stackReader.openFile(path, logger);
+            openedFileMemo = stackReader.openFile(path);
         }
         return openedFileMemo;
     }

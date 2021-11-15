@@ -71,7 +71,7 @@ public class IndependentChannels extends ChannelConvertStyle {
             String key, ChannelGetterForTimepoint channelGetter, Logger logger)
             throws OperationFailedException {
         try {
-            Channel channel = channelGetter.getChannel(key);
+            Channel channel = channelGetter.getChannel(key, logger);
             return Optional.of(new Stack(channel));
 
         } catch (GetOperationFailedException e) {

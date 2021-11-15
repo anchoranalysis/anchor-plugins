@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
@@ -67,14 +68,14 @@ class GroupingInput extends NamedChannelsInput {
     }
 
     @Override
-    public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
-        return openedFile.dimensionsForSeries(stackIndexInSeries);
+    public Dimensions dimensions(int stackIndexInSeries, Logger logger) throws ImageIOException {
+        return openedFile.dimensionsForSeries(stackIndexInSeries, logger);
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress, Logger logger)
             throws ImageIOException {
-        ensureChannelMapExists();
+        ensureChannelMapExists(logger);
         return new NamedChannelsForSeriesMap(openedFile, channelMap, seriesIndex);
     }
 
@@ -89,27 +90,27 @@ class GroupingInput extends NamedChannelsInput {
     }
 
     @Override
-    public int numberChannels() throws ImageIOException {
-        ensureChannelMapExists();
+    public int numberChannels(Logger logger) throws ImageIOException {
+        ensureChannelMapExists(logger);
         return channelMap.keySet().size();
     }
 
     @Override
-    public int bitDepth() throws ImageIOException {
-        return openedFile.bitDepth();
+    public int bitDepth(Logger logger) throws ImageIOException {
+        return openedFile.bitDepth(logger);
     }
 
     @Override
-    public ImageMetadata metadata(int seriesIndex) throws ImageIOException {
+    public ImageMetadata metadata(int seriesIndex, Logger logger) throws ImageIOException {
         NamedChannelsForSeries channels =
-                createChannelsForSeries(seriesIndex, ProgressIgnore.get());
+                createChannelsForSeries(seriesIndex, ProgressIgnore.get(), logger);
         ImageTimestampsAttributes timestamps = openedFile.timestamps();
         return new ImageMetadata(
-                channels.dimensions(),
-                numberChannels(),
+                channels.dimensions(logger),
+                numberChannels(logger),
                 numberFrames(),
                 channels.isRGB(),
-                bitDepth(),
+                bitDepth(logger),
                 timestamps.getAttributes(),
                 timestamps.getAcqusitionTime());
     }
@@ -123,11 +124,11 @@ class GroupingInput extends NamedChannelsInput {
         }
     }
 
-    private void ensureChannelMapExists() throws ImageIOException {
+    private void ensureChannelMapExists(Logger logger) throws ImageIOException {
         // Lazy creation
         if (channelMap == null) {
             try {
-                channelMap = channelMapCreator.createMap(openedFile);
+                channelMap = channelMapCreator.createMap(openedFile, logger);
             } catch (CreateException e) {
                 throw new ImageIOException("Failed to create a channel-map", e);
             }
