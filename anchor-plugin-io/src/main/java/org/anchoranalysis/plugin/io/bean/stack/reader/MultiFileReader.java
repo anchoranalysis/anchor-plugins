@@ -35,7 +35,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -61,7 +60,7 @@ public class MultiFileReader extends StackReader {
     @BeanField @Getter @Setter private boolean recurseSubfolders = false;
 
     /** Search x number directories higher than file */
-    @BeanField @Getter @Setter private int navigateHigherDirs = 0;
+    @BeanField @Getter @Setter private int navigateHigherDirectories = 0;
 
     /** If non-empty a regular-expression is applied to files */
     @BeanField @AllowEmpty @Getter @Setter private String regExFile = "";
@@ -71,7 +70,7 @@ public class MultiFileReader extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path filePath, Logger logger) throws ImageIOException {
+    public OpenedImageFile openFile(Path filePath) throws ImageIOException {
 
         // We look at all other files in the same folder as our filepath to match our expression
 
@@ -88,7 +87,7 @@ public class MultiFileReader extends StackReader {
             }
         }
 
-        return new OpenedMultiFile(stackReader, bag, logger);
+        return new OpenedMultiFile(stackReader, bag);
     }
 
     private File folderFromFile(Path filePath) {
@@ -100,7 +99,7 @@ public class MultiFileReader extends StackReader {
             dir = dir.getParentFile();
         }
 
-        for (int i = 0; i < navigateHigherDirs; i++) {
+        for (int i = 0; i < navigateHigherDirectories; i++) {
             dir = dir.getParentFile();
         }
 

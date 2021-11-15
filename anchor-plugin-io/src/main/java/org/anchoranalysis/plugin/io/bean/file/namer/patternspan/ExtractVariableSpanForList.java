@@ -30,14 +30,12 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.file.NamedFile;
 import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
-import org.apache.commons.io.IOCase;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractVariableSpanForList {
@@ -45,21 +43,21 @@ class ExtractVariableSpanForList {
     /**
      * Extract {@link NamedFiles} from the files by naming via the extracted pattern.
      *
-     * <p>If any of descriptive-names are empty, then a string (constant portion) is appended to all
+     * <p>If any of the identifiers are empty, then a string (constant portion) is appended to all
      * names so none are empty.
      *
-     * @param files files
-     * @param extractVariableSpan extracted-pattern
-     * @param ioCase whether to be case-sensitive when extracting a variable span.
+     * @param files files, which must be the same files, in the same order as the pattern in {@code extractVariableSpan}.
+     * @param extractVariableSpan extracted-pattern.
      * @return a list corresponding to {@code files} but with names associated.
      */
     public static List<NamedFile> listExtract(
-            Collection<File> files, ExtractVariableSpan extractVariableSpan, IOCase ioCase) {
-        List<NamedFile> listMaybeEmpty =
-                listExtractMaybeEmpty(
-                        files, file -> extractVariableSpan.extractSpanPortionFor(file, ioCase));
+            List<File> files, ExtractVariableSpan extractVariableSpan) {
 
-        if (hasAnyEmptyDescriptiveName(listMaybeEmpty)) {
+         List<NamedFile> listMaybeEmpty = FunctionalList.mapToListWithIndex(
+                files, (file, index) -> namedFileFor(extractVariableSpan, index, file)
+         );
+                
+        if (hasAnyEmptyIdentifier(listMaybeEmpty)) {
             String prependStr =
                     extractLastComponent(
                             extractVariableSpan.extractConstantElementBeforeSpanPortion());
@@ -67,6 +65,10 @@ class ExtractVariableSpanForList {
         } else {
             return listMaybeEmpty;
         }
+    }
+    
+    private static NamedFile namedFileFor(ExtractVariableSpan extractVariableSpan, int fileIndex, File file) {
+        return new NamedFile(extractVariableSpan.extractSpanPortionFor(fileIndex), file);
     }
 
     private static List<NamedFile> listPrepend(String prefix, List<NamedFile> list) {
@@ -82,15 +84,9 @@ class ExtractVariableSpanForList {
         return FilePathToUnixStyleConverter.toStringUnixStyle(prefix + name).trim();
     }
 
-    private static boolean hasAnyEmptyDescriptiveName(List<NamedFile> list) {
-        return list.stream().filter(df -> df.getIdentifier().isEmpty()).count() > 0;
-    }
-
-    private static List<NamedFile> listExtractMaybeEmpty(
-            Collection<File> files, Function<File, String> extractVariableSpan) {
-
-        return FunctionalList.mapToList(
-                files, file -> new NamedFile(extractVariableSpan.apply(file), file));
+    /** Whether any identifier is missing... */
+    private static boolean hasAnyEmptyIdentifier(List<NamedFile> list) {
+        return list.stream().filter(file -> file.getIdentifier().isEmpty()).count() > 0;
     }
 
     private static String extractLastComponent(String str) {

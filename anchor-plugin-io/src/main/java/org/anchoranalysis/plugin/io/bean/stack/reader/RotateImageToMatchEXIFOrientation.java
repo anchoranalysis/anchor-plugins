@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
+import org.anchoranalysis.image.io.stack.CalculateOrientationChange;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.bioformats.metadata.OrientationReader;
 
@@ -34,30 +36,34 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException {
-        return openFile(path, inferNeededOrientationChange(path, logger), logger);
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
+        return openFile(path, logger -> inferNeededOrientationChange(path, logger));
     }
 
     @Override
     public OpenedImageFile openFile(
-            Path path, OrientationChange orientationCorrection, Logger logger)
+            Path path, CalculateOrientationChange orientationCorrection)
             throws ImageIOException {
-        return reader.openFile(path, orientationCorrection, logger);
+        return reader.openFile(path, orientationCorrection);
     }
 
     private static OrientationChange inferNeededOrientationChange(Path path, Logger logger)
             throws ImageIOException {
         try {
-            // If no orientation-correction data is available, we proceed, performing no rotation.
-            OrientationChange change =
-                    OrientationReader.determineOrientationCorrection(path)
-                            .orElse(OrientationChange.KEEP_UNCHANGED);
-
-            if (change != OrientationChange.KEEP_UNCHANGED) {
-                logger.messageLogger().log("Reoriented image from EXIF tag: " + change.toString());
+            if (ImageFileFormat.JPEG.matches(path) || ImageFileFormat.TIFF.matches(path)) {
+                // If no orientation-correction data is available, we proceed, performing no rotation.
+                OrientationChange change =
+                        OrientationReader.determineOrientationCorrection(path)
+                                .orElse(OrientationChange.KEEP_UNCHANGED);
+    
+                if (change != OrientationChange.KEEP_UNCHANGED) {
+                    logger.messageLogger().log("Reoriented image from EXIF tag: " + change.toString());
+                }
+    
+                return change;
+            } else {
+                return OrientationChange.KEEP_UNCHANGED;
             }
-
-            return change;
         } catch (Exception e) {
             logger.errorReporter()
                     .recordError(

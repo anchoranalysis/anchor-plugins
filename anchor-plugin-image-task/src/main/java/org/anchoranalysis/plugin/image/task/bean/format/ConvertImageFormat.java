@@ -172,7 +172,7 @@ public class ConvertImageFormat
             throws JobExecutionException {
 
         try {
-            NamedChannelsForSeries channels = createNamedChannels(input.getInput(), seriesIndex);
+            NamedChannelsForSeries channels = createNamedChannels(input.getInput(), seriesIndex, context.getLogger());
 
             ChannelGetter channelGetter = maybeAddFilter(channels, context);
 
@@ -184,7 +184,7 @@ public class ConvertImageFormat
                     seriesIndex,
                     channels.channelNames(),
                     numberSeries,
-                    channels.sizeT(ProgressIgnore.get()),
+                    channels.sizeT(ProgressIgnore.get(), context.getLogger()),
                     channelGetter,
                     sharedStateJob,
                     context.getLogger());
@@ -248,9 +248,9 @@ public class ConvertImageFormat
         }
     }
 
-    private NamedChannelsForSeries createNamedChannels(NamedChannelsInput input, int seriesIndex)
+    private NamedChannelsForSeries createNamedChannels(NamedChannelsInput input, int seriesIndex, Logger logger)
             throws ImageIOException {
-        return input.createChannelsForSeries(seriesIndex, new ProgressConsole(1));
+        return input.createChannelsForSeries(seriesIndex, new ProgressConsole(1), logger);
     }
 
     private void addStackToOutput(

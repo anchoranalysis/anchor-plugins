@@ -31,6 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
@@ -56,18 +57,18 @@ public class Autoname extends ChannelMap {
     private static final String[] RGB_CHANNEL_NAMES = RGBChannelNames.asArray(true);
 
     @Override
-    public NamedEntries createMap(OpenedImageFile openedFile) throws CreateException {
+    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger) throws CreateException {
 
         NamedEntries map = new NamedEntries();
 
         try {
-            Optional<List<String>> names = openedFile.channelNames();
+            Optional<List<String>> names = openedFile.channelNames(logger);
 
-            boolean rgb = openedFile.isRGB() && (openedFile.numberChannels() == 3 || openedFile.numberChannels() == 4);
+            boolean rgb = openedFile.isRGB() && (openedFile.numberChannels(logger) == 3 || openedFile.numberChannels(logger) == 4);
 
             // The insertion order is critical here to remember R, G, B (and possibly A)
             FunctionalIterate.repeatWithIndex(
-                    openedFile.numberChannels(),
+                    openedFile.numberChannels(logger),
                     channelIndex -> addEntryToMap(map, names, rgb, channelIndex));
 
         } catch (ImageIOException e) {

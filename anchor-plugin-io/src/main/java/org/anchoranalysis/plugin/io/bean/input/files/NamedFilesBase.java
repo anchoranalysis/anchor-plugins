@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.io.bean.input.files;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -81,7 +80,7 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
             FilesProvider files, InputManagerParams params, Function<NamedFile, T> mapToInput)
             throws InputReadFailedException {
         try {
-            Collection<File> filesCreated = files.create(params);
+            List<File> filesCreated = files.create(params);
 
             Optional<Path> inputDirectory = inputDirectory(files, params.getInputContext());
 
@@ -100,7 +99,7 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
     }
 
     private List<T> createInputs(
-            Collection<File> filesCreated,
+            List<File> filesCreated,
             Function<NamedFile, T> mapToInput,
             FileNamerContext context)
             throws InputReadFailedException {

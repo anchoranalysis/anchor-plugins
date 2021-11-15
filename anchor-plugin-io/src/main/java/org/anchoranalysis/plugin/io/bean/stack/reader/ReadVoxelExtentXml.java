@@ -33,7 +33,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.format.NonImageFileFormat;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -94,9 +93,9 @@ public class ReadVoxelExtentXml extends StackReader {
     }
 
     @Override
-    public OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException {
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
 
-        OpenedImageFile delegate = stackReader.openFile(path, logger); // NOSONAR
+        OpenedImageFile delegate = stackReader.openFile(path); // NOSONAR
 
         Optional<Resolution> resolutionToAssign = readMetadata(path, acceptNoResolution);
 

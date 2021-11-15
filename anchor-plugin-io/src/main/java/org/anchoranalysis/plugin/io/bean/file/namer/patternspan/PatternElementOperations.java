@@ -112,7 +112,8 @@ class PatternElementOperations {
         for (int i = index + 1; i < pattern.size(); i++) {
             PatternElement element = pattern.get(i);
             assert (element.hasConstantValue());
-            sb.append(PatternUtilities.constantElementAsString(element));
+            // The value is the same for all indexes, so we use 0
+            sb.append(element.valueAt(0));
         }
         return sb.toString();
     }

@@ -64,7 +64,7 @@ public class PatternSpan extends FileNamer {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedFile> deriveName(Collection<File> files, FileNamerContext context) {
+    public List<NamedFile> deriveName(List<File> files, FileNamerContext context) {
 
         // Convert to list
         List<Path> paths = convertToList(files);
@@ -81,7 +81,7 @@ public class PatternSpan extends FileNamer {
             throw new AnchorImpossibleSituationException();
         }
 
-        return extractFromPattern(pattern, files, ioCase, context);
+        return extractFromPattern(pattern, files, context);
     }
 
     private IOCase createCaseSensitivity() {
@@ -89,11 +89,11 @@ public class PatternSpan extends FileNamer {
     }
 
     private static List<NamedFile> extractFromPattern(
-            Pattern pattern, Collection<File> files, IOCase ioCase, FileNamerContext context) {
+            Pattern pattern, List<File> files, FileNamerContext context) {
         ExtractVariableSpan extracter =
                 new SelectSpanToExtract(pattern, context.getNameSubrange())
                         .selectSpanToExtract(context.getElseName());
-        return ExtractVariableSpanForList.listExtract(files, extracter, ioCase);
+        return ExtractVariableSpanForList.listExtract(files, extracter);
     }
 
     private static boolean hasAtLeastOneVariableElement(Pattern pattern) {

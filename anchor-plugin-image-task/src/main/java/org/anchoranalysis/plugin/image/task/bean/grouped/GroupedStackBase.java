@@ -35,6 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -113,7 +114,7 @@ public abstract class GroupedStackBase<S, T>
                 extractGroupName(input.pathForBinding(), context.isDebugEnabled());
 
         processStacks(
-                GroupedStackBase.extractInputStacks(input),
+                GroupedStackBase.extractInputStacks(input, context.getLogger()),
                 groupName,
                 params.getSharedState(),
                 context);
@@ -197,11 +198,11 @@ public abstract class GroupedStackBase<S, T>
         }
     }
 
-    private static NamedStacks extractInputStacks(ProvidesStackInput input)
+    private static NamedStacks extractInputStacks(ProvidesStackInput input, Logger logger)
             throws JobExecutionException {
         try {
             NamedStacks stacks = new NamedStacks();
-            input.addToStoreInferNames(stacks);
+            input.addToStoreInferNames(stacks, logger);
             return stacks;
         } catch (OperationFailedException e1) {
             throw new JobExecutionException("An error occurred creating inputs to the task", e1);

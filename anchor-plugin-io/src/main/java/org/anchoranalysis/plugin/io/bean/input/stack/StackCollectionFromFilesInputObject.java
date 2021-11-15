@@ -80,13 +80,13 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     public int numberFrames() throws OperationFailedException {
 
         try {
-            return getOpenedRaster().numberFrames();
+            return getOpenedRaster().numberFrames(logger);
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    public TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex)
+    public TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex, Logger logger)
             throws ImageIOException {
 
         // We always use the last one
@@ -98,7 +98,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stackCollection, int seriesIndex, Progress progress)
+            NamedProviderStore<TimeSequence> stackCollection, int seriesIndex, Progress progress, Logger logger)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }
@@ -108,14 +108,14 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            Progress progress)
+            Progress progress, Logger logger)
             throws OperationFailedException {
 
         stacks.add(
                 name,
                 () -> {
                     try {
-                        return createStackSequenceForSeries(seriesIndex).get(progress);
+                        return createStackSequenceForSeries(seriesIndex, logger).get(progress);
                     } catch (ImageIOException e) {
                         throw new OperationFailedException(e);
                     }
@@ -155,17 +155,16 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                                     .orElseThrow(
                                             () ->
                                                     new ImageIOException(
-                                                            "A binding-path must be associated with this file")),
-                            logger);
+                                                            "A binding-path must be associated with this file")));
         }
         return openedFileMemo;
     }
 
-    private static TimeSequenceSupplier openRasterAsOperation(
+    private TimeSequenceSupplier openRasterAsOperation(
             OpenedImageFile openedFile, int seriesIndex) {
         return progress -> {
             try {
-                return openedFile.open(seriesIndex, progress);
+                return openedFile.open(seriesIndex, progress, logger);
             } catch (ImageIOException e) {
                 throw new OperationFailedException(e);
             }
