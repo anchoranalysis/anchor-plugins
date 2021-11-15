@@ -42,6 +42,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -151,7 +152,7 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
         AnnotationComparisonInput<ProvidesStackInput> input = params.getInput();
 
         // Create the background.
-        DisplayStack backgroundStack = createBackground(input);
+        DisplayStack backgroundStack = createBackground(input, params.getLogger());
 
         // We only do a descriptive split if it's allowed.
         SplitString descriptiveSplit = createSplitString(input);
@@ -235,12 +236,12 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
                 : null;
     }
 
-    private DisplayStack createBackground(AnnotationComparisonInput<ProvidesStackInput> input)
+    private DisplayStack createBackground(AnnotationComparisonInput<ProvidesStackInput> input, Logger logger)
             throws JobExecutionException {
 
         try {
             NamedStacks stacks = new NamedStacks();
-            input.getInput().addToStoreInferNames(stacks);
+            input.getInput().addToStoreInferNames(stacks, logger);
             return DisplayStack.create(stacks.getException(background));
 
         } catch (CreateException | OperationFailedException e) {

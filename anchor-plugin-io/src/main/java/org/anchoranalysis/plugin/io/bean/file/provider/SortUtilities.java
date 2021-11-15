@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class SortUtilities {
 
-    public static Collection<File> sortFiles(Collection<File> files) {
+    public static List<File> sortFiles(Collection<File> files) {
         List<File> out = new ArrayList<>();
         out.addAll(files);
         Collections.sort(out);

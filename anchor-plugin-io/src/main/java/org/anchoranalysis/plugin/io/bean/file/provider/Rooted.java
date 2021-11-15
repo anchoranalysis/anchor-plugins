@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.file.provider;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -66,7 +66,7 @@ public class Rooted extends FilesProviderWithoutDirectory {
     private static Log log = LogFactory.getLog(Rooted.class);
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
+    public List<File> create(InputManagerParams params) throws FilesProviderException {
 
         try {
             log.debug(

@@ -42,8 +42,8 @@ public class FromStackReader extends ImageMetadataReader {
 
         StackReader selectedReader = Optional.ofNullable(stackReader).orElse(defaultStackReader);
 
-        try (OpenedImageFile file = selectedReader.openFile(path, logger)) {
-            return file.metadata(seriesIndex);
+        try (OpenedImageFile file = selectedReader.openFile(path)) {
+            return file.metadata(seriesIndex, logger);
         }
     }
 }

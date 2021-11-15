@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
@@ -93,7 +94,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
         openStackIfNecessary();
         return new TimeSequence(stack);
     }
@@ -104,24 +105,25 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     }
 
     @Override
-    public Optional<List<String>> channelNames() throws ImageIOException {
+    public Optional<List<String>> channelNames(Logger logger) throws ImageIOException {
         openStackIfNecessary();
-        return OptionalUtilities.createFromFlag(stack.isRGB(), RGBChannelNames.asList());
+        boolean includeAlpha = numberChannels(logger) == 4;
+        return OptionalUtilities.createFromFlag(stack.isRGB(), RGBChannelNames.asList(includeAlpha));
     }
 
     @Override
-    public int numberChannels() throws ImageIOException {
+    public int numberChannels(Logger logger) throws ImageIOException {
         openStackIfNecessary();
         return stack.getNumberChannels();
     }
 
     @Override
-    public int numberFrames() throws ImageIOException {
+    public int numberFrames(Logger logger) throws ImageIOException {
         return 1;
     }
 
     @Override
-    public int bitDepth() throws ImageIOException {
+    public int bitDepth(Logger logger) throws ImageIOException {
         openStackIfNecessary();
         if (!stack.allChannelsHaveIdenticalType()) {
             throw new ImageIOException(
@@ -142,9 +144,17 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     }
 
     @Override
-    public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
+    public Dimensions dimensionsForSeries(int seriesIndex, Logger logger) throws ImageIOException {
         openStackIfNecessary();
         return stack.dimensions();
+    }
+
+    @Override
+    public ImageTimestampsAttributes timestamps() throws ImageIOException {
+        if (timestamps == null) {
+            timestamps = ImageTimestampsAttributesFactory.fromPath(path);
+        }
+        return timestamps;
     }
 
     /** Opens the stack if has not already been opened. */
@@ -155,13 +165,5 @@ class OpenedRasterOpenCV implements OpenedImageFile {
         } catch (OperationFailedException e) {
             throw new ImageIOException("Failed to convert an OpenCV image structure to a stack", e);
         }
-    }
-
-    @Override
-    public ImageTimestampsAttributes timestamps() throws ImageIOException {
-        if (timestamps == null) {
-            timestamps = ImageTimestampsAttributesFactory.fromPath(path);
-        }
-        return timestamps;
     }
 }

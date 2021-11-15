@@ -375,7 +375,7 @@ public class SegmentInstanceWithModel<T>
                             try {
                                 TimeSequence sequence =
                                         input.getInput()
-                                                .createStackSequenceForSeries(0)
+                                                .createStackSequenceForSeries(0, input.getLogger())
                                                 .get(ProgressIgnore.get());
                                 return sequence.get(0);
 

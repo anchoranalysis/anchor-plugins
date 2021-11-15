@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.io.bean.file.provider;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +45,7 @@ public class Combine extends FilesProviderWithoutDirectory {
     // END BEAN PROPERTIES
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
+    public List<File> create(InputManagerParams params) throws FilesProviderException {
 
         try (ProgressMultiple progress = new ProgressMultiple(params.getProgress(), list.size())) {
 

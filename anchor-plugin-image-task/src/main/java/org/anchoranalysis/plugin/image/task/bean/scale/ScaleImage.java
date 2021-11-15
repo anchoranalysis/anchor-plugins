@@ -125,7 +125,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     public void doJobOnInput(InputBound<StackSequenceInput, NoSharedState> input)
             throws JobExecutionException {
         try {
-            NamedStacks stacks = input.getInput().asSet(ProgressIgnore.get());
+            NamedStacks stacks = input.getInput().asSet(ProgressIgnore.get(), input.getLogger());
 
             ImageInitialization initialization =
                     InitializationFactory.createWithoutStacks(input.createInitializationContext());

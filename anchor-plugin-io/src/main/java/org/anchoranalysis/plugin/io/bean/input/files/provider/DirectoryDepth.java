@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.input.files.provider;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -46,7 +46,7 @@ public class DirectoryDepth extends FilesProviderWithDirectoryString {
     // END BEAN PROPERTIES
 
     @Override
-    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
+    public List<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
             throws FilesProviderException {
 
         String[] filesDir = directory.toFile().list();

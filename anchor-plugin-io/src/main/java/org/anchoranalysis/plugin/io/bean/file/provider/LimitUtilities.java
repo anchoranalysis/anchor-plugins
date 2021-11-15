@@ -29,13 +29,14 @@ package org.anchoranalysis.plugin.io.bean.file.provider;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class LimitUtilities {
 
-    public static Collection<File> apply(Collection<File> filesIn, int maxNumItems) {
+    public static List<File> apply(Collection<File> filesIn, int maxNumItems) {
 
         ArrayList<File> filesOut = new ArrayList<>();
 

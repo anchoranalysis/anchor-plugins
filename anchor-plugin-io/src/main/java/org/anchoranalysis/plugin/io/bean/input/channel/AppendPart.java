@@ -61,8 +61,6 @@ class AppendPart extends NamedChannelsInputPart {
     private final AdditionalChannel additionalChannel;
 
     private final StackReader stackReader;
-
-    private final Logger logger;
     // END: REQUIRED ARGUMENTS
 
     private OpenedImageFile openedFileMemo;
@@ -72,12 +70,11 @@ class AppendPart extends NamedChannelsInputPart {
             String channelName,
             int channelIndex,
             PathSupplier filePath,
-            StackReader stackReader,
-            Logger logger) {
+            StackReader stackReader
+            ) {
         this.toAppendTo = toAppendTo;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
         this.stackReader = stackReader;
-        this.logger = logger;
     }
 
     @Override
@@ -86,24 +83,24 @@ class AppendPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
-        return toAppendTo.dimensions(stackIndexInSeries);
+    public Dimensions dimensions(int stackIndexInSeries, Logger logger) throws ImageIOException {
+        return toAppendTo.dimensions(stackIndexInSeries, logger);
     }
 
     @Override
-    public boolean hasChannel(String channelName) throws ImageIOException {
+    public boolean hasChannel(String channelName, Logger logger) throws ImageIOException {
 
         if (additionalChannel.getName().equals(channelName)) {
             return true;
         }
-        return toAppendTo.hasChannel(channelName);
+        return toAppendTo.hasChannel(channelName, logger);
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress)
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress, Logger logger)
             throws ImageIOException {
 
-        NamedChannelsForSeries existing = toAppendTo.createChannelsForSeries(seriesIndex, progress);
+        NamedChannelsForSeries existing = toAppendTo.createChannelsForSeries(seriesIndex, progress, logger);
 
         openRasterIfNecessary();
 
@@ -143,18 +140,18 @@ class AppendPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public int numberChannels() throws ImageIOException {
-        return toAppendTo.numberChannels() + 1;
+    public int numberChannels(Logger logger) throws ImageIOException {
+        return toAppendTo.numberChannels(logger) + 1;
     }
 
     @Override
-    public int bitDepth() throws ImageIOException {
-        return toAppendTo.bitDepth();
+    public int bitDepth(Logger logger) throws ImageIOException {
+        return toAppendTo.bitDepth(logger);
     }
 
     @Override
-    public ImageMetadata metadata(int seriesIndex) throws ImageIOException {
-        ImageMetadata existing = toAppendTo.metadata(seriesIndex);
+    public ImageMetadata metadata(int seriesIndex, Logger logger) throws ImageIOException {
+        ImageMetadata existing = toAppendTo.metadata(seriesIndex, logger);
         return new ImageMetadata(
                 existing.getDimensions(),
                 existing.getNumberChannels() + 1,
@@ -182,7 +179,7 @@ class AppendPart extends NamedChannelsInputPart {
             Path filePathAdditional = additionalChannel.getFilePath();
 
             if (openedFileMemo == null) {
-                openedFileMemo = stackReader.openFile(filePathAdditional, logger);
+                openedFileMemo = stackReader.openFile(filePathAdditional);
             }
 
         } catch (DerivePathException e) {

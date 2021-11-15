@@ -31,6 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.image.io.stack.output.StackRGBState;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
@@ -40,8 +41,17 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
  * <p>If any optional condition does not have a writer, then {@code writer} is used in this case. An
  * exception is {@code whenBinaryChannel}, which instead falls back to {@code whenSingleChannel} if
  * unspecified.
+ * 
+ * <p>The order of precedence is:
  *
- * <p>{@code whenBinaryChannel} is given precedence over {@code whenSingleChannel}.
+ * <ul>
+ * <li>{@code whenNotEightBit}
+ * <li>{@code whenRGB}
+ * <li>{@code whenRGBAlpha}
+ * <li>{@code whenThreeChannels}
+ * <li>{@code whenBinaryChannel}
+ * <li>{@code whenSingleChannel}
+ * </ul>
  *
  * @author Owen Feehan
  */
@@ -51,14 +61,20 @@ public class BranchChannels extends StackWriterDelegateBase {
     /** Default writer, if a more specific writer is not specified for a condition. */
     @BeanField @Getter @Setter private StackWriter writer;
 
+    /** Writer employed if a stack contains channels that are not 8-bit. */
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenNotEightBit;
+
+    /** Writer employed if a stack is a <b>three-channeled RGB</b> image. */
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGB;
+    
+    /** Writer employed if a stack is a <b>four-channeled RGBA</b> image. */
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGBAlpha;
+    
     /** Writer employed if a stack is a single-channeled image, not guaranteed to be binary. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenSingleChannel;
 
     /** Writer employed if a stack is a <b>three-channeled non-RGB</b> image. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenThreeChannels;
-
-    /** Writer employed if a stack is a <b>three-channeled RGB</b> image. */
-    @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGB;
 
     /** Writer employed if a stack is a <b>single-channeled binary</b> image. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenBinaryChannel;
@@ -67,8 +83,12 @@ public class BranchChannels extends StackWriterDelegateBase {
     @Override
     protected StackWriter selectDelegate(StackWriteOptions writeOptions) {
         StackWriteAttributes attributes = writeOptions.getAttributes();
-        if (attributes.isRgb()) {
+        if (!attributes.isEightBitChannels()) {
+            return writerOrDefault(whenNotEightBit);
+        } else if (attributes.getRgb()==StackRGBState.RGB_WITHOUT_ALPHA) {
             return writerOrDefault(whenRGB);
+        } else if (attributes.getRgb()==StackRGBState.RGB_WITH_ALPHA) {
+            return writerOrDefault(whenRGBAlpha);            
         } else if (attributes.isThreeChannels()) {
             return writerOrDefault(whenThreeChannels);
         } else if (attributes.isSingleChannel()) {

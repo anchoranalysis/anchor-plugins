@@ -29,27 +29,24 @@ package org.anchoranalysis.plugin.io.bean.file.namer.patternspan;
 import com.google.api.client.repackaged.com.google.common.base.Preconditions;
 import com.owenfeehan.pathpatternfinder.Pattern;
 import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
-import java.io.File;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
-import org.apache.commons.io.IOCase;
 
 /**
- * Extracts the a "spanning part" of the pattern from the string.
+ * Extracts the a <i>spanning part</i> of the pattern from the string.
  *
  * <p>The spanning part should contain all variable elements, and optionally adjacent (or in
  * between) constant elements.
+ * 
+ * <p>It assumes that {@link Pattern} has been derived from a particular list of files,
+ * and the <i>spanning part</i> is retrieved for a corresponding index in this list.
+ * 
+ * <p>It uses saved components {@link Pattern} to efficiently perform this operation.
  *
  * @author Owen Feehan
  */
 @AllArgsConstructor
 class ExtractVariableSpan {
-
-    private static Logger log = Logger.getLogger(ExtractVariableSpan.class.getName());
 
     /** The pattern used to extract the spanning element. */
     private Pattern pattern;
@@ -64,9 +61,9 @@ class ExtractVariableSpan {
     private int indexSpanEnd;
 
     /**
-     * The right-most constant element before the span portion begins
+     * The right-most constant element before the span portion begins.
      *
-     * @return a string describing this constant element
+     * @return a string describing this constant element.
      */
     public String extractConstantElementBeforeSpanPortion() {
         // Find all the constant portions before the empty string
@@ -80,61 +77,25 @@ class ExtractVariableSpan {
 
         assert (element.hasConstantValue());
 
-        return PatternUtilities.constantElementAsString(element);
+        // The index is irrelevant, as it's a constant value, so we use 0.
+        return element.valueAt(0);
     }
 
     /**
-     * Extracts the spanning-portion from a particular file, ensuring it has UNIX-style path
+     * Extracts the spanning-portion from a particular file, ensuring it has UNIX-style path.
      *
-     * @param file
-     * @return the spanning-portion of the file-path.
+     * @param fileIndex the index of the file (zero-valued) among the strings used for deriving the pattern.
+     * @return the spanning-portion of the file-path corresponding to {@code fileIndex}.
      */
-    public String extractSpanPortionFor(File file, IOCase ioCase) {
+    public String extractSpanPortionFor(int fileIndex) {
         return FilePathToUnixStyleConverter.toStringUnixStyle(
-                extractVariableSpanUnnormalized(file, ioCase));
+                extractTrimmedFromBothSides(fileIndex));
     }
 
-    private String extractVariableSpanUnnormalized(File file, IOCase ioCase) {
-        try {
-            return extractVariableSpanWithError(file, ioCase);
-        } catch (OperationFailedException e) {
-            log.log(Level.WARNING, "Cannot extract a variable", e);
-            return elseName;
-        }
-    }
-
-    private String extractVariableSpanWithError(File file, IOCase ioCase)
-            throws OperationFailedException {
-        String path = file.toPath().toString();
-        return trimConstantElementsFromBothSides(path, ioCase);
-    }
-
-    private String trimConstantElementsFromBothSides(String str, IOCase ioCase)
-            throws OperationFailedException {
-        Optional<String[]> fittedElements = pattern.fitAgainst(str, ioCase);
-
-        if (fittedElements.isPresent()) {
-            return extractFromFittedElements(fittedElements.get());
-        } else {
-            throw new OperationFailedException(
-                    String.format("Cannot match pattern %s against %s", pattern, str));
-        }
-    }
-
-    private String extractFromFittedElements(String[] fittedElements) {
-        Preconditions.checkArgument(fittedElements.length == pattern.size());
-
-        // Replace any constants from the left-hand-side with empty strings
-        for (int i = 0; i < indexSpanStart; i++) {
-            fittedElements[i] = "";
-        }
-
-        // Replace any constants from the right-hand-side with empty strings
-        for (int i = (fittedElements.length - 1); i > indexSpanEnd; i--) {
-            fittedElements[i] = "";
-        }
-
-        // Combine all strings to form the name
-        return String.join("", fittedElements);
+    /** Extracts the spanning-portion and trims the constant patterns from both left and right. */
+    private String extractTrimmedFromBothSides(int fileIndex) {
+        String[] elements = pattern.valuesAt(fileIndex, indexSpanStart, indexSpanEnd+1);
+        Preconditions.checkArgument(elements.length == (indexSpanEnd-indexSpanStart+1));
+        return String.join("", elements);
     }
 }

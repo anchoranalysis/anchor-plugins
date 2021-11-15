@@ -147,7 +147,7 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
             // If we have a condition to check against
             if (checkParsedFilePathBag == null || checkParsedFilePathBag.accept(bag)) {
                 files.add(Paths.get(key).toFile());
-                openedFiles.add(new OpenedMultiFile(getStackReader(), bag, logger));
+                openedFiles.add(new OpenedMultiFile(getStackReader(), bag));
             }
         }
 

@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.io.bean.file.provider;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -45,7 +45,7 @@ public class RemoveMatching extends FilesProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    protected Collection<File> transform(Collection<File> source, boolean debugMode) {
+    protected List<File> transform(List<File> source, boolean debugMode) {
 
         // Loop through each file and see if it's in our has map
         Iterator<File> itr = source.iterator();
