@@ -28,7 +28,7 @@ public class JPEG extends HeaderFormat {
 
     @Override
     protected Optional<ImageMetadata> populateFromMetadata(
-            Metadata metadata, ImageFileAttributes timestamps) throws ImageIOException {
+            Metadata metadata, ImageFileAttributes attributes) throws ImageIOException {
         Optional<OrientationChange> orientation =
                 OrientationReader.determineOrientationCorrection(metadata);
 
@@ -39,7 +39,7 @@ public class JPEG extends HeaderFormat {
                         .map(Dimensions::new);
 
         if (dimensions.isPresent()) {
-            return inferRemainingAttributes(metadata, dimensions.get(), timestamps);
+            return inferRemainingAttributes(metadata, dimensions.get(), attributes);
         }
 
         return Optional.empty();

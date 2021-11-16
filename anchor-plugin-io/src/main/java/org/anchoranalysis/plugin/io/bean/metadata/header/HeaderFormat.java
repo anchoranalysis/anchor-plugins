@@ -38,8 +38,8 @@ public abstract class HeaderFormat extends AnchorBean<HeaderFormat> {
                     return Optional.empty();
                 }
 
-                ImageFileAttributes timestamps = ImageFileAttributes.fromPath(path);
-                return populateFromMetadata(metadata, timestamps);
+                ImageFileAttributes attributes = ImageFileAttributes.fromPath(path);
+                return populateFromMetadata(metadata, attributes);
             } else {
                 return Optional.empty();
             }
@@ -62,10 +62,10 @@ public abstract class HeaderFormat extends AnchorBean<HeaderFormat> {
      * Creates a {@link ImageMetadata}, if possible, from {@code metadata}.
      *
      * @param metadata the {@link Metadata} to infer {@link ImageMetadata} from.
-     * @param timestamps TODO
+     * @param attributes timestamps and other file-attributes associated with the metadata.
      * @return the inferred metadata, if it was possible to infer it.
      * @throws ImageIOException if the metadata does not meet expectations.
      */
     protected abstract Optional<ImageMetadata> populateFromMetadata(
-            Metadata metadata, ImageFileAttributes timestamps) throws ImageIOException;
+            Metadata metadata, ImageFileAttributes attributes) throws ImageIOException;
 }

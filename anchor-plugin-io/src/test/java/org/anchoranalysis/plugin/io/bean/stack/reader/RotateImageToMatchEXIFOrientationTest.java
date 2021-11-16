@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Owen Feehan
  */
-public class RotateImageToMatchEXIFOrientationTest {
+class RotateImageToMatchEXIFOrientationTest {
 
     static {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
