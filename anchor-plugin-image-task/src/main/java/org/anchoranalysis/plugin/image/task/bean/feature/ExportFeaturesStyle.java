@@ -18,6 +18,7 @@ import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
 @AllArgsConstructor
 public class ExportFeaturesStyle extends AnchorBean<ExportFeaturesStyle> {
 
+    // START BEAN PROPERTIES
     /**
      * When true, columns containing all {@link Double#NaN} values are removed before outputting.
      *
@@ -36,7 +37,17 @@ public class ExportFeaturesStyle extends AnchorBean<ExportFeaturesStyle> {
      */
     @BeanField @Getter @Setter boolean visuallyShortenDecimals = true;
 
+    /**
+     * When false, an image is reported as errored, if any exception is thrown during calculation.
+     *
+     * <p>When true, then a value of {@link Double#NaN} is returned, and a message is written to the
+     * error-log.
+     */
+    @BeanField @Getter @Setter boolean suppressErrors = false;
+    // END BEAN PROPERTIES
+
     public FeatureExporterContext deriveContext(InputOutputContext context) {
-        return new FeatureExporterContext(context, removeNaNColumns, visuallyShortenDecimals);
+        return new FeatureExporterContext(
+                context, removeNaNColumns, visuallyShortenDecimals, suppressErrors);
     }
 }

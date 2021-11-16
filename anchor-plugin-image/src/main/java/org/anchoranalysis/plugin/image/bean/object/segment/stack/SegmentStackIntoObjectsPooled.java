@@ -26,8 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
-import org.anchoranalysis.experiment.bean.io.ExecutionTimeStatistics;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -47,32 +46,32 @@ public abstract class SegmentStackIntoObjectsPooled<T>
         extends SegmentationBean<SegmentStackIntoObjectsPooled<T>> {
 
     /**
-     * Segments individually using a pool of size 1 just for one stack
+     * Segments individually using a pool of size 1 just for one stack.
      *
      * <p>See {@link #segment(Stack, ConcurrentModelPool, ExecutionTimeRecorder)} for more details.
      *
-     * @param stack the stack to segment
-     * @param executionTimeStatistics for measuring execution-times of operations.
+     * @param stack the stack to segment.
+     * @param executionTimeRecorder for measuring execution-times of operations.
      * @return a collection of objects with corresponding confidence scores.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
      */
-    public SegmentedObjects segment(Stack stack, ExecutionTimeStatistics executionTimeStatistics)
+    public SegmentedObjects segment(Stack stack, ExecutionTimeRecorder executionTimeRecorder)
             throws SegmentationFailedException {
         try {
             return segment(
                     stack,
                     createModelPool(ConcurrencyPlan.singleCPUProcessor(0)),
-                    executionTimeStatistics);
+                    executionTimeRecorder);
         } catch (CreateModelFailedException e) {
             throw new SegmentationFailedException("Cannot create model for segmentaiton", e);
         }
     }
 
     /**
-     * Creates the model pool (to be used by multiple threads)
+     * Creates the model pool (to be used by multiple threads).
      *
-     * @param plan the number and types of processors available for concurrent execution
-     * @return the newly created model pool
+     * @param plan the number and types of processors available for concurrent execution.
+     * @return the newly created model pool.
      * @throws CreateModelFailedException if a model cannot be created.
      */
     public abstract ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan)
@@ -83,8 +82,8 @@ public abstract class SegmentStackIntoObjectsPooled<T>
      *
      * <p>Any created objects will always exist inside the stack's {@link Extent}.
      *
-     * @param stack the stack to segment
-     * @param executionTimeRecorder TODO
+     * @param stack the stack to segment.
+     * @param executionTimeRecorder measures execution-times of particular operations.
      * @return a collection of objects with corresponding confidence scores.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
      */

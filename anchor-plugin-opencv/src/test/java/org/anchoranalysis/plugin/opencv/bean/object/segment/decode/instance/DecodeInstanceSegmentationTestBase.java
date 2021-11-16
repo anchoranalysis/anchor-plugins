@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.core.exception.InitializeException;
-import org.anchoranalysis.experiment.bean.io.ExecutionTimeStatistics;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageInitializationFactory;
@@ -98,7 +98,8 @@ abstract class DecodeInstanceSegmentationTestBase {
     private void assertExpectedSegmentation(
             Stack stack, List<BoundingBox> expectedBoxes, String suffix)
             throws SegmentationFailedException {
-        SegmentedObjects segmentResults = segmenter.segment(stack, new ExecutionTimeStatistics());
+        SegmentedObjects segmentResults =
+                segmenter.segment(stack, ExecutionTimeRecorderIgnore.instance());
         writer.writeObjects("objects_" + suffix, segmentResults.asObjects(), stackRGB());
         ExpectedBoxesChecker.assertExpectedBoxes(segmentResults.asObjects(), expectedBoxes);
     }

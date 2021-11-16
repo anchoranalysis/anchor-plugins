@@ -39,7 +39,8 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 public class FromMetadata extends ChannelMap {
 
     @Override
-    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger) throws CreateException {
+    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger)
+            throws CreateException {
 
         try {
             Optional<List<String>> names = openedFile.channelNames(logger);

@@ -172,7 +172,8 @@ public class ConvertImageFormat
             throws JobExecutionException {
 
         try {
-            NamedChannelsForSeries channels = createNamedChannels(input.getInput(), seriesIndex, context.getLogger());
+            NamedChannelsForSeries channels =
+                    createNamedChannels(input.getInput(), seriesIndex, context.getLogger());
 
             ChannelGetter channelGetter = maybeAddFilter(channels, context);
 
@@ -180,14 +181,24 @@ public class ConvertImageFormat
                 channelGetter = maybeAddConverter(channelGetter);
             }
 
+            // This is where the input image is typically read for the first time, so we profile
+            // this operation.
+            int numberTimepoints =
+                    context.getExecutionTimeRecorder()
+                            .recordExecutionTime(
+                                    "Determining number of timepoints",
+                                    () ->
+                                            channels.sizeT(
+                                                    ProgressIgnore.get(), context.getLogger()));
+
             convertEachTimepoint(
                     seriesIndex,
                     channels.channelNames(),
                     numberSeries,
-                    channels.sizeT(ProgressIgnore.get(), context.getLogger()),
+                    numberTimepoints,
                     channelGetter,
                     sharedStateJob,
-                    context.getLogger());
+                    context);
 
         } catch (ImageIOException | CreateException e) {
             throw new JobExecutionException(e);
@@ -216,7 +227,7 @@ public class ConvertImageFormat
             int sizeT,
             ChannelGetter channelGetter,
             OutputSequenceIndexed<Stack, String> outputSequence,
-            Logger logger)
+            InputOutputContext context)
             throws JobExecutionException {
 
         for (int t = 0; t < sizeT; t++) {
@@ -224,14 +235,14 @@ public class ConvertImageFormat
             CalculateOutputName namer =
                     new CalculateOutputName(seriesIndex, t, numberSeries, sizeT, suppressSeries);
 
-            logger.messageLogger().logFormatted("Starting time-point: %d", t);
+            context.getLogger().messageLogger().logFormatted("Starting time-point: %d", t);
 
             try {
                 NamedStacks stacks =
                         channelConversionStyle.convert(
                                 channelNames,
                                 new ChannelGetterForTimepoint(channelGetter, t),
-                                logger);
+                                context.getLogger());
 
                 stacks.forEach(
                         (existingName, stack) ->
@@ -244,23 +255,25 @@ public class ConvertImageFormat
                 throw new JobExecutionException(e);
             }
 
-            logger.messageLogger().logFormatted("Ending time-point: %d", t);
+            context.getLogger().messageLogger().logFormatted("Ending time-point: %d", t);
         }
     }
 
-    private NamedChannelsForSeries createNamedChannels(NamedChannelsInput input, int seriesIndex, Logger logger)
-            throws ImageIOException {
+    private NamedChannelsForSeries createNamedChannels(
+            NamedChannelsInput input, int seriesIndex, Logger logger) throws ImageIOException {
         return input.createChannelsForSeries(seriesIndex, new ProgressConsole(1), logger);
     }
 
     private void addStackToOutput(
             OutputSequenceIndexed<Stack, String> outputSequence,
             Optional<String> existingName,
-            StoreSupplier<Stack> stack,
+            StoreSupplier<Stack> stackSupplier,
             CalculateOutputName namer)
             throws OperationFailedException {
         try {
-            outputSequence.add(stack.get(), namer.calculateOutputName(existingName));
+            Optional<String> outputName = namer.calculateOutputName(existingName);
+            outputSequence.add(stackSupplier.get(), outputName);
+
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }

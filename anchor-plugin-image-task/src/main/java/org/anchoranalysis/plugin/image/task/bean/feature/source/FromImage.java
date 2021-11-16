@@ -34,12 +34,12 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.results.ResultsVector;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -92,9 +92,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
                 createCalculator(input, context);
 
         // Calculate the results for the current stack
-        ResultsVector results =
-                calculateResults(
-                        calculator, context.getRowSource(), context.getExecutionTimeRecorder());
+        ResultsVector results = calculateResults(calculator, context);
 
         thumbnail.start();
 
@@ -109,21 +107,26 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
     private ResultsVector calculateResults(
             FeatureCalculatorFromProvider<FeatureInputStack> factory,
-            FeatureList<FeatureInputStack> features,
-            ExecutionTimeRecorder executionTimeRecorder)
+            FeatureCalculationContext<FeatureList<FeatureInputStack>> context)
             throws NamedFeatureCalculateException {
-        return executionTimeRecorder.recordExecutionTime(
-                "Calculating features",
-                () -> {
-                    try {
-                        // The energy-stack will be added later, so we do not need to intialize it
-                        // in the FeatureInputStack
-                        return factory.calculatorForAll(features)
-                                .calculate(new FeatureInputStack());
-                    } catch (InitializeException e) {
-                        throw new NamedFeatureCalculateException(e);
-                    }
-                });
+        return context.getExecutionTimeRecorder()
+                .recordExecutionTime(
+                        "Calculating features",
+                        () -> {
+                            try {
+                                // The energy-stack will be added later, so we do not need to
+                                // initialize it
+                                // in the FeatureInputStack
+                                FeatureCalculatorMulti<FeatureInputStack> calculator =
+                                        factory.calculatorForAll(context.getRowSource());
+                                return calculator.calculate(
+                                        new FeatureInputStack(),
+                                        context.getLogger().errorReporter(),
+                                        context.isSuppressErrors());
+                            } catch (InitializeException e) {
+                                throw new NamedFeatureCalculateException(e);
+                            }
+                        });
     }
 
     private Optional<DisplayStack> extractThumbnail(EnergyStack energyStack, boolean thumbnails)

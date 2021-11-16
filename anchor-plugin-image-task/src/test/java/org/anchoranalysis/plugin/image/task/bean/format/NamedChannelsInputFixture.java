@@ -85,8 +85,8 @@ class NamedChannelsInputFixture extends NamedChannelsInput {
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress, Logger logger)
-            throws ImageIOException {
+    public NamedChannelsForSeries createChannelsForSeries(
+            int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
         return new NamedChannelsForSeriesFixture(stack);
     }
 

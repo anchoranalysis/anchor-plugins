@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.quick.bean.structure;
 
-import lombok.Getter;
-import lombok.Setter;
 import java.io.File;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;

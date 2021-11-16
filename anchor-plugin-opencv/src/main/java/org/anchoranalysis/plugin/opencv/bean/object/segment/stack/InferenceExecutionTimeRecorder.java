@@ -2,7 +2,7 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.OptionalFactory;
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 
 /**
  * Records the execution-time of several operations during inference.

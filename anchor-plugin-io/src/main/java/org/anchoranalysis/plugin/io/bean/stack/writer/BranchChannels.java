@@ -41,16 +41,16 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
  * <p>If any optional condition does not have a writer, then {@code writer} is used in this case. An
  * exception is {@code whenBinaryChannel}, which instead falls back to {@code whenSingleChannel} if
  * unspecified.
- * 
+ *
  * <p>The order of precedence is:
  *
  * <ul>
- * <li>{@code whenNotEightBit}
- * <li>{@code whenRGB}
- * <li>{@code whenRGBAlpha}
- * <li>{@code whenThreeChannels}
- * <li>{@code whenBinaryChannel}
- * <li>{@code whenSingleChannel}
+ *   <li>{@code whenNotEightBit}
+ *   <li>{@code whenRGB}
+ *   <li>{@code whenRGBAlpha}
+ *   <li>{@code whenThreeChannels}
+ *   <li>{@code whenBinaryChannel}
+ *   <li>{@code whenSingleChannel}
  * </ul>
  *
  * @author Owen Feehan
@@ -66,10 +66,10 @@ public class BranchChannels extends StackWriterDelegateBase {
 
     /** Writer employed if a stack is a <b>three-channeled RGB</b> image. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGB;
-    
+
     /** Writer employed if a stack is a <b>four-channeled RGBA</b> image. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGBAlpha;
-    
+
     /** Writer employed if a stack is a single-channeled image, not guaranteed to be binary. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenSingleChannel;
 
@@ -85,10 +85,10 @@ public class BranchChannels extends StackWriterDelegateBase {
         StackWriteAttributes attributes = writeOptions.getAttributes();
         if (!attributes.isEightBitChannels()) {
             return writerOrDefault(whenNotEightBit);
-        } else if (attributes.getRgb()==StackRGBState.RGB_WITHOUT_ALPHA) {
+        } else if (attributes.getRgb() == StackRGBState.RGB_WITHOUT_ALPHA) {
             return writerOrDefault(whenRGB);
-        } else if (attributes.getRgb()==StackRGBState.RGB_WITH_ALPHA) {
-            return writerOrDefault(whenRGBAlpha);            
+        } else if (attributes.getRgb() == StackRGBState.RGB_WITH_ALPHA) {
+            return writerOrDefault(whenRGBAlpha);
         } else if (attributes.isThreeChannels()) {
             return writerOrDefault(whenThreeChannels);
         } else if (attributes.isSingleChannel()) {

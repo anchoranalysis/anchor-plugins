@@ -99,9 +99,7 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
     }
 
     private List<T> createInputs(
-            List<File> filesCreated,
-            Function<NamedFile, T> mapToInput,
-            FileNamerContext context)
+            List<File> filesCreated, Function<NamedFile, T> mapToInput, FileNamerContext context)
             throws InputReadFailedException {
         return FunctionalList.mapToList(namer.deriveNameUnique(filesCreated, context), mapToInput);
     }

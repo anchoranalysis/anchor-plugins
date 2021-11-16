@@ -133,13 +133,15 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
     }
 
     @Override
-    public void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex, Logger logger)
+    public void addAsSeparateChannels(
+            NamedProviderStore<TimeSequence> stacks, int timeIndex, Logger logger)
             throws OperationFailedException {
         throwUnsupportedException();
     }
 
     @Override
-    public void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Progress progress, Logger logger)
+    public void addAsSeparateChannels(
+            NamedStacks stacks, int timeIndex, Progress progress, Logger logger)
             throws OperationFailedException {
         throwUnsupportedException();
     }

@@ -1,5 +1,8 @@
 package org.anchoranalysis.plugin.io.bean.metadata.header;
 
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.bmp.BmpHeaderDirectory;
 import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.ImageFileAttributes;
@@ -7,10 +10,6 @@ import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.bioformats.metadata.ReadMetadataUtilities;
 import org.anchoranalysis.spatial.box.Extent;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.bmp.BmpHeaderDirectory;
-
 
 /**
  * The headers found in a BMP file.
@@ -29,7 +28,7 @@ public class BMP extends HeaderFormat {
             Metadata metadata, ImageFileAttributes timestamps) throws ImageIOException {
 
         Directory directory = metadata.getFirstDirectoryOfType(BmpHeaderDirectory.class);
-        if (directory==null) {
+        if (directory == null) {
             return Optional.empty();
         }
 
@@ -52,7 +51,7 @@ public class BMP extends HeaderFormat {
         if (!bitDepth.isPresent()) {
             return Optional.empty();
         }
-        
+
         switch (bitDepth.get()) {
             case 1:
             case 2:
@@ -66,16 +65,18 @@ public class BMP extends HeaderFormat {
             case 16:
                 return createMetadata(extent.get(), 2, 8, timestamps);
             case 24:
-                return createMetadata(extent.get(), 3, 8, timestamps);                
+                return createMetadata(extent.get(), 3, 8, timestamps);
             case 32:
-                return createMetadata(extent.get(), 4, 8, timestamps);                
+                return createMetadata(extent.get(), 4, 8, timestamps);
             default:
-                throw new ImageIOException( String.format("Unrecognised bitsPerPixel of %d", bitDepth.get()));
+                throw new ImageIOException(
+                        String.format("Unrecognised bitsPerPixel of %d", bitDepth.get()));
         }
     }
-    
-    private static Optional<ImageMetadata> createMetadata(Extent extent, int numberChannels, int pixelDepth, ImageFileAttributes timestamps) {
-        return Optional.of(MetadataFactory.createMetadata(extent, numberChannels, pixelDepth, timestamps));
-    }
 
+    private static Optional<ImageMetadata> createMetadata(
+            Extent extent, int numberChannels, int pixelDepth, ImageFileAttributes timestamps) {
+        return Optional.of(
+                MetadataFactory.createMetadata(extent, numberChannels, pixelDepth, timestamps));
+    }
 }

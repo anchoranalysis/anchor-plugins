@@ -96,7 +96,10 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Progress progress, Logger logger)
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
+            Progress progress,
+            Logger logger)
             throws OperationFailedException {
         String stackName = channelName.orElse(DEFAULT_STACK_NAME);
         addConvertedInputToStacks(stackName, stacks, seriesIndex, progress, logger);
@@ -107,7 +110,8 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            Progress progress, Logger logger)
+            Progress progress,
+            Logger logger)
             throws OperationFailedException {
         addConvertedInputToStacks(name, stacks, seriesIndex, progress, logger);
     }
@@ -117,13 +121,15 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
         return getDelegate().numberFrames();
     }
 
-    private TimeSequence convert(Progress progressParent, NamedChannelsInput input, int seriesIndex, Logger logger)
+    private TimeSequence convert(
+            Progress progressParent, NamedChannelsInput input, int seriesIndex, Logger logger)
             throws OperationFailedException {
 
         try (ProgressMultiple progress = new ProgressMultiple(progressParent, 2)) {
 
             NamedChannelsForSeries channels =
-                    input.createChannelsForSeries(seriesIndex, progress.trackCurrentChild(), logger);
+                    input.createChannelsForSeries(
+                            seriesIndex, progress.trackCurrentChild(), logger);
             progress.incrementChild();
 
             return new TimeSequence(stackFromChannels(channels, progress, logger));
@@ -137,12 +143,14 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            Progress progress, Logger logger)
+            Progress progress,
+            Logger logger)
             throws OperationFailedException {
         stacks.add(name, () -> convert(progress, getDelegate(), seriesIndex, logger));
     }
 
-    private Stack stackFromChannels(NamedChannelsForSeries channels, ProgressMultiple progress, Logger logger)
+    private Stack stackFromChannels(
+            NamedChannelsForSeries channels, ProgressMultiple progress, Logger logger)
             throws OperationFailedException {
         try {
             if (channelName.isPresent()) {
@@ -157,7 +165,8 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
         }
     }
 
-    private Stack rgbStackFromChannels(NamedChannelsForSeries channels, ProgressMultiple progress, Logger logger)
+    private Stack rgbStackFromChannels(
+            NamedChannelsForSeries channels, ProgressMultiple progress, Logger logger)
             throws OperationFailedException {
         if (channels.numberChannels() != 3) {
             throw new OperationFailedException(
@@ -179,7 +188,10 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
     }
 
     private Channel extractChannel(
-            NamedChannelsForSeries channels, String channelName, ProgressMultiple progress, Logger logger)
+            NamedChannelsForSeries channels,
+            String channelName,
+            ProgressMultiple progress,
+            Logger logger)
             throws GetOperationFailedException {
         return channels.getChannel(channelName, timeIndex, progress.trackCurrentChild(), logger);
     }

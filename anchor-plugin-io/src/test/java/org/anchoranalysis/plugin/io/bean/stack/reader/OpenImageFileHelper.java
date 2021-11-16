@@ -50,11 +50,13 @@ class OpenImageFileHelper {
      * Opens an image-file from the {@code subdirectory} passed to the constructor.
      *
      * @param filename the name of a file in {@code subdirectory} to open.
-     * @param orientationCorrection calculates any needed correction applied to the orientation as the image is loaded.
+     * @param orientationCorrection calculates any needed correction applied to the orientation as
+     *     the image is loaded.
      * @return the opened file.
      * @throws ImageIOException if the file cannot be opened.
      */
-    public OpenedImageFile openFile(String filename, CalculateOrientationChange orientationCorrection)
+    public OpenedImageFile openFile(
+            String filename, CalculateOrientationChange orientationCorrection)
             throws ImageIOException {
         return reader.openFile(pathForFile(filename), orientationCorrection);
     }
