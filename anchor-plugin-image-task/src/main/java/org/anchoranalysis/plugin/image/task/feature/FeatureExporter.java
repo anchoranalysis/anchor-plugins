@@ -81,15 +81,15 @@ public class FeatureExporter<S> {
 
     /** Outputs thumbnails. */
     private ThumbnailsWriter thumbnails = new ThumbnailsWriter();
-
+    
     /** Context for outputting operations. */
     private FeatureExporterContext context;
 
     /**
      * Creates the shared state.
      *
-     * @param outputMetadata headers and output-name for the feature CSV file that is written
-     * @param rowSource source of rows in the feature-table (called independently for each thread)
+     * @param outputMetadata headers and output-name for the feature CSV file that is written.
+     * @param rowSource source of rows in the feature-table (called independently for each thread).
      * @param context context for exporting features.
      * @throws OutputWriteFailedException
      */
@@ -210,6 +210,7 @@ public class FeatureExporter<S> {
                 featureNames,
                 groupName,
                 executionTimeRecorder,
+                context.isSuppressErrors(),
                 ioContext);
     }
 

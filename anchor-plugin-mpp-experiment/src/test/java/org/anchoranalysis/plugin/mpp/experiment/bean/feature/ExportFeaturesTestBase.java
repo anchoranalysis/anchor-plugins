@@ -125,7 +125,7 @@ abstract class ExportFeaturesTestBase<
             // The saved results were recorded before certain CSV style options became the default,
             // so
             // we switch back to the old settings for comparison.
-            task.setStyle(new ExportFeaturesStyle(false, false));
+            task.setStyle(new ExportFeaturesStyle(false, false, false));
 
             TaskSingleInputHelper.runTaskAndCompareOutputs(
                     input,

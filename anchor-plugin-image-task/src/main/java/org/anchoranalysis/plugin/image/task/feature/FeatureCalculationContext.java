@@ -45,18 +45,21 @@ public class FeatureCalculationContext<S> {
 
     // START REQUIRED ARGUMENTS
     /** Adds results (a row in a feature-table) for export-features. */
-    private CheckedConsumer<LabelledResultsVectorWithThumbnail, OperationFailedException> adder;
+    private final CheckedConsumer<LabelledResultsVectorWithThumbnail, OperationFailedException> adder;
 
-    @Getter private S rowSource;
+    @Getter private final S rowSource;
 
-    @Getter private FeatureNameList featureNames;
+    @Getter private final FeatureNameList featureNames;
 
-    @Getter private Optional<String> groupGeneratorName;
+    @Getter private final Optional<String> groupGeneratorName;
 
     /** Records the execution-time of particular operations. */
-    @Getter private ExecutionTimeRecorder executionTimeRecorder;
+    @Getter private final ExecutionTimeRecorder executionTimeRecorder;
 
-    @Getter private InputOutputContext context;
+    @Getter private final InputOutputContext context;
+    
+    /** If false, an image is reported as errored, if any exception is thrown during calculation.  If true, then a value of {@link Double#NaN} is returned, and a message is written to the error-log. */
+    @Getter private final boolean suppressErrors;
     // END REQUIRED ARGUMENTS
 
     @Getter private boolean thumbnailsEnabled;
@@ -69,6 +72,7 @@ public class FeatureCalculationContext<S> {
      * @param featureNames
      * @param groupGeneratorName
      * @param executionTimeRecorder
+     * @param suppressErrors if false, an image is reported as errored, if any exception is thrown during calculation.  If true, then a value of {@link Double#NaN} is returned, and a message is written to the error-log.
      * @param context
      */
     public FeatureCalculationContext(
@@ -77,12 +81,14 @@ public class FeatureCalculationContext<S> {
             FeatureNameList featureNames,
             Optional<String> groupGeneratorName,
             ExecutionTimeRecorder executionTimeRecorder,
+            boolean suppressErrors,
             InputOutputContext context) {
         this.adder = adder;
         this.rowSource = rowSource;
         this.featureNames = featureNames;
         this.groupGeneratorName = groupGeneratorName;
         this.executionTimeRecorder = executionTimeRecorder;
+        this.suppressErrors = suppressErrors;
         this.context = context;
         this.thumbnailsEnabled = areThumbnailsEnabled(context);
     }
