@@ -45,7 +45,8 @@ public class FeatureCalculationContext<S> {
 
     // START REQUIRED ARGUMENTS
     /** Adds results (a row in a feature-table) for export-features. */
-    private final CheckedConsumer<LabelledResultsVectorWithThumbnail, OperationFailedException> adder;
+    private final CheckedConsumer<LabelledResultsVectorWithThumbnail, OperationFailedException>
+            adder;
 
     @Getter private final S rowSource;
 
@@ -57,8 +58,12 @@ public class FeatureCalculationContext<S> {
     @Getter private final ExecutionTimeRecorder executionTimeRecorder;
 
     @Getter private final InputOutputContext context;
-    
-    /** If false, an image is reported as errored, if any exception is thrown during calculation.  If true, then a value of {@link Double#NaN} is returned, and a message is written to the error-log. */
+
+    /**
+     * If false, an image is reported as errored, if any exception is thrown during calculation. If
+     * true, then a value of {@link Double#NaN} is returned, and a message is written to the
+     * error-log.
+     */
     @Getter private final boolean suppressErrors;
     // END REQUIRED ARGUMENTS
 
@@ -72,7 +77,9 @@ public class FeatureCalculationContext<S> {
      * @param featureNames
      * @param groupGeneratorName
      * @param executionTimeRecorder
-     * @param suppressErrors if false, an image is reported as errored, if any exception is thrown during calculation.  If true, then a value of {@link Double#NaN} is returned, and a message is written to the error-log.
+     * @param suppressErrors if false, an image is reported as errored, if any exception is thrown
+     *     during calculation. If true, then a value of {@link Double#NaN} is returned, and a
+     *     message is written to the error-log.
      * @param context
      */
     public FeatureCalculationContext(

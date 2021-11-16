@@ -25,8 +25,12 @@ public class FeatureExporterContext {
      * precision.
      */
     private final boolean visuallyShortenDecimals;
-    
-    /** If false, an image is reported as errored, if any exception is thrown during calculation.  If true, then a value of {@link Double#NaN} is returned, and a message is written to the error-log. */
+
+    /**
+     * If false, an image is reported as errored, if any exception is thrown during calculation. If
+     * true, then a value of {@link Double#NaN} is returned, and a message is written to the
+     * error-log.
+     */
     private final boolean suppressErrors;
 
     /** Creates a {@link FeatureCSVWriter} for the non-aggregated results. */

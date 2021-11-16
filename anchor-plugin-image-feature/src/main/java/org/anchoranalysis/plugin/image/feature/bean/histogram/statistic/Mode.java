@@ -32,8 +32,9 @@ import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
- * Calculates the <a href="https://en.wikipedia.org/wiki/Mode_(statistics)">skewness</a> of all the values in the histogram.
- * 
+ * Calculates the <a href="https://en.wikipedia.org/wiki/Mode_(statistics)">skewness</a> of all the
+ * values in the histogram.
+ *
  * @author Owen Feehan
  */
 public class Mode extends FeatureHistogramStatistic {

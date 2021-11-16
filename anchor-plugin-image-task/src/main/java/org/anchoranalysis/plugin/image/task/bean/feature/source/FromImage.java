@@ -109,18 +109,24 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
             FeatureCalculatorFromProvider<FeatureInputStack> factory,
             FeatureCalculationContext<FeatureList<FeatureInputStack>> context)
             throws NamedFeatureCalculateException {
-        return context.getExecutionTimeRecorder().recordExecutionTime(
-                "Calculating features",
-                () -> {
-                    try {
-                        // The energy-stack will be added later, so we do not need to initialize it
-                        // in the FeatureInputStack
-                        FeatureCalculatorMulti<FeatureInputStack> calculator = factory.calculatorForAll(context.getRowSource());
-                        return calculator.calculate(new FeatureInputStack(), context.getLogger().errorReporter(), context.isSuppressErrors());
-                    } catch (InitializeException e) {
-                        throw new NamedFeatureCalculateException(e);
-                    }
-                });
+        return context.getExecutionTimeRecorder()
+                .recordExecutionTime(
+                        "Calculating features",
+                        () -> {
+                            try {
+                                // The energy-stack will be added later, so we do not need to
+                                // initialize it
+                                // in the FeatureInputStack
+                                FeatureCalculatorMulti<FeatureInputStack> calculator =
+                                        factory.calculatorForAll(context.getRowSource());
+                                return calculator.calculate(
+                                        new FeatureInputStack(),
+                                        context.getLogger().errorReporter(),
+                                        context.isSuppressErrors());
+                            } catch (InitializeException e) {
+                                throw new NamedFeatureCalculateException(e);
+                            }
+                        });
     }
 
     private Optional<DisplayStack> extractThumbnail(EnergyStack energyStack, boolean thumbnails)
