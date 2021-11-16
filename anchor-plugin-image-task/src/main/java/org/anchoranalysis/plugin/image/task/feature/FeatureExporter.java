@@ -81,7 +81,7 @@ public class FeatureExporter<S> {
 
     /** Outputs thumbnails. */
     private ThumbnailsWriter thumbnails = new ThumbnailsWriter();
-    
+
     /** Context for outputting operations. */
     private FeatureExporterContext context;
 
