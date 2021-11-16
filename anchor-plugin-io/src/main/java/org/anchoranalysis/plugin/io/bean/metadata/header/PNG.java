@@ -55,7 +55,8 @@ public class PNG extends HeaderFormat {
         }
 
         return Optional.of(
-                MetadataFactory.createMetadata(extent.get(), numberChannels.get(), bitDepth.get(), timestamps));
+                MetadataFactory.createMetadata(
+                        extent.get(), numberChannels.get(), bitDepth.get(), timestamps));
     }
 
     private static Optional<Integer> numberOfChannels(Directory directory) throws ImageIOException {

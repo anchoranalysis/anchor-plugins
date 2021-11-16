@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -88,8 +88,8 @@ public class FeatureExporter<S> {
     /**
      * Creates the shared state.
      *
-     * @param outputMetadata headers and output-name for the feature CSV file that is written
-     * @param rowSource source of rows in the feature-table (called independently for each thread)
+     * @param outputMetadata headers and output-name for the feature CSV file that is written.
+     * @param rowSource source of rows in the feature-table (called independently for each thread).
      * @param context context for exporting features.
      * @throws OutputWriteFailedException
      */
@@ -210,6 +210,7 @@ public class FeatureExporter<S> {
                 featureNames,
                 groupName,
                 executionTimeRecorder,
+                context.isSuppressErrors(),
                 ioContext);
     }
 

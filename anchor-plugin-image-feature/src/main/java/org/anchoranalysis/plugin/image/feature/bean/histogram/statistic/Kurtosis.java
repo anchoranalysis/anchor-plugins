@@ -32,6 +32,12 @@ import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.math.histogram.HistogramStatistics;
 
+/**
+ * Calculates the <a href="https://en.wikipedia.org/wiki/Kurtosis">kurtosis</a> of all the values in
+ * the histogram.
+ *
+ * @author Owen Feehan
+ */
 public class Kurtosis extends FeatureHistogramStatistic {
 
     @Override

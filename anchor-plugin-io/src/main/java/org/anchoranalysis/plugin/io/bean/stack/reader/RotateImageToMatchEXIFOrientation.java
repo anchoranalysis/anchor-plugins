@@ -41,8 +41,7 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
     }
 
     @Override
-    public OpenedImageFile openFile(
-            Path path, CalculateOrientationChange orientationCorrection)
+    public OpenedImageFile openFile(Path path, CalculateOrientationChange orientationCorrection)
             throws ImageIOException {
         return reader.openFile(path, orientationCorrection);
     }
@@ -51,15 +50,17 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
             throws ImageIOException {
         try {
             if (ImageFileFormat.JPEG.matches(path) || ImageFileFormat.TIFF.matches(path)) {
-                // If no orientation-correction data is available, we proceed, performing no rotation.
+                // If no orientation-correction data is available, we proceed, performing no
+                // rotation.
                 OrientationChange change =
                         OrientationReader.determineOrientationCorrection(path)
                                 .orElse(OrientationChange.KEEP_UNCHANGED);
-    
+
                 if (change != OrientationChange.KEEP_UNCHANGED) {
-                    logger.messageLogger().log("Reoriented image from EXIF tag: " + change.toString());
+                    logger.messageLogger()
+                            .log("Reoriented image from EXIF tag: " + change.toString());
                 }
-    
+
                 return change;
             } else {
                 return OrientationChange.KEEP_UNCHANGED;

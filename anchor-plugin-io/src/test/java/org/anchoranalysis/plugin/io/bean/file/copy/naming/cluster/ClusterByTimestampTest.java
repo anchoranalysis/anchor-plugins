@@ -88,8 +88,7 @@ class ClusterByTimestampTest {
     /** Create inputs. */
     private static List<FileWithDirectoryInput> createInputs(Path source)
             throws InputReadFailedException {
-        InputManagerParams params =
-                new InputManagerParams(LoggingFixture.suppressedLogger());
+        InputManagerParams params = new InputManagerParams(LoggingFixture.suppressedLogger());
 
         return createFiles(source).inputs(params).inputs();
     }

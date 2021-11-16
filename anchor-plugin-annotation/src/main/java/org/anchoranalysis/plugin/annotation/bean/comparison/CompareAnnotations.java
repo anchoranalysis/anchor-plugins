@@ -236,7 +236,8 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
                 : null;
     }
 
-    private DisplayStack createBackground(AnnotationComparisonInput<ProvidesStackInput> input, Logger logger)
+    private DisplayStack createBackground(
+            AnnotationComparisonInput<ProvidesStackInput> input, Logger logger)
             throws JobExecutionException {
 
         try {

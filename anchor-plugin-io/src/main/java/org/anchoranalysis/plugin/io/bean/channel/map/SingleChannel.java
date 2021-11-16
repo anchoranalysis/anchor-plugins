@@ -48,7 +48,8 @@ public class SingleChannel extends ChannelMap {
     // END BEAN PROPERTIES
 
     @Override
-    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger) throws CreateException {
+    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger)
+            throws CreateException {
         NamedEntries map = new NamedEntries();
         map.add(new ChannelEntry(channelName, 0));
         return map;

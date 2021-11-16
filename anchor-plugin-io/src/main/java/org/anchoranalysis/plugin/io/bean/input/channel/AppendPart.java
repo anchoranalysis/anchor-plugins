@@ -70,8 +70,7 @@ class AppendPart extends NamedChannelsInputPart {
             String channelName,
             int channelIndex,
             PathSupplier filePath,
-            StackReader stackReader
-            ) {
+            StackReader stackReader) {
         this.toAppendTo = toAppendTo;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
         this.stackReader = stackReader;
@@ -97,10 +96,11 @@ class AppendPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Progress progress, Logger logger)
-            throws ImageIOException {
+    public NamedChannelsForSeries createChannelsForSeries(
+            int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
 
-        NamedChannelsForSeries existing = toAppendTo.createChannelsForSeries(seriesIndex, progress, logger);
+        NamedChannelsForSeries existing =
+                toAppendTo.createChannelsForSeries(seriesIndex, progress, logger);
 
         openRasterIfNecessary();
 

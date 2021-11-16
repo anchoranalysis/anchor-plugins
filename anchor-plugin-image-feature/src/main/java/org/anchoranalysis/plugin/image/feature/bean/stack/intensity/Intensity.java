@@ -72,6 +72,15 @@ public class Intensity extends FeatureStack {
                         new ChildCacheName(Intensity.class, energyIndex + "_" + energyIndexMask));
     }
 
+    @Override
+    public String descriptionLong() {
+        if (energyIndexMask != -1) {
+            return String.format("channelMasked%d.%d/%s", energyIndex, energyIndexMask, item);
+        } else {
+            return String.format("channel%d/%s", energyIndex, item);
+        }
+    }
+
     private FeatureCalculation<Histogram, FeatureInputStack> histogramCalculator() {
         if (energyIndexMask != -1) {
             return new CalculateHistogramMasked(energyIndex, energyIndexMask);

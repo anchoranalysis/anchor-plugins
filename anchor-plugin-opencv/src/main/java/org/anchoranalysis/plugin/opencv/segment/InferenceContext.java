@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Value;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 

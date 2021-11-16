@@ -84,7 +84,7 @@ public class RGB extends ChannelConvertStyle {
         NamedStacks out = new NamedStacks();
 
         try {
-            Stack stack = createRGBStack(channelGetter, channelNames.size()==4, logger);
+            Stack stack = createRGBStack(channelGetter, channelNames.size() == 4, logger);
 
             // The name is blank as there is a single channel
             out.add("", stack);
@@ -96,7 +96,8 @@ public class RGB extends ChannelConvertStyle {
     }
 
     private static Stack createRGBStack(
-            ChannelGetterForTimepoint channelGetter, boolean includeAlpha, Logger logger) throws CreateException {
+            ChannelGetterForTimepoint channelGetter, boolean includeAlpha, Logger logger)
+            throws CreateException {
 
         Stack stackRearranged = new Stack(true);
         addChannelOrBlank(RGBChannelNames.RED, channelGetter, stackRearranged, logger);
@@ -118,7 +119,8 @@ public class RGB extends ChannelConvertStyle {
             if (channelGetter.hasChannel(channelName)) {
                 stackRearranged.addChannel(channelGetter.getChannel(channelName, logger));
             } else {
-                logger.messageLogger().logFormatted(String.format("Adding a blank channel for %s", channelName));
+                logger.messageLogger()
+                        .logFormatted(String.format("Adding a blank channel for %s", channelName));
                 stackRearranged.addBlankChannel();
             }
         } catch (IncorrectImageSizeException

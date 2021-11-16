@@ -1,14 +1,14 @@
 package org.anchoranalysis.plugin.io.bean.metadata.header;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.spatial.box.Extent;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MetadataFactory {
 
     /** Creates the {@link ImageMetadata} given the necessary ingredients. */

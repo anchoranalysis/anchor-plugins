@@ -46,17 +46,18 @@ class ExtractVariableSpanForList {
      * <p>If any of the identifiers are empty, then a string (constant portion) is appended to all
      * names so none are empty.
      *
-     * @param files files, which must be the same files, in the same order as the pattern in {@code extractVariableSpan}.
+     * @param files files, which must be the same files, in the same order as the pattern in {@code
+     *     extractVariableSpan}.
      * @param extractVariableSpan extracted-pattern.
      * @return a list corresponding to {@code files} but with names associated.
      */
     public static List<NamedFile> listExtract(
             List<File> files, ExtractVariableSpan extractVariableSpan) {
 
-         List<NamedFile> listMaybeEmpty = FunctionalList.mapToListWithIndex(
-                files, (file, index) -> namedFileFor(extractVariableSpan, index, file)
-         );
-                
+        List<NamedFile> listMaybeEmpty =
+                FunctionalList.mapToListWithIndex(
+                        files, (file, index) -> namedFileFor(extractVariableSpan, index, file));
+
         if (hasAnyEmptyIdentifier(listMaybeEmpty)) {
             String prependStr =
                     extractLastComponent(
@@ -66,8 +67,9 @@ class ExtractVariableSpanForList {
             return listMaybeEmpty;
         }
     }
-    
-    private static NamedFile namedFileFor(ExtractVariableSpan extractVariableSpan, int fileIndex, File file) {
+
+    private static NamedFile namedFileFor(
+            ExtractVariableSpan extractVariableSpan, int fileIndex, File file) {
         return new NamedFile(extractVariableSpan.extractSpanPortionFor(fileIndex), file);
     }
 
