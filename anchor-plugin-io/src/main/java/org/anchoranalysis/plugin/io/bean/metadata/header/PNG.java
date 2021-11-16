@@ -25,7 +25,7 @@ public class PNG extends HeaderFormat {
 
     @Override
     protected Optional<ImageMetadata> populateFromMetadata(
-            Metadata metadata, ImageFileAttributes timestamps) throws ImageIOException {
+            Metadata metadata, ImageFileAttributes attributes) throws ImageIOException {
 
         Optional<Directory> directory =
                 ReadMetadataUtilities.findDirectoryWithName(
@@ -56,7 +56,7 @@ public class PNG extends HeaderFormat {
 
         return Optional.of(
                 MetadataFactory.createMetadata(
-                        extent.get(), numberChannels.get(), bitDepth.get(), timestamps));
+                        extent.get(), numberChannels.get(), bitDepth.get(), attributes));
     }
 
     private static Optional<Integer> numberOfChannels(Directory directory) throws ImageIOException {

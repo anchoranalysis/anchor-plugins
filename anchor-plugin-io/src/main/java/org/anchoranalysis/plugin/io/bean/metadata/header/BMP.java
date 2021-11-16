@@ -25,7 +25,7 @@ public class BMP extends HeaderFormat {
 
     @Override
     protected Optional<ImageMetadata> populateFromMetadata(
-            Metadata metadata, ImageFileAttributes timestamps) throws ImageIOException {
+            Metadata metadata, ImageFileAttributes attributes) throws ImageIOException {
 
         Directory directory = metadata.getFirstDirectoryOfType(BmpHeaderDirectory.class);
         if (directory == null) {
@@ -40,11 +40,6 @@ public class BMP extends HeaderFormat {
         if (!extent.isPresent()) {
             return Optional.empty();
         }
-
-        /*Optional<Integer> numberChannels = numberOfChannels(directory.get());
-        if (!numberChannels.isPresent()) {
-            return Optional.empty();
-        }*/
 
         Optional<Integer> bitDepth =
                 ReadMetadataUtilities.readInt(directory, BmpHeaderDirectory.TAG_BITS_PER_PIXEL);
@@ -61,13 +56,13 @@ public class BMP extends HeaderFormat {
             case 6:
             case 7:
             case 8:
-                return createMetadata(extent.get(), 1, 8, timestamps);
+                return createMetadata(extent.get(), 1, 8, attributes);
             case 16:
-                return createMetadata(extent.get(), 2, 8, timestamps);
+                return createMetadata(extent.get(), 2, 8, attributes);
             case 24:
-                return createMetadata(extent.get(), 3, 8, timestamps);
+                return createMetadata(extent.get(), 3, 8, attributes);
             case 32:
-                return createMetadata(extent.get(), 4, 8, timestamps);
+                return createMetadata(extent.get(), 4, 8, attributes);
             default:
                 throw new ImageIOException(
                         String.format("Unrecognised bitsPerPixel of %d", bitDepth.get()));
