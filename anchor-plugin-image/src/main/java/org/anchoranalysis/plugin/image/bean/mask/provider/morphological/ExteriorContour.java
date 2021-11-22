@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
+import org.anchoranalysis.image.core.contour.FindContour;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.core.outline.FindOutline;
 
 /**
  * Finds the exterior <i>outer</i> contour for a {@link Mask} that forms its outline.
@@ -55,6 +55,6 @@ public class ExteriorContour extends MaskProviderUnary {
 
     @Override
     public Mask createFromMask(Mask mask) throws ProvisionFailedException {
-        return FindOutline.outlineGuess3D(mask, 1, flatten, outlineAtBoundary);
+        return FindContour.createFromGuess3D(mask, 1, flatten, outlineAtBoundary);
     }
 }

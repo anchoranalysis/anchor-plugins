@@ -35,13 +35,13 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFromObjects;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
+import org.anchoranalysis.spatial.box.Extent;
 
 public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 
@@ -51,21 +51,19 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 
     @Override
     public Channel imposeMinima(
-            Channel channel, SeedCollection seeds, Optional<ObjectMask> containingMask)
+            Channel channel, ObjectCollection seeds, Optional<ObjectMask> containingMask)
             throws OperationFailedException {
 
         if (seeds.size() < 1) {
             throw new OperationFailedException("There must be at least one seed");
         }
 
-        seeds.verifySeedsAreInside(channel.extent());
-
-        ObjectCollection objects = seeds.deriveObjects();
+        verifySeedsAreInside(seeds, channel.extent());
 
         // We need 255 for the landini algorithms to work
         Mask markerMask =
                 MaskFromObjects.createFromObjects(
-                        objects, channel.dimensions(), objects.getFirstBinaryValues());
+                        seeds, channel.dimensions(), seeds.getFirstBinaryValues());
 
         // We duplicate the channel so we are not manipulating the original
         channel = channel.duplicate();
@@ -75,7 +73,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
         VoxelsAssigner zeroAssigner = voxelsIntensity.assignValue(0);
 
         // We set the EDM to 0 at the points of the minima
-        objects.forEach(zeroAssigner::toObject);
+        seeds.forEach(zeroAssigner::toObject);
 
         // We set the EDM to 255 outside the channel, otherwise the reconstruction will be messed up
         // Better alternative is to apply the reconstruction only on the mask
@@ -107,5 +105,15 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
         ObjectMask object = new ObjectMask(marker.binaryVoxels());
         gradientImage.copyVoxelsTo(object, out, object.boundingBox());
         return out;
+    }
+
+    private static boolean verifySeedsAreInside(ObjectCollection seeds, Extent extent) {
+        for (ObjectMask object : seeds) {
+
+            if (!extent.contains(object.boundingBox())) {
+                return false;
+            }
+        }
+        return true;
     }
 }

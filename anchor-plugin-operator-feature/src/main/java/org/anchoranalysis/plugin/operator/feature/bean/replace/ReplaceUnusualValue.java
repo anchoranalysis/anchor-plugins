@@ -48,8 +48,8 @@ public abstract class ReplaceUnusualValue<T extends FeatureInput> extends WithVa
     }
 
     @Override
-    protected String combineDscr(String valueDscr, String featureDscr) {
-        return featureDscr;
+    protected String combineDescription(String valueDescription, String featureDescription) {
+        return featureDescription;
     }
 
     protected abstract boolean isResultUnusual(double featureResult);

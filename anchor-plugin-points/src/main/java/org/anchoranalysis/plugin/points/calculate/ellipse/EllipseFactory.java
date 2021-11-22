@@ -54,7 +54,7 @@ class EllipseFactory {
 
         pointsFitter.setShellRad(shellRad);
 
-        Set<Point3i> points = PointsFromObject.setFromOutline(object);
+        Set<Point3i> points = PointsFromObject.setFromContour(object);
 
         if (points.size() < MIN_NUMBER_POINTS) {
             throw new InsufficientPointsException(

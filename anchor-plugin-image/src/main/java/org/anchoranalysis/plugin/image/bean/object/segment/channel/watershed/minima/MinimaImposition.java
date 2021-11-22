@@ -30,12 +30,12 @@ import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public abstract class MinimaImposition extends AnchorBean<MinimaImposition> {
 
     public abstract Channel imposeMinima(
-            Channel channel, SeedCollection seeds, Optional<ObjectMask> containingMask)
+            Channel channel, ObjectCollection seeds, Optional<ObjectMask> containingMask)
             throws OperationFailedException;
 }

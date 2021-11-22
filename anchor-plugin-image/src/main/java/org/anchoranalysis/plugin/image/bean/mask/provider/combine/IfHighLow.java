@@ -27,13 +27,22 @@
 package org.anchoranalysis.plugin.image.bean.mask.provider.combine;
 
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.core.mask.combine.MaskIfHighLow;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 /**
  * Outputs the logical operation {@code iff first==HIGH and second==LOW then LOW} voxelwise on both
  * masks, modifying {mask} with the result.
  *
- * <p>See {@link IfHighLow} for truth-tables of the operation.
+ * <p>Specifically the truth table is:
+ *
+ * <table>
+ * <tr><th>First</th><th>Second</th><th>Output</th></tr>
+ * <tr><td>0</td><td>0</td><td>0</td></tr>
+ * <tr><td>0</td><td>1</td><td>0</td></tr>
+ * <tr><td>1</td><td>0</td><td>1</td></tr>
+ * <tr><td>1</td><td>1</td><td>0</td></tr>
+ * <caption>truth table</caption>
+ * </table>
  *
  * @author Owen Feehan
  */
@@ -42,7 +51,31 @@ public class IfHighLow extends CombineBase {
     // ASSUMES REGIONS ARE IDENTICAL
     @Override
     protected Mask createFromTwoMasks(Mask maskToModify, Mask maskReceiver) {
-        MaskIfHighLow.apply(maskToModify, maskReceiver);
+        applyOperation(maskToModify, maskReceiver);
         return maskToModify;
+    }
+
+    /**
+     * Performs a {@code iff first==HIGH and second==LOW then LOW} operation on each voxel in two
+     * masks, writing the result onto the second mask.
+     *
+     * @param first the first channel for operation (and in which the result is written)
+     * @param second the second channel for operation
+     */
+    private static void applyOperation(Mask first, Mask second) {
+
+        byte sourceOn = first.binaryValuesByte().getOn();
+        byte sourceOff = first.binaryValuesByte().getOff();
+        byte receiveOn = second.binaryValuesByte().getOn();
+
+        IterateVoxelsAll.withTwoBuffersAndPoint(
+                first.voxels(),
+                second.voxels(),
+                (point, bufferSource, bufferReceive, offsetSource, offsetReceive) -> {
+                    if (bufferSource.getRaw(offsetSource) == sourceOn
+                            && bufferReceive.getRaw(offsetReceive) == receiveOn) {
+                        bufferSource.putRaw(offsetSource, sourceOff);
+                    }
+                });
     }
 }

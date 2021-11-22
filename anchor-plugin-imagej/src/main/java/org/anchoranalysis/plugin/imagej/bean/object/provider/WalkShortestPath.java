@@ -82,7 +82,7 @@ class WalkShortestPath {
 
         checkCoplanar(points);
 
-        BoundingBox box = BoundingBoxFromPoints.forList(points);
+        BoundingBox box = BoundingBoxFromPoints.fromCollection(points);
 
         ObjectMask object = new ObjectMask(box);
 
@@ -188,6 +188,6 @@ class WalkShortestPath {
             BinaryValuesByte binaryValues,
             int x,
             int y) {
-        plane.putByte(extent.offset(x, y), binaryValues.getOnByte());
+        plane.putByte(extent.offset(x, y), binaryValues.getOn());
     }
 }

@@ -59,13 +59,13 @@ public class MultiFileReader extends StackReader {
 
     @BeanField @Getter @Setter private boolean recurseSubfolders = false;
 
-    /** Search x number directories higher than file */
+    /** Search x number directories higher than file. */
     @BeanField @Getter @Setter private int navigateHigherDirectories = 0;
 
-    /** If non-empty a regular-expression is applied to files */
+    /** If non-empty a regular-expression is applied to files. */
     @BeanField @AllowEmpty @Getter @Setter private String regExFile = "";
 
-    /** If non-empty a regular-expression is applied to directories */
+    /** If non-empty a regular-expression is applied to directories. */
     @BeanField @AllowEmpty @Getter @Setter private String regExDir = "";
     // END BEAN PROPERTIES
 

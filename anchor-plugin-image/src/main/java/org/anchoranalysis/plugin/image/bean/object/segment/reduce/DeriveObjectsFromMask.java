@@ -105,8 +105,7 @@ class DeriveObjectsFromMask {
     private static double confidenceForObject(
             ObjectMask object, Channel channel, DoubleUnaryOperator unscale)
             throws OperationFailedException {
-        Histogram histogram =
-                HistogramFromObjectsFactory.createHistogramIgnoreZero(channel, object, false);
+        Histogram histogram = HistogramFromObjectsFactory.createFrom(channel, object);
         return unscale.applyAsDouble(histogram.mean());
     }
 }

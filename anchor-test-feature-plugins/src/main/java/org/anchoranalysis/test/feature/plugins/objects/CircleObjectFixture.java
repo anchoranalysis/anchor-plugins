@@ -53,7 +53,7 @@ public class CircleObjectFixture {
                                 .membershipWithFlagsForIndex(
                                         GlobalRegionIdentifiers.SUBMARK_INSIDE),
                         BinaryValuesByte.getDefault())
-                .withoutProperties();
+                .asObjectMask();
     }
 
     public static EnergyStack energyStack() {

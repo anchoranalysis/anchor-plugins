@@ -34,13 +34,13 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.bean.proposer.RadiiProposer;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.mpp.mark.conic.RadiiRandomizer;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.point.Point3d;
 
 @NoArgsConstructor

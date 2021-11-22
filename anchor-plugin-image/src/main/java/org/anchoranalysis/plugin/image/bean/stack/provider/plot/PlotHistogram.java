@@ -74,7 +74,7 @@ public class PlotHistogram extends StackProvider {
 
             BufferedImage image = plot.createBufferedImage(size.getWidth(), size.getHeight());
 
-            return CreateStackFromBufferedImage.create(image);
+            return CreateStackFromBufferedImage.createFrom(image);
 
         } catch (OperationFailedException | CreateException e) {
             throw new ProvisionFailedException(e);

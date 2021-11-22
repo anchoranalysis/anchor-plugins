@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.points.contour;
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.orientation.Orientation;
+import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 

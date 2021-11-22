@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation;
 import java.util.List;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.plugin.mpp.bean.contour.TraverseContourException;
+import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 

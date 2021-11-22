@@ -58,7 +58,7 @@ class MakePlateauLowerComplete {
 
         public PointEvaluator(EncodedVoxels matS, BinaryValuesByte binaryValues) {
             this.matS = matS;
-            this.maskValueOff = binaryValues.getOffByte();
+            this.maskValueOff = binaryValues.getOff();
         }
 
         @Override

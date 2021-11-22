@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -86,7 +87,7 @@ public class FromChannelOrMask extends StackProvider {
         if (rgb) {
             try {
                 return new Stack(true, channel, channel.duplicate(), channel.duplicate());
-            } catch (IncorrectImageSizeException e) {
+            } catch (IncorrectImageSizeException | CreateException e) {
                 throw new AnchorImpossibleSituationException();
             }
         } else {

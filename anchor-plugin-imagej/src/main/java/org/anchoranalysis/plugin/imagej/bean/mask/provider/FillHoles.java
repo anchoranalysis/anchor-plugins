@@ -73,7 +73,7 @@ public class FillHoles extends MaskProviderUnary {
     }
 
     private Mask fillMask(Mask mask) throws ProvisionFailedException {
-        Mask maskInverted = new Mask(mask.channel(), mask.binaryValues().createInverted());
+        Mask maskInverted = new Mask(mask.channel(), mask.binaryValuesInt().createInverted());
 
         Mask maskDuplicated = mask.duplicate();
 

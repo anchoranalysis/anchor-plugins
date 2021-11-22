@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.io.bean.metadata.header;
 
 import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.jpeg.JpegDirectory;
 import java.util.Optional;
@@ -56,8 +57,8 @@ class FromExifIfPossible {
         return ReadMetadataUtilities.readFromWidthHeightTags(
                 metadata,
                 ExifIFD0Directory.class,
-                ExifIFD0Directory.TAG_IMAGE_WIDTH,
-                ExifIFD0Directory.TAG_IMAGE_HEIGHT);
+                ExifDirectoryBase.TAG_IMAGE_WIDTH,
+                ExifDirectoryBase.TAG_IMAGE_HEIGHT);
     }
 
     private static Optional<Extent> readOther(Metadata metadata) throws ImageIOException {

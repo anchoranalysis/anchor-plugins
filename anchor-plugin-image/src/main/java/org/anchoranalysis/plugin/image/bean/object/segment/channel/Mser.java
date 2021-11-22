@@ -40,8 +40,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.object.factory.SingleObjectFromPointsFactory;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
+import org.anchoranalysis.image.core.object.ObjectFromPointsFactory;
 import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
@@ -70,7 +69,7 @@ public class Mser extends SegmentChannelIntoObjects {
     @SuppressWarnings("unchecked")
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<ObjectCollection> seeds)
             throws SegmentationFailedException {
 
         checkUnsupportedObjectMask(objectMask);
@@ -92,7 +91,7 @@ public class Mser extends SegmentChannelIntoObjects {
     private <T extends Type<T>> ObjectCollection convertOutputToObjects(MserTree<T> tree)
             throws CreateException {
         return ObjectCollectionFactory.mapFrom(
-                tree, mser -> SingleObjectFromPointsFactory.create(convertPixelPoints(mser)));
+                tree, mser -> ObjectFromPointsFactory.create(convertPixelPoints(mser)));
     }
 
     private static List<Point3i> convertPixelPoints(

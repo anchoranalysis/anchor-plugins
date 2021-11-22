@@ -32,10 +32,10 @@ import java.util.List;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.core.points.PointsNeighborChecker;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Contour;
 import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointsNeighborChecker;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.object.TestLoaderObjects;
 import org.junit.jupiter.api.Test;
@@ -58,7 +58,7 @@ class CVFindContoursTest {
         for (Contour contour : CVFindContours.contoursForObject(object)) {
             List<Point3i> points = contour.pointsDiscrete();
             assertTrue(doesFirstNeighborLast(points));
-            assertTrue(PointsNeighborChecker.areNeighborsDistinct(points));
+            assertTrue(areSuccessiveElementsDistinct(points));
             assertTrue(PointsNeighborChecker.areAllPointsInBigNeighborhood(points));
         }
     }
@@ -67,5 +67,21 @@ class CVFindContoursTest {
         Point3i first = points.get(0);
         Point3i last = points.get(points.size() - 1);
         return PointsNeighborChecker.arePointsNeighbors(first, last);
+    }
+
+    /** Makes sure no successive elements in the list are equal. */
+    private static boolean areSuccessiveElementsDistinct(List<Point3i> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (i != 0) {
+
+                Point3i first = list.get(i - 1);
+                Point3i second = list.get(i);
+
+                if (first.equals(second)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

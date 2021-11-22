@@ -34,6 +34,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -78,13 +79,28 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
             InputOutputContext context)
             throws OperationFailedException {
         this.initialization =
-                InitializationFactory.createWithStacks(
-                        stackInput, new InitializationContext(context));
+                context.getExecutionTimeRecorder()
+                        .recordExecutionTime(
+                                "Creating image-initialization",
+                                () ->
+                                        InitializationFactory.createWithStacks(
+                                                stackInput, new InitializationContext(context)));
+
+        // Caches the loading of the stack for the feature.
+        CachedSupplier<Stack, OperationFailedException> loadImage =
+                CachedSupplier.cache(
+                        () ->
+                                allStacksAsOne(
+                                        initialization.stacks(),
+                                        context.getExecutionTimeRecorder()));
+
         this.energyStack =
-                energyStackFromProviderOrElse(
-                        stackEnergy,
-                        CachedSupplier.cache(() -> allStacksAsOne(initialization.stacks())),
-                        context.getLogger());
+                context.getExecutionTimeRecorder()
+                        .recordExecutionTime(
+                                "Loading feature calculation stack",
+                                () ->
+                                        energyStackFromProviderOrElse(
+                                                stackEnergy, loadImage, context.getLogger()));
         this.logger = context.getLogger();
     }
 
@@ -161,13 +177,17 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
      * @throws OperationFailedException if the stacks have different dimensions, or if anything else
      *     goes wrong
      */
-    private static Stack allStacksAsOne(NamedProviderStore<Stack> store)
+    private static Stack allStacksAsOne(
+            NamedProviderStore<Stack> store, ExecutionTimeRecorder executionTimeRecorder)
             throws OperationFailedException {
         try {
             Stack out = new Stack();
 
             for (String key : store.keys()) {
-                out.addChannelsFrom(store.getOptional(key).get()); // NOSONAR
+                Stack channel =
+                        executionTimeRecorder.recordExecutionTime(
+                                "Loading channel", () -> store.getOptional(key).get()); // NOSONAR
+                out.addChannelsFrom(channel);
             }
 
             return out;

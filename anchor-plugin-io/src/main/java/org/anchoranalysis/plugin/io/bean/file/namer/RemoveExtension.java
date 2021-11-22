@@ -45,14 +45,14 @@ import org.anchoranalysis.io.input.file.FileNamerContext;
 import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
- * Removes extensions from the descriptive-name (but not from the file) AND only if the extension
+ * Removes extensions from the identifier (but not from the file) <i>and</i> only if the extension
  * hasn't already been removed upstream.
  *
  * <p>As an exception, the extension can be retained if there is more than one file with the same
- * descriptive-name
+ * identifier.
  *
  * <p>To check if the extension has already been removed upstream, a check occurs if the path ends
- * with the descriptive-name
+ * with the identifier.
  *
  * @author Owen Feehan
  */
@@ -63,7 +63,7 @@ public class RemoveExtension extends FileNamer {
     @BeanField @Getter @Setter private FileNamer namer;
 
     /**
-     * Keeps the extension if the file-name (without the extension) becomes duplicated with another
+     * Keeps the extension if the file-name (without the extension) becomes duplicated with another.
      */
     @BeanField @Getter @Setter private boolean preserveExtensionIfDuplicate = true;
     // END BEAN PROPERTIES
@@ -100,13 +100,13 @@ public class RemoveExtension extends FileNamer {
 
     /**
      * Creates a new list selecting either the version with an extension (if there is more than 1
-     * entry) or without an extension (otherwise)
+     * entry) or without an extension (otherwise).
      *
-     * @param listWith descriptive-names with the extension
-     * @param listWithout descriptive-names without the extension (in identical order to listWith)
-     * @param countWithout a corresponding count for each entry in listWithout
+     * @param listWith descriptive-names with the extension.
+     * @param listWithout descriptive-names without the extension (in identical order to listWith).
+     * @param countWithout a corresponding count for each entry in listWithout.
      * @return a list in the same order, selecting either the corresponding entry from listWith or
-     *     listWithout depending on the count value
+     *     listWithout depending on the count value.
      */
     private static List<NamedFile> listMaybeWithExtension(
             List<NamedFile> listWith, List<NamedFile> listWithout, Map<String, Long> countWithout) {

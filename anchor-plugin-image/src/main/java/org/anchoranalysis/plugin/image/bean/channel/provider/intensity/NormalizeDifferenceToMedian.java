@@ -71,7 +71,8 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
             for (ObjectMask object : objects) {
 
                 Histogram histogram =
-                        HistogramFromObjectsFactory.create(lookup.voxels(), Optional.of(object));
+                        HistogramFromObjectsFactory.createFrom(
+                                lookup.voxels(), Optional.of(object));
                 adjustObject(object, channel, lookup, (int) Math.round(histogram.mean()));
             }
 

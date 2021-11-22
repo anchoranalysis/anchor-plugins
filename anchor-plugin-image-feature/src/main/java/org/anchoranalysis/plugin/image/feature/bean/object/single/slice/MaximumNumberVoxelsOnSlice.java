@@ -49,8 +49,7 @@ public class MaximumNumberVoxelsOnSlice extends FeatureSingleObject {
 
         for (int z = 0; z < params.getObject().boundingBox().extent().z(); z++) {
             UnsignedByteBuffer buffer = params.getObject().sliceBufferLocal(z);
-            int count =
-                    countForByteBuffer(buffer, params.getObject().binaryValuesByte().getOnByte());
+            int count = countForByteBuffer(buffer, params.getObject().binaryValuesByte().getOn());
 
             if (count > max) {
                 max = count;
