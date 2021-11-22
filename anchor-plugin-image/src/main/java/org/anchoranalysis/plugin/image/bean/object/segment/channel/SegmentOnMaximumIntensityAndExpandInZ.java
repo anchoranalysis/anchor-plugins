@@ -36,7 +36,6 @@ import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -66,7 +65,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
     public ObjectCollection segment(
             Channel channel,
             Optional<ObjectMask> objectMask,
-            Optional<SeedCollection> seeds,
+            Optional<ObjectCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException {
 
@@ -104,9 +103,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
         return segmentStack.segment(new VoxelsUntyped(stackBinary), params, Optional.empty());
     }
 
-    private static SeedCollection flattenSeedsInZ(SeedCollection seeds) {
-        SeedCollection seedsDup = seeds.duplicate();
-        seedsDup.flattenZ();
-        return seedsDup;
+    private static ObjectCollection flattenSeedsInZ(ObjectCollection seeds) {
+        return seeds.stream().map(ObjectMask::flattenZ);
     }
 }

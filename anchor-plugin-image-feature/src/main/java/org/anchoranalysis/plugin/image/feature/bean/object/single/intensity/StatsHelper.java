@@ -97,7 +97,7 @@ class StatsHelper {
             Channel channel, ObjectMask object, int numberVoxels, boolean highest)
             throws OperationFailedException {
 
-        Histogram histogram = HistogramFromObjectsFactory.create(channel, object);
+        Histogram histogram = HistogramFromObjectsFactory.createFrom(channel, object);
 
         Histogram histogramCut =
                 highest

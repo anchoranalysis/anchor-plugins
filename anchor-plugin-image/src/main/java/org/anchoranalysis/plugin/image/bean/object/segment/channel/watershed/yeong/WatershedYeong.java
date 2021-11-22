@@ -36,7 +36,6 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -76,7 +75,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
 
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<ObjectCollection> seeds)
             throws SegmentationFailedException {
 
         EncodedVoxels matS = createS(channel.extent());

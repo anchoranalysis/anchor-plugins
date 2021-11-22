@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.bean.scale;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.box.Extent;
+import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.anchoranalysis.spatial.scale.ScaleFactorInt;
 
@@ -69,7 +69,7 @@ class FindLargestMultipleWithin {
         }
 
         // Non-integral scale factors
-        ScaleFactor scaleFactor = ResizeExtentUtilities.relativeScale(small, stayWithin);
+        ScaleFactor scaleFactor = RelativeScaleCalculator.relativeScale(small, stayWithin);
 
         int minFactor = minScaleFactorUnder(scaleFactor, maxScaleFactor);
 

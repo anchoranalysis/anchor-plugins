@@ -53,10 +53,11 @@ public abstract class WithValueBase<T extends FeatureInput> extends FeatureUnary
 
     @Override
     public String descriptionLong() {
-        return combineDscr(String.format("%f", value), getItem().descriptionLong());
+        return combineDescription(String.format("%f", value), getItem().descriptionLong());
     }
 
     protected abstract double combineValueAndFeature(double value, double featureResult);
 
-    protected abstract String combineDscr(String valueDscr, String featureDscr);
+    protected abstract String combineDescription(
+            String valueDescription, String featureDescription);
 }

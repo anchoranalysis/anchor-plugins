@@ -66,12 +66,12 @@ public class MaxIntensityProjectionPair {
         int count1 =
                 voxelsProjected1
                         .extract()
-                        .voxelsEqualTo(BinaryValuesInt.getDefault().getOnInt())
+                        .voxelsEqualTo(BinaryValuesInt.getDefault().getOn())
                         .count();
         int count2 =
                 voxelsProjected2
                         .extract()
-                        .voxelsEqualTo(BinaryValuesInt.getDefault().getOnInt())
+                        .voxelsEqualTo(BinaryValuesInt.getDefault().getOn())
                         .count();
         return Math.min(count1, count2);
     }
@@ -108,10 +108,10 @@ public class MaxIntensityProjectionPair {
             RegionMembershipWithFlags rmFlags) {
         byte b = buffer.getRaw(offset);
         if (rmFlags.isMemberFlag(b)) {
-            bufferOut.putRaw(offset, binaryValues.getOnByte());
+            bufferOut.putRaw(offset, binaryValues.getOn());
         } else {
-            if (binaryValues.getOffByte() != 0) {
-                bufferOut.putRaw(offset, binaryValues.getOffByte());
+            if (binaryValues.getOff() != 0) {
+                bufferOut.putRaw(offset, binaryValues.getOff());
             }
         }
     }

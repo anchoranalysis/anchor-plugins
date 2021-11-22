@@ -70,6 +70,6 @@ public abstract class CheckMarkWithMask extends CheckMark {
             return acceptOutsideScene;
         }
 
-        return createChannel().isPointOn(deriveFunc.apply(point));
+        return createChannel().isVoxelOn(deriveFunc.apply(point));
     }
 }

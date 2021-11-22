@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.core.object.factory.SingleObjectFromPointsFactory;
+import org.anchoranalysis.image.core.object.ObjectFromPointsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -98,7 +98,6 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
 
     private static ObjectMask createObjectFromContour(Contour contour, boolean round)
             throws CreateException {
-        return SingleObjectFromPointsFactory.create(
-                PointConverter.convert3i(contour.getPoints(), round));
+        return ObjectFromPointsFactory.create(PointConverter.convert3i(contour.getPoints(), round));
     }
 }

@@ -33,9 +33,9 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.spatial.box.Extent;
+import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -75,6 +75,6 @@ public class LargestMultipleWithin extends ScaleCalculator {
         Extent sizeLargestMultiple =
                 FindLargestMultipleWithin.apply(
                         minimumSize.asExtent(), originalSize, maxScaleFactor);
-        return ResizeExtentUtilities.relativeScale(originalSize, sizeLargestMultiple);
+        return RelativeScaleCalculator.relativeScale(originalSize, sizeLargestMultiple);
     }
 }

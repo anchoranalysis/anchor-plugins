@@ -30,8 +30,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
+import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 
 @AllArgsConstructor
@@ -43,8 +43,8 @@ public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInp
     @Override
     protected Histogram execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
-            return HistogramFromObjectsFactory.create(
-                    input.getEnergyStackRequired().getChannel(energyIndex));
+            return HistogramFactory.createFrom(
+                    input.getEnergyStackRequired().getChannel(energyIndex).voxels());
         } catch (Exception e) {
             throw new FeatureCalculationException(e);
         }

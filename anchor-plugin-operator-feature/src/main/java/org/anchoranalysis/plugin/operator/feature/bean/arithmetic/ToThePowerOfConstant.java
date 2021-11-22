@@ -37,7 +37,7 @@ public class ToThePowerOfConstant<T extends FeatureInput> extends WithValueBase<
     }
 
     @Override
-    protected String combineDscr(String valueDscr, String featureDscr) {
-        return featureDscr + "^" + valueDscr;
+    protected String combineDescription(String valueDescription, String featureDescription) {
+        return featureDescription + "^" + valueDescription;
     }
 }

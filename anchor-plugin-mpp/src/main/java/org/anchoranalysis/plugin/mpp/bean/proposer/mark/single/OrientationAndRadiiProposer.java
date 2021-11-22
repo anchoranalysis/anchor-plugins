@@ -31,7 +31,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.mpp.bean.proposer.RadiiProposer;
@@ -40,6 +39,7 @@ import org.anchoranalysis.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
+import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.point.Point3d;
 
 /**

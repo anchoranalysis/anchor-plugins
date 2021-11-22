@@ -40,6 +40,6 @@ class ObjectWithHistogram {
 
     public ObjectWithHistogram(ObjectMask object, Channel channel) {
         this.object = object;
-        this.histogram = HistogramFromObjectsFactory.create(channel, object);
+        this.histogram = HistogramFromObjectsFactory.createFrom(channel, object);
     }
 }

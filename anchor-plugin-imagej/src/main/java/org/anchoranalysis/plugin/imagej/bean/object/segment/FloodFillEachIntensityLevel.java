@@ -37,7 +37,6 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.label.DecodeLabels;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
@@ -70,7 +69,7 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
 
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<ObjectCollection> seeds)
             throws SegmentationFailedException {
         checkUnsupportedObjectMask(objectMask);
         checkUnsupportedSeeds(seeds);
@@ -100,7 +99,7 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
         FloodFillHelper helper =
                 new FloodFillHelper(
                         minimumBoundingBoxVolume,
-                        BinaryValuesByte.getDefault().getOnByte(),
+                        BinaryValuesByte.getDefault().getOn(),
                         imageProcessor);
         return helper.floodFill2D(startingIntensity);
     }

@@ -37,8 +37,8 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
+import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -96,7 +96,7 @@ public class ToDimensions extends ScaleCalculator {
 
         if (dimensionsCombined.isPresent()) {
             try {
-                return ResizeExtentUtilities.relativeScale(
+                return RelativeScaleCalculator.relativeScale(
                         dimensionsCombined.get().extent(),
                         dimensions.get().extent(),
                         preserveAspectRatio);

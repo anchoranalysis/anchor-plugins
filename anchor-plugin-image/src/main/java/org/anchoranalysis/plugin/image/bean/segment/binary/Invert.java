@@ -71,10 +71,10 @@ public class Invert extends BinarySegmentationOne {
 
                 byte val = buffer.getRaw(index);
 
-                if (val == bv.getOnByte()) {
-                    buffer.putRaw(index, bv.getOffByte());
-                } else if (val == bv.getOffByte()) {
-                    buffer.putRaw(index, bv.getOnByte());
+                if (val == bv.getOn()) {
+                    buffer.putRaw(index, bv.getOff());
+                } else if (val == bv.getOff()) {
+                    buffer.putRaw(index, bv.getOn());
                 } else {
                     assert false;
                 }

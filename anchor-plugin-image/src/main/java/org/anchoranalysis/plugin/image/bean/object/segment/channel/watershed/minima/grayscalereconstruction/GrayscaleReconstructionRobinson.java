@@ -50,7 +50,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
 
-    private static final byte OUT_ON = BinaryValuesByte.getDefault().getOnByte();
+    private static final byte OUT_ON = BinaryValuesByte.getDefault().getOn();
 
     @Override
     public VoxelsUntyped reconstruction(

@@ -81,16 +81,16 @@ public class Invert extends MaskProviderUnary {
                 return maskToInvert;
             } else {
                 return new Mask(
-                        maskToInvert.channel(), maskToInvert.binaryValues().createInverted());
+                        maskToInvert.channel(), maskToInvert.binaryValuesInt().createInverted());
             }
         }
     }
 
     private void invertWithMask(Mask maskToInvert, Mask restricted) {
 
-        BinaryValuesByte invertedIndex = maskToInvert.binaryValues().asByte();
-        final byte byteOn = invertedIndex.getOnByte();
-        final byte byteOff = invertedIndex.getOffByte();
+        BinaryValuesByte invertedIndex = maskToInvert.binaryValuesByte();
+        final byte byteOn = invertedIndex.getOn();
+        final byte byteOff = invertedIndex.getOff();
 
         IterateVoxelsMask.withBuffer(
                 restricted,

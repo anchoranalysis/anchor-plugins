@@ -71,8 +71,8 @@ public class ConvexHull3D extends ConvexHullBase {
         Channel out = outline.channel();
         Voxels<UnsignedByteBuffer> voxelsOut = out.voxels().asByte();
 
-        VoxelsAssigner assignerOn = voxelsOut.assignValue(outline.binaryValues().getOnInt());
-        VoxelsAssigner assignerOff = voxelsOut.assignValue(outline.binaryValues().getOffInt());
+        VoxelsAssigner assignerOn = voxelsOut.assignValue(outline.binaryValuesInt().getOn());
+        VoxelsAssigner assignerOff = voxelsOut.assignValue(outline.binaryValuesInt().getOff());
 
         assignerOff.toAll();
         for (int i = 0; i < vertices.length; i++) {
@@ -89,9 +89,8 @@ public class ConvexHull3D extends ConvexHullBase {
     // We use it here as it uses the quickHull3D Point3d primitive
     private static List<Point3d> pointsFromMask(Mask mask) {
         List<Point3d> listOut = new ArrayList<>();
-        BinaryValuesByte binaryValues = mask.binaryValues().asByte();
-        IterateVoxelsEqualTo.equalToPrimitive(
-                mask.voxels(), binaryValues.getOnByte(), Point3d::new);
+        BinaryValuesByte binaryValues = mask.binaryValuesByte();
+        IterateVoxelsEqualTo.equalToPrimitive(mask.voxels(), binaryValues.getOn(), Point3d::new);
         return listOut;
     }
 }

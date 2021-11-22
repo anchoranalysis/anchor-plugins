@@ -100,7 +100,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
                     int offset = extent.offset(x, y);
 
-                    if (buffer.getRaw(offset) == object.binaryValuesByte().getOnByte()) {
+                    if (buffer.getRaw(offset) == object.binaryValuesByte().getOn()) {
 
                         int y1 = y + object.boundingBox().cornerMin().y();
                         int x1 = x + object.boundingBox().cornerMin().x();

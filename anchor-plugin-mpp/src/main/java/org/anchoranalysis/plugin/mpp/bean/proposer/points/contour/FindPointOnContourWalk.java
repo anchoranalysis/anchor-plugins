@@ -39,13 +39,13 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.spatial.orientation.Orientation;
+import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
-import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 /** Walks incrementally in a particular direction until the contour is found. */
 public class FindPointOnContourWalk extends FindPointOnContour {
@@ -65,7 +65,7 @@ public class FindPointOnContourWalk extends FindPointOnContour {
 
         createMaskIfNecessary();
 
-        RotationMatrix rotationMatrix = orientation.createRotationMatrix();
+        RotationMatrix rotationMatrix = orientation.deriveRotationMatrix();
 
         boolean is3D = rotationMatrix.getNumberDimensions() >= 3;
 
@@ -87,7 +87,7 @@ public class FindPointOnContourWalk extends FindPointOnContour {
     private Optional<Point3i> pointOnOutline( // NOSONAR
             Point3d centerPoint, Point3d step, boolean useZ) throws OperationFailedException {
 
-        BinaryValuesByte binaryValues = maskCreated.binaryValues().asByte();
+        BinaryValuesByte binaryValues = maskCreated.binaryValuesByte();
 
         Point3d pointDouble = new Point3d(centerPoint);
         while (true) {
@@ -158,7 +158,7 @@ public class FindPointOnContourWalk extends FindPointOnContour {
         }
 
         UnsignedByteBuffer buffer = channel.voxels().asByte().sliceBuffer(point.z());
-        return buffer.getRaw(dimensions.offsetSlice(point)) == binaryValues.getOnByte();
+        return buffer.getRaw(dimensions.offsetSlice(point)) == binaryValues.getOn();
     }
 
     private static Point3d marginalStepFrom(RotationMatrix matrix, boolean is3d) {
@@ -188,9 +188,23 @@ public class FindPointOnContourWalk extends FindPointOnContour {
     private static double distanceZBetweenPoints(
             Point3d centerPoint, Point3d pointDouble, Optional<Resolution> resolution) {
         if (resolution.isPresent()) {
-            return resolution.get().distanceZRelative(centerPoint, pointDouble);
+            return distanceZRelative(resolution.get(), centerPoint, pointDouble);
         } else {
             return Math.abs(centerPoint.z() - pointDouble.z());
         }
+    }
+
+    private static double distanceZRelative(Resolution resolution, Point3d point1, Point3d point2) {
+
+        double sx = point1.x() - point2.x();
+        double sy = point1.y() - point2.y();
+        double sz = point1.z() - point2.z();
+
+        return Math.sqrt(sumSquaresZRelative(sx, sy, sz * resolution.zRelative()));
+    }
+
+    private static double sumSquaresZRelative(
+            double distanceX, double distanceY, double distanceZ) {
+        return Math.pow(distanceX, 2) + Math.pow(distanceY, 2) + Math.pow(distanceZ, 2);
     }
 }

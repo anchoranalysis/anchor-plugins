@@ -228,7 +228,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
             }
         }
 
-        return stacks.withoutUniformSizeConstraint();
+        return stacks.asNamedStacks();
     }
 
     private Generator<BoundedList<ObjectMask>> createGenerator(

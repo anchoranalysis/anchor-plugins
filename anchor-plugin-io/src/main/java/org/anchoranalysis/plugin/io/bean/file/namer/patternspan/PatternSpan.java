@@ -112,7 +112,7 @@ public class PatternSpan extends FileNamer {
                 file -> new NamedFile(ExtensionUtilities.filenameWithoutExtension(file), file));
     }
 
-    /** Convert {@link File} to {@link Path}. */
+    /** Convert a collection of {@link File}s to a list of {@link Path}s. */
     private static List<Path> convertToList(Collection<File> files) {
         return FunctionalList.mapToList(files, File::toPath);
     }

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
  * Combines all series and frames returned by a reader by converting them into multiple channels in
  * the same image.
  *
- * <p>It assumes that the underlying stackReader will only return images with:
+ * <p>It assumes that the underlying {@link StackReader} will only return images with:
  *
  * <ol>
  *   <li>a constant number of channels.
