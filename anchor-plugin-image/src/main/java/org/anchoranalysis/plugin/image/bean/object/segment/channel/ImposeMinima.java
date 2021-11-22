@@ -35,7 +35,6 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.MinimaImposition;
@@ -55,7 +54,7 @@ public class ImposeMinima extends SegmentChannelIntoObjectsUnary {
     public ObjectCollection segment(
             Channel channel,
             Optional<ObjectMask> objectMask,
-            Optional<SeedCollection> seeds,
+            Optional<ObjectCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException {
 
@@ -73,7 +72,7 @@ public class ImposeMinima extends SegmentChannelIntoObjectsUnary {
     }
 
     private Channel channelWithImposedMinima(
-            Channel channel, SeedCollection seeds, Optional<ObjectMask> object)
+            Channel channel, ObjectCollection seeds, Optional<ObjectMask> object)
             throws OperationFailedException {
         if (!seeds.isEmpty()) {
             return minimaImposition.imposeMinima(channel, seeds, object);

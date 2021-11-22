@@ -30,8 +30,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
-import org.anchoranalysis.image.core.object.seed.SeedObjectMask;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -40,17 +38,17 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class SeedsFactory {
 
-    public static SeedCollection createSeedsWithoutMask(ObjectCollection seeds) {
+    public static ObjectCollection createSeedsWithoutMask(ObjectCollection seeds) {
         // We create a collection of seeds localised appropriately
         // NB: we simply change the object seeds, as it seemingly won't be used again!!!
-        SeedCollection out = new SeedCollection();
+        ObjectCollection out = new ObjectCollection();
         for (ObjectMask object : seeds) {
             out.add(createSeed(object));
         }
         return out;
     }
 
-    public static SeedCollection createSeedsWithMask(
+    public static ObjectCollection createSeedsWithMask(
             ObjectCollection seeds,
             ObjectMask containingMask,
             ReadableTuple3i subtractFromCornerMin,
@@ -58,7 +56,7 @@ class SeedsFactory {
             throws CreateException {
         // We create a collection of seeds localised appropriately
         // NB: we simply change the object seeds, as it seemingly won't be used again!!!
-        SeedCollection out = new SeedCollection();
+        ObjectCollection out = new ObjectCollection();
         for (ObjectMask object : seeds) {
             out.add(
                     createSeedWithinMask(
@@ -67,11 +65,11 @@ class SeedsFactory {
         return out;
     }
 
-    private static SeedObjectMask createSeed(ObjectMask object) {
-        return new SeedObjectMask(object.duplicate());
+    private static ObjectMask createSeed(ObjectMask object) {
+        return object.duplicate();
     }
 
-    private static SeedObjectMask createSeedWithinMask(
+    private static ObjectMask createSeedWithinMask(
             ObjectMask object,
             BoundingBox containingBBox,
             ReadableTuple3i subtractFromCornerMin,
@@ -82,7 +80,7 @@ class SeedsFactory {
 
         // If a seed object is partially located outside an object, the above line might fail, so we
         // should test
-        return new SeedObjectMask(ensureInsideContainer(seed, containingBBox, dim));
+        return ensureInsideContainer(seed, containingBBox, dim);
     }
 
     private static ObjectMask ensureInsideContainer(

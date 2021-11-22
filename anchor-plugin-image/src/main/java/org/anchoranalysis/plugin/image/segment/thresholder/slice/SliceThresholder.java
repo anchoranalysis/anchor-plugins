@@ -47,7 +47,7 @@ public abstract class SliceThresholder {
             Voxels<?> voxelsIn, Voxels<?> voxelsThreshold, Voxels<UnsignedByteBuffer> voxelsOut);
 
     protected final void writeOffByte(int offset, UnsignedByteBuffer bufferOut) {
-        bufferOut.putRaw(offset, binaryValuesByte.getOffByte());
+        bufferOut.putRaw(offset, binaryValuesByte.getOff());
     }
 
     protected final void writeThresholdedByte(
@@ -59,9 +59,9 @@ public abstract class SliceThresholder {
         int valThrshld = bufferThreshold.getInt(offset);
 
         if (val >= valThrshld) {
-            bufferOut.putRaw(offset, binaryValuesByte.getOnByte());
+            bufferOut.putRaw(offset, binaryValuesByte.getOn());
         } else {
-            bufferOut.putRaw(offset, binaryValuesByte.getOffByte());
+            bufferOut.putRaw(offset, binaryValuesByte.getOff());
         }
     }
 }

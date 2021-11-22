@@ -34,7 +34,6 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.points.BoundingBoxFromPoints;
-import org.anchoranalysis.image.core.points.PointsFromMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -66,7 +65,7 @@ class GeneratePointsHelper {
             List<Point3i> pointsAlongContour, PointListForConvex pointList)
             throws OperationFailedException {
 
-        BoundingBox box = BoundingBoxFromPoints.forList(pointsAlongContour);
+        BoundingBox box = BoundingBoxFromPoints.fromCollection(pointsAlongContour);
 
         int zLow = Math.max(0, box.cornerMin().z() - maxZDistance);
         int zHigh = Math.min(dimensions.z(), box.cornerMin().z() + maxZDistance);
@@ -75,7 +74,7 @@ class GeneratePointsHelper {
             return new PointsFromInsideHelper(pointList, maskFilled.get(), box)
                     .convexOnly(mask, pointRoot, skipZDistance);
         } else {
-            return PointsFromMask.listFromSlicesInsideBox3i(
+            return pointsFromMaskInsideBox3i(
                     mask,
                     box.changeZ(zLow, zHigh - zLow),
                     (int) Math.floor(pointRoot.z()),
@@ -91,5 +90,26 @@ class GeneratePointsHelper {
             }
         }
         return pl;
+    }
+
+    private static List<Point3i> pointsFromMaskInsideBox3i(
+            Mask mask, BoundingBox box, int startZ, int skipAfterSuccessiveEmptySlices) {
+
+        List<Point3i> out = new ArrayList<>();
+
+        ConsumePointsFromMaskSliced helper =
+                new ConsumePointsFromMaskSliced(
+                        skipAfterSuccessiveEmptySlices, box, mask, startZ, out::add);
+
+        helper.firstHalf();
+
+        // Exit early if we start on the first slice
+        if (startZ == 0) {
+            return out;
+        }
+
+        helper.secondHalf();
+
+        return out;
     }
 }

@@ -42,7 +42,6 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithChannelBase;
@@ -78,7 +77,7 @@ public class SegmentChannel extends WithChannelBase {
         return OptionalFactory.create(mask).map(Mask::binaryVoxels).map(ObjectMask::new);
     }
 
-    private Optional<SeedCollection> createSeeds(
+    private Optional<ObjectCollection> createSeeds(
             Dimensions dimensions, Optional<ObjectMask> maskAsObject)
             throws ProvisionFailedException {
         return OptionalUtilities.map(
@@ -86,7 +85,7 @@ public class SegmentChannel extends WithChannelBase {
                 objects -> createSeeds(objects, maskAsObject, dimensions));
     }
 
-    private static SeedCollection createSeeds(
+    private static ObjectCollection createSeeds(
             ObjectCollection seeds, Optional<ObjectMask> maskAsObject, Dimensions dim)
             throws ProvisionFailedException {
         try {

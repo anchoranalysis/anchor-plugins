@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.io.multifile;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.stack.time.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.plugin.io.multifile.buffer.MultiBufferSized;
 

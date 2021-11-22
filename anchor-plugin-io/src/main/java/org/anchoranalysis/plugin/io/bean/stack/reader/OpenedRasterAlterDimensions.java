@@ -34,10 +34,10 @@ import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
+import org.anchoranalysis.image.io.stack.time.TimeSequence;
 
 /**
  * An {@link OpenedImageFile} whose dimensions will be altered from those specified in the

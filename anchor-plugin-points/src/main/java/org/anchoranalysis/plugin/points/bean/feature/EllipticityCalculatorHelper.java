@@ -62,7 +62,7 @@ class EllipticityCalculatorHelper {
     private static ObjectMask objectMaskCompare(Mark mark, Dimensions dim) {
         RegionMembershipWithFlags rm = RegionMapSingleton.instance().membershipWithFlagsForIndex(0);
         assert (rm.getRegionID() == 0);
-        return mark.deriveObject(dim, rm, BinaryValuesByte.getDefault()).withoutProperties();
+        return mark.deriveObject(dim, rm, BinaryValuesByte.getDefault()).asObjectMask();
     }
 
     private static double intDiv(int num, int dem) {

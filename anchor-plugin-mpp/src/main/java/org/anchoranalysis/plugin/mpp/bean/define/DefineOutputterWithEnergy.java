@@ -44,7 +44,7 @@ import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.core.stack.StackIdentifiers;
+import org.anchoranalysis.image.io.stack.StackIdentifiers;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.ExportSharedObjects;

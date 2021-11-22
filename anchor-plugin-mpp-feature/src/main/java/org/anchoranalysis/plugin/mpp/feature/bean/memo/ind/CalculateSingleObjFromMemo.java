@@ -60,6 +60,6 @@ class CalculateSingleObjFromMemo
                                 params.dimensionsRequired(),
                                 regionMap.membershipWithFlagsForIndex(index),
                                 BinaryValuesByte.getDefault());
-        return om.withoutProperties();
+        return om.asObjectMask();
     }
 }

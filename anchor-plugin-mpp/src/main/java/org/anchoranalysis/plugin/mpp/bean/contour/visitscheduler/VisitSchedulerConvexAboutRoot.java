@@ -142,6 +142,6 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
             return false;
         }
 
-        return extracter.voxel(pointInt) == binaryValues.getOnInt();
+        return extracter.voxel(pointInt) == binaryValues.getOn();
     }
 }

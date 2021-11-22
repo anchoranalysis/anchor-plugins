@@ -85,13 +85,13 @@ class ExtendInZHelper {
                         point.x() <= max.x();
                         point.incrementX(), offset++) {
 
-                    if (bufferIn2D.getRaw(offset) == binaryValues.getOnByte()) {
+                    if (bufferIn2D.getRaw(offset) == binaryValues.getOn()) {
                         int indexGlobal = mask3D.extent().offset(point.x(), point.y());
                         bufferOut3D.putRaw(
                                 offset,
-                                bufferMask3D.getRaw(indexGlobal) == binaryValues.getOnByte()
-                                        ? binaryValues.getOnByte()
-                                        : binaryValues.getOffByte());
+                                bufferMask3D.getRaw(indexGlobal) == binaryValues.getOn()
+                                        ? binaryValues.getOn()
+                                        : binaryValues.getOff());
                     }
                 }
             }

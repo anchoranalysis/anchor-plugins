@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class CountEqual extends SpecificEnergyChannelBase {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int value = BinaryValuesInt.getDefault().getOnInt();
+    @BeanField @Getter @Setter private int value = BinaryValuesInt.getDefault().getOn();
     // END BEAN PROPERTIES
 
     @Override

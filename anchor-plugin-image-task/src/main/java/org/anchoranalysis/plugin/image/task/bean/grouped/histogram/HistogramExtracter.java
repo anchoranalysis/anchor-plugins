@@ -34,6 +34,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
+import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 
@@ -49,9 +50,9 @@ class HistogramExtracter {
 
         try {
             if (!keyMask.isEmpty()) {
-                return HistogramFromObjectsFactory.create(channel, extractMask(keyMask));
+                return HistogramFromObjectsFactory.createFrom(channel, extractMask(keyMask));
             } else {
-                return HistogramFromObjectsFactory.create(channel);
+                return HistogramFactory.createFrom(channel.voxels());
             }
 
         } catch (CreateException e) {

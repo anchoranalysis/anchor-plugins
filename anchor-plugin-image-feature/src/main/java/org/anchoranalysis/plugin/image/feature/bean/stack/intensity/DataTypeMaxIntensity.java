@@ -32,10 +32,12 @@ import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 
 /**
- * The maximum-intensity allowed by the data-type of the stack (e.g. 255 for unsigned 8-bit).
+ * The maximum-intensity allowed by the data-type of the stack.
  *
- * <p>Note this is NOT the actual max-intensity seen in the stack, rather the theoretical max of the
- * data-type.
+ * <p>e.g. 255 for unsigned 8-bit.
+ *
+ * <p>Note this is <b>not</b> the actual max-intensity seen in the stack, rather the theoretical max
+ * of the data-type.
  *
  * @author Owen Feehan
  * @param <T> feature-input-type

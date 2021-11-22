@@ -41,7 +41,6 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.object.scale.Scaler;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -69,7 +68,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     public ObjectCollection segment(
             Channel channel,
             Optional<ObjectMask> objectMask,
-            Optional<SeedCollection> seeds,
+            Optional<ObjectCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException {
 
@@ -110,8 +109,8 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
                 objectMask, object -> object.scale(scaleFactor, Optional.of(extent)), "mask");
     }
 
-    private Optional<SeedCollection> scaleSeeds(
-            Optional<SeedCollection> seeds, ScaleFactor scaleFactor, Extent extent)
+    private Optional<ObjectCollection> scaleSeeds(
+            Optional<ObjectCollection> seeds, ScaleFactor scaleFactor, Extent extent)
             throws SegmentationFailedException {
         return mapScale(
                 seeds, seedCollection -> scaleSeeds(seedCollection, scaleFactor, extent), "seeds");
@@ -161,8 +160,8 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         }
     }
 
-    private static SeedCollection scaleSeeds(
-            SeedCollection seedsUnscaled, ScaleFactor scaleFactor, Extent extent)
+    private static ObjectCollection scaleSeeds(
+            ObjectCollection seedsUnscaled, ScaleFactor scaleFactor, Extent extent)
             throws OperationFailedException {
 
         if (scaleFactor.x() != scaleFactor.y()) {
@@ -170,9 +169,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
                     "scaleFactor in X and Y must be equal to scale seeds");
         }
 
-        SeedCollection seedsScaled = seedsUnscaled.duplicate();
-        seedsScaled.scaleXY(scaleFactor.x(), extent);
-        return seedsScaled;
+        return seedsUnscaled.stream().map(object -> object.scale(scaleFactor, Optional.of(extent)));
     }
 
     private Interpolator createInterpolator() {

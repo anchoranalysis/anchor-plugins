@@ -30,10 +30,10 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.core.orientation.Orientation2D;
 import org.anchoranalysis.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.conic.Ellipse;
+import org.anchoranalysis.spatial.orientation.Orientation2D;
 import org.anchoranalysis.spatial.point.Point2d;
 
 public class CreateEllipse extends SingleMarkProvider {

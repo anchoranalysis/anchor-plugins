@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
+import org.anchoranalysis.core.identifier.getter.IdentifyFromIteration;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
@@ -80,7 +80,7 @@ class MarksOutputter {
                 new ColoredMarks(
                         marks.getMarks(),
                         outputter.getSettings().defaultColorIndexFor(20),
-                        new IdentifyByIteration<>());
+                        new IdentifyFromIteration<>());
 
         ColoredMarksWithDisplayStack coloredMarksDisplayStack =
                 new ColoredMarksWithDisplayStack(coloredMarks, dualStack.getBackground());
@@ -129,13 +129,13 @@ class MarksOutputter {
                 outputNamePrefix,
                 () ->
                         new MarksGenerator(
-                                outlineWriter, new IdentifyByIteration<>(), regionMembership),
+                                outlineWriter, new IdentifyFromIteration<>(), regionMembership),
                 () -> coloredMarksDisplayStack);
         writer.write(
                 outputNamePrefix + "MIP",
                 () ->
                         new MarksFlattenedGenerator(
-                                outlineWriter, new IdentifyByIteration<>(), regionMembership),
+                                outlineWriter, new IdentifyFromIteration<>(), regionMembership),
                 () -> coloredMarksDisplayStack);
     }
 

@@ -66,7 +66,7 @@ public class QuantileStretch extends ChannelProviderUnary {
 
         VoxelsUntyped voxels = channel.voxels();
 
-        Histogram histogram = HistogramFactory.create(voxels);
+        Histogram histogram = HistogramFactory.createFrom(voxels);
 
         double rangeMin = histogram.calculateMinimum();
         double rangeMax = histogram.quantile(quantile);

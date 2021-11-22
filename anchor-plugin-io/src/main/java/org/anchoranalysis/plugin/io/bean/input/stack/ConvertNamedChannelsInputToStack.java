@@ -26,6 +26,7 @@
 package org.anchoranalysis.plugin.io.bean.input.stack;
 
 import java.util.Optional;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
@@ -37,12 +38,12 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.image.io.stack.input.TimeSequenceSupplier;
+import org.anchoranalysis.image.io.stack.time.TimeSequence;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
 
 /**
@@ -180,7 +181,7 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
                     extractChannel(channels, RGBChannelNames.RED, progress, logger),
                     extractChannel(channels, RGBChannelNames.GREEN, progress, logger),
                     extractChannel(channels, RGBChannelNames.BLUE, progress, logger));
-        } catch (IncorrectImageSizeException e) {
+        } catch (IncorrectImageSizeException | CreateException e) {
             throw new AnchorImpossibleSituationException();
         } catch (GetOperationFailedException e) {
             throw new OperationFailedException(e);

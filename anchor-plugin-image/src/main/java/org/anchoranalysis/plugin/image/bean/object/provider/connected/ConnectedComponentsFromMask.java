@@ -109,7 +109,9 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                 0,
                 mask.dimensions().z(),
                 CreateException.class,
-                z -> createForSlice(creator, extractSlice(extracter, z, mask.binaryValues()), z));
+                z ->
+                        createForSlice(
+                                creator, extractSlice(extracter, z, mask.binaryValuesInt()), z));
     }
 
     private static BinaryVoxels<UnsignedByteBuffer> extractSlice(

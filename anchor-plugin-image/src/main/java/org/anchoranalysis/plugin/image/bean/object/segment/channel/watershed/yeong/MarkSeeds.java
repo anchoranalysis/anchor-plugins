@@ -30,10 +30,9 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.core.object.seed.Seed;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
@@ -41,7 +40,7 @@ import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 class MarkSeeds {
 
     public static void apply(
-            SeedCollection seeds,
+            ObjectCollection seeds,
             EncodedVoxels matS,
             Optional<MinimaStore> minimaStore,
             Optional<ObjectMask> containingMask)
@@ -52,9 +51,7 @@ class MarkSeeds {
             throw new SegmentationFailedException("Extent of matS does not match containingMask");
         }
 
-        for (Seed seed : seeds) {
-
-            ObjectMask object = seed.deriveObject();
+        for (ObjectMask object : seeds) {
 
             throwExceptionIfNotConnected(object);
 

@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -190,7 +191,10 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
         // Extract slices
         NamedStacks slices =
                 stacks.applyOperation(
-                        energyStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
+                        stack -> {
+                            return stack.extractSlice(optimaSliceIndex);
+                        },
+                        Optional.of(energyStack.dimensions()));
 
         try {
             NamedStacksOutputter.output(slices, OUTPUT_SLICES, false, outputter);

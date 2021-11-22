@@ -32,7 +32,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.core.orientation.Orientation2D;
 import org.anchoranalysis.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -41,6 +40,7 @@ import org.anchoranalysis.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
+import org.anchoranalysis.spatial.orientation.Orientation2D;
 import org.anchoranalysis.spatial.point.Point3d;
 
 public class MergeMarkEllipse extends MarkMergeProposer {

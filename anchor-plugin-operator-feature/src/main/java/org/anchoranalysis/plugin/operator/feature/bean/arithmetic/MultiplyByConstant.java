@@ -45,7 +45,7 @@ public class MultiplyByConstant<T extends FeatureInput> extends WithValueBase<T>
     }
 
     @Override
-    protected String combineDscr(String valueDscr, String featureDscr) {
-        return valueDscr + " * " + featureDscr;
+    protected String combineDescription(String valueDescription, String featureDescription) {
+        return valueDescription + " * " + featureDescription;
     }
 }

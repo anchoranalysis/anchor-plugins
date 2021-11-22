@@ -40,9 +40,9 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.core.outline.traverser.OutlineTraverser;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.mpp.bean.contour.visitscheduler.VisitScheduler;
+import org.anchoranalysis.plugin.mpp.contour.ContourTraverser;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -152,13 +152,13 @@ public class TraverseOuterContourOnImage extends TraverseOuterCounter {
     private void traverseOutline(Point3i root, List<Point3i> listOut)
             throws TraverseContourException {
         try {
-            new OutlineTraverser(
+            new ContourTraverser(
                             objectOutline,
                             (point, distance) ->
                                     visitScheduler.considerVisit(point, distance, objectFilled),
                             useZ,
                             bigNeighborhood)
-                    .applyGlobal(root, listOut);
+                    .traverseGlobal(root, listOut::add);
         } catch (OperationFailedException e) {
             throw new TraverseContourException("Cannot traverse outline", e);
         }

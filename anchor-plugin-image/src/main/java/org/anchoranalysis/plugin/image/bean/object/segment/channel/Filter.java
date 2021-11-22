@@ -37,7 +37,6 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
@@ -56,7 +55,7 @@ public class Filter extends SegmentChannelIntoObjectsUnary {
     public ObjectCollection segment(
             Channel channel,
             Optional<ObjectMask> object,
-            Optional<SeedCollection> seeds,
+            Optional<ObjectCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException {
         return filterObjects(

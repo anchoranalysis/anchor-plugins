@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.StackIdentifiers;
+import org.anchoranalysis.image.io.stack.StackIdentifiers;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;

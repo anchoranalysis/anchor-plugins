@@ -76,7 +76,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
                                 input.dimensionsRequired(),
                                 regionMap.membershipWithFlagsForIndex(getRegionID()),
                                 BinaryValuesByte.getDefault());
-        return omWithProps.withoutProperties();
+        return omWithProps.asObjectMask();
     }
 
     private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object)
@@ -96,7 +96,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
                                     .extract()
                                     .slice(z)
                                     .extract()
-                                    .voxelsEqualTo(object.binaryValues().getOnInt())
+                                    .voxelsEqualTo(object.binaryValues().getOn())
                                     .count();
                 }
             }
