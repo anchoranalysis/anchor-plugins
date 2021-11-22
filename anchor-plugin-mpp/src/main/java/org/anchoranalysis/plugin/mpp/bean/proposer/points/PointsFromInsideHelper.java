@@ -101,7 +101,7 @@ class PointsFromInsideHelper {
             int successiveEmptySlices,
             int skipAfterSuccessiveEmptySlices,
             Consumer<Point3i> processPoint) {
-        BinaryValuesByte binaryValues = mask.binaryValues().asByte();
+        BinaryValuesByte binaryValues = mask.binaryValuesByte();
 
         Voxels<UnsignedByteBuffer> voxels = mask.channel().voxels().asByte();
         Extent extent = voxels.extent();
@@ -136,7 +136,7 @@ class PointsFromInsideHelper {
         for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
             for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
                 int offset = extent.offset(x, y);
-                if (buffer.getRaw(offset) == binaryValues.getOnByte()) {
+                if (buffer.getRaw(offset) == binaryValues.getOn()) {
 
                     Point3i point = new Point3i(x, y, z);
                     if (pointsConvexRoot.convexWithAtLeastOnePoint(point, voxelsFilled)) {

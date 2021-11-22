@@ -54,9 +54,11 @@ class CalculateHistogramForChannel
     @Override
     protected FeatureInputHistogram execute(FeatureInputSingleObject params) {
 
-        Histogram histogram =
-                HistogramFromObjectsFactory.createHistogramIgnoreZero(
-                        channel, params.getObject(), excludeZero);
+        Histogram histogram = HistogramFromObjectsFactory.createFrom(channel, params.getObject());
+
+        if (excludeZero) {
+            histogram.zeroValue(0);
+        }
 
         return new FeatureInputHistogram(histogram, params.getResolutionOptional());
     }

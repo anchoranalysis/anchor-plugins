@@ -34,12 +34,12 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.bean.spatial.direction.VectorInDirection;
-import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+import org.anchoranalysis.spatial.orientation.Orientation;
+import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Vector3d;
-import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 public abstract class FeatureMarkDirection extends FeatureMark {
 
@@ -67,7 +67,7 @@ public abstract class FeatureMarkDirection extends FeatureMark {
 
         Orientation orientation = mark.getOrientation();
         return calculateForEllipsoid(
-                mark, orientation, orientation.createRotationMatrix(), vectorInDirection);
+                mark, orientation, orientation.deriveRotationMatrix(), vectorInDirection);
     }
 
     protected abstract double calculateForEllipsoid(

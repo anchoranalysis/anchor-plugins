@@ -88,7 +88,7 @@ class VoxelsFromScoreCreator {
         List<Histogram> out = new ArrayList<>();
 
         for (VoxelsUntyped voxels : listVoxels) {
-            out.add(HistogramFromObjectsFactory.create(voxels, object));
+            out.add(HistogramFromObjectsFactory.createFrom(voxels, object));
         }
 
         for (Histogram histogram : listAdditionalHistograms) {
@@ -123,7 +123,7 @@ class VoxelsFromScoreCreator {
             Voxels<UnsignedByteBuffer> voxelsOut, ObjectMask object, VoxelScore pixelScore)
             throws FeatureCalculationException {
 
-        byte maskOn = object.binaryValuesByte().getOnByte();
+        byte maskOn = object.binaryValuesByte().getOn();
         Extent e = voxelsOut.extent();
         Extent eMask = object.binaryVoxels().extent();
 

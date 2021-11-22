@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.StackIdentifiers;
+import org.anchoranalysis.image.io.stack.StackIdentifiers;
 
 /**
  * Guesses dimensions from an <i>input-image</i> if it exists.

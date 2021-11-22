@@ -40,7 +40,6 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.object.MatchedObject;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -111,11 +110,11 @@ public class SegmentWithSeeds extends WithChannelBase {
     }
 
     private static ObjectCollection createWithoutSourceObjects(
-            Channel channel, ObjectCollection seedsAsObjects, SegmentChannelIntoObjects sgmn)
+            Channel channel, ObjectCollection seedsAsObjects, SegmentChannelIntoObjects segment)
             throws ProvisionFailedException {
 
         try {
-            return sgmn.segment(
+            return segment.segment(
                     channel,
                     Optional.empty(),
                     Optional.of(SeedsFactory.createSeedsWithoutMask(seedsAsObjects)));
@@ -134,7 +133,7 @@ public class SegmentWithSeeds extends WithChannelBase {
         // We create a new object-mask for the new channel
         ObjectMask objectLocal = new ObjectMask(matchedObject.getSource().binaryVoxels());
 
-        SeedCollection seedsObj =
+        ObjectCollection seedsObj =
                 SeedsFactory.createSeedsWithMask(
                         matchedObject.getMatches(),
                         objectLocal,

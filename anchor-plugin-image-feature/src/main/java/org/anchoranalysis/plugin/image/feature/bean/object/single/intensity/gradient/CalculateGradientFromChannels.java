@@ -119,7 +119,7 @@ class CalculateGradientFromChannels
 
                     int offsetMask = extentMask.offset(x, y);
 
-                    if (bufferMask.buffer().getRaw(offsetMask) == binaryValuesMask.getOnByte()) {
+                    if (bufferMask.buffer().getRaw(offsetMask) == binaryValuesMask.getOn()) {
 
                         int offset =
                                 extent.offset(x + box.cornerMin().x(), y + box.cornerMin().y());

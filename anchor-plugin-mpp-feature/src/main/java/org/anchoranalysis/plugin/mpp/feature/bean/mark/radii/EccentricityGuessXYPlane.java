@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import java.util.stream.IntStream;
-import org.anchoranalysis.image.core.orientation.Orientation;
+import org.anchoranalysis.spatial.orientation.Orientation;
+import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Vector3d;
-import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 // Calculates the eccentricity of the ellipse by considering the two planes which are furtherest way
 // from the Z unit-vector
@@ -53,7 +53,7 @@ public class EccentricityGuessXYPlane extends FeatureMarkEccentricity {
 
     private static Double[] angles(Orientation orientation) {
 
-        RotationMatrix rotMatrix = orientation.createRotationMatrix();
+        RotationMatrix rotMatrix = orientation.deriveRotationMatrix();
 
         Vector3d unitVectorZ = new Vector3d(0, 0, 1.0);
         Vector3d unitVectorZRev = new Vector3d(0, 0, -1.0);

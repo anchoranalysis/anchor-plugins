@@ -35,10 +35,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.plugin.mpp.bean.contour.TraverseContourException;
 import org.anchoranalysis.plugin.mpp.bean.contour.TraverseOuterCounter;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.contour.FindPointOnContour;
+import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 

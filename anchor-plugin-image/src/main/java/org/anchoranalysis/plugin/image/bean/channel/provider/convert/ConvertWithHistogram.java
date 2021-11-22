@@ -32,14 +32,13 @@ import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelToWithHistogram;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
-import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
+import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
@@ -78,12 +77,8 @@ public class ConvertWithHistogram<T> extends ConvertBase {
     }
 
     private Histogram createHistogram(Channel channel) throws ProvisionFailedException {
-        try {
-            return OptionalUtilities.orElseGet(
-                    OptionalFactory.create(histogram),
-                    () -> HistogramFromObjectsFactory.create(channel));
-        } catch (CreateException e) {
-            throw new ProvisionFailedException(e);
-        }
+        return OptionalUtilities.orElseGet(
+                OptionalFactory.create(histogram),
+                () -> HistogramFactory.createFrom(channel.voxels()));
     }
 }

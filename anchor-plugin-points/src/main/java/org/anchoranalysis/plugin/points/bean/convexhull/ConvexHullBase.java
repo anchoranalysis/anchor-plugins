@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
+import org.anchoranalysis.image.core.contour.FindContour;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.core.outline.FindOutline;
 
 public abstract class ConvexHullBase extends MaskProviderUnary {
 
@@ -42,7 +42,7 @@ public abstract class ConvexHullBase extends MaskProviderUnary {
 
     @Override
     public Mask createFromMask(Mask mask) throws ProvisionFailedException {
-        return createFromMask(mask, FindOutline.outline(mask, 1, true, erodeAtBoundary));
+        return createFromMask(mask, FindContour.createFrom(mask, 1, true, erodeAtBoundary));
     }
 
     protected abstract Mask createFromMask(Mask mask, Mask outline) throws ProvisionFailedException;

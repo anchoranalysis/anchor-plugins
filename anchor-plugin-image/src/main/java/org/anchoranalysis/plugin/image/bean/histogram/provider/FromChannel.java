@@ -37,6 +37,7 @@ import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
+import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 
 public class FromChannel extends HistogramProvider {
@@ -54,9 +55,9 @@ public class FromChannel extends HistogramProvider {
 
         try {
             if (mask != null) {
-                return HistogramFromObjectsFactory.create(channelIn, mask.get());
+                return HistogramFromObjectsFactory.createFrom(channelIn, mask.get());
             } else {
-                return HistogramFromObjectsFactory.create(channelIn);
+                return HistogramFactory.createFrom(channelIn.voxels());
             }
         } catch (CreateException e) {
             throw new ProvisionFailedException(e);

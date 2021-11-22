@@ -43,10 +43,10 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.stack.time.TimeSequence;
 
 /**
  * Exposes a {@link NamedChannelsForSeries} with a certain number of channels.

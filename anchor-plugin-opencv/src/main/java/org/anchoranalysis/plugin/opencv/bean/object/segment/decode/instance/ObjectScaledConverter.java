@@ -83,6 +83,6 @@ class ObjectScaledConverter {
         }
         // Then derive an {@link ObjectMask} representation.
         return mark.deriveObject(dimensions, REGION_MEMBERSHIP, BinaryValuesByte.getDefault())
-                .withoutProperties();
+                .asObjectMask();
     }
 }

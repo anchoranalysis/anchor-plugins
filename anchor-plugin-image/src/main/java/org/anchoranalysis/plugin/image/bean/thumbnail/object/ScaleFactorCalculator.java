@@ -30,9 +30,9 @@ import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.StreamableCollection;
-import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
+import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -62,7 +62,7 @@ class ScaleFactorCalculator {
                 new Extent(
                         extractMaxDimension(boundingBoxes.stream(), Extent::x),
                         extractMaxDimension(boundingBoxes.stream(), Extent::y));
-        return ResizeExtentUtilities.relativeScale(maxInEachDimension, targetSize);
+        return RelativeScaleCalculator.relativeScale(maxInEachDimension, targetSize);
     }
 
     private static int extractMaxDimension(

@@ -32,11 +32,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.image.core.orientation.Orientation2D;
 import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.conic.Ellipse;
+import org.anchoranalysis.spatial.orientation.Orientation;
+import org.anchoranalysis.spatial.orientation.Orientation2D;
 
 public class AngleRotation extends OrientationProposer {
 

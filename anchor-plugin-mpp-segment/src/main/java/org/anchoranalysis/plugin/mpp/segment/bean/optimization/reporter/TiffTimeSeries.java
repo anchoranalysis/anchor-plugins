@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
+import org.anchoranalysis.core.identifier.getter.IdentifyFromIteration;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.io.generator.Generator;
@@ -107,7 +107,7 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
             FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization) {
         DisplayStack stack = initialization.getInitContext().getDualStack().getBackground();
         ColoredMarks coloredMarks =
-                new ColoredMarks(marks, colorIndex, new IdentifyByIteration<>());
+                new ColoredMarks(marks, colorIndex, new IdentifyFromIteration<>());
         return new ColoredMarksWithDisplayStack(coloredMarks, stack);
     }
 }

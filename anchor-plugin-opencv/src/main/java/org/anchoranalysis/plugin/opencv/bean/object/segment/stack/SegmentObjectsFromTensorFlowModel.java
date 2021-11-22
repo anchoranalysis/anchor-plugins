@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.primitive.DoubleList;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -297,7 +298,7 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
     private static Stack grayscaleToRGB(Channel channel) {
         try {
             return new Stack(true, channel, channel.duplicate(), channel.duplicate());
-        } catch (IncorrectImageSizeException e) {
+        } catch (IncorrectImageSizeException | CreateException e) {
             throw new AnchorImpossibleSituationException();
         }
     }

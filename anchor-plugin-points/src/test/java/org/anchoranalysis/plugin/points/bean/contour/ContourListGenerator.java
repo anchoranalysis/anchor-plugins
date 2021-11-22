@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
+import org.anchoranalysis.core.identifier.getter.IdentifyFromIteration;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
@@ -74,7 +74,7 @@ class ContourListGenerator
                 new ColoredMarks(
                         createMarksFromContourList(element),
                         generateColors(element.size()),
-                        new IdentifyByIteration<>());
+                        new IdentifyFromIteration<>());
         return new ColoredMarksWithDisplayStack(marks, background);
     }
 
@@ -107,7 +107,7 @@ class ContourListGenerator
 
     private static MarksGenerator createDelegate(DrawObject drawObject) {
         MarksGenerator delegate =
-                new MarksGenerator(drawObject, new IdentifyByIteration<Overlay>());
+                new MarksGenerator(drawObject, new IdentifyFromIteration<Overlay>());
         delegate.setManifestDescriptionFunction("contourRepresentationRGB");
         return delegate;
     }

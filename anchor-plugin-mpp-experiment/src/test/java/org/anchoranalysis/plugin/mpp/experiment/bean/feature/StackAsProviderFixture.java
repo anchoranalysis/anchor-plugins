@@ -35,8 +35,8 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.stack.time.TimeSequence;
 
 @AllArgsConstructor
 class StackAsProviderFixture implements ProvidesStackInput {

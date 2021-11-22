@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+import org.anchoranalysis.spatial.orientation.Orientation;
 
 public abstract class FeatureMarkEccentricity extends FeatureMark {
 

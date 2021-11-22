@@ -28,14 +28,14 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.core.orientation.Orientation2D;
 import org.anchoranalysis.mpp.mark.points.RotatableBoundingBox;
+import org.anchoranalysis.spatial.orientation.Orientation2D;
+import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.spatial.point.Point2f;
 import org.anchoranalysis.spatial.point.Point2i;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.PointConverter;
-import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 /**
  * Extracts a bounding box from arrays returned by the EAST CNN model.
@@ -109,7 +109,7 @@ class RotatableBoundingBoxFromArrays {
     private static Point3d rotatedPointWithOffset(
             Point2f unrotated, Orientation2D orientation, Point2i offset) {
 
-        RotationMatrix rotMatrix = orientation.createRotationMatrix();
+        RotationMatrix rotMatrix = orientation.deriveRotationMatrix();
 
         Point3d rotated = rotMatrix.rotatedPoint(convert3d(unrotated));
         rotated.add(PointConverter.doubleFromInt(offset));

@@ -77,7 +77,7 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
 
         // We see if it's been finalized or not
         byte value = bufferFinalized.buffer().getRaw(index);
-        if (value == binaryValues.getOffByte()) {
+        if (value == binaryValues.getOff()) {
 
             // get value from mask
             int maskVal = bufferMask.getInt(index);
@@ -91,7 +91,7 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
             queue.put(new Point3i(x1, y1, z), valToWrite);
 
             // point as finalized
-            bufferFinalized.buffer().putRaw(index, binaryValues.getOnByte());
+            bufferFinalized.buffer().putRaw(index, binaryValues.getOn());
         }
     }
 

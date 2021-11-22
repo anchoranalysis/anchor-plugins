@@ -66,6 +66,6 @@ class CalculateMaskInput<T extends FeatureInputEnergy>
                     "mask has incompatible data type, it must be unsigned 8-bit", e);
         }
 
-        return BinaryVoxelsFactory.reuseByte(voxels, mask.binaryValues());
+        return BinaryVoxelsFactory.reuseByte(voxels, mask.binaryValuesInt());
     }
 }

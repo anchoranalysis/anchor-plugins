@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
+import org.anchoranalysis.core.identifier.getter.IdentifyFromIteration;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.io.bean.object.draw.Filled;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
@@ -74,7 +74,7 @@ class MarksVisualization {
             ColorIndex colorIndex = outputter.getSettings().defaultColorIndexFor(marks.size());
 
             return new ColoredMarksWithDisplayStack(
-                    new ColoredMarks(marks, colorIndex, new IdentifyByIteration<>()),
+                    new ColoredMarks(marks, colorIndex, new IdentifyFromIteration<>()),
                     backgroundStack);
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
@@ -91,6 +91,6 @@ class MarksVisualization {
     }
 
     private static MarksGenerator createMarksGenerator(DrawObject drawObject) {
-        return new MarksGenerator(drawObject, new IdentifyByIteration<>());
+        return new MarksGenerator(drawObject, new IdentifyFromIteration<>());
     }
 }

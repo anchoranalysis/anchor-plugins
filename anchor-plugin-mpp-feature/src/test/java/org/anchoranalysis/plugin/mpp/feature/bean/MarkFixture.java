@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.mpp.feature.bean;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+import org.anchoranalysis.spatial.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.spatial.point.Point3d;
 
 @AllArgsConstructor

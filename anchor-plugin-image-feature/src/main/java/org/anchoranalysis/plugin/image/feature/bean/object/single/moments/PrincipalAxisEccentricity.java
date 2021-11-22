@@ -30,14 +30,14 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.statistics.moment.ImageMoments;
 
 /**
- * Calculates the eccentricity of the Principal Axes (as defined by Image Moments)
+ * Calculates the eccentricity of the Principal Axes (as defined by Image Moments).
  *
- * <p>Specifically, this is
+ * <p>Specifically, this is:
  *
  * <pre>sqrt( 1 - eigenvalue2/eigenvalue1)</pre>
  *
  * where <code>eigenvalue1</code> is the eigen-value with first highest-magnitude, and <code>
- * eigenvalue2</code> is second-highest etc..
+ * eigenvalue2</code> is second-highest etc.
  *
  * <p>See <a href="https://en.wikipedia.org/wiki/Image_moment">Image moment on Wikipedia</a> for the
  * precise calculation.

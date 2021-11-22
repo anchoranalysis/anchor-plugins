@@ -67,6 +67,8 @@ public class RejectIfConditionXYResolution extends StackReader {
     private static class MaybeRejectProcessor
             implements OpenedRasterAlterDimensions.ConsiderUpdatedImageResolution {
 
+        private static final double DELTA_RESOLUTION = 1e-15;
+
         private DoubleBiPredicate relation;
         private double value;
 
@@ -79,7 +81,7 @@ public class RejectIfConditionXYResolution extends StackReader {
                         "No image-resolution is present, so cannot perform this check.");
             }
 
-            if (!resolution.get().hasEqualXAndY()) {
+            if (!hasEqualXAndYResolution(resolution.get())) {
                 throw new ImageIOException("X and Y pixel-sizes are different. They must be equal");
             }
 
@@ -88,6 +90,10 @@ public class RejectIfConditionXYResolution extends StackReader {
             } else {
                 return Optional.empty();
             }
+        }
+
+        private static boolean hasEqualXAndYResolution(Resolution resolution) {
+            return Math.abs(resolution.x() - resolution.y()) < DELTA_RESOLUTION;
         }
     }
 
