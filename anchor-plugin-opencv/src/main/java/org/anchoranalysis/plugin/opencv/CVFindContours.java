@@ -56,13 +56,25 @@ public class CVFindContours {
         CVInit.alwaysExecuteBeforeCallingLibrary();
     }
 
+    /**
+     * Calculates the extreme outer contours from an {@link ObjectMask} as OpenCV defines <a href="https://docs.opencv.org/3.4/d4/d73/tutorial_py_contours_begin.html">contours</a>.
+     * 
+     * <p>The setting {@link Imgproc#RETR_EXTERNAL} defines the extreme outer contours. Please see the related
+     * <a href="https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#ga17ed9f5d79ae97bd4c7cf18403e1689a">OpenCV documentation</a>.
+     * 
+     * <p>No approximation occurs of the contours' points.
+     * 
+     * @param object the object whose contours should be found.
+     * @return a newly created list, containing the extreme outer contours.
+     * @throws OperationFailedException if the countour cannot be calculated.
+     */
     public static List<Contour> contoursForObject(ObjectMask object)
             throws OperationFailedException {
 
         CVInit.blockUntilLoaded();
 
         try {
-            // We clone ss the source image is modified by the algorithm according to OpenCV docs
+            // We deep-copy the object, as its voxels are modified by the algorithm according to OpenCV docs
             // https://docs.opencv.org/2.4/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=findcontours#findcontours
             Mat mat = ConvertToMat.fromObject(object.duplicate());
 
@@ -77,30 +89,34 @@ public class CVFindContours {
         }
     }
 
+    /** Convert <i>many</i> OpenCV matrices describing points to {@code List<Contour>}. */
     private static List<Contour> convertMatOfPoint(
-            List<MatOfPoint> contours, ReadableTuple3i cornerMin) {
+            List<MatOfPoint> matrices, ReadableTuple3i cornerMin) {
         return FunctionalList.mapToList(
-                contours, points -> CVFindContours.createContour(points, cornerMin));
+                matrices, points -> CVFindContours.createContour(points, cornerMin));
     }
 
-    private static Contour createContour(MatOfPoint mop, ReadableTuple3i cornerMin) {
+    /** Convert a <i>single</i> OpenCV matrix describing points to a {@link Contour}. */
+    private static Contour createContour(MatOfPoint matrix, ReadableTuple3i cornerMin) {
         Contour contour = new Contour();
 
-        Arrays.stream(mop.toArray())
+        Arrays.stream(matrix.toArray())
                 .map(point -> convert(point, cornerMin))
                 .forEach(contour.getPoints()::add);
 
         return contour;
     }
 
-    private static Point3f convert(Point point, ReadableTuple3i cornerMin) {
+    /** Converts a 2D OpenCV {@link Point} to a {@link Point3f}, adding {@code toAdd}. */
+    private static Point3f convert(Point point, ReadableTuple3i toAdd) {
         return new Point3f(
-                convertAdd(point.x, cornerMin.x()),
-                convertAdd(point.y, cornerMin.y()),
-                cornerMin.z());
+                addDoubles(point.x, toAdd.x()),
+                addDoubles(point.y, toAdd.y()),
+                toAdd.z());
     }
 
-    private static float convertAdd(double in, double add) {
-        return (float) (in + add);
+    /** Adds two {@code double} values and converts to a {@code float}. */
+    private static float addDoubles(double value1, double value2) {
+        return (float) (value1 + value2);
     }
 }
