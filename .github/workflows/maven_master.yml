@@ -30,6 +30,8 @@ jobs:
       with:
         java-version: 8
         lfs: true
+    - name: Checkout LFS objects
+      run: git lfs checkout                
     - name: Cache Maven packages
       uses: actions/cache@v2
       with:
