@@ -73,7 +73,7 @@ public class ConvertToMat {
      * Converts a {@link Stack} to a {@link Mat}.
      * 
      * @param stack the stack to convert, which must have 1 or 3 channels (in which case, it is presumed to be RGB).
-     * @return a newly-created {@Mat} with identical voxels to {@code Stack}. In the case of an RGB image, the {@link Mat} has BGR channel ordering.
+     * @return a newly-created {@link Mat} with identical voxels to {@code Stack}. In the case of an RGB image, the {@link Mat} has BGR channel ordering.
      * @throws CreateException if the stack is 3D, or has an invalid number of channels.
      */
     public static Mat fromStack(Stack stack) throws CreateException {
