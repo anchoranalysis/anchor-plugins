@@ -32,8 +32,13 @@ import ai.onnxruntime.OrtLoggingLevel;
 import ai.onnxruntime.OrtProvider;
 import ai.onnxruntime.OrtSession;
 import ai.onnxruntime.OrtSession.SessionOptions;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.nio.FloatBuffer;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,6 +60,7 @@ import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
 import org.anchoranalysis.io.imagej.iterpolator.InterpolatorImageJ;
 import org.anchoranalysis.plugin.onnx.model.OnnxModel;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Performs instance-segmentation using the ONNX Runtime and an {@code .onnx} model file.
@@ -71,8 +77,16 @@ public class SegmentObjectsFromONNXModel
     /**
      * Relative-path to the model file in ONNX form, relative to the <i>models/</i> directory in the
      * Anchor distribution.
+     * 
+     * <p>If {@code readFromResources==true}, it is read instead from resources on the class-path.
      */
     @BeanField @Getter @Setter private String modelPath;
+    
+    /**
+     * When true, rather than reading {@code modelPath} from the file-system, it is read from Java
+     * resources on the class-path.
+     */
+    @BeanField @Getter @Setter private boolean readFromResources = false;
 
     /** The name of the input in the ONNX model. */
     @BeanField @Getter @Setter private String inputName;
@@ -92,6 +106,9 @@ public class SegmentObjectsFromONNXModel
      */
     @BeanField @Getter @Setter private boolean interleaveChannels = false;
     // END BEAN PROPERTIES
+    
+    /** The model read from the file-system as bytes. */
+    private byte[] modelAsBytes;
 
     @Override
     public ConcurrentModelPool<OnnxModel> createModelPool(ConcurrencyPlan plan, Logger logger)
@@ -164,8 +181,6 @@ public class SegmentObjectsFromONNXModel
             throws CreateModelFailedException {
 
         try {
-            Path path = resolve(modelPath);
-
             // Using this logging-level is important to suppress log messages sent to standard-error
             //  when the import of CUDA fails.
             OrtEnvironment env =
@@ -176,12 +191,12 @@ public class SegmentObjectsFromONNXModel
                 options.close();
                 return Optional.empty();
             }
-
-            OrtSession session = env.createSession(path.toString(), options); // NOSONAR
+            
+            OrtSession session = env.createSession(readModelIfNecessary(), options); // NOSONAR
 
             return Optional.of(new ConcurrentModel<>(new OnnxModel(session), useGPU));
 
-        } catch (InitializeException | OrtException e) {
+        } catch (InitializeException | OrtException | IOException e) {
             throw new CreateModelFailedException(e);
         }
     }
@@ -197,5 +212,20 @@ public class SegmentObjectsFromONNXModel
         } else {
             return new long[] {stack.getNumberChannels(), dimensions.y(), dimensions.x()};
         }
+    }
+    
+    /** Reads the ONNX model as a byte-array, either from the file-system or from resources. */
+    private byte[] readModelIfNecessary() throws IOException, InitializeException {
+        if (modelAsBytes==null) {
+            if (readFromResources) {
+                ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+                InputStream inputStream = classloader.getResourceAsStream(modelPath);
+                modelAsBytes = IOUtils.toByteArray(inputStream);
+            } else {
+                Path path = resolve(modelPath);
+                modelAsBytes = Files.readAllBytes(path);
+            }
+        }
+        return modelAsBytes;
     }
 }

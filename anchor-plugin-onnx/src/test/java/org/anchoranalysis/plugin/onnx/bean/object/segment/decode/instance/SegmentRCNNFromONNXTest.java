@@ -22,6 +22,7 @@ class SegmentRCNNFromONNXTest extends SegmentCarBase {
         segment.setClassLabelsPath("mscoco_labels.names");
         segment.setScaleInput(new ToDimensions(1088, 800));
         segment.setInputName("image");
+        segment.setReadFromResources(true);
         return new SuppressNonMaxima<>(segment, new RemoveOverlappingObjects(), false);
     }
 }

@@ -27,6 +27,7 @@ class SegmentTextFromONNXTest extends SegmentNumberPlateBase {
         segment.setInputName("input_images:0");
         segment.setIncludeBatchDimension(true);
         segment.setInterleaveChannels(true);
+        segment.setReadFromResources(true);
         return new SuppressNonMaxima<>(segment, new ConditionallyMergeOverlappingObjects(), false);
     }
 
