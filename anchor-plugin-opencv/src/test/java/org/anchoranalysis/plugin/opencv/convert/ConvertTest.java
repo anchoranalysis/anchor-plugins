@@ -32,7 +32,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
-import org.anchoranalysis.plugin.opencv.test.ImageLoader;
+import org.anchoranalysis.test.image.load.CarImageLoader;
 import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 
@@ -47,7 +47,7 @@ class ConvertTest {
         CVInit.alwaysExecuteBeforeCallingLibrary();
     }
 
-    private ImageLoader loader = new ImageLoader();
+    private CarImageLoader loader = new CarImageLoader();
 
     @Test
     void testGrayScale8Bit() throws OperationFailedException {

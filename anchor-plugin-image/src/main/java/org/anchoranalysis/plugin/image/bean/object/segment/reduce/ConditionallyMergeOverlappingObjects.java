@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
+import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 
 /**
  * Where objects overlap, they are merged together if certain conditions are fulfilled.

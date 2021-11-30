@@ -35,9 +35,10 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
+import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
+import org.anchoranalysis.image.inference.segment.WithConfidence;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.spatial.box.BoundedList;
 import org.anchoranalysis.spatial.rtree.SpatiallySeparate;
 

@@ -1,0 +1,143 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+	<parent>
+        <groupId>org.anchoranalysis.anchor</groupId>
+   	    <artifactId>anchor-parent-plugins</artifactId>
+		<version>0.0.11-SNAPSHOT</version>
+    </parent> 
+    <artifactId>anchor-plugin-onnx</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+	<description>Plugins that call the ONNX runtime.</description>
+    
+    <!-- Properties Section. Change ND4J versions here, if required -->
+    <properties>
+        <dl4j-master.version>1.0.0-M1.1</dl4j-master.version>
+    </properties>	
+	
+   <dependencies>
+    <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-bean</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+    <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-core</artifactId>
+	  <version>0.1.4-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+  		<groupId>${project.groupId}</groupId>
+  		<artifactId>anchor-inference</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-core</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-inference</artifactId>
+	  <version>0.0.1-SNAPSHOT</version>
+	</dependency>	
+
+	<dependency>
+	  <groupId>${project.groupId}</groupId>	
+	  <artifactId>anchor-mpp</artifactId>
+  	  <version>0.0.8-SNAPSHOT</version>
+  	</dependency>
+
+	<!--  START: ONNX Runtime dependencies -->
+	
+	<dependency>
+		<groupId> com.microsoft.onnxruntime</groupId>
+		<artifactId>onnxruntime_gpu </artifactId>
+		<version>1.9.0</version>
+	</dependency>
+        
+    <!--  END: ONNX Runtime dependencies -->
+
+
+    <!-- START: Test dependencies -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>anchor-test-image</artifactId>
+      <version>0.0.8-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    
+     <dependency>
+       <groupId>org.mockito</groupId>
+       <artifactId>mockito-core</artifactId>
+       <version>${mockito.version}</version>
+       <scope>test</scope>
+     </dependency>
+     
+     
+     <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-image</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	  <scope>test</scope>
+	</dependency>
+     <!--  END: Test dependencies -->
+    	
+</dependencies>
+
+<profiles>
+
+	<profile>
+	  <id>mac</id>
+	  <activation>
+	    <os> 
+	      <family>mac</family>
+	    </os>
+	  </activation>
+	  <dependencies>
+	  	<dependency>
+			<groupId> com.microsoft.onnxruntime</groupId>
+			<artifactId>onnxruntime</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+	  </dependencies>
+	</profile>
+	<profile>
+	  <id>unix</id>
+	  <activation>
+	    <os>
+	      <family>unix</family>
+	      <name>Linux</name>
+	    </os>
+	  </activation>
+	  <dependencies>
+	  	<dependency>
+			<groupId> com.microsoft.onnxruntime</groupId>
+			<artifactId>onnxruntime_gpu</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+	  </dependencies>
+	</profile>
+	<profile>
+	  <id>windows</id>
+	  <activation>
+	    <os>
+	      <family>windows</family>
+	    </os>
+	    <activeByDefault>true</activeByDefault>
+	  </activation>
+	  <dependencies>
+	  	<dependency>
+			<groupId> com.microsoft.onnxruntime</groupId>
+			<artifactId>onnxruntime_gpu</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+	  </dependencies>
+      
+	</profile>
+
+</profiles>
+</project>

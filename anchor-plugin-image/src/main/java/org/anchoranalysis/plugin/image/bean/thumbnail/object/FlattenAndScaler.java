@@ -51,49 +51,78 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 @RequiredArgsConstructor
 class FlattenAndScaler {
 
-    /** scale-factor to apply to objects and stacks */
+    /** Scaling-factor to apply to objects and stacks. */
     @Getter private final ScaleFactor scaleFactor;
 
     private final Interpolator interpolator;
 
-    /** A scaled version of the objects */
+    /** A scaled version of each object. */
     private ScaledElements<ObjectMask> objectsScaled;
 
     /**
      * An efficiently searchable index of the unscaled objects, indexed by their scaled
-     * bounding-boxes
+     * bounding-boxes.
      */
     private IntersectingObjects<ObjectMask> objectsIndexed;
 
+    /** The background scaled to match the scaled-objects. */
+    @Getter private Optional<ScaleableBackground> background;
+
+    /** The size of the image when scaled, if it is known. */
+    private Optional<Extent> sizeScaled;
+
     /**
-     * Constructor
+     * Constructor.
      *
      * @param boundingBoxes supplies a stream of bounding-boxes that specify each unscaled regions
-     *     that we will generate thumbnails for
-     * @param allObjects all the objects that can appear in the thumbnails
-     * @param interpolator interpolator for scaling stack
-     * @param targetSize the target size which objects will be scaled-down to fit inside
-     * @throws OperationFailedException if there are too many objects
+     *     that we will generate thumbnails for.
+     * @param allObjects all objects that may appear in the thumbnails.
+     * @param overlappingObjects true if objects may overlap unscaled. false if this is never
+     *     allowed. This influences whether scaling occurs collectively (to preserve tight borders
+     *     between objects), or individually.
+     * @param interpolator interpolator for scaling stack.
+     * @param targetSize the target size which objects will be scaled-down to fit inside.
+     * @param backgroundSource an unscaled background image, if it exists.
+     * @param backgroundChannelIndex which channel use in the background image, or -1 to use the
+     *     entire stack.
+     * @throws OperationFailedException if there are too many objects.
      */
     public FlattenAndScaler(
             StreamableCollection<BoundingBox> boundingBoxes,
             ObjectCollection allObjects,
+            boolean overlappingObjects,
             Interpolator interpolator,
-            Extent targetSize)
+            Extent targetSize,
+            Optional<Stack> backgroundSource,
+            int backgroundChannelIndex)
             throws OperationFailedException {
-        this.scaleFactor =
-                ScaleFactorCalculator.factorSoEachBoundingBoxFitsIn(boundingBoxes, targetSize);
+        this.scaleFactor = ScaleFactorCalculator.soEachBoundingBoxFits(boundingBoxes, targetSize);
         this.interpolator = interpolator;
+
+        this.background =
+                determineBackgroundMaybeOutlined(
+                        backgroundSource, backgroundChannelIndex, scaleFactor, interpolator);
+
+        this.sizeScaled = background.map(ScaleableBackground::extentAfterAnyScaling);
 
         this.objectsScaled =
                 Scaler.scaleObjects(
                         allObjects,
                         scaleFactor,
+                        overlappingObjects,
                         Optional.of(ObjectMask::flattenZ),
-                        Optional.empty());
+                        Optional.of(this::clipToScaledSizeIfKnown));
         this.objectsIndexed =
                 IntersectingObjects.create(
                         ObjectCollectionFactory.of(objectsScaled.asCollectionOrderNotPreserved()));
+    }
+
+    private ObjectMask clipToScaledSizeIfKnown(ObjectMask object) {
+        if (sizeScaled.isPresent()) {
+            return object.clipTo(sizeScaled.get());
+        } else {
+            return object;
+        }
     }
 
     /**
@@ -117,25 +146,21 @@ class FlattenAndScaler {
 
     /**
      * Reads the extent from a stack that has already been scaled if it exists, or derives an extent
-     * from an object collection
+     * from an object collection.
      *
-     * @param background the background-image
-     * @param objectsUnscaled objects that have yet to be scaled (and flattened)
-     * @return an extent that has been flattened and scaled
+     * @param objectsUnscaled objects that have yet to be scaled (and flattened).
+     * @return an extent that has been flattened and scaled.
      */
-    public Extent extentFromStackOrObjects(
-            Optional<ScaleableBackground> background, ObjectCollection objectsUnscaled) {
-        return background
-                .map(ScaleableBackground::extentAfterAnyScaling)
-                .orElseGet(() -> deriveScaledExtentFromObjects(objectsUnscaled));
+    public Extent extentFromStackOrObjects(ObjectCollection objectsUnscaled) {
+        return sizeScaled.orElseGet(() -> deriveScaledExtentFromObjects(objectsUnscaled));
     }
 
     /**
-     * Flattens and scales objects
+     * Flattens and scales objects.
      *
-     * @param objects unscaled objects
-     * @return a scaled object
-     * @throws OperationFailedException
+     * @param objects unscaled objects.
+     * @return a scaled object.
+     * @throws OperationFailedException if a scaling cannot successfully complete.
      */
     public ObjectCollection scaleObjects(ObjectCollection objects) throws OperationFailedException {
         try {
@@ -149,11 +174,11 @@ class FlattenAndScaler {
      * Objects (scaled) that intersect with a particular bounding-box
      *
      * @param box a search occurs for objects that intersect with this box (which has already been
-     *     scaled)
+     *     scaled).
      * @param excludeFromAdding these objects are excluded from the search (specifically, any object
-     *     found that has the same bounding-box and number of pixels)
+     *     found that has the same bounding-box and number of pixels).
      * @return the objects that intersect with the bounding-box except any in {@code
-     *     excludeFromAdding}
+     *     excludeFromAdding}.
      */
     public ObjectCollection objectsThatIntersectWith(
             BoundingBox box, ObjectCollection excludeFromAdding) {
@@ -169,7 +194,7 @@ class FlattenAndScaler {
 
     /**
      * Scales each channel in the stack by the scale-factor and removes any resolution information
-     * (which is no longer physically valid)
+     * (which is no longer physically valid).
      */
     private Stack flattenScaleAndRemoveResolution(Stack stack) throws OperationFailedException {
         return stack.mapChannel(this::flattenScaleAndRemoveResolutionFromChannel);
@@ -177,7 +202,7 @@ class FlattenAndScaler {
 
     /**
      * Scales the channel by the scale-factor and removes any resolution information (which is no
-     * longer physically valid)
+     * longer physically valid).
      */
     private Channel flattenScaleAndRemoveResolutionFromChannel(Channel channel) {
         Channel scaled = channel.projectMax().scaleXY(scaleFactor, interpolator);
@@ -185,10 +210,21 @@ class FlattenAndScaler {
         return scaled;
     }
 
-    /** Derives what a scaled version of an extent would look like that fits all objects */
+    /** Derives what a scaled version of an extent would look like that fits all objects. */
     private Extent deriveScaledExtentFromObjects(ObjectCollection objects) {
         return ExtentToFitBoundingBoxes.derive(
                 objects.streamStandardJava()
                         .map(object -> object.boundingBox().scale(scaleFactor).flattenZ()));
+    }
+
+    private static Optional<ScaleableBackground> determineBackgroundMaybeOutlined(
+            Optional<Stack> backgroundSource,
+            int backgroundChannelIndex,
+            ScaleFactor scaleFactor,
+            Interpolator interpolator)
+            throws OperationFailedException {
+        BackgroundSelector backgroundHelper =
+                new BackgroundSelector(backgroundChannelIndex, scaleFactor, interpolator);
+        return backgroundHelper.determineBackground(backgroundSource);
     }
 }

@@ -31,19 +31,15 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
+import org.anchoranalysis.image.inference.segment.ScaleAndThresholdVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
-import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3f;
@@ -57,8 +53,6 @@ import org.opencv.core.Mat;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MaskRCNNObjectExtracter {
-
-    private static final Interpolator INTERPOLATOR = createInterpolator();
 
     /** Then number of bounding boxes that Mask RCNN returns. */
     private static final int NUMBER_BOXES_DETECTED = 100;
@@ -86,6 +80,9 @@ class MaskRCNNObjectExtracter {
 
     /** A fallback object-class-label used, if no class-labels are provided to index. */
     private static final String OBJECT_CLASS_LABEL_FALLBACK = "unknown";
+
+    /** Scaler for the mask voxels. */
+    private static final ScaleAndThresholdVoxels SCALER = new ScaleAndThresholdVoxels(false);
 
     /**
      * Extracts object-masks from the tensors returned as model output from Mask R-CNN inference.
@@ -117,7 +114,7 @@ class MaskRCNNObjectExtracter {
         for (int i = 0; i < NUMBER_BOXES_DETECTED; i++) {
 
             float[] coded =
-                    MatExtracter.extractFloatArray(boxes, i, DETECTION_MATRIX_NUMBER_ELEMENTS);
+                    MatExtracter.extractRowFloat(boxes, i, DETECTION_MATRIX_NUMBER_ELEMENTS);
 
             Optional<LabelledWithConfidence<ObjectMask>> object =
                     extractFromCode(
@@ -194,12 +191,7 @@ class MaskRCNNObjectExtracter {
     private static BinaryVoxels<UnsignedByteBuffer> extractScaledMask(
             Mat masks, int row, Extent boxExtent, int objectClassIdentifier, float maskMinValue) {
         Voxels<FloatBuffer> maskVoxels = extractMaskVoxels(masks, row, objectClassIdentifier);
-
-        // Scale and interpolate voxels to march the bounding-box
-        maskVoxels = maskVoxels.extract().resizedXY(boxExtent.x(), boxExtent.y(), INTERPOLATOR);
-
-        return VoxelsThresholder.thresholdFloat(
-                maskVoxels, maskMinValue, BinaryValuesByte.getDefault());
+        return SCALER.scaleAndThreshold(maskVoxels, boxExtent, maskMinValue);
     }
 
     /**
@@ -210,20 +202,11 @@ class MaskRCNNObjectExtracter {
             Mat masks, int row, int objectClassIdentifier) {
 
         // All the masks for a given box (index by a row)
-        float[] allMasks = MatExtracter.extractFloatArray(masks, row, ALL_MASKS_ARRAY_SIZE);
+        float[] allMasks = MatExtracter.extractRowFloat(masks, row, ALL_MASKS_ARRAY_SIZE);
 
         VoxelBuffer<FloatBuffer> buffer = VoxelBufferFactory.allocateFloat(MASK_AREA);
         buffer.buffer().put(allMasks, objectClassIdentifier * MASK_AREA, MASK_AREA);
         return VoxelsFactory.getFloat()
                 .createForVoxelBuffer(buffer, new Extent(MASK_EXTENT, MASK_EXTENT, 1));
-    }
-
-    /** The interpolator used for scaling the predicted mask up to the entire bounding-box. */
-    private static Interpolator createInterpolator() {
-        InterpolatorImgLib2 interpolator = new InterpolatorImgLib2Lanczos();
-        // To avoid using the default mirroring strategy. Instead we wish to consider pixels outside
-        // the box as being zero-valued.
-        interpolator.extendWith(0);
-        return interpolator;
     }
 }

@@ -34,6 +34,7 @@ import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.inference.InferenceModel;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
@@ -46,7 +47,7 @@ import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
  * @author Owen Feehan
  * @param <T> model-type in pool
  */
-public class SharedStateSegmentInstance<T> {
+public class SharedStateSegmentInstance<T extends InferenceModel> {
 
     public static final String OUTPUT_SUMMARY_CSV = "summary";
 

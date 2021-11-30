@@ -69,7 +69,8 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * Generates a thumbnail representation of one or more combined objects, as form a single input.
      */
     @BeanField @Getter @Setter
-    private ThumbnailFromObjects thumbnail = new OutlinePreserveRelativeSize();
+    private ThumbnailFromObjects thumbnail =
+            OutlinePreserveRelativeSize.createToColorUnselectedObjects();
 
     /**
      * Creates features that will be applied on the objects. Features should always be duplicated

@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
@@ -49,19 +47,17 @@ class CreateScaledInput {
 
     /**
      * Returns a scaled-down version of the stack, and a scale-factor that would return it to
-     * original size
+     * original size.
      *
      * @param scaleFactor the scaleFactor to use for resizing.
      * @param swapRB if true, the first channel and third channel in {@code stack} are swapped to
      *     make the {@link Mat} to e.g. translate RGB to BGR (as expected by OpenCV).
      */
-    public static Tuple2<Mat, ScaleFactor> apply(
-            Stack stack, ScaleFactor scaleFactor, boolean swapRB) throws CreateException {
+    public static Mat apply(Stack stack, ScaleFactor scaleFactor, boolean swapRB)
+            throws CreateException {
 
-        Mat original = ConvertToMat.makeRGBStack(stack, swapRB);
-
-        Mat input = resizeMatToTarget(original, stack.extent().scaleXYBy(scaleFactor));
-        return Tuple.of(input, scaleFactor);
+        Mat originalSize = ConvertToMat.makeRGBStack(stack, swapRB);
+        return resizeMatToTarget(originalSize, stack.extent().scaleXYBy(scaleFactor));
     }
 
     private static Mat resizeMatToTarget(Mat src, Extent targetExtent) {

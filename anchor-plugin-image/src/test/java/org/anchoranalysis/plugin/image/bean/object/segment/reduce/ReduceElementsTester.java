@@ -31,8 +31,9 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
+import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
+import org.anchoranalysis.image.inference.segment.SegmentedObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjectsFixture;
 import org.anchoranalysis.test.image.WriteIntoDirectory;
 
