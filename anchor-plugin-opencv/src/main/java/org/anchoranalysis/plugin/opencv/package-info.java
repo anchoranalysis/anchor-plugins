@@ -23,5 +23,15 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Plugins that call <a href="https://opencv.org/">OpenCV</a>. */
+/** 
+ * Plugins that call <a href="https://opencv.org/">OpenCV</a>.
+ *
+ * <p>Note: there might be quite a bit of unnecessary memory allocation here as the underlying Java byte-arrays
+ * aren't directly usable in OpenCV and vice-versa, so new duplicated memory buffers are created both inwards and
+ * outwards, when converting an image.
+ * 
+ * <p>Accordingly, all things being equal, using OpenCV's library would be more inefficient than another. However,
+ * OpenCV has highly optimized functions, and often their implementation is more optimal than another library. These
+ * trade-offs should be considered when selecting algorithms for particular tasks.
+ */
 package org.anchoranalysis.plugin.opencv;

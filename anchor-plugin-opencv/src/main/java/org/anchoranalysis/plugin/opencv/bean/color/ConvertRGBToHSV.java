@@ -28,6 +28,12 @@ package org.anchoranalysis.plugin.opencv.bean.color;
 
 import org.opencv.imgproc.Imgproc;
 
+/**
+ * Converts a RGB image to the <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSV color space</a>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ConvertRGBToHSV extends ColorConverterBase {
 
     @Override
