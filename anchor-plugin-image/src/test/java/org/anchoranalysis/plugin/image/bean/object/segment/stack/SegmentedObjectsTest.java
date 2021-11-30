@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.inference.segment.SegmentedObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;

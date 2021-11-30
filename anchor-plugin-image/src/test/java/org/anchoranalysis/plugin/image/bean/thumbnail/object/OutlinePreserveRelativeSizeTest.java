@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Color;
 import java.nio.file.Path;
@@ -43,14 +42,11 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
-import org.anchoranalysis.test.image.DualComparer;
-import org.anchoranalysis.test.image.DualComparerFactory;
 import org.anchoranalysis.test.image.EnergyStackFixture;
-import org.anchoranalysis.test.image.WriteIntoDirectory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -67,6 +63,8 @@ class OutlinePreserveRelativeSizeTest {
     private static final int NUMBER_INTERSECTING = 4;
     private static final int NUMBER_NOT_INTERSECTING = 2;
 
+    private static final int NUMBER_TOTAL = NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING;
+
     private static final ObjectCollection OBJECTS =
             IntersectingCircleObjectsFixture.generateIntersectingObjects(
                     NUMBER_INTERSECTING, NUMBER_NOT_INTERSECTING, false);
@@ -75,52 +73,78 @@ class OutlinePreserveRelativeSizeTest {
 
     @TempDir Path temporaryDirectory;
 
-    private WriteIntoDirectory writer;
+    private WriteThumbnailsIntoDirectory writer;
 
     @BeforeEach
     void setup() {
-        writer = new WriteIntoDirectory(temporaryDirectory, false);
+        writer = new WriteThumbnailsIntoDirectory(temporaryDirectory);
     }
 
     @Test
     void testThumbnails() throws OperationFailedException, CreateException {
 
-        List<DisplayStack> thumbnails = createAndWriteThumbnails();
+        doTestAndAssert(OBJECTS, NUMBER_TOTAL, true);
 
-        assertEquals(
-                thumbnails.size(),
-                NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING,
-                "number of thumbnails");
-        for (DisplayStack thumbnail : thumbnails) {
-            assertEquals(SIZE.asExtent(), thumbnail.extent(), "size of a thumbnail");
-        }
-
-        DualComparer comparer =
-                DualComparerFactory.compareTemporaryDirectoryToTest(
-                        writer.getDirectory(), Optional.of("thumbnails"), "thumbnails01");
-        assertTrue(
-                comparer.compareTwoSubdirectories("."), "thumbnails are identical to saved copy");
+        // Additionally check that the written thumbnails are identical to saved images in a
+        // resources directory.
+        writer.assertWrittenThumbnailsIdenticalToResources("thumbnails01");
     }
 
     /**
-     * Creates thumbnails and writes them to the temporary folder
+     * Deliberately adds an additional object that is copy of an existing object.
+     *
+     * <p>This means at least one object is fully occluded.
+     *
+     * <p>The test checks that the total number of expected thumbnails are created, and all of
+     * expected size.
      *
      * @throws OperationFailedException
      */
-    private List<DisplayStack> createAndWriteThumbnails() throws OperationFailedException {
-        OutlinePreserveRelativeSize outline = createOutline();
+    @Test
+    void testOccludedObject() throws OperationFailedException {
+        ObjectCollection objectsPlusExtra = OBJECTS.duplicate();
+        objectsPlusExtra.add(OBJECTS.get(0).duplicate());
+
+        doTestAndAssert(objectsPlusExtra, NUMBER_TOTAL + 1, true);
+    }
+
+    private void doTestAndAssert(
+            ObjectCollection objects, int expectedNumber, boolean overlappingObjects)
+            throws OperationFailedException {
+        List<DisplayStack> thumbnails = createAndWriteThumbnails(objects, overlappingObjects);
+        assertThumbnailsEqual(thumbnails, expectedNumber, SIZE.asExtent());
+    }
+
+    /**
+     * Creates thumbnails and writes them to the temporary folder.
+     *
+     * @throws OperationFailedException
+     */
+    public List<DisplayStack> createAndWriteThumbnails(
+            ObjectCollection objects, boolean overlappingObjects) throws OperationFailedException {
+        OutlinePreserveRelativeSize outline = createOutline(overlappingObjects);
         ThumbnailBatch<ObjectCollection> batch =
-                outline.start(OBJECTS, boundingBoxes(OBJECTS), Optional.of(BACKGROUND));
+                outline.start(objects, boundingBoxes(objects), Optional.of(BACKGROUND));
 
         try {
-            List<DisplayStack> thumbnails = thumbnailsFor(batch, OBJECTS);
-            writer.writeList("thumbnails", thumbnails, true);
+            List<DisplayStack> thumbnails = thumbnailsFor(batch, objects);
+            writer.writeThumbnails(thumbnails);
             return thumbnails;
-        } catch (CreateException | OutputWriteFailedException e) {
+        } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
+    /** Asserts that a certain number of thumbnails exist, and all have the expected-size. */
+    private void assertThumbnailsEqual(
+            List<DisplayStack> thumbnails, int expectedNumber, Extent expectedSize) {
+        assertEquals(thumbnails.size(), expectedNumber, "number of thumbnails");
+        for (DisplayStack thumbnail : thumbnails) {
+            assertEquals(expectedSize, thumbnail.extent(), "size of a thumbnail");
+        }
+    }
+
+    /** Calculates the thumbnails for a particular batch. */
     private static List<DisplayStack> thumbnailsFor(
             ThumbnailBatch<ObjectCollection> batch, ObjectCollection objects)
             throws CreateException {
@@ -128,16 +152,19 @@ class OutlinePreserveRelativeSizeTest {
                 .mapToList(object -> batch.thumbnailFor(ObjectCollectionFactory.of(object)));
     }
 
+    /** Derives the bounding-boxes from a corresponding {@link ObjectCollection}. */
     private static StreamableCollection<BoundingBox> boundingBoxes(ObjectCollection objects) {
         return new StreamableCollection<>(
                 () -> objects.streamStandardJava().map(ObjectMask::boundingBox));
     }
 
-    private static OutlinePreserveRelativeSize createOutline() {
+    /** Creates the bean. */
+    private static OutlinePreserveRelativeSize createOutline(boolean overlappingObjects) {
         OutlinePreserveRelativeSize outline = new OutlinePreserveRelativeSize();
         outline.setColorUnselectedObjects(new RGBColorBean(Color.BLUE));
         outline.setOutlineWidth(1);
         outline.setSize(SIZE);
+        outline.setOverlappingObjects(overlappingObjects);
         outline.setInterpolator(new ImgLib2Lanczos());
         return outline;
     }

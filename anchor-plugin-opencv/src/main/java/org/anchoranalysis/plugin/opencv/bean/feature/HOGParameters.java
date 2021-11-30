@@ -59,22 +59,26 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
      */
     @BeanField @OptionalBean @Getter @Setter private SizeXY windowSize;
 
-    /** The block-size as per OpenCV implementation (identical default-size) */
+    /** The block-size as per OpenCV implementation (identical default-size). */
     @BeanField @Getter @Setter private SizeXY blockSize = new SizeXY(16, 16);
 
-    /** The block-stride as per OpenCV implementation (identical default-size) */
+    /** The block-stride as per OpenCV implementation (identical default-size). */
     @BeanField @Getter @Setter private SizeXY blockStride = new SizeXY(8, 8);
 
-    /** The cell-size as per OpenCV implementation (identical default-size) */
+    /** The cell-size as per OpenCV implementation (identical default-size). */
     @BeanField @Getter @Setter private SizeXY cellSize = new SizeXY(8, 8);
 
-    /** The number of bins in each histogram for a cell */
+    /** The number of bins in each histogram for a cell. */
     @BeanField @Getter @Setter private int numberBins = 9;
     // END BEAN PROPERTIES
 
     /**
-     * Calculates the size of the descriptor will be for a given image, assuming the window is equal
-     * to the image-size
+     * Calculates the size of the descriptor will be for a given image.
+     *
+     * <p>It assumes the window is equal to the image-size.
+     *
+     * @param imageSize the size of the image (and window).
+     * @return the size of the descriptor needed.
      */
     public int sizeDescriptor(Extent imageSize) {
 
@@ -147,7 +151,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
         return timesX * timesY;
     }
 
-    /** Convert to OpenCV Size class */
+    /** Convert to OpenCV Size class. */
     private static Size convertOr(Optional<SizeXY> in, Extent imageSize) {
         return in.map(HOGParameters::sizeFor)
                 .orElseGet(() -> new Size(imageSize.x(), imageSize.y()));

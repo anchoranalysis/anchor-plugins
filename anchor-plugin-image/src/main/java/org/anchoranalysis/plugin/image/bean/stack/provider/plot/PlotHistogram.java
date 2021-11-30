@@ -59,7 +59,7 @@ public class PlotHistogram extends StackProvider {
     /** The histogram to plot. */
     @BeanField @Getter @Setter private HistogramProvider histogram;
 
-    /** Size of the image produced showing a plot of the histogram */
+    /** Size of the image produced showing a plot of the histogram. */
     @BeanField @Getter @Setter private SizeXY size = new SizeXY(1024, 768);
     // END BEAN PROPERTIES
 

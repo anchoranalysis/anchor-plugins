@@ -38,6 +38,7 @@ import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -59,6 +60,9 @@ import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsPooled;
+import org.anchoranalysis.image.inference.segment.SegmentedObjects;
+import org.anchoranalysis.image.inference.segment.WithConfidence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.object.output.grayscale.ObjectsMergedAsMaskGenerator;
 import org.anchoranalysis.image.io.object.output.hdf5.HDF5ObjectsGenerator;
@@ -68,6 +72,7 @@ import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
 import org.anchoranalysis.image.io.stack.time.TimeSequence;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.inference.InferenceModel;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
@@ -75,10 +80,7 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesStyle;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
@@ -120,7 +122,7 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  * @author Owen Feehan
  * @param <T> model-type in pool
  */
-public class SegmentInstanceWithModel<T>
+public class SegmentInstanceWithModel<T extends InferenceModel>
         extends Task<StackSequenceInput, SharedStateSegmentInstance<T>> {
 
     private static final EachObjectIndependently COMBINE_OBJECTS = new EachObjectIndependently();
@@ -142,11 +144,11 @@ public class SegmentInstanceWithModel<T>
 
     private static final String MANIFEST_FUNCTION_INPUT_IMAGE = "input_image";
 
-    private static final String EXECUTION_TIME_OUTPUTS = "Entire Outputs";
+    private static final String EXECUTION_TIME_OUTPUTS = "Entire outputs";
 
-    private static final String EXECUTION_TIME_SEGMENTATION = "Entire Segmentation";
+    private static final String EXECUTION_TIME_SEGMENTATION = "Entire segmentation";
 
-    private static final String EXECUTION_TIME_FEATURES = "Calculating Features";
+    private static final String EXECUTION_TIME_FEATURES = "Calculating features";
 
     private static final String[] FEATURE_LABEL_HEADERS =
             new String[] {"image", "object", "confidence"};
@@ -201,11 +203,14 @@ public class SegmentInstanceWithModel<T>
             throws ExperimentExecutionException {
         try {
             initializeBeans(params.createInitializationContext());
-            ConcurrentModelPool<T> modelPool = segment.createModelPool(plan);
+
+            ConcurrentModelPool<T> modelPool =
+                    segment.createModelPool(plan, params.getContext().getLogger()); // NOSONAR
 
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);
             FeatureExporterContext context = style.deriveContext(params.getContext());
             return new SharedStateSegmentInstance<>(modelPool, tableCalculator(), headers, context);
+
         } catch (CreateModelFailedException | InitializeException | CreateException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -262,6 +267,7 @@ public class SegmentInstanceWithModel<T>
             throws ExperimentExecutionException {
         try {
             sharedState.closeAnyOpenIO();
+            closeModelPool(sharedState.getModelPool(), context.getErrorReporter());
         } catch (IOException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -396,6 +402,18 @@ public class SegmentInstanceWithModel<T>
             return COMBINE_OBJECTS.createFeatures(FeaturesCreator.defaultInstanceSegmentation());
         } else {
             return COMBINE_OBJECTS.createFeatures(features, STORE_FACTORY, true);
+        }
+    }
+
+    /** Closes the model-pool, logging any error that may occur. */
+    private void closeModelPool(ConcurrentModelPool<T> modelPool, ErrorReporter errorReporter) {
+        try {
+            modelPool.close();
+        } catch (Exception e) {
+            errorReporter.recordError(
+                    SegmentInstanceWithModel.class,
+                    "An error occurred closing the inference model",
+                    e);
         }
     }
 

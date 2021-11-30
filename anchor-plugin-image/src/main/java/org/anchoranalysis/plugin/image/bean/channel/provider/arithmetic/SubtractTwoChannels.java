@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import org.anchoranalysis.core.functional.checked.IntBinaryOperation;
+import org.anchoranalysis.core.functional.unchecked.IntBinaryOperation;
 import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase;
 
 public class SubtractTwoChannels extends TwoVoxelMappingBase {

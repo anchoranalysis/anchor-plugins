@@ -27,13 +27,13 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.image.inference.ImageInferenceContext;
+import org.anchoranalysis.image.inference.bean.segment.instance.DecodeInstanceSegmentation;
+import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
-import org.anchoranalysis.plugin.opencv.segment.InferenceContext;
 import org.opencv.core.Mat;
 
 /**
@@ -46,7 +46,7 @@ import org.opencv.core.Mat;
  *
  * @author Owen Feehan
  */
-public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
+public class DecodeMaskRCNN extends DecodeInstanceSegmentation<Mat> {
 
     /** Name of model output for encoded bounding-boxes. */
     private static final String OUTPUT_FINAL = "detection_out_final";
@@ -71,8 +71,8 @@ public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
     }
 
     @Override
-    public Stream<LabelledWithConfidence<ObjectMask>> decode(
-            List<Mat> inferenceOutput, InferenceContext context) {
+    public List<LabelledWithConfidence<ObjectMask>> decode(
+            List<Mat> inferenceOutput, ImageInferenceContext context) {
 
         Mat boxes = inferenceOutput.get(0);
         Mat masks = inferenceOutput.get(1);
@@ -83,7 +83,6 @@ public class DecodeMaskRCNN extends DecodeInstanceSegmentation {
                 context.getDimensions().extent(),
                 minConfidence,
                 minMaskValue,
-                context.getClassLabels())
-                .stream();
+                context.getClassLabels());
     }
 }

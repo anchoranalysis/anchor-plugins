@@ -36,7 +36,7 @@ import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * Helpers determine a scaling-factor for objects to fit in a certain-sized scene.
+ * Helpers determine a scaling-factor for objects to fit in a certain-sized {@link Extent}.
  *
  * @author Owen Feehan
  */
@@ -45,18 +45,18 @@ class ScaleFactorCalculator {
 
     /**
      * Calculates a minimal scaling necessary so that each bounding-box can fit inside a certain
-     * sized scene
+     * size.
      *
-     * <p>In otherwords the largest dimension of any object, must still be able to fit inside the
+     * <p>In other words, the largest dimension of any object, must still be able to fit inside the
      * corresponding dimension of the target scene.
      *
      * @param boundingBoxes a stream of bounding-boxes, each of which must fit inside {@code
-     *     targetSize}
-     * @param targetSize the size in which all bounding-boxes must fit
+     *     targetSize}.
+     * @param targetSize the size in which all bounding-boxes must fit.
      * @return a scale-factor that can be applied to the bounding-boxes so that they will always fit
-     *     inside {@code targetSize}
+     *     inside {@code targetSize}.
      */
-    public static ScaleFactor factorSoEachBoundingBoxFitsIn(
+    public static ScaleFactor soEachBoundingBoxFits(
             StreamableCollection<BoundingBox> boundingBoxes, Extent targetSize) {
         Extent maxInEachDimension =
                 new Extent(

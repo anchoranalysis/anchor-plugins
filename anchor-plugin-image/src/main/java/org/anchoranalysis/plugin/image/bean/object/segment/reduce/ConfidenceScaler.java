@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.OptionalDouble;
 import java.util.function.Function;
 import java.util.stream.DoubleStream;
+import org.anchoranalysis.image.inference.segment.WithConfidence;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 /**
  * Methods to scale normalizes a {@code double} confidence value to an unsigned-int range, and to

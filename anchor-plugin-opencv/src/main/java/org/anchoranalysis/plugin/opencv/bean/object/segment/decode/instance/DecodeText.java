@@ -28,14 +28,16 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.image.inference.ImageInferenceContext;
+import org.anchoranalysis.image.inference.bean.segment.instance.DecodeInstanceSegmentation;
+import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
-import org.anchoranalysis.plugin.opencv.segment.InferenceContext;
+import org.anchoranalysis.mpp.mark.MarkToObjectConverter;
 import org.opencv.core.Mat;
 
 /**
@@ -49,13 +51,13 @@ import org.opencv.core.Mat;
  *
  * @author Owen Feehan
  */
-public class DecodeText extends DecodeInstanceSegmentation {
+public class DecodeText extends DecodeInstanceSegmentation<Mat> {
 
     private static final String OUTPUT_SCORES = "feature_fusion/Conv_7/Sigmoid";
     private static final String OUTPUT_GEOMETRY = "feature_fusion/concat_3";
 
     // START BEAN PROPERTIES
-    /** Proposed bounding boxes below this confidence interval are removed */
+    /** Proposed bounding boxes below this confidence interval are removed. */
     @BeanField @Getter @Setter private double minConfidence = 0.5;
     // END BEAN PROPERTIES
 
@@ -65,12 +67,25 @@ public class DecodeText extends DecodeInstanceSegmentation {
     }
 
     @Override
-    public Stream<LabelledWithConfidence<ObjectMask>> decode(
-            List<Mat> inferenceOutput, InferenceContext context) {
+    public List<LabelledWithConfidence<ObjectMask>> decode(
+            List<Mat> inferenceOutput, ImageInferenceContext context) {
         List<LabelledWithConfidence<Mark>> marks =
                 EastMarkExtracter.decode(inferenceOutput, minConfidence);
-        ObjectScaledConverter converter =
-                new ObjectScaledConverter(context.getScaleFactor(), context.getDimensions());
-        return marks.stream().map(converter::convert);
+        MarkToObjectConverter converter =
+                new MarkToObjectConverter(context.getScaleFactor(), context.getDimensions());
+        return FunctionalList.mapToList(marks, labelledMark -> convert(labelledMark, converter));
+    }
+
+    /**
+     * Converts a {@link Mark} with associated confidence and label to an equivalent {@link
+     * ObjectMask}.
+     *
+     * @param mark the {@link Mark} with associated confidence and label
+     * @return an {@link ObjectMask} with scaling applied, but preserving the existing confidence
+     *     and label.
+     */
+    private static LabelledWithConfidence<ObjectMask> convert(
+            LabelledWithConfidence<Mark> mark, MarkToObjectConverter converter) {
+        return mark.map(converter::convert);
     }
 }

@@ -27,9 +27,10 @@ package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
 import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.image.inference.segment.SegmentedObjects;
+import org.anchoranalysis.image.inference.segment.WithConfidence;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.test.image.object.CircleObjectFixture;
 import org.anchoranalysis.test.image.object.CutOffCornersObjectFixture;

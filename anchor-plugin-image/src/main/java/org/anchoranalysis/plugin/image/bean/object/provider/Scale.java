@@ -79,7 +79,8 @@ public class Scale extends WithDimensionsBase {
             ObjectCollection objects, ScaleFactor factor, Extent extent)
             throws ProvisionFailedException {
         try {
-            ScaledElements<ObjectMask> scaledObjects = Scaler.scaleObjects(objects, factor, extent);
+            ScaledElements<ObjectMask> scaledObjects =
+                    Scaler.scaleObjects(objects, factor, true, extent);
             return ObjectCollectionFactory.of(scaledObjects.asCollectionOrderNotPreserved());
         } catch (OperationFailedException e) {
             throw new ProvisionFailedException(e);
