@@ -40,9 +40,22 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+/**
+ * Convert from the OpenCV {@link Mat} to a {@link Stack}.
+ *  
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertFromMat {
 
+    /**
+     * Convert from an OpenCV {@link Mat} to a {@link Stack}.
+     * 
+     * @param mat either of type {@link CvType#CV_8UC3} for an BGR image, or otherwise a single-channeled image. 
+     * @return a newly created {@link Stack}, in RGB order (not BGR) or otherwise single-channeled.
+     * @throws OperationFailedException if the data-type is unsupported, or if {@link Mat} has zero width or height, which indicates an error.
+     */
     public static Stack toStack(Mat mat) throws OperationFailedException {
         if (mat.type() == CvType.CV_8UC3) {
             return toRGB(mat);
@@ -51,12 +64,14 @@ public class ConvertFromMat {
         }
     }
 
+    /** Converts to a {@link Stack} with a single channel. */
     private static Stack toGrayscale(Mat mat) throws OperationFailedException {
         Voxels<?> voxels =
                 VoxelsSingleChannelFromMat.createVoxelBuffer(mat, dimensionsFrom(mat).extent());
         return new Stack(ChannelFactory.instance().create(voxels));
     }
 
+    /** Converts to a {@link Stack} with three channels (RGB). */
     private static Stack toRGB(Mat mat) throws OperationFailedException {
         Stack stack = createEmptyStack(dimensionsFrom(mat), 3, true);
         VoxelsRGBFromMat.matToRGB(
@@ -64,6 +79,7 @@ public class ConvertFromMat {
         return stack;
     }
 
+    /** Create a {@link Stack} with a number of newly-created empty (zero-valued) channels. */
     private static Stack createEmptyStack(Dimensions dimensions, int numberChannels, boolean rgb) {
         Stack stack = new Stack(rgb);
         FunctionalIterate.repeat(
@@ -80,6 +96,7 @@ public class ConvertFromMat {
         return stack;
     }
 
+    /** Infer the {@link Dimensions} for an image from a {@link Mat}. */
     private static Dimensions dimensionsFrom(Mat mat) throws OperationFailedException {
         int width = mat.size(1);
         int height = mat.size(0);
