@@ -27,8 +27,8 @@ package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.segment.LabelledWithConfidence;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ScoreHelper {

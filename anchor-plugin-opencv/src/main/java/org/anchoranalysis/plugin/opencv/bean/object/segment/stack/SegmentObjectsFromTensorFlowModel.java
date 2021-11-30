@@ -25,51 +25,41 @@
  */
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
-import io.vavr.Tuple2;
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.primitive.DoubleList;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.time.ExecutionTimeRecorder;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
-import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsScaleDecode;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.inference.concurrency.ConcurrentModel;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
-import org.anchoranalysis.io.manifest.file.TextFileReader;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.CVInit;
-import org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance.DecodeInstanceSegmentation;
-import org.anchoranalysis.plugin.opencv.segment.InferenceContext;
+import org.anchoranalysis.plugin.opencv.segment.OpenCVModel;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.apache.commons.collections.IteratorUtils;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
 /**
- * Performs instance-segmentation, resulting in {@link ObjectMask}s using a TensorFlow model.
+ * Performs instance-segmentation using OpenCV's DNN module and a TensorFlow {@code .pb} model file.
+ *
+ * <p>Optionally a {@code .pb.txt} file may accompany it.
  *
  * @author Owen Feehan
  */
-public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPooled<Net> {
+public class SegmentObjectsFromTensorFlowModel
+        extends SegmentStackIntoObjectsScaleDecode<Mat, OpenCVModel> {
 
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();
@@ -89,35 +79,10 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
      * <p>If empty, then no such file is specified.
      */
     @BeanField @Getter @Setter @AllowEmpty private String modelTextGraphPath = "";
-
-    /**
-     * Relative-path to the class-labels file, a text file where each line specifies a class label
-     * in order, relative to the <i>models/</i> directory in the Anchor distribution.
-     *
-     * <p>If empty, then no such file is specified.
-     */
-    @BeanField @Getter @Setter @AllowEmpty private String classLabelsPath = "";
-
-    /**
-     * Any scaling to be applied to the input-image before being input to the model for inference.
-     */
-    @BeanField @Getter @Setter private ScaleCalculator scaleInput;
-
-    /** Decodes inference output into segmented objects. */
-    @BeanField @Getter @Setter private DecodeInstanceSegmentation decode;
-
-    /**
-     * A constant intensity for each respective channel to be subtracted before performing
-     * inference.
-     *
-     * <p>If set, this should create an list, with as many elements as channels inputted to the
-     * inference model.
-     */
-    @BeanField @OptionalBean @Getter @Setter private DoubleList subtractMean;
     // END BEAN PROPERTIES
 
     @Override
-    public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan)
+    public ConcurrentModelPool<OpenCVModel> createModelPool(ConcurrencyPlan plan, Logger logger)
             throws CreateModelFailedException {
         // We disable all GPU inference as the current OpenCV library (from org.openpnp) does not
         // support it
@@ -131,71 +96,26 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
         // This means this possibility isn't particularly attractive, so for now, it is decided to
         // exclude GPU
         // support from our OpenCV implementations.
-        return new ConcurrentModelPool<>(plan.disableGPUs(), this::readPrepareModel);
+        if (plan.numberGPUs() > 0) {
+            logger.messageLogger()
+                    .logFormatted(
+                            "Although the plan allows for %d GPU processors, GPU processers are disabled with the OpenCV processor.",
+                            plan.numberGPUs());
+        }
+        return new ConcurrentModelPool<>(plan.disableGPUs(), this::readPrepareModel, logger);
     }
 
     @Override
-    public SegmentedObjects segment(
-            Stack stack,
-            ConcurrentModelPool<Net> modelPool,
-            ExecutionTimeRecorder executionTimeRecorder)
-            throws SegmentationFailedException {
-
-        stack = checkAndCorrectInput(stack);
-
+    protected Mat deriveInput(Stack stack, ScaleFactor downfactor, Optional<double[]> subtractMeans)
+            throws OperationFailedException {
+        // Scales the input to the largest acceptable-extent
+        double[] toSubtract =
+                subtractMeans.orElseGet(() -> arrayWithZeros(stack.getNumberChannels()));
         try {
-            ScaleFactor downfactor =
-                    scaleInput.calculate(Optional.of(stack.dimensions()), Optional.empty());
-
-            // Scales the input to the largest acceptable-extent
-            Tuple2<Mat, ScaleFactor> pair = CreateScaledInput.apply(stack, downfactor, false);
-
-            ScaleFactor upfactor = pair._2().invert();
-
-            InferenceHelper helper =
-                    new InferenceHelper(decode, subtractMeanArray(stack.getNumberChannels()));
-            return helper.queueInference(
-                    pair._1(),
-                    modelPool,
-                    new InferenceContext(
-                            stack.dimensions(),
-                            upfactor,
-                            classLabels(),
-                            executionTimeRecorder,
-                            getInitialization().getSharedObjects().getContext().getLogger()));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new SegmentationFailedException(e);
-        } catch (Throwable e) {
-            throw new SegmentationFailedException(e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private double[] subtractMeanArray(int numberChannels) throws SegmentationFailedException {
-
-        if (subtractMean != null) {
-            List<Double> list =
-                    (List<Double>) IteratorUtils.toList(subtractMean.iterator()); // NOSONAR
-
-            if (list.size() != numberChannels) {
-                throw new SegmentationFailedException(
-                        String.format(
-                                "There are %d channels in the input stack for inference, but %d constants were supplied for mean-subtraction.",
-                                numberChannels, list.size()));
-            }
-
-            double[] out = new double[list.size()];
-            for (int i = 0; i < out.length; i++) {
-                out[i] = list.get(i);
-            }
-            return out;
-        } else {
-            double[] out = new double[numberChannels];
-            for (int i = 0; i < out.length; i++) {
-                out[i] = 0.0;
-            }
-            return out;
+            Mat mat = CreateScaledInput.apply(stack, downfactor, false);
+            return Dnn.blobFromImage(mat, 1.0, mat.size(), new Scalar(toSubtract), false, false);
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
         }
     }
 
@@ -206,7 +126,7 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
      *     inference with the model.
      * @return a newly created model
      */
-    private ConcurrentModel<Net> readPrepareModel(boolean useGPU)
+    private Optional<ConcurrentModel<OpenCVModel>> readPrepareModel(boolean useGPU)
             throws CreateModelFailedException {
 
         try {
@@ -221,10 +141,12 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
             Net net = readNet(model, textGraph);
 
             if (useGPU) {
+                // No exceptions will be thrown here immediately if CUDA support is unavailalbve
+                // rather later when inference is first tried.
                 net.setPreferableBackend(Dnn.DNN_BACKEND_CUDA);
                 net.setPreferableTarget(Dnn.DNN_TARGET_CUDA);
             }
-            return new ConcurrentModel<>(net, useGPU);
+            return Optional.of(new ConcurrentModel<>(new OpenCVModel(net), useGPU));
 
         } catch (InitializeException e) {
             throw new CreateModelFailedException(e);
@@ -247,59 +169,18 @@ public class SegmentObjectsFromTensorFlowModel extends SegmentStackIntoObjectsPo
         }
     }
 
-    /** Checks the input-stack has the necessary number of channels, otherwise throwing an error. */
-    private Stack checkAndCorrectInput(Stack stack) throws SegmentationFailedException {
-        if (stack.getNumberChannels() == 1) {
-            return checkInput(grayscaleToRGB(stack.getChannel(0)));
-        } else {
-            return checkInput(stack);
-        }
-    }
-
-    private Stack checkInput(Stack stack) throws SegmentationFailedException {
-        if (stack.getNumberChannels() != 3) {
-            throw new SegmentationFailedException(
-                    String.format(
-                            "Non-RGB stacks are not supported by this algorithm. This stack has %d channels.",
-                            stack.getNumberChannels()));
-        }
-
-        if (stack.dimensions().z() > 1) {
-            throw new SegmentationFailedException("z-stacks are not supported by this algorithm");
-        }
-
-        return stack;
-    }
-
-    /** A list of ordered object-class labels, if a class-labels file is specified. */
-    private Optional<List<String>> classLabels() throws IOException {
-        if (!classLabelsPath.isEmpty()) {
-            try {
-                Path filename = resolve(classLabelsPath);
-                return Optional.of(TextFileReader.readLinesAsList(filename));
-            } catch (InitializeException e) {
-                throw new IOException(e);
-            }
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    /** Resolves a relative-filename (to the model directory) into a path. */
-    private Path resolve(String filename) throws InitializeException {
-        return getInitialization().getModelDirectory().resolve(filename);
-    }
-
     /** Converts a {@link Path} into an absolute-path encoded as a string. */
     private static String absolutePath(Path path) {
         return path.toAbsolutePath().toString();
     }
 
-    private static Stack grayscaleToRGB(Channel channel) {
-        try {
-            return new Stack(true, channel, channel.duplicate(), channel.duplicate());
-        } catch (IncorrectImageSizeException | CreateException e) {
-            throw new AnchorImpossibleSituationException();
-        }
+    /** Creates an array containing only zeros. */
+    private static double[] arrayWithZeros(int size) {
+        return new double[size];
+    }
+
+    @Override
+    protected Optional<String> inputName() {
+        return Optional.empty();
     }
 }

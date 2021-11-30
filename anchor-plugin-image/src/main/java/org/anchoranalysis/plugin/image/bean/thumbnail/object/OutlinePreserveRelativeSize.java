@@ -25,32 +25,25 @@
  */
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
+import java.awt.Color;
 import java.util.Optional;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
-import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
-import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.output.box.DrawObjectOnStackGenerator;
-import org.anchoranalysis.image.io.stack.output.box.ScaleableBackground;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
-import org.anchoranalysis.spatial.box.BoundedList;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Create a thumbnail by drawing an outline of an object at a particular-scale, and placing it
@@ -78,6 +71,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
 
     // START BEAN PROPERTIES
@@ -100,97 +94,33 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
 
     /**
      * Optionally outline the other (unselected for the thumbnail) objects in this particular color.
-     * If not set, these objects aren't outlined at all..
+     * If not set, these objects aren't outlined at all.
      */
-    @BeanField @OptionalBean @Getter @Setter
-    private RGBColorBean colorUnselectedObjects = new RGBColorBean(0, 0, 255);
+    @BeanField @OptionalBean @Getter @Setter private RGBColorBean colorUnselectedObjects;
+
+    /**
+     * Whether objects may overlap or not when unscaled.
+     *
+     * <p>If they overlap, we scale them individually, not taking account of their neighbours.
+     *
+     * <p>If they may not overlap, we scale them collectively, as visually this gives tighter
+     * borders between neighbouring objects.
+     */
+    @BeanField @OptionalBean @Getter @Setter private boolean overlappingObjects = true;
     // END BEAN PROPERTIES
 
-    private class BatchImplementation implements ThumbnailBatch<ObjectCollection> {
-
-        private final DrawObjectOnStackGenerator generator;
-        private final FlattenAndScaler scaler;
-        private final Extent sceneExtentScaled;
-
-        /**
-         * Sets up the generator and the related {@code sceneExtentScaled} variable
-         *
-         * @param objectsUnscaled unscaled objects
-         * @param backgroundScaled scaled background if it exists
-         */
-        public BatchImplementation(
-                FlattenAndScaler scaler,
-                ObjectCollection objectsUnscaled,
-                Optional<ScaleableBackground> backgroundScaled) {
-            this.scaler = scaler;
-
-            this.sceneExtentScaled =
-                    scaler.extentFromStackOrObjects(backgroundScaled, objectsUnscaled);
-
-            // Create a generator that draws objects on the background
-            this.generator =
-                    DrawObjectOnStackGenerator.createFromStack(
-                            backgroundScaled, outlineWidth, createColorIndex(false));
-        }
-
-        @Override
-        public DisplayStack thumbnailFor(ObjectCollection element) throws CreateException {
-            // For now only work with the first object in the collection
-            try {
-                BoundedList<ObjectMask> objectsScaled =
-                        BoundedList.createFromList(
-                                scaler.scaleObjects(element).asList(), ObjectMask::boundingBox);
-
-                assert (!objectsScaled
-                        .boundingBox()
-                        .extent()
-                        .anyDimensionIsLargerThan(size.asExtent()));
-
-                // Find a bounding-box of target size in which objectScaled is centered
-                BoundingBox centeredBox =
-                        CenterBoundingBoxHelper.deriveCenteredBoxWithSize(
-                                objectsScaled.boundingBox(), size.asExtent(), sceneExtentScaled);
-
-                assert centeredBox.extent().equals(size.asExtent());
-                assert sceneExtentScaled.contains(centeredBox);
-
-                Stack transformed =
-                        generator.transform(
-                                determineObjectsForGenerator(objectsScaled, centeredBox));
-                return DisplayStack.create(transformed);
-
-            } catch (OutputWriteFailedException | OperationFailedException e) {
-                throw new CreateException(e);
-            }
-        }
-
-        private BoundedList<ObjectMask> determineObjectsForGenerator(
-                BoundedList<ObjectMask> objectsScaled, BoundingBox centeredBox) {
-            BoundedList<ObjectMask> objectsMapped = objectsScaled.assignBoundingBox(centeredBox);
-
-            // Add any other objects which intersect with the scaled-bounding box, excluding
-            //  the object themselves
-            if (colorUnselectedObjects != null) {
-                return objectsMapped.addObjectsNoBoundingBoxChange(
-                        scaler.objectsThatIntersectWith(
-                                        objectsMapped.boundingBox(),
-                                        ObjectCollectionFactory.of(objectsScaled.list()))
-                                .asList());
-            } else {
-                return objectsMapped;
-            }
-        }
-
-        /**
-         * Creates a suitable color index for distinguishing between the different types of objects
-         * that appear
-         *
-         * @param pairs whether pairs are being used or not
-         * @return the color index
-         */
-        private ColorIndex createColorIndex(boolean pairs) {
-            return new ThumbnailColorIndex(pairs, colorUnselectedObjects.toAWTColor());
-        }
+    /**
+     * Alternative constructor that switches on the coloring of unselected objects by default.
+     *
+     * <p>They are colored in blue.
+     *
+     * @return a newly created instance of {@link OutlinePreserveRelativeSize} that colors
+     *     unselected objects, but otherwise uses defaults.
+     */
+    public static OutlinePreserveRelativeSize createToColorUnselectedObjects() {
+        OutlinePreserveRelativeSize out = new OutlinePreserveRelativeSize();
+        out.colorUnselectedObjects = new RGBColorBean(Color.BLUE);
+        return out;
     }
 
     @Override
@@ -206,13 +136,16 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             // Determine what to scale the objects and any background by
             FlattenAndScaler scaler =
                     new FlattenAndScaler(
-                            boundingBoxes, objects, interpolatorBackground, size.asExtent());
+                            boundingBoxes,
+                            objects,
+                            overlappingObjects,
+                            interpolatorBackground,
+                            size.asExtent(),
+                            backgroundSource,
+                            backgroundChannelIndex);
 
-            return new BatchImplementation(
-                    scaler,
-                    objects,
-                    determineBackgroundMaybeOutlined(
-                            backgroundSource, scaler, interpolatorBackground));
+            return new ThumbnailBatchOutline(
+                    scaler, objects, size.asExtent(), outlineWidth, colorForUnselectedObjects());
         } else {
             return objectForBatch -> {
                 throw new CreateException("No objects are expected in this batch");
@@ -220,12 +153,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
         }
     }
 
-    private Optional<ScaleableBackground> determineBackgroundMaybeOutlined(
-            Optional<Stack> backgroundSource, FlattenAndScaler scaler, Interpolator interpolator)
-            throws OperationFailedException {
-        BackgroundSelector backgroundHelper =
-                new BackgroundSelector(
-                        backgroundChannelIndex, scaler.getScaleFactor(), interpolator);
-        return backgroundHelper.determineBackground(backgroundSource);
+    private Optional<Color> colorForUnselectedObjects() {
+        return Optional.ofNullable(colorUnselectedObjects).map(RGBColorBean::toAWTColor);
     }
 }

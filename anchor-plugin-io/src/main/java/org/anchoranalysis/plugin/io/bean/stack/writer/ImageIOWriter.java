@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import javax.imageio.ImageIO;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.image.core.bufferedimage.BufferedImageFactory;
+import org.anchoranalysis.image.core.bufferedimage.BufferedImageFromStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.OneOrThreeChannelsWriter;
@@ -40,7 +40,7 @@ public class ImageIOWriter extends OneOrThreeChannelsWriter {
     @Override
     protected void writeStackAfterCheck(Stack stack, Path filePath) throws ImageIOException {
         try {
-            ImageIO.write(BufferedImageFactory.create(stack), getExtension(), filePath.toFile());
+            ImageIO.write(BufferedImageFromStack.create(stack), getExtension(), filePath.toFile());
         } catch (CreateException | IOException e) {
             throw WriterErrorMessageHelper.generalWriteException(ImageIOWriter.class, filePath, e);
         }

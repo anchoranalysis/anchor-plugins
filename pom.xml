@@ -55,6 +55,7 @@
 	   <module>anchor-plugin-annotation</module>
 	   <module>anchor-plugin-opencv</module>
 	   <module>anchor-plugin-operator-feature</module>
+	   <module>anchor-plugin-onnx</module>
 		
 		<!-- testing routines which we currently store
 		   with the plugins as they depend on them. Perhaps

@@ -34,13 +34,13 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
-import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.image.load.CarImageLoader;
 import org.junit.jupiter.api.Test;
 
 class HOGFeatureTest {
 
-    private ImageLoader loader = new ImageLoader();
+    private CarImageLoader loader = new CarImageLoader();
 
     private static final double DELTA = 10e-6;
 

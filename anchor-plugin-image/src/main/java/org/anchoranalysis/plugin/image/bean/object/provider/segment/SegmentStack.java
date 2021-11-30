@@ -33,8 +33,9 @@ import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.stack.ProviderAsStack;
+import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
+import org.anchoranalysis.inference.InferenceModel;
 
 /**
  * Segments a stack into objects.
@@ -42,7 +43,7 @@ import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackInt
  * @author Owen Feehan
  * @param <T> model-type in pool
  */
-public class SegmentStack<T> extends ObjectCollectionProvider {
+public class SegmentStack<T extends InferenceModel> extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
     /** The stack to segment */
