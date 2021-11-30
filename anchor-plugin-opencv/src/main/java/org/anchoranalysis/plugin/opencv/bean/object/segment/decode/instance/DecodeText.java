@@ -41,9 +41,9 @@ import org.anchoranalysis.mpp.mark.MarkToObjectConverter;
 import org.opencv.core.Mat;
 
 /**
- * Extracts text from a RGB image by using the EAST deep neural network model
+ * Extracts text from a RGB image by using the <i>EAST deep neural network model</i> and OpenCV's DNN module.
  *
- * <p>Each object-mask represented rotated-bounding box and is associated with a confidence score
+ * <p>Each object-mask represented rotated-bounding box and is associated with a confidence score.
  *
  * <p>Particular thanks to <a
  * href="https://www.pyimagesearch.com/2018/08/20/opencv-text-detection-east-text-detector/">Adrian
