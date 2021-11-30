@@ -52,11 +52,18 @@ import org.opencv.core.Mat;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertToMat {
 
+    /**
+     * Convert a {@link ObjectMask} to a {@link Mat}.
+     * 
+     * @param object the object to convert.
+     * @return a newly created {@link Mat} containing the voxels in the mask of the {@link ObjectMask}.
+     * @throws CreateException if the object is 3D, which is unsupported.
+     */
     public static Mat fromObject(ObjectMask object) throws CreateException {
-        Extent e = object.boundingBox().extent();
-        if (e.z() > 1) {
+        Extent extent = object.boundingBox().extent();
+        if (extent.z() > 1) {
             throw new CreateException(
-                    "Objects with more than 1 z-stack are not supported for OpenCV to Mat conversion (at the moment)");
+                    "Objects with more than 1 z-slice are not supported for OpenCV to Mat conversion (at the moment)");
         }
 
         return fromSingleChannelByte(object.binaryVoxels().voxels());
@@ -84,19 +91,19 @@ public class ConvertToMat {
     /**
      * Derives a {@link Mat} representing an RGB stack.
      *
-     * @param stack a stack containing three channels
-     * @param swapRB if true, the first channel and third channel in {@code stack} are swapped to
+     * @param stack a stack containing three channels.
+     * @param swapRedBlueChannels if true, the first channel and third channel in {@code stack} are swapped to
      *     make the {@link Mat} to e.g. translate RGB to BGR (as expected by OpenCV).
      * @return a newly created {@link Mat} representation of {@code stack}.
-     * @throws CreateException
+     * @throws CreateException if the stack does not have exactly three channels.
      */
-    public static Mat makeRGBStack(Stack stack, boolean swapRB) throws CreateException {
+    public static Mat makeRGBStack(Stack stack, boolean swapRedBlueChannels) throws CreateException {
         if (stack.getNumberChannels() != 3) {
             throw new CreateException("Stack must have 3 channels for RGB conversion");
         }
         VoxelDataType dataType = stack.getChannel(0).getVoxelDataType();
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
-            if (swapRB) {
+            if (swapRedBlueChannels) {
                 return fromRGBByte(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
             } else {
                 return fromRGBByte(stack.getChannel(2), stack.getChannel(1), stack.getChannel(0));
