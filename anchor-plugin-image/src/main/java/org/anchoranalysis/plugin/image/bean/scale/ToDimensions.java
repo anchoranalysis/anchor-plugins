@@ -38,6 +38,7 @@ import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
+import org.anchoranalysis.plugin.image.bean.dimensions.provider.SpecifyDimensions;
 import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
@@ -73,6 +74,25 @@ public class ToDimensions extends ScaleCalculator {
      */
     @BeanField @Getter @Setter private boolean preserveAspectRatio = false;
     // END BEAN PROPERTIES
+
+    /**
+     * Create with specific lengths for X and Y dimensions.
+     *
+     * @param sizeX the size of the X-dimension.
+     * @param sizeY the size of the X-dimension.
+     */
+    public ToDimensions(int sizeX, int sizeY) {
+        this(new SpecifyDimensions(sizeX, sizeY));
+    }
+
+    /**
+     * Create with specific {@code dimensions}.
+     *
+     * @param dimensions the dimensions the source image/entity is desired to be scaled to.
+     */
+    public ToDimensions(DimensionsProvider dimensions) {
+        this(dimensions, false);
+    }
 
     /**
      * Create with specific {@code dimensions} and {@code preserveAspectRatio}.

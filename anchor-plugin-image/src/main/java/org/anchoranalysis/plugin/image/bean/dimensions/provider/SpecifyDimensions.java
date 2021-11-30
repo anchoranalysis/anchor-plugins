@@ -56,7 +56,17 @@ public class SpecifyDimensions extends DimensionsProvider {
     /**
      * Create with specific lengths for X and Y dimensions.
      *
-     * @param sizeXY the size
+     * @param sizeX the size of the X-dimension.
+     * @param sizeY the size of the X-dimension.
+     */
+    public SpecifyDimensions(int sizeX, int sizeY) {
+        this(new SizeXY(sizeX, sizeY));
+    }
+
+    /**
+     * Create with specific lengths for X and Y dimensions.
+     *
+     * @param sizeXY the size.
      */
     public SpecifyDimensions(SizeXY sizeXY) {
         this.sizeXY = sizeXY;

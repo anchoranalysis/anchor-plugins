@@ -130,7 +130,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             ObjectCollection objects, ScaleFactor scaleFactor, Extent originalExtent)
             throws OperationFailedException {
         return ObjectCollectionFactory.of(
-                Scaler.scaleObjects(objects, scaleFactor.invert(), originalExtent)
+                Scaler.scaleObjects(objects, scaleFactor.invert(), true, originalExtent)
                         .asCollectionOrderNotPreserved());
     }
 

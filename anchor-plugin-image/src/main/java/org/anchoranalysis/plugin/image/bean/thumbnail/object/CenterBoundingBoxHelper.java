@@ -51,7 +51,7 @@ class CenterBoundingBoxHelper {
      *
      * @param boxToBeCentered
      * @param targetSize
-     * @param sceneExtent defines the boundaries of the scene
+     * @param sceneExtent defines the boundaries of the scene.
      * @return a bounding-box of size {@code targetSize} entirely containing {@code
      *     boxToBeCentered}, as centered as possible.
      * @throws OperationFailedException if the box to centered is larger than the target size
@@ -60,12 +60,7 @@ class CenterBoundingBoxHelper {
             BoundingBox boxToBeCentered, Extent targetSize, Extent sceneExtent)
             throws OperationFailedException {
 
-        if (boxToBeCentered.extent().anyDimensionIsLargerThan(targetSize)) {
-            throw new OperationFailedException(
-                    String.format(
-                            "The existing bounding-box (%s) is larger than the target-size (%s)",
-                            boxToBeCentered.extent(), targetSize));
-        }
+        checkArguments(boxToBeCentered, targetSize, sceneExtent);
 
         ReadableTuple3i targetSizeAsTuple = targetSize.asTuple();
 
@@ -149,6 +144,25 @@ class CenterBoundingBoxHelper {
             return value - boundary;
         } else {
             return 0;
+        }
+    }
+
+    /** Check that the arguments confirm to expectations/ */
+    private static void checkArguments(
+            BoundingBox boxToBeCentered, Extent targetSize, Extent sceneExtent)
+            throws OperationFailedException {
+        if (boxToBeCentered.extent().anyDimensionIsLargerThan(targetSize)) {
+            throw new OperationFailedException(
+                    String.format(
+                            "The existing bounding-box (%s) is larger than the target-size (%s)",
+                            boxToBeCentered.extent(), targetSize));
+        }
+
+        if (!sceneExtent.contains(boxToBeCentered)) {
+            throw new OperationFailedException(
+                    String.format(
+                            "The box to be centered (%s) is not contained within the extent (%s)",
+                            boxToBeCentered.extent(), sceneExtent));
         }
     }
 }

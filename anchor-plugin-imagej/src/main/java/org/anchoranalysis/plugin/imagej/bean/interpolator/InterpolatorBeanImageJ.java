@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.imagej.bean.interpolator;
 
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.io.imagej.iterpolator.InterpolatorImageJ;
 
 public class InterpolatorBeanImageJ extends InterpolatorBean {
 
