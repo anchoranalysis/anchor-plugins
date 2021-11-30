@@ -9,9 +9,9 @@
     <version>0.0.1-SNAPSHOT</version>
 	<description>Plugins that call the ONNX runtime.</description>
     
-    <!-- Properties Section. Change ND4J versions here, if required -->
+    <!-- Properties Section. Change ONNX Runtime version here, if required. -->
     <properties>
-        <dl4j-master.version>1.0.0-M1.1</dl4j-master.version>
+        <onnx-runtime.version>1.9.0</onnx-runtime.version>
     </properties>	
 	
    <dependencies>
@@ -101,7 +101,7 @@
 	  	<dependency>
 			<groupId> com.microsoft.onnxruntime</groupId>
 			<artifactId>onnxruntime</artifactId>
-			<version>1.9.0</version>
+			<version>${onnx-runtime.version}</version>
 		</dependency>
 	  </dependencies>
 	</profile>
@@ -117,7 +117,7 @@
 	  	<dependency>
 			<groupId> com.microsoft.onnxruntime</groupId>
 			<artifactId>onnxruntime_gpu</artifactId>
-			<version>1.9.0</version>
+			<version>${onnx-runtime.version}</version>
 		</dependency>
 	  </dependencies>
 	</profile>
@@ -133,7 +133,7 @@
 	  	<dependency>
 			<groupId> com.microsoft.onnxruntime</groupId>
 			<artifactId>onnxruntime_gpu</artifactId>
-			<version>1.9.0</version>
+			<version>${onnx-runtime.version}</version>
 		</dependency>
 	  </dependencies>
       

@@ -40,11 +40,13 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
 /**
- * Converts a RGB stack into another color space using OpenCV
- *
- * <p>Note: there might be quite a bit of redundant memory allocation here as the Java ByteArrays
- * aren't directly usable in OpenCV and vice-versa, so new images are created both inwards and
- * outwards.
+ * Converts a RGB stack into another color space using OpenCV.
+ * 
+ * <p>Note that internally the RGB image is reordered as BGR, as OpenCV expects this order, but this  
+ * should not be performed externally by the user when calling this class, it is rather automatically
+ * taken care of.
+ * 
+ * <p>i.e. please always pass the channels in a {@link Stack} in RGB order.
  *
  * @author Owen Feehan
  */
@@ -73,9 +75,11 @@ public abstract class ColorConverterBase extends StackProviderUnary {
     }
 
     /**
-     * The color space conversion code to use from OpenCV.
+     * The color space conversion code to use from OpenCV, that defines the color-space to convert to.
      *
-     * <p>Assume that the inputted image is provided is a 3 channel stack in BGR order
+     * <p>Assume that the inputted image is provided is a 3 channel stack in BGR order.
+     * 
+     * @return the code, as defined by OpenCV, to describe the target color-space.
      */
     protected abstract int colorSpaceCode();
 

@@ -28,6 +28,12 @@ package org.anchoranalysis.plugin.opencv.bean.color;
 
 import org.opencv.imgproc.Imgproc;
 
+/**
+ * Converts a RGB image to the <a href="https://en.wikipedia.org/wiki/CIELAB_color_space">Lab color space</a>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ConvertRGBToLab extends ColorConverterBase {
 
     @Override
