@@ -35,9 +35,18 @@ import org.anchoranalysis.image.bean.spatial.SizeXY;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DivideUtilities {
 
-    /** Integer division of a value extracted by another value extracted */
-    public static int divide(SizeXY big, SizeXY divider, ToIntFunction<SizeXY> func) {
-        return func.applyAsInt(big) / func.applyAsInt(divider);
+    /** 
+     * Integer division of one extracted value by another extracted value.
+     * 
+     * <p>The values are extracted respectively from a instance of {@link SizeXY}. 
+     * 
+     * @param dividend the number that is divided.
+     * @param divisor what {@code dividend} is divided by.
+     * @param extract the function to extract an integer value from {@link SizeXY}.
+     * @return the result of the integer division.
+     */
+    public static int divide(SizeXY dividend, SizeXY divisor, ToIntFunction<SizeXY> extract) {
+        return extract.applyAsInt(dividend) / extract.applyAsInt(divisor);
     }
 
     public static void checkDivisibleBy(

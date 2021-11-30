@@ -60,16 +60,22 @@ public class HOGFeature extends FeatureStack {
     }
 
     // START BEAN PROPERTIES
-    /** The input is rescaled to this width/height before calculating HOG descriptors */
+    /** The input is rescaled to this width/height before calculating HOG descriptors. */
     @BeanField @OptionalBean @Getter @Setter private SizeXY resizeTo;
 
-    /** Parameters used for calculating HOG */
+    /** Parameters used for calculating HOG. */
     @BeanField @Getter @Setter private HOGParameters params = new HOGParameters();
 
-    /** Which index to return from the HOG descriptor */
+    /** Which index to return from the HOG descriptor. */
     @BeanField @NonNegative @Getter @Setter private int index = 0;
     // END BEAN PROPRERTIES
 
+    /**
+     * Create with a specific size to resize to, and index.
+     * 
+     * @param resizeTo the size to resize to.
+     * @param index the index to return from the HOG descriptor.
+     */
     public HOGFeature(SizeXY resizeTo, int index) {
         this.resizeTo = resizeTo;
         this.index = index;
@@ -92,6 +98,11 @@ public class HOGFeature extends FeatureStack {
     }
 
     @Override
+    public String describeParams() {
+        return Integer.toString(index);
+    }
+    
+    @Override
     protected double calculate(SessionInput<FeatureInputStack> input)
             throws FeatureCalculationException {
 
@@ -108,10 +119,5 @@ public class HOGFeature extends FeatureStack {
         }
 
         return descriptor[index];
-    }
-
-    @Override
-    public String describeParams() {
-        return Integer.toString(index);
     }
 }

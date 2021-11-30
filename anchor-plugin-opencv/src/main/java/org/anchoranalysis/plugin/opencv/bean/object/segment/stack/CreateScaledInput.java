@@ -46,12 +46,14 @@ import org.opencv.imgproc.Imgproc;
 class CreateScaledInput {
 
     /**
-     * Returns a scaled-down version of the stack, and a scale-factor that would return it to
-     * original size.
+     * Returns version of a {@link Stack} that is scaled down in size, but converted into a {@link Mat}.
      *
-     * @param scaleFactor the scaleFactor to use for resizing.
+     * @param stack the stack to scale down in size, which should have three channels in RGB order.
+     * @param scaleFactor the scaleFactor to use for scaling-down.
      * @param swapRB if true, the first channel and third channel in {@code stack} are swapped to
      *     make the {@link Mat} to e.g. translate RGB to BGR (as expected by OpenCV).
+     * @return a newly created {@link Mat} representing a scaled-down version of {@code stack}.
+     * @throws CreateException if the number of channels, or data-type of {@code stack} does not meet expectations.
      */
     public static Mat apply(Stack stack, ScaleFactor scaleFactor, boolean swapRB)
             throws CreateException {

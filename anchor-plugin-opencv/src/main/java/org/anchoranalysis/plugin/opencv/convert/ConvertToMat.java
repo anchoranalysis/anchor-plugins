@@ -69,6 +69,13 @@ public class ConvertToMat {
         return fromSingleChannelByte(object.binaryVoxels().voxels());
     }
 
+    /**
+     * Converts a {@link Stack} to a {@link Mat}.
+     * 
+     * @param stack the stack to convert, which must have 1 or 3 channels (in which case, it is presumed to be RGB).
+     * @return a newly-created {@Mat} with identical voxels to {@code Stack}. In the case of an RGB image, the {@link Mat} has BGR channel ordering.
+     * @throws CreateException if the stack is 3D, or has an invalid number of channels.
+     */
     public static Mat fromStack(Stack stack) throws CreateException {
 
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
@@ -113,6 +120,13 @@ public class ConvertToMat {
         }
     }
 
+    /**
+     * Creates a {@link Mat} which contains only zero-values.
+     * 
+     * @param extent the size of the {@link Mat} to create.
+     * @param type a OpenCV type constant indicating the data-type of the voxels in {@link Mat}.
+     * @return the newly created {@link Mat}.
+     */
     public static Mat createEmptyMat(Extent extent, int type) {
         return new Mat(extent.y(), extent.x(), type);
     }
