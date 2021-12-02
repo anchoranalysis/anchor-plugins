@@ -33,7 +33,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 
-/** Helpful routines and constants related to outputting for {@link ExportFeaturesObjectTest} */
+/** Helpful routines and constants related to outputting for {@link ExportFeaturesObjectTest}. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExportOutputter {
 

@@ -41,7 +41,7 @@ import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EnergyStackHelper {
 
-    private static final String IDENTIFIER = "energyStack";
+    private static final String IDENTIFIER = EnergyStackWriter.OUTPUT_ENERGY_STACK_DIRECTORY;
 
     // TODO make this more elegant in the design We make a special exception for writing our
     // energyStacks
