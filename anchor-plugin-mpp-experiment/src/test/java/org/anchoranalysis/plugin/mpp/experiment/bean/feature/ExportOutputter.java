@@ -48,13 +48,12 @@ class ExportOutputter {
     // Used for tests where we expect an exception to be thrown, and thus never to actually be
     // compared
     // It doesn't physically exist
-    public static final String OUTPUT_DIR_IRRELEVANT = "irrelevant/";
+    public static final String OUTPUT_DIRECTORY_IRRELEVANT = "irrelevant/";
 
     private static final String[] OUTPUTS_TO_COMPARE_ALWAYS = {
         "featuresAggregated.csv",
         "features.csv",
         "grouped/arbitraryGroup/featuresGroup.csv",
-        "job_manifest.ser.xml"
     };
 
     /**
