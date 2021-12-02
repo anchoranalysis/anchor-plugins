@@ -89,12 +89,12 @@
       <files>
         <org.anchoranalysis.io.manifest.file.OutputtedFile>
           <parentDirectory class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../../../.."/>
-          <fileName>energyStackParams.xml</fileName>
-          <outputName>energyStackParams</outputName>
+          <fileName>energyStackParameters.xml</fileName>
+          <outputName>energyStackParameters</outputName>
           <index></index>
           <description>
             <type>dictionary</type>
-            <function>energyStackParams</function>
+            <function>energyStackParameters</function>
           </description>
         </org.anchoranalysis.io.manifest.file.OutputtedFile>
       </files>
