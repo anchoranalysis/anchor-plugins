@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithoutDirectory;
 import org.anchoranalysis.io.input.bean.files.SearchDirectory;
@@ -158,8 +158,8 @@ public class ExperimentResultsExperimentStructure extends FilesProviderWithoutDi
     }
 
     @Override
-    public List<File> create(InputManagerParams params) throws FilesProviderException {
-        return delegate.create(params);
+    public List<File> create(InputManagerParameters parameters) throws FilesProviderException {
+        return delegate.create(parameters);
     }
 
     private Rooted createRootedFileSet() {

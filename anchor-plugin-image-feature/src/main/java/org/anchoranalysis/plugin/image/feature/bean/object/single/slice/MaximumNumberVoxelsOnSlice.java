@@ -27,10 +27,11 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.slice;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Maximum number of voxels in the object-mask across all slices.
@@ -40,16 +41,18 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 public class MaximumNumberVoxelsOnSlice extends FeatureSingleObject {
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
-        FeatureInputSingleObject params = input.get();
+        ObjectMask single = input.get().getObject();
+
+        byte onByte = single.binaryValuesByte().getOn();
 
         int max = 0;
 
-        for (int z = 0; z < params.getObject().boundingBox().extent().z(); z++) {
-            UnsignedByteBuffer buffer = params.getObject().sliceBufferLocal(z);
-            int count = countForByteBuffer(buffer, params.getObject().binaryValuesByte().getOn());
+        for (int z = 0; z < single.boundingBox().extent().z(); z++) {
+            UnsignedByteBuffer buffer = single.sliceBufferLocal(z);
+            int count = countForByteBuffer(buffer, onByte);
 
             if (count > max) {
                 max = count;

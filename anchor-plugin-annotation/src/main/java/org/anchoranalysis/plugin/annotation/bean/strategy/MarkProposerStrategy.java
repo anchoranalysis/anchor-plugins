@@ -54,7 +54,7 @@ public class MarkProposerStrategy extends SinglePathStrategy {
 
     @BeanField @OptionalBean @Getter @Setter private DerivePath pathDefaultMarks;
 
-    @BeanField @OptionalBean @Getter @Setter private DerivePath pathParams;
+    @BeanField @OptionalBean @Getter @Setter private DerivePath pathDictionary;
 
     /**
      * Additional background-stacks that are possible to use while annotating.
@@ -70,8 +70,8 @@ public class MarkProposerStrategy extends SinglePathStrategy {
     @BeanField @Getter @Setter private NamedBean<MarkEvaluator> markEvaluator;
     // END BEAN PROPERTIES
 
-    public Optional<DerivePath> paramsDeriver() {
-        return Optional.ofNullable(pathParams);
+    public Optional<DerivePath> dictionaryDeriver() {
+        return Optional.ofNullable(pathDictionary);
     }
 
     public Optional<DerivePath> marksDeriver() {

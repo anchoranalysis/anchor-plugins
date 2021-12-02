@@ -41,12 +41,12 @@ import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
@@ -160,7 +160,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         return FeatureSession.with(
                 features,
                 new FeatureInitialization(),
-                FeaturesInitialization.create(logger, modelDirectory).getSharedFeatures(),
+                FeatureRelatedInitialization.create(logger, modelDirectory).getSharedFeatures(),
                 logger);
     }
 

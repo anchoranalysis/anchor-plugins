@@ -201,7 +201,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                 return new MarkCollection();
             }
 
-            maybeWriteGroupParams(dictionary, context.getOutputter());
+            maybeWriteGroupDictionary(dictionary, context.getOutputter());
 
             OptimizationContext initContext =
                     new OptimizationContext(
@@ -274,11 +274,11 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         return new DualStack(energyStack, background);
     }
 
-    private void maybeWriteGroupParams(Optional<Dictionary> dictionary, Outputter outputter) {
+    private void maybeWriteGroupDictionary(Optional<Dictionary> dictionary, Outputter outputter) {
         if (dictionary.isPresent()) {
             outputter
                     .writerSelective()
-                    .write("groupParams", GroupParamsGenerator::new, dictionary::get);
+                    .write("groupParameters", GroupDictionaryGenerator::new, dictionary::get);
         }
     }
 }

@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureAllMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
@@ -45,7 +45,7 @@ public class MeanFromAll extends FeatureAllMemo {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputAllMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputAllMemo> input)
             throws FeatureCalculationException {
 
         EnergyMemoList memo = input.get().getPxlPartMemo();

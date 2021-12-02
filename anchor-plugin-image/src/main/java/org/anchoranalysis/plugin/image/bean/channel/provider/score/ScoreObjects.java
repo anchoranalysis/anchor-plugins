@@ -37,11 +37,11 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.functional.checked.CheckedToIntFunction;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
@@ -86,9 +86,9 @@ public class ScoreObjects extends UnaryWithObjectsBase {
         }
     }
 
-    private EnergyStackWithoutParams createEnergyStack(Channel channel)
+    private EnergyStackWithoutParameters createEnergyStack(Channel channel)
             throws ProvisionFailedException {
-        EnergyStackWithoutParams energyStack = new EnergyStackWithoutParams(channel);
+        EnergyStackWithoutParameters energyStack = new EnergyStackWithoutParameters(channel);
 
         // add other channels
         for (ChannelProvider cp : listAdditionalChannelProviders) {

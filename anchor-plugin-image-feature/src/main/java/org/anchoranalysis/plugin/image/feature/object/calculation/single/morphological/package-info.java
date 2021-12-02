@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Implementations of {@link org.anchoranalysis.feature.calculate.FeatureCalculation} that that
+ * Implementations of {@link org.anchoranalysis.feature.calculate.part.CalculationPart} that that
  * process a single {@link org.anchoranalysis.image.voxel.object.ObjectMask} - with <a
  * href="https://en.wikipedia.org/wiki/Mathematical_morphology">morphological operations</a>.
  */

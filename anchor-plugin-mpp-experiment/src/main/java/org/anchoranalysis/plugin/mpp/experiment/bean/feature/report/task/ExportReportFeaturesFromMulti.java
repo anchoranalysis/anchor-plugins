@@ -76,12 +76,12 @@ public class ExportReportFeaturesFromMulti
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<MultiInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
 
         Optional<CSVWriter> writer;
         try {
-            writer = createWriter(params.getOutputter().getChecked());
+            writer = createWriter(parameters.getOutputter().getChecked());
         } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }

@@ -35,7 +35,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
@@ -58,11 +58,11 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManagerUnary
 
     @Override
     protected InputsWithDirectory<T> inputsFromDelegate(
-            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+            InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
-        if (params.isDebugModeActivated()) {
+        if (parameters.isDebugModeActivated()) {
             if (inputDebug != null) {
-                return inputDebug.inputs(params);
+                return inputDebug.inputs(parameters);
             } else {
                 // We pick the first item
                 T firstItem = fromDelegate.iterator().next();

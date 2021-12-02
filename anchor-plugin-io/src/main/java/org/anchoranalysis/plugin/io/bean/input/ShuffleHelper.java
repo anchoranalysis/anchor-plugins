@@ -31,7 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 
 /**
  * Helps shuffle elements in a list of inputs.
@@ -48,11 +48,11 @@ class ShuffleHelper {
      *
      * @param <T> element-type in list.
      * @param list the list to be shuffled.
-     * @param params the {@link InputManager} parameters.
+     * @param parameters the {@link InputManager} parameters.
      * @return {@code list} with its elements shuffled.
      */
-    public static <T> List<T> shuffleInputs(List<T> list, InputManagerParams params) {
-        MessageLogger logger = params.getLogger().messageLogger();
+    public static <T> List<T> shuffleInputs(List<T> list, InputManagerParameters parameters) {
+        MessageLogger logger = parameters.getLogger().messageLogger();
         logger.log("Shuffling input order.");
         logger.logEmptyLine();
         Collections.shuffle(list);

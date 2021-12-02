@@ -54,9 +54,10 @@ public class ConvertToMat {
 
     /**
      * Convert a {@link ObjectMask} to a {@link Mat}.
-     * 
+     *
      * @param object the object to convert.
-     * @return a newly created {@link Mat} containing the voxels in the mask of the {@link ObjectMask}.
+     * @return a newly created {@link Mat} containing the voxels in the mask of the {@link
+     *     ObjectMask}.
      * @throws CreateException if the object is 3D, which is unsupported.
      */
     public static Mat fromObject(ObjectMask object) throws CreateException {
@@ -71,9 +72,11 @@ public class ConvertToMat {
 
     /**
      * Converts a {@link Stack} to a {@link Mat}.
-     * 
-     * @param stack the stack to convert, which must have 1 or 3 channels (in which case, it is presumed to be RGB).
-     * @return a newly-created {@link Mat} with identical voxels to {@code Stack}. In the case of an RGB image, the {@link Mat} has BGR channel ordering.
+     *
+     * @param stack the stack to convert, which must have 1 or 3 channels (in which case, it is
+     *     presumed to be RGB).
+     * @return a newly-created {@link Mat} with identical voxels to {@code Stack}. In the case of an
+     *     RGB image, the {@link Mat} has BGR channel ordering.
      * @throws CreateException if the stack is 3D, or has an invalid number of channels.
      */
     public static Mat fromStack(Stack stack) throws CreateException {
@@ -99,12 +102,13 @@ public class ConvertToMat {
      * Derives a {@link Mat} representing an RGB stack.
      *
      * @param stack a stack containing three channels.
-     * @param swapRedBlueChannels if true, the first channel and third channel in {@code stack} are swapped to
-     *     make the {@link Mat} to e.g. translate RGB to BGR (as expected by OpenCV).
+     * @param swapRedBlueChannels if true, the first channel and third channel in {@code stack} are
+     *     swapped to make the {@link Mat} to e.g. translate RGB to BGR (as expected by OpenCV).
      * @return a newly created {@link Mat} representation of {@code stack}.
      * @throws CreateException if the stack does not have exactly three channels.
      */
-    public static Mat makeRGBStack(Stack stack, boolean swapRedBlueChannels) throws CreateException {
+    public static Mat makeRGBStack(Stack stack, boolean swapRedBlueChannels)
+            throws CreateException {
         if (stack.getNumberChannels() != 3) {
             throw new CreateException("Stack must have 3 channels for RGB conversion");
         }
@@ -122,7 +126,7 @@ public class ConvertToMat {
 
     /**
      * Creates a {@link Mat} which contains only zero-values.
-     * 
+     *
      * @param extent the size of the {@link Mat} to create.
      * @param type a OpenCV type constant indicating the data-type of the voxels in {@link Mat}.
      * @return the newly created {@link Mat}.

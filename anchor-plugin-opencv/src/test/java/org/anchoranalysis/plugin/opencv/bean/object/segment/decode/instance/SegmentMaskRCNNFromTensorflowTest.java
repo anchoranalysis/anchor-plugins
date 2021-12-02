@@ -25,9 +25,9 @@
  */
 package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
+import org.anchoranalysis.image.inference.bean.reduce.RemoveOverlappingObjects;
 import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.image.inference.bean.segment.instance.SuppressNonMaxima;
-import org.anchoranalysis.plugin.image.bean.object.segment.reduce.RemoveOverlappingObjects;
 import org.anchoranalysis.plugin.image.bean.scale.ConstantScaleFactor;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentObjectsFromTensorFlowModel;
 

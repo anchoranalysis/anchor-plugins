@@ -35,13 +35,13 @@ import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.feature.input.FeatureInputDictionary;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.plugin.operator.feature.bean.range.IfOutsideRange;
 import org.anchoranalysis.plugin.operator.feature.bean.statistics.StatisticalBase;
 
 @RequiredArgsConstructor
-public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
+public abstract class PermuteFirstSecondOrder<T extends FeatureInputDictionary>
         extends PermuteFeatureSequenceInteger<T> {
 
     // START BEAN PROPERTIES

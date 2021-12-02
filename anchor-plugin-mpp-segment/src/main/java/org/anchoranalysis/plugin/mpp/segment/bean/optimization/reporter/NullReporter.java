@@ -56,7 +56,7 @@ public class NullReporter<T> extends FeedbackReceiverBean<T> {
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<T> params) {
+    public void reportEnd(FeedbackEndParameters<T> parameters) {
         // NOTHING TO DO
     }
 }

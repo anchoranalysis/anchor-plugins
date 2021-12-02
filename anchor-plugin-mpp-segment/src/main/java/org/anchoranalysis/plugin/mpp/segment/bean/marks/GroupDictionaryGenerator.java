@@ -37,7 +37,7 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-class GroupParamsGenerator extends OneStageGenerator<Dictionary> {
+class GroupDictionaryGenerator extends OneStageGenerator<Dictionary> {
 
     @Override
     public void writeToFile(Dictionary element, OutputWriteSettings settings, Path filePath)
@@ -56,6 +56,6 @@ class GroupParamsGenerator extends OneStageGenerator<Dictionary> {
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("serialized", "groupParams"));
+        return Optional.of(new ManifestDescription("serialized", "groupParameters"));
     }
 }

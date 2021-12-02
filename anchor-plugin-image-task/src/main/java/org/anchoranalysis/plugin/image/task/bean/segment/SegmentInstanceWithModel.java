@@ -128,7 +128,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
     private static final EachObjectIndependently COMBINE_OBJECTS = new EachObjectIndependently();
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
-            NamedFeatureStoreFactory.factoryParamsOnly();
+            NamedFeatureStoreFactory.parametersOnly();
 
     /** Output-name for the input-image for the segmentation */
     private static final String OUTPUT_INPUT_IMAGE = "input";
@@ -199,16 +199,16 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
             Outputter outputter,
             ConcurrencyPlan plan,
             List<StackSequenceInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         try {
-            initializeBeans(params.createInitializationContext());
+            initializeBeans(parameters.createInitializationContext());
 
             ConcurrentModelPool<T> modelPool =
-                    segment.createModelPool(plan, params.getContext().getLogger()); // NOSONAR
+                    segment.createModelPool(plan, parameters.getContext().getLogger()); // NOSONAR
 
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);
-            FeatureExporterContext context = style.deriveContext(params.getContext());
+            FeatureExporterContext context = style.deriveContext(parameters.getContext());
             return new SharedStateSegmentInstance<>(modelPool, tableCalculator(), headers, context);
 
         } catch (CreateModelFailedException | InitializeException | CreateException e) {
@@ -392,8 +392,8 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
     }
 
     private void initializeBeans(InitializationContext context) throws InitializeException {
-        ImageInitialization params = InitializationFactory.createWithoutStacks(context);
-        segment.initializeRecursive(params, context.getLogger());
+        ImageInitialization initialization = InitializationFactory.createWithoutStacks(context);
+        segment.initializeRecursive(initialization, context.getLogger());
     }
 
     private FeatureTableCalculator<FeatureInputSingleObject> tableCalculator()

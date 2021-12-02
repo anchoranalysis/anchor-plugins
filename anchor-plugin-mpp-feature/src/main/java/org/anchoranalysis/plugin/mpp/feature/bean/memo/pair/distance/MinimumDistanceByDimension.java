@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.distance;
 
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeaturePairMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.spatial.point.Point3d;
@@ -40,16 +40,16 @@ import org.anchoranalysis.spatial.point.Point3d;
 public class MinimumDistanceByDimension extends FeaturePairMemo {
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairMemo> input) {
+    public double calculate(FeatureCalculationInput<FeatureInputPairMemo> input) {
 
-        FeatureInputPairMemo params = input.get();
+        FeatureInputPairMemo inputPair = input.get();
 
         Point3d centerPoint =
                 distanceVector(
-                        params.getObject1().getMark().centerPoint(),
-                        params.getObject2().getMark().centerPoint());
+                        inputPair.getObject1().getMark().centerPoint(),
+                        inputPair.getObject2().getMark().centerPoint());
 
-        return minDimension(centerPoint, params.getObject1().getMark().numberDimensions() >= 3);
+        return minDimension(centerPoint, inputPair.getObject1().getMark().numberDimensions() >= 3);
     }
 
     /** Calculates the distance between two points in each dimension independently */

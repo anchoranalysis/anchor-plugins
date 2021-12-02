@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
@@ -37,7 +37,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 public class SurfaceNumberVoxelFaces extends SurfaceNumberVoxelsBase {
 
     @Override
-    protected FeatureCalculation<Integer, FeatureInputSingleObject> createParams(
+    protected CalculationPart<Integer, FeatureInputSingleObject> createParameters(
             boolean mip, boolean suppress3d) {
         return new CalculateOutlineNumberVoxelFaces(mip, suppress3d);
     }

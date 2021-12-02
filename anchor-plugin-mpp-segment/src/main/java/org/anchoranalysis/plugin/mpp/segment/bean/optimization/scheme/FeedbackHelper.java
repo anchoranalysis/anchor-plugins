@@ -48,28 +48,27 @@ class FeedbackHelper {
         FeedbackGenerator<T> feedbackGenerator =
                 new FeedbackGenerator<>(feedbackReceiver, initContext.getLogger().errorReporter());
 
-        feedbackGenerator.begin(
-                feedbackBeginParams(initContext, allKernelFactories), extractScoreSize);
+        feedbackGenerator.begin(createBegin(initContext, allKernelFactories), extractScoreSize);
 
         return feedbackGenerator;
     }
 
     public static <T> void endWithFinalFeedback(
             FeedbackGenerator<T> feedbackGenerator, T state, OptimizationContext initContext) {
-        FeedbackEndParameters<T> optEndParams =
-                feedbackEndParams(state, initContext.getLogger().messageLogger());
-        feedbackGenerator.end(optEndParams);
+        FeedbackEndParameters<T> endParameters =
+                createEnd(state, initContext.getLogger().messageLogger());
+        feedbackGenerator.end(endParameters);
     }
 
-    private static <T> FeedbackBeginParameters<T> feedbackBeginParams(
+    private static <T> FeedbackBeginParameters<T> createBegin(
             OptimizationContext initContext, WeightedKernelList<?, ?> allKernelFactories) {
-        FeedbackBeginParameters<T> feedbackParams = new FeedbackBeginParameters<>();
-        feedbackParams.setInitContext(initContext);
-        feedbackParams.setKernelFactoryList(allKernelFactories);
-        return feedbackParams;
+        FeedbackBeginParameters<T> parmeters = new FeedbackBeginParameters<>();
+        parmeters.setInitContext(initContext);
+        parmeters.setKernelFactoryList(allKernelFactories);
+        return parmeters;
     }
 
-    private static <T> FeedbackEndParameters<T> feedbackEndParams(T state, MessageLogger logger) {
+    private static <T> FeedbackEndParameters<T> createEnd(T state, MessageLogger logger) {
         return new FeedbackEndParameters<>(state, logger);
     }
 }

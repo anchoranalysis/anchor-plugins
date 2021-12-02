@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.points.bean.feature;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -42,7 +42,7 @@ public class Ellipticity extends FeatureSingleObject {
     private static final int MINIMUM_NUMBER_VOXELS = 6;
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         FeatureInputSingleObject inputSessionless = input.get();

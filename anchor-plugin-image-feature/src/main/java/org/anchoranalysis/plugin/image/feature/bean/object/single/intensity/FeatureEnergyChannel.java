@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -48,7 +48,7 @@ public abstract class FeatureEnergyChannel extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         Channel channel = input.get().getEnergyStackRequired().getChannel(energyIndex);
@@ -56,6 +56,6 @@ public abstract class FeatureEnergyChannel extends FeatureSingleObject {
     }
 
     protected abstract double calculateForChannel(
-            SessionInput<FeatureInputSingleObject> input, Channel channel)
+            FeatureCalculationInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException;
 }

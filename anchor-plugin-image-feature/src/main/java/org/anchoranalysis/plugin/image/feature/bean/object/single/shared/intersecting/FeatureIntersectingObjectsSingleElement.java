@@ -33,9 +33,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -48,21 +48,21 @@ public abstract class FeatureIntersectingObjectsSingleElement extends FeatureInt
 
     @Override
     protected double valueFor(
-            SessionInput<FeatureInputSingleObject> params,
-            ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting)
+            FeatureCalculationInput<FeatureInputSingleObject> input,
+            ResolvedPart<ObjectCollection, FeatureInputSingleObject> intersecting)
             throws FeatureCalculationException {
 
-        return aggregateResults(calculateResults(params, intersecting));
+        return aggregateResults(calculateResults(input, intersecting));
     }
 
     protected abstract double aggregateResults(List<Double> results);
 
     private List<Double> calculateResults(
-            SessionInput<FeatureInputSingleObject> paramsExst,
-            ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> ccIntersecting)
+            FeatureCalculationInput<FeatureInputSingleObject> inputExisting,
+            ResolvedPart<ObjectCollection, FeatureInputSingleObject> ccIntersecting)
             throws FeatureCalculationException {
 
-        int size = paramsExst.calculate(ccIntersecting).size();
+        int size = inputExisting.calculate(ccIntersecting).size();
 
         List<Double> results = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -70,7 +70,7 @@ public abstract class FeatureIntersectingObjectsSingleElement extends FeatureInt
             final int index = i;
 
             double res =
-                    paramsExst
+                    inputExisting
                             .forChild()
                             .calculate(
                                     item,

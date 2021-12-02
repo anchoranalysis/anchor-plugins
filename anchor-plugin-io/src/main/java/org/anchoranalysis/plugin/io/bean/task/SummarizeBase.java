@@ -57,27 +57,27 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<T> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
 
-        if (params.isDetailedLogging()) {
+        if (parameters.isDetailedLogging()) {
             summarizeExperimentArguments(
-                    params.getLoggerExperiment(), params.getExperimentArguments());
+                    parameters.getLoggerExperiment(), parameters.getExperimentArguments());
         }
 
         return summarizer;
     }
 
     @Override
-    public void doJobOnInput(InputBound<T, Summarizer<S>> params) throws JobExecutionException {
+    public void doJobOnInput(InputBound<T, Summarizer<S>> input) throws JobExecutionException {
         try {
-            params.getSharedState().add(extractObjectForSummary(params.getInput()));
+            input.getSharedState().add(extractObjectForSummary(input.getInput()));
         } catch (OperationFailedException e) {
 
             String message =
                     String.format(
                             "Cannot summarize %s",
-                            params.getInput()
+                            input.getInput()
                                     .pathForBinding()
                                     .map(Path::toString)
                                     .orElse("the input."));

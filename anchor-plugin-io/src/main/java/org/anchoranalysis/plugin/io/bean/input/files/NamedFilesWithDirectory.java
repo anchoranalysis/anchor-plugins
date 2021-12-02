@@ -30,7 +30,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
 import org.anchoranalysis.io.input.file.FileInput;
 import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
@@ -49,13 +49,13 @@ public class NamedFilesWithDirectory extends NamedFilesBase<FileWithDirectoryInp
     // END BEAN PROPERTIES
 
     @Override
-    public InputsWithDirectory<FileWithDirectoryInput> inputs(InputManagerParams params)
+    public InputsWithDirectory<FileWithDirectoryInput> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
         return createInputsFromFiles(
                 files,
-                params,
+                parameters,
                 namedFile ->
                         new FileWithDirectoryInput(
-                                namedFile, files.getDirectoryAsPath(params.getInputContext())));
+                                namedFile, files.getDirectoryAsPath(parameters.getInputContext())));
     }
 }

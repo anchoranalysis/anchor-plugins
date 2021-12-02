@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.proposer.MarkFromCollectionProposer;
 import org.anchoranalysis.mpp.bean.proposer.MarkSplitProposer;
@@ -105,7 +105,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy, Updatabl
         return Optional.of(
                 createMarks(
                         existing.get(),
-                        propContext.getEnergyStack().withoutParams(),
+                        propContext.getEnergyStack().withoutParameters(),
                         pairNew.get(),
                         markExstIndex));
     }
@@ -118,7 +118,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy, Updatabl
 
     private static VoxelizedMarksWithEnergy createMarks(
             VoxelizedMarksWithEnergy existing,
-            EnergyStackWithoutParams energyStack,
+            EnergyStackWithoutParameters energyStack,
             PairPxlMarkMemo pair,
             int markExistingIndex)
             throws KernelCalculateEnergyException {

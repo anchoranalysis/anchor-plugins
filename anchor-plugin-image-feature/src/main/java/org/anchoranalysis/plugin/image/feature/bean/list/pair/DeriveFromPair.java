@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.bean.list.PrependName;
+import org.anchoranalysis.feature.name.AssignFeatureNameUtilities;
 import org.anchoranalysis.image.feature.bean.object.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.bean.object.pair.Merged;
@@ -53,7 +53,7 @@ public class DeriveFromPair extends FeatureListProvider<FeatureInputPairObjects>
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private FeatureListProvider<FeatureInputSingleObject> item;
 
-    @BeanField @AllowEmpty @Getter @Setter private String prependString = "";
+    @BeanField @AllowEmpty @Getter @Setter private String prefix = "";
 
     /** Either "merged" or "first" or "second" indicating which feature to delegate from */
     @BeanField @Getter @Setter private String select;
@@ -64,14 +64,15 @@ public class DeriveFromPair extends FeatureListProvider<FeatureInputPairObjects>
         return item.get().map(this::pairFromSingle);
     }
 
-    private FeatureDeriveFromPair pairFromSingle(Feature<FeatureInputSingleObject> featExst)
+    private FeatureDeriveFromPair pairFromSingle(Feature<FeatureInputSingleObject> existing)
             throws ProvisionFailedException {
-        Feature<FeatureInputSingleObject> featExstDup = featExst.duplicateBean();
+        Feature<FeatureInputSingleObject> existingDuplicated = existing.duplicateBean();
 
         FeatureDeriveFromPair featDelegate = createNewDelegateFeature();
-        featDelegate.setItem(featExstDup);
+        featDelegate.setItem(existingDuplicated);
 
-        PrependName.setNewNameOnFeature(featDelegate, featExstDup.getFriendlyName(), prependString);
+        AssignFeatureNameUtilities.assignWithPrefix(
+                featDelegate, existingDuplicated.getFriendlyName(), prefix);
         return featDelegate;
     }
 

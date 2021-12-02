@@ -103,7 +103,7 @@ public class FromObjects<T extends FeatureInput>
         extends FeatureSource<MultiInput, FeatureTableCalculator<T>, FeatureInputSingleObject> {
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
-            NamedFeatureStoreFactory.bothNameAndParams();
+            NamedFeatureStoreFactory.bothNameAndParameters();
 
     private static final String[] NON_GROUP_HEADERS =
             new String[] {"image", "unique_pixel_in_object"};

@@ -30,20 +30,20 @@ import java.util.Optional;
 import java.util.function.Function;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Like {@link CalculateInputFromDelegate} except assumes optional return value and no parameters.
  *
  * @author Owen Feehan
- * @param <S> optional final-type of {@link FeatureCalculation}.
+ * @param <S> optional final-type of {@link CalculationPart}.
  * @param <T> feature input-type as input to cached-calculations.
- * @param <U> delegate-type of {@link FeatureCalculation}.
+ * @param <U> delegate-type of {@link CalculationPart}.
  */
 @EqualsAndHashCode(callSuper = true)
 public abstract class CalculateInputFromDelegateOption<
@@ -51,43 +51,43 @@ public abstract class CalculateInputFromDelegateOption<
         extends CalculateInputFromDelegate<Optional<S>, T, U> {
 
     /**
-     * The constructor
+     * Creates with a delegate.
      *
      * @param delegate the resolved-calculation for the delegate.
      */
-    protected CalculateInputFromDelegateOption(ResolvedCalculation<U, T> delegate) {
+    protected CalculateInputFromDelegateOption(ResolvedPart<U, T> delegate) {
         super(delegate);
     }
 
     /**
-     * Calculates a feature using a cached-calculation as delegate, and optional Params return value
+     * Calculates a feature using a cached-calculation as delegate.
      *
-     * @param <S> optional final params-type for calculation
-     * @param <T> input params-type for calculation
+     * @param <S> optional final input-type for calculation
+     * @param <T> input-type for calculation
      * @param <U> delegate-type of CachedCalculation
-     * @param input feature-input
-     * @param delegate the Cached-Calculation delegate used
-     * @param funcCreateFromDelegate creates output-params from the delegates
-     * @param feature feature to use to calculate the output result
-     * @param cacheName a sub-cache of the main cache to use for calculating the output feature
-     * @param emptyValue what to return if the parameters are empty
-     * @return the result of the feature calculation
-     * @throws FeatureCalculationException
+     * @param input feature-input.
+     * @param delegate the Cached-Calculation delegate used.
+     * @param createFromDelegate creates a calculation from the delegates.
+     * @param feature feature to use to calculate the output result.
+     * @param cacheName a sub-cache of the main cache to use for calculating the output feature.
+     * @param emptyValue what to return if the parameters are empty.
+     * @return the result of the feature calculation.
+     * @throws FeatureCalculationException if the calculation does not succeed successfully.
      */
     public static <S extends FeatureInput, T extends FeatureInput, U> double calc(
-            SessionInput<T> input,
-            FeatureCalculation<U, T> delegate,
-            Function<ResolvedCalculation<U, T>, CalculateInputFromDelegateOption<S, T, U>>
-                    funcCreateFromDelegate,
+            FeatureCalculationInput<T> input,
+            CalculationPart<U, T> delegate,
+            Function<ResolvedPart<U, T>, CalculateInputFromDelegateOption<S, T, U>>
+                    createFromDelegate,
             Feature<S> feature,
             ChildCacheName cacheName,
             double emptyValue)
             throws FeatureCalculationException {
 
-        FeatureCalculation<Optional<S>, T> paramsDerived =
-                funcCreateFromDelegate.apply(input.resolver().search(delegate));
+        CalculationPart<Optional<S>, T> inputDerived =
+                createFromDelegate.apply(input.resolver().search(delegate));
 
-        Optional<S> inputForDelegate = input.calculate(paramsDerived);
+        Optional<S> inputForDelegate = input.calculate(inputDerived);
 
         if (inputForDelegate.isPresent()) {
             // We select an appropriate cache for calculating the feature (should be the same as

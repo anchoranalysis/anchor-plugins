@@ -39,7 +39,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
  * Creates a mock-feature which used a mock {@link
- * org.anchoranalysis.feature.calculate.FeatureCalculation} under the hood
+ * org.anchoranalysis.feature.calculate.part.CalculationPart} under the hood
  *
  * <p>Tests can be executed so as to count the number of times the calculation and feature's {@link
  * MockFeatureWithCalculation#calculate} method are called.

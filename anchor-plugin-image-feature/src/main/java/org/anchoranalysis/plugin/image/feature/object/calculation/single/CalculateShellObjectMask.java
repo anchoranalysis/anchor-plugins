@@ -30,10 +30,10 @@ import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
@@ -45,25 +45,25 @@ import org.anchoranalysis.spatial.box.Extent;
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class CalculateShellObjectMask
-        extends FeatureCalculation<ObjectMask, FeatureInputSingleObject> {
+        extends CalculationPart<ObjectMask, FeatureInputSingleObject> {
 
-    private final ResolvedCalculation<ObjectMask, FeatureInputSingleObject> calculateDilation;
-    private final ResolvedCalculation<ObjectMask, FeatureInputSingleObject> calculateErosion;
+    private final ResolvedPart<ObjectMask, FeatureInputSingleObject> calculateDilation;
+    private final ResolvedPart<ObjectMask, FeatureInputSingleObject> calculateErosion;
     private final int iterationsErosionSecond;
     private final boolean do3D;
     private final boolean inverse;
 
-    public static FeatureCalculation<ObjectMask, FeatureInputSingleObject> of(
-            CalculationResolver<FeatureInputSingleObject> params,
+    public static CalculationPart<ObjectMask, FeatureInputSingleObject> of(
+            CalculationPartResolver<FeatureInputSingleObject> resolver,
             MorphologicalIterations iterations,
             int iterationsErosionSecond,
             boolean inverse) {
-        ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccDilation =
+        ResolvedPart<ObjectMask, FeatureInputSingleObject> ccDilation =
                 CalculateDilation.of(
-                        params, iterations.getIterationsDilation(), iterations.isDo3D());
-        ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccErosion =
+                        resolver, iterations.getIterationsDilation(), iterations.isDo3D());
+        ResolvedPart<ObjectMask, FeatureInputSingleObject> ccErosion =
                 CalculateErosion.ofResolved(
-                        params, iterations.getIterationsErosion(), iterations.isDo3D());
+                        resolver, iterations.getIterationsErosion(), iterations.isDo3D());
 
         return new CalculateShellObjectMask(
                 ccDilation, ccErosion, iterationsErosionSecond, iterations.isDo3D(), inverse);

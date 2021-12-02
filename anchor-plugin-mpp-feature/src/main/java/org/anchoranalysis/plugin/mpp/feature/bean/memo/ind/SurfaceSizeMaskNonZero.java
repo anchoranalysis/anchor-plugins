@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -59,7 +59,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
 
         ObjectMask objectMask = createMask(input.get());
@@ -108,8 +108,8 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 
     private static BinaryVoxels<UnsignedByteBuffer> outline(ObjectMask object, boolean useZ) {
         OutlineKernel kernel = new OutlineKernel();
-        KernelApplicationParameters params =
+        KernelApplicationParameters parameters =
                 new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, useZ);
-        return ApplyKernel.apply(kernel, object.binaryVoxels(), params);
+        return ApplyKernel.apply(kernel, object.binaryVoxels(), parameters);
     }
 }

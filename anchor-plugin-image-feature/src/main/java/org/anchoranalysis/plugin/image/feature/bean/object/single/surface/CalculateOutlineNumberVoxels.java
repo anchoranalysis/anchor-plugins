@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureInputSingleObject> {
+class CalculateOutlineNumberVoxels extends CalculationPart<Integer, FeatureInputSingleObject> {
 
     /** Whether to calculate the outline on a MIP */
     private boolean mip;
@@ -73,8 +73,8 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureIn
     }
 
     private static int applyForCount(BinaryVoxels<UnsignedByteBuffer> voxels, boolean do3D) {
-        KernelApplicationParameters params =
+        KernelApplicationParameters parameters =
                 new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, do3D);
-        return ApplyKernel.applyForCount(new OutlineKernel(), voxels, params);
+        return ApplyKernel.applyForCount(new OutlineKernel(), voxels, parameters);
     }
 }

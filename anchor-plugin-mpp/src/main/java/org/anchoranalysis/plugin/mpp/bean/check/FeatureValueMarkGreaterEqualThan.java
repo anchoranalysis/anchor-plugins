@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.mark.Mark;
 public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark<FeatureInputMark> {
 
     @Override
-    protected FeatureInputMark createFeatureCalcParams(
+    protected FeatureInputMark createFeatureInput(
             Mark mark, RegionMap regionMap, EnergyStack energyStack) {
         return new FeatureInputMark(mark, Optional.of(energyStack.dimensions()));
     }

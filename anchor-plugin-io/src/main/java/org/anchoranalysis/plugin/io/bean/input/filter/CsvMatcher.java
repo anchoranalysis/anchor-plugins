@@ -46,13 +46,13 @@ class CsvMatcher {
 
         try (ReadByLine csvFile = CSVReaderByLine.open(path, ",", true, true)) {
 
-            int cnt = processLines(csvFile, set, match);
+            int count = processLines(csvFile, set, match);
 
-            if (cnt != numRowsExpected) {
+            if (count != numRowsExpected) {
                 throw new CSVReaderException(
                         String.format(
                                 "Csv file must have exactly %d rows. It has %d.",
-                                numRowsExpected, cnt));
+                                numRowsExpected, count));
             }
         }
 

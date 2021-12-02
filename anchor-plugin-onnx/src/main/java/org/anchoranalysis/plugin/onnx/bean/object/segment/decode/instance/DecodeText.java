@@ -21,7 +21,8 @@ import org.anchoranalysis.spatial.point.Point2i;
 import org.anchoranalysis.spatial.scale.ScaleFactorInt;
 
 /**
- * Extracts text from a RGB image by using the <i>EAST deep neural network model</i> and the ONNX Runtime.
+ * Extracts text from a RGB image by using the <i>EAST deep neural network model</i> and the ONNX
+ * Runtime.
  *
  * <p>Each object-mask represented rotated-bounding box and is associated with a confidence score.
  *
@@ -68,7 +69,9 @@ public class DecodeText extends DecodeInstanceSegmentation<OnnxTensor> {
         return Arrays.asList(OUTPUT_SCORES, OUTPUT_GEOMETRY);
     }
 
-    /** Find the indices of all proposals whose score is greater or equal to a confidence threshold. */
+    /**
+     * Find the indices of all proposals whose score is greater or equal to a confidence threshold.
+     */
     private List<Integer> indicesAboveThreshold(FloatBuffer scores) {
         scores.rewind();
 
@@ -81,7 +84,10 @@ public class DecodeText extends DecodeInstanceSegmentation<OnnxTensor> {
         return indices;
     }
 
-    /** Extract the bounding-boxes located at particular indices in the form of an {@link ObjectMask} with an associated label and confidence. */
+    /**
+     * Extract the bounding-boxes located at particular indices in the form of an {@link ObjectMask}
+     * with an associated label and confidence.
+     */
     private List<LabelledWithConfidence<ObjectMask>> extractObjects(
             OnnxTensor geometryTensor,
             FloatBuffer scores,

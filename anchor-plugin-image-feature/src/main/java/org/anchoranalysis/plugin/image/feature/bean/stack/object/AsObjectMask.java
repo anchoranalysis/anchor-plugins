@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -56,7 +56,7 @@ public class AsObjectMask extends FeatureStack {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputStack> input)
+    public double calculate(FeatureCalculationInput<FeatureInputStack> input)
             throws FeatureCalculationException {
 
         return input.forChild()

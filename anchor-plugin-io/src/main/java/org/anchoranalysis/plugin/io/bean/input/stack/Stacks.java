@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.file.FileInput;
 
 /**
@@ -62,16 +62,16 @@ public class Stacks extends InputManagerWithStackReader<StackSequenceInput> {
     }
 
     @Override
-    public InputsWithDirectory<StackSequenceInput> inputs(InputManagerParams params)
+    public InputsWithDirectory<StackSequenceInput> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
         return fileInput
-                .inputs(params)
+                .inputs(parameters)
                 .map(
                         file ->
                                 new StackCollectionFromFilesInputObject(
                                         file,
                                         getStackReader(),
                                         useLastSeriesIndexOnly,
-                                        params.getLogger()));
+                                        parameters.getLogger()));
     }
 }

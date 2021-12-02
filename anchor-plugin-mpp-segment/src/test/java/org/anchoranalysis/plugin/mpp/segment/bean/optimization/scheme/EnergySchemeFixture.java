@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.feature.addcriteria.BoundingBoxIntersection;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
@@ -59,7 +59,7 @@ public class EnergySchemeFixture {
             throws CreateException {
         return new EnergySchemeWithSharedFeatures(
                 createEnergyScheme(weightOverlap),
-                new SharedFeatureMulti(),
+                new SharedFeatures(),
                 LoggingFixture.suppressedLogger());
     }
 

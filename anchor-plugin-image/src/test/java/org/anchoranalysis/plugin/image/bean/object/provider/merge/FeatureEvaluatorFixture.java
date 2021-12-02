@@ -33,8 +33,8 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -45,7 +45,8 @@ class FeatureEvaluatorFixture {
         FeatureEvaluator<T> evaluator = new FeatureEvaluator<>();
         evaluator.setFeature(feature);
         try {
-            evaluator.initialize(FeaturesInitialization.create(logger, modelDirectory), logger);
+            evaluator.initialize(
+                    FeatureRelatedInitialization.create(logger, modelDirectory), logger);
         } catch (InitializeException e) {
             throw new CreateException(e);
         }

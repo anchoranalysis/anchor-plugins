@@ -28,22 +28,22 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.all;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculateDeriveSingleMemoInput
-        extends FeatureCalculation<FeatureInputSingleMemo, FeatureInputAllMemo> {
+        extends CalculationPart<FeatureInputSingleMemo, FeatureInputAllMemo> {
 
     private final int index;
 
     @Override
     protected FeatureInputSingleMemo execute(FeatureInputAllMemo input) {
-        FeatureInputSingleMemo paramsInd =
+        FeatureInputSingleMemo inputSingle =
                 new FeatureInputSingleMemo(null, input.getEnergyStackOptional());
-        paramsInd.setPxlPartMemo(input.getPxlPartMemo().getMemoForIndex(index));
-        return paramsInd;
+        inputSingle.setPxlPartMemo(input.getPxlPartMemo().getMemoForIndex(index));
+        return inputSingle;
     }
 }

@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Implementations of {@link org.anchoranalysis.feature.calculate.FeatureCalculation} to calculate
+ * Implementations of {@link org.anchoranalysis.feature.calculate.part.CalculationPart} to calculate
  * overlap between two entities.
  */
 package org.anchoranalysis.plugin.mpp.feature.overlap;

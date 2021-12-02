@@ -79,8 +79,10 @@ public class DefineOutputterWithEnergy extends DefineOutputter {
     // END BEAN PROPERTIES
 
     /**
+     * Processes the energy-stack.
+     *
      * @author Owen Feehan
-     * @param <T> init-params-type
+     * @param <T> initialization-type
      * @param <S> return-type
      */
     @FunctionalInterface
@@ -150,7 +152,7 @@ public class DefineOutputterWithEnergy extends DefineOutputter {
 
         if (dictionary != null) {
             dictionary.initializeRecursive(initialization.dictionaryInitialization(), logger);
-            stack.setDictionary(dictionary.get());
+            stack.setParameters(dictionary.get());
         }
         return stack;
     }

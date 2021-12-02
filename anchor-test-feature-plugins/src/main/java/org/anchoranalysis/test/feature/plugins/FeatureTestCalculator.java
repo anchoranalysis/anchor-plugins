@@ -35,55 +35,50 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.test.LoggingFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureTestCalculator {
 
     public static <T extends FeatureInput> void assertDoubleResult(
-            String message, Feature<T> feature, T params, double expectedResult)
+            String message, Feature<T> feature, T input, double expectedResult)
             throws FeatureCalculationException {
-        assertDoubleResult(message, feature, params, Optional.empty(), expectedResult);
+        assertDoubleResult(message, feature, input, Optional.empty(), expectedResult);
     }
 
     public static <T extends FeatureInput> void assertIntResult(
-            String message, Feature<T> feature, T params, int expectedResult)
+            String message, Feature<T> feature, T input, int expectedResult)
             throws FeatureCalculationException {
-        assertIntResult(message, feature, params, Optional.empty(), expectedResult);
+        assertIntResult(message, feature, input, Optional.empty(), expectedResult);
     }
 
     public static <T extends FeatureInput> void assertDoubleResult(
             String message,
             Feature<T> feature,
-            T params,
+            T input,
             Optional<SharedObjects> sharedObjects,
             double expectedResult)
             throws FeatureCalculationException {
         assertResultTolerance(
-                message,
-                feature,
-                params,
-                createInitialization(sharedObjects),
-                expectedResult,
-                1e-4);
+                message, feature, input, createInitialization(sharedObjects), expectedResult, 1e-4);
     }
 
     public static <T extends FeatureInput> void assertIntResult(
             String message,
             Feature<T> feature,
-            T params,
+            T input,
             Optional<SharedObjects> sharedObjects,
             int expectedResult)
             throws FeatureCalculationException {
         assertResultTolerance(
                 message,
                 feature,
-                params,
+                input,
                 createInitialization(sharedObjects),
                 expectedResult,
                 1e-20);
@@ -98,18 +93,18 @@ public class FeatureTestCalculator {
     private static <T extends FeatureInput> void assertResultTolerance(
             String message,
             Feature<T> feature,
-            T params,
+            T input,
             FeatureInitialization initialization,
             double expectedResult,
             double delta)
             throws FeatureCalculationException {
         double result =
-                FeatureTestCalculator.calculateSequentialSession(feature, params, initialization);
+                FeatureTestCalculator.calculateSequentialSession(feature, input, initialization);
         assertEquals(expectedResult, result, delta, message);
     }
 
     private static <T extends FeatureInput> double calculateSequentialSession(
-            Feature<T> feature, T params, FeatureInitialization initialization)
+            Feature<T> feature, T input, FeatureInitialization initialization)
             throws FeatureCalculationException {
 
         try {
@@ -117,10 +112,10 @@ public class FeatureTestCalculator {
                     FeatureSession.with(
                             feature,
                             initialization,
-                            new SharedFeatureMulti(),
+                            new SharedFeatures(),
                             LoggingFixture.suppressedLogger());
 
-            return calculator.calculate(params);
+            return calculator.calculate(input);
         } catch (InitializeException e) {
             throw new FeatureCalculationException(e);
         }

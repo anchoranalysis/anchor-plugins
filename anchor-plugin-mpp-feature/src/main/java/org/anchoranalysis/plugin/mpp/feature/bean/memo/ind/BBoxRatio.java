@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 import java.util.Arrays;
 import java.util.Optional;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureSingleMemo;
@@ -42,7 +42,7 @@ import org.anchoranalysis.spatial.box.Extent;
 public class BBoxRatio extends FeatureSingleMemo {
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
 
         ConicBase markCast = (ConicBase) input.get().getPxlPartMemo().getMark();

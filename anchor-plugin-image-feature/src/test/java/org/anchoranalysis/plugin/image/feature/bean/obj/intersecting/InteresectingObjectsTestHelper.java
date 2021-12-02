@@ -104,15 +104,15 @@ class InteresectingObjectsTestHelper {
     }
 
     /**
-     * Asserts a result after extracting object at index i from a collection, and using the
-     * remainder as the object-collection
+     * Asserts a result after extracting object at index {@code i} from a collection, and using the
+     * remainder as the {@link ObjectCollection}.
      *
-     * @param message descriptive-message for test
-     * @param feature feature to calculate on params to form value
+     * @param message descriptive-message for test.
+     * @param feature feature to calculate on inputs to form value.
      * @param objects object-collection used to determine parameter for feature (single object
-     *     removed at index) and the remainder that form a set of objects to intersect with
-     * @param index index of object in collection to remove and use as parameter
-     * @param expectedResult expected result from test
+     *     removed at index) and the remainder that form a set of objects to intersect with.
+     * @param index index of object in collection to remove and use as parameter.
+     * @param expectedResult expected result from test.
      * @throws InitializeException
      * @throws FeatureCalculationException
      * @throws OperationFailedException

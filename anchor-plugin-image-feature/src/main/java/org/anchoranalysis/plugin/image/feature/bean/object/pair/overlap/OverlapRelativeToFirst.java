@@ -31,7 +31,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 public class OverlapRelativeToFirst extends OverlapRelative {
 
     @Override
-    protected int calculateDenominator(FeatureInputPairObjects params) {
-        return params.getFirst().numberVoxelsOn();
+    protected int calculateDenominator(FeatureInputPairObjects input) {
+        return input.getFirst().numberVoxelsOn();
     }
 }

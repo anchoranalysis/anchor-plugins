@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.feature.input.FeatureInputDictionary;
 import org.anchoranalysis.plugin.operator.feature.bean.FromDictionary;
 
 /**
@@ -45,7 +45,7 @@ import org.anchoranalysis.plugin.operator.feature.bean.FromDictionary;
  * @author Owen Feehan
  * @param <T> feature-input
  */
-public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputParams>
+public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputDictionary>
         extends PermuteFeatureBase<T> {
 
     // START BEAN PROPERTIES

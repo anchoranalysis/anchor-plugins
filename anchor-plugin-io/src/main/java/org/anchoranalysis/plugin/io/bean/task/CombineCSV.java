@@ -88,7 +88,7 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<FileInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
 
         try {
@@ -118,19 +118,20 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
     }
 
     @Override
-    public void doJobOnInput(InputBound<FileInput, CSVWriter> params) throws JobExecutionException {
+    public void doJobOnInput(InputBound<FileInput, CSVWriter> parameters)
+            throws JobExecutionException {
 
-        FileInput input = params.getInput();
-        CSVWriter writer = params.getSharedState();
+        FileInput fileInput = parameters.getInput();
+        CSVWriter writer = parameters.getSharedState();
 
         if (writer == null || !writer.isOutputEnabled()) {
             return;
         }
 
-        Path inputPath = input.getFile().toPath();
+        Path inputPath = fileInput.getFile().toPath();
         try (ReadByLine readByLine = CSVReaderByLine.open(inputPath, seperator, firstLineHeaders)) {
 
-            String name = addName ? input.identifier() : null; // null means no-name is added
+            String name = addName ? fileInput.identifier() : null; // null means no-name is added
             AddWithName addWithName = new AddWithName(writer, firstLineHeaders, name);
 
             if (transposed) {

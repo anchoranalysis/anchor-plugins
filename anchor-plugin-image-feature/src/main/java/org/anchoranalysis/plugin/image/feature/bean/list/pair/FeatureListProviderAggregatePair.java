@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.bean.list.PrependName;
-import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import org.anchoranalysis.feature.bean.operator.FeatureFromList;
+import org.anchoranalysis.feature.name.AssignFeatureNameUtilities;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.bean.object.pair.Merged;
 import org.anchoranalysis.image.feature.bean.object.pair.Second;
@@ -57,16 +57,17 @@ public abstract class FeatureListProviderAggregatePair
 
     // START BEAN PROPERTIES
     /**
-     * For each feature in the list, a corresponding "aggregate" feature is created in the output
-     * list
+     * For each feature in the list, a corresponding <i>aggregate</i> feature is created in the
+     * output list.
      */
     @BeanField @Getter @Setter private FeatureListProvider<FeatureInputSingleObject> item;
 
-    @BeanField @Getter @Setter private String prependString;
+    /** The string to prepend. */
+    @BeanField @Getter @Setter private String prefix;
 
     /** Method for reducing all pairs into a single value e.g. Mean, Max, Min etc. */
     @BeanField @Getter @Setter @SkipInit
-    private FeatureListElem<FeatureInputPairObjects> reduce = new Mean<>();
+    private FeatureFromList<FeatureInputPairObjects> reduce = new Mean<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -74,28 +75,28 @@ public abstract class FeatureListProviderAggregatePair
         return item.get().map(this::createFeatureFor);
     }
 
-    private Feature<FeatureInputPairObjects> createFeatureFor(
-            Feature<FeatureInputSingleObject> featExst) {
-        Feature<FeatureInputPairObjects> featOut =
-                createAggregateFeature(
-                        new First(featExst.duplicateBean()),
-                        new Second(featExst.duplicateBean()),
-                        new Merged(featExst.duplicateBean()));
-        PrependName.setNewNameOnFeature(featOut, featExst.getFriendlyName(), prependString);
-        return featOut;
-    }
-
     protected abstract Feature<FeatureInputPairObjects> createAggregateFeature(
             Feature<FeatureInputPairObjects> first,
             Feature<FeatureInputPairObjects> second,
             Feature<FeatureInputPairObjects> merged);
 
-    protected FeatureListElem<FeatureInputPairObjects> createReducedFeature(
+    protected FeatureFromList<FeatureInputPairObjects> createReducedFeature(
             Feature<FeatureInputPairObjects> first, Feature<FeatureInputPairObjects> second) {
-        FeatureListElem<FeatureInputPairObjects> featWithList =
-                (FeatureListElem<FeatureInputPairObjects>) reduce.duplicateBean();
-        featWithList.getList().add(first);
-        featWithList.getList().add(second);
-        return featWithList;
+        FeatureFromList<FeatureInputPairObjects> featureWithList =
+                (FeatureFromList<FeatureInputPairObjects>) reduce.duplicateBean();
+        featureWithList.getList().add(first);
+        featureWithList.getList().add(second);
+        return featureWithList;
+    }
+
+    private Feature<FeatureInputPairObjects> createFeatureFor(
+            Feature<FeatureInputSingleObject> existing) {
+        Feature<FeatureInputPairObjects> out =
+                createAggregateFeature(
+                        new First(existing.duplicateBean()),
+                        new Second(existing.duplicateBean()),
+                        new Merged(existing.duplicateBean()));
+        AssignFeatureNameUtilities.assignWithPrefix(out, existing.getFriendlyName(), prefix);
+        return out;
     }
 }

@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.object;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class CalculateDeriveObjectInput
-        extends FeatureCalculation<FeatureInputSingleObject, FeatureInputStack> {
+        extends CalculationPart<FeatureInputSingleObject, FeatureInputStack> {
 
     private final int energyIndex;
 

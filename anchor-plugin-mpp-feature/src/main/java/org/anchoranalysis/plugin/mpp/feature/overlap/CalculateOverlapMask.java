@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.feature.overlap;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
@@ -37,7 +37,7 @@ import org.anchoranalysis.mpp.overlap.OverlapUtilities;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CalculateOverlapMask extends FeatureCalculation<Double, FeatureInputPairMemo> {
+public class CalculateOverlapMask extends CalculationPart<Double, FeatureInputPairMemo> {
 
     private final int regionID;
     private final int energyIndex;
@@ -49,7 +49,8 @@ public class CalculateOverlapMask extends FeatureCalculation<Double, FeatureInpu
         VoxelizedMarkMemo mark1 = input.getObject1();
         VoxelizedMarkMemo mark2 = input.getObject2();
 
-        Channel channel = input.getEnergyStackRequired().withoutParams().getChannel(energyIndex);
+        Channel channel =
+                input.getEnergyStackRequired().withoutParameters().getChannel(energyIndex);
 
         return OverlapUtilities.overlapWithMaskGlobal(
                 mark1, mark2, regionID, channel.voxels().asByte(), maskOnValue);

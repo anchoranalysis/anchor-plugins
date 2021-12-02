@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.input;
 
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputsWithDirectory;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
@@ -41,8 +41,8 @@ public class Shuffle<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
     protected InputsWithDirectory<T> inputsFromDelegate(
-            InputsWithDirectory<T> fromDelegate, InputManagerParams params) {
-        ShuffleHelper.shuffleInputs(fromDelegate.inputs(), params);
+            InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters) {
+        ShuffleHelper.shuffleInputs(fromDelegate.inputs(), parameters);
         return fromDelegate;
     }
 }

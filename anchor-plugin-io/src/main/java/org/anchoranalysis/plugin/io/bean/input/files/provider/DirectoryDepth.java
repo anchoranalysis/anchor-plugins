@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressMultiple;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectoryString;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 
@@ -46,7 +46,7 @@ public class DirectoryDepth extends FilesProviderWithDirectoryString {
     // END BEAN PROPERTIES
 
     @Override
-    public List<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
+    public List<File> matchingFilesForDirectory(Path directory, InputManagerParameters parameters)
             throws FilesProviderException {
 
         String[] filesDir = directory.toFile().list();
@@ -59,7 +59,7 @@ public class DirectoryDepth extends FilesProviderWithDirectoryString {
         int numFiles = filesDir.length;
 
         try (ProgressMultiple progressMultiple =
-                new ProgressMultiple(params.getProgress(), numFiles)) {
+                new ProgressMultiple(parameters.getProgress(), numFiles)) {
             WalkToDepth walkTo = new WalkToDepth(exactDepth, progressMultiple);
             return walkTo.findDirs(directory.toFile());
         } catch (IOException e) {

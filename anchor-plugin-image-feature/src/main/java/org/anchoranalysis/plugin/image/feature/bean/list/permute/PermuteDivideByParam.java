@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
 import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.feature.input.FeatureInputDictionary;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide;
 
 /**
@@ -40,7 +40,7 @@ import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide;
  * @author Owen Feehan
  * @param <T> feature-input
  */
-public class PermuteDivideByParam<T extends FeatureInputParams>
+public class PermuteDivideByParam<T extends FeatureInputDictionary>
         extends PermuteFeatureSequenceInteger<T> {
 
     @Override

@@ -37,7 +37,7 @@ import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
@@ -61,12 +61,12 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
     }
 
     @Override
-    public InputsWithDirectory<ManifestCouplingDefinition> inputs(InputManagerParams params)
+    public InputsWithDirectory<ManifestCouplingDefinition> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
 
         try {
             if (manifestCouplingDefinition == null) {
-                manifestCouplingDefinition = createDeserializedList(params);
+                manifestCouplingDefinition = createDeserializedList(parameters);
             }
         } catch (DeserializationFailedException e) {
             throw new InputReadFailedException("Deserialization failed", e);
@@ -75,16 +75,16 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
         return new InputsWithDirectory<>(Collections.singletonList(manifestCouplingDefinition));
     }
 
-    public ManifestCouplingDefinition manifestCouplingDefinition(InputManagerParams params)
+    public ManifestCouplingDefinition manifestCouplingDefinition(InputManagerParameters parameters)
             throws DeserializationFailedException {
         if (manifestCouplingDefinition == null) {
-            manifestCouplingDefinition = createDeserializedList(params);
+            manifestCouplingDefinition = createDeserializedList(parameters);
         }
         return manifestCouplingDefinition;
     }
 
     // Runs the experiment on a particular file
-    private ManifestCouplingDefinition createDeserializedList(InputManagerParams params)
+    private ManifestCouplingDefinition createDeserializedList(InputManagerParameters parameters)
             throws DeserializationFailedException {
 
         try {
@@ -93,16 +93,16 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
             // Uncoupled file manifests
             if (manifestInputFileSet != null) {
                 definition.addUncoupledJobs(
-                        manifestInputFileSet.create(params),
+                        manifestInputFileSet.create(parameters),
                         manifestDeserializer,
-                        params.getLogger());
+                        parameters.getLogger());
             }
 
             if (manifestExperimentInputFileSet != null) {
                 definition.addManifestExperimentFileSet(
-                        manifestExperimentInputFileSet.create(params),
+                        manifestExperimentInputFileSet.create(parameters),
                         manifestDeserializer,
-                        params.getLogger());
+                        parameters.getLogger());
             }
 
             return definition;

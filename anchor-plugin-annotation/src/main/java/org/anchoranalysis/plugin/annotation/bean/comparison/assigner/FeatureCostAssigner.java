@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
@@ -85,8 +85,9 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Overlappin
             InputOutputContext context)
             throws CreateException {
         try {
-            FeaturesInitialization soFeature =
-                    FeaturesInitialization.create(context.getLogger(), context.getModelDirectory());
+            FeatureRelatedInitialization soFeature =
+                    FeatureRelatedInitialization.create(
+                            context.getLogger(), context.getModelDirectory());
             featureEvaluator.initializeRecursive(soFeature, context.getLogger());
 
             AssignOverlappingObjects assignmentCreator =

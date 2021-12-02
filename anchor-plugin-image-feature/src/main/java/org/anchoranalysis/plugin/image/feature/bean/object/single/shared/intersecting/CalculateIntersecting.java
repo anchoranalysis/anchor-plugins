@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -41,8 +41,7 @@ public class CalculateIntersecting
     private int index;
 
     public CalculateIntersecting(
-            ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting,
-            int index) {
+            ResolvedPart<ObjectCollection, FeatureInputSingleObject> intersecting, int index) {
         super(intersecting);
         this.index = index;
     }

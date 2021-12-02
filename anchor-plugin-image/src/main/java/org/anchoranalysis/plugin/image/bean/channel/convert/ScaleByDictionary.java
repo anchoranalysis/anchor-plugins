@@ -39,11 +39,11 @@ import org.anchoranalysis.image.core.channel.convert.ToUnsignedByteScaleByMinMax
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
- * Scales by compressing a certain range of values into the 8-bit signal
+ * Scales by compressing a certain range of values into the 8-bit signal.
  *
  * @author Owen Feehan
  */
-public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
+public class ScaleByDictionary extends ConvertChannelTo<UnsignedByteBuffer> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DictionaryProvider dictionary;
@@ -81,7 +81,7 @@ public class ScaleByParams extends ConvertChannelTo<UnsignedByteBuffer> {
             throws CreateException {
 
         if (!dictionary.containsKey(key)) {
-            throw new CreateException(String.format("Params is missing key '%s'", key));
+            throw new CreateException(String.format("Parameters is missing key '%s'", key));
         }
 
         double val = dictionary.getAsDouble(key);

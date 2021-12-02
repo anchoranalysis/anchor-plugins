@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -47,12 +47,12 @@ public class InvertedMax<T extends FeatureInput> extends FeatureUnaryGeneric<T> 
     // END BEAN PARAMETERS
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
         return Math.min((1 / input.calculate(getItem())), max);
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format("inverted_max=%f", max);
     }
 

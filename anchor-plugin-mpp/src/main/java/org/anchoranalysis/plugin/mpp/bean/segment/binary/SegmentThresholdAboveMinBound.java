@@ -60,13 +60,13 @@ public class SegmentThresholdAboveMinBound extends BinarySegmentation {
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsUntyped voxels,
-            BinarySegmentationParameters params,
+            BinarySegmentationParameters parameters,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
 
-        setUpDelegate(voxels.any().extent(), params.getResolution());
+        setUpDelegate(voxels.any().extent(), parameters.getResolution());
 
-        return delegate.segment(voxels, params, objectMask);
+        return delegate.segment(voxels, parameters, objectMask);
     }
 
     private void setUpDelegate(Extent extent, Optional<Resolution> resolution) {

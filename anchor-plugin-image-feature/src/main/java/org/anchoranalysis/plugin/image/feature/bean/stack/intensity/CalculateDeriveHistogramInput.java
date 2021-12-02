@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.intensity;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -39,13 +39,13 @@ import org.anchoranalysis.math.histogram.Histogram;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculateDeriveHistogramInput
-        extends FeatureCalculation<FeatureInputHistogram, FeatureInputStack> {
+        extends CalculationPart<FeatureInputHistogram, FeatureInputStack> {
 
-    private final ResolvedCalculation<Histogram, FeatureInputStack> histogramCalculation;
+    private final ResolvedPart<Histogram, FeatureInputStack> histogramCalculation;
 
     public CalculateDeriveHistogramInput(
-            FeatureCalculation<Histogram, FeatureInputStack> histogramCalculation,
-            CalculationResolver<FeatureInputStack> resolver) {
+            CalculationPart<Histogram, FeatureInputStack> histogramCalculation,
+            CalculationPartResolver<FeatureInputStack> resolver) {
         this(resolver.search(histogramCalculation));
     }
 

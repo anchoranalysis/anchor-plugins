@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -44,8 +44,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-class CalculateOutlineNumberVoxelFaces
-        extends FeatureCalculation<Integer, FeatureInputSingleObject> {
+class CalculateOutlineNumberVoxelFaces extends CalculationPart<Integer, FeatureInputSingleObject> {
 
     /** Whether to calculate the outline on a MIP */
     private final boolean mip;
@@ -68,21 +67,20 @@ class CalculateOutlineNumberVoxelFaces
             BinaryVoxels<UnsignedByteBuffer> voxelsProjected =
                     BinaryVoxelsFactory.reuseByte(
                             object.extract().projectMax(), object.binaryValues());
-            KernelApplicationParameters params =
+            KernelApplicationParameters parameters =
                     new KernelApplicationParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, false);
-            return ApplyKernel.applyForCount(kernel, voxelsProjected, params);
+            return ApplyKernel.applyForCount(kernel, voxelsProjected, parameters);
 
         } else {
             CountKernel kernel = new CountKernelNeighborhood();
-            KernelApplicationParameters params =
+            KernelApplicationParameters parameters =
                     new KernelApplicationParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, do3D);
-            return ApplyKernel.applyForCount(kernel, object.binaryVoxels(), params);
+            return ApplyKernel.applyForCount(kernel, object.binaryVoxels(), parameters);
         }
     }
 
     @Override
-    protected Integer execute(FeatureInputSingleObject params) throws FeatureCalculationException {
-        return calculateSurfaceSize(
-                params.getObject(), params.dimensionsRequired(), mip, suppress3D);
+    protected Integer execute(FeatureInputSingleObject input) throws FeatureCalculationException {
+        return calculateSurfaceSize(input.getObject(), input.dimensionsRequired(), mip, suppress3D);
     }
 }

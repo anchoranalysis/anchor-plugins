@@ -117,10 +117,12 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
     }
 
     /**
-     * Throws an exception if an image of size {@code extent} cannot be described by these parameters.
-     * 
+     * Throws an exception if an image of size {@code extent} cannot be described by these
+     * parameters.
+     *
      * @param extent the size of the image to check.
-     * @throws FeatureCalculationException if the image is inappropriately sized for these parameters.
+     * @throws FeatureCalculationException if the image is inappropriately sized for these
+     *     parameters.
      */
     public void checkSize(Extent extent) throws FeatureCalculationException {
 
@@ -146,7 +148,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
     private Size determineWindowSize(Extent imageSize) {
         return convertOr(Optional.ofNullable(windowSize), imageSize);
     }
-    
+
     private static int numberSlidingWindowsFor(
             Size size, Size subtractFromSize, SizeXY addToSize, SizeXY stride) {
 

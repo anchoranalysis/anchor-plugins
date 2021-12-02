@@ -68,7 +68,9 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
 
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segment(
-            VoxelsUntyped voxels, BinarySegmentationParameters params, Optional<ObjectMask> object)
+            VoxelsUntyped voxels,
+            BinarySegmentationParameters parameters,
+            Optional<ObjectMask> object)
             throws SegmentationFailedException {
 
         Voxels<?> voxelsIn = voxels.any();

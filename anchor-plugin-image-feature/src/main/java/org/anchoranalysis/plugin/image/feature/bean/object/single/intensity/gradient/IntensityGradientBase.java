@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.spatial.point.Point3d;
@@ -49,7 +49,7 @@ public abstract class IntensityGradientBase extends FeatureSingleObject {
     @BeanField @Getter @Setter private int subtractConstant = 0;
     // END BEAN PROPERTIES
 
-    protected FeatureCalculation<List<Point3d>, FeatureInputSingleObject> gradientCalculation() {
+    protected CalculationPart<List<Point3d>, FeatureInputSingleObject> gradientCalculation() {
         return new CalculateGradientFromChannels(
                 energyIndexX, energyIndexY, energyIndexZ, subtractConstant);
     }

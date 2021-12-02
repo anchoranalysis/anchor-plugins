@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -40,7 +40,7 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculateSingleObjFromMemo
-        extends FeatureCalculation<FeatureInputSingleObject, FeatureInputSingleMemo> {
+        extends CalculationPart<FeatureInputSingleObject, FeatureInputSingleMemo> {
 
     private final RegionMap regionMap;
     private final int index;
@@ -51,13 +51,12 @@ class CalculateSingleObjFromMemo
         return new FeatureInputSingleObject(deriveMask(input), input.getEnergyStackOptional());
     }
 
-    private ObjectMask deriveMask(FeatureInputSingleMemo params)
-            throws FeatureCalculationException {
+    private ObjectMask deriveMask(FeatureInputSingleMemo input) throws FeatureCalculationException {
         ObjectWithProperties om =
-                params.getPxlPartMemo()
+                input.getPxlPartMemo()
                         .getMark()
                         .deriveObject(
-                                params.dimensionsRequired(),
+                                input.dimensionsRequired(),
                                 regionMap.membershipWithFlagsForIndex(index),
                                 BinaryValuesByte.getDefault());
         return om.asObjectMask();

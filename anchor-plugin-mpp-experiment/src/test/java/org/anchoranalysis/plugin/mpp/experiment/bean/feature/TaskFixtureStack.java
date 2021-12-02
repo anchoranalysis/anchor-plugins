@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
@@ -46,7 +46,7 @@ class TaskFixtureStack
 
     @Override
     protected FeatureSource<ProvidesStackInput, FeatureList<FeatureInputStack>, FeatureInputStack>
-            createSource(EnergyStackWithoutParams energyStack, FeaturesLoader featureLoader)
+            createSource(EnergyStackWithoutParameters energyStack, FeaturesLoader featureLoader)
                     throws CreateException {
         return new FromImage();
     }

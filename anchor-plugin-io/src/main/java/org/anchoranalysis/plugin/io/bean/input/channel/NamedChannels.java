@@ -34,7 +34,7 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.file.FileInput;
 import org.anchoranalysis.plugin.io.bean.channel.map.Autoname;
 
@@ -54,9 +54,9 @@ public class NamedChannels extends NamedChannelsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParams params)
+    public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
-        return fileInput.inputs(params).map(this::createPart);
+        return fileInput.inputs(parameters).map(this::createPart);
     }
 
     private MapPart createPart(FileInput input) {

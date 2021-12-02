@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.list.Define;
+import org.anchoranalysis.feature.bean.list.DefineSingle;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.test.TestLoader;
@@ -84,7 +84,7 @@ class LoadFeatures<T extends FeatureInput> {
     public void useSingleFeature(Feature<T> feature) {
 
         NamedBean<FeatureListProvider<T>> bean =
-                new NamedBean<>(SINGLE_FEATURE_NAME, new Define<>(feature));
+                new NamedBean<>(SINGLE_FEATURE_NAME, new DefineSingle<>(feature));
 
         this.features = Optional.of(Arrays.asList(bean));
     }

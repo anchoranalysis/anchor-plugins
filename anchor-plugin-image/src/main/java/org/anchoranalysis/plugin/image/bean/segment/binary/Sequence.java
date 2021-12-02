@@ -72,7 +72,7 @@ public class Sequence extends BinarySegmentation {
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsUntyped voxels,
-            BinarySegmentationParameters params,
+            BinarySegmentationParameters parameters,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
 
@@ -88,7 +88,8 @@ public class Sequence extends BinarySegmentation {
         Optional<ObjectMask> evolvingMask = objectMask;
         for (BinarySegmentation segment : list) {
 
-            BinaryVoxels<UnsignedByteBuffer> outNew = segment.segment(voxels, params, evolvingMask);
+            BinaryVoxels<UnsignedByteBuffer> outNew =
+                    segment.segment(voxels, parameters, evolvingMask);
 
             out = outNew;
             evolvingMask = Optional.of(new ObjectMask(box, outNew));

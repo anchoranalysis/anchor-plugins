@@ -27,14 +27,14 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.points.contour;
 
 import java.util.Optional;
-import org.anchoranalysis.bean.NullParamsBean;
+import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /** Finds a pixel in a particular direction on the exterior <i>outer</i> contour of an object. */
-public abstract class FindPointOnContour extends NullParamsBean<FindPointOnContour> {
+public abstract class FindPointOnContour extends NullParametersBean<FindPointOnContour> {
 
     public abstract Optional<Point3i> pointOnContour(Point3d centerPoint, Orientation orientation)
             throws OperationFailedException;

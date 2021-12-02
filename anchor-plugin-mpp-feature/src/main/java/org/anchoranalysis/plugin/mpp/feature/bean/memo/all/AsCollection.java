@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.all;
 
 import org.anchoranalysis.feature.bean.operator.FeatureUnary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
 import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 
@@ -38,7 +38,7 @@ public class AsCollection extends FeatureUnary<FeatureInputAllMemo, FeatureInput
     private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsCollection.class);
 
     @Override
-    public double calculate(SessionInput<FeatureInputAllMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputAllMemo> input)
             throws FeatureCalculationException {
         return input.forChild()
                 .calculate(getItem(), new CalculateDeriveMarkCollectionInput(), CACHE_NAME);

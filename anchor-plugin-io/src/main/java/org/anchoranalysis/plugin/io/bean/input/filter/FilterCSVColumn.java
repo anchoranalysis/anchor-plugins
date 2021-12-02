@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
@@ -63,7 +63,7 @@ public class FilterCSVColumn<T extends InputFromManager> extends InputManagerUna
 
     @Override
     protected InputsWithDirectory<T> inputsFromDelegate(
-            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+            InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
 
         if (fromDelegate.isEmpty()) {
@@ -76,7 +76,7 @@ public class FilterCSVColumn<T extends InputFromManager> extends InputManagerUna
             Set<String> matching =
                     matchingNames(
                             inputs.get(0).pathForBindingRequired(),
-                            params.isDebugModeActivated(),
+                            parameters.isDebugModeActivated(),
                             inputs.size());
 
             applyFilter(inputs, matching);

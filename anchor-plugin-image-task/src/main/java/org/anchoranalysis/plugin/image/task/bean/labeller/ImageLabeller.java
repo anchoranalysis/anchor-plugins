@@ -54,9 +54,9 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
 
     /**
      * A set of identifiers for all groups that can be outputted by the labeller. Should be callable
-     * always
+     * always.
      */
-    public abstract Set<String> allLabels(T params);
+    public abstract Set<String> allLabels(T initialization);
 
     /** Determines a particular group-identifier for an input */
     public abstract String labelFor(

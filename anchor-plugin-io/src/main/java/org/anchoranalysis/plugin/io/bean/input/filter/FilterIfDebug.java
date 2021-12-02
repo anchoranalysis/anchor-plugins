@@ -31,8 +31,8 @@ import java.util.List;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
-import org.anchoranalysis.io.input.bean.DebugModeParams;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.DebugModeParameters;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
 
@@ -46,16 +46,17 @@ public class FilterIfDebug<T extends InputFromManager> extends InputManagerUnary
 
     @Override
     protected InputsWithDirectory<T> inputsFromDelegate(
-            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+            InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
-        return params.getDebugModeParams()
-                .map(paramsToMap -> maybeFilterInputs(fromDelegate, paramsToMap))
+        return parameters
+                .getDebugModeParameters()
+                .map(parametersToMap -> maybeFilterInputs(fromDelegate, parametersToMap))
                 .orElse(fromDelegate);
     }
 
     private InputsWithDirectory<T> maybeFilterInputs(
-            InputsWithDirectory<T> fromDelegate, DebugModeParams debugModeParams) {
-        List<T> filtered = takeFirst(maybeFilteredList(fromDelegate.inputs(), debugModeParams));
+            InputsWithDirectory<T> fromDelegate, DebugModeParameters debugMode) {
+        List<T> filtered = takeFirst(maybeFilteredList(fromDelegate.inputs(), debugMode));
         return fromDelegate.withInputs(filtered);
     }
 
@@ -69,11 +70,11 @@ public class FilterIfDebug<T extends InputFromManager> extends InputManagerUnary
         }
     }
 
-    private List<T> maybeFilteredList(List<T> unfiltered, DebugModeParams debugModeParams) {
+    private List<T> maybeFilteredList(List<T> unfiltered, DebugModeParameters debugMode) {
         FilterDescriptiveNameEqualsContains filter =
                 new FilterDescriptiveNameEqualsContains(
                         "", // Always disabled
-                        debugModeParams.containsOrEmpty());
+                        debugMode.containsOrEmpty());
 
         return filter.removeNonMatching(unfiltered);
     }

@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
@@ -47,8 +47,9 @@ public class Shell extends DerivedObject {
     // END BEAN PROPERTIES
 
     @Override
-    protected FeatureCalculation<ObjectMask, FeatureInputSingleObject>
-            createCachedCalculationForDerived(CalculationResolver<FeatureInputSingleObject> session)
+    protected CalculationPart<ObjectMask, FeatureInputSingleObject>
+            createCachedCalculationForDerived(
+                    CalculationPartResolver<FeatureInputSingleObject> session)
                     throws FeatureCalculationException {
         return CalculateShellObjectMask.of(session, iterations, 0, false);
     }

@@ -72,7 +72,7 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<AnnotationWithStrategy<S>> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         try {
             return new AggregateSharedState();
@@ -82,11 +82,11 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
     }
 
     @Override
-    public void doJobOnInput(InputBound<AnnotationWithStrategy<S>, AggregateSharedState> params)
+    public void doJobOnInput(InputBound<AnnotationWithStrategy<S>, AggregateSharedState> input)
             throws JobExecutionException {
 
-        Optional<ImageAnnotation> ann = createFromInput(params.getInput(), params.getLogger());
-        ann.ifPresent(annotation -> params.getSharedState().getAnnotations().add(annotation));
+        Optional<ImageAnnotation> ann = createFromInput(input.getInput(), input.getLogger());
+        ann.ifPresent(annotation -> input.getSharedState().getAnnotations().add(annotation));
     }
 
     @Override

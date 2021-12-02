@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 
@@ -56,7 +56,7 @@ class MultiInputFixture {
      * @param energyStack
      * @return
      */
-    public static MultiInput createInput(EnergyStackWithoutParams energyStack) {
+    public static MultiInput createInput(EnergyStackWithoutParameters energyStack) {
         MultiInput input =
                 new MultiInput(
                         "input", new StackAsProviderFixture(energyStack.asStack(), "someName"));

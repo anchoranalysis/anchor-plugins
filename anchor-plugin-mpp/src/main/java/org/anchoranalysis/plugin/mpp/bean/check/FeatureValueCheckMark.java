@@ -38,12 +38,12 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.mpp.feature.error.CheckException;
@@ -60,7 +60,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
     @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEANS
 
-    private SharedFeatureMulti sharedFeatureSet;
+    private SharedFeatures sharedFeatureSet;
 
     private FeatureCalculatorSingle<T> featureCalculator;
 
@@ -101,8 +101,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 
         try {
             double energy =
-                    featureCalculator.calculate(
-                            createFeatureCalcParams(mark, regionMap, energyStack));
+                    featureCalculator.calculate(createFeatureInput(mark, regionMap, energyStack));
 
             return (energy >= minVal);
 
@@ -112,7 +111,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
         }
     }
 
-    protected abstract T createFeatureCalcParams(
+    protected abstract T createFeatureInput(
             Mark mark, RegionMap regionMap, EnergyStack energyStack);
 
     private Dictionary createDictionary() throws ProvisionFailedException {

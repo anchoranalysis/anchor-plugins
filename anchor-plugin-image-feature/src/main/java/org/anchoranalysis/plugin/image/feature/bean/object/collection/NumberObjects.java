@@ -33,8 +33,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputObjectCollection;
 public class NumberObjects extends FeatureObjectCollection {
 
     @Override
-    public double calculate(FeatureInputObjectCollection params)
-            throws FeatureCalculationException {
-        return params.getObjects().size();
+    public double calculate(FeatureInputObjectCollection input) throws FeatureCalculationException {
+        return input.getObjects().size();
     }
 }

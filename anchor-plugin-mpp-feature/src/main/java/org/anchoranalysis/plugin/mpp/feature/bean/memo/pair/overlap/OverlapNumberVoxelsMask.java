@@ -27,14 +27,14 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 
-public class OverlapNumVoxelsMask extends OverlapMaskBase {
+public class OverlapNumberVoxelsMask extends OverlapMaskBase {
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairMemo> params)
+    public double calculate(FeatureCalculationInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
-        return overlapWithGlobalMask(params);
+        return overlapWithGlobalMask(input);
     }
 }

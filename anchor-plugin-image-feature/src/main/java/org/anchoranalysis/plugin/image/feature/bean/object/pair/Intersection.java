@@ -32,10 +32,10 @@ import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.bean.object.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -67,7 +67,7 @@ public class Intersection extends FeatureDeriveFromPair {
     }
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairObjects> input)
+    public double calculate(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
 
         return CalculateInputFromDelegateOption.calc(
@@ -85,8 +85,8 @@ public class Intersection extends FeatureDeriveFromPair {
         return new ChildCacheName(Intersection.class, id);
     }
 
-    private FeatureCalculation<Optional<ObjectMask>, FeatureInputPairObjects> createCalculation(
-            SessionInput<FeatureInputPairObjects> input) {
+    private CalculationPart<Optional<ObjectMask>, FeatureInputPairObjects> createCalculation(
+            FeatureCalculationInput<FeatureInputPairObjects> input) {
         return CalculatePairIntersectionCommutative.of(
                 input, CACHE_NAME_FIRST, CACHE_NAME_SECOND, iterations);
     }

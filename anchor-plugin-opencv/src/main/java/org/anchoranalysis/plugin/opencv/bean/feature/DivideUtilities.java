@@ -35,11 +35,11 @@ import org.anchoranalysis.image.bean.spatial.SizeXY;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DivideUtilities {
 
-    /** 
+    /**
      * Integer division of one extracted value by another extracted value.
-     * 
-     * <p>The values are extracted respectively from a instance of {@link SizeXY}. 
-     * 
+     *
+     * <p>The values are extracted respectively from a instance of {@link SizeXY}.
+     *
      * @param dividend the number that is divided.
      * @param divisor what {@code dividend} is divided by.
      * @param extract the function to extract an integer value from {@link SizeXY}.

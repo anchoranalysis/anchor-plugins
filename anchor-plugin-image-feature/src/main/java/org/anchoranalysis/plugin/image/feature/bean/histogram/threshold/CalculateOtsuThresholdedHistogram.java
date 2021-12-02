@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.bean.initializable.params.NullInitialization;
+import org.anchoranalysis.bean.initializable.parameters.NullInitialization;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -41,20 +41,19 @@ import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-class CalculateOtsuThresholdedHistogram
-        extends FeatureCalculation<Histogram, FeatureInputHistogram> {
+class CalculateOtsuThresholdedHistogram extends CalculationPart<Histogram, FeatureInputHistogram> {
 
     private final CalculateLevel calculateLevel;
     private final Logger logger;
 
     @Override
-    protected Histogram execute(FeatureInputHistogram params) throws FeatureCalculationException {
+    protected Histogram execute(FeatureInputHistogram input) throws FeatureCalculationException {
         try {
             if (!calculateLevel.isInitialized()) {
                 calculateLevel.initialize(NullInitialization.instance(), logger);
             }
             return HistogramThresholder.withCalculateLevel(
-                    params.getHistogram().duplicate(), // Important to duplicate
+                    input.getHistogram().duplicate(), // Important to duplicate
                     calculateLevel);
         } catch (OperationFailedException | InitializeException e) {
             throw new FeatureCalculationException(e);

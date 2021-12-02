@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
@@ -53,7 +53,7 @@ public class ThresholdHistogram extends FeatureHistogram {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputHistogram> input)
+    public double calculate(FeatureCalculationInput<FeatureInputHistogram> input)
             throws FeatureCalculationException {
 
         return input.forChild()

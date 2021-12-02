@@ -43,12 +43,12 @@ public class FrequencyMap<T> {
 
     public synchronized void incrementCount(T key) {
 
-        Integer cnt = map.get(key);
+        Integer count = map.get(key);
 
-        if (cnt == null) {
+        if (count == null) {
             map.put(key, 1);
         } else {
-            map.put(key, cnt + 1);
+            map.put(key, count + 1);
         }
     }
 

@@ -128,20 +128,20 @@ public class TaskSingleInputHelper {
 
             StatefulMessageLogger logger = createStatefulLogReporter();
 
-            ParametersExperiment paramsExperiment =
+            ParametersExperiment parametersExperiment =
                     createParametersExperiment(
                             outputter.getChecked(), outputManager.getPrefixer(), logger);
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleCPUProcessor(0);
             S sharedState =
                     task.beforeAnyJobIsExecuted(
-                            outputter, concurrencyPlan, Arrays.asList(input), paramsExperiment);
+                            outputter, concurrencyPlan, Arrays.asList(input), parametersExperiment);
 
             try {
                 return task.executeJob(
-                        new ParametersUnbound<>(paramsExperiment, input, sharedState, false));
+                        new ParametersUnbound<>(parametersExperiment, input, sharedState, false));
             } finally {
-                task.afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
+                task.afterAllJobsAreExecuted(sharedState, parametersExperiment.getContext());
             }
 
         } catch (ExperimentExecutionException
@@ -157,7 +157,7 @@ public class TaskSingleInputHelper {
         ExperimentFeedbackContext context =
                 new ExperimentFeedbackContext(
                         logger, false, ExecutionTimeRecorderIgnore.instance());
-        ParametersExperiment params =
+        ParametersExperiment parameters =
                 new ParametersExperiment(
                         new ExecutionArguments(Paths.get(".")),
                         "arbitraryExperimentName",
@@ -165,8 +165,8 @@ public class TaskSingleInputHelper {
                         outputter,
                         prefixer,
                         context);
-        params.setLoggerTaskCreator(createLogReporterBean());
-        return params;
+        parameters.setLoggerTaskCreator(createLogReporterBean());
+        return parameters;
     }
 
     private static LoggingDestination createLogReporterBean() {

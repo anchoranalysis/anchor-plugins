@@ -37,7 +37,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.SearchDirectory;
 import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -113,9 +113,10 @@ class ClusterByTimestampTest {
     /** Create inputs. */
     private static List<FileWithDirectoryInput> createInputs(Path source)
             throws InputReadFailedException {
-        InputManagerParams params = new InputManagerParams(LoggingFixture.suppressedLogger());
+        InputManagerParameters parameters =
+                new InputManagerParameters(LoggingFixture.suppressedLogger());
 
-        return createFiles(source).inputs(params).inputs();
+        return createFiles(source).inputs(parameters).inputs();
     }
 
     /** Create the files to be used as inputs. */

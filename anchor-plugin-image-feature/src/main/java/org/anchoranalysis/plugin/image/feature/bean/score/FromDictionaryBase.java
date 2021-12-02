@@ -40,13 +40,13 @@ public abstract class FromDictionaryBase extends SingleChannel {
 
         if (!dictionary.isPresent()) {
             throw new InitializeException(
-                    "This pixel-score required key-value-params to be present, but they are not");
+                    "This pixel-score requires a dictionary to be present, but it is not.");
         }
 
-        setupParams(dictionary.get());
+        setupDictionary(dictionary.get());
     }
 
-    protected abstract void setupParams(Dictionary dictionary) throws InitializeException;
+    protected abstract void setupDictionary(Dictionary dictionary) throws InitializeException;
 
     protected static double extractAsDouble(Dictionary dictionary, String key)
             throws InitializeException {

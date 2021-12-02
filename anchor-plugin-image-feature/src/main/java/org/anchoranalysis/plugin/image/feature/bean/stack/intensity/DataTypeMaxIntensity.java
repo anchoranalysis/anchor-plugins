@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.stack.intensity;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 public class DataTypeMaxIntensity<T extends FeatureInputEnergy> extends FeatureEnergy<T> {
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
         return input.get().getEnergyStackRequired().getChannel(0).getVoxelDataType().maxValue();
     }
 }

@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculatePairInput
-        extends FeatureCalculation<FeatureInputPairObjects, FeatureInputSingleObject> {
+        extends CalculationPart<FeatureInputPairObjects, FeatureInputSingleObject> {
 
     private final Mask mask;
 

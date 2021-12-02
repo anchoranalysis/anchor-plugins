@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.points.calculate.ellipse;
 
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
@@ -39,7 +39,7 @@ import org.anchoranalysis.plugin.points.bean.fitter.LinearLeastSquaresEllipseFit
 
 @EqualsAndHashCode(callSuper = false)
 public class CalculateEllipseLeastSquares
-        extends FeatureCalculation<ObjectWithEllipse, FeatureInputSingleObject> {
+        extends CalculationPart<ObjectWithEllipse, FeatureInputSingleObject> {
 
     @EqualsAndHashCode.Exclude private EllipseFactory factory;
 
@@ -52,7 +52,8 @@ public class CalculateEllipseLeastSquares
             throws FeatureCalculationException {
 
         try {
-            EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().withoutParams();
+            EnergyStackWithoutParameters energyStack =
+                    input.getEnergyStackRequired().withoutParameters();
 
             ObjectMask object = extractEllipseSlice(input.getObject());
 

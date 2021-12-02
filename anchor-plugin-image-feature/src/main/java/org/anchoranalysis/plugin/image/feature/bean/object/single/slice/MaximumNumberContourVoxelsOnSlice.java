@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.slice;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.core.contour.FindContour;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         ObjectMask object = input.get().getObject();
 
@@ -58,13 +58,13 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
     }
 
     private static int countForByteBuffer(UnsignedByteBuffer buffer, byte equalVal) {
-        int cnt = 0;
+        int count = 0;
         while (buffer.hasRemaining()) {
             if (buffer.getRaw() == equalVal) {
-                cnt++;
+                count++;
             }
         }
-        return cnt;
+        return count;
     }
 
     private static int indexOfSliceWithMaxNumberVoxels(ObjectMask object) {

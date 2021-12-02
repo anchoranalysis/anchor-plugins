@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.contour.visitscheduler;
 
 import java.util.Optional;
-import org.anchoranalysis.bean.NullParamsBean;
+import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.Tuple3i;
 
-public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
+public abstract class VisitScheduler extends NullParametersBean<VisitScheduler> {
 
     public abstract Optional<Tuple3i> maxDistanceFromRootPoint(Optional<Resolution> resolution)
             throws OperationFailedException;

@@ -35,10 +35,10 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -71,7 +71,7 @@ class FeatureListImageTest {
     }
 
     @Test
-    void testNoParams() {
+    void testNoParameters() {
 
         assertThrows(
                 NamedFeatureCalculateException.class,
@@ -92,7 +92,7 @@ class FeatureListImageTest {
                 createAndStart(histogramFeatures(loader));
 
         assertCalc(
-                session.calculate(createParams(HistogramFixture.createAscending())),
+                session.calculate(createParameters(HistogramFixture.createAscending())),
                 32450.0,
                 30870.0,
                 14685.0,
@@ -101,7 +101,7 @@ class FeatureListImageTest {
                 0.005545343137254902);
 
         assertCalc(
-                session.calculate(createParams(HistogramFixture.createDescending())),
+                session.calculate(createParameters(HistogramFixture.createDescending())),
                 27730.0,
                 19110.0,
                 2145.0,
@@ -180,7 +180,8 @@ class FeatureListImageTest {
         return FeaturesFromXmlFixture.createFeatureList("objectFeatureList.xml", loader);
     }
 
-    private static FeatureInputHistogram createParams(Histogram histogram) throws CreateException {
+    private static FeatureInputHistogram createParameters(Histogram histogram)
+            throws CreateException {
         return new FeatureInputHistogram(histogram, ENERGY_STACK.resolution());
     }
 

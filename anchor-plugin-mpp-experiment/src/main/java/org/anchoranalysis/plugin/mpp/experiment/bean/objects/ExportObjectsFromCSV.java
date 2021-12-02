@@ -123,7 +123,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<FromCSVInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         return new FromCSVSharedState();
     }
@@ -251,12 +251,12 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
         }
     }
 
-    private DisplayStack createBackgroundStack(ImageInitialization params, Logger logger)
+    private DisplayStack createBackgroundStack(ImageInitialization initialization, Logger logger)
             throws OutputWriteFailedException {
         // Get our background-stack and objects. We duplicate to avoid threading issues
         StackProvider providerCopy = stack.duplicateBean();
         try {
-            providerCopy.initializeRecursive(params, logger);
+            providerCopy.initializeRecursive(initialization, logger);
             return DisplayStack.create(providerCopy.get());
         } catch (CreateException | InitializeException | ProvisionFailedException e) {
             throw new OutputWriteFailedException(e);

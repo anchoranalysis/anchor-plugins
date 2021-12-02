@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegate;
@@ -39,20 +39,19 @@ class CalculateHistogramInput
         extends CalculateInputFromDelegate<
                 FeatureInputHistogram, FeatureInputHistogram, Histogram> {
 
-    public CalculateHistogramInput(
-            ResolvedCalculation<Histogram, FeatureInputHistogram> ccDelegate) {
+    public CalculateHistogramInput(ResolvedPart<Histogram, FeatureInputHistogram> ccDelegate) {
         super(ccDelegate);
     }
 
     public CalculateHistogramInput(
-            FeatureCalculation<Histogram, FeatureInputHistogram> ccDelegate,
-            CalculationResolver<FeatureInputHistogram> cache) {
+            CalculationPart<Histogram, FeatureInputHistogram> ccDelegate,
+            CalculationPartResolver<FeatureInputHistogram> cache) {
         super(ccDelegate, cache);
     }
 
     @Override
     protected FeatureInputHistogram deriveFromDelegate(
-            FeatureInputHistogram params, Histogram delegate) {
-        return new FeatureInputHistogram(delegate, params.getResolutionOptional());
+            FeatureInputHistogram input, Histogram delegate) {
+        return new FeatureInputHistogram(delegate, input.getResolutionOptional());
     }
 }

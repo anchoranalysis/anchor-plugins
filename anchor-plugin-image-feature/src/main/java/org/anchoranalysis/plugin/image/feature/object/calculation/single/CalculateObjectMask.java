@@ -29,19 +29,19 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.single;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPartMap;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateObjectMask
-        extends FeatureCalculation<ObjectMask, FeatureInputSingleObject> {
+        extends CalculationPart<ObjectMask, FeatureInputSingleObject> {
 
     private final int iterations;
-    private final ResolvedCalculationMap<ObjectMask, FeatureInputSingleObject, Integer> map;
+    private final ResolvedPartMap<ObjectMask, FeatureInputSingleObject, Integer> map;
 
     /**
      * Copy constructor
@@ -54,14 +54,14 @@ public abstract class CalculateObjectMask
     }
 
     @Override
-    protected ObjectMask execute(FeatureInputSingleObject params)
+    protected ObjectMask execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
         if (iterations == 0) {
-            return params.getObject();
+            return input.getObject();
         }
 
-        return map.getOrCalculate(params, iterations);
+        return map.getOrCalculate(input, iterations);
     }
 
     @Override

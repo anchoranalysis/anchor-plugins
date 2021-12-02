@@ -57,13 +57,16 @@ public class CVFindContours {
     }
 
     /**
-     * Calculates the extreme outer contours from an {@link ObjectMask} as OpenCV defines <a href="https://docs.opencv.org/3.4/d4/d73/tutorial_py_contours_begin.html">contours</a>.
-     * 
-     * <p>The setting {@link Imgproc#RETR_EXTERNAL} defines the extreme outer contours. Please see the related
-     * <a href="https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#ga17ed9f5d79ae97bd4c7cf18403e1689a">OpenCV documentation</a>.
-     * 
+     * Calculates the extreme outer contours from an {@link ObjectMask} as OpenCV defines <a
+     * href="https://docs.opencv.org/3.4/d4/d73/tutorial_py_contours_begin.html">contours</a>.
+     *
+     * <p>The setting {@link Imgproc#RETR_EXTERNAL} defines the extreme outer contours. Please see
+     * the related <a
+     * href="https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#ga17ed9f5d79ae97bd4c7cf18403e1689a">OpenCV
+     * documentation</a>.
+     *
      * <p>No approximation occurs of the contours' points.
-     * 
+     *
      * @param object the object whose contours should be found.
      * @return a newly created list, containing the extreme outer contours.
      * @throws OperationFailedException if the countour cannot be calculated.
@@ -74,7 +77,8 @@ public class CVFindContours {
         CVInit.blockUntilLoaded();
 
         try {
-            // We deep-copy the object, as its voxels are modified by the algorithm according to OpenCV docs
+            // We deep-copy the object, as its voxels are modified by the algorithm according to
+            // OpenCV docs
             // https://docs.opencv.org/2.4/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=findcontours#findcontours
             Mat mat = ConvertToMat.fromObject(object.duplicate());
 
@@ -110,9 +114,7 @@ public class CVFindContours {
     /** Converts a 2D OpenCV {@link Point} to a {@link Point3f}, adding {@code toAdd}. */
     private static Point3f convert(Point point, ReadableTuple3i toAdd) {
         return new Point3f(
-                addDoubles(point.x, toAdd.x()),
-                addDoubles(point.y, toAdd.y()),
-                toAdd.z());
+                addDoubles(point.x, toAdd.x()), addDoubles(point.y, toAdd.y()), toAdd.z());
     }
 
     /** Adds two {@code double} values and converts to a {@code float}. */

@@ -123,15 +123,15 @@ public final class TextFile extends ReporterAggregate<VoxelizedMarksWithEnergy>
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params) {
+    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> parameters) {
 
-        super.reportEnd(params);
+        super.reportEnd(parameters);
         if (fileOutput.isPresent() && fileOutput.get().isEnabled()) {
 
             timer.stop();
 
             PrintWriter writer = this.fileOutput.get().getWriter();
-            writer.print(params.toString());
+            writer.print(parameters.toString());
             writer.printf("Optimization time took %e s%n", ((double) timer.getTime()) / 1000);
             writer.close();
         }

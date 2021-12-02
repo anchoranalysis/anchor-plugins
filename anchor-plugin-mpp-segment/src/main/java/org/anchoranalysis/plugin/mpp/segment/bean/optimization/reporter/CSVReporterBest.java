@@ -90,7 +90,7 @@ public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEner
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params) {
+    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> parameters) {
         csvOutput.ifPresent(output -> output.getWriter().close());
     }
 

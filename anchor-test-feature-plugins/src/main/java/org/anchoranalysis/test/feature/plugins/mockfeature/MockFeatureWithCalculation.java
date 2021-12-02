@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.test.feature.plugins.mockfeature;
 
-import org.anchoranalysis.feature.bean.operator.FeatureOperator;
+import org.anchoranalysis.feature.bean.operator.FeatureGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *
  * @author Owen Feehan
  */
-public class MockFeatureWithCalculation extends FeatureOperator<FeatureInput> {
+public class MockFeatureWithCalculation extends FeatureGeneric<FeatureInput> {
 
     /**
      * Records a count of the number of calls to {@link #calculate}
@@ -48,7 +48,7 @@ public class MockFeatureWithCalculation extends FeatureOperator<FeatureInput> {
     static int countCalculateCalled = 0;
 
     @Override
-    protected double calculate(SessionInput<FeatureInput> input)
+    protected double calculate(FeatureCalculationInput<FeatureInput> input)
             throws FeatureCalculationException {
         countCalculateCalled++; // NOSONAR
         return input.calculate(new MockCalculation());

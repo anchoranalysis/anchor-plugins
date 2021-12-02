@@ -1,8 +1,8 @@
 package org.anchoranalysis.plugin.onnx.bean.object.segment.decode.instance;
 
+import org.anchoranalysis.image.inference.bean.reduce.RemoveOverlappingObjects;
 import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.image.inference.bean.segment.instance.SuppressNonMaxima;
-import org.anchoranalysis.plugin.image.bean.object.segment.reduce.RemoveOverlappingObjects;
 import org.anchoranalysis.plugin.image.bean.scale.ToDimensions;
 import org.anchoranalysis.plugin.onnx.bean.object.segment.stack.SegmentObjectsFromONNXModel;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance.SegmentCarBase;

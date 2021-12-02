@@ -33,10 +33,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
-import org.anchoranalysis.feature.bean.operator.FeatureOperator;
+import org.anchoranalysis.feature.bean.operator.FeatureGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
@@ -50,7 +50,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
  * @author Owen Feehan
  * @param <T> feature-input-type
  */
-public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator<T> {
+public class ParamFromCollection<T extends FeatureInput> extends FeatureGeneric<T> {
 
     // START BEAN PROPERTIES
     /** The name of the {@link Dictionary} that will be retrieved from {@link SharedObjects}. */
@@ -76,7 +76,7 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
     }
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
         return value;
     }
 }

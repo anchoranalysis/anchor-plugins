@@ -61,7 +61,7 @@ public abstract class ForSpecificAxis<T extends FeatureInputEnergy> extends From
             throws FeatureCalculationException;
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format("%s", axis);
     }
 }

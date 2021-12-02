@@ -129,7 +129,7 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<AnnotationComparisonInput<ProvidesStackInput>> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
 
         try {
@@ -146,28 +146,29 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
     @Override
     public void doJobOnInput(
             InputBound<AnnotationComparisonInput<ProvidesStackInput>, ComparisonSharedState<T>>
-                    params)
+                    input)
             throws JobExecutionException {
 
-        AnnotationComparisonInput<ProvidesStackInput> input = params.getInput();
+        AnnotationComparisonInput<ProvidesStackInput> inputComparison = input.getInput();
 
         // Create the background.
-        DisplayStack backgroundStack = createBackground(input, params.getLogger());
+        DisplayStack backgroundStack = createBackground(inputComparison, input.getLogger());
 
         // We only do a descriptive split if it's allowed.
-        SplitString descriptiveSplit = createSplitString(input);
+        SplitString descriptiveSplit = createSplitString(inputComparison);
 
         // Now do whatever comparison is necessary to update the assignment.
         Optional<Assignment<ObjectMask>> assignment =
                 compareAndUpdate(
-                        input,
+                        inputComparison,
                         backgroundStack,
                         descriptiveSplit,
-                        params.getContextJob(),
-                        params.getSharedState());
+                        input.getContextJob(),
+                        input.getSharedState());
 
         if (assignment.isPresent()) {
-            writeOutlineStack(params.getOutputter(), input, assignment.get(), backgroundStack);
+            writeOutlineStack(
+                    input.getOutputter(), inputComparison, assignment.get(), backgroundStack);
         }
     }
 

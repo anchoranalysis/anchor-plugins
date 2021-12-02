@@ -27,15 +27,15 @@
 package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureListElem;
+import org.anchoranalysis.feature.bean.operator.FeatureFromList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class Multiply<T extends FeatureInput> extends FeatureListElem<T> {
+public class Multiply<T extends FeatureInput> extends FeatureFromList<T> {
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
 
         double result = 1;
 

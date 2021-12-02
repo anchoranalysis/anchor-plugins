@@ -30,10 +30,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.bean.histogram.Mean;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
@@ -63,7 +63,7 @@ public class Intensity extends FeatureStack {
     // END BEAN PROEPRTIES
 
     @Override
-    protected double calculate(SessionInput<FeatureInputStack> input)
+    protected double calculate(FeatureCalculationInput<FeatureInputStack> input)
             throws FeatureCalculationException {
         return input.forChild()
                 .calculate(
@@ -81,7 +81,7 @@ public class Intensity extends FeatureStack {
         }
     }
 
-    private FeatureCalculation<Histogram, FeatureInputStack> histogramCalculator() {
+    private CalculationPart<Histogram, FeatureInputStack> histogramCalculator() {
         if (energyIndexMask != -1) {
             return new CalculateHistogramMasked(energyIndex, energyIndexMask);
         } else {

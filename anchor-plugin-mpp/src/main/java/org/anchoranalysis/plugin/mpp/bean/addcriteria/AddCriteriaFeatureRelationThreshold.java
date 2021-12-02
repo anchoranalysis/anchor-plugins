@@ -35,8 +35,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.mpp.feature.addcriteria.IncludeMarksFailureException;
@@ -63,12 +63,12 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
             throws IncludeMarksFailureException {
 
         try {
-            FeatureInputPairMemo params =
+            FeatureInputPairMemo parameters =
                     new FeatureInputPairMemo(mark1, mark2, new EnergyStack(dimensions));
 
             double featureVal =
                     session.orElseThrow(() -> new IncludeMarksFailureException("No session exists"))
-                            .calculate(params, FeatureListFactory.from(feature))
+                            .calculate(parameters, FeatureListFactory.from(feature))
                             .get(0);
 
             return relation.create().test(featureVal, threshold);

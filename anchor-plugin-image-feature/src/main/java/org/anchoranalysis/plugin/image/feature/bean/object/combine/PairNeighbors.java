@@ -64,8 +64,9 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  * <p>Specifically:
  *
  * <ul>
- *   <li>Creates a graph of neighboring-objects
- *   <li>Passes each pair of immediately-neighboring as params, together with their merged object
+ *   <li>Creates a graph of neighboring-objects.
+ *   <li>Passes each pair of immediately-neighboring objects, together with their merged object, as
+ *       an input.
  * </ul>
  *
  * <p>Features are formed by duplicating the input-feature list (inputfeatures, single-object
@@ -159,7 +160,7 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
         GraphWithPayload<ObjectMask, Integer> graphNeighbors =
                 NeighborGraph.create(
                         objects,
-                        energyStack.withoutParams().extent(),
+                        energyStack.withoutParameters().extent(),
                         avoidOverlappingObjects,
                         do3D);
 

@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.mpp.mark.conic.Ellipse;
@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.mark.conic.Ellipse;
 public class MaxRatioRadii extends FeatureMark {
 
     @Override
-    public double calculate(SessionInput<FeatureInputMark> input)
+    public double calculate(FeatureCalculationInput<FeatureInputMark> input)
             throws FeatureCalculationException {
 
         if (!(input.get().getMark() instanceof Ellipse)) {

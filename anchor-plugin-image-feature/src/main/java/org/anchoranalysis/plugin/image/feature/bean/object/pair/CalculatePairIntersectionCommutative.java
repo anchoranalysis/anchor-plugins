@@ -30,11 +30,11 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -56,15 +56,13 @@ import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalI
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false)
 class CalculatePairIntersectionCommutative
-        extends FeatureCalculation<Optional<ObjectMask>, FeatureInputPairObjects> {
+        extends CalculationPart<Optional<ObjectMask>, FeatureInputPairObjects> {
 
-    private final ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects>
-            ccFirstToSecond;
-    private final ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects>
-            ccSecondToFirst;
+    private final ResolvedPart<Optional<ObjectMask>, FeatureInputPairObjects> ccFirstToSecond;
+    private final ResolvedPart<Optional<ObjectMask>, FeatureInputPairObjects> ccSecondToFirst;
 
-    public static FeatureCalculation<Optional<ObjectMask>, FeatureInputPairObjects> of(
-            SessionInput<FeatureInputPairObjects> cache,
+    public static CalculationPart<Optional<ObjectMask>, FeatureInputPairObjects> of(
+            FeatureCalculationInput<FeatureInputPairObjects> cache,
             ChildCacheName childDilation1,
             ChildCacheName childDilation2,
             MorphologicalIterations iterations) {
@@ -72,9 +70,9 @@ class CalculatePairIntersectionCommutative
         // We use two additional caches, for the calculations involving the single objects, as these
         // can be expensive, and we want
         //  them also cached
-        ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> ccFirstToSecond =
+        ResolvedPart<Optional<ObjectMask>, FeatureInputPairObjects> ccFirstToSecond =
                 CalculatePairIntersection.of(cache, childDilation1, childDilation2, iterations, 0);
-        ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> ccSecondToFirst =
+        ResolvedPart<Optional<ObjectMask>, FeatureInputPairObjects> ccSecondToFirst =
                 CalculatePairIntersection.of(
                         cache,
                         childDilation1,

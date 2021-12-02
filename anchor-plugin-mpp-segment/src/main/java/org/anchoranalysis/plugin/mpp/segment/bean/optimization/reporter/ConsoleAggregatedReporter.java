@@ -95,8 +95,8 @@ public final class ConsoleAggregatedReporter extends ReporterAggregate<Voxelized
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params) {
-        super.reportEnd(params);
+    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> parameters) {
+        super.reportEnd(parameters);
         timer.stop();
         System.out.printf( // NOSONAR
                 "Optimization time took %e s%n", ((double) timer.getTime()) / 1000);

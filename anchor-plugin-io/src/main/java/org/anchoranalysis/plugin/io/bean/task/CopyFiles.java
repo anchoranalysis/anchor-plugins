@@ -119,11 +119,11 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<FileWithDirectoryInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         try {
             T namingSharedState =
-                    naming.beforeCopying(params.getOutputter().getOutputDirectory(), inputs);
+                    naming.beforeCopying(parameters.getOutputter().getOutputDirectory(), inputs);
 
             return new RecordingCounter<>(new Counter(), outputter, namingSharedState);
         } catch (OperationFailedException e) {

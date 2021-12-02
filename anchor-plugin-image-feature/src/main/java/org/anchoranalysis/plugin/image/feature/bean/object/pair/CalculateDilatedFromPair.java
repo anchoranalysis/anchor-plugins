@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair;
 import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
@@ -45,19 +45,19 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphol
 /** Calculates a dilated-object from a pair */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false)
-class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInputPairObjects> {
+class CalculateDilatedFromPair extends CalculationPart<ObjectMask, FeatureInputPairObjects> {
 
     // Not included in hash-coding as its assumed to be singular
     @EqualsAndHashCode.Exclude private CalculateForChild<FeatureInputPairObjects> resolverForChild;
 
-    private ResolvedCalculation<FeatureInputSingleObject, FeatureInputPairObjects> calculation;
+    private ResolvedPart<FeatureInputSingleObject, FeatureInputPairObjects> calculation;
     private Extract extract;
     private ChildCacheName childCacheName;
     private int iterations;
     private boolean do3D;
 
-    public static FeatureCalculation<ObjectMask, FeatureInputPairObjects> of(
-            CalculationResolver<FeatureInputPairObjects> resolver,
+    public static CalculationPart<ObjectMask, FeatureInputPairObjects> of(
+            CalculationPartResolver<FeatureInputPairObjects> resolver,
             CalculateForChild<FeatureInputPairObjects> calculateForChild,
             Extract extract,
             ChildCacheName childCacheName,

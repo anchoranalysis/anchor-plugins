@@ -42,19 +42,20 @@ import org.opencv.core.Mat;
 
 /**
  * Convert from the OpenCV {@link Mat} to a {@link Stack}.
- *  
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertFromMat {
 
     /**
      * Convert from an OpenCV {@link Mat} to a {@link Stack}.
-     * 
-     * @param mat either of type {@link CvType#CV_8UC3} for an BGR image, or otherwise a single-channeled image. 
+     *
+     * @param mat either of type {@link CvType#CV_8UC3} for an BGR image, or otherwise a
+     *     single-channeled image.
      * @return a newly created {@link Stack}, in RGB order (not BGR) or otherwise single-channeled.
-     * @throws OperationFailedException if the data-type is unsupported, or if {@link Mat} has zero width or height, which indicates an error.
+     * @throws OperationFailedException if the data-type is unsupported, or if {@link Mat} has zero
+     *     width or height, which indicates an error.
      */
     public static Stack toStack(Mat mat) throws OperationFailedException {
         if (mat.type() == CvType.CV_8UC3) {

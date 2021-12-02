@@ -74,11 +74,7 @@ class CombineWithTarget {
         return numPixelsLost;
     }
 
-    public static int cnt(List<ContiguousVoxelPath> paths) {
-        int sum = 0;
-        for (ContiguousVoxelPath cpp : paths) {
-            sum += cpp.size();
-        }
-        return sum;
+    public static int count(List<ContiguousVoxelPath> paths) {
+        return paths.stream().mapToInt(ContiguousVoxelPath::size).sum();
     }
 }

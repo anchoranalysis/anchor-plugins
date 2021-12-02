@@ -31,10 +31,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.mpp.feature.bean.energy.element.CalculateDeriveSingleMemoFromPair;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
@@ -58,28 +58,29 @@ public class FeatureAsIndividualProportionate extends FeaturePairMemoOne {
     @AllArgsConstructor
     private class CalculateHelper {
 
-        private FeatureCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> ccExtract;
+        private CalculationPart<FeatureInputSingleMemo, FeatureInputPairMemo> ccExtract;
         private ChildCacheName childCacheName;
 
-        public double valueFor(SessionInput<FeatureInputPairMemo> params)
+        public double valueFor(FeatureCalculationInput<FeatureInputPairMemo> input)
                 throws FeatureCalculationException {
-            return calculateFeatureFor(getItem(), params);
+            return calculateFeatureFor(getItem(), input);
         }
 
-        public double weightFor(SessionInput<FeatureInputPairMemo> params)
+        public double weightFor(FeatureCalculationInput<FeatureInputPairMemo> input)
                 throws FeatureCalculationException {
-            return calculateFeatureFor(itemProportionate, params);
+            return calculateFeatureFor(itemProportionate, input);
         }
 
         private double calculateFeatureFor(
-                Feature<FeatureInputSingleMemo> feature, SessionInput<FeatureInputPairMemo> params)
+                Feature<FeatureInputSingleMemo> feature,
+                FeatureCalculationInput<FeatureInputPairMemo> input)
                 throws FeatureCalculationException {
-            return params.forChild().calculate(feature, ccExtract, childCacheName);
+            return input.forChild().calculate(feature, ccExtract, childCacheName);
         }
     }
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
 
         CalculateHelper first =

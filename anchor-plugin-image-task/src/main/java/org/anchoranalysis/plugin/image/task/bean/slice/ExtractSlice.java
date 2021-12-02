@@ -47,9 +47,9 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -90,7 +90,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<NamedChannelsInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         try {
             return new SharedStateSelectedSlice(outputter);
@@ -105,28 +105,28 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
     }
 
     @Override
-    public void doJobOnInput(InputBound<NamedChannelsInput, SharedStateSelectedSlice> params)
+    public void doJobOnInput(InputBound<NamedChannelsInput, SharedStateSelectedSlice> input)
             throws JobExecutionException {
 
         try {
             // Create an energy stack
             EnergyStack energyStack =
                     FeatureCalculatorRepeated.extractStack(
-                            params.getInput(), stackEnergy, params.getContextJob());
+                            input.getInput(), stackEnergy, input.getContextJob());
 
             int optimaSliceIndex =
                     selectSlice(
                             energyStack,
-                            params.getLogger(),
-                            params.getInput().identifier(),
-                            params.getSharedState());
+                            input.getLogger(),
+                            input.getInput().identifier(),
+                            input.getSharedState());
 
             deriveSlicesAndOutput(
-                    params.getInput(),
+                    input.getInput(),
                     energyStack,
                     optimaSliceIndex,
-                    params.getOutputter().getChecked(),
-                    params.getContextJob().getLogger());
+                    input.getOutputter().getChecked(),
+                    input.getContextJob().getLogger());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -159,7 +159,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
             EnergyStack energyStack,
             Logger logger,
             String imageName,
-            SharedStateSelectedSlice params)
+            SharedStateSelectedSlice sharedState)
             throws OperationFailedException {
 
         Feature<FeatureInputStack> scoreFeature = extractScoreFeature();
@@ -170,7 +170,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
             logger.messageLogger().logFormatted("Selected optima is slice %d", optimalSliceIndex);
 
-            params.writeRow(imageName, optimalSliceIndex, scores[optimalSliceIndex]);
+            sharedState.writeRow(imageName, optimalSliceIndex, scores[optimalSliceIndex]);
 
             return optimalSliceIndex;
         } catch (FeatureCalculationException e) {
@@ -191,9 +191,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
         // Extract slices
         NamedStacks slices =
                 stacks.applyOperation(
-                        stack -> {
-                            return stack.extractSlice(optimaSliceIndex);
-                        },
+                        stack -> stack.extractSlice(optimaSliceIndex),
                         Optional.of(energyStack.dimensions()));
 
         try {
@@ -233,7 +231,8 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
                 // Calculate feature for this slice
                 double featVal =
-                        session.calculate(new FeatureInputStack(energyStackSlice.withoutParams()));
+                        session.calculate(
+                                new FeatureInputStack(energyStackSlice.withoutParameters()));
 
                 logger.messageLogger().logFormatted("Slice %3d has score %f", z, featVal);
 

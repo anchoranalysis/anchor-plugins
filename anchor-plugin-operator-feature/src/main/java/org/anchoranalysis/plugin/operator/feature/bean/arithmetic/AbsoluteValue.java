@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public class AbsoluteValue<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
@@ -37,7 +37,7 @@ public class AbsoluteValue<T extends FeatureInput> extends FeatureUnaryGeneric<T
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
         return Math.abs(input.calculate(getItem()));
     }
 

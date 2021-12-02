@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.object;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, FeatureInputStack> {
+class CalculateConnectedComponents extends CalculationPart<ObjectCollection, FeatureInputStack> {
 
     private final int energyChannelIndex;
 

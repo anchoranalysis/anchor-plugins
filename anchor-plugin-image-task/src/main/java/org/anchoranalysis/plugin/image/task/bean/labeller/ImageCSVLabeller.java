@@ -68,8 +68,8 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitializati
     }
 
     @Override
-    public Set<String> allLabels(ImageCSVLabellerInitialization params) {
-        return params.getLabelMap().labels();
+    public Set<String> allLabels(ImageCSVLabellerInitialization initialization) {
+        return initialization.getLabelMap().labels();
     }
 
     @Override

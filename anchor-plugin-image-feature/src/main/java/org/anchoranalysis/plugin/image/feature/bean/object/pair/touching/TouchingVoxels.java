@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
@@ -53,7 +53,7 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairObjects> input)
+    public double calculate(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
 
         FeatureInputPairObjects inputSessionless = input.get();
@@ -77,7 +77,8 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
      * The intersection of the bounding box of one object-mask with the (dilated by 1 bounding-box)
      * of the other
      */
-    private Optional<BoundingBox> boxIntersectDilated(SessionInput<FeatureInputPairObjects> input)
+    private Optional<BoundingBox> boxIntersectDilated(
+            FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
         return input.calculate(new CalculateIntersectionOfDilatedBoundingBox(do3D));
     }
@@ -86,7 +87,7 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
         return new CountKernelNeighborhoodMask(object2Relative);
     }
 
-    protected KernelApplicationParameters createParams() {
+    protected KernelApplicationParameters createParameters() {
         return new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, do3D);
     }
 }

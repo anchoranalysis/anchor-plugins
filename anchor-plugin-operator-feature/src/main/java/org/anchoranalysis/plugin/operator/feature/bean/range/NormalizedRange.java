@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.range;
 
-import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureBinary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -37,13 +37,13 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  * @param <T> feature input-type
  */
-public class NormalizedRange<T extends FeatureInput> extends FeatureDoubleElem<T> {
+public class NormalizedRange<T extends FeatureInput> extends FeatureBinary<T> {
 
     // START BEAN PROPERTIES
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
         double val1 = input.calculate(getItem1());
         double val2 = input.calculate(getItem2());
 

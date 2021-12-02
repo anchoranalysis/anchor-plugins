@@ -137,7 +137,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<MultiInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }

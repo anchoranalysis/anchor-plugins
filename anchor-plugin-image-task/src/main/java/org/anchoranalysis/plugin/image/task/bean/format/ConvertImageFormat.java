@@ -130,7 +130,7 @@ public class ConvertImageFormat
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<NamedChannelsInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }

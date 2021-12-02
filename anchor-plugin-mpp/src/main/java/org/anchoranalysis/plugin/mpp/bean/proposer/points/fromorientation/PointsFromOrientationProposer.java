@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation;
 
 import java.util.List;
-import org.anchoranalysis.bean.NullParamsBean;
+import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.plugin.mpp.bean.contour.TraverseContourException;
 import org.anchoranalysis.spatial.orientation.Orientation;
@@ -35,7 +35,7 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class PointsFromOrientationProposer
-        extends NullParamsBean<PointsFromOrientationProposer> {
+        extends NullParametersBean<PointsFromOrientationProposer> {
 
     // Optionally one can specify a maxDistance used to find a contour point, -1 disables
     public abstract List<List<Point3i>> calculatePoints(

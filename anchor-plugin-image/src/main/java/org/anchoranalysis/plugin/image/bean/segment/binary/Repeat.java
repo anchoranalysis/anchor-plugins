@@ -53,16 +53,16 @@ public class Repeat extends BinarySegmentationOne {
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segmentFromExistingSegmentation(
             VoxelsUntyped voxels,
-            BinarySegmentationParameters params,
+            BinarySegmentationParameters parameters,
             Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)
             throws SegmentationFailedException {
 
         BinaryVoxels<UnsignedByteBuffer> outOld = null;
 
-        int cnt = 0;
-        while (cnt++ < iterations) {
-            BinaryVoxels<UnsignedByteBuffer> outNew = sgmn.segment(voxels, params, objectMask);
+        int count = 0;
+        while (count++ < iterations) {
+            BinaryVoxels<UnsignedByteBuffer> outNew = sgmn.segment(voxels, parameters, objectMask);
 
             if (outNew == null) {
                 return outOld;

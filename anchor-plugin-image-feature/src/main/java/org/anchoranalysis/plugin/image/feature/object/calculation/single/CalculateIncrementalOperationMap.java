@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.single;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureCalculationMap;
+import org.anchoranalysis.feature.calculate.part.CalculationPartMap;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateIncrementalOperationMap
-        extends FeatureCalculationMap<
+        extends CalculationPartMap<
                 ObjectMask, FeatureInputSingleObject, Integer, FeatureCalculationException> {
     private boolean do3D;
 
@@ -51,9 +51,9 @@ public abstract class CalculateIncrementalOperationMap
     }
 
     @Override
-    protected ObjectMask execute(FeatureInputSingleObject params, Integer key)
+    protected ObjectMask execute(FeatureInputSingleObject input, Integer key)
             throws FeatureCalculationException {
-        Extent extent = params.dimensionsRequired().extent();
+        Extent extent = input.dimensionsRequired().extent();
 
         if (key == 0) {
             throw new FeatureCalculationException("Key must be > 0");
@@ -62,7 +62,7 @@ public abstract class CalculateIncrementalOperationMap
         int lowestExistingKey = findHighestExistingKey(key - 1);
 
         ObjectMask object =
-                lowestExistingKey != 0 ? getOrNull(lowestExistingKey) : params.getObject();
+                lowestExistingKey != 0 ? getOrNull(lowestExistingKey) : input.getObject();
 
         try {
             for (int i = (lowestExistingKey + 1); i <= key; i++) {

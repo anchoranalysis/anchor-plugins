@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.bean.namer.FileNamer;
 import org.anchoranalysis.io.input.file.FileInput;
@@ -62,8 +62,8 @@ public class NamedFiles extends NamedFilesBase<FileInput> {
     }
 
     @Override
-    public InputsWithDirectory<FileInput> inputs(InputManagerParams params)
+    public InputsWithDirectory<FileInput> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
-        return createInputsFromFiles(files, params, FileInput::new);
+        return createInputsFromFiles(files, parameters, FileInput::new);
     }
 }
