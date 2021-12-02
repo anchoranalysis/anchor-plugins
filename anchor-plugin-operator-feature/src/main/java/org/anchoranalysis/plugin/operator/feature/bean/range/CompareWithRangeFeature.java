@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -59,25 +59,30 @@ public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompar
     }
 
     @Override
-    protected double boundaryMin(SessionInput<T> input) throws FeatureCalculationException {
+    protected double boundaryMin(FeatureCalculationInput<T> input)
+            throws FeatureCalculationException {
         return input.calculate(min);
     }
 
     @Override
-    protected double boundaryMax(SessionInput<T> input) throws FeatureCalculationException {
+    protected double boundaryMax(FeatureCalculationInput<T> input)
+            throws FeatureCalculationException {
         return input.calculate(max);
     }
 
     @Override
-    protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
+    protected double withinRangeValue(double valWithinRange, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
         return withinValue;
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format(
                 "min=%s,max=%s,withinValue=%f,%s",
-                min.getFriendlyName(), max.getFriendlyName(), withinValue, super.describeParams());
+                min.getFriendlyName(),
+                max.getFriendlyName(),
+                withinValue,
+                super.describeParameters());
     }
 }

@@ -97,26 +97,26 @@ public abstract class GroupedStackBase<S, T>
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<ProvidesStackInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         return new GroupedSharedState<>(this::createGroupMap);
     }
 
     @Override
-    public void doJobOnInput(InputBound<ProvidesStackInput, GroupedSharedState<S, T>> params)
+    public void doJobOnInput(InputBound<ProvidesStackInput, GroupedSharedState<S, T>> input)
             throws JobExecutionException {
 
-        ProvidesStackInput input = params.getInput();
-        InputOutputContext context = params.getContextJob();
+        ProvidesStackInput inputStack = input.getInput();
+        InputOutputContext context = input.getContextJob();
 
         // Extract a group name
         Optional<String> groupName =
-                extractGroupName(input.pathForBinding(), context.isDebugEnabled());
+                extractGroupName(inputStack.pathForBinding(), context.isDebugEnabled());
 
         processStacks(
-                GroupedStackBase.extractInputStacks(input, context.getLogger()),
+                GroupedStackBase.extractInputStacks(inputStack, context.getLogger()),
                 groupName,
-                params.getSharedState(),
+                input.getSharedState(),
                 context);
     }
 

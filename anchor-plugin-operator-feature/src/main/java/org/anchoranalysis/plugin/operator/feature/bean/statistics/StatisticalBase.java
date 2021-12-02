@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.statistics.FeatureResultSupplier;
 
@@ -51,7 +51,7 @@ public abstract class StatisticalBase<T extends FeatureInput> extends FeatureUna
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
 
         return deriveScore(
                 input.calculate(getItem()),
@@ -60,7 +60,7 @@ public abstract class StatisticalBase<T extends FeatureInput> extends FeatureUna
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format(
                 "%s,%s,%s",
                 getItem().descriptionLong(),

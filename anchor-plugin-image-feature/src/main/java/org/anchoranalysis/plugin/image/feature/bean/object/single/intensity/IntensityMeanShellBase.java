@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
@@ -84,17 +84,17 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format(
                 "%s,%s,inverse=%s",
-                super.describeParams(),
+                super.describeParameters(),
                 iterations.describePropertiesFriendly(),
                 inverse ? "true" : "false");
     }
 
     @Override
     protected double calculateForChannel(
-            SessionInput<FeatureInputSingleObject> input, Channel channel)
+            FeatureCalculationInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
 
         ObjectMask objectShell = createShell(input);
@@ -103,7 +103,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
             // If an Energy mask is defined...
             Optional<ObjectMask> omIntersected =
                     intersectWithEnergyMask(
-                            objectShell, input.get().getEnergyStackRequired().withoutParams());
+                            objectShell, input.get().getEnergyStackRequired().withoutParameters());
 
             if (omIntersected.isPresent()) {
                 objectShell = omIntersected.get();
@@ -118,18 +118,18 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
     protected abstract double calculateForShell(ObjectMask shell, Channel channel)
             throws FeatureCalculationException;
 
-    private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
+    private ObjectMask createShell(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         return input.calculate(
                 CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
     }
 
     private Optional<ObjectMask> intersectWithEnergyMask(
-            ObjectMask object, EnergyStackWithoutParams energyStack) {
+            ObjectMask object, EnergyStackWithoutParameters energyStack) {
         return object.intersect(createEnergyMask(energyStack), energyStack.extent());
     }
 
-    private ObjectMask createEnergyMask(EnergyStackWithoutParams energyStack) {
+    private ObjectMask createEnergyMask(EnergyStackWithoutParameters energyStack) {
         return new ObjectMask(
                 new BoundingBox(energyStack.extent()),
                 energyStack.getChannel(energyIndexMask).voxels().asByte(),

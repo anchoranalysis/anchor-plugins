@@ -40,14 +40,14 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 class OverlapRatioUtilities {
 
     /** Calculates the overlap of two objects relative to the maximum-volume denominator */
-    public static double overlapRatioToMaxVolume(FeatureInputPairObjects params) {
-        return overlapRatioTo(params, () -> OverlapRatioUtilities.denominatorMaxVolume(params));
+    public static double overlapRatioToMaxVolume(FeatureInputPairObjects input) {
+        return overlapRatioTo(input, () -> OverlapRatioUtilities.denominatorMaxVolume(input));
     }
 
     /** Calculates the overlap of two objects relative to a denominator expressed as a function */
     public static double overlapRatioTo(
-            FeatureInputPairObjects params, IntSupplier denominatorFunc) {
-        int intersectingVoxels = params.getFirst().countIntersectingVoxels(params.getSecond());
+            FeatureInputPairObjects input, IntSupplier denominatorFunc) {
+        int intersectingVoxels = input.getFirst().countIntersectingVoxels(input.getSecond());
 
         if (intersectingVoxels == 0) {
             return 0;
@@ -57,7 +57,7 @@ class OverlapRatioUtilities {
     }
 
     /** A denominator that is the maximum-volume of the two objects */
-    public static int denominatorMaxVolume(FeatureInputPairObjects params) {
-        return Math.max(params.getFirst().numberVoxelsOn(), params.getSecond().numberVoxelsOn());
+    public static int denominatorMaxVolume(FeatureInputPairObjects input) {
+        return Math.max(input.getFirst().numberVoxelsOn(), input.getSecond().numberVoxelsOn());
     }
 }

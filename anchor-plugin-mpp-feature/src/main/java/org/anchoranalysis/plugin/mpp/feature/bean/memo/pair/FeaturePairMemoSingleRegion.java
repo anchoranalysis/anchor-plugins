@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeaturePairMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -46,7 +46,7 @@ public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
     @BeanField @Getter @Setter private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
     // END BEAN PROPERTIES
 
-    protected double overlappingNumVoxels(SessionInput<FeatureInputPairMemo> input)
+    protected double overlappingNumVoxels(FeatureCalculationInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
         return input.calculate(new CalculateOverlap(regionID));
     }

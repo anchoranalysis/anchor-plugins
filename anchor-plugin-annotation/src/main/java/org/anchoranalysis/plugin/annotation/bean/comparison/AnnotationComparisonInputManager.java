@@ -42,7 +42,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 
 public class AnnotationComparisonInputManager<T extends InputFromManager>
@@ -61,12 +61,13 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
     // END BEAN PROPERTIES
 
     @Override
-    public InputsWithDirectory<AnnotationComparisonInput<T>> inputs(InputManagerParams params)
-            throws InputReadFailedException {
+    public InputsWithDirectory<AnnotationComparisonInput<T>> inputs(
+            InputManagerParameters parameters) throws InputReadFailedException {
 
-        try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
+        try (ProgressMultiple progressMultiple =
+                new ProgressMultiple(parameters.getProgress(), 2)) {
 
-            InputsWithDirectory<T> inputs = input.inputs(params);
+            InputsWithDirectory<T> inputs = input.inputs(parameters);
 
             Iterator<T> iterator = inputs.iterator();
 

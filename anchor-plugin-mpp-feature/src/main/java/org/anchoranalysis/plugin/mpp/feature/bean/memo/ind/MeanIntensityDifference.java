@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureSingleMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -47,10 +47,10 @@ public class MeanIntensityDifference extends FeatureSingleMemo {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleMemo> params)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
 
-        VoxelizedMark mark = params.get().getPxlPartMemo().voxelized();
+        VoxelizedMark mark = input.get().getPxlPartMemo().voxelized();
 
         double meanInside =
                 mark.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
@@ -61,7 +61,7 @@ public class MeanIntensityDifference extends FeatureSingleMemo {
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format("minDiff=%f", minDiff);
     }
 }

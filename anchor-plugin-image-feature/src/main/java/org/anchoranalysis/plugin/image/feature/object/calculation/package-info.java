@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Implementations of {@link org.anchoranalysis.feature.calculate.FeatureCalculation} that process
+ * Implementations of {@link org.anchoranalysis.feature.calculate.part.CalculationPart} that process
  * {@link org.anchoranalysis.image.voxel.object.ObjectMask}s as used by features elsewhere in this
  * package.
  */

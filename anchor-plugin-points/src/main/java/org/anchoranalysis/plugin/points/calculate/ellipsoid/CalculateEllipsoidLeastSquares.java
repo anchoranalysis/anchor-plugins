@@ -31,10 +31,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -42,19 +42,19 @@ import org.anchoranalysis.spatial.point.Point3i;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false)
 public class CalculateEllipsoidLeastSquares
-        extends FeatureCalculation<Ellipsoid, FeatureInputSingleObject> {
+        extends CalculationPart<Ellipsoid, FeatureInputSingleObject> {
 
     private final boolean suppressZCovariance;
-    private final ResolvedCalculation<List<Point3i>, FeatureInputSingleObject> ccPoints;
+    private final ResolvedPart<List<Point3i>, FeatureInputSingleObject> ccPoints;
 
     public static Ellipsoid of(
-            SessionInput<FeatureInputSingleObject> input, boolean suppressZCovariance)
+            FeatureCalculationInput<FeatureInputSingleObject> input, boolean suppressZCovariance)
             throws FeatureCalculationException {
 
-        ResolvedCalculation<List<Point3i>, FeatureInputSingleObject> ccPoints =
+        ResolvedPart<List<Point3i>, FeatureInputSingleObject> ccPoints =
                 input.resolver().search(new CalculatePointsFromOutline());
 
-        ResolvedCalculation<Ellipsoid, FeatureInputSingleObject> ccEllipsoid =
+        ResolvedPart<Ellipsoid, FeatureInputSingleObject> ccEllipsoid =
                 input.resolver()
                         .search(new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPoints));
         return input.calculate(ccEllipsoid);

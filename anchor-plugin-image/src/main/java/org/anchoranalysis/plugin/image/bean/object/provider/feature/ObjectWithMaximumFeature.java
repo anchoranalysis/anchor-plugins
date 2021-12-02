@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.feature;
 import java.util.Optional;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;

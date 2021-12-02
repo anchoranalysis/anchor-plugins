@@ -45,7 +45,7 @@ class EnergyStackHelper {
 
     // TODO make this more elegant in the design We make a special exception for writing our
     // energyStacks
-    public static void writeEnergyStackParams(
+    public static void writeEnergyStackDictionary(
             ImageInitialization initialization,
             Optional<String> energyDictionaryName,
             InputOutputContext context) {

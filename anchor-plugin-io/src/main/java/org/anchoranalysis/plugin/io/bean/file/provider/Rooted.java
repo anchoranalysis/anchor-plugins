@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithoutDirectory;
 import org.anchoranalysis.io.input.file.FilesProviderException;
@@ -66,28 +66,28 @@ public class Rooted extends FilesProviderWithoutDirectory {
     private static Log log = LogFactory.getLog(Rooted.class);
 
     @Override
-    public List<File> create(InputManagerParams params) throws FilesProviderException {
+    public List<File> create(InputManagerParameters parameters) throws FilesProviderException {
 
         try {
             log.debug(
                     String.format(
                             "matchingFiles() old directory '%s'%n",
-                            files.getDirectoryAsPath(params.getInputContext())));
+                            files.getDirectoryAsPath(parameters.getInputContext())));
 
-            Path directoryOriginal = files.getDirectoryAsPath(params.getInputContext());
+            Path directoryOriginal = files.getDirectoryAsPath(parameters.getInputContext());
 
             Path directoryNew =
                     RootedFilePathUtilities.deriveRootedPath(
                             directoryOriginal,
                             rootName,
-                            params.isDebugModeActivated(),
+                            parameters.isDebugModeActivated(),
                             disableDebugMode);
 
             boolean directoryNewExists = directoryNew.toFile().exists();
 
             // As a special behavior, if the debug folder doesn't exist
             // we try and again with the non-debug folder
-            if (params.isDebugModeActivated() && !directoryNewExists) {
+            if (parameters.isDebugModeActivated() && !directoryNewExists) {
                 directoryNew =
                         RootedFilePathUtilities.deriveRootedPath(
                                 directoryOriginal, rootName, false, disableDebugMode);
@@ -101,7 +101,7 @@ public class Rooted extends FilesProviderWithoutDirectory {
 
             log.debug(String.format("Setting new directory '%s'%n", directoryNew));
 
-            return files.matchingFilesForDirectory(directoryNew, params);
+            return files.matchingFilesForDirectory(directoryNew, parameters);
 
         } catch (BeanDuplicateException | PathDifferenceException e) {
             throw new FilesProviderException(e);

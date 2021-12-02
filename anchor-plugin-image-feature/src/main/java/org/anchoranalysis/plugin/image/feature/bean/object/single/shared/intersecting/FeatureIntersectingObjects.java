@@ -32,9 +32,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -64,7 +64,7 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
     }
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         if (getSearchObjects().isEmpty()) {
@@ -77,8 +77,8 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
     }
 
     protected abstract double valueFor(
-            SessionInput<FeatureInputSingleObject> params,
-            ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting)
+            FeatureCalculationInput<FeatureInputSingleObject> input,
+            ResolvedPart<ObjectCollection, FeatureInputSingleObject> intersecting)
             throws FeatureCalculationException;
 
     protected ObjectCollection getSearchObjects() {

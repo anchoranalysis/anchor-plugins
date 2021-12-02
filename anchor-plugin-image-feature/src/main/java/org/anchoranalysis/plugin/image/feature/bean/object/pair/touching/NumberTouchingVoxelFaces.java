@@ -63,7 +63,7 @@ public class NumberTouchingVoxelFaces extends TouchingVoxels {
                     createCountKernelMask(object2Relative),
                     object1.binaryVoxels(),
                     RelativeUtilities.relativizeBox(boxIntersect, object1),
-                    createParams());
+                    createParameters());
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

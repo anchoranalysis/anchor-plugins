@@ -56,8 +56,8 @@ public class Count extends FeatureHistogramStatistic {
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format(
-                "%f,%s,threshold=%s", threshold, super.describeParams(), threshold.toString());
+                "%f,%s,threshold=%s", threshold, super.describeParameters(), threshold.toString());
     }
 }

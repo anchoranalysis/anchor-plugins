@@ -28,8 +28,8 @@ package org.anchoranalysis.test.feature.plugins.mockfeature;
 
 import java.util.function.ToDoubleFunction;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * times executed is called
  */
 @EqualsAndHashCode(callSuper = false)
-class MockCalculation extends FeatureCalculation<Double, FeatureInput> {
+class MockCalculation extends CalculationPart<Double, FeatureInput> {
 
     // Incremented every time executed is called
     static int countExecuteCalled = 0;

@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -68,7 +68,7 @@ class TaskFixtureObjects
     @SuppressWarnings("unchecked")
     @Override
     protected FromObjects<FeatureInputSingleObject> createSource(
-            EnergyStackWithoutParams energyStack, FeaturesLoader featureLoader)
+            EnergyStackWithoutParameters energyStack, FeaturesLoader featureLoader)
             throws CreateException {
         FromObjects<FeatureInputSingleObject> source = new FromObjects<>();
         try {

@@ -62,11 +62,11 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
             Channel channel, Optional<ObjectMask> objectMask, Optional<ObjectCollection> seeds)
             throws SegmentationFailedException {
 
-        BinarySegmentationParameters params =
+        BinarySegmentationParameters parameters =
                 new BinarySegmentationParameters(channel.resolution());
 
         BinaryVoxels<UnsignedByteBuffer> binaryValues =
-                segment.segment(channel.voxels(), params, objectMask);
+                segment.segment(channel.voxels(), parameters, objectMask);
         return createFromVoxels(
                 binaryValues,
                 channel.resolution(),

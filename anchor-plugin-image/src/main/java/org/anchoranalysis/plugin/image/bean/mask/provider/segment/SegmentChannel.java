@@ -84,16 +84,16 @@ public class SegmentChannel extends FromChannelBase {
         try {
             Optional<ObjectMask> object = objectFromMask(channel.dimensions());
 
-            BinarySegmentationParameters params = createParams(channel.dimensions());
+            BinarySegmentationParameters parameters = createParameters(channel.dimensions());
 
-            return segment.segment(channel.voxels(), params, object);
+            return segment.segment(channel.voxels(), parameters, object);
 
         } catch (SegmentationFailedException | ProvisionFailedException e) {
             throw new CreateException(e);
         }
     }
 
-    private BinarySegmentationParameters createParams(Dimensions dimensions)
+    private BinarySegmentationParameters createParameters(Dimensions dimensions)
             throws ProvisionFailedException {
         return new BinarySegmentationParameters(
                 OptionalFactory.create(histogram), dimensions.resolution());

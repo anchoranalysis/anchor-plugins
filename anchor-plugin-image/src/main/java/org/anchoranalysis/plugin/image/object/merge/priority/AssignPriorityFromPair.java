@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;

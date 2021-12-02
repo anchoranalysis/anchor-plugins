@@ -38,18 +38,6 @@ public class NumberIntersectingObjectsAboveThreshold extends FeatureIntersecting
 
     @Override
     protected double aggregateResults(List<Double> results) {
-
-        int cnt = 0;
-
-        // We loop through each intersecting bounding box, and take the one with the highest
-        // feature-value
-        for (double val : results) {
-
-            if (val >= getThreshold()) {
-                cnt++;
-            }
-        }
-
-        return cnt;
+        return results.stream().filter(value -> value >= getThreshold()).count();
     }
 }

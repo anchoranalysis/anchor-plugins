@@ -27,21 +27,18 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 public class NumberIntersectingObjects extends FeatureIntersectingObjects {
 
-    // START BEAN PROPERTIES
-    // END BEAN PROPERTIES
-
     @Override
     protected double valueFor(
-            SessionInput<FeatureInputSingleObject> params,
-            ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting)
+            FeatureCalculationInput<FeatureInputSingleObject> input,
+            ResolvedPart<ObjectCollection, FeatureInputSingleObject> intersecting)
             throws FeatureCalculationException {
-        return params.calculate(intersecting).size();
+        return input.calculate(intersecting).size();
     }
 }

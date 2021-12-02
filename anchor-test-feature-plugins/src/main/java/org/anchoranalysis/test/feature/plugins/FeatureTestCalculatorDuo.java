@@ -39,29 +39,29 @@ public class FeatureTestCalculatorDuo {
     public static <T extends FeatureInput> void assertDoubleResult(
             String message,
             Feature<T> feature,
-            T paramsPositive,
-            T paramsNegative,
+            T inputPositive,
+            T inputNegative,
             double expectedResultPositive,
             double expectedResultNegative)
             throws FeatureCalculationException {
         FeatureTestCalculator.assertDoubleResult(
-                positiveMessage(message), feature, paramsPositive, expectedResultPositive);
+                positiveMessage(message), feature, inputPositive, expectedResultPositive);
         FeatureTestCalculator.assertDoubleResult(
-                negativeMessage(message), feature, paramsNegative, expectedResultNegative);
+                negativeMessage(message), feature, inputNegative, expectedResultNegative);
     }
 
     public static <T extends FeatureInput> void assertIntResult(
             String message,
             Feature<T> feature,
-            T paramsPositive,
-            T paramsNegative,
+            T inputPositive,
+            T inputNegative,
             int expectedResultPositive,
             int expectedResultNegative)
             throws FeatureCalculationException {
         FeatureTestCalculator.assertIntResult(
-                positiveMessage(message), feature, paramsPositive, expectedResultPositive);
+                positiveMessage(message), feature, inputPositive, expectedResultPositive);
         FeatureTestCalculator.assertIntResult(
-                negativeMessage(message), feature, paramsNegative, expectedResultNegative);
+                negativeMessage(message), feature, inputNegative, expectedResultNegative);
     }
 
     private static String positiveMessage(String message) {

@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
@@ -46,15 +46,17 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureUn
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
         return calculateForValue(input.calculate(featureToCalcInputVal()), input);
     }
 
     /** Boundary to define the minimum accepted value in the range */
-    protected abstract double boundaryMin(SessionInput<T> input) throws FeatureCalculationException;
+    protected abstract double boundaryMin(FeatureCalculationInput<T> input)
+            throws FeatureCalculationException;
 
     /** Boundary to define the maximum accepted value in the range */
-    protected abstract double boundaryMax(SessionInput<T> input) throws FeatureCalculationException;
+    protected abstract double boundaryMax(FeatureCalculationInput<T> input)
+            throws FeatureCalculationException;
 
     /**
      * Which feature to calculate the input-value? The result is then passed to {@link
@@ -63,7 +65,8 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureUn
     protected abstract Feature<T> featureToCalcInputVal();
 
     /** What value to return if the value is inside the range */
-    protected abstract double withinRangeValue(double valWithinRange, SessionInput<T> input)
+    protected abstract double withinRangeValue(
+            double valWithinRange, FeatureCalculationInput<T> input)
             throws FeatureCalculationException;
 
     /**
@@ -75,7 +78,7 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureUn
      *     withinRangeValue function
      * @throws FeatureCalculationException
      */
-    private double calculateForValue(double val, SessionInput<T> input)
+    private double calculateForValue(double val, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
 
         if (val < boundaryMin(input)) {
@@ -90,7 +93,7 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureUn
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format("belowMinValue=%f,aboveMaxValue=%f", belowMinValue, aboveMaxValue);
     }
 }

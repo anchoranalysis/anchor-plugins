@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateErosion;
@@ -45,9 +45,9 @@ public class Erode extends DerivedObject {
     // END BEAN PROPERTIES
 
     @Override
-    protected FeatureCalculation<ObjectMask, FeatureInputSingleObject>
+    protected CalculationPart<ObjectMask, FeatureInputSingleObject>
             createCachedCalculationForDerived(
-                    CalculationResolver<FeatureInputSingleObject> session) {
+                    CalculationPartResolver<FeatureInputSingleObject> session) {
         return CalculateErosion.of(session, iterations, do3D);
     }
 

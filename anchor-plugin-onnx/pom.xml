@@ -8,11 +8,6 @@
     <artifactId>anchor-plugin-onnx</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 	<description>Plugins that call the ONNX runtime.</description>
-    
-    <!-- Properties Section. Change ONNX Runtime version here, if required. -->
-    <properties>
-        <onnx-runtime.version>1.9.0</onnx-runtime.version>
-    </properties>	
 	
    <dependencies>
     <dependency>

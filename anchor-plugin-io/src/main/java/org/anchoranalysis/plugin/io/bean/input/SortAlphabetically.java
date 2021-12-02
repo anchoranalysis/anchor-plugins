@@ -32,7 +32,7 @@ import java.util.List;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
@@ -45,7 +45,7 @@ public class SortAlphabetically<T extends InputFromManager> extends InputManager
 
     @Override
     protected InputsWithDirectory<T> inputsFromDelegate(
-            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+            InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
         List<T> list = new ArrayList<>(fromDelegate.inputs());
         Collections.sort(list, (T o1, T o2) -> o1.identifier().compareTo(o2.identifier()));

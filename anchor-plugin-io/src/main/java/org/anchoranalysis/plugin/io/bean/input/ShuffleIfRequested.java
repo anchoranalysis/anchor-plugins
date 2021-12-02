@@ -25,15 +25,15 @@
  */
 package org.anchoranalysis.plugin.io.bean.input;
 
-import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
- * Shuffles inputs if it is requested in the {@link InputContextParams} otherwise does not.
+ * Shuffles inputs if it is requested in the {@link InputContextParameters} otherwise does not.
  *
  * @author Owen Feehan
  * @param <T> input-object type
@@ -42,11 +42,11 @@ public class ShuffleIfRequested<T extends InputFromManager> extends InputManager
 
     @Override
     protected InputsWithDirectory<T> inputsFromDelegate(
-            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+            InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
 
-        if (params.getInputContext().isShuffle()) {
-            ShuffleHelper.shuffleInputs(fromDelegate.inputs(), params);
+        if (parameters.getInputContext().isShuffle()) {
+            ShuffleHelper.shuffleInputs(fromDelegate.inputs(), parameters);
         }
         return fromDelegate;
     }

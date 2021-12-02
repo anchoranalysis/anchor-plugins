@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressMultiple;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithoutDirectory;
 import org.anchoranalysis.io.input.file.FilesProviderException;
@@ -45,16 +45,17 @@ public class Combine extends FilesProviderWithoutDirectory {
     // END BEAN PROPERTIES
 
     @Override
-    public List<File> create(InputManagerParams params) throws FilesProviderException {
+    public List<File> create(InputManagerParameters parameters) throws FilesProviderException {
 
-        try (ProgressMultiple progress = new ProgressMultiple(params.getProgress(), list.size())) {
+        try (ProgressMultiple progress =
+                new ProgressMultiple(parameters.getProgress(), list.size())) {
 
             List<File> combined = new ArrayList<>();
 
             for (FilesProvider provider : list) {
 
-                InputManagerParams inputManager =
-                        params.withProgressReporter(progress.trackCurrentChild());
+                InputManagerParameters inputManager =
+                        parameters.withProgressReporter(progress.trackCurrentChild());
                 combined.addAll(provider.create(inputManager));
                 progress.incrementChild();
             }

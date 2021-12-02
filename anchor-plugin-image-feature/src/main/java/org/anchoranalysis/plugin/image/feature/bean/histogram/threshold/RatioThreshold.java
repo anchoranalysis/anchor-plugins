@@ -54,7 +54,7 @@ public class RatioThreshold extends FeatureHistogramStatistic {
     }
 
     @Override
-    public String describeParams() {
-        return String.format("%s,threshold=%s", super.describeParams(), threshold.toString());
+    public String describeParameters() {
+        return String.format("%s,threshold=%s", super.describeParameters(), threshold.toString());
     }
 }

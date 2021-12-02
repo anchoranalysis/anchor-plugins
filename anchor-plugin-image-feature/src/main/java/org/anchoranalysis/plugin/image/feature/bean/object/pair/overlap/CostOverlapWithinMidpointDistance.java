@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
@@ -56,7 +56,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairObjects> input)
+    public double calculate(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
 
         FeatureInputPairObjects inputSessionless = input.get();

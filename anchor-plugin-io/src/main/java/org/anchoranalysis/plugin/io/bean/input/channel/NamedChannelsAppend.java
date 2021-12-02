@@ -45,7 +45,7 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.input.path.PathSupplier;
@@ -65,12 +65,12 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParams params)
+    public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
 
-        try (ProgressMultiple progress = new ProgressMultiple(params.getProgress(), 2)) {
+        try (ProgressMultiple progress = new ProgressMultiple(parameters.getProgress(), 2)) {
 
-            InputsWithDirectory<NamedChannelsInputPart> inputs = input.inputs(params);
+            InputsWithDirectory<NamedChannelsInputPart> inputs = input.inputs(parameters);
 
             Iterator<NamedChannelsInputPart> iterator = inputs.iterator();
 
@@ -83,7 +83,9 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
             List<NamedChannelsInputPart> outList =
                     createOutList(
-                            listTemp, progress.trackCurrentChild(), params.isDebugModeActivated());
+                            listTemp,
+                            progress.trackCurrentChild(),
+                            parameters.isDebugModeActivated());
 
             progress.incrementChild();
 

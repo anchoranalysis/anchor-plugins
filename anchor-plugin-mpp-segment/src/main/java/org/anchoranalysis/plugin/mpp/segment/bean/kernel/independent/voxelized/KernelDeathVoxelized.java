@@ -80,7 +80,7 @@ public class KernelDeathVoxelized extends KernelDeath<VoxelizedMarksWithEnergy> 
         VoxelizedMarksWithEnergy newEnergy = existing.shallowCopy();
 
         try {
-            newEnergy.remove(index, propContext.getEnergyStack().withoutParams());
+            newEnergy.remove(index, propContext.getEnergyStack().withoutParameters());
         } catch (NamedFeatureCalculateException e) {
             throw new KernelCalculateEnergyException(
                     String.format("Cannot remove index %d", index), e);

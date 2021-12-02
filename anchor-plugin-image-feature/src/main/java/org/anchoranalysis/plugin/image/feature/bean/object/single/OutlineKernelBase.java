@@ -30,7 +30,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -49,7 +49,7 @@ public abstract class OutlineKernelBase extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculate(SessionInput<FeatureInputSingleObject> input)
+    protected double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         FeatureInputSingleObject inputSessionless = input.get();

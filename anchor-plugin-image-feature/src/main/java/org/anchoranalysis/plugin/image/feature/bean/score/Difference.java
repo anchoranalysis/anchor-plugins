@@ -51,7 +51,7 @@ public class Difference extends VoxelScore {
 
     @Override
     public double calculate(int[] voxelIntensities) throws FeatureCalculationException {
-        return DifferenceHelper.differenceFromParams(
+        return DifferenceHelper.differenceFromChannels(
                 voxelIntensities, channelFirst, channelSecond, width, minDifference);
     }
 }

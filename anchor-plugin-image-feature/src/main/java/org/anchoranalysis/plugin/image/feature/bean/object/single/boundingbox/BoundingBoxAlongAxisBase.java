@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.spatial.axis.AxisConversionException;
@@ -45,7 +45,7 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
     // END BEAN PARAMETERS
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         FeatureInputSingleObject inputSessionless = input.get();
@@ -59,7 +59,7 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
     protected abstract ReadableTuple3i extractTupleForBoundingBox(BoundingBox box);
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format("%s", axis);
     }
 

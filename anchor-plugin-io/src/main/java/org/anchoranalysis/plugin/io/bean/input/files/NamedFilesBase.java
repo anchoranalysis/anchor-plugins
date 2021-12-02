@@ -38,12 +38,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.bean.namer.FileNamer;
 import org.anchoranalysis.io.input.file.FileNamerContext;
@@ -70,26 +70,28 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
      * can create the inputs.
      *
      * @param files the files-provider
-     * @param params parameters for the input-manager
+     * @param parameters parameters for the input-manager
      * @param mapToInput a function that maps a created {@link NamedFile} to the eventual
      *     input-type.
      * @return a newly created list of inputs
      * @throws InputReadFailedException
      */
     protected InputsWithDirectory<T> createInputsFromFiles(
-            FilesProvider files, InputManagerParams params, Function<NamedFile, T> mapToInput)
+            FilesProvider files,
+            InputManagerParameters parameters,
+            Function<NamedFile, T> mapToInput)
             throws InputReadFailedException {
         try {
-            List<File> filesCreated = files.create(params);
+            List<File> filesCreated = files.create(parameters);
 
-            Optional<Path> inputDirectory = inputDirectory(files, params.getInputContext());
+            Optional<Path> inputDirectory = inputDirectory(files, parameters.getInputContext());
 
             FileNamerContext context =
                     new FileNamerContext(
                             inputDirectory,
-                            params.getInputContext().isRelativeForIdentifier(),
-                            params.getInputContext().getIdentifierSubrange(),
-                            params.getLogger());
+                            parameters.getInputContext().isRelativeForIdentifier(),
+                            parameters.getInputContext().getIdentifierSubrange(),
+                            parameters.getLogger());
 
             return new InputsWithDirectory<>(
                     createInputs(filesCreated, mapToInput, context), inputDirectory);
@@ -104,8 +106,8 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
         return FunctionalList.mapToList(namer.deriveNameUnique(filesCreated, context), mapToInput);
     }
 
-    private static Optional<Path> inputDirectory(FilesProvider files, InputContextParams context)
-            throws FilesProviderException {
+    private static Optional<Path> inputDirectory(
+            FilesProvider files, InputContextParameters context) throws FilesProviderException {
         return OptionalUtilities.orElseGetFlat(
                 context.getInputDirectory(), () -> files.rootDirectory(context));
     }

@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureAllMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
@@ -45,7 +45,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputAllMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputAllMemo> input)
             throws FeatureCalculationException {
 
         EnergyMemoList memoMarks = input.get().getPxlPartMemo();
@@ -58,7 +58,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
     }
 
     private double calculateStatistic(
-            SessionInput<FeatureInputAllMemo> input, EnergyMemoList memoMarks)
+            FeatureCalculationInput<FeatureInputAllMemo> input, EnergyMemoList memoMarks)
             throws FeatureCalculationException {
 
         double[] vals = new double[memoMarks.size()];
@@ -74,7 +74,9 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
     /** Calculates the feature on each mark separately, populating vals, and returns the mean */
     private double calculateForEachItem(
-            SessionInput<FeatureInputAllMemo> input, EnergyMemoList memoMarks, double[] vals)
+            FeatureCalculationInput<FeatureInputAllMemo> input,
+            EnergyMemoList memoMarks,
+            double[] vals)
             throws FeatureCalculationException {
 
         double sum = 0.0;

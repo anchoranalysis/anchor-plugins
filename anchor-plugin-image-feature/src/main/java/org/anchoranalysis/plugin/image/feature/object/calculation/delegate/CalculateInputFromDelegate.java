@@ -29,36 +29,36 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.delegate;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A base class for {@link FeatureCalculation}s that derive from an existing "delegate" calculation.
+ * A base class for {@link CalculationPart}s that derive from an existing "delegate" calculation.
  *
  * <p>These types of calculations involve two steps:
  *
  * <ul>
- *   <li>Calculating from an existing {@link FeatureCalculation}.
+ *   <li>Calculating from an existing {@link CalculationPart}.
  *   <li>Applying a transform to generate parameters.
  * </ul>
  *
  * @author Owen Feehan
- * @param <S> final-type of {@link FeatureCalculation}.
+ * @param <S> final-type of {@link CalculationPart}.
  * @param <T> feature input-type as input to cached-calculations.
- * @param <U> delegate-type of {@link FeatureCalculation}.
+ * @param <U> delegate-type of {@link CalculationPart}.
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U>
-        extends FeatureCalculation<S, T> {
+        extends CalculationPart<S, T> {
 
-    private final ResolvedCalculation<U, T> delegate;
+    private final ResolvedPart<U, T> delegate;
 
     protected CalculateInputFromDelegate(
-            FeatureCalculation<U, T> delegate, CalculationResolver<T> cache) {
+            CalculationPart<U, T> delegate, CalculationPartResolver<T> cache) {
         this(cache.search(delegate));
     }
 
@@ -69,7 +69,7 @@ public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U>
 
     protected abstract S deriveFromDelegate(T input, U delegate);
 
-    protected ResolvedCalculation<U, T> getDelegate() {
+    protected ResolvedPart<U, T> getDelegate() {
         return delegate;
     }
 }

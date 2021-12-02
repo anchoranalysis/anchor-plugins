@@ -34,11 +34,9 @@ import ai.onnxruntime.OrtSession;
 import ai.onnxruntime.OrtSession.SessionOptions;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.FloatBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -77,11 +75,11 @@ public class SegmentObjectsFromONNXModel
     /**
      * Relative-path to the model file in ONNX form, relative to the <i>models/</i> directory in the
      * Anchor distribution.
-     * 
+     *
      * <p>If {@code readFromResources==true}, it is read instead from resources on the class-path.
      */
     @BeanField @Getter @Setter private String modelPath;
-    
+
     /**
      * When true, rather than reading {@code modelPath} from the file-system, it is read from Java
      * resources on the class-path.
@@ -106,7 +104,7 @@ public class SegmentObjectsFromONNXModel
      */
     @BeanField @Getter @Setter private boolean interleaveChannels = false;
     // END BEAN PROPERTIES
-    
+
     /** The model read from the file-system as bytes. */
     private byte[] modelAsBytes;
 
@@ -191,7 +189,7 @@ public class SegmentObjectsFromONNXModel
                 options.close();
                 return Optional.empty();
             }
-            
+
             OrtSession session = env.createSession(readModelIfNecessary(), options); // NOSONAR
 
             return Optional.of(new ConcurrentModel<>(new OnnxModel(session), useGPU));
@@ -213,10 +211,10 @@ public class SegmentObjectsFromONNXModel
             return new long[] {stack.getNumberChannels(), dimensions.y(), dimensions.x()};
         }
     }
-    
+
     /** Reads the ONNX model as a byte-array, either from the file-system or from resources. */
     private byte[] readModelIfNecessary() throws IOException, InitializeException {
-        if (modelAsBytes==null) {
+        if (modelAsBytes == null) {
             if (readFromResources) {
                 ClassLoader classloader = Thread.currentThread().getContextClassLoader();
                 InputStream inputStream = classloader.getResourceAsStream(modelPath);

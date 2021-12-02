@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.feature.overlap;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
@@ -37,15 +37,15 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateOverlapMIPBase
-        extends FeatureCalculation<Double, FeatureInputPairMemo> {
+        extends CalculationPart<Double, FeatureInputPairMemo> {
 
     private final int regionID;
 
     @Override
-    protected Double execute(FeatureInputPairMemo params) {
+    protected Double execute(FeatureInputPairMemo input) {
 
-        VoxelizedMarkMemo mark1 = params.getObject1();
-        VoxelizedMarkMemo mark2 = params.getObject2();
+        VoxelizedMarkMemo mark1 = input.getObject1();
+        VoxelizedMarkMemo mark2 = input.getObject2();
 
         VoxelizedMark voxelized1 = mark1.voxelized();
         VoxelizedMark voxelized2 = mark2.voxelized();

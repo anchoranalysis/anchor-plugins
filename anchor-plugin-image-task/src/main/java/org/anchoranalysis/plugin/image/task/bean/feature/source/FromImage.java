@@ -37,9 +37,9 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -132,7 +132,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
     private Optional<DisplayStack> extractThumbnail(EnergyStack energyStack, boolean thumbnails)
             throws CreateException {
         if (thumbnails) {
-            return Optional.of(thumbnail.thumbnailFor(energyStack.withoutParams().asStack()));
+            return Optional.of(thumbnail.thumbnailFor(energyStack.withoutParameters().asStack()));
         } else {
             return Optional.empty();
         }

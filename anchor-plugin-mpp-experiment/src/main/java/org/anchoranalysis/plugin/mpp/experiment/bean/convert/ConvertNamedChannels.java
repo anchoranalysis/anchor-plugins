@@ -103,14 +103,15 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<T> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
 
         SharedStateRememberConverted<U, S> sharedState = new SharedStateRememberConverted<>();
 
         List<U> convertedInputs = convertListAndPopulateMap(inputs, sharedState);
         sharedState.setSharedState(
-                task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, convertedInputs, params));
+                task.beforeAnyJobIsExecuted(
+                        outputter, concurrencyPlan, convertedInputs, parameters));
         return sharedState;
     }
 

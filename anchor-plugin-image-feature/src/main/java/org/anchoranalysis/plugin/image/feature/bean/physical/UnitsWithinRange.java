@@ -92,7 +92,7 @@ public class UnitsWithinRange<T extends FeatureInputWithResolution> extends With
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format("min=%s,max=%s,within=%8.3f outside=%8.3f", min, max, within, outside);
     }
 }

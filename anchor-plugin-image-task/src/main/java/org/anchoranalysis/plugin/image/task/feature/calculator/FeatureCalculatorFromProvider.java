@@ -40,15 +40,15 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMultiChangeInput;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMultiChangeInput;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingleChangeInput;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -151,14 +151,14 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
     }
 
     private FeatureCalculatorMulti<T> createMultiCalculator(
-            FeatureList<T> features, SharedFeatureMulti sharedFeatures) throws InitializeException {
+            FeatureList<T> features, SharedFeatures sharedFeatures) throws InitializeException {
         return new FeatureCalculatorMultiChangeInput<>(
                 FeatureSession.with(features, new FeatureInitialization(), sharedFeatures, logger),
                 input -> input.setEnergyStack(energyStack));
     }
 
     private FeatureCalculatorSingle<T> createSingleCalculator(
-            Feature<T> feature, SharedFeatureMulti sharedFeatures) throws InitializeException {
+            Feature<T> feature, SharedFeatures sharedFeatures) throws InitializeException {
         return new FeatureCalculatorSingleChangeInput<>(
                 FeatureSession.with(feature, new FeatureInitialization(), sharedFeatures, logger),
                 input -> input.setEnergyStack(energyStack));

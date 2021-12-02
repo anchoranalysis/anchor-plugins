@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPartMap;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateObjectMask;
@@ -38,22 +38,21 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.Calcula
 @EqualsAndHashCode(callSuper = true)
 public class CalculateErosion extends CalculateObjectMask {
 
-    public static FeatureCalculation<ObjectMask, FeatureInputSingleObject> of(
-            CalculationResolver<FeatureInputSingleObject> cache, int iterations, boolean do3D) {
-        ResolvedCalculationMap<ObjectMask, FeatureInputSingleObject, Integer> map =
+    public static CalculationPart<ObjectMask, FeatureInputSingleObject> of(
+            CalculationPartResolver<FeatureInputSingleObject> cache, int iterations, boolean do3D) {
+        ResolvedPartMap<ObjectMask, FeatureInputSingleObject, Integer> map =
                 cache.search(new CalculateErosionMap(do3D));
 
         return new CalculateErosion(iterations, map);
     }
 
-    public static ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ofResolved(
-            CalculationResolver<FeatureInputSingleObject> cache, int iterations, boolean do3D) {
+    public static ResolvedPart<ObjectMask, FeatureInputSingleObject> ofResolved(
+            CalculationPartResolver<FeatureInputSingleObject> cache, int iterations, boolean do3D) {
         return cache.search(of(cache, iterations, do3D));
     }
 
     private CalculateErosion(
-            int iterations,
-            ResolvedCalculationMap<ObjectMask, FeatureInputSingleObject, Integer> map) {
+            int iterations, ResolvedPartMap<ObjectMask, FeatureInputSingleObject, Integer> map) {
         super(iterations, map);
     }
 }

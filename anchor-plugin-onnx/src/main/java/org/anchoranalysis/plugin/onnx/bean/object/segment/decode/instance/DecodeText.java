@@ -20,6 +20,18 @@ import org.anchoranalysis.mpp.mark.points.RotatableBoundingBoxFactory;
 import org.anchoranalysis.spatial.point.Point2i;
 import org.anchoranalysis.spatial.scale.ScaleFactorInt;
 
+/**
+ * Extracts text from a RGB image by using the <i>EAST deep neural network model</i> and the ONNX
+ * Runtime.
+ *
+ * <p>Each object-mask represented rotated-bounding box and is associated with a confidence score.
+ *
+ * <p>Particular thanks to <a
+ * href="https://www.pyimagesearch.com/2018/08/20/opencv-text-detection-east-text-detector/">Adrian
+ * Rosebrock</a> whose tutorial was useful in applying this model
+ *
+ * @author Owen Feehan
+ */
 public class DecodeText extends DecodeInstanceSegmentation<OnnxTensor> {
 
     private static final String OUTPUT_SCORES = "feature_fusion/Conv_7/Sigmoid:0";
@@ -33,7 +45,7 @@ public class DecodeText extends DecodeInstanceSegmentation<OnnxTensor> {
     private static final int VECTOR_SIZE = 5;
 
     // START BEAN PROPERTIES
-    /** Proposed bounding boxes below this confidence interval are removed */
+    /** Proposed bounding boxes below this confidence interval are removed from consideration. */
     @BeanField @Getter @Setter private double minConfidence = 0.5;
     // END BEAN PROPERTIES
 
@@ -57,18 +69,25 @@ public class DecodeText extends DecodeInstanceSegmentation<OnnxTensor> {
         return Arrays.asList(OUTPUT_SCORES, OUTPUT_GEOMETRY);
     }
 
+    /**
+     * Find the indices of all proposals whose score is greater or equal to a confidence threshold.
+     */
     private List<Integer> indicesAboveThreshold(FloatBuffer scores) {
         scores.rewind();
 
         List<Integer> indices = new ArrayList<>();
         for (int i = 0; i < scores.capacity(); i++) {
-            if (scores.get() > minConfidence) {
+            if (scores.get() >= minConfidence) {
                 indices.add(i);
             }
         }
         return indices;
     }
 
+    /**
+     * Extract the bounding-boxes located at particular indices in the form of an {@link ObjectMask}
+     * with an associated label and confidence.
+     */
     private List<LabelledWithConfidence<ObjectMask>> extractObjects(
             OnnxTensor geometryTensor,
             FloatBuffer scores,
@@ -96,6 +115,7 @@ public class DecodeText extends DecodeInstanceSegmentation<OnnxTensor> {
         return out;
     }
 
+    /** Extract a bounding-box together with a confidence and label at a particular index. */
     private LabelledWithConfidence<ObjectMask> extractLabelledBoundingBox(
             FloatBuffer scores,
             FloatBuffer geometry,

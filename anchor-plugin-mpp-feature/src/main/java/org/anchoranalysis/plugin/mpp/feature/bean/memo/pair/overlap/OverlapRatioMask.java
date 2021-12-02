@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
@@ -45,7 +45,7 @@ public class OverlapRatioMask extends OverlapMaskBase {
     private RelationBean relationToThreshold = new EqualToBean();
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
 
         FeatureInputPairMemo inputSessionless = input.get();

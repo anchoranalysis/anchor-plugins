@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 
@@ -45,7 +45,8 @@ public class ConvertUnits<T extends FeatureInput> extends FeatureUnaryGeneric<T>
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    protected double calculate(FeatureCalculationInput<T> input)
+            throws FeatureCalculationException {
 
         double value = input.calculate(getItem());
 

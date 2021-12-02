@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
@@ -44,11 +44,11 @@ public abstract class SurfaceNumberVoxelsBase extends FeatureSingleObject {
     /// END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
-        return input.calculate(createParams(mip, suppress3D));
+        return input.calculate(createParameters(mip, suppress3D));
     }
 
-    protected abstract FeatureCalculation<Integer, FeatureInputSingleObject> createParams(
+    protected abstract CalculationPart<Integer, FeatureInputSingleObject> createParameters(
             boolean mip, boolean suppress3d);
 }

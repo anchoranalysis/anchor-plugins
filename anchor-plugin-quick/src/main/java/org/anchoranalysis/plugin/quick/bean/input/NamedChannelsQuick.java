@@ -43,7 +43,7 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.plugin.io.bean.input.channel.NamedChannelsAppend;
 import org.anchoranalysis.plugin.io.bean.path.derive.Replace;
@@ -122,10 +122,10 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
     }
 
     @Override
-    public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParams params)
+    public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
         createAppendedChannelsIfNecessary();
-        return append.inputs(params);
+        return append.inputs(parameters);
     }
 
     private void createAppendedChannelsIfNecessary() throws InputReadFailedException {

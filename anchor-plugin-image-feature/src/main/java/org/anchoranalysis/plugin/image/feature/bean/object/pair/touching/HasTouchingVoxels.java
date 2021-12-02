@@ -63,7 +63,7 @@ public class HasTouchingVoxels extends TouchingVoxels {
         CountKernel kernelMatch = createCountKernelMask(secondRelative);
         try {
             return ApplyKernel.applyUntilPositive(
-                    kernelMatch, first.binaryVoxels(), boxIntersectRel, createParams());
+                    kernelMatch, first.binaryVoxels(), boxIntersectRel, createParameters());
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

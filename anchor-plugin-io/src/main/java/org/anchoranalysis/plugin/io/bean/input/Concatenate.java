@@ -36,7 +36,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 
 /**
  * Concatenates the inputs from multiple {@link InputManager}s that all provide the same input-type.
@@ -52,16 +52,16 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public InputsWithDirectory<T> inputs(InputManagerParams params)
+    public InputsWithDirectory<T> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
 
         try (ProgressMultiple progressMultiple =
-                new ProgressMultiple(params.getProgress(), list.size())) {
+                new ProgressMultiple(parameters.getProgress(), list.size())) {
 
             ArrayList<T> out = new ArrayList<>();
 
             for (InputManager<T> inputManager : list) {
-                out.addAll(inputManager.inputs(params).inputs());
+                out.addAll(inputManager.inputs(parameters).inputs());
 
                 progressMultiple.incrementChild();
             }

@@ -33,9 +33,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -53,10 +53,10 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputStack> input)
+    public double calculate(FeatureCalculationInput<FeatureInputStack> input)
             throws FeatureCalculationException {
 
-        ResolvedCalculation<ObjectCollection, FeatureInputStack> ccObjects =
+        ResolvedPart<ObjectCollection, FeatureInputStack> ccObjects =
                 input.resolver().search(new CalculateConnectedComponents(energyChannelIndex));
 
         int size = input.calculate(ccObjects).size();

@@ -27,14 +27,14 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.all;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
 import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 
 @EqualsAndHashCode(callSuper = false)
 public class CalculateDeriveMarkCollectionInput
-        extends FeatureCalculation<FeatureInputMarkCollection, FeatureInputAllMemo> {
+        extends CalculationPart<FeatureInputMarkCollection, FeatureInputAllMemo> {
 
     @Override
     protected FeatureInputMarkCollection execute(FeatureInputAllMemo input)

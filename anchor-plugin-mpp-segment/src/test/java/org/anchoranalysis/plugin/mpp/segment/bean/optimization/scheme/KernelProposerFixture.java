@@ -89,9 +89,9 @@ class KernelProposerFixture {
     }
 
     private static KernelInitialMarksVoxelized createInitialKernel(
-            MarksInitialization params, Logger logger) {
+            MarksInitialization initialization, Logger logger) {
         return BeanTestChecker.checkAndInit(
-                new KernelInitialMarksVoxelized(new CreateNew()), params, logger);
+                new KernelInitialMarksVoxelized(new CreateNew()), initialization, logger);
     }
 
     private static KernelBirthVoxelized createBirthKernel(

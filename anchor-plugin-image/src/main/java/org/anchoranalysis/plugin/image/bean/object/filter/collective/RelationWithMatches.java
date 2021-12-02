@@ -36,8 +36,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorCachedSingle;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorCache;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.MatchedObject;
@@ -92,14 +92,14 @@ public class RelationWithMatches extends ObjectFilterRelation {
 
         evaluatorForSource = featureEvaluator.createFeatureSession();
 
+        FeatureCalculatorSingle<FeatureInputSingleObject> calculator =
+                featureEvaluatorMatch != null
+                        ? featureEvaluatorMatch.createFeatureSession()
+                        : evaluatorForSource;
+
         // Use a specific evaluator for matching if defined, otherwise reuse the existing evaluator
         // and cache it so we don't have to repeatedly calculate on the same object
-        evaluatorForMatch =
-                new FeatureCalculatorCachedSingle<>(
-                        featureEvaluatorMatch != null
-                                ? featureEvaluatorMatch.createFeatureSession()
-                                : evaluatorForSource,
-                        cacheSize);
+        evaluatorForMatch = FeatureCalculatorCache.cache(calculator, cacheSize);
     }
 
     @Override

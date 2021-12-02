@@ -128,7 +128,7 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
             throw new OperationFailedException(e);
         }
 
-        EnergyStackHelper.writeEnergyStackParams(
+        EnergyStackHelper.writeEnergyStackDictionary(
                 initialization, OptionalUtilities.create(dictionary), context);
     }
 

@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.core.object.MatchedObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;

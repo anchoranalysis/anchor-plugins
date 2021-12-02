@@ -49,8 +49,8 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
 /**
  * Permutes one or more properties of a Feature, so as to create a set of Features
@@ -118,13 +118,13 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
     }
 
     @Override
-    public void onInitialization(FeaturesInitialization so) throws InitializeException {
+    public void onInitialization(FeatureRelatedInitialization so) throws InitializeException {
         super.onInitialization(so);
         if (referencesFeatureListCreator != null && so != null) {
             for (String s : referencesFeatureListCreator.set()) {
 
                 try {
-                    getInitialization().getFeatureListSet().getException(s);
+                    getInitialization().getFeatureLists().getException(s);
                 } catch (NamedProviderGetException e) {
                     throw new InitializeException(e.summarize());
                 }

@@ -54,7 +54,7 @@ class DifferenceHelper {
         }
     }
 
-    public static double differenceFromParams(
+    public static double differenceFromChannels(
             int[] pixelVals,
             int energyChannelIndexFirst,
             int energyChannelIndexSecond,

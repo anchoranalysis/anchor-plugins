@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
@@ -37,8 +37,7 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.Calcu
 class CalculateObjForDerived
         extends CalculateInputFromDelegateOption<
                 FeatureInputSingleObject, FeatureInputSingleObject, ObjectMask> {
-    public CalculateObjForDerived(
-            ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccDerived) {
+    public CalculateObjForDerived(ResolvedPart<ObjectMask, FeatureInputSingleObject> ccDerived) {
         super(ccDerived);
     }
 

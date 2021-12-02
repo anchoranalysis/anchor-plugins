@@ -138,7 +138,7 @@ public class KernelBirthVoxelized extends KernelBirth<VoxelizedMarksWithEnergy> 
         VoxelizedMarksWithEnergy newEnergy = exst.deepCopy();
         try {
             assert (pmmMark != null);
-            newEnergy.add(pmmMark, propContext.getEnergyStack().withoutParams());
+            newEnergy.add(pmmMark, propContext.getEnergyStack().withoutParameters());
 
         } catch (NamedFeatureCalculateException e) {
             throw new KernelCalculateEnergyException("Cannot add pmmMarkNew", e);

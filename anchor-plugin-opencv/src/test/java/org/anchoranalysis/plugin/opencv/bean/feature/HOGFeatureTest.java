@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -64,18 +64,18 @@ class HOGFeatureTest {
         assertFailure(loader.carRGBAsEnergy(), 60000);
     }
 
-    private void assertFailure(EnergyStackWithoutParams stack, int index) {
+    private void assertFailure(EnergyStackWithoutParameters stack, int index) {
         assertThrows(
                 FeatureCalculationException.class,
                 () -> featureValueForIndex(loader.carRGBAsEnergy(), 60000));
     }
 
-    private void assertFeatureValueFirst(EnergyStackWithoutParams stack, double expectedValue)
+    private void assertFeatureValueFirst(EnergyStackWithoutParameters stack, double expectedValue)
             throws FeatureCalculationException {
         assertEquals(expectedValue, featureValueForIndex(stack, 0), DELTA);
     }
 
-    private double featureValueForIndex(EnergyStackWithoutParams stack, int index)
+    private double featureValueForIndex(EnergyStackWithoutParameters stack, int index)
             throws FeatureCalculationException {
         HOGFeature feature = new HOGFeature(new SizeXY(64, 64), index);
         return FeatureSession.calculateWith(

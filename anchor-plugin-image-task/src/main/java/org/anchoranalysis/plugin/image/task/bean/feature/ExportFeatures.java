@@ -101,7 +101,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
         extends Task<T, FeatureExporter<S>> {
 
     private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE =
-            NamedFeatureStoreFactory.bothNameAndParams();
+            NamedFeatureStoreFactory.bothNameAndParameters();
 
     public static final FeatureOutputNames OUTPUT_RESULTS = new FeatureOutputNames();
 
@@ -138,10 +138,10 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<T> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         try {
-            FeatureExporterContext context = style.deriveContext(params.getContext());
+            FeatureExporterContext context = style.deriveContext(parameters.getContext());
             return source.createExporter(
                     source.headers(isGroupGeneratorDefined()), features, OUTPUT_RESULTS, context);
         } catch (CreateException e) {

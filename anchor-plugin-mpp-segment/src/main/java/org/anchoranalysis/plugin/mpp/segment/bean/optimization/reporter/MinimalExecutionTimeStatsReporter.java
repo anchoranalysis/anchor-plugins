@@ -85,7 +85,7 @@ public class MinimalExecutionTimeStatsReporter
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params) {
+    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> parameters) {
         stats.setTotalExecutionTime(stopWatch.getTime());
         stopWatch.stop();
 

@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.feature.stack.calculation;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
@@ -44,7 +44,7 @@ import org.anchoranalysis.math.histogram.Histogram;
  */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CalculateHistogramMasked extends FeatureCalculation<Histogram, FeatureInputStack> {
+public class CalculateHistogramMasked extends CalculationPart<Histogram, FeatureInputStack> {
 
     /** the index in the energy-stack of the channel part of whose signal will form a histogram */
     private final int energyIndexSignal;
@@ -56,7 +56,8 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
     protected Histogram execute(FeatureInputStack input) throws FeatureCalculationException {
 
         try {
-            EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().withoutParams();
+            EnergyStackWithoutParameters energyStack =
+                    input.getEnergyStackRequired().withoutParameters();
 
             return HistogramFromObjectsFactory.createFrom(
                     extractChannel(energyStack), extractMask(energyStack));
@@ -66,11 +67,11 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
         }
     }
 
-    private Channel extractChannel(EnergyStackWithoutParams energyStack) {
+    private Channel extractChannel(EnergyStackWithoutParameters energyStack) {
         return energyStack.getChannel(energyIndexSignal);
     }
 
-    private Mask extractMask(EnergyStackWithoutParams energyStack) {
+    private Mask extractMask(EnergyStackWithoutParameters energyStack) {
         return new Mask(energyStack.getChannel(energyIndexMask));
     }
 }

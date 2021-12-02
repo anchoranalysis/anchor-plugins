@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 
 /**
  * Manager that converts (one channel) {@link NamedChannelsInput} to {@link StackSequenceInput}.
@@ -58,9 +58,9 @@ public class ConvertNamedChannelsToStack extends InputManager<StackSequenceInput
     // END BEAN PROPERTIES
 
     @Override
-    public InputsWithDirectory<StackSequenceInput> inputs(InputManagerParams params)
+    public InputsWithDirectory<StackSequenceInput> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
-        return input.inputs(params).map(this::convert);
+        return input.inputs(parameters).map(this::convert);
     }
 
     private StackSequenceInput convert(NamedChannelsInput input) {

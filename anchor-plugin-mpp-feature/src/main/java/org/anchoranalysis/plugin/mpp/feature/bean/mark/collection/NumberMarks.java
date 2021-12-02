@@ -33,7 +33,7 @@ import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureMarkCollection
 public class NumberMarks extends FeatureMarkCollection {
 
     @Override
-    public double calc(FeatureInputMarkCollection params) throws FeatureCalculationException {
-        return params.getMarks().size();
+    public double calc(FeatureInputMarkCollection input) throws FeatureCalculationException {
+        return input.getMarks().size();
     }
 }

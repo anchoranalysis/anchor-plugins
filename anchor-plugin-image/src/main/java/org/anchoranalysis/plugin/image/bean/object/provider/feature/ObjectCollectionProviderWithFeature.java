@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;

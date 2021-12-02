@@ -27,15 +27,15 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.all;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureAllMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 
 public class NumberMarks extends FeatureAllMemo {
 
     @Override
-    public double calculate(SessionInput<FeatureInputAllMemo> params)
+    public double calculate(FeatureCalculationInput<FeatureInputAllMemo> input)
             throws FeatureCalculationException {
-        return params.get().getPxlPartMemo().size();
+        return input.get().getPxlPartMemo().size();
     }
 }

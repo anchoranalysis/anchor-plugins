@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
@@ -52,7 +52,7 @@ public class Exclude<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
     protected InputsWithDirectory<T> inputsFromDelegate(
-            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+            InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
 
         ListIterator<T> itr = fromDelegate.listIterator();

@@ -35,8 +35,8 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.StackIdentifiers;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
@@ -53,7 +53,7 @@ class SegmentHelper {
 
     public static EnergySchemeWithSharedFeatures initEnergy(
             EnergySchemeCreator energySchemeCreator,
-            FeaturesInitialization featureInit,
+            FeatureRelatedInitialization featureInit,
             Logger logger)
             throws InitializeException {
 
@@ -72,8 +72,8 @@ class SegmentHelper {
     public static EnergyStack createEnergyStack(
             NamedProvider<Stack> stackCollection, Dictionary dictionary) throws CreateException {
         try {
-            EnergyStackWithoutParams energyStack =
-                    new EnergyStackWithoutParams(
+            EnergyStackWithoutParameters energyStack =
+                    new EnergyStackWithoutParameters(
                             stackCollection.getException(StackIdentifiers.ENERGY_STACK));
             return new EnergyStack(energyStack, dictionary);
         } catch (NamedProviderGetException e) {

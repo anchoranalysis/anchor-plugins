@@ -94,13 +94,13 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
 
     private BinaryVoxels<UnsignedByteBuffer> binarySgmn(Channel channel)
             throws SegmentationFailedException {
-        BinarySegmentationParameters params =
+        BinarySegmentationParameters parameters =
                 new BinarySegmentationParameters(channel.resolution());
 
         Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
         Voxels<UnsignedByteBuffer> stackBinary = voxels.duplicate();
-        return segmentStack.segment(new VoxelsUntyped(stackBinary), params, Optional.empty());
+        return segmentStack.segment(new VoxelsUntyped(stackBinary), parameters, Optional.empty());
     }
 
     private static ObjectCollection flattenSeedsInZ(ObjectCollection seeds) {

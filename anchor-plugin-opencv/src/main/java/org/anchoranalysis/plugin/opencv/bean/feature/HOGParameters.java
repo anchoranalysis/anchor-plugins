@@ -101,6 +101,12 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
         return blocksPerWindow * cellsPerBlock * numberBins * windowsPerImage;
     }
 
+    /**
+     * Creates an empty {@link HOGDescriptor} to describe an image of a particular size.
+     *
+     * @param imageSize the size of the image.
+     * @return the descriptor, not yet computed with meaningful values.
+     */
     public HOGDescriptor createDescriptor(Extent imageSize) {
         return new HOGDescriptor(
                 determineWindowSize(imageSize),
@@ -110,10 +116,14 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
                 numberBins);
     }
 
-    private Size determineWindowSize(Extent imageSize) {
-        return convertOr(Optional.ofNullable(windowSize), imageSize);
-    }
-
+    /**
+     * Throws an exception if an image of size {@code extent} cannot be described by these
+     * parameters.
+     *
+     * @param extent the size of the image to check.
+     * @throws FeatureCalculationException if the image is inappropriately sized for these
+     *     parameters.
+     */
     public void checkSize(Extent extent) throws FeatureCalculationException {
 
         SizeXY extentAsSize = new SizeXY(extent);
@@ -133,6 +143,10 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
                         "Image height is smaller than HOG window height. This is not permitted.");
             }
         }
+    }
+
+    private Size determineWindowSize(Extent imageSize) {
+        return convertOr(Optional.ofNullable(windowSize), imageSize);
     }
 
     private static int numberSlidingWindowsFor(

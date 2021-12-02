@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** {@link org.anchoranalysis.feature.calculate.FeatureCalculation} related to points. */
+/** {@link org.anchoranalysis.feature.calculate.part.CalculationPart} related to points. */
 package org.anchoranalysis.plugin.points.calculate;

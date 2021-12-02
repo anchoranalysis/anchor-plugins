@@ -33,9 +33,9 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -75,7 +75,7 @@ public class PairedWithMask extends FeatureSingleObject {
     }
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         return input.forChild()
                 .calculate(

@@ -47,12 +47,13 @@ public class Invert extends BinarySegmentationOne {
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segmentFromExistingSegmentation(
             VoxelsUntyped voxels,
-            BinarySegmentationParameters params,
+            BinarySegmentationParameters parameters,
             Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)
             throws SegmentationFailedException {
 
-        BinaryVoxels<UnsignedByteBuffer> voxelsSegmented = sgmn.segment(voxels, params, objectMask);
+        BinaryVoxels<UnsignedByteBuffer> voxelsSegmented =
+                sgmn.segment(voxels, parameters, objectMask);
         invertVoxels(voxelsSegmented);
         return voxelsSegmented;
     }

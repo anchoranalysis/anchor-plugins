@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 
 public class MinFeatureAsIndividual extends FeaturePairMemoOne {
@@ -39,13 +39,14 @@ public class MinFeatureAsIndividual extends FeaturePairMemoOne {
             new ChildCacheName(MinFeatureAsIndividual.class, "second");
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
 
         return Math.min(calculateForInput(input, true), calculateForInput(input, false));
     }
 
-    private double calculateForInput(SessionInput<FeatureInputPairMemo> input, boolean first)
+    private double calculateForInput(
+            FeatureCalculationInput<FeatureInputPairMemo> input, boolean first)
             throws FeatureCalculationException {
 
         return input.forChild()

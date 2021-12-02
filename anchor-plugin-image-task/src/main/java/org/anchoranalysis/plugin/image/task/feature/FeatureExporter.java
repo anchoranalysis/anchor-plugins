@@ -69,7 +69,7 @@ public class FeatureExporter<S> {
 
     /** Creates a {@link NamedFeatureStore}. */
     private static final NamedFeatureStoreFactory STORE_FACTORY =
-            NamedFeatureStoreFactory.factoryParamsOnly();
+            NamedFeatureStoreFactory.parametersOnly();
 
     /** Where the results of feature-calculation are stored/outputted. */
     private final FeatureCalculationResults results;
@@ -154,8 +154,8 @@ public class FeatureExporter<S> {
         try {
             return new FeatureExporter<>(
                     new FeatureOutputMetadata(
-                            metadataHeaders, featureStore.createFeatureNames(), outputNames),
-                    featureStore.deepCopy()::listFeatures,
+                            metadataHeaders, featureStore.featureNames(), outputNames),
+                    featureStore.duplicate()::features,
                     context);
         } catch (OutputWriteFailedException e) {
             throw new CreateException(e);

@@ -30,11 +30,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPartMap;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
@@ -42,26 +42,26 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphol
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false)
-class CalculateClosing extends FeatureCalculation<ObjectMask, FeatureInputSingleObject> {
+class CalculateClosing extends CalculationPart<ObjectMask, FeatureInputSingleObject> {
 
     private final int iterations;
-    private final ResolvedCalculationMap<ObjectMask, FeatureInputSingleObject, Integer> mapDilation;
+    private final ResolvedPartMap<ObjectMask, FeatureInputSingleObject, Integer> mapDilation;
     private final boolean do3D;
 
-    public static ResolvedCalculation<ObjectMask, FeatureInputSingleObject> of(
-            CalculationResolver<FeatureInputSingleObject> cache, int iterations, boolean do3D) {
-        ResolvedCalculationMap<ObjectMask, FeatureInputSingleObject, Integer> map =
+    public static ResolvedPart<ObjectMask, FeatureInputSingleObject> of(
+            CalculationPartResolver<FeatureInputSingleObject> cache, int iterations, boolean do3D) {
+        ResolvedPartMap<ObjectMask, FeatureInputSingleObject, Integer> map =
                 cache.search(new CalculateDilationMap(do3D));
 
         return cache.search(new CalculateClosing(iterations, map, do3D));
     }
 
     @Override
-    protected ObjectMask execute(FeatureInputSingleObject params)
+    protected ObjectMask execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
         try {
-            ObjectMask dilated = mapDilation.getOrCalculate(params, iterations);
+            ObjectMask dilated = mapDilation.getOrCalculate(input, iterations);
 
             return MorphologicalErosion.erode(dilated, iterations, do3D);
 

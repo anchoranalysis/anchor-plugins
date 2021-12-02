@@ -91,7 +91,7 @@ public class ConsoleAccepted extends FeedbackReceiverBean<VoxelizedMarksWithEner
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params) {
+    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> parameters) {
         // NOTHING TO DO
     }
 

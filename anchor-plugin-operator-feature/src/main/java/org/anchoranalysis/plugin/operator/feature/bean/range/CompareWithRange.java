@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -54,13 +54,13 @@ public class CompareWithRange<T extends FeatureInput> extends RangeCompareFromSc
     }
 
     @Override
-    protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
+    protected double withinRangeValue(double valWithinRange, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
         return withinValue;
     }
 
     @Override
-    public String describeParams() {
-        return String.format("%s,withinValue=%f", super.describeParams(), withinValue);
+    public String describeParameters() {
+        return String.format("%s,withinValue=%f", super.describeParameters(), withinValue);
     }
 }

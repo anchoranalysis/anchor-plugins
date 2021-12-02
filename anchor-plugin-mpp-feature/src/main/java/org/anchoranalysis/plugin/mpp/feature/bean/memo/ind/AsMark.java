@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.feature.bean.operator.FeatureUnary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
@@ -39,20 +39,20 @@ public class AsMark extends FeatureUnary<FeatureInputSingleMemo, FeatureInputMar
     private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsMark.class);
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
         return input.forChild().calculate(getItem(), new CalculateDeriveMarkFromMemo(), CACHE_NAME);
     }
 
-    // We change the default behaviour, as we don't want to give the same paramsFactory
-    //   as the item we pass to
+    // We change the default behaviour, as we don't want to give the same input-type as the item we
+    // pass to.
     @Override
     public Class<? extends FeatureInput> inputType() {
         return FeatureInputSingleMemo.class;
     }
 
     @Override
-    public String describeParams() {
-        return getItem().describeParams();
+    public String describeParameters() {
+        return getItem().describeParameters();
     }
 }

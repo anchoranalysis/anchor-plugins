@@ -37,8 +37,8 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 
@@ -66,7 +66,7 @@ class ExtractFromProvider {
     public static <T extends FeatureInput> Feature<T> extractFeature(
             FeatureListProvider<T> featureListProvider,
             String featureProviderName,
-            FeaturesInitialization initialization,
+            FeatureRelatedInitialization initialization,
             Logger logger)
             throws FeatureCalculationException {
 

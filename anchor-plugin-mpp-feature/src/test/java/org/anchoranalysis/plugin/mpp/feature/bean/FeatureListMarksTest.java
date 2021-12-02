@@ -36,11 +36,11 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
@@ -64,15 +64,14 @@ class FeatureListMarksTest {
     }
 
     @Test
-    void testNoParams()
-            throws InitializeException, NamedFeatureCalculateException, CreateException {
+    void testNoInput() throws InitializeException, NamedFeatureCalculateException, CreateException {
         assertThrows(
                 NamedFeatureCalculateException.class,
                 () -> testConstantsInList((FeatureInput) null, (FeatureInput) null));
     }
 
     @Test
-    void testArbitraryParams()
+    void testArbitraryInput()
             throws InitializeException, NamedFeatureCalculateException, CreateException {
 
         MarkCollectionFixture marksFixture = new MarkCollectionFixture(DIMENSIONS);
@@ -157,16 +156,16 @@ class FeatureListMarksTest {
         return FeatureSession.with(features, LoggingFixture.suppressedLogger());
     }
 
-    private void testConstantsInList(FeatureInput params1, FeatureInput params2)
+    private void testConstantsInList(FeatureInput input1, FeatureInput input2)
             throws CreateException, InitializeException, NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInput> session =
                 createAndStart(ConstantsInListFixture.create());
 
-        ResultsVector rv1 = session.calculate(params1);
+        ResultsVector rv1 = session.calculate(input1);
         ConstantsInListFixture.checkResultVector(rv1);
 
-        ResultsVector rv2 = session.calculate(params2);
+        ResultsVector rv2 = session.calculate(input2);
         ConstantsInListFixture.checkResultVector(rv2);
     }
 }

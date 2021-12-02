@@ -77,19 +77,19 @@ public class ExportReportFeaturesFromManifest
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<ManifestCouplingDefinition> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
 
     @Override
-    public void doJobOnInput(InputBound<ManifestCouplingDefinition, NoSharedState> params)
+    public void doJobOnInput(InputBound<ManifestCouplingDefinition, NoSharedState> input)
             throws JobExecutionException {
 
         try {
-            Optional<CSVWriter> writer = createWriter(params.getOutputter().getChecked());
+            Optional<CSVWriter> writer = createWriter(input.getOutputter().getChecked());
             if (writer.isPresent()) {
-                writeCSV(writer.get(), params.getInput(), params.getLogger());
+                writeCSV(writer.get(), input.getInput(), input.getLogger());
             }
 
         } catch (OutputWriteFailedException e) {

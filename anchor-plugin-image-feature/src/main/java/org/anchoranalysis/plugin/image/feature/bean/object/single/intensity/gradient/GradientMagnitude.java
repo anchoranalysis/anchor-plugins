@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gra
 
 import java.util.List;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.spatial.point.Point3d;
 
@@ -45,7 +45,7 @@ import org.anchoranalysis.spatial.point.Point3d;
 public class GradientMagnitude extends IntensityGradientBase {
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         // Calculate the mean

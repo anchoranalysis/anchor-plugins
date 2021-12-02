@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.bean.FeatureStack;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -60,16 +60,22 @@ public class HOGFeature extends FeatureStack {
     }
 
     // START BEAN PROPERTIES
-    /** The input is rescaled to this width/height before calculating HOG descriptors */
+    /** The input is rescaled to this width/height before calculating HOG descriptors. */
     @BeanField @OptionalBean @Getter @Setter private SizeXY resizeTo;
 
-    /** Parameters used for calculating HOG */
-    @BeanField @Getter @Setter private HOGParameters params = new HOGParameters();
+    /** Parameters used for calculating HOG. */
+    @BeanField @Getter @Setter private HOGParameters parameters = new HOGParameters();
 
-    /** Which index to return from the HOG descriptor */
+    /** Which index to return from the HOG descriptor. */
     @BeanField @NonNegative @Getter @Setter private int index = 0;
     // END BEAN PROPRERTIES
 
+    /**
+     * Create with a specific size to resize to, and index.
+     *
+     * @param resizeTo the size to resize to.
+     * @param index the index to return from the HOG descriptor.
+     */
     public HOGFeature(SizeXY resizeTo, int index) {
         this.resizeTo = resizeTo;
         this.index = index;
@@ -80,11 +86,11 @@ public class HOGFeature extends FeatureStack {
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
         if (resizeTo != null) {
-            if (resizeTo.getWidth() < params.getWindowSize().getWidth()) {
+            if (resizeTo.getWidth() < parameters.getWindowSize().getWidth()) {
                 throw new BeanMisconfiguredException(
                         "The resizeTo width is smaller than the window-width");
             }
-            if (resizeTo.getHeight() < params.getWindowSize().getHeight()) {
+            if (resizeTo.getHeight() < parameters.getWindowSize().getHeight()) {
                 throw new BeanMisconfiguredException(
                         "The resizeTo height is smaller than the window-height");
             }
@@ -92,13 +98,19 @@ public class HOGFeature extends FeatureStack {
     }
 
     @Override
-    protected double calculate(SessionInput<FeatureInputStack> input)
+    public String describeParameters() {
+        return Integer.toString(index);
+    }
+
+    @Override
+    protected double calculate(FeatureCalculationInput<FeatureInputStack> input)
             throws FeatureCalculationException {
 
         CVInit.blockUntilLoaded();
 
         float[] descriptor =
-                input.calculate(new CalculateHOGDescriptor(Optional.ofNullable(resizeTo), params));
+                input.calculate(
+                        new CalculateHOGDescriptor(Optional.ofNullable(resizeTo), parameters));
 
         if (index >= descriptor.length) {
             throw new FeatureCalculationException(
@@ -108,10 +120,5 @@ public class HOGFeature extends FeatureStack {
         }
 
         return descriptor[index];
-    }
-
-    @Override
-    public String describeParams() {
-        return Integer.toString(index);
     }
 }

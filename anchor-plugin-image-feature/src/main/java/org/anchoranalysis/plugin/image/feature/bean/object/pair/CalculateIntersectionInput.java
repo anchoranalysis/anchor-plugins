@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -39,7 +39,7 @@ class CalculateIntersectionInput
         extends CalculateInputFromDelegateOption<
                 FeatureInputSingleObject, FeatureInputPairObjects, Optional<ObjectMask>> {
     public CalculateIntersectionInput(
-            ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> ccIntersection) {
+            ResolvedPart<Optional<ObjectMask>, FeatureInputPairObjects> ccIntersection) {
         super(ccIntersection);
     }
 

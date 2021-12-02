@@ -116,7 +116,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<StackSequenceInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
@@ -178,12 +178,12 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     }
 
     private void populateStacksFromSharedObjects(
-            ImageInitialization params,
+            ImageInitialization initialization,
             DualNamedStacks stacksToAddTo,
             DualEnabled dualEnabled,
             InputOutputContext context)
             throws JobExecutionException {
-        Set<String> inputKeys = params.stacks().keys();
+        Set<String> inputKeys = initialization.stacks().keys();
         for (String key : inputKeys) {
 
             DualEnabled enabledForKey =
@@ -197,12 +197,12 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
 
             if (enabledForKey.isEitherEnabled()) {
                 try {
-                    Stack stackIn = params.stacks().getException(key);
+                    Stack stackIn = initialization.stacks().getException(key);
 
                     Stack stackOut =
                             scaleStack(
                                     stackIn,
-                                    params.getSuggestedResize(),
+                                    initialization.getSuggestedResize(),
                                     context.getLogger().messageLogger());
 
                     stacksToAddTo.addStack(key, stackOut, enabledForKey);

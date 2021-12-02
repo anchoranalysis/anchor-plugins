@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
@@ -57,7 +57,7 @@ public class IfCondition<T extends FeatureInput> extends FeatureUnaryGeneric<T> 
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
 
         double featureConditionResult = input.calculate(featureCondition);
         DoubleBiPredicate relation = threshold.relation();

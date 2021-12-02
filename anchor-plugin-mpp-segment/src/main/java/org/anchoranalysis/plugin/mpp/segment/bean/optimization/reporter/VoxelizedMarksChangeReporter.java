@@ -95,7 +95,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params)
+    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> parameters)
             throws ReporterException {
 
         if (outputSequence == null) {

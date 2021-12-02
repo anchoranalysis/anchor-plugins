@@ -31,7 +31,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.statistics.moment.ImageMoments;
@@ -47,14 +47,14 @@ import org.anchoranalysis.spatial.point.Point3i;
  */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-class CalculateSecondMoments extends FeatureCalculation<ImageMoments, FeatureInputSingleObject> {
+class CalculateSecondMoments extends CalculationPart<ImageMoments, FeatureInputSingleObject> {
 
     /** Whether to ignore the z-dimension */
     private final boolean suppressZ;
 
     @Override
-    protected ImageMoments execute(FeatureInputSingleObject params) {
-        return new ImageMoments(createPointMatrixFromObject(params.getObject()), suppressZ, false);
+    protected ImageMoments execute(FeatureInputSingleObject input) {
+        return new ImageMoments(createPointMatrixFromObject(input.getObject()), suppressZ, false);
     }
 
     /**

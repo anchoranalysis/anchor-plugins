@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.stack.object;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -41,7 +41,7 @@ class CalculateDeriveObjFromCollection
     private final int index;
 
     public CalculateDeriveObjFromCollection(
-            ResolvedCalculation<ObjectCollection, FeatureInputStack> ccDelegate, int index) {
+            ResolvedPart<ObjectCollection, FeatureInputStack> ccDelegate, int index) {
         super(ccDelegate);
         this.index = index;
     }

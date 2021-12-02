@@ -147,8 +147,8 @@ public class CSVReporterAggregated extends ReporterAggregate<VoxelizedMarksWithE
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params) {
-        super.reportEnd(params);
+    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> parameters) {
+        super.reportEnd(parameters);
         timer.stop();
         csvOutput.ifPresent(TextFileOutput::end);
     }

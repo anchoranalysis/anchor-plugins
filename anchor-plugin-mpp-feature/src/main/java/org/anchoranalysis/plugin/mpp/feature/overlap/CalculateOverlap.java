@@ -28,18 +28,18 @@ package org.anchoranalysis.plugin.mpp.feature.overlap;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.overlap.OverlapUtilities;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CalculateOverlap extends FeatureCalculation<Double, FeatureInputPairMemo> {
+public class CalculateOverlap extends CalculationPart<Double, FeatureInputPairMemo> {
 
     private final int regionID;
 
     @Override
-    protected Double execute(FeatureInputPairMemo params) {
-        return OverlapUtilities.overlapWith(params.getObject1(), params.getObject2(), regionID);
+    protected Double execute(FeatureInputPairMemo input) {
+        return OverlapUtilities.overlapWith(input.getObject1(), input.getObject2(), regionID);
     }
 }

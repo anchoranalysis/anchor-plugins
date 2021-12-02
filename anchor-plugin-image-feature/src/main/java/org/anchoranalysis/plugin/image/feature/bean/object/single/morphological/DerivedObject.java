@@ -30,11 +30,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -49,7 +49,7 @@ public abstract class DerivedObject extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         ChildCacheName cacheName = cacheName();
@@ -63,8 +63,9 @@ public abstract class DerivedObject extends FeatureSingleObject {
                 emptyValue);
     }
 
-    protected abstract FeatureCalculation<ObjectMask, FeatureInputSingleObject>
-            createCachedCalculationForDerived(CalculationResolver<FeatureInputSingleObject> session)
+    protected abstract CalculationPart<ObjectMask, FeatureInputSingleObject>
+            createCachedCalculationForDerived(
+                    CalculationPartResolver<FeatureInputSingleObject> session)
                     throws FeatureCalculationException;
 
     protected abstract ChildCacheName cacheName();

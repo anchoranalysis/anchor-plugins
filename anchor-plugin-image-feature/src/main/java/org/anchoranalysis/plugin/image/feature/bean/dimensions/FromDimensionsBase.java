@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.dimensions;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputDimensions;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 public abstract class FromDimensionsBase<T extends FeatureInputDimensions> extends Feature<T> {
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
         return calculateFromDimensions(input.get().dimensions());
     }
 

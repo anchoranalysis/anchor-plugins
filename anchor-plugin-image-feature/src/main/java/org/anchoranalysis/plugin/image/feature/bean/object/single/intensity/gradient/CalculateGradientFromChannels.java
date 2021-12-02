@@ -31,9 +31,9 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.InitializeException;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -58,7 +58,7 @@ import org.anchoranalysis.spatial.point.Point3d;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculateGradientFromChannels
-        extends FeatureCalculation<List<Point3d>, FeatureInputSingleObject> {
+        extends CalculationPart<List<Point3d>, FeatureInputSingleObject> {
 
     private int energyIndexX;
 
@@ -81,7 +81,8 @@ class CalculateGradientFromChannels
         // create a list of points
         List<Point3d> out = new ArrayList<>();
 
-        EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().withoutParams();
+        EnergyStackWithoutParameters energyStack =
+                input.getEnergyStackRequired().withoutParameters();
 
         putGradientValue(input.getObject(), out, 0, energyStack.getChannel(energyIndexX));
         putGradientValue(input.getObject(), out, 1, energyStack.getChannel(energyIndexY));

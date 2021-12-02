@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.DefineAddException;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -56,7 +56,7 @@ class DefineFixture {
      * @throws ProvisionFailedException
      */
     public static DefineOutputterWithEnergy create(
-            EnergyStackWithoutParams energyStack,
+            EnergyStackWithoutParameters energyStack,
             Optional<List<NamedBean<FeatureListProvider<FeatureInput>>>> sharedFeatures)
             throws ProvisionFailedException {
         DefineOutputterWithEnergy out = new DefineOutputterWithEnergy();
@@ -83,7 +83,7 @@ class DefineFixture {
         return define;
     }
 
-    private static StackProvider stackEnergy(EnergyStackWithoutParams energyStack)
+    private static StackProvider stackEnergy(EnergyStackWithoutParameters energyStack)
             throws ProvisionFailedException {
 
         // Create energy stack

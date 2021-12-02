@@ -28,19 +28,18 @@ package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 
 import java.util.List;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.core.points.PointsFromObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.spatial.point.Point3i;
 
 @EqualsAndHashCode(callSuper = false)
-class CalculatePointsFromOutline
-        extends FeatureCalculation<List<Point3i>, FeatureInputSingleObject> {
+class CalculatePointsFromOutline extends CalculationPart<List<Point3i>, FeatureInputSingleObject> {
 
     @Override
-    protected List<Point3i> execute(FeatureInputSingleObject params)
+    protected List<Point3i> execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
-        return PointsFromObject.listFromOutline3i(params.getObject());
+        return PointsFromObject.listFromOutline3i(input.getObject());
     }
 }

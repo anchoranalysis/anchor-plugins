@@ -30,11 +30,11 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -61,15 +61,15 @@ import org.anchoranalysis.spatial.box.Extent;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculatePairIntersection
-        extends FeatureCalculation<Optional<ObjectMask>, FeatureInputPairObjects> {
+        extends CalculationPart<Optional<ObjectMask>, FeatureInputPairObjects> {
 
     private final boolean do3D;
     private final int iterationsErosion;
-    private final ResolvedCalculation<ObjectMask, FeatureInputPairObjects> first;
-    private final ResolvedCalculation<ObjectMask, FeatureInputPairObjects> second;
+    private final ResolvedPart<ObjectMask, FeatureInputPairObjects> first;
+    private final ResolvedPart<ObjectMask, FeatureInputPairObjects> second;
 
-    public static ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> of(
-            SessionInput<FeatureInputPairObjects> cache,
+    public static ResolvedPart<Optional<ObjectMask>, FeatureInputPairObjects> of(
+            FeatureCalculationInput<FeatureInputPairObjects> cache,
             ChildCacheName cacheLeft,
             ChildCacheName cacheRight,
             MorphologicalIterations iterations,

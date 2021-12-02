@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculateInputFromStack<T extends FeatureInputEnergy>
-        extends FeatureCalculation<FeatureInputSingleObject, T> {
+        extends CalculationPart<FeatureInputSingleObject, T> {
 
     /**
      * The object-mask collection to calculate from (ignored in hash-coding and equality as assumed

@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.all;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
@@ -38,13 +38,13 @@ import org.anchoranalysis.mpp.mark.Mark;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class CalculateDeriveMarkInput
-        extends FeatureCalculation<FeatureInputMark, FeatureInputAllMemo> {
+        extends CalculationPart<FeatureInputMark, FeatureInputAllMemo> {
 
     @Override
-    protected FeatureInputMark execute(FeatureInputAllMemo params)
+    protected FeatureInputMark execute(FeatureInputAllMemo input)
             throws FeatureCalculationException {
 
-        EnergyMemoList list = params.getPxlPartMemo();
+        EnergyMemoList list = input.getPxlPartMemo();
 
         if (list.size() == 0) {
             throw new FeatureCalculationException("No mark exists in the list");
@@ -56,6 +56,6 @@ public class CalculateDeriveMarkInput
 
         Mark mark = list.getMemoForIndex(0).getMark();
 
-        return new FeatureInputMark(mark, params.dimensionsOptional());
+        return new FeatureInputMark(mark, input.dimensionsOptional());
     }
 }

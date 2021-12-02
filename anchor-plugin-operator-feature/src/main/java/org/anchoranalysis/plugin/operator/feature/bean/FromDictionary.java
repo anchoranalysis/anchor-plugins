@@ -34,11 +34,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.value.Dictionary;
-import org.anchoranalysis.feature.bean.operator.FeatureOperator;
+import org.anchoranalysis.feature.bean.operator.FeatureGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
+import org.anchoranalysis.feature.input.FeatureInputDictionary;
 
 /**
  * Extracts a key-value from a {@link Dictionary} as a double.
@@ -49,7 +49,7 @@ import org.anchoranalysis.feature.input.FeatureInputParams;
  * @author Owen Feehan
  * @param <T> feature-input type
  */
-public class FromDictionary<T extends FeatureInputParams> extends FeatureOperator<T> {
+public class FromDictionary<T extends FeatureInputDictionary> extends FeatureGeneric<T> {
 
     // START BEAN PROPERTIES
     /** Prefix prepended to key */
@@ -73,9 +73,9 @@ public class FromDictionary<T extends FeatureInputParams> extends FeatureOperato
     }
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
 
-        Dictionary dictionary = input.get().getParamsRequired();
+        Dictionary dictionary = input.get().getDictionaryRequired();
 
         if (dictionary.containsKey(keyAggregated)) {
             return dictionary.getAsDouble(keyAggregated);

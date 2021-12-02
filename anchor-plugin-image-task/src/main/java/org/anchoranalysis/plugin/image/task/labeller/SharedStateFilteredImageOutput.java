@@ -49,7 +49,7 @@ import org.anchoranalysis.plugin.image.task.bean.labeller.ImageLabeller;
 
 /**
  * @author Owen Feehan
- * @param <T> type of init-params for the ImageFilter
+ * @param <T> type of initialization for the {@link ImageLabeller}.
  */
 public class SharedStateFilteredImageOutput<T> {
 

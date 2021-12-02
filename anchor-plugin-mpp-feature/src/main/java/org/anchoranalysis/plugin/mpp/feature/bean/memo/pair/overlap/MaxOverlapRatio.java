@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 import org.anchoranalysis.plugin.mpp.feature.overlap.CalculateOverlap;
@@ -53,20 +53,20 @@ public class MaxOverlapRatio extends FeaturePairMemoSingleRegion {
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format("max=%f", max);
     }
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
 
-        FeatureInputPairMemo params = input.get();
+        FeatureInputPairMemo inputPair = input.get();
 
         double ratio =
                 OverlapRatioUtilities.overlapRatio(
-                        params.getObject1(),
-                        params.getObject2(),
+                        inputPair.getObject1(),
+                        inputPair.getObject2(),
                         input.calculate(new CalculateOverlap(getRegionID())),
                         getRegionID(),
                         false,

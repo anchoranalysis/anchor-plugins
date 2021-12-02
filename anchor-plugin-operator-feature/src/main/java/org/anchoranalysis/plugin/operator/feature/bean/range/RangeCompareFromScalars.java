@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.range;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /** A base-class for setting the boundaries of the range using constant scalars */
@@ -44,17 +44,17 @@ public abstract class RangeCompareFromScalars<T extends FeatureInput> extends Ra
     // END BEAN PROPERTIES
 
     @Override
-    public String describeParams() {
-        return String.format("min=%f,max=%f,%s", min, max, super.describeParams());
+    public String describeParameters() {
+        return String.format("min=%f,max=%f,%s", min, max, super.describeParameters());
     }
 
     @Override
-    protected double boundaryMin(SessionInput<T> input) {
+    protected double boundaryMin(FeatureCalculationInput<T> input) {
         return min;
     }
 
     @Override
-    protected double boundaryMax(SessionInput<T> input) {
+    protected double boundaryMax(FeatureCalculationInput<T> input) {
         return max;
     }
 }

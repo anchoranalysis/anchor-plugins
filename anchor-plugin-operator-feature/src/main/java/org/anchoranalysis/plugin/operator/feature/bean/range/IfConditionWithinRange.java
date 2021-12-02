@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -53,7 +53,7 @@ public class IfConditionWithinRange<T extends FeatureInput> extends RangeCompare
     }
 
     @Override
-    protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
+    protected double withinRangeValue(double valWithinRange, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
         // If the condition lies within the range, then we calculate the derived feature as intended
         return input.calculate(getItem());

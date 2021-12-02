@@ -96,10 +96,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
     /** How to perform the segmentation. */
     @BeanField @Getter @Setter private SegmentIntoMarks segment;
 
-    /**
-     * If non-empty, the identifier of a key-value-params collection that is passed to the
-     * segmentation procedure.
-     */
+    /** If non-empty, a dictionary that is passed to the segmentation procedure. */
     @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
@@ -128,7 +125,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<MultiInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         ExperimentState experimentState = segment.createExperimentState();
         experimentState.outputBeforeAnyTasksAreExecuted(outputter);

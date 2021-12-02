@@ -52,19 +52,19 @@ public class HOGDescriptor extends FeatureListProvider<FeatureInputStack> {
     @BeanField @Getter @Setter private SizeXY resizeTo;
 
     /** Parameters used for calculating HOG */
-    @BeanField @Getter @Setter private HOGParameters params = new HOGParameters();
+    @BeanField @Getter @Setter private HOGParameters parameters = new HOGParameters();
     // END BEAN PROPERTIES
 
     @Override
     public FeatureList<FeatureInputStack> get() throws ProvisionFailedException {
         return FeatureListFactory.mapFromRange(
-                0, params.sizeDescriptor(resizeTo.asExtent()), this::featureFor);
+                0, parameters.sizeDescriptor(resizeTo.asExtent()), this::featureFor);
     }
 
     private HOGFeature featureFor(int index) {
         HOGFeature feature = new HOGFeature();
         feature.setResizeTo(resizeTo);
-        feature.setParams(params);
+        feature.setParameters(parameters);
         feature.setIndex(index);
         return feature;
     }

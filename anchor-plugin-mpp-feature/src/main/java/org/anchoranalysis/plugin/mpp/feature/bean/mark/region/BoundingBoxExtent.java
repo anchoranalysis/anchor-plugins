@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
@@ -51,7 +51,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     // END BEAN PARAMETERS
 
     @Override
-    public double calculate(SessionInput<FeatureInputMark> input)
+    public double calculate(FeatureCalculationInput<FeatureInputMark> input)
             throws FeatureCalculationException {
 
         Dimensions dimensions = input.get().getDimensionsRequired();
@@ -67,7 +67,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format("%s", axis);
     }
 

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.range;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -46,7 +46,7 @@ public class IfOutsideRange<T extends FeatureInput> extends RangeCompareFromScal
     }
 
     @Override
-    protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
+    protected double withinRangeValue(double valWithinRange, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
         return valWithinRange;
     }

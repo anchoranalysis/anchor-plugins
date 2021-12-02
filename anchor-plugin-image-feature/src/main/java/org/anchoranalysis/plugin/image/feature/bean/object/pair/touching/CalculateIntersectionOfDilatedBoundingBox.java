@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -39,7 +39,7 @@ import org.anchoranalysis.spatial.box.Extent;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculateIntersectionOfDilatedBoundingBox
-        extends FeatureCalculation<Optional<BoundingBox>, FeatureInputPairObjects> {
+        extends CalculationPart<Optional<BoundingBox>, FeatureInputPairObjects> {
 
     private final boolean do3D;
 

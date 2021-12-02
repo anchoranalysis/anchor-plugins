@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
@@ -38,7 +38,7 @@ import org.anchoranalysis.math.histogram.Histogram;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculateHistogramForChannel
-        extends FeatureCalculation<FeatureInputHistogram, FeatureInputSingleObject> {
+        extends CalculationPart<FeatureInputHistogram, FeatureInputSingleObject> {
 
     /**
      * iff true zero-intensity values are excluded from the histogram, otherwise they are included
@@ -52,14 +52,14 @@ class CalculateHistogramForChannel
     @EqualsAndHashCode.Exclude private Channel channel;
 
     @Override
-    protected FeatureInputHistogram execute(FeatureInputSingleObject params) {
+    protected FeatureInputHistogram execute(FeatureInputSingleObject input) {
 
-        Histogram histogram = HistogramFromObjectsFactory.createFrom(channel, params.getObject());
+        Histogram histogram = HistogramFromObjectsFactory.createFrom(channel, input.getObject());
 
         if (excludeZero) {
             histogram.zeroValue(0);
         }
 
-        return new FeatureInputHistogram(histogram, params.getResolutionOptional());
+        return new FeatureInputHistogram(histogram, input.getResolutionOptional());
     }
 }

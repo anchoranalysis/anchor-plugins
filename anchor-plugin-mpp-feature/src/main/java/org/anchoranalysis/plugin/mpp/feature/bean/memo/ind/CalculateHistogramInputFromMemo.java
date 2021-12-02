@@ -30,8 +30,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -41,7 +41,7 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculateHistogramInputFromMemo
-        extends FeatureCalculation<FeatureInputHistogram, FeatureInputSingleMemo> {
+        extends CalculationPart<FeatureInputHistogram, FeatureInputSingleMemo> {
 
     private final MarkRegion pixelList;
     private final boolean excludeZero;

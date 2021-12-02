@@ -90,15 +90,16 @@ public final class OptimizationStepLogReporter extends ReporterAggregate<Voxeliz
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params) {
+    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> parameters) {
 
         timer.stop();
 
-        params.getLogger().log(params.getState().toString());
-        params.getLogger()
+        parameters.getLogger().log(parameters.getState().toString());
+        parameters
+                .getLogger()
                 .logFormatted("Optimization time took %e s%n", ((double) timer.getTime()) / 1000);
 
-        super.reportEnd(params);
+        super.reportEnd(parameters);
     }
 
     @Override

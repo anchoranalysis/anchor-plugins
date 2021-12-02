@@ -28,15 +28,15 @@ package org.anchoranalysis.plugin.image.feature.stack.calculation;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInputStack> {
+public class CalculateHistogram extends CalculationPart<Histogram, FeatureInputStack> {
 
     private final int energyIndex;
 

@@ -74,7 +74,7 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  * </table>
  *
  * @author Owen Feehan
- * @param <T> type of init-params associated with the filter
+ * @param <T> type of initialization associated with the filter.
  */
 public class ImageAssignLabel<T>
         extends Task<ProvidesStackInput, SharedStateFilteredImageOutput<T>> {
@@ -104,7 +104,7 @@ public class ImageAssignLabel<T>
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<ProvidesStackInput> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         try {
             return new SharedStateFilteredImageOutput<>(

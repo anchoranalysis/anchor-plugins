@@ -41,20 +41,20 @@ public class FeatureInputOverlappingCircleFixture {
     private static final int DEFAULT_POS_Y = 50;
 
     /**
-     * Two object-masks of circles in different locations WITH some overlap
+     * Two object-masks of circles in different locations WITH some overlap.
      *
      * @param sameSize iff true the object-masks are the same size, otherwise not
-     * @return the params populated with the two object-masks
+     * @return the input, populated with the two object-masks.
      */
     public static FeatureInputPairObjects twoOverlappingCircles(boolean sameSize) {
         return twoCircles(10, 0, sameSize, 3);
     }
 
     /**
-     * Two object-masks of circles in different locations WITHOUT any overlap
+     * Two object-masks of circles in different locations WITHOUT any overlap.
      *
      * @param sameSize iff true the object-masks are the same size, otherwise not
-     * @return the params populated with the two object-masks
+     * @return the input, populated with the two object-masks.
      */
     public static FeatureInputPairObjects twoNonOverlappingCircles(boolean sameSize) {
         return twoCircles(0, (DEFAULT_CIRCLE_RADIUS * 3), sameSize, -3);

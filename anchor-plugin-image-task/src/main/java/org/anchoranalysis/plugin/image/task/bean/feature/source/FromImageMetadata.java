@@ -34,12 +34,12 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.feature.input.FeatureInputImageMetadata;
@@ -119,7 +119,7 @@ public class FromImageMetadata
                     FeatureSession.with(
                             context.getRowSource(),
                             initialization,
-                            new SharedFeatureMulti(),
+                            new SharedFeatures(),
                             context.getLogger());
 
             ImageMetadata metadata =

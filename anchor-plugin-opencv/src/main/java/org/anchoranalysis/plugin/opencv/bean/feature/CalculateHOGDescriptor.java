@@ -31,8 +31,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -49,7 +49,7 @@ import org.opencv.core.MatOfFloat;
  */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputStack> {
+class CalculateHOGDescriptor extends CalculationPart<float[], FeatureInputStack> {
 
     /**
      * Optionally resizes the image before calculating the descriptor (useful for achieving
@@ -58,7 +58,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     private final Optional<SizeXY> resizeTo;
 
     /** Parameters for the HOG-calculation */
-    private final HOGParameters params;
+    private final HOGParameters parameters;
 
     @Override
     protected float[] execute(FeatureInputStack input) throws FeatureCalculationException {
@@ -76,7 +76,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
         try {
             Mat img = ConvertToMat.fromStack(stack);
             MatOfFloat descriptorValues = new MatOfFloat();
-            params.createDescriptor(stack.extent()).compute(img, descriptorValues);
+            parameters.createDescriptor(stack.extent()).compute(img, descriptorValues);
             return convertToArray(descriptorValues);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
@@ -91,7 +91,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     private Stack extractStack(EnergyStack energyStack) throws OperationFailedException {
 
         // We can rely that an energy stack always exists
-        Stack stack = energyStack.withoutParams().asStack();
+        Stack stack = energyStack.withoutParameters().asStack();
 
         if (resizeTo.isPresent()) {
             SizeXY size = resizeTo.get();
@@ -106,7 +106,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
             throw new FeatureCalculationException(
                     "The image is 3D, but the feture only supports 2D images");
         }
-        params.checkSize(extent);
+        parameters.checkSize(extent);
     }
 
     private static float[] convertToArray(MatOfFloat mat) {

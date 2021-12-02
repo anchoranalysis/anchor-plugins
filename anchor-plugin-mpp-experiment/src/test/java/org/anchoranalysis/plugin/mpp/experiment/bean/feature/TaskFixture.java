@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
@@ -53,7 +53,7 @@ import org.anchoranalysis.test.image.EnergyStackFixture;
 @Accessors(fluent = true)
 abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEnergy, V> {
 
-    @Getter private EnergyStackWithoutParams energyStack;
+    @Getter private EnergyStackWithoutParameters energyStack;
 
     @Getter protected final FeaturesLoader featureLoader;
 
@@ -107,15 +107,15 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
     }
 
     protected abstract FeatureSource<S, V, T> createSource(
-            EnergyStackWithoutParams energyStack, FeaturesLoader featureLoader)
+            EnergyStackWithoutParameters energyStack, FeaturesLoader featureLoader)
             throws CreateException;
 
     protected abstract List<NamedBean<FeatureListProvider<T>>> createFeatures(
             FeaturesLoader featureLoader);
 
-    private EnergyStackWithoutParams createEnergyStack(
+    private EnergyStackWithoutParameters createEnergyStack(
             boolean bigSizeEnergy, boolean singleChannel, boolean includeResolution) {
         return EnergyStackFixture.create(bigSizeEnergy, false, singleChannel, includeResolution)
-                .withoutParams();
+                .withoutParameters();
     }
 }

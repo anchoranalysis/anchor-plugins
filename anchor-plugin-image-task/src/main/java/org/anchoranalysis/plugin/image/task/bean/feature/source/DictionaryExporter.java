@@ -48,10 +48,11 @@ class DictionaryExporter {
                 () -> convert(featureNames, rv, context.getLogger()), context.getOutputter());
     }
 
-    private static void writeDictionary(ElementSupplier<Dictionary> params, Outputter outputter) {
+    private static void writeDictionary(
+            ElementSupplier<Dictionary> dictionary, Outputter outputter) {
         outputter
                 .writerSelective()
-                .write("dictionary", () -> new DictionaryGenerator("dictionary"), params);
+                .write("dictionary", () -> new DictionaryGenerator("dictionary"), dictionary);
     }
 
     private static Dictionary convert(
@@ -62,13 +63,13 @@ class DictionaryExporter {
         for (int i = 0; i < featureNames.size(); i++) {
 
             String key = featureNames.get(i);
-            Optional<Double> val = rv.getDoubleOrNull(i);
+            Optional<Double> val = rv.getResult(i);
 
             if (val.isPresent()) {
                 dictionary.put(key, val.get());
             } else {
                 // Then an error happened and we report it
-                logger.errorReporter().recordError(FromHistogram.class, rv.getException(i));
+                logger.errorReporter().recordError(FromHistogram.class, rv.getError(i));
                 dictionary.put(key, Double.NaN);
             }
         }
