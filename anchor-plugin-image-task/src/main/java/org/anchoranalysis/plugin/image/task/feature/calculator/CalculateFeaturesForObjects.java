@@ -26,6 +26,7 @@
 package org.anchoranalysis.plugin.image.task.feature.calculator;
 
 import java.util.Optional;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -35,6 +36,10 @@ import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.results.LabelledResultsVector;
+import org.anchoranalysis.feature.results.ResultsVector;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -42,34 +47,22 @@ import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObject
 import org.anchoranalysis.plugin.image.feature.object.ListWithThumbnails;
 import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.InitializationWithEnergyStack;
-import org.anchoranalysis.plugin.image.task.feature.LabelledResultsVectorWithThumbnail;
-import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 
 public class CalculateFeaturesForObjects<T extends FeatureInput> {
 
     private final CombineObjectsForFeatures<T> table;
     private final FeatureCalculatorMulti<T> calculator;
+    private final InitializationWithEnergyStack initialization;
 
     /**
-     * iff true no exceptions are thrown when an error occurs, but rather a message is written to
-     * the log
+     * When true, no exceptions are thrown when an error occurs, but rather a message is written to
+     * the log.
      */
     private final boolean suppressErrors;
 
+    /** Labels to describe {@code objects}. */
     private final FeatureCalculationContext<FeatureTableCalculator<T>> context;
-
-    public interface LabelsForInput<T extends FeatureInput> {
-
-        /**
-         * Calculates labels for a given input (and index)
-         *
-         * @param input the input to calculate labels for
-         * @param index the index in the input-collection for the particular input
-         * @return row-labels for the input
-         */
-        RowLabels deriveLabels(T input, int index);
-    }
 
     public CalculateFeaturesForObjects(
             CombineObjectsForFeatures<T> table,
@@ -79,13 +72,31 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
             throws OperationFailedException {
         this.table = table;
         this.calculator =
-                startCalculator(context.getRowSource(), initialization, context.getLogger());
+                startCalculator(context.getFeatureSource(), initialization, context.getLogger());
         this.suppressErrors = suppressErrors;
+        this.initialization = initialization;
         this.context = context;
     }
 
-    public void calculateFeaturesForObjects(
-            ObjectCollection objects, EnergyStack energyStack, LabelsForInput<T> labelsForInput)
+    public void calculateForObjects(
+            ObjectCollectionProvider provider, LabelsForInput labelsForInput)
+            throws OperationFailedException {
+        ObjectCollection objects =
+                objectsFromProvider(provider, initialization.getImage(), context.getLogger());
+        calculateForObjects(objects, initialization.getEnergyStack(), labelsForInput);
+    }
+
+    /**
+     * Calculates the feature-results for {@code objects}, and stores the results.
+     *
+     * @param objects the objects to calculate features for.
+     * @param labelsForInput how to assign labels to the input.
+     * @param energyStack the energy-stack.
+     * @throws OperationFailedException if the operation cannot be completed, but not if a
+     *     particular feature calculation fails.
+     */
+    public void calculateForObjects(
+            ObjectCollection objects, EnergyStack energyStack, LabelsForInput labelsForInput)
             throws OperationFailedException {
         try {
             ListWithThumbnails<T, ObjectCollection> inputs =
@@ -102,6 +113,23 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
         }
     }
 
+    private static ObjectCollection objectsFromProvider(
+            ObjectCollectionProvider provider, ImageInitialization initialization, Logger logger)
+            throws OperationFailedException {
+
+        try {
+            ObjectCollectionProvider providerDuplicated = provider.duplicateBean();
+
+            // Initialise
+            providerDuplicated.initializeRecursive(initialization, logger);
+
+            return providerDuplicated.get();
+
+        } catch (InitializeException | ProvisionFailedException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
     /**
      * Calculates a bunch of features with an objectID (unique) and a groupID and adds them to the
      * stored-results.
@@ -113,46 +141,47 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
      * @throws OperationFailedException
      */
     private void calculateManyFeaturesInto(
-            ListWithThumbnails<T, ObjectCollection> listInputs, LabelsForInput<T> labelsForInput)
+            ListWithThumbnails<T, ObjectCollection> listInputs, LabelsForInput labelsForInput)
             throws OperationFailedException {
 
         for (int i = 0; i < listInputs.size(); i++) {
+            final int index = i;
+            T input = listInputs.get(index);
+            context.getResults()
+                    .add(
+                            () ->
+                                    calculateLabelledResults(
+                                            input, listInputs, labelsForInput, index),
+                            () ->
+                                    thumbnailForInput(
+                                            input,
+                                            listInputs.getThumbnailBatch(),
+                                            context.isThumbnailsEnabled()));
+        }
+    }
 
-            T input = listInputs.get(i);
-
+    private LabelledResultsVector calculateLabelledResults(
+            T input,
+            ListWithThumbnails<T, ObjectCollection> listInputs,
+            LabelsForInput labelsForInput,
+            int index)
+            throws OperationFailedException {
+        try {
             context.getLogger()
                     .messageLogger()
                     .logFormatted(
                             "Calculating input %d of %d: %s",
-                            i + 1, listInputs.size(), input.toString());
+                            index + 1, listInputs.size(), input.toString());
 
-            LabelledResultsVectorWithThumbnail results =
-                    calculateLabelledResults(input, listInputs, labelsForInput, i);
-            context.addResults(results);
-        }
-    }
-
-    private LabelledResultsVectorWithThumbnail calculateLabelledResults(
-            T input,
-            ListWithThumbnails<T, ObjectCollection> listInputs,
-            LabelsForInput<T> labelsForInput,
-            int index)
-            throws OperationFailedException {
-        ResultsVectorWithThumbnail results = calculateResults(input, listInputs);
-        RowLabels labels = labelsForInput.deriveLabels(input, index);
-        return new LabelledResultsVectorWithThumbnail(labels, results);
-    }
-
-    private ResultsVectorWithThumbnail calculateResults(
-            T input, ListWithThumbnails<T, ObjectCollection> listInputs)
-            throws OperationFailedException {
-        try {
-            return new ResultsVectorWithThumbnail(
+            ResultsVector results =
                     calculator.calculate(
-                            input, context.getLogger().errorReporter(), suppressErrors),
-                    thumbnailForInput(
-                            input, listInputs.getThumbnailBatch(), context.isThumbnailsEnabled()));
-        } catch (NamedFeatureCalculateException | CreateException e) {
+                            input, context.getLogger().errorReporter(), suppressErrors);
+            String objectIdentifier = table.uniqueIdentifierFor(input);
+            RowLabels labels =
+                    labelsForInput.deriveLabels(
+                            objectIdentifier, context.getGroupGeneratorName(), index);
+            return new LabelledResultsVector(labels, results);
+        } catch (NamedFeatureCalculateException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -161,20 +190,17 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
             T input,
             Optional<ThumbnailBatch<ObjectCollection>> thumbnailBatch,
             boolean thumbnailsEnabled)
-            throws CreateException {
+            throws OperationFailedException {
         if (thumbnailsEnabled && thumbnailBatch.isPresent()) {
-            return Optional.of(thumbnailBatch.get().thumbnailFor(table.objectsForThumbnail(input)));
+            try {
+                return Optional.of(
+                        thumbnailBatch.get().thumbnailFor(table.objectsForThumbnail(input)));
+            } catch (CreateException e) {
+                throw new OperationFailedException(e);
+            }
         } else {
             return Optional.empty();
         }
-    }
-
-    public String uniqueIdentifierFor(T input) {
-        return table.uniqueIdentifierFor(input);
-    }
-
-    public Logger getLogger() {
-        return context.getLogger();
     }
 
     private static <T extends FeatureInput> FeatureCalculatorMulti<T> startCalculator(

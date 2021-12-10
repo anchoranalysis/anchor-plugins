@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.image.task.feature;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 
@@ -50,8 +51,9 @@ public class LabelledResultsVectorWithThumbnail {
      * Exposes as a {@link LabelledResultsVector} without a thumbnail.
      *
      * @return a newly created {@link LabelledResultsVector} derived from the current object.
+     * @throws OperationFailedException
      */
-    public LabelledResultsVector withoutThumbnail() {
-        return new LabelledResultsVector(labels, results.getResultsVector());
+    public LabelledResultsVector withoutThumbnail() throws OperationFailedException {
+        return new LabelledResultsVector(labels, results.getResultsVector().get());
     }
 }

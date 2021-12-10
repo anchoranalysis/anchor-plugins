@@ -66,7 +66,7 @@ public class Ellipticity extends FeatureSingleObject {
             return 1.0;
         }
 
-        return EllipticityCalculatorHelper.calc(
+        return EllipticityCalculatorHelper.calculate(
                 object, both.getMark(), inputSessionless.dimensionsRequired());
     }
 }

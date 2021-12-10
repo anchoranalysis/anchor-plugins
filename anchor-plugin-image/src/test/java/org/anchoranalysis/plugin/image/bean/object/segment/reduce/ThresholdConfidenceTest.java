@@ -28,6 +28,11 @@ package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link ThresholdConfidence}.
+ *
+ * @author Owen Feehan
+ */
 class ThresholdConfidenceTest {
 
     private ReduceElementsTester tester = new ReduceElementsTester();

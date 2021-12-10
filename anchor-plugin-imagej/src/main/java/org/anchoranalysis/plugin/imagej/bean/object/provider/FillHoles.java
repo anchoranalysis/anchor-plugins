@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.imagej.bean.object.provider;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -65,7 +65,7 @@ public class FillHoles extends ObjectCollectionProviderUnary {
     public ObjectCollection createFromObjects(ObjectCollection objects)
             throws ProvisionFailedException {
 
-        Optional<Mask> maskChannel = OptionalFactory.create(mask);
+        Optional<Mask> maskChannel = OptionalProviderFactory.create(mask);
 
         for (ObjectMask objectMask : objects) {
 

@@ -28,8 +28,6 @@ package org.anchoranalysis.plugin.image.task.feature;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.checked.CheckedConsumer;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.name.FeatureNameList;
@@ -39,17 +37,21 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  * The context in which features are calculated, so as to be later exported as a CSV.
  *
  * @author Owen Feehan
- * @param <S> row-source that is duplicated for each new thread (to prevent any concurrency issues)
+ * @param <S> encapsulation of the features that provide the calculation.
  */
 public class FeatureCalculationContext<S> {
 
     // START REQUIRED ARGUMENTS
-    /** Adds results (a row in a feature-table) for export-features. */
-    private final CheckedConsumer<LabelledResultsVectorWithThumbnail, OperationFailedException>
-            adder;
+    /** The stored results and thumbnail writer. */
+    @Getter private final FeatureResultsAndThumbnails results;
 
-    @Getter private final S rowSource;
+    /** The features that are calculated, encapsulated in some object. */
+    @Getter private final S featureSource;
 
+    /**
+     * The name of each feature being calculated, in identical order, as that is placed in the
+     * exported CSV.
+     */
     @Getter private final FeatureNameList featureNames;
 
     @Getter private final Optional<String> groupGeneratorName;
@@ -60,8 +62,9 @@ public class FeatureCalculationContext<S> {
     @Getter private final InputOutputContext context;
 
     /**
-     * If false, an image is reported as errored, if any exception is thrown during calculation. If
-     * true, then a value of {@link Double#NaN} is returned, and a message is written to the
+     * When false, an image is reported as errored, if any exception is thrown during calculation.
+     *
+     * <p>When true, then a value of {@link Double#NaN} is returned, and a message is written to the
      * error-log.
      */
     @Getter private final boolean suppressErrors;
@@ -72,7 +75,7 @@ public class FeatureCalculationContext<S> {
     /**
      * Default constructor.
      *
-     * @param adder adds results (a row in a feature-table) for export-features.
+     * @param results the stored results and thumbnail writer.
      * @param rowSource
      * @param featureNames
      * @param groupGeneratorName
@@ -83,15 +86,15 @@ public class FeatureCalculationContext<S> {
      * @param context
      */
     public FeatureCalculationContext(
-            CheckedConsumer<LabelledResultsVectorWithThumbnail, OperationFailedException> adder,
+            FeatureResultsAndThumbnails results,
             S rowSource,
             FeatureNameList featureNames,
             Optional<String> groupGeneratorName,
             ExecutionTimeRecorder executionTimeRecorder,
             boolean suppressErrors,
             InputOutputContext context) {
-        this.adder = adder;
-        this.rowSource = rowSource;
+        this.results = results;
+        this.featureSource = rowSource;
         this.featureNames = featureNames;
         this.groupGeneratorName = groupGeneratorName;
         this.executionTimeRecorder = executionTimeRecorder;
@@ -106,11 +109,6 @@ public class FeatureCalculationContext<S> {
 
     public Logger getLogger() {
         return context.getLogger();
-    }
-
-    public void addResults(LabelledResultsVectorWithThumbnail results)
-            throws OperationFailedException {
-        adder.accept(results);
     }
 
     private boolean areThumbnailsEnabled(InputOutputContext context) {

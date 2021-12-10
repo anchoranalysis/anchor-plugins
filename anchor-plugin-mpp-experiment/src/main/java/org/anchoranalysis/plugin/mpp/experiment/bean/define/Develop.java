@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
@@ -129,7 +129,7 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
         }
 
         EnergyStackHelper.writeEnergyStackDictionary(
-                initialization, OptionalUtilities.create(dictionary), context);
+                initialization, OptionalFactory.create(dictionary), context);
     }
 
     private void outputFeatureTables(ImageInitialization initialization, InputOutputContext context)

@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import lombok.Getter;
@@ -37,6 +36,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
+import org.anchoranalysis.image.inference.segment.ReductionOutcome;
 import org.anchoranalysis.image.inference.segment.WithConfidence;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundedList;
@@ -79,12 +79,13 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
     }
 
     @Override
-    public List<LabelledWithConfidence<ObjectMask>> reduceLabelled(
+    public ReductionOutcome<LabelledWithConfidence<ObjectMask>> reduce(
             List<LabelledWithConfidence<ObjectMask>> elements) throws OperationFailedException {
 
         if (elements.isEmpty()) {
-            // An empty input list produces an empty output list
-            return new ArrayList<>();
+            // An empty input list produces an outcome where no elements are retained (because none
+            // exist).
+            return new ReductionOutcome<>();
         }
 
         // Take the label from the first element
@@ -100,15 +101,15 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
                 new SpatiallySeparate<>(
                         withConfidence -> withConfidence.getElement().boundingBox());
 
-        List<LabelledWithConfidence<ObjectMask>> out = new ArrayList<>();
+        ReductionOutcome<LabelledWithConfidence<ObjectMask>> outcome = new ReductionOutcome<>();
 
         // For efficiency on rasters sparsely populated with objects, process each
         //  spatially-connected set of objects separately.
         for (Set<LabelledWithConfidence<ObjectMask>> split : separate.separate(elements)) {
-            out.addAll(deriveLabelledObjects(Lists.newArrayList(split), label));
+            deriveLabelledObjects(Lists.newArrayList(split), label).forEach(outcome::addNewlyAdded);
         }
 
-        return out;
+        return outcome;
     }
 
     private List<LabelledWithConfidence<ObjectMask>> deriveLabelledObjects(
@@ -124,7 +125,7 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
                 derived, object -> new LabelledWithConfidence<>(label, object));
     }
 
-    /** Checks if any label is different to {@code labelToCOmpare}. */
+    /** Checks if any label is different to {@code labelToCompare}. */
     private static <T> boolean anyLabelDiffersTo(
             List<LabelledWithConfidence<T>> elements, String labelToCompare) {
         return elements.stream()

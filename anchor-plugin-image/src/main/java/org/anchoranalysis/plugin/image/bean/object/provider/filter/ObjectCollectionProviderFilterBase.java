@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.filter;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -53,7 +53,8 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects)
             throws ProvisionFailedException {
-        return createFromObjects(objects, OptionalFactory.create(objectsRejected), createDims());
+        return createFromObjects(
+                objects, OptionalProviderFactory.create(objectsRejected), createDims());
     }
 
     protected ObjectCollection filter(

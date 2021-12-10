@@ -28,11 +28,13 @@ package org.anchoranalysis.plugin.image.task.feature;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 
 /**
- * A results-vector with an optional thumbnail associated with it
+ * A results-vector with an optional thumbnails associated with it.
  *
  * @author Owen Feehan
  */
@@ -40,11 +42,12 @@ import org.anchoranalysis.image.core.stack.DisplayStack;
 @Value
 public class ResultsVectorWithThumbnail {
 
-    private ResultsVector resultsVector;
-    private Optional<DisplayStack> thumbnail;
+    private CheckedSupplier<ResultsVector, OperationFailedException> resultsVector;
+    private CheckedSupplier<Optional<DisplayStack>, OperationFailedException> thumbnail;
 
-    public ResultsVectorWithThumbnail(ResultsVector resultsVector) {
+    public ResultsVectorWithThumbnail(
+            CheckedSupplier<ResultsVector, OperationFailedException> resultsVector) {
         this.resultsVector = resultsVector;
-        this.thumbnail = Optional.empty();
+        this.thumbnail = Optional::empty;
     }
 }

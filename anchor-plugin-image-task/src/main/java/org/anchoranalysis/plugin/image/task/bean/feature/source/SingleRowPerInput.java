@@ -96,13 +96,13 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
     public void calculateAndOutput(T input, FeatureCalculationContext<FeatureList<S>> context)
             throws OperationFailedException {
         try {
-            ResultsVectorWithThumbnail results = calculateResultsForInput(input, context);
             LabelledResultsVectorWithThumbnail labelledResults =
-                    new LabelledResultsVectorWithThumbnail(
-                            labelsFor(input, context.getGroupGeneratorName()), results);
-            context.addResults(labelledResults);
-
-        } catch (BeanDuplicateException | NamedFeatureCalculateException e) {
+                    calculateLabelledResults(input, context);
+            context.getResults()
+                    .add(
+                            labelledResults::withoutThumbnail,
+                            labelledResults.getResults().getThumbnail());
+        } catch (BeanDuplicateException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -131,6 +131,18 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
      */
     protected abstract Optional<String[]> additionalLabelsFor(T input)
             throws OperationFailedException;
+
+    private LabelledResultsVectorWithThumbnail calculateLabelledResults(
+            T input, FeatureCalculationContext<FeatureList<S>> context)
+            throws OperationFailedException {
+        try {
+            ResultsVectorWithThumbnail results = calculateResultsForInput(input, context);
+            RowLabels labels = labelsFor(input, context.getGroupGeneratorName());
+            return new LabelledResultsVectorWithThumbnail(labels, results);
+        } catch (NamedFeatureCalculateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
 
     /** Row-labels for a particular input. */
     private RowLabels labelsFor(T input, Optional<String> groupGeneratorName)

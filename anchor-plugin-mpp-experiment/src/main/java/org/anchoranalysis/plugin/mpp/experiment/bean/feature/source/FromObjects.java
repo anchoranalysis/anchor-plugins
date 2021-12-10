@@ -39,14 +39,12 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.RowLabels;
-import org.anchoranalysis.feature.io.name.CombinedName;
-import org.anchoranalysis.feature.io.name.MultiName;
-import org.anchoranalysis.feature.io.name.SimpleName;
 import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -156,9 +154,7 @@ public class FromObjects<T extends FeatureInput>
                 new InitializationContext(context.getContext()),
                 (initialization, energyStack) ->
                         calculateFeaturesForImage(
-                                input.identifier(),
-                                new InitializationWithEnergyStack(initialization, energyStack),
-                                context));
+                                input.identifier(), initialization, energyStack, context));
     }
 
     @Override
@@ -181,62 +177,41 @@ public class FromObjects<T extends FeatureInput>
         return objects.size() > 1;
     }
 
-    private int calculateFeaturesForImage(
+    private Object calculateFeaturesForImage(
             String inputName,
-            InitializationWithEnergyStack initialization,
+            ImageInitialization initialization,
+            EnergyStack energyStack,
             FeatureCalculationContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
 
-        CalculateFeaturesForObjects<T> objectsCalculator =
-                new CalculateFeaturesForObjects<>(combine, initialization, suppressErrors, context);
+        InitializationWithEnergyStack initializationEnergy =
+                new InitializationWithEnergyStack(initialization, energyStack);
 
-        CalculateFeaturesFromProvider<T> fromProviderCalculator =
-                new CalculateFeaturesFromProvider<>(objectsCalculator, initialization);
-        processAllProviders(inputName, context.getGroupGeneratorName(), fromProviderCalculator);
+        CalculateFeaturesForObjects<T> objectsCalculator =
+                new CalculateFeaturesForObjects<>(
+                        combine, initializationEnergy, suppressErrors, context);
+
+        processAllProviders(inputName, objectsCalculator);
 
         // Arbitrary, we need a return-type
-        return 0;
+        return null;
     }
 
     private void processAllProviders(
-            String imageIdentifier,
-            Optional<String> groupGeneratorName,
-            CalculateFeaturesFromProvider<T> calculator)
+            String imageIdentifier, CalculateFeaturesForObjects<T> calculator)
             throws OperationFailedException {
 
         // For every object-collection-provider
         for (NamedBean<ObjectCollectionProvider> namedBean : objects) {
-            calculator.processProvider(
+            calculator.calculateForObjects(
                     namedBean.getValue(),
-                    (input, index) ->
-                            identifierFor(
+                    (objectIdentifier, groupGeneratorName, index) ->
+                            IdentifierHelper.identifierFor(
                                     imageIdentifier,
-                                    combine.uniqueIdentifierFor(input),
+                                    objectIdentifier,
                                     groupGeneratorName,
-                                    namedBean.getName()));
-        }
-    }
-
-    private RowLabels identifierFor(
-            String imageIdentifier,
-            String objectIdentifier,
-            Optional<String> groupGeneratorName,
-            String providerName) {
-        return new RowLabels(
-                Optional.of(new String[] {imageIdentifier, objectIdentifier}),
-                createGroupName(groupGeneratorName, providerName));
-    }
-
-    private Optional<MultiName> createGroupName(
-            Optional<String> groupGeneratorName, String providerName) {
-        if (moreThanOneProvider()) {
-            if (groupGeneratorName.isPresent()) {
-                return Optional.of(new CombinedName(groupGeneratorName.get(), providerName));
-            } else {
-                return Optional.of(new SimpleName(providerName));
-            }
-        } else {
-            return groupGeneratorName.map(SimpleName::new);
+                                    namedBean.getName(),
+                                    moreThanOneProvider()));
         }
     }
 }

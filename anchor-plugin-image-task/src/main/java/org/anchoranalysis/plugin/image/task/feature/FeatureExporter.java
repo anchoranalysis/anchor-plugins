@@ -46,7 +46,6 @@ import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.io.results.calculation.FeatureCSVWriterCreator;
 import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResultsFactory;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
@@ -71,16 +70,13 @@ public class FeatureExporter<S> {
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.parametersOnly();
 
-    /** Where the results of feature-calculation are stored/outputted. */
-    private final FeatureCalculationResults results;
-
     /** The names of the features to be exported. */
     @Getter private final FeatureNameList featureNames;
 
-    private final Supplier<S> rowSource;
+    private final Supplier<S> featureSource;
 
-    /** Outputs thumbnails. */
-    private ThumbnailsWriter thumbnails = new ThumbnailsWriter();
+    /** Saved store feature calculation results, and writes associated thumbnails. */
+    @Getter private FeatureResultsAndThumbnails results;
 
     /** Context for outputting operations. */
     private FeatureExporterContext context;
@@ -89,21 +85,20 @@ public class FeatureExporter<S> {
      * Creates the shared state.
      *
      * @param outputMetadata headers and output-name for the feature CSV file that is written.
-     * @param rowSource source of rows in the feature-table (called independently for each thread).
+     * @param featureSource source of rows in the feature-table (called independently for each
+     *     thread).
      * @param context context for exporting features.
      * @throws OutputWriteFailedException
      */
     public FeatureExporter(
             FeatureOutputMetadata outputMetadata,
-            Supplier<S> rowSource,
+            Supplier<S> featureSource,
             FeatureExporterContext context)
             throws OutputWriteFailedException {
         this.featureNames = outputMetadata.featureNamesNonAggregate();
-        this.rowSource = rowSource;
+        this.featureSource = featureSource;
         this.context = context;
-        this.results =
-                FeatureCalculationResultsFactory.create(
-                        outputMetadata, context::csvWriter, context.isRemoveNaNColumns());
+        this.results = new FeatureResultsAndThumbnails(outputMetadata, context);
     }
 
     /**
@@ -205,8 +200,8 @@ public class FeatureExporter<S> {
             ExecutionTimeRecorder executionTimeRecorder,
             InputOutputContext ioContext) {
         return new FeatureCalculationContext<>(
-                this::addResultsFor,
-                rowSource.get(),
+                results,
+                featureSource.get(),
                 featureNames,
                 groupName,
                 executionTimeRecorder,
@@ -215,7 +210,8 @@ public class FeatureExporter<S> {
     }
 
     /**
-     * Writes all the results that have been collected as a CSV file.
+     * Writes all the results that have been collected as a CSV file, and closes open I/O handles
+     * and memory structures.
      *
      * @param featuresAggregate features that can be used for generating additional "aggregated"
      *     exports.
@@ -223,47 +219,22 @@ public class FeatureExporter<S> {
      *     exports occur, otherwise not.
      * @param csvWriterCreator creates a CSV writer for a particular IO-context.
      * @param context IO-context.
-     * @throws OutputWriteFailedException
+     * @throws OperationFailedException if any output cannot be written, or there is an error
+     *     closing open I/O.
      */
-    public void writeGroupedResults(
+    public void closeAndWriteOutputs(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
             Function<InputOutputContext, FeatureCSVWriterCreator> csvWriterCreator,
             InputOutputContext context)
-            throws OutputWriteFailedException {
-        results.flushAndClose(featuresAggregate, includeGroups, csvWriterCreator, context);
-    }
-
-    /**
-     * Closes any open IO and removes redundant structures stored in memory.
-     *
-     * @throws IOException if the close operation cannot successfully complete.
-     */
-    public void closeAnyOpenIO() throws IOException {
-        thumbnails.removeStoredThumbnails();
-    }
-
-    /**
-     * An adder for results.
-     *
-     * <p>Note that in order for the sequence numbers to match the order in the feature table, a
-     * thumbnail should be present for <i>all</i> results, or for <i>no</i> results, but never
-     * partially.
-     *
-     * @throws OperationFailedException
-     */
-    private void addResultsFor(LabelledResultsVectorWithThumbnail labelledResults)
             throws OperationFailedException {
-        // Synchronization is important to preserve identical order in thumbnails and in the
-        // exported feature CSV file, as multiple threads will concurrently add results.
-        synchronized (this) {
-            // Add results to grouped-map, and write to CSV file
-            results.add(labelledResults.withoutThumbnail());
-
-            thumbnails.maybeOutputThumbnail(
-                    labelledResults.getResults().getThumbnail(),
-                    context.getContext().getOutputter().getChecked(),
-                    OUTPUT_THUMBNAILS);
+        try {
+            results.writeGroupedResults(
+                    featuresAggregate, includeGroups, csvWriterCreator, context);
+            results.closeAnyOpenIO();
+            results = null;
+        } catch (IOException | OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
         }
     }
 }

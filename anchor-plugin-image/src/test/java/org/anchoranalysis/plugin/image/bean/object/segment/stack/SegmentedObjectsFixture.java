@@ -25,12 +25,16 @@
  */
 package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.inference.segment.DualScale;
+import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
+import org.anchoranalysis.image.inference.segment.MultiScaleObject;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
-import org.anchoranalysis.image.inference.segment.WithConfidence;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.test.image.object.CircleObjectFixture;
 import org.anchoranalysis.test.image.object.CutOffCornersObjectFixture;
@@ -52,13 +56,15 @@ public class SegmentedObjectsFixture {
 
     private static final int CIRCLE_RADIUS = 5;
 
-    private static final Point2d CIRCLE_CENTER_SHIFT = new Point2d(8, 8);
+    private static final Point2d CIRCLE_CENTER_SHIFT = new Point2d(3, 3);
 
     private static final int CIRCLE_RADIUS_SHIFT = 1;
 
     private static final double CONFIDENCE_START = 0.2;
 
     private static final double CONFIDENCE_INCREMENT = 0.1;
+
+    private static final Stack BACKGROUND = new Stack(new Extent(100, 200, 5));
 
     /**
      * Creates a {@link SegmentedObjects} containing two possible class-labels and corresponding
@@ -72,7 +78,7 @@ public class SegmentedObjectsFixture {
      *     2 class-types.
      */
     public static SegmentedObjects create(boolean circles, boolean cutOffCorners) {
-        SegmentedObjects out = new SegmentedObjects();
+        List<LabelledWithConfidence<MultiScaleObject>> list = new ArrayList<>();
 
         if (circles) {
             ObjectCollection circleObjects =
@@ -82,27 +88,30 @@ public class SegmentedObjectsFixture {
                             CIRCLE_RADIUS,
                             CIRCLE_CENTER_SHIFT,
                             CIRCLE_RADIUS_SHIFT);
-            addObjects(CLASS_LABEL_CIRCLE, circleObjects, out);
+            addObjects(CLASS_LABEL_CIRCLE, circleObjects, list);
         }
 
         if (cutOffCorners) {
             ObjectCollection cutOffCornerObjects = new CutOffCornersObjectFixture().createAll();
-            addObjects(CLASS_LABEL_CUT_OFF_CORNERS, cutOffCornerObjects, out);
+            addObjects(CLASS_LABEL_CUT_OFF_CORNERS, cutOffCornerObjects, list);
         }
 
-        return out;
+        return new SegmentedObjects(list, new DualScale<>(BACKGROUND, BACKGROUND));
     }
 
     private static void addObjects(
-            String classLabel, ObjectCollection objects, SegmentedObjects out) {
+            String classLabel,
+            ObjectCollection objects,
+            List<LabelledWithConfidence<MultiScaleObject>> list) {
         // Add confidence successively with incrementing confidence
-        List<WithConfidence<ObjectMask>> list =
+        List<LabelledWithConfidence<MultiScaleObject>> toAdd =
                 FunctionalList.mapToListWithIndex(
                         objects.asList(),
                         (object, index) ->
-                                new WithConfidence<>(
-                                        object, (index * CONFIDENCE_INCREMENT) + CONFIDENCE_START));
-
-        out.add(classLabel, list);
+                                new LabelledWithConfidence<>(
+                                        new MultiScaleObject(() -> object, () -> object),
+                                        (index * CONFIDENCE_INCREMENT) + CONFIDENCE_START,
+                                        classLabel));
+        list.addAll(toAdd);
     }
 }

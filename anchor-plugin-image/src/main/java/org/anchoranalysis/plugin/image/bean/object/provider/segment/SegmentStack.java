@@ -57,7 +57,9 @@ public class SegmentStack<T extends InferenceModel> extends ObjectCollectionProv
     public ObjectCollection get() throws ProvisionFailedException {
         try {
             return segment.segment(stack.getAsStack(), ExecutionTimeRecorderIgnore.instance())
-                    .asObjects();
+                    .getObjects()
+                    .atInputScale()
+                    .objects();
         } catch (SegmentationFailedException e) {
             throw new ProvisionFailedException(e);
         }

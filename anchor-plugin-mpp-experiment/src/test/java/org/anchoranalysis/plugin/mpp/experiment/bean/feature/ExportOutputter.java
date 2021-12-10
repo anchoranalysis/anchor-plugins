@@ -51,9 +51,7 @@ class ExportOutputter {
     public static final String OUTPUT_DIRECTORY_IRRELEVANT = "irrelevant/";
 
     private static final String[] OUTPUTS_TO_COMPARE_ALWAYS = {
-        "featuresAggregated.csv",
-        "features.csv",
-        "grouped/arbitraryGroup/featuresGroup.csv",
+        "featuresAggregated.csv", "features.csv", "grouped/arbitraryGroup/featuresGroup.csv",
     };
 
     /**

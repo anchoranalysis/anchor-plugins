@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.task.bean.feature;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,6 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
@@ -177,13 +175,12 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
             throws ExperimentExecutionException {
         // Write the aggregate features
         try {
-            sharedState.writeGroupedResults(
+            sharedState.closeAndWriteOutputs(
                     featuresAggregateAsStore(),
                     source.includeGroupInExperiment(isGroupGeneratorDefined()),
                     contextForWriter -> style.deriveContext(contextForWriter)::csvWriter,
                     context);
-            sharedState.closeAnyOpenIO();
-        } catch (OutputWriteFailedException | ProvisionFailedException | IOException e) {
+        } catch (ProvisionFailedException | OperationFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }

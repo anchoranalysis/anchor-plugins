@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.bean.feature.source;
+package org.anchoranalysis.plugin.image.task.feature;
 
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -37,22 +37,30 @@ import org.anchoranalysis.io.generator.serialized.DictionaryGenerator;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.ElementSupplier;
+import org.anchoranalysis.plugin.image.task.bean.feature.source.FromHistogram;
 
 /** Exports a ResultVector as a {@link Dictionary}. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DictionaryExporter {
 
+    private static final String MANIFEST_FUNCTION = "dictionary";
+
     public static void export(
-            FeatureNameList featureNames, ResultsVector rv, InputOutputContext context) {
+            FeatureNameList featureNames,
+            ResultsVector results,
+            String outputName,
+            InputOutputContext context) {
         writeDictionary(
-                () -> convert(featureNames, rv, context.getLogger()), context.getOutputter());
+                () -> convert(featureNames, results, context.getLogger()),
+                context.getOutputter(),
+                outputName);
     }
 
     private static void writeDictionary(
-            ElementSupplier<Dictionary> dictionary, Outputter outputter) {
+            ElementSupplier<Dictionary> dictionary, Outputter outputter, String outputName) {
         outputter
                 .writerSelective()
-                .write("dictionary", () -> new DictionaryGenerator("dictionary"), dictionary);
+                .write(outputName, () -> new DictionaryGenerator(MANIFEST_FUNCTION), dictionary);
     }
 
     private static Dictionary convert(

@@ -32,7 +32,6 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.ScaleFactorInt;
 
 /**
  * Finds largest multiple of an {@link Extent} without being larger than another {@link Extent}.
@@ -43,19 +42,20 @@ import org.anchoranalysis.spatial.scale.ScaleFactorInt;
 class FindLargestMultipleWithin {
 
     /**
-     * Scales an extent as much as possible in BOTH dimensions without growing larger than another
-     * extent
+     * Scales an extent as much as possible in <b>both</b> dimensions without growing larger than
+     * another extent.
      *
      * <p>Only integral scale-factors are considered e.g. twice, thrice, 4 times etc.
      *
      * <p>The X dimension and Y dimension are treated in unison i.e. both are scaled together
      *
-     * @param small the extent to scale
-     * @param stayWithin a maximum size not to scale beyond
-     * @return the final {@link Extent} to use for the image.
+     * @param small the extent to scale.
+     * @param stayWithin a maximum size not to scale beyond.
+     * @return the scale-factor to use scale {@code small} (in both dimensions) to be the largest
+     *     size possible, without exceeding {@code stayWithin}.
      * @throws OperationFailedException
      */
-    public static Extent apply(Extent small, Extent stayWithin, int maxScaleFactor)
+    public static int apply(Extent small, Extent stayWithin, int maxScaleFactor)
             throws OperationFailedException {
 
         if (small.x() > stayWithin.x()) {
@@ -71,9 +71,7 @@ class FindLargestMultipleWithin {
         // Non-integral scale factors
         ScaleFactor scaleFactor = RelativeScaleCalculator.relativeScale(small, stayWithin);
 
-        int minFactor = minScaleFactorUnder(scaleFactor, maxScaleFactor);
-
-        return new ScaleFactorInt(minFactor, minFactor).scale(small);
+        return minScaleFactorUnder(scaleFactor, maxScaleFactor);
     }
 
     /**

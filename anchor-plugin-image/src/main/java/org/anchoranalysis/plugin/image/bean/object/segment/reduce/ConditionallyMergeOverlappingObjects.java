@@ -31,6 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
+import org.anchoranalysis.image.inference.bean.reduce.ObjectForReduction;
 import org.anchoranalysis.image.inference.bean.reduce.ReduceElementsGreedy;
 import org.anchoranalysis.image.inference.bean.reduce.ReduceObjectsGraph;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
@@ -81,11 +82,9 @@ public class ConditionallyMergeOverlappingObjects extends ReduceElementsGreedy {
 
     @Override
     protected boolean processObjects(
-            LabelledWithConfidence<ObjectMask> source,
-            LabelledWithConfidence<ObjectMask> other,
-            ReduceObjectsGraph graph) {
+            ObjectForReduction source, ObjectForReduction other, ReduceObjectsGraph graph) {
 
-        removeCommonVoxelsFromOther(source, other);
+        removeCommonVoxelsFromOther(source.getLabelled(), other.getLabelled());
 
         // Remove the edge from the graph that indicates overlap is present
         graph.removeEdge(source, other);
@@ -108,13 +107,12 @@ public class ConditionallyMergeOverlappingObjects extends ReduceElementsGreedy {
 
     /** Whethere two object-masks should be merged together? */
     private boolean shouldMerge(
-            int numberVoxelsOverlapping,
-            LabelledWithConfidence<ObjectMask> source,
-            LabelledWithConfidence<ObjectMask> other) {
+            int numberVoxelsOverlapping, ObjectForReduction source, ObjectForReduction other) {
         double overlapScore =
                 ScoreHelper.overlapScore(numberVoxelsOverlapping, source.getElement());
         return (overlapScore < overlapThreshold)
-                || ScoreHelper.confidenceDifference(source, other) < confidenceThreshold;
+                || ScoreHelper.confidenceDifference(source.getLabelled(), other.getLabelled())
+                        < confidenceThreshold;
     }
 
     /** Removes any common voxels (between source and other) from other. */
@@ -124,8 +122,7 @@ public class ConditionallyMergeOverlappingObjects extends ReduceElementsGreedy {
     }
 
     /** Removes a vertex from the graph. */
-    private static void removeVertex(
-            ReduceObjectsGraph graph, LabelledWithConfidence<ObjectMask> vertex) {
+    private static void removeVertex(ReduceObjectsGraph graph, ObjectForReduction vertex) {
         try {
             graph.removeVertex(vertex);
         } catch (OperationFailedException e) {
@@ -135,14 +132,12 @@ public class ConditionallyMergeOverlappingObjects extends ReduceElementsGreedy {
 
     /** Merges two objects together. */
     private static boolean mergeObjects(
-            LabelledWithConfidence<ObjectMask> source,
-            LabelledWithConfidence<ObjectMask> other,
-            ReduceObjectsGraph graph) {
+            ObjectForReduction source, ObjectForReduction other, ReduceObjectsGraph graph) {
         ObjectMask merged = ObjectMaskMerger.merge(source.getElement(), other.getElement());
         // Use the confidence from the source
         LabelledWithConfidence<ObjectMask> mergedWithConfidence =
                 new LabelledWithConfidence<>(merged, source.getConfidence(), source.getLabel());
-        graph.mergeVertices(source, other, mergedWithConfidence);
+        graph.mergeVertices(source, other, new ObjectForReduction(mergedWithConfidence));
         return true;
     }
 }

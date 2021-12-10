@@ -27,12 +27,11 @@ package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.List;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.inference.bean.reduce.RemoveOverlappingObjects;
+import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -42,37 +41,28 @@ import org.junit.jupiter.api.Test;
  */
 class SegmentedObjectsTest {
 
-    private static final Extent EXTENT = new Extent(800, 600, 20);
+    private static final int NUMBER_OBJECTS_BEFORE_REDUCTION = 10;
 
-    private static final double SCALE_FACTOR = 2.0;
+    private static final int NUMBER_OBJECTS_AFTER_REDUCTION = 6;
+
+    private static final ReduceElements<ObjectMask> REDUCE = new RemoveOverlappingObjects();
 
     @Test
-    void testMap() throws OperationFailedException {
+    void testReduceCollective() throws OperationFailedException {
+        doTest(false);
+    }
+
+    @Test
+    void testReduceByLabel() throws OperationFailedException {
+        doTest(true);
+    }
+
+    private void doTest(boolean separateEachLabel) throws OperationFailedException {
         SegmentedObjects objects = SegmentedObjectsFixture.create(true, true);
 
-        List<Integer> sizeUnscaled = calcuateNumberVoxels(objects);
+        SegmentedObjects reduced = objects.reduce(REDUCE, separateEachLabel);
 
-        SegmentedObjects objectsScaled = objects.scale(new ScaleFactor(SCALE_FACTOR), EXTENT);
-
-        List<Integer> sizeScaled = calcuateNumberVoxels(objectsScaled);
-        assertSizeRatioApprox(sizeScaled, sizeUnscaled, Math.pow(2.0, SCALE_FACTOR));
-    }
-
-    /** Creates a list with the number of objects for each respective object (preserving order). */
-    private static List<Integer> calcuateNumberVoxels(SegmentedObjects objects) {
-        return objects.asObjects().stream().mapToList(ObjectMask::numberVoxelsOn);
-    }
-
-    /**
-     * Asserts that the ratio of each element in {@code sizeScaled} to the respective element in
-     * {@code sizeUnscaled} is approxiamtely {@code approximateRatio}.
-     */
-    private static void assertSizeRatioApprox(
-            List<Integer> sizeScaled, List<Integer> sizeUnscaled, double approximateRatio) {
-        assert (sizeScaled.size() == sizeUnscaled.size());
-        for (int i = 0; i < sizeScaled.size(); i++) {
-            double sizeRatio = ((double) sizeScaled.get(i)) / sizeUnscaled.get(i);
-            assertEquals(sizeRatio, approximateRatio, 0.1);
-        }
+        assertEquals(NUMBER_OBJECTS_BEFORE_REDUCTION, objects.size());
+        assertEquals(NUMBER_OBJECTS_AFTER_REDUCTION, reduced.size());
     }
 }

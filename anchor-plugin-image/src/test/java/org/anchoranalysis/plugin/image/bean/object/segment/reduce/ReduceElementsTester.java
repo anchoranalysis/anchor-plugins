@@ -71,7 +71,7 @@ class ReduceElementsTester {
                 countTotalVoxels(segments),
                 countTotalVoxels(reduced),
                 "identical number of voxels");
-        assertEquals(numberObjectsAfter, reduced.asList().size(), "number-objects-after");
+        assertEquals(numberObjectsAfter, reduced.size(), "number-objects-after");
 
         assertEquals(
                 highestConfidenceObjectUnchanged,
@@ -87,13 +87,14 @@ class ReduceElementsTester {
     /** Writes raster-images (for debugging) to the filesystem of before and after the reduction. */
     private static void writeRasters(
             WriteIntoDirectory write, SegmentedObjects segments, SegmentedObjects reduced) {
-        write.writeObjects("before", segments.asObjects());
-        write.writeObjects("after", reduced.asObjects());
+        write.writeObjects("before", segments.getObjects().atInputScale().objects());
+        write.writeObjects("after", reduced.getObjects().atInputScale().objects());
     }
 
     private static int countTotalVoxels(SegmentedObjects segments) {
         try {
-            return ObjectMaskMerger.merge(segments.asObjects()).numberVoxelsOn();
+            return ObjectMaskMerger.merge(segments.getObjects().atInputScale().objects())
+                    .numberVoxelsOn();
         } catch (OperationFailedException e) {
             throw new AnchorFriendlyRuntimeException(e);
         }

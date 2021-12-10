@@ -39,11 +39,11 @@ import org.anchoranalysis.mpp.mark.Mark;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EllipticityCalculatorHelper {
 
-    public static double calc(ObjectMask object, Mark mark, Dimensions dimensions) {
-        return calc(object, objectMaskCompare(mark, dimensions));
+    public static double calculate(ObjectMask object, Mark mark, Dimensions dimensions) {
+        return calculate(object, objectMaskCompare(mark, dimensions));
     }
 
-    private static double calc(ObjectMask object, ObjectMask objectCompare) {
+    private static double calculate(ObjectMask object, ObjectMask objectCompare) {
         return calculateWithMerged(
                 object, objectCompare, ObjectMaskMerger.merge(object, objectCompare));
     }

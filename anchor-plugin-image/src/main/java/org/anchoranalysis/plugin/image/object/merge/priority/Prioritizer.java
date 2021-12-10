@@ -33,6 +33,6 @@ import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
 /** Creates a priority between two vertices */
 @FunctionalInterface
 public interface Prioritizer {
-    PrioritisedVertex createPriority(ObjectVertex src, ObjectVertex dest, Logger logger)
+    PrioritisedVertex createPriority(ObjectVertex source, ObjectVertex destination, Logger logger)
             throws OperationFailedException;
 }

@@ -112,12 +112,19 @@ public class FromImageMetadata
             ImageMetadataInput input,
             FeatureCalculationContext<FeatureList<FeatureInputImageMetadata>> context)
             throws NamedFeatureCalculateException {
+        return new ResultsVectorWithThumbnail(() -> calculateResults(input, context));
+    }
 
+    private ResultsVector calculateResults(
+            ImageMetadataInput input,
+            FeatureCalculationContext<FeatureList<FeatureInputImageMetadata>> context)
+            throws OperationFailedException {
         try {
+
             FeatureInitialization initialization = new FeatureInitialization();
             FeatureCalculatorMulti<FeatureInputImageMetadata> calculator =
                     FeatureSession.with(
-                            context.getRowSource(),
+                            context.getFeatureSource(),
                             initialization,
                             new SharedFeatures(),
                             context.getLogger());
@@ -127,17 +134,12 @@ public class FromImageMetadata
                             .recordExecutionTime("Reading image metadata", input::metadata);
 
             // Calculate the results for the current stack
-            ResultsVector results =
-                    context.getExecutionTimeRecorder()
-                            .recordExecutionTime(
-                                    "Calculating features",
-                                    () ->
-                                            calculator.calculate(
-                                                    new FeatureInputImageMetadata(metadata)));
-
-            return new ResultsVectorWithThumbnail(results, Optional.empty());
-        } catch (InitializeException | ImageIOException e) {
-            throw new NamedFeatureCalculateException(e);
+            return context.getExecutionTimeRecorder()
+                    .recordExecutionTime(
+                            "Calculating features",
+                            () -> calculator.calculate(new FeatureInputImageMetadata(metadata)));
+        } catch (InitializeException | ImageIOException | NamedFeatureCalculateException e) {
+            throw new OperationFailedException(e);
         }
     }
 
