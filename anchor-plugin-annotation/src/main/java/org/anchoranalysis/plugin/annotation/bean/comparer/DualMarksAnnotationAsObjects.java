@@ -39,7 +39,6 @@ import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -89,9 +88,9 @@ public class DualMarksAnnotationAsObjects<T> extends ComparableSource {
             return new NotFound<>(filePath, "The annotation is NOT accepted");
         }
 
-        ObjectCollectionWithProperties objects =
+        ObjectCollection objects =
                 annotation.marks().deriveObjects(dimensions, annotation.region());
 
-        return new Found<>(objects.withoutProperties());
+        return new Found<>(objects);
     }
 }

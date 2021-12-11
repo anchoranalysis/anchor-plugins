@@ -82,7 +82,7 @@ class WalkShortestPath {
 
         checkCoplanar(points);
 
-        BoundingBox box = BoundingBoxFromPoints.fromCollection(points);
+        BoundingBox box = BoundingBoxFromPoints.fromStream(points.stream());
 
         ObjectMask object = new ObjectMask(box);
 

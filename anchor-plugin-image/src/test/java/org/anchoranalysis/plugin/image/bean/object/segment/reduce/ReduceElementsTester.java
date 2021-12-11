@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
@@ -63,7 +64,8 @@ class ReduceElementsTester {
 
         SegmentedObjects segments = SegmentedObjectsFixture.create(true, false);
 
-        SegmentedObjects reduced = segments.reduce(reduce, true);
+        SegmentedObjects reduced =
+                segments.reduce(reduce, true, ExecutionTimeRecorderIgnore.instance());
 
         writeIntoDirectory.ifPresent(folder -> writeRasters(folder, segments, reduced));
 

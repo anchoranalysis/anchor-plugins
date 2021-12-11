@@ -48,12 +48,10 @@ public class CircleObjectFixture {
         mark.setPosition(PointConverter.doubleFromInt(center));
         mark.setRadius(radius);
         return mark.deriveObject(
-                        DIMS,
-                        RegionMapSingleton.instance()
-                                .membershipWithFlagsForIndex(
-                                        GlobalRegionIdentifiers.SUBMARK_INSIDE),
-                        BinaryValuesByte.getDefault())
-                .asObjectMask();
+                DIMS,
+                RegionMapSingleton.instance()
+                        .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE),
+                BinaryValuesByte.getDefault());
     }
 
     public static EnergyStack energyStack() {

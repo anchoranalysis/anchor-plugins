@@ -25,21 +25,25 @@
  */
 package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
-import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.inference.segment.ReductionOutcome;
 import org.anchoranalysis.image.inference.segment.WithConfidence;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.box.BoundedList;
+import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBoxMerger;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.rtree.SpatiallySeparate;
 
 /**
@@ -48,13 +52,14 @@ import org.anchoranalysis.spatial.rtree.SpatiallySeparate;
  * <p>After thresholding, a connected-components algorithm splits the thresholded-mask into
  * single-objects.
  *
- * <p>This is a more efficient approach for merging adjacent segments than {@link
- * ConditionallyMergeOverlappingObjects}, especially if there are very many overlapping objects
- * occupying the same space.
+ * <p>Depending on the number of objects, two types of projection occur:
  *
- * <p>However, unlike {@link ConditionallyMergeOverlappingObjects}, it does not distinguish easily
- * between regions of different levels of confidence, beyond a simple threshold, which are then
- * merged together if spatially adjacent.
+ * <ul>
+ *   <li>the projection occurs globally on an identically sized image to the entire size (more
+ *       efficient for a larger number of objects and/or small image), or
+ *   <li>using an R-Tree clusters of intersecting boxes are found, and each is processed separately
+ *       (more efficient for a smaller number of objects and/or large image).
+ * </ul>
  *
  * @author Owen Feehan
  */
@@ -62,17 +67,27 @@ import org.anchoranalysis.spatial.rtree.SpatiallySeparate;
 public class ThresholdConfidence extends ReduceElements<ObjectMask> {
 
     // START BEAN PROPERTIES
-    /** The minimum confidence of an element for its object-mask to be included. */
+    /**
+     * The minimum confidence of an element for its object-mask to be <b>initially</b> included for
+     * consideration (before merging).
+     */
     @BeanField @Getter @Setter private double minConfidence = 0.5;
 
     /** The minimum number of voxels that must exist in a connected-component to be included. */
     @BeanField @Getter @Setter private int minNumberVoxels = 5;
+
+    /**
+     * When the number of objects is greater or equal than this, they are reduced globally, without
+     * separation. See class javadoc.
+     */
+    @BeanField @Getter @Setter private int thresholdNumberObjectsGlobal = 20;
     // END BEAN PROPERTIES
 
     /**
      * Creates with a minimum-confidence level.
      *
-     * @param minConfidence the minimum confidence of an element for its object-mask to be included.
+     * @param minConfidence the minimum confidence of an element for its object-mask to be
+     *     <b>finally</b> included (after merging).
      */
     public ThresholdConfidence(double minConfidence) {
         this.minConfidence = minConfidence;
@@ -80,49 +95,111 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
 
     @Override
     public ReductionOutcome<LabelledWithConfidence<ObjectMask>> reduce(
-            List<LabelledWithConfidence<ObjectMask>> elements) throws OperationFailedException {
+            List<LabelledWithConfidence<ObjectMask>> elements,
+            Extent extent,
+            ExecutionTimeRecorder executionTimeRecorder)
+            throws OperationFailedException {
 
-        if (elements.isEmpty()) {
+        // Filter
+        List<LabelledWithConfidence<ObjectMask>> elementsFiltered =
+                elements.stream()
+                        .filter(withConfidence -> withConfidence.getConfidence() >= minConfidence)
+                        .collect(Collectors.toList());
+
+        if (elementsFiltered.isEmpty()) {
             // An empty input list produces an outcome where no elements are retained (because none
             // exist).
             return new ReductionOutcome<>();
         }
 
         // Take the label from the first element
-        String label = elements.get(0).getLabel();
+        String label = elementsFiltered.get(0).getLabel();
 
         // Check that all other labels are the same, otherwise we cannot proceed
-        if (anyLabelDiffersTo(elements, label)) {
+        if (anyLabelDiffersTo(elementsFiltered, label)) {
             throw new OperationFailedException(
                     "Labels are not all identical, so this reduction operation cannot proceed.");
         }
 
-        SpatiallySeparate<LabelledWithConfidence<ObjectMask>> separate =
-                new SpatiallySeparate<>(
-                        withConfidence -> withConfidence.getElement().boundingBox());
-
         ReductionOutcome<LabelledWithConfidence<ObjectMask>> outcome = new ReductionOutcome<>();
 
-        // For efficiency on rasters sparsely populated with objects, process each
-        //  spatially-connected set of objects separately.
-        for (Set<LabelledWithConfidence<ObjectMask>> split : separate.separate(elements)) {
-            deriveLabelledObjects(Lists.newArrayList(split), label).forEach(outcome::addNewlyAdded);
-        }
+        executionTimeRecorder.recordExecutionTime(
+                "Derive labelled reduced objects",
+                () ->
+                        projectAllObjects(
+                                elementsFiltered,
+                                extent,
+                                withConfidence ->
+                                        outcome.addNewlyAdded(
+                                                new LabelledWithConfidence<>(
+                                                        label, withConfidence)),
+                                executionTimeRecorder));
 
         return outcome;
     }
 
-    private List<LabelledWithConfidence<ObjectMask>> deriveLabelledObjects(
-            List<LabelledWithConfidence<ObjectMask>> elements, String label)
+    /** Perform the projection on all {@code elements} using either of the two methods. */
+    private void projectAllObjects(
+            List<LabelledWithConfidence<ObjectMask>> elements,
+            Extent extent,
+            Consumer<WithConfidence<ObjectMask>> addToOutcome,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws OperationFailedException {
+        if (elements.size() >= thresholdNumberObjectsGlobal) {
+            // If there are many elements, we prefer to use a raster on the entire scene, as
+            // "separating"
+            // the elements into clusters can be expensive
+            deriveObjects(elements.stream(), new BoundingBox(extent), addToOutcome);
+        } else {
+            // If there are few elements, we separate the elements, to avoid having to create a big
+            // raster for small areas of space.
+            projectSeparatedObjects(elements, addToOutcome, executionTimeRecorder);
+        }
+    }
 
-        List<WithConfidence<ObjectMask>> elementsWithOutLabel =
-                FunctionalList.mapToList(elements, LabelledWithConfidence::getWithConfidence);
+    /** Perform the projection on all {@code elements} after separating them via a R-Tree. */
+    private void projectSeparatedObjects(
+            List<LabelledWithConfidence<ObjectMask>> elements,
+            Consumer<WithConfidence<ObjectMask>> addToOutcome,
+            ExecutionTimeRecorder executionTimeRecorder)
+            throws OperationFailedException {
+        SpatiallySeparate<LabelledWithConfidence<ObjectMask>> separate =
+                new SpatiallySeparate<>(
+                        withConfidence -> withConfidence.getElement().boundingBox());
 
-        List<WithConfidence<ObjectMask>> derived = deriveObjects(elementsWithOutLabel);
+        List<Set<LabelledWithConfidence<ObjectMask>>> separatedElements =
+                executionTimeRecorder.recordExecutionTime(
+                        "Spatially separate for reduction", () -> separate.separate(elements));
 
-        return FunctionalList.mapToList(
-                derived, object -> new LabelledWithConfidence<>(label, object));
+        // For efficiency on rasters sparsely populated with objects, process each
+        //  spatially-connected set of objects separately.
+        for (Set<LabelledWithConfidence<ObjectMask>> split : separatedElements) {
+            BoundingBox mergedBox =
+                    BoundingBoxMerger.merge(
+                            split.stream()
+                                    .map(
+                                            withConfidence ->
+                                                    withConfidence.getElement().boundingBox()));
+            deriveObjects(split.stream(), mergedBox, addToOutcome);
+        }
+    }
+
+    /**
+     * Projects elements into a raster, and derives a list of {@link ObjectMask}s from the
+     * connected-components.
+     */
+    private void deriveObjects(
+            Stream<LabelledWithConfidence<ObjectMask>> elements,
+            BoundingBox box,
+            Consumer<WithConfidence<ObjectMask>> addToOutcome)
+            throws OperationFailedException {
+        DeriveObjectsFromStream.deriveObjects(
+                        elements.map(LabelledWithConfidence::getWithConfidence),
+                        box,
+                        minConfidence,
+                        minNumberVoxels)
+                .stream()
+                .forEach(addToOutcome);
     }
 
     /** Checks if any label is different to {@code labelToCompare}. */
@@ -131,15 +208,5 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
         return elements.stream()
                 .map(LabelledWithConfidence::getLabel)
                 .anyMatch(label -> !labelToCompare.equals(label));
-    }
-
-    private List<WithConfidence<ObjectMask>> deriveObjects(
-            List<WithConfidence<ObjectMask>> elements) throws OperationFailedException {
-
-        BoundedList<WithConfidence<ObjectMask>> boundedList =
-                BoundedList.createFromList(
-                        elements, withConfidence -> withConfidence.getElement().boundingBox());
-        return DeriveObjectsFromList.deriveObjects(
-                boundedList, elements, minConfidence, minNumberVoxels);
     }
 }

@@ -44,14 +44,16 @@ public class FitResult {
     private double radiusX;
     private double radiusY;
     private double radiusZ;
+
+    /** The rotation matrix, which must be considered immutable to be used here. */
     private DoubleMatrix2D rotMatrix;
 
-    public void applyFitResultToMark(Ellipsoid mark, Dimensions sceneDim, double shellRad)
+    public void applyFitResultToMark(Ellipsoid mark, Dimensions sceneDim, double shell)
             throws PointsFitterException {
 
         Orientation orientation = new OrientationRotationMatrix(new RotationMatrix(rotMatrix));
 
-        mark.setShellRad(shellRad);
+        mark.setShell(shell);
         mark.setMarksExplicit(centerPoint, orientation, radiiAsPoint());
 
         BoundingBox box = mark.boxAllRegions(sceneDim);

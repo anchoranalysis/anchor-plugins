@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.inference.ImageInferenceContext;
 import org.anchoranalysis.image.inference.bean.segment.instance.DecodeInstanceSegmentation;
 import org.anchoranalysis.image.inference.segment.DualScale;
@@ -60,7 +61,11 @@ public class DecodeEAST extends DecodeInstanceSegmentation<OnnxTensor> {
         List<Integer> indices = indicesAboveThreshold(scores);
 
         return extractObjects(
-                inferenceOutput.get(1), scores, indices, dualScaleConverters(context));
+                inferenceOutput.get(1),
+                scores,
+                indices,
+                dualScaleConverters(context),
+                context.getExecutionTimeRecorder());
     }
 
     @Override
@@ -91,7 +96,8 @@ public class DecodeEAST extends DecodeInstanceSegmentation<OnnxTensor> {
             OnnxTensor geometryTensor,
             FloatBuffer scores,
             List<Integer> indices,
-            DualScale<MarkToObjectConverter> converter) {
+            DualScale<MarkToObjectConverter> converter,
+            ExecutionTimeRecorder executionTimeRecorder) {
 
         List<LabelledWithConfidence<MultiScaleObject>> out = new ArrayList<>();
 
@@ -105,7 +111,12 @@ public class DecodeEAST extends DecodeInstanceSegmentation<OnnxTensor> {
             Point2i anchorPointScaled = SCALE_BY_4.scale(x, y);
             out.add(
                     extractLabelledBoundingBox(
-                            scores, geometryBuffer, index, anchorPointScaled, converter));
+                            scores,
+                            geometryBuffer,
+                            index,
+                            anchorPointScaled,
+                            converter,
+                            executionTimeRecorder));
         }
 
         return out;
@@ -117,12 +128,15 @@ public class DecodeEAST extends DecodeInstanceSegmentation<OnnxTensor> {
             FloatBuffer geometry,
             int index,
             Point2i offset,
-            DualScale<MarkToObjectConverter> convertersDual) {
+            DualScale<MarkToObjectConverter> convertersDual,
+            ExecutionTimeRecorder executionTimeRecorder) {
 
         MultiScaleObject objectAtScale =
                 MultiScaleObject.extractFrom(
                         convertersDual,
-                        converter -> createObjectFromGeometry(index, offset, geometry, converter));
+                        converter ->
+                                createObjectFromGeometry(
+                                        index, offset, geometry, converter, executionTimeRecorder));
         return new LabelledWithConfidence<>(objectAtScale, scores.get(index), CLASS_LABEL);
     }
 
@@ -131,13 +145,18 @@ public class DecodeEAST extends DecodeInstanceSegmentation<OnnxTensor> {
      * <i>geometry</i> buffer at a particular index.
      */
     private static ObjectMask createObjectFromGeometry(
-            int index, Point2i offset, FloatBuffer geometry, MarkToObjectConverter converter) {
+            int index,
+            Point2i offset,
+            FloatBuffer geometry,
+            MarkToObjectConverter converter,
+            ExecutionTimeRecorder executionTimeRecorder) {
         int indexStart = index * VECTOR_SIZE;
         Mark mark =
                 RotatableBoundingBoxFactory.create(
                         vectorIndex -> geometry.get(indexStart + vectorIndex), offset);
 
-        return converter.convert(mark);
+        return executionTimeRecorder.recordExecutionTime(
+                "Convert mark", () -> converter.convert(mark));
     }
 
     /** A {@link MarkToObjectConverter} for each respective scale. */

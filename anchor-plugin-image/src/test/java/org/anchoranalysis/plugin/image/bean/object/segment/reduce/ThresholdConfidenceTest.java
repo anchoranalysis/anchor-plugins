@@ -39,6 +39,6 @@ class ThresholdConfidenceTest {
 
     @Test
     void testReduce() throws OperationFailedException {
-        tester.test(new ThresholdConfidence(0), false, 1, 0.56827);
+        tester.test(new ThresholdConfidence(0), false, 1, 0.53823);
     }
 }

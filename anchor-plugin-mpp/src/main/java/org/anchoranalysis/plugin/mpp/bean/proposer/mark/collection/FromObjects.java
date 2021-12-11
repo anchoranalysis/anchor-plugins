@@ -56,7 +56,7 @@ public class FromObjects extends MarkCollectionProposer {
 
     @BeanField @Getter @Setter private boolean suppressZCovariance = false;
 
-    @BeanField @Getter @Setter private double shellRad = 0.2;
+    @BeanField @Getter @Setter private double shell = 0.2;
 
     @BeanField @OptionalBean @Getter @Setter private CheckMark checkMark;
     // END BEAN PROPERTIES
@@ -118,6 +118,6 @@ public class FromObjects extends MarkCollectionProposer {
     private Ellipsoid createFromObject(ObjectMask object, EnergyStack energyStack)
             throws CreateException {
         return EllipsoidFactory.createMarkEllipsoidLeastSquares(
-                object, energyStack.dimensions(), suppressZCovariance, shellRad);
+                object, energyStack.dimensions(), suppressZCovariance, shell);
     }
 }

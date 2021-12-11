@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.segment.DualScale;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
@@ -96,7 +97,10 @@ public class SegmentedObjectsFixture {
             addObjects(CLASS_LABEL_CUT_OFF_CORNERS, cutOffCornerObjects, list);
         }
 
-        return new SegmentedObjects(list, new DualScale<>(BACKGROUND, BACKGROUND));
+        return new SegmentedObjects(
+                list,
+                new DualScale<>(BACKGROUND, BACKGROUND),
+                ExecutionTimeRecorderIgnore.instance());
     }
 
     private static void addObjects(

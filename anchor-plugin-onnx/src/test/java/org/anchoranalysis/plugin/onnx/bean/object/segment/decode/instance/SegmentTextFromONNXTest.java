@@ -5,7 +5,7 @@ import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.image.inference.bean.segment.instance.SuppressNonMaximum;
-import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyMergeOverlappingObjects;
+import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ThresholdConfidence;
 import org.anchoranalysis.plugin.image.bean.scale.FitTo;
 import org.anchoranalysis.plugin.onnx.bean.object.segment.decode.instance.text.DecodeEAST;
 import org.anchoranalysis.plugin.onnx.bean.object.segment.stack.SegmentObjectsFromONNXModel;
@@ -36,7 +36,7 @@ class SegmentTextFromONNXTest extends InstanceSegmentationTestBase {
         segment.setIncludeBatchDimension(true);
         segment.setInterleaveChannels(true);
         segment.setReadFromResources(true);
-        return new SuppressNonMaximum<>(segment, new ConditionallyMergeOverlappingObjects(), false);
+        return new SuppressNonMaximum<>(segment, new ThresholdConfidence(), false);
     }
 
     private ScaleCalculator createScaleInput() {

@@ -31,7 +31,6 @@ import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationExcep
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.spatial.orientation.Orientation;
-import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Vector3d;
 
@@ -40,19 +39,16 @@ public class DotProductOrientationToVector extends FeatureMarkDirection {
 
     @Override
     protected double calculateForEllipsoid(
-            Ellipsoid mark,
-            Orientation orientation,
-            RotationMatrix rotMatrix,
-            Vector3d directionVector)
+            Ellipsoid mark, Orientation orientation, Vector3d directionVector)
             throws FeatureCalculationException {
 
         double minDot = Double.POSITIVE_INFINITY;
 
         try {
             for (int dimension = 0; dimension < 3; dimension++) {
-                Point3d vec = rotMatrix.column(dimension);
+                Point3d vector = orientation.getRotationMatrix().column(dimension);
 
-                double dot = Math.acos(directionVector.dotProduct(vec));
+                double dot = Math.acos(directionVector.dotProduct(vector));
 
                 if (dot < minDot) {
                     minDot = dot;

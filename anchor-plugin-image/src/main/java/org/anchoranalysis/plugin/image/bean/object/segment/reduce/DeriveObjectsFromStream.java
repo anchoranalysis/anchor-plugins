@@ -25,8 +25,10 @@
  */
 package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.DoubleToIntFunction;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -39,7 +41,6 @@ import org.anchoranalysis.image.inference.segment.WithConfidence;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
-import org.anchoranalysis.spatial.box.BoundedList;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
@@ -56,26 +57,36 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class DeriveObjectsFromList {
+class DeriveObjectsFromStream {
 
+    /**
+     * Merges individual objects (with confidence) together if spatially adjacent.
+     *
+     * <p>This is achieved via projecting the maximum-confidence of each value into a raster, as per
+     * class Javadoc.
+     *
+     * @param elements a stream of elements which form the input, and which may be merged.
+     * @param containingBox a bounding-box that should contain all {@code elements}.
+     * @param minConfidence only final (after merging) objects with at least this average confidence
+     *     are outputted.
+     * @param minNumberVoxels only final (after merging) objects with at least these number of
+     *     voxels are outputted.
+     * @return a list of object-masks, after possibly, merging, as per the above.
+     * @throws OperationFailedException if the operation cannot succeed.
+     */
     public static List<WithConfidence<ObjectMask>> deriveObjects(
-            BoundedList<WithConfidence<ObjectMask>> boundedList,
-            List<WithConfidence<ObjectMask>> elements,
+            Stream<WithConfidence<ObjectMask>> elements,
+            BoundingBox containingBox,
             double minConfidence,
             int minNumberVoxels)
             throws OperationFailedException {
-        ConfidenceScaler scaler = new ConfidenceScaler(elements);
+        ConfidenceScaler<ObjectMask> scaler = new ConfidenceScaler<>(minConfidence, 1.0);
 
-        Channel channel =
-                writeConfidenceIntoChannel(elements, boundedList.boundingBox(), scaler::downscale);
+        Channel channel = writeConfidenceIntoChannel(elements, containingBox, scaler::downscale);
 
         Mask mask = threshold(channel.duplicate(), minConfidence, scaler::downscale);
         return DeriveObjectsFromMask.splitIntoObjects(
-                mask,
-                channel,
-                scaler::upscale,
-                boundedList.boundingBox().cornerMin(),
-                minNumberVoxels);
+                mask, channel, scaler::upscale, containingBox.cornerMin(), minNumberVoxels);
     }
 
     private static Mask threshold(
@@ -92,7 +103,7 @@ class DeriveObjectsFromList {
     }
 
     private static Channel writeConfidenceIntoChannel(
-            List<WithConfidence<ObjectMask>> elements,
+            Stream<WithConfidence<ObjectMask>> elements,
             BoundingBox boxOverall,
             DoubleToIntFunction convertConfidence) {
         Dimensions dimensions = new Dimensions(boxOverall.extent());
@@ -101,13 +112,17 @@ class DeriveObjectsFromList {
                         .get(UnsignedByteVoxelType.INSTANCE)
                         .createEmptyInitialised(dimensions);
 
-        for (WithConfidence<ObjectMask> withConfidence : elements) {
-            int confidenceAsInt = convertConfidence.applyAsInt(withConfidence.getConfidence());
+        for (Iterator<WithConfidence<ObjectMask>> iterator = elements.iterator();
+                iterator.hasNext(); ) {
+
+            WithConfidence<ObjectMask> element = iterator.next();
+
+            int confidenceAsInt = convertConfidence.applyAsInt(element.getConfidence());
 
             // Assign a value to the voxels only if it is greater than the existing-value
             channel.assignValue(confidenceAsInt)
                     .toObjectIf(
-                            withConfidence.getElement().relativeMaskTo(boxOverall),
+                            element.getElement().relativeMaskTo(boxOverall),
                             voxelValue -> voxelValue == 0 || voxelValue > confidenceAsInt);
         }
 

@@ -30,7 +30,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.part.CalculationPart;
-import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -52,13 +51,11 @@ class CalculateSingleObjFromMemo
     }
 
     private ObjectMask deriveMask(FeatureInputSingleMemo input) throws FeatureCalculationException {
-        ObjectWithProperties om =
-                input.getPxlPartMemo()
-                        .getMark()
-                        .deriveObject(
-                                input.dimensionsRequired(),
-                                regionMap.membershipWithFlagsForIndex(index),
-                                BinaryValuesByte.getDefault());
-        return om.asObjectMask();
+        return input.getPxlPartMemo()
+                .getMark()
+                .deriveObject(
+                        input.dimensionsRequired(),
+                        regionMap.membershipWithFlagsForIndex(index),
+                        BinaryValuesByte.getDefault());
     }
 }

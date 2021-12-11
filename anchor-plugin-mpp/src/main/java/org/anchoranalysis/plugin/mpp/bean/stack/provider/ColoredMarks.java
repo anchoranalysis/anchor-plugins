@@ -58,9 +58,7 @@ public class ColoredMarks extends ColoredBaseWithGenerator {
         RegionMembershipWithFlags regionMembership =
                 RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID);
         try {
-            return marks.get()
-                    .deriveObjects(backgroundDimensions, regionMembership)
-                    .withoutProperties();
+            return marks.get().deriveObjects(backgroundDimensions, regionMembership);
         } catch (ProvisionFailedException e) {
             throw new CreateException(e);
         }

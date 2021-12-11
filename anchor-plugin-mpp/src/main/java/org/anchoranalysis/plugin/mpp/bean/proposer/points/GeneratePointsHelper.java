@@ -65,7 +65,7 @@ class GeneratePointsHelper {
             List<Point3i> pointsAlongContour, PointListForConvex pointList)
             throws OperationFailedException {
 
-        BoundingBox box = BoundingBoxFromPoints.fromCollection(pointsAlongContour);
+        BoundingBox box = BoundingBoxFromPoints.fromStream(pointsAlongContour.stream());
 
         int zLow = Math.max(0, box.cornerMin().z() - maxZDistance);
         int zHigh = Math.min(dimensions.z(), box.cornerMin().z() + maxZDistance);

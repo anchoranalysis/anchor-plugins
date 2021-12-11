@@ -32,7 +32,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
-import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -69,14 +68,12 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     }
 
     private ObjectMask createMask(FeatureInputSingleMemo input) throws FeatureCalculationException {
-        ObjectWithProperties omWithProps =
-                input.getPxlPartMemo()
-                        .getMark()
-                        .deriveObject(
-                                input.dimensionsRequired(),
-                                regionMap.membershipWithFlagsForIndex(getRegionID()),
-                                BinaryValuesByte.getDefault());
-        return omWithProps.asObjectMask();
+        return input.getPxlPartMemo()
+                .getMark()
+                .deriveObject(
+                        input.dimensionsRequired(),
+                        regionMap.membershipWithFlagsForIndex(getRegionID()),
+                        BinaryValuesByte.getDefault());
     }
 
     private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object)

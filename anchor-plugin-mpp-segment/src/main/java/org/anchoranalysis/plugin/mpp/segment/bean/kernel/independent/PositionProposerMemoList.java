@@ -75,7 +75,8 @@ class PositionProposerMemoList implements OptionalPointProposer {
 
             Point3d point = randomPosition(box, context.getRandomNumberGenerator());
 
-            if (insideRelevantRegion(voxelized, rm, point, box)) {
+            if (insideRelevantRegion(
+                    voxelized, rm, PointConverter.intFromDoubleFloor(point), box)) {
                 return Optional.of(point);
             }
         }
@@ -84,13 +85,11 @@ class PositionProposerMemoList implements OptionalPointProposer {
     }
 
     private boolean insideRelevantRegion(
-            VoxelizedMark voxelized, RegionMembership rm, Point3d point, BoundingBox box) {
+            VoxelizedMark voxelized, RegionMembership rm, Point3i point, BoundingBox box) {
 
         byte flags = rm.flags();
 
-        Point3i pointRelative =
-                Point3i.immutableSubtract(
-                        PointConverter.intFromDoubleFloor(point), box.cornerMin());
+        Point3i pointRelative = Point3i.immutableSubtract(point, box.cornerMin());
 
         byte membershipExisting =
                 voxelized
