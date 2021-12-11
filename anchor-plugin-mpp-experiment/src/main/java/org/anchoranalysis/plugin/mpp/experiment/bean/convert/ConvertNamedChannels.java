@@ -32,10 +32,10 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
@@ -212,7 +212,7 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
             throws ExperimentExecutionException {
         // Derive a directory if needed
         InputTypesExpected expectedFromDelegate = task.inputTypesExpected();
-        return OptionalFactory.createWithException(
+        return OptionalFactory.createChecked(
                 expectedFromDelegate.doesClassInheritFromAny(FileWithDirectoryInput.class),
                 () -> CommonRootHelper.findCommonPathRoot(inputs));
     }

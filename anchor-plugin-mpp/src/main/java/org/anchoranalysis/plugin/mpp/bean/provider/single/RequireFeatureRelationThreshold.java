@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitializeException;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
@@ -68,8 +69,7 @@ public class RequireFeatureRelationThreshold extends SingleMarkProvider {
     public Optional<Mark> get() throws ProvisionFailedException {
 
         return OptionalUtilities.flatMap(
-                markProvider.get(),
-                mark -> OptionalUtilities.createFromFlag(isFeatureAccepted(mark), mark));
+                markProvider.get(), mark -> OptionalFactory.create(isFeatureAccepted(mark), mark));
     }
 
     private boolean isFeatureAccepted(Mark mark) throws ProvisionFailedException {

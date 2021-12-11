@@ -63,7 +63,7 @@ class MarksVisualization {
 
         // Cache the creation of colored-marks
         CachedSupplier<ColoredMarksWithDisplayStack, OutputWriteFailedException>
-                cachedMarksWithStack = CachedSupplier.cache(this::createMarksWithStack);
+                cachedMarksWithStack = CachedSupplier.cacheChecked(this::createMarksWithStack);
 
         writeColoredMarks(OUTPUT_VISUALIZE_MARKS_SOLID, Filled::new, cachedMarksWithStack::get);
         writeColoredMarks(OUTPUT_VISUALIZE_MARKS_OUTLINE, Outline::new, cachedMarksWithStack::get);

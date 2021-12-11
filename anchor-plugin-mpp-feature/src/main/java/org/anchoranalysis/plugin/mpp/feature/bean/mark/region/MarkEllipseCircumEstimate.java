@@ -34,7 +34,7 @@ import org.anchoranalysis.mpp.mark.conic.Ellipse;
 
 /**
  * Estimates the circumference of an ellipse based upon finding the area of the shell, and dividing
- * // by the ShellRad
+ * // by the shell
  *
  * @author Owen Feehan
  */

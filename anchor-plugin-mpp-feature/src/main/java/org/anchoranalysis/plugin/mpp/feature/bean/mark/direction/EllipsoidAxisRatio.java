@@ -32,7 +32,6 @@ import org.anchoranalysis.math.equation.QuadraticEquationSolver;
 import org.anchoranalysis.math.equation.QuadraticEquationSolver.QuadraticRoots;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.spatial.orientation.Orientation;
-import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Vector3d;
 
@@ -47,22 +46,18 @@ public class EllipsoidAxisRatio extends FeatureMarkDirection {
 
     @Override
     protected double calculateForEllipsoid(
-            Ellipsoid mark,
-            Orientation orientation,
-            RotationMatrix rotMatrix,
-            Vector3d normalToPlane)
+            Ellipsoid mark, Orientation orientation, Vector3d normalToPlane)
             throws FeatureCalculationException {
 
         // Now we get
         QuadraticRoots roots =
-                solveEquation(mark.createRadiiArray(), calculateBeta(rotMatrix, normalToPlane));
+                solveEquation(mark.createRadiiArray(), calculateBeta(orientation, normalToPlane));
 
         return ratio(roots);
     }
 
-    private static Point3d calculateBeta(RotationMatrix rotMatrix, Vector3d normalToPlane) {
-        normalToPlane.normalize();
-        return rotMatrix.rotatedPoint(new Point3d(normalToPlane));
+    private static Point3d calculateBeta(Orientation orientation, Vector3d normalToPlane) {
+        return orientation.getRotationMatrix().rotatePoint(normalToPlane);
     }
 
     private QuadraticRoots solveEquation(double[] radii, Point3d beta)

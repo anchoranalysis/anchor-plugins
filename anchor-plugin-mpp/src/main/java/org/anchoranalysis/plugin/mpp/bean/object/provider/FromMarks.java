@@ -62,8 +62,7 @@ public class FromMarks extends ObjectCollectionProvider {
 
         MarkCollection marksCreated = marks.get();
 
-        return marksCreated
-                .deriveObjects(dimensions.get(), regionMap.membershipWithFlagsForIndex(regionID))
-                .withoutProperties();
+        return marksCreated.deriveObjects(
+                dimensions.get(), regionMap.membershipWithFlagsForIndex(regionID));
     }
 }

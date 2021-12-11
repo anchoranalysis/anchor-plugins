@@ -57,7 +57,7 @@ public class DeserializedManifest {
             File file, ManifestDeserializer manifestDeserializer, Logger logger) {
         this.file = file;
         this.logger = logger;
-        this.memoized = CachedSupplier.cache(() -> getInternal(manifestDeserializer));
+        this.memoized = CachedSupplier.cacheChecked(() -> getInternal(manifestDeserializer));
     }
 
     public Manifest get() throws OperationFailedException {

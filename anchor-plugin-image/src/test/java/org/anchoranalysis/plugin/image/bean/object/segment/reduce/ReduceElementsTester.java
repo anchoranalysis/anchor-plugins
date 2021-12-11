@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
@@ -63,7 +64,8 @@ class ReduceElementsTester {
 
         SegmentedObjects segments = SegmentedObjectsFixture.create(true, false);
 
-        SegmentedObjects reduced = segments.reduce(reduce, true);
+        SegmentedObjects reduced =
+                segments.reduce(reduce, true, ExecutionTimeRecorderIgnore.instance());
 
         writeIntoDirectory.ifPresent(folder -> writeRasters(folder, segments, reduced));
 
@@ -71,7 +73,7 @@ class ReduceElementsTester {
                 countTotalVoxels(segments),
                 countTotalVoxels(reduced),
                 "identical number of voxels");
-        assertEquals(numberObjectsAfter, reduced.asList().size(), "number-objects-after");
+        assertEquals(numberObjectsAfter, reduced.size(), "number-objects-after");
 
         assertEquals(
                 highestConfidenceObjectUnchanged,
@@ -87,13 +89,14 @@ class ReduceElementsTester {
     /** Writes raster-images (for debugging) to the filesystem of before and after the reduction. */
     private static void writeRasters(
             WriteIntoDirectory write, SegmentedObjects segments, SegmentedObjects reduced) {
-        write.writeObjects("before", segments.asObjects());
-        write.writeObjects("after", reduced.asObjects());
+        write.writeObjects("before", segments.getObjects().atInputScale().objects());
+        write.writeObjects("after", reduced.getObjects().atInputScale().objects());
     }
 
     private static int countTotalVoxels(SegmentedObjects segments) {
         try {
-            return ObjectMaskMerger.merge(segments.asObjects()).numberVoxelsOn();
+            return ObjectMaskMerger.merge(segments.getObjects().atInputScale().objects())
+                    .numberVoxelsOn();
         } catch (OperationFailedException e) {
             throw new AnchorFriendlyRuntimeException(e);
         }

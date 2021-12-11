@@ -53,29 +53,29 @@ public class EllipsoidFactory {
      * @param dimensions the dimensions of the scene the object is contaiend in
      * @param suppressZCovariance whether to suppress the covariance in the z-dimension when doing
      *     least squares fiting
-     * @param shellRad shellRad for the mark that is created
+     * @param shell shell for the mark that is created
      * @return
      * @throws CreateException
      */
     public static Ellipsoid createMarkEllipsoidLeastSquares(
-            ObjectMask object, Dimensions dimensions, boolean suppressZCovariance, double shellRad)
+            ObjectMask object, Dimensions dimensions, boolean suppressZCovariance, double shell)
             throws CreateException {
         return createMarkEllipsoidLeastSquares(
                 () -> PointsFromObject.listFromOutline3i(object),
                 dimensions,
                 suppressZCovariance,
-                shellRad);
+                shell);
     }
 
     public static Ellipsoid createMarkEllipsoidLeastSquares(
             CheckedSupplier<List<Point3i>, CreateException> opPoints,
             Dimensions dimensions,
             boolean suppressZCovariance,
-            double shellRad)
+            double shell)
             throws CreateException {
 
         LinearLeastSquaresEllipsoidFitter pointsFitter = new LinearLeastSquaresEllipsoidFitter();
-        pointsFitter.setShellRad(shellRad);
+        pointsFitter.setShell(shell);
         pointsFitter.setSuppressZCovariance(suppressZCovariance);
 
         // Now get all the points on the outline

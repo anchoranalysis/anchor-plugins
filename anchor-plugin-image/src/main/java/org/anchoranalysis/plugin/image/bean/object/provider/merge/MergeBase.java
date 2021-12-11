@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -99,7 +99,7 @@ public abstract class MergeBase extends WithContainerBase {
 
     private Optional<Resolution> resolutionOptional() throws OperationFailedException {
         try {
-            return OptionalFactory.create(dimensions).flatMap(Dimensions::resolution);
+            return OptionalProviderFactory.create(dimensions).flatMap(Dimensions::resolution);
         } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.segment;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -96,7 +96,7 @@ public class SegmentChannel extends FromChannelBase {
     private BinarySegmentationParameters createParameters(Dimensions dimensions)
             throws ProvisionFailedException {
         return new BinarySegmentationParameters(
-                OptionalFactory.create(histogram), dimensions.resolution());
+                OptionalProviderFactory.create(histogram), dimensions.resolution());
     }
 
     private Optional<ObjectMask> objectFromMask(Dimensions dim) throws ProvisionFailedException {

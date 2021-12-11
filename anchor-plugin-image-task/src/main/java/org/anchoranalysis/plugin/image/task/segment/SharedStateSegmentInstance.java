@@ -25,10 +25,10 @@
  */
 package org.anchoranalysis.plugin.image.task.segment;
 
-import java.io.IOException;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
@@ -37,6 +37,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.inference.InferenceModel;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesStyle;
 import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
@@ -49,24 +50,26 @@ import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
  */
 public class SharedStateSegmentInstance<T extends InferenceModel> {
 
-    public static final String OUTPUT_SUMMARY_CSV = "summary";
-
-    private static final FeatureOutputNames OUTPUT_RESULTS =
-            new FeatureOutputNames(OUTPUT_SUMMARY_CSV, false, false);
-
     private final FeatureExporter<FeatureTableCalculator<FeatureInputSingleObject>> features;
 
     @Getter private final ConcurrentModelPool<T> modelPool;
+
+    private final FeatureExporterContext context;
 
     public SharedStateSegmentInstance(
             ConcurrentModelPool<T> modelPool,
             FeatureTableCalculator<FeatureInputSingleObject> featureTable,
             LabelHeaders identifierHeaders,
+            String outputNameFeatures,
             FeatureExporterContext context)
             throws CreateException {
         this.modelPool = modelPool;
+
+        FeatureOutputNames outputNames = new FeatureOutputNames(outputNameFeatures, false, false);
+
         this.features =
-                FeatureExporter.create(OUTPUT_RESULTS, featureTable, identifierHeaders, context);
+                FeatureExporter.create(outputNames, featureTable, identifierHeaders, context);
+        this.context = context;
     }
 
     /**
@@ -85,11 +88,17 @@ public class SharedStateSegmentInstance<T extends InferenceModel> {
     }
 
     /**
-     * Closes any open IO and removes redundant structures stored in memory.
+     * Writes all the results that have been collected as a CSV file, and closes open I/O handles
+     * and memory structures.
      *
-     * @throws IOException if the close operation cannot successfully complete.
+     * @throws OperationFailedException if any output cannot be written, or there is an error
+     *     closing open I/O.
      */
-    public void closeAnyOpenIO() throws IOException {
-        features.closeAnyOpenIO();
+    public void closeAndWriteOutputs(ExportFeaturesStyle style) throws OperationFailedException {
+        features.closeAndWriteOutputs(
+                Optional.empty(),
+                false,
+                contextForWriter -> style.deriveContext(contextForWriter)::csvWriter,
+                context.getContext());
     }
 }

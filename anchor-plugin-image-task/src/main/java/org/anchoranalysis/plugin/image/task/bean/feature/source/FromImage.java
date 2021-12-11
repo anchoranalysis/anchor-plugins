@@ -91,48 +91,50 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
         FeatureCalculatorFromProvider<FeatureInputStack> calculator =
                 createCalculator(input, context);
 
-        // Calculate the results for the current stack
-        ResultsVector results = calculateResults(calculator, context);
-
         thumbnail.start();
 
-        try {
-            return new ResultsVectorWithThumbnail(
-                    results,
-                    extractThumbnail(calculator.getEnergyStack(), context.isThumbnailsEnabled()));
-        } catch (CreateException e) {
-            throw new NamedFeatureCalculateException(e);
-        }
+        return new ResultsVectorWithThumbnail(
+                () -> calculateResults(calculator, context),
+                () -> extractThumbnail(calculator.getEnergyStack(), context.isThumbnailsEnabled()));
     }
 
     private ResultsVector calculateResults(
             FeatureCalculatorFromProvider<FeatureInputStack> factory,
             FeatureCalculationContext<FeatureList<FeatureInputStack>> context)
-            throws NamedFeatureCalculateException {
-        return context.getExecutionTimeRecorder()
-                .recordExecutionTime(
-                        "Calculating features",
-                        () -> {
-                            try {
-                                // The energy-stack will be added later, so we do not need to
-                                // initialize it
-                                // in the FeatureInputStack
-                                FeatureCalculatorMulti<FeatureInputStack> calculator =
-                                        factory.calculatorForAll(context.getRowSource());
-                                return calculator.calculate(
-                                        new FeatureInputStack(),
-                                        context.getLogger().errorReporter(),
-                                        context.isSuppressErrors());
-                            } catch (InitializeException e) {
-                                throw new NamedFeatureCalculateException(e);
-                            }
-                        });
+            throws OperationFailedException {
+        try {
+            return context.getExecutionTimeRecorder()
+                    .recordExecutionTime(
+                            "Calculating features",
+                            () -> {
+                                try {
+                                    // The energy-stack will be added later, so we do not need to
+                                    // initialize it
+                                    // in the FeatureInputStack
+                                    FeatureCalculatorMulti<FeatureInputStack> calculator =
+                                            factory.calculatorForAll(context.getFeatureSource());
+                                    return calculator.calculate(
+                                            new FeatureInputStack(),
+                                            context.getLogger().errorReporter(),
+                                            context.isSuppressErrors());
+                                } catch (InitializeException e) {
+                                    throw new NamedFeatureCalculateException(e);
+                                }
+                            });
+        } catch (NamedFeatureCalculateException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     private Optional<DisplayStack> extractThumbnail(EnergyStack energyStack, boolean thumbnails)
-            throws CreateException {
+            throws OperationFailedException {
         if (thumbnails) {
-            return Optional.of(thumbnail.thumbnailFor(energyStack.withoutParameters().asStack()));
+            try {
+                return Optional.of(
+                        thumbnail.thumbnailFor(energyStack.withoutParameters().asStack()));
+            } catch (CreateException e) {
+                throw new OperationFailedException(e);
+            }
         } else {
             return Optional.empty();
         }

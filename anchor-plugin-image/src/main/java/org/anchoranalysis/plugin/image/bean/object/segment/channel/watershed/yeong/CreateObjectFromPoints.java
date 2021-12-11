@@ -42,7 +42,7 @@ class CreateObjectFromPoints {
     public static ObjectMask create(List<Point3i> points) throws CreateException {
 
         try {
-            ObjectMask object = new ObjectMask(BoundingBoxFromPoints.fromCollection(points));
+            ObjectMask object = new ObjectMask(BoundingBoxFromPoints.fromStream(points.stream()));
 
             for (int i = 0; i < points.size(); i++) {
 

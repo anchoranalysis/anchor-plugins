@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.object;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
@@ -101,7 +101,7 @@ public class ColoredObjectCollection {
 
         try {
             // If objects were created, add some corresponding colors
-            OptionalFactory.create(provider)
+            OptionalProviderFactory.create(provider)
                     .ifPresent(
                             objectsCreated -> {
                                 objects.addAll(objectsCreated);

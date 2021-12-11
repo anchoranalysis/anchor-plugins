@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -109,8 +109,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     public Optional<List<String>> channelNames(Logger logger) throws ImageIOException {
         openStackIfNecessary();
         boolean includeAlpha = numberChannels(logger) == 4;
-        return OptionalUtilities.createFromFlag(
-                stack.isRGB(), RGBChannelNames.asList(includeAlpha));
+        return OptionalFactory.create(stack.isRGB(), RGBChannelNames.asList(includeAlpha));
     }
 
     @Override

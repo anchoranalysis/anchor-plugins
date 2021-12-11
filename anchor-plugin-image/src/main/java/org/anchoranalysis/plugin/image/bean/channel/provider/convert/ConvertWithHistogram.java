@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.convert;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -78,7 +78,7 @@ public class ConvertWithHistogram<T> extends ConvertBase {
 
     private Histogram createHistogram(Channel channel) throws ProvisionFailedException {
         return OptionalUtilities.orElseGet(
-                OptionalFactory.create(histogram),
+                OptionalProviderFactory.create(histogram),
                 () -> HistogramFactory.createFrom(channel.voxels()));
     }
 }

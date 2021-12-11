@@ -49,10 +49,10 @@ class EllipseFactory {
 
     private final ConicFitterBase pointsFitter;
 
-    public Ellipse create(ObjectMask object, Dimensions dimensions, double shellRad)
+    public Ellipse create(ObjectMask object, Dimensions dimensions, double shell)
             throws CreateException, InsufficientPointsException {
 
-        pointsFitter.setShellRad(shellRad);
+        pointsFitter.setShell(shell);
 
         Set<Point3i> points = PointsFromObject.setFromContour(object);
 

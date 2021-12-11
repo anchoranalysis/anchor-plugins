@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;
@@ -87,7 +87,7 @@ class InvertTest {
     }
 
     private static Optional<Mask> createRestrictTo(boolean flag, boolean do3D) {
-        return OptionalUtilities.createFromFlag(flag, () -> create(CORNER_MASK, do3D));
+        return OptionalFactory.create(flag, () -> create(CORNER_MASK, do3D));
     }
 
     private static MaskProvider createProviderInvert(Mask mask, Optional<Mask> restrictTo) {

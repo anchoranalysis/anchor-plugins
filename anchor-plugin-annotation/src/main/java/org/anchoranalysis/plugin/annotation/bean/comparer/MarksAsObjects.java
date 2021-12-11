@@ -98,6 +98,6 @@ public class MarksAsObjects extends ComparableSource {
             throw new InputReadFailedException(e);
         }
 
-        return marks.deriveObjects(dimensions, REGION_MEMBERSHIP).withoutProperties();
+        return marks.deriveObjects(dimensions, REGION_MEMBERSHIP);
     }
 }

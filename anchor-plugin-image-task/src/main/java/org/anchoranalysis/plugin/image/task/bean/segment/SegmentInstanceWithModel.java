@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.image.task.bean.segment;
 
 import java.awt.Color;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -55,13 +54,13 @@ import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
-import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
+import org.anchoranalysis.image.inference.segment.SegmentedObjectsAtScale;
 import org.anchoranalysis.image.inference.segment.WithConfidence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.object.output.grayscale.ObjectsMergedAsMaskGenerator;
@@ -111,8 +110,10 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  * <tbody>
  * <tr><td>input</td><td>no</td><td>The input image for segmentation.</td></tr>
  * <tr><td>objects</td><td>yes</td><td>Segmented object-masks encoded into HDF5.</td></tr>
- * <tr><td>mask</td><td>yes</td><td>A binary-mask image that binary <i>or</i>s each voxel across the segmented object-masks.</td></tr>
- * <tr><td>outline</td><td>yes</td><td>A RGB image showing the outline of segmented-objects on top of the input image.</td></tr>
+ * <tr><td>mask</td><td>yes</td><td>A binary-mask image that binary <i>or</i>s each voxel across the segmented object-masks (scaled to match the input image for model inference).</td></tr>
+ * <tr><td>outline</td><td>yes</td><td>A RGB image showing the outline of segmented-objects on top of the input image (scaled to match the input image for model inference).</td></tr>
+ * <tr><td>mask_full_scale</td><td>no</td><td>Like <i>mask</i> but on the full-scale input image.</td></tr>
+ * <tr><td>outline_full_scale</td><td>no</td><td>Like <i>outline</i> but on on the full-scale input image.</td></tr>
  * <tr><td>summary</td><td>yes</td><td>A CSV file showing basic feature of <i>all</i> segmented-objects across <i>all</i> input images.</td></tr>
  * <tr><td>thumbnails</td><td>yes</td><td>A directory of thumbnails showing the outline of <i>all</i> segmented objects on top of an extracted portion of the respective input-image.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
@@ -142,25 +143,37 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
     /** Output-name for a colored outline placed around the masks */
     private static final String OUTPUT_OUTLINE = "outline";
 
+    /** Output-name for the feature-results CSV for all objects. */
+    private static final String OUTPUT_SUMMARY_CSV = "summary";
+
+    /**
+     * A suffix appended to some of the existing output-names, to generate an equivalent output but
+     * but on a scaled version of the input image.
+     *
+     * <p>The scaled version corresponds to the image inputted to the model for inference.
+     */
+    private static final String OUTPUT_NAME_SCALED_SUFFIX = "_full_scale";
+
     private static final String MANIFEST_FUNCTION_INPUT_IMAGE = "input_image";
 
-    private static final String EXECUTION_TIME_OUTPUTS = "Entire outputs";
+    /** All the outputs that occur <i>per job</i>. */
+    private static final String EXECUTION_TIME_OUTPUTS = "All outputs excl. thumbnails";
 
-    private static final String EXECUTION_TIME_SEGMENTATION = "Entire segmentation";
+    private static final String EXECUTION_TIME_SEGMENTATION = "Segmentation";
 
-    private static final String EXECUTION_TIME_FEATURES = "Calculating features";
+    private static final String EXECUTION_TIME_FEATURES = "Calculating features + thumbnails";
 
     private static final String[] FEATURE_LABEL_HEADERS =
             new String[] {"image", "object", "confidence"};
 
     // START BEAN FIELDS
-    /** The segmentation algorithm */
+    /** The segmentation algorithm. */
     @BeanField @Getter @Setter private SegmentStackIntoObjectsPooled<T> segment;
 
-    /** The width of the outline */
+    /** The width of the outline. */
     @BeanField @Getter @Setter private int outlineWidth = 1;
 
-    /** The color of the outline */
+    /** The color of the outline. */
     @BeanField @OptionalBean @Getter @Setter
     private RGBColorBean outlineColor = new RGBColorBean(Color.GREEN);
 
@@ -172,8 +185,10 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
     @BeanField @Getter @Setter private boolean varyColors = false;
 
     /**
-     * Features to calculate for objects in the features output. If unspecified, default features of
-     * bounding-box coordinates and number of voxels are selected.
+     * Features to calculate for objects in the features output.
+     *
+     * <p>If unspecified, default features of bounding-box coordinates and number of voxels are
+     * selected.
      */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features;
@@ -209,7 +224,8 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
 
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);
             FeatureExporterContext context = style.deriveContext(parameters.getContext());
-            return new SharedStateSegmentInstance<>(modelPool, tableCalculator(), headers, context);
+            return new SharedStateSegmentInstance<>(
+                    modelPool, tableCalculator(), headers, OUTPUT_SUMMARY_CSV, context);
 
         } catch (CreateModelFailedException | InitializeException | CreateException e) {
             throw new ExperimentExecutionException(e);
@@ -239,24 +255,19 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
             if (!segments.isEmpty() || !ignoreNoObjects) {
                 recorder.recordExecutionTime(
                         EXECUTION_TIME_OUTPUTS,
-                        () -> {
-                            DisplayStack background =
-                                    DisplayStack.create(stack.extractUpToThreeChannels());
-                            writeOutputsForImage(
-                                    stack,
-                                    segments.asObjects(),
-                                    background,
-                                    input.getContextJob().getOutputter());
-                        });
+                        () ->
+                                writeOutputsForImage(
+                                        stack, segments, input.getContextJob().getOutputter()));
                 recorder.recordExecutionTime(
                         EXECUTION_TIME_FEATURES,
-                        () -> calculateFeaturesForImage(input, stack, segments.asList()));
+                        () ->
+                                calculateFeaturesForImage(
+                                        input,
+                                        stack,
+                                        segments.getObjects().atInputScale().listWithoutLabels()));
             }
 
-        } catch (SegmentationFailedException
-                | OperationFailedException
-                | CreateException
-                | InitializeException e) {
+        } catch (SegmentationFailedException | OperationFailedException | InitializeException e) {
             throw new JobExecutionException(e);
         }
     }
@@ -266,9 +277,9 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
             SharedStateSegmentInstance<T> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         try {
-            sharedState.closeAnyOpenIO();
+            sharedState.closeAndWriteOutputs(style);
             closeModelPool(sharedState.getModelPool(), context.getErrorReporter());
-        } catch (IOException e) {
+        } catch (OperationFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -282,11 +293,10 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs()
                 .addEnabledOutputFirst(
-                        OUTPUT_H5,
                         OUTPUT_MERGED_AS_MASK,
                         OUTPUT_OUTLINE,
                         FeatureExporter.OUTPUT_THUMBNAILS,
-                        SharedStateSegmentInstance.OUTPUT_SUMMARY_CSV);
+                        OUTPUT_SUMMARY_CSV);
     }
 
     private void calculateFeaturesForImage(
@@ -296,11 +306,13 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
             throws OperationFailedException {
 
         if (segments.isEmpty()) {
-            // Exit early, nothing to do
+            // Exit early, nothing to do, as there are no objects.
             return;
         }
 
         EnergyStack energyStack = new EnergyStack(stack);
+
+        ObjectCollection objects = deriveObjects(segments);
 
         CalculateFeaturesForObjects<FeatureInputSingleObject> calculator =
                 new CalculateFeaturesForObjects<>(
@@ -312,34 +324,31 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
                                 .createCalculationContext(
                                         input.getContextJob().getExecutionTimeRecorder(),
                                         input.getContextJob()));
-        calculator.calculateFeaturesForObjects(
-                deriveObjects(segments),
+
+        String imageIdentifier = input.getInput().identifier();
+
+        calculator.calculateForObjects(
+                objects,
                 energyStack,
-                (featureInput, index) ->
+                (objectIdentifier, groupGeneratorName, index) ->
                         identifierFor(
-                                input.getInput().identifier(),
-                                featureInput,
-                                calculator,
+                                imageIdentifier,
+                                objectIdentifier,
                                 segments.get(index).getConfidence()));
     }
 
-    private RowLabels identifierFor(
-            String imageIdentifier,
-            FeatureInputSingleObject featureInput,
-            CalculateFeaturesForObjects<FeatureInputSingleObject> calculator,
-            double confidence) {
+    private static RowLabels identifierFor(
+            String imageIdentifier, String objectIdentifier, double confidence) {
         return new RowLabels(
                 Optional.of(
                         new String[] {
-                            imageIdentifier,
-                            calculator.uniqueIdentifierFor(featureInput),
-                            Double.toString(confidence)
+                            imageIdentifier, objectIdentifier, Double.toString(confidence)
                         }),
                 Optional.empty());
     }
 
     private void writeOutputsForImage(
-            Stack stack, ObjectCollection objects, DisplayStack background, Outputter outputter) {
+            Stack stack, SegmentedObjects segmentedObjects, Outputter outputter) {
 
         WriterRouterErrors writer = outputter.writerSelective();
 
@@ -347,16 +356,31 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
                 OUTPUT_INPUT_IMAGE,
                 () -> new StackGenerator(true, Optional.of(MANIFEST_FUNCTION_INPUT_IMAGE), false),
                 () -> stack);
-        writer.write(OUTPUT_H5, HDF5ObjectsGenerator::new, () -> objects);
-        writer.write(
-                OUTPUT_MERGED_AS_MASK,
-                () -> new ObjectsMergedAsMaskGenerator(stack.dimensions()),
-                () -> objects);
 
         writer.write(
-                OUTPUT_OUTLINE,
-                () -> outlineGenerator(objects.size(), background),
-                () -> new ObjectCollectionWithProperties(objects));
+                OUTPUT_H5,
+                HDF5ObjectsGenerator::new,
+                segmentedObjects.getObjects().atInputScale()::objects);
+
+        assert (segmentedObjects.getObjects().atInputScale().objects().get(0).numberVoxelsOn()
+                > segmentedObjects.getObjects().atModelScale().objects().get(0).numberVoxelsOn());
+
+        writeOuputsAtScale(
+                writer, segmentedObjects.getObjects().atInputScale(), OUTPUT_NAME_SCALED_SUFFIX);
+        writeOuputsAtScale(writer, segmentedObjects.getObjects().atModelScale(), "");
+    }
+
+    private void writeOuputsAtScale(
+            WriterRouterErrors writer, SegmentedObjectsAtScale memoized, String outputNameSuffix) {
+        writer.write(
+                OUTPUT_MERGED_AS_MASK + outputNameSuffix,
+                () -> new ObjectsMergedAsMaskGenerator(memoized.background().dimensions()),
+                memoized::objects);
+
+        writer.write(
+                OUTPUT_OUTLINE + outputNameSuffix,
+                () -> outlineGenerator(memoized.size(), memoized.backgroundDisplayStack()),
+                memoized::objectsWithProperties);
     }
 
     private DrawObjectsGenerator outlineGenerator(int objectsSize, DisplayStack background) {

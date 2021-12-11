@@ -33,7 +33,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 
-/** Helpful routines and constants related to outputting for {@link ExportFeaturesObjectTest} */
+/** Helpful routines and constants related to outputting for {@link ExportFeaturesObjectTest}. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExportOutputter {
 
@@ -51,9 +51,7 @@ class ExportOutputter {
     public static final String OUTPUT_DIRECTORY_IRRELEVANT = "irrelevant/";
 
     private static final String[] OUTPUTS_TO_COMPARE_ALWAYS = {
-        "featuresAggregated.csv",
-        "features.csv",
-        "grouped/arbitraryGroup/featuresGroup.csv",
+        "featuresAggregated.csv", "features.csv", "grouped/arbitraryGroup/featuresGroup.csv",
     };
 
     /**

@@ -38,7 +38,6 @@ import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.spatial.orientation.Orientation;
-import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Vector3d;
 
 public abstract class FeatureMarkDirection extends FeatureMark {
@@ -53,6 +52,7 @@ public abstract class FeatureMarkDirection extends FeatureMark {
     protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         super.beforeCalc(initialization);
         this.vectorInDirection = direction.createVector().asVector3d();
+        this.vectorInDirection.normalize();
     }
 
     @Override
@@ -66,14 +66,11 @@ public abstract class FeatureMarkDirection extends FeatureMark {
         Ellipsoid mark = (Ellipsoid) input.get().getMark();
 
         Orientation orientation = mark.getOrientation();
-        return calculateForEllipsoid(
-                mark, orientation, orientation.deriveRotationMatrix(), vectorInDirection);
+        // TODO replace this inefficient repeated deriving of the rotation-matrix
+        return calculateForEllipsoid(mark, orientation, vectorInDirection);
     }
 
     protected abstract double calculateForEllipsoid(
-            Ellipsoid mark,
-            Orientation orientation,
-            RotationMatrix rotMatrix,
-            Vector3d directionVector)
+            Ellipsoid mark, Orientation orientation, Vector3d directionVector)
             throws FeatureCalculationException;
 }

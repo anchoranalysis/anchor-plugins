@@ -50,12 +50,10 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsScaleDecode;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.inference.concurrency.ConcurrentModel;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
-import org.anchoranalysis.io.imagej.iterpolator.InterpolatorImageJ;
 import org.anchoranalysis.plugin.onnx.model.OnnxModel;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.apache.commons.io.IOUtils;
@@ -67,9 +65,6 @@ import org.apache.commons.io.IOUtils;
  */
 public class SegmentObjectsFromONNXModel
         extends SegmentStackIntoObjectsScaleDecode<OnnxTensor, OnnxModel> {
-
-    // This is used for downscaling as it's fast.
-    private static final Interpolator INTERPOLATOR = new InterpolatorImageJ();
 
     // START BEAN PROPERTIES
     /**
@@ -118,8 +113,6 @@ public class SegmentObjectsFromONNXModel
     protected OnnxTensor deriveInput(
             Stack stack, ScaleFactor downfactor, Optional<double[]> subtractMeans)
             throws OperationFailedException {
-
-        stack = stack.mapChannel(channel -> channel.scaleXY(downfactor, INTERPOLATOR));
 
         // Change from RGB to BGR
         try {

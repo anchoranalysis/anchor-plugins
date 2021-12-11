@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;

@@ -89,7 +89,7 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
         DoubleMatrix2D matS = matD.viewDice().zMult(matD, null);
 
         createFitResultFromMatS(matS, matCInverse)
-                .applyFitResultToMark((Ellipsoid) mark, dimensions, getShellRad());
+                .applyFitResultToMark((Ellipsoid) mark, dimensions, getShell());
     }
 
     private FitResult createFitResultFromMatS(DoubleMatrix2D matS, DoubleMatrix2D matCInverse)

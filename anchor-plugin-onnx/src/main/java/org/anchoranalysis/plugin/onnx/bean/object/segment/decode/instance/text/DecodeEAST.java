@@ -1,7 +1,6 @@
-package org.anchoranalysis.plugin.onnx.bean.object.segment.decode.instance;
+package org.anchoranalysis.plugin.onnx.bean.object.segment.decode.instance.text;
 
 import ai.onnxruntime.OnnxTensor;
-import ai.onnxruntime.TensorInfo;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,9 +9,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.inference.ImageInferenceContext;
 import org.anchoranalysis.image.inference.bean.segment.instance.DecodeInstanceSegmentation;
+import org.anchoranalysis.image.inference.segment.DualScale;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
+import org.anchoranalysis.image.inference.segment.MultiScaleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkToObjectConverter;
@@ -32,7 +34,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactorInt;
  *
  * @author Owen Feehan
  */
-public class DecodeText extends DecodeInstanceSegmentation<OnnxTensor> {
+public class DecodeEAST extends DecodeInstanceSegmentation<OnnxTensor> {
 
     private static final String OUTPUT_SCORES = "feature_fusion/Conv_7/Sigmoid:0";
     private static final String OUTPUT_GEOMETRY = "feature_fusion/concat_3:0";
@@ -50,7 +52,7 @@ public class DecodeText extends DecodeInstanceSegmentation<OnnxTensor> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<LabelledWithConfidence<ObjectMask>> decode(
+    public List<LabelledWithConfidence<MultiScaleObject>> decode(
             List<OnnxTensor> inferenceOutput, ImageInferenceContext context)
             throws OperationFailedException {
 
@@ -58,10 +60,12 @@ public class DecodeText extends DecodeInstanceSegmentation<OnnxTensor> {
 
         List<Integer> indices = indicesAboveThreshold(scores);
 
-        MarkToObjectConverter converter =
-                new MarkToObjectConverter(context.getScaleFactor(), context.getDimensions());
-
-        return extractObjects(inferenceOutput.get(1), scores, indices, converter);
+        return extractObjects(
+                inferenceOutput.get(1),
+                scores,
+                indices,
+                dualScaleConverters(context),
+                context.getExecutionTimeRecorder());
     }
 
     @Override
@@ -88,46 +92,77 @@ public class DecodeText extends DecodeInstanceSegmentation<OnnxTensor> {
      * Extract the bounding-boxes located at particular indices in the form of an {@link ObjectMask}
      * with an associated label and confidence.
      */
-    private List<LabelledWithConfidence<ObjectMask>> extractObjects(
+    private static List<LabelledWithConfidence<MultiScaleObject>> extractObjects(
             OnnxTensor geometryTensor,
             FloatBuffer scores,
             List<Integer> indices,
-            MarkToObjectConverter converter) {
+            DualScale<MarkToObjectConverter> converter,
+            ExecutionTimeRecorder executionTimeRecorder) {
 
-        List<LabelledWithConfidence<ObjectMask>> out = new ArrayList<>();
+        List<LabelledWithConfidence<MultiScaleObject>> out = new ArrayList<>();
 
-        TensorInfo geometryInfo = geometryTensor.getInfo();
-        int width = (int) geometryInfo.getShape()[1];
-        int height = (int) geometryInfo.getShape()[2];
+        int height = (int) geometryTensor.getInfo().getShape()[2];
 
         FloatBuffer geometryBuffer = geometryTensor.getFloatBuffer();
 
         for (int index : indices) {
-            int x = index % width;
+            int x = index % height;
             int y = index / height;
-            Point2i anchorPointUnscaled = new Point2i(x, y);
-            Point2i anchorPointScaled = SCALE_BY_4.scale(anchorPointUnscaled);
+            Point2i anchorPointScaled = SCALE_BY_4.scale(x, y);
             out.add(
                     extractLabelledBoundingBox(
-                            scores, geometryBuffer, index, anchorPointScaled, converter));
+                            scores,
+                            geometryBuffer,
+                            index,
+                            anchorPointScaled,
+                            converter,
+                            executionTimeRecorder));
         }
 
         return out;
     }
 
     /** Extract a bounding-box together with a confidence and label at a particular index. */
-    private LabelledWithConfidence<ObjectMask> extractLabelledBoundingBox(
+    private static LabelledWithConfidence<MultiScaleObject> extractLabelledBoundingBox(
             FloatBuffer scores,
             FloatBuffer geometry,
             int index,
             Point2i offset,
-            MarkToObjectConverter converter) {
+            DualScale<MarkToObjectConverter> convertersDual,
+            ExecutionTimeRecorder executionTimeRecorder) {
+
+        MultiScaleObject objectAtScale =
+                MultiScaleObject.extractFrom(
+                        convertersDual,
+                        converter ->
+                                createObjectFromGeometry(
+                                        index, offset, geometry, converter, executionTimeRecorder));
+        return new LabelledWithConfidence<>(objectAtScale, scores.get(index), CLASS_LABEL);
+    }
+
+    /**
+     * Derive an {@link ObjectMask} from the rotated-bounding box entity described in the
+     * <i>geometry</i> buffer at a particular index.
+     */
+    private static ObjectMask createObjectFromGeometry(
+            int index,
+            Point2i offset,
+            FloatBuffer geometry,
+            MarkToObjectConverter converter,
+            ExecutionTimeRecorder executionTimeRecorder) {
         int indexStart = index * VECTOR_SIZE;
         Mark mark =
                 RotatableBoundingBoxFactory.create(
                         vectorIndex -> geometry.get(indexStart + vectorIndex), offset);
 
-        ObjectMask objectMask = converter.convert(mark);
-        return new LabelledWithConfidence<>(objectMask, scores.get(index), CLASS_LABEL);
+        return executionTimeRecorder.recordExecutionTime(
+                "Convert mark", () -> converter.convert(mark));
+    }
+
+    /** A {@link MarkToObjectConverter} for each respective scale. */
+    private static DualScale<MarkToObjectConverter> dualScaleConverters(
+            ImageInferenceContext context) {
+        return context.scaleFactorUpscale()
+                .combine(context.getDimensions(), MarkToObjectConverter::new);
     }
 }

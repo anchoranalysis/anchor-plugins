@@ -65,7 +65,7 @@ public class FindPointOnContourWalk extends FindPointOnContour {
 
         createMaskIfNecessary();
 
-        RotationMatrix rotationMatrix = orientation.deriveRotationMatrix();
+        RotationMatrix rotationMatrix = orientation.getRotationMatrix();
 
         boolean is3D = rotationMatrix.getNumberDimensions() >= 3;
 

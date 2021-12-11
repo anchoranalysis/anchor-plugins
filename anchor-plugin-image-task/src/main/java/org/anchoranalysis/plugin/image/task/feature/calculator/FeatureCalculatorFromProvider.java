@@ -88,7 +88,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
 
         // Caches the loading of the stack for the feature.
         CachedSupplier<Stack, OperationFailedException> loadImage =
-                CachedSupplier.cache(
+                CachedSupplier.cacheChecked(
                         () ->
                                 allStacksAsOne(
                                         initialization.stacks(),

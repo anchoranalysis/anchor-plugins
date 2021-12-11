@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -69,7 +69,7 @@ public class Invert extends MaskProviderUnary {
     @Override
     public Mask createFromMask(Mask maskToInvert) throws ProvisionFailedException {
 
-        Optional<Mask> restricted = OptionalFactory.create(restrictTo);
+        Optional<Mask> restricted = OptionalProviderFactory.create(restrictTo);
 
         if (restricted.isPresent()) {
             invertWithMask(maskToInvert, restricted.get());

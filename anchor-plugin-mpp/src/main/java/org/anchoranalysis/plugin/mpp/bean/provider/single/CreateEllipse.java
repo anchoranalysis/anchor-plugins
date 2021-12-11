@@ -39,7 +39,7 @@ import org.anchoranalysis.spatial.point.Point2d;
 public class CreateEllipse extends SingleMarkProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private double shellRad = 0.2;
+    @BeanField @Getter @Setter private double shell = 0.2;
 
     @BeanField @Getter @Setter private int id = 0;
     // END BEAN PROPERTIES
@@ -49,7 +49,7 @@ public class CreateEllipse extends SingleMarkProvider {
         Ellipse mark = new Ellipse();
         mark.setMarks(new Point2d(5, 5), new Orientation2D(0));
         mark.setId(id);
-        mark.updateShellRad(shellRad);
+        mark.updateshell(shell);
         return Optional.of(mark);
     }
 }

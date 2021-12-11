@@ -102,7 +102,12 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
             FileInput input, FeatureCalculationContext<FeatureList<FeatureInputHistogram>> context)
             throws NamedFeatureCalculateException {
 
-        // Reads histogram from filesystem
+        return new ResultsVectorWithThumbnail(() -> calculateFeature(input, context));
+    }
+
+    private ResultsVector calculateFeature(
+            FileInput input, FeatureCalculationContext<FeatureList<FeatureInputHistogram>> context)
+            throws OperationFailedException {
         try {
             Histogram histogramRead = readHistogramFromCSV(input);
 
@@ -110,23 +115,17 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
                 histogramRead = filterHistogramFromProvider(histogramRead, context.getContext());
             }
 
-            ResultsVector results =
-                    createCalculator(
-                                    context.getRowSource(),
-                                    context.getModelDirectory(),
-                                    context.getLogger())
-                            .calculate(new FeatureInputHistogram(histogramRead, Optional.empty()));
-
-            // Exports results as a Dictionary
-            DictionaryExporter.export(context.getFeatureNames(), results, context.getContext());
-
-            return new ResultsVectorWithThumbnail(results);
-
+            return createCalculator(
+                            context.getFeatureSource(),
+                            context.getModelDirectory(),
+                            context.getLogger())
+                    .calculate(new FeatureInputHistogram(histogramRead, Optional.empty()));
         } catch (CSVReaderException
                 | BeanDuplicateException
                 | OperationFailedException
-                | InitializeException e) {
-            throw new NamedFeatureCalculateException(e);
+                | InitializeException
+                | NamedFeatureCalculateException e) {
+            throw new OperationFailedException(e);
         }
     }
 

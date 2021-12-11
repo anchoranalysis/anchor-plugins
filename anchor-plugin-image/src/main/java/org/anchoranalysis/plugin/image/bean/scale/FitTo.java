@@ -39,26 +39,35 @@ import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * Finds largest multiple of an {@link Extent} without being larger than another {@link Extent}.
+ * Scales an image to approximately similar in size to a {@link SizeXY}.
  *
- * <p>Each dimension is calculated separately, and then the minimum scaling-factor is used for both.
+ * <p>Optionally, the aspect-ratio is preserved between width and height.
  *
- * <p>e.g. for the X dimension in {@code minimumSize}, the maximum <code>multiple</code> is selected
- * so that <code>(unscaledSizeX * 2^multiple)</code> is less than <code>maxSixeX</code>.
+ * <p>Optionally, the eventual width, and height can be rounded to the nearest whole multiple of an
+ * integer.
  *
  * @author Owen Feehan
  */
-public class LargestMultipleWithin extends ScaleCalculator {
+public class FitTo extends ScaleCalculator {
 
     // START BEAN PROPERTIES
     /**
-     * The minimum size in each dimension. Integer multiples are considered separately in each
-     * dimension.
+     * The target size. The image will be scaled to be as similar to this as possible, preserving
+     * aspect ratio.
      */
-    private @BeanField @Getter @Setter SizeXY minimumSize;
+    private @BeanField @Getter @Setter SizeXY targetSize;
 
-    /** An upper limit on the scale-factor allowed in each dimension. */
-    private @BeanField @Getter @Setter int maxScaleFactor;
+    /**
+     * If true, the aspect-ratio is preserved between width and height. Otherwise, they are treated
+     * independently.
+     */
+    private @BeanField @Getter @Setter boolean preserveAspectRatio = true;
+
+    /**
+     * The eventual width and height of the image must be a multiple of this number. Effecitvely
+     * disabled when {@code == 1}
+     */
+    private @BeanField @Getter @Setter int multipleOf = 1;
     // END BEAN PROPERTIES
 
     @Override
@@ -71,10 +80,43 @@ public class LargestMultipleWithin extends ScaleCalculator {
             throw new OperationFailedException(
                     "dimensionsToBeScaled is required by the plugin but is missing.");
         }
+
         Extent originalSize = dimensionsToBeScaled.get().extent();
-        Extent sizeLargestMultiple =
-                FindLargestMultipleWithin.apply(
-                        minimumSize.asExtent(), originalSize, maxScaleFactor);
-        return RelativeScaleCalculator.relativeScale(originalSize, sizeLargestMultiple);
+
+        // What the new size will be after scaling to fit the target.
+        Extent resized = calculateResized(originalSize);
+
+        // If necessary, round each dimension to the closest whole multiple
+        if (multipleOf != 1) {
+            resized = roundExtentToNearestMultiple(resized, multipleOf);
+        }
+
+        return RelativeScaleCalculator.relativeScale(originalSize, resized);
+    }
+
+    /** The {@link ScaleFactor} to reduce from the original-size to the target-size. */
+    private Extent calculateResized(Extent originalSize) {
+        Extent target = targetSize.asExtent();
+        if (preserveAspectRatio) {
+            ScaleFactor scaleFactor =
+                    RelativeScaleCalculator.relativeScalePreserveAspectRatio(originalSize, target);
+            return originalSize.scaleXYBy(scaleFactor);
+        } else {
+            return target;
+        }
+    }
+
+    /** Rounds the width and the height to the nearest multiple of a given number. */
+    private static Extent roundExtentToNearestMultiple(Extent extent, int multipleOf) {
+        return new Extent(
+                roundToNearestMultiple(extent.x(), multipleOf),
+                roundToNearestMultiple(extent.y(), multipleOf),
+                extent.z());
+    }
+
+    /** Rounds an integer to the nearest multiple of another integer. */
+    private static int roundToNearestMultiple(int valueToRound, int multipleOf) {
+        double valueAsDouble = (double) valueToRound;
+        return (int) Math.round(valueAsDouble / multipleOf) * multipleOf;
     }
 }

@@ -156,6 +156,6 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     }
 
     private static PathSupplier cachePathSupplier(PathSupplier supplier) {
-        return CachedSupplier.cache(supplier::get)::get;
+        return CachedSupplier.cacheChecked(supplier::get)::get;
     }
 }

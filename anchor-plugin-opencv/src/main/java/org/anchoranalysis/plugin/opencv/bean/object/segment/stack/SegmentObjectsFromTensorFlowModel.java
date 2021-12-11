@@ -29,12 +29,12 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -44,6 +44,7 @@ import org.anchoranalysis.inference.concurrency.ConcurrentModel;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
 import org.anchoranalysis.plugin.opencv.CVInit;
+import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.anchoranalysis.plugin.opencv.segment.OpenCVModel;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
@@ -52,7 +53,8 @@ import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
 /**
- * Performs instance-segmentation using OpenCV's DNN module and a TensorFlow {@code .pb} model file.
+ * Performs instance-segmentation using OpenCV's DNN module and a TensorFlow {@code .pb} <a
+ * href="https://www.tensorflow.org/guide/saved_model">SavedModel</a> file.
  *
  * <p>Optionally a {@code .pb.txt} file may accompany it.
  *
@@ -112,7 +114,7 @@ public class SegmentObjectsFromTensorFlowModel
         double[] toSubtract =
                 subtractMeans.orElseGet(() -> arrayWithZeros(stack.getNumberChannels()));
         try {
-            Mat mat = CreateScaledInput.apply(stack, downfactor, false);
+            Mat mat = ConvertToMat.makeRGBStack(stack, false);
             return Dnn.blobFromImage(mat, 1.0, mat.size(), new Scalar(toSubtract), false, false);
         } catch (CreateException e) {
             throw new OperationFailedException(e);

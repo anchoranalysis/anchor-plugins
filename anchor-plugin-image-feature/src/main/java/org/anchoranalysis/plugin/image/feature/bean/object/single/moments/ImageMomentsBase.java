@@ -36,7 +36,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.math.statistics.moment.ImageMoments;
 
 /**
- * A base class for features that are calculated using image-moments
+ * A base class for features that are calculated using image-moments.
  *
  * <p>If there are too few voxels, then a constant value is returned.
  *

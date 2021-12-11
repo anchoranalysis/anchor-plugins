@@ -119,7 +119,7 @@ public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
             throw new PointsFitterException("fitter returned 0 width or height");
         }
 
-        markE.setShellRad(getShellRad());
+        markE.setShell(getShell());
         markE.setMarksExplicit(
                 new Point3d(converter.getCenterPointX(), converter.getCenterPointY(), 0),
                 new Orientation2D(converter.getMajorAxisAngle()), // the reason for -1, assuming

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
@@ -84,7 +84,7 @@ public class ScoreVoxels extends ChannelProvider {
         VoxelsWrapperList voxelsCreated = createVoxelsList(intensityCreated);
         List<Histogram> histogramsCreated = ProviderBeanHelper.listFromBeans(histogramsExtra);
 
-        Optional<Dictionary> dictionaryCreated = OptionalFactory.create(dictionary);
+        Optional<Dictionary> dictionaryCreated = OptionalProviderFactory.create(dictionary);
 
         Optional<ObjectMask> object = createObject();
 
@@ -109,7 +109,7 @@ public class ScoreVoxels extends ChannelProvider {
 
         out.add(channelIntensity.voxels());
 
-        OptionalFactory.create(gradient).map(Channel::voxels).ifPresent(out::add);
+        OptionalProviderFactory.create(gradient).map(Channel::voxels).ifPresent(out::add);
 
         for (ChannelProvider channelProvider : channelsExtra) {
             VoxelsUntyped voxelsExtra =

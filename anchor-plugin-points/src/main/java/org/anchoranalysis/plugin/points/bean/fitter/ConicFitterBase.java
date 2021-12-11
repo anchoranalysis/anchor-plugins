@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 public abstract class ConicFitterBase extends PointsFitter {
 
     // START BEAN
-    @BeanField @Positive @Getter @Setter private double shellRad;
+    @BeanField @Positive @Getter @Setter private double shell;
 
     @BeanField @Getter @Setter private double subtractRadii = 0.0;
 
@@ -52,7 +52,7 @@ public abstract class ConicFitterBase extends PointsFitter {
      * @param target the object fields are assigned to.
      */
     protected void assignTo(ConicFitterBase target) {
-        target.shellRad = shellRad;
+        target.shell = shell;
         target.subtractRadii = subtractRadii;
         target.inputPointShift = inputPointShift;
         target.scaleRadii = scaleRadii;

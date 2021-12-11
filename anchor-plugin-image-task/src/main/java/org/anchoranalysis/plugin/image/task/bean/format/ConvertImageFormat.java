@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressConsole;
@@ -309,6 +309,6 @@ public class ConvertImageFormat
      */
     private static Optional<String> maybeSuppressExistingName(
             NamedStacks stacks, String existingName) {
-        return OptionalUtilities.createFromFlag(stacks.size() > 1, () -> existingName);
+        return OptionalFactory.create(stacks.size() > 1, () -> existingName);
     }
 }

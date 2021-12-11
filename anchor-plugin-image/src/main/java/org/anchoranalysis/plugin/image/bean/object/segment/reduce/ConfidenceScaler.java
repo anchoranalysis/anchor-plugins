@@ -31,7 +31,6 @@ import java.util.function.Function;
 import java.util.stream.DoubleStream;
 import org.anchoranalysis.image.inference.segment.WithConfidence;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Methods to scale normalizes a {@code double} confidence value to an unsigned-int range, and to
@@ -46,25 +45,37 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  * maximize the spread on the available range for unsigned byte.
  *
  * @author Owen Feehan
+ * @param <T> element-type from which a minimum/maximum confidence is obtained
  */
-class ConfidenceScaler {
+class ConfidenceScaler<T> {
 
     private static final int MAX_RANGE_INT_MINUS = UnsignedByteVoxelType.MAX_VALUE_INT - 1;
 
     private double minConfidence;
-    private double maxConfidence;
     private double spread;
 
     /**
-     * Create a scaler for a list of elements
+     * Create a scaler for a list of elements, using an explicit min and max confidence.
+     *
+     * @param minConfidence the minimum possible confidence value.
+     * @param maxConfidence the maximum possible confidence value.
+     */
+    public ConfidenceScaler(double minConfidence, double maxConfidence) {
+        this.minConfidence = minConfidence;
+        // Avoid the spread being 0 by using a very tiny value if there's no confidence difference
+        spread = Math.max(maxConfidence - minConfidence, 0.000001);
+    }
+
+    /**
+     * Create a scaler for a list of elements, deriving a minimum and maximum from the min and max
+     * of a list of elements.
      *
      * @param elements all the existing elements with confidence
      */
-    public ConfidenceScaler(List<WithConfidence<ObjectMask>> elements) {
-        minConfidence = aggregateFunction(elements, DoubleStream::min);
-        maxConfidence = aggregateFunction(elements, DoubleStream::max);
-        // Avoid the spread being 0 by using a very tiny value if there's no confidence difference
-        spread = Math.max(maxConfidence - minConfidence, 0.000001);
+    public ConfidenceScaler(List<WithConfidence<T>> elements) {
+        this(
+                aggregateFunction(elements, DoubleStream::min),
+                aggregateFunction(elements, DoubleStream::max));
     }
 
     /**
@@ -89,8 +100,8 @@ class ConfidenceScaler {
         return ratio + minConfidence;
     }
 
-    private static double aggregateFunction(
-            List<WithConfidence<ObjectMask>> list,
+    private static <T> double aggregateFunction(
+            List<WithConfidence<T>> list,
             Function<DoubleStream, OptionalDouble> aggregateFunction) {
         DoubleStream stream = list.stream().mapToDouble(WithConfidence::getConfidence);
         return aggregateFunction.apply(stream).getAsDouble();
