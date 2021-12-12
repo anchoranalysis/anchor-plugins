@@ -95,8 +95,10 @@ class BufferFromStack {
 
     private static void updateBuffers(Stack stack, int z, UnsignedByteBuffer[] sliceBuffers) {
         for (int channelIndex = 0; channelIndex < stack.getNumberChannels(); channelIndex++) {
-            sliceBuffers[channelIndex] =
+            UnsignedByteBuffer buffer =
                     stack.getChannel(channelIndex).voxels().asByte().slice(z).buffer();
+            buffer.rewind();
+            sliceBuffers[channelIndex] = buffer;
         }
     }
 
