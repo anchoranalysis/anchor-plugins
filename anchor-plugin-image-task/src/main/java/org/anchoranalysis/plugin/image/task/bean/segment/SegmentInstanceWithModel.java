@@ -94,13 +94,13 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  *
  * <p>Various visualizations and export types are supported.
  *
- * <p>The task will output the segmentation results (in HDF5 form and as a mask) for each input,
- * together with visualizations of the outlines.
+ * <ul>
+ * <li>Segmentation results in vairous forms (HDF5) for input into other scripts. (in HDF5 form and as a mask).
+ * <li>Visualizations of the instances found (outlines, thumbnails etc.)
+ * <li>A table of basic features (CSV) for each instance.
+ * </ul>
  *
- * <p>The task also provides aggregated outputs (features, thumbnails) of extracted objects across
- * all inputs.
- *
- * <p>The following outputs are produced:
+ * <p>Specifically, the following outputs are produced:
  *
  * <table>
  * <caption></caption>
@@ -108,15 +108,15 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>input</td><td>no</td><td>The input image for segmentation.</td></tr>
- * <tr><td>objects</td><td>yes</td><td>Segmented object-masks encoded into HDF5.</td></tr>
- * <tr><td>mask</td><td>yes</td><td>A binary-mask image that binary <i>or</i>s each voxel across the segmented object-masks (scaled to match the input image for model inference).</td></tr>
- * <tr><td>outline</td><td>yes</td><td>A RGB image showing the outline of segmented-objects on top of the input image (scaled to match the input image for model inference).</td></tr>
- * <tr><td>mask_full_scale</td><td>no</td><td>Like <i>mask</i> but on the full-scale input image.</td></tr>
- * <tr><td>outline_full_scale</td><td>no</td><td>Like <i>outline</i> but on on the full-scale input image.</td></tr>
- * <tr><td>summary</td><td>yes</td><td>A CSV file showing basic feature of <i>all</i> segmented-objects across <i>all</i> input images.</td></tr>
- * <tr><td>thumbnails</td><td>yes</td><td>A directory of thumbnails showing the outline of <i>all</i> segmented objects on top of an extracted portion of the respective input-image.</td></tr>
- * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * <tr><td>{@value #OUTPUT_INPUT_IMAGE}</td><td>no</td><td>The input image for segmentation.</td></tr>
+ * <tr><td>{@value #OUTPUT_H5}</td><td>yes</td><td>Segmented object-masks encoded into HDF5.</td></tr>
+ * <tr><td>{@value #OUTPUT_MERGED_AS_MASK}</td><td>yes</td><td>A binary-mask image that binary <i>or</i>s each voxel across the segmented object-masks (scaled to match the input image for model inference).</td></tr>
+ * <tr><td>{@value #OUTPUT_OUTLINE}</td><td>yes</td><td>A RGB image showing the outline of segmented-objects on top of the input image (scaled to match the input image for model inference).</td></tr>
+ * <tr><td>{@value #OUTPUT_MERGED_AS_MASK}{@value #OUTPUT_NAME_SCALED_SUFFIX}</td><td>no</td><td>Like <i>mask</i> but on the full-scale input image.</td></tr>
+ * <tr><td>{@value #OUTPUT_OUTLINE}{@value #OUTPUT_NAME_SCALED_SUFFIX}</td><td>no</td><td>Like <i>outline</i> but on on the full-scale input image.</td></tr>
+ * <tr><td>{@value #OUTPUT_SUMMARY_CSV}</td><td>yes</td><td>A CSV file showing basic feature of <i>all</i> segmented-objects across <i>all</i> input images.</td></tr>
+ * <tr><td>{@value FeatureExporter#OUTPUT_THUMBNAILS}</td><td>yes</td><td>A directory of thumbnails showing the outline of <i>all</i> segmented objects on top of an extracted portion of the respective input-image.</td></tr>
+ * <tr><td rowspan="3"><i>outputs inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
  *
@@ -157,7 +157,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
     private static final String MANIFEST_FUNCTION_INPUT_IMAGE = "input_image";
 
     /** All the outputs that occur <i>per job</i>. */
-    private static final String EXECUTION_TIME_OUTPUTS = "All outputs excl. thumbnails";
+    private static final String EXECUTION_TIME_OUTPUTS = "All outputs apart from thumbnails";
 
     private static final String EXECUTION_TIME_SEGMENTATION = "Segmentation";
 
@@ -197,7 +197,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
      * If true, then the outputs (outline, mask, image etc.) are not written for images that produce
      * no objects.
      */
-    @BeanField @Getter @Setter private boolean ignoreNoObjects = true;
+    @BeanField @Getter @Setter private boolean ignoreNoObjects = false;
 
     /** Visual style for how feature export occurs. */
     @BeanField @Getter @Setter ExportFeaturesStyle style = new ExportFeaturesStyle();
@@ -299,7 +299,64 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
                         OUTPUT_SUMMARY_CSV);
     }
 
-    private void calculateFeaturesForImage(
+    private void writeOutputsForImage(
+            Stack stack, SegmentedObjects segmentedObjects, Outputter outputter) {
+
+        WriterRouterErrors writer = outputter.writerSelective();
+
+        writer.write(
+                OUTPUT_INPUT_IMAGE,
+                () -> new StackGenerator(true, Optional.of(MANIFEST_FUNCTION_INPUT_IMAGE), false),
+                () -> stack);
+
+        writer.write(
+                OUTPUT_H5,
+                HDF5ObjectsGenerator::new,
+                segmentedObjects.getObjects().atInputScale()::objects);
+
+        writeOuputsAtScale(
+                writer, segmentedObjects.getObjects().atInputScale(), OUTPUT_NAME_SCALED_SUFFIX);
+        writeOuputsAtScale(writer, segmentedObjects.getObjects().atModelScale(), "");
+    }
+
+    private void writeOuputsAtScale(
+            WriterRouterErrors writer, SegmentedObjectsAtScale memoized, String outputNameSuffix) {
+        writer.write(
+                OUTPUT_MERGED_AS_MASK + outputNameSuffix,
+                () -> new ObjectsMergedAsMaskGenerator(memoized.background().dimensions()),
+                memoized::objects);
+
+        writer.write(
+                OUTPUT_OUTLINE + outputNameSuffix,
+                () -> outlineGenerator(memoized.size(), memoized.backgroundDisplayStack()),
+                memoized::objectsWithProperties);
+    }
+
+    private DrawObjectsGenerator outlineGenerator(int objectsSize, DisplayStack background) {
+        if (varyColors) {
+            return DrawObjectsGenerator.outlineVariedColors(objectsSize, outlineWidth, background);
+        } else {
+            return DrawObjectsGenerator.outlineSingleColor(
+                    outlineWidth, background, outlineColor.toRGBColor());
+        }
+    }
+
+    private void initializeBeans(InitializationContext context) throws InitializeException {
+        ImageInitialization initialization = InitializationFactory.createWithoutStacks(context);
+        segment.initializeRecursive(initialization, context.getLogger());
+    }
+
+    private FeatureTableCalculator<FeatureInputSingleObject> tableCalculator()
+            throws CreateException {
+        if (features == null) {
+            return COMBINE_OBJECTS.createFeatures(FeaturesCreator.defaultInstanceSegmentation());
+        } else {
+            return COMBINE_OBJECTS.createFeatures(features, STORE_FACTORY, true);
+        }
+    }
+
+
+    private static <T extends InferenceModel> void calculateFeaturesForImage(
             InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input,
             Stack stack,
             List<WithConfidence<ObjectMask>> segments)
@@ -330,72 +387,28 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
         calculator.calculateForObjects(
                 objects,
                 energyStack,
-                (objectIdentifier, groupGeneratorName, index) ->
-                        identifierFor(
+                (instanceIdentifier, groupGeneratorName, index) ->
+                        rowLabelsFor(
                                 imageIdentifier,
-                                objectIdentifier,
+                                instanceIdentifier,
                                 segments.get(index).getConfidence()));
     }
-
-    private static RowLabels identifierFor(
-            String imageIdentifier, String objectIdentifier, double confidence) {
+    
+    /** Constructs a {@link RowLabels} instance for a particular instance in a particular image. */
+    private static RowLabels rowLabelsFor(
+            String imageIdentifier, String instanceIdentifier, double confidence) {
         return new RowLabels(
                 Optional.of(
                         new String[] {
-                            imageIdentifier, objectIdentifier, Double.toString(confidence)
+                            imageIdentifier, instanceIdentifier, Double.toString(confidence)
                         }),
                 Optional.empty());
-    }
-
-    private void writeOutputsForImage(
-            Stack stack, SegmentedObjects segmentedObjects, Outputter outputter) {
-
-        WriterRouterErrors writer = outputter.writerSelective();
-
-        writer.write(
-                OUTPUT_INPUT_IMAGE,
-                () -> new StackGenerator(true, Optional.of(MANIFEST_FUNCTION_INPUT_IMAGE), false),
-                () -> stack);
-
-        writer.write(
-                OUTPUT_H5,
-                HDF5ObjectsGenerator::new,
-                segmentedObjects.getObjects().atInputScale()::objects);
-
-        assert (segmentedObjects.getObjects().atInputScale().objects().get(0).numberVoxelsOn()
-                > segmentedObjects.getObjects().atModelScale().objects().get(0).numberVoxelsOn());
-
-        writeOuputsAtScale(
-                writer, segmentedObjects.getObjects().atInputScale(), OUTPUT_NAME_SCALED_SUFFIX);
-        writeOuputsAtScale(writer, segmentedObjects.getObjects().atModelScale(), "");
-    }
-
-    private void writeOuputsAtScale(
-            WriterRouterErrors writer, SegmentedObjectsAtScale memoized, String outputNameSuffix) {
-        writer.write(
-                OUTPUT_MERGED_AS_MASK + outputNameSuffix,
-                () -> new ObjectsMergedAsMaskGenerator(memoized.background().dimensions()),
-                memoized::objects);
-
-        writer.write(
-                OUTPUT_OUTLINE + outputNameSuffix,
-                () -> outlineGenerator(memoized.size(), memoized.backgroundDisplayStack()),
-                memoized::objectsWithProperties);
-    }
-
-    private DrawObjectsGenerator outlineGenerator(int objectsSize, DisplayStack background) {
-        if (varyColors) {
-            return DrawObjectsGenerator.outlineVariedColors(objectsSize, outlineWidth, background);
-        } else {
-            return DrawObjectsGenerator.outlineSingleColor(
-                    outlineWidth, background, outlineColor.toRGBColor());
-        }
     }
 
     /**
      * The stack to use as an input to the segmentation algorithm. Always uses the first timepoint.
      */
-    private Stack inputStack(InputBound<StackSequenceInput, ?> input)
+    private static Stack inputStack(InputBound<StackSequenceInput, ?> input)
             throws OperationFailedException {
         return input.getContextJob()
                 .getExecutionTimeRecorder()
@@ -414,23 +427,9 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
                             }
                         });
     }
-
-    private void initializeBeans(InitializationContext context) throws InitializeException {
-        ImageInitialization initialization = InitializationFactory.createWithoutStacks(context);
-        segment.initializeRecursive(initialization, context.getLogger());
-    }
-
-    private FeatureTableCalculator<FeatureInputSingleObject> tableCalculator()
-            throws CreateException {
-        if (features == null) {
-            return COMBINE_OBJECTS.createFeatures(FeaturesCreator.defaultInstanceSegmentation());
-        } else {
-            return COMBINE_OBJECTS.createFeatures(features, STORE_FACTORY, true);
-        }
-    }
-
+    
     /** Closes the model-pool, logging any error that may occur. */
-    private void closeModelPool(ConcurrentModelPool<T> modelPool, ErrorReporter errorReporter) {
+    private static void closeModelPool(ConcurrentModelPool<?> modelPool, ErrorReporter errorReporter) {
         try {
             modelPool.close();
         } catch (Exception e) {

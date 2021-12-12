@@ -75,9 +75,9 @@ import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>marks</td><td>yes</td><td>The segmented outcome as serialized XML using <a href="https://x-stream.github.io/">XStream</a>.</td></tr>
- * <tr><td>outline</td><td>yes</td><td>A RGB image showing <i>outline-colored</i> segmented marks on a background.</td></tr>
- * <tr><td>solid</td><td>no</td><td>A RGB image showing <i>solidly-colored</i> segmented marks on a background.</td></tr>
+ * <tr><td>{@value #OUTPUT_MARKS}</td><td>yes</td><td>The segmented outcome as serialized XML using <a href="https://x-stream.github.io/">XStream</a>.</td></tr>
+ * <tr><td>{@value MarksVisualization#OUTPUT_VISUALIZE_MARKS_OUTLINE}</td><td>yes</td><td>A RGB image showing <i>outline-colored</i> segmented marks on a background.</td></tr>
+ * <tr><td>{@value MarksVisualization#OUTPUT_VISUALIZE_MARKS_SOLID}</td><td>no</td><td>A RGB image showing <i>solidly-colored</i> segmented marks on a background.</td></tr>
  * <tr><td rowspan="3"><i>any outputs produced by {@link SegmentIntoMarks}</i> in {@code segment}.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>

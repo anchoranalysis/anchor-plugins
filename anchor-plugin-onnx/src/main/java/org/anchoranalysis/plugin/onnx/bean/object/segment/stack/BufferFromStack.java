@@ -78,8 +78,7 @@ class BufferFromStack {
      * interleaving of channels.
      */
     private static void copyChannelFirst(
-            FloatBuffer buffer, Stack stack, Optional<double[]> subtractMeans)
-            throws OperationFailedException {
+            FloatBuffer buffer, Stack stack, Optional<double[]> subtractMeans) {
         for (int channelIndex = 0; channelIndex < stack.getNumberChannels(); channelIndex++) {
 
             Channel channel = stack.getChannel(channelIndex);
@@ -96,8 +95,10 @@ class BufferFromStack {
 
     private static void updateBuffers(Stack stack, int z, UnsignedByteBuffer[] sliceBuffers) {
         for (int channelIndex = 0; channelIndex < stack.getNumberChannels(); channelIndex++) {
-            sliceBuffers[channelIndex] =
+            UnsignedByteBuffer buffer =
                     stack.getChannel(channelIndex).voxels().asByte().slice(z).buffer();
+            buffer.rewind();
+            sliceBuffers[channelIndex] = buffer;
         }
     }
 
@@ -125,8 +126,7 @@ class BufferFromStack {
      * interleaving of channels.
      */
     private static void copyChannelLast(
-            FloatBuffer buffer, Stack stack, Optional<double[]> subtractMeans)
-            throws OperationFailedException {
+            FloatBuffer buffer, Stack stack, Optional<double[]> subtractMeans) {
 
         float[] valuesToRemove =
                 subtractMeans.isPresent() ? convertToFloat(subtractMeans.get()) : new float[3];

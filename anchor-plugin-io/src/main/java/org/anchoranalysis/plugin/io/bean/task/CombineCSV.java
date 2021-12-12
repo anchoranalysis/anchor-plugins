@@ -62,7 +62,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>combined</td><td>yes</td><td>A CSV combining the input CSV files.</td></tr>
+ * <tr><td>{@value #OUTPUT_COMBINED}</td><td>yes</td><td>A CSV combining the input CSV files.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>

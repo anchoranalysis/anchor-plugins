@@ -55,14 +55,14 @@ class SimulatedAnnealingTest {
     void testOverlappingEllipses()
             throws OptimizationTerminatedEarlyException, CreateException, InitializeException,
                     BeanMisconfiguredException {
-        runTest(false, 26, 6955.0, false);
+        runTest(false, 26, 4847.0, false);
     }
 
     @Test
     void testOverlappingEllipsoids()
             throws OptimizationTerminatedEarlyException, CreateException, InitializeException,
                     BeanMisconfiguredException {
-        runTest(true, 18, 8403, false);
+        runTest(true, 18, 4159, false);
     }
 
     /**

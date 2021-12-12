@@ -67,8 +67,8 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>images</td><td>yes</td><td>a directory where copies of input images are placed in subdirectories corresponding to their label.</td></tr>
- * <tr><td>mapping</td><td>yes</td><td>a single CSV file where each row is an image-label correspondence.</td></tr>
+ * <tr><td>{@value #OUTPUT_IMAGES}</td><td>yes</td><td>a directory where copies of input images are placed in subdirectories corresponding to their label.</td></tr>
+ * <tr><td>{@value #OUTPUT_MAPPING}</td><td>yes</td><td>a single CSV file where each row is an image-label correspondence.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>

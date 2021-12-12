@@ -67,11 +67,11 @@ import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterWithEnergy;
  *
  * <ol>
  *   <li>All input are aggregated into groups (with the name of the {@link ObjectCollectionProvider}
- *       added to the end)
+ *       added to the end).
  *   <li>For each input, the <code>define</code> is applied and one or more {@link ObjectCollection}
- *       are extracted
+ *       are extracted.
  *   <li>These objects are added to the appropriate {@link ObjectCollection} associated with each
- *       group
+ *       group.
  * </ol>
  *
  * <p>Note unlike other feature-sources, the group here is not only what is returned by the <code>

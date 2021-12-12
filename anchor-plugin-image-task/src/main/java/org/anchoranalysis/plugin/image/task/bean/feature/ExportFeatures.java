@@ -65,6 +65,7 @@ import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
+import org.anchoranalysis.plugin.image.task.feature.FeatureResultsAndThumbnails;
 
 /**
  * Calculates features and exports them as a CSV file.
@@ -79,13 +80,13 @@ import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>features</td><td>yes</td><td>a single CSV file of feature-calculations where each row is an object.</td></tr>
- * <tr><td>featuresAggregated</td><td>yes</td><td>a single CSV file of feature-calculations where each row is a group (with aggregated features of the objects within).</td></tr>
- * <tr><td>featuresGroup</td><td>no</td><td>a CSV file of feature-calculations per group, where each row is an object.</td></tr>
- * <tr><td>featuresAggregatedGroup</td><td>no</td><td>a XML file of aggregated feature-calculations per group</td></tr>
- * <tr><td>thumbnails</td><td>yes</td><td>a small picture for each row in the {@code features} CSV illustrating what the row represents. How this picture is formulated depends on the {@code source}.</td></tr>
+ * <tr><td>{@value FeatureOutputNames#OUTPUT_DEFAULT_NON_AGGREGATED}</td><td>yes</td><td>a single CSV file of feature-calculations where each row is an object.</td></tr>
+ * <tr><td>{@value FeatureOutputNames#OUTPUT_DEFAULT_NON_AGGREGATED}{@value FeatureOutputNames#OUTPUT_SUFFIX_AGGREGATED}</td><td>yes</td><td>a single CSV file of feature-calculations where each row is a group (with aggregated features of the objects within).</td></tr>
+ * <tr><td>{@value FeatureOutputNames#OUTPUT_DEFAULT_NON_AGGREGATED}{@value FeatureOutputNames#OUTPUT_SUFFIX_GROUP}</td><td>no</td><td>a CSV file of feature-calculations per group, where each row is an object.</td></tr>
+ * <tr><td>{@value FeatureOutputNames#OUTPUT_DEFAULT_NON_AGGREGATED}{@value FeatureOutputNames#OUTPUT_SUFFIX_AGGREGATED_GROUP}</td><td>no</td><td>a XML file of aggregated feature-calculations per group</td></tr>
  * <tr><td rowspan="3"><i>outputs from a sub-class of {@link FeatureSource} as used in {@code source}.</i></td></tr>
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
+ * <tr><td rowspan="3"><i>outputs from {@link FeatureResultsAndThumbnails}</i></td></tr>
  * </tbody>
  * </table>
  *

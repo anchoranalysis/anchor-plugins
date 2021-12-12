@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.opencv.convert;
 
 import com.google.common.base.Preconditions;
+import java.nio.FloatBuffer;
 import java.util.function.BiConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -67,7 +69,7 @@ public class ConvertToMat {
                     "Objects with more than 1 z-slice are not supported for OpenCV to Mat conversion (at the moment)");
         }
 
-        return fromSingleChannelByte(object.binaryVoxels().voxels());
+        return fromVoxelsByte(object.binaryVoxels().voxels());
     }
 
     /**
@@ -96,6 +98,86 @@ public class ConvertToMat {
             // Single channel
             return makeGrayscale(stack.getChannel(0));
         }
+    }
+
+    /**
+     * Converts a {@link Voxels} of type {@link UnsignedByteBuffer} to a {@link Mat}.
+     *
+     * @param voxels the voxels to convert.
+     * @return a newly created {@link Mat}.
+     */
+    public static Mat fromVoxelsByte(Voxels<UnsignedByteBuffer> voxels) {
+        return fromVoxels(voxels, CvType.CV_8UC1, (mat, buffer) -> mat.put(0, 0, buffer.array()));
+    }
+
+    /**
+     * Converts a {@link Voxels} of type {@link UnsignedShortBuffer} to a {@link Mat}.
+     *
+     * @param voxels the voxels to convert.
+     * @return a newly created {@link Mat}.
+     */
+    public static Mat fromVoxelsShort(Voxels<UnsignedShortBuffer> voxels) {
+        return fromVoxels(voxels, CvType.CV_16UC1, (mat, buffer) -> mat.put(0, 0, buffer.array()));
+    }
+
+    /**
+     * Converts a {@link Voxels} of type {@link FloatBuffer} to a {@link Mat}.
+     *
+     * @param voxels the voxels to convert.
+     * @return a newly created {@link Mat}.
+     */
+    public static Mat fromVoxelsFloat(Voxels<FloatBuffer> voxels) {
+        return fromVoxels(voxels, CvType.CV_32FC1, (mat, buffer) -> mat.put(0, 0, buffer.array()));
+    }
+
+    /**
+     * Converts a {@link VoxelBuffer} of type {@link UnsignedByteBuffer} to a {@link Mat}.
+     *
+     * @param voxelBuffer the voxel-buffer to convert.
+     * @param extent the size of the image the buffer represents (must have identical number of
+     *     voxels to {@code voxelBuffer}.
+     * @return a newly created {@link Mat}.
+     */
+    public static Mat fromVoxelBufferByte(
+            VoxelBuffer<UnsignedByteBuffer> voxelBuffer, Extent extent) {
+        return fromVoxelBuffer(
+                voxelBuffer,
+                extent,
+                CvType.CV_8UC1,
+                (mat, buffer) -> mat.put(0, 0, buffer.array()));
+    }
+
+    /**
+     * Converts a {@link VoxelBuffer} of type {@link UnsignedShortBuffer} to a {@link Mat}.
+     *
+     * @param voxelBuffer the voxel-buffer to convert.
+     * @param extent the size of the image the buffer represents (must have identical number of
+     *     voxels to {@code voxelBuffer}.
+     * @return a newly created {@link Mat}.
+     */
+    public static Mat fromVoxelBufferShort(
+            VoxelBuffer<UnsignedShortBuffer> voxelBuffer, Extent extent) {
+        return fromVoxelBuffer(
+                voxelBuffer,
+                extent,
+                CvType.CV_16UC1,
+                (mat, buffer) -> mat.put(0, 0, buffer.array()));
+    }
+
+    /**
+     * Converts a {@link VoxelBuffer} of type {@link FloatBuffer} to a {@link Mat}.
+     *
+     * @param voxelBuffer the voxel-buffer to convert.
+     * @param extent the size of the image the buffer represents (must have identical number of
+     *     voxels to {@code voxelBuffer}.
+     * @return a newly created {@link Mat}.
+     */
+    public static Mat fromVoxelBufferFloat(VoxelBuffer<FloatBuffer> voxelBuffer, Extent extent) {
+        return fromVoxelBuffer(
+                voxelBuffer,
+                extent,
+                CvType.CV_32FC1,
+                (mat, buffer) -> mat.put(0, 0, buffer.array()));
     }
 
     /**
@@ -137,30 +219,30 @@ public class ConvertToMat {
 
     private static Mat makeGrayscale(Channel channel) throws CreateException {
         if (channel.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-            return fromSingleChannelByte(channel.voxels().asByte());
+            return fromVoxelsByte(channel.voxels().asByte());
         } else if (channel.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
-            return fromSingleChannelShort(channel.voxels().asShort());
+            return fromVoxelsShort(channel.voxels().asShort());
         } else {
             throw new CreateException("Only unsigned 8-bit or 16-bit channels are supported");
         }
     }
 
-    private static Mat fromSingleChannelByte(Voxels<UnsignedByteBuffer> voxels) {
-        return fromSingleChannel(
-                voxels, CvType.CV_8UC1, (mat, buffer) -> mat.put(0, 0, buffer.array()));
-    }
-
-    private static Mat fromSingleChannelShort(Voxels<UnsignedShortBuffer> voxels) {
-        return fromSingleChannel(
-                voxels, CvType.CV_16UC1, (mat, buffer) -> mat.put(0, 0, buffer.array()));
-    }
-
-    private static <T> Mat fromSingleChannel(
+    private static <T> Mat fromVoxels(
             Voxels<T> voxels, int matType, BiConsumer<Mat, T> populateMat) {
         Preconditions.checkArgument(voxels.extent().z() == 1);
 
         Mat mat = createEmptyMat(voxels.extent(), matType);
         populateMat.accept(mat, voxels.sliceBuffer(0));
+        return mat;
+    }
+
+    private static <T> Mat fromVoxelBuffer(
+            VoxelBuffer<T> voxelBuffer,
+            Extent extent,
+            int matType,
+            BiConsumer<Mat, T> populateMat) {
+        Mat mat = createEmptyMat(extent, matType);
+        populateMat.accept(mat, voxelBuffer.buffer());
         return mat;
     }
 
