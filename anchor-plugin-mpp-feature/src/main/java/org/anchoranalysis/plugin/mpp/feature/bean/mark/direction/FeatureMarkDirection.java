@@ -60,14 +60,12 @@ public abstract class FeatureMarkDirection extends FeatureMark {
             throws FeatureCalculationException {
 
         if (!(input.get().getMark() instanceof Ellipsoid)) {
-            throw new FeatureCalculationException("Only supports MarkEllipsoids");
+            throw new FeatureCalculationException(
+                    "Only supports marks of type " + Ellipsoid.class.getSimpleName());
         }
 
         Ellipsoid mark = (Ellipsoid) input.get().getMark();
-
-        Orientation orientation = mark.getOrientation();
-        // TODO replace this inefficient repeated deriving of the rotation-matrix
-        return calculateForEllipsoid(mark, orientation, vectorInDirection);
+        return calculateForEllipsoid(mark, mark.getOrientation(), vectorInDirection);
     }
 
     protected abstract double calculateForEllipsoid(

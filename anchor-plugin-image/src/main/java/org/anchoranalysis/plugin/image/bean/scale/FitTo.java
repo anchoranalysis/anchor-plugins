@@ -116,7 +116,7 @@ public class FitTo extends ScaleCalculator {
 
     /** Rounds an integer to the nearest multiple of another integer. */
     private static int roundToNearestMultiple(int valueToRound, int multipleOf) {
-        double valueAsDouble = (double) valueToRound;
+        double valueAsDouble = valueToRound;
         return (int) Math.round(valueAsDouble / multipleOf) * multipleOf;
     }
 }

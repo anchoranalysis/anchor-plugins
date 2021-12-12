@@ -78,8 +78,7 @@ class BufferFromStack {
      * interleaving of channels.
      */
     private static void copyChannelFirst(
-            FloatBuffer buffer, Stack stack, Optional<double[]> subtractMeans)
-            throws OperationFailedException {
+            FloatBuffer buffer, Stack stack, Optional<double[]> subtractMeans) {
         for (int channelIndex = 0; channelIndex < stack.getNumberChannels(); channelIndex++) {
 
             Channel channel = stack.getChannel(channelIndex);
@@ -125,8 +124,7 @@ class BufferFromStack {
      * interleaving of channels.
      */
     private static void copyChannelLast(
-            FloatBuffer buffer, Stack stack, Optional<double[]> subtractMeans)
-            throws OperationFailedException {
+            FloatBuffer buffer, Stack stack, Optional<double[]> subtractMeans) {
 
         float[] valuesToRemove =
                 subtractMeans.isPresent() ? convertToFloat(subtractMeans.get()) : new float[3];
