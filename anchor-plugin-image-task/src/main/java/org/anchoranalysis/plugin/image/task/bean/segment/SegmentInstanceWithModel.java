@@ -157,7 +157,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
     private static final String MANIFEST_FUNCTION_INPUT_IMAGE = "input_image";
 
     /** All the outputs that occur <i>per job</i>. */
-    private static final String EXECUTION_TIME_OUTPUTS = "All outputs excl. thumbnails";
+    private static final String EXECUTION_TIME_OUTPUTS = "All outputs apart from thumbnails";
 
     private static final String EXECUTION_TIME_SEGMENTATION = "Segmentation";
 
@@ -197,7 +197,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
      * If true, then the outputs (outline, mask, image etc.) are not written for images that produce
      * no objects.
      */
-    @BeanField @Getter @Setter private boolean ignoreNoObjects = true;
+    @BeanField @Getter @Setter private boolean ignoreNoObjects = false;
 
     /** Visual style for how feature export occurs. */
     @BeanField @Getter @Setter ExportFeaturesStyle style = new ExportFeaturesStyle();
@@ -361,9 +361,6 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
                 OUTPUT_H5,
                 HDF5ObjectsGenerator::new,
                 segmentedObjects.getObjects().atInputScale()::objects);
-
-        assert (segmentedObjects.getObjects().atInputScale().objects().get(0).numberVoxelsOn()
-                > segmentedObjects.getObjects().atModelScale().objects().get(0).numberVoxelsOn());
 
         writeOuputsAtScale(
                 writer, segmentedObjects.getObjects().atInputScale(), OUTPUT_NAME_SCALED_SUFFIX);

@@ -29,19 +29,31 @@ import java.nio.FloatBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
-import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.box.Extent;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+/**
+ * Converts a {@link Mat} to a {@link VoxelBuffer}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class VoxelsSingleChannelFromMat {
+public class VoxelBufferFromMat {
 
-    public static Voxels<?> createVoxelBuffer( // NOSONAR
+    /**
+     * Converts a {@link Mat} to a {@link VoxelBuffer}.
+     *
+     * @param mat the {@link Mat} to convert.
+     * @param extent the size of the image in the {@link Mat}.
+     * @return a newly created {@link VoxelBuffer}, converted from {@code mat}.
+     * @throws OperationFailedException if it has an supported voxel data-type.
+     */
+    public static VoxelBuffer<?> toVoxelBuffer( // NOSONAR
             Mat mat, Extent extent) throws OperationFailedException {
 
         if (mat.depth() == CvType.CV_8U) {
@@ -57,24 +69,44 @@ class VoxelsSingleChannelFromMat {
         }
     }
 
-    private static Voxels<UnsignedByteBuffer> unsignedByteFromMat(Mat mat, Extent extent) {
+    /**
+     * Converts a {@link Mat} to a {@link VoxelBuffer} with voxel data-type {@link
+     * UnsignedByteBuffer}.
+     *
+     * @param mat the {@link Mat} to convert.
+     * @param extent the size of the image in the {@link Mat}.
+     * @return a newly created {@link VoxelBuffer}, converted from {@code mat}.
+     */
+    public static VoxelBuffer<UnsignedByteBuffer> unsignedByteFromMat(Mat mat, Extent extent) {
         UnsignedByteBuffer buffer = UnsignedByteBuffer.allocate(extent.areaXY());
         mat.get(0, 0, buffer.array());
-        return VoxelsFactory.getUnsignedByte()
-                .createForVoxelBuffer(VoxelBufferWrap.unsignedByteBuffer(buffer), extent);
+        return VoxelBufferWrap.unsignedByteBuffer(buffer);
     }
 
-    private static Voxels<UnsignedShortBuffer> unsignedShortFromMat(Mat mat, Extent extent) {
+    /**
+     * Converts a {@link Mat} to a {@link VoxelBuffer} with voxel data-type {@link
+     * UnsignedShortBuffer}.
+     *
+     * @param mat the {@link Mat} to convert.
+     * @param extent the size of the image in the {@link Mat}.
+     * @return a newly created {@link VoxelBuffer}, converted from {@code mat}.
+     */
+    public static VoxelBuffer<UnsignedShortBuffer> unsignedShortFromMat(Mat mat, Extent extent) {
         UnsignedShortBuffer buffer = UnsignedShortBuffer.allocate(extent.areaXY());
         mat.get(0, 0, buffer.array());
-        return VoxelsFactory.getUnsignedShort()
-                .createForVoxelBuffer(VoxelBufferWrap.unsignedShortBuffer(buffer), extent);
+        return VoxelBufferWrap.unsignedShortBuffer(buffer);
     }
 
-    private static Voxels<FloatBuffer> floatFromMat(Mat mat, Extent extent) {
+    /**
+     * Converts a {@link Mat} to a {@link VoxelBuffer} with voxel data-type {@link FloatBuffer}.
+     *
+     * @param mat the {@link Mat} to convert.
+     * @param extent the size of the image in the {@link Mat}.
+     * @return a newly created {@link VoxelBuffer}, converted from {@code mat}.
+     */
+    public static VoxelBuffer<FloatBuffer> floatFromMat(Mat mat, Extent extent) {
         FloatBuffer buffer = FloatBuffer.allocate(extent.areaXY());
         mat.get(0, 0, buffer.array());
-        return VoxelsFactory.getFloat()
-                .createForVoxelBuffer(VoxelBufferWrap.floatBuffer(buffer), extent);
+        return VoxelBufferWrap.floatBuffer(buffer);
     }
 }

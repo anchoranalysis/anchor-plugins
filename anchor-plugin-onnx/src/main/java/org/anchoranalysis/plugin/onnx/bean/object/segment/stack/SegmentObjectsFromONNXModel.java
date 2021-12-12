@@ -55,7 +55,6 @@ import org.anchoranalysis.inference.concurrency.ConcurrentModel;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
 import org.anchoranalysis.plugin.onnx.model.OnnxModel;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -110,8 +109,7 @@ public class SegmentObjectsFromONNXModel
     }
 
     @Override
-    protected OnnxTensor deriveInput(
-            Stack stack, ScaleFactor downfactor, Optional<double[]> subtractMeans)
+    protected OnnxTensor deriveInput(Stack stack, Optional<double[]> subtractMeans)
             throws OperationFailedException {
 
         // Change from RGB to BGR

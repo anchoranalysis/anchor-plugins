@@ -67,8 +67,7 @@ public class ConvertFromMat {
 
     /** Converts to a {@link Stack} with a single channel. */
     private static Stack toGrayscale(Mat mat) throws OperationFailedException {
-        Voxels<?> voxels =
-                VoxelsSingleChannelFromMat.createVoxelBuffer(mat, dimensionsFrom(mat).extent());
+        Voxels<?> voxels = VoxelsFromMat.toVoxels(mat, dimensionsFrom(mat).extent());
         return new Stack(ChannelFactory.instance().create(voxels));
     }
 

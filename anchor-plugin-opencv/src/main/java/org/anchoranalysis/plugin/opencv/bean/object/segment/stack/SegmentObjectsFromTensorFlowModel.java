@@ -46,7 +46,6 @@ import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.anchoranalysis.plugin.opencv.segment.OpenCVModel;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
@@ -108,7 +107,7 @@ public class SegmentObjectsFromTensorFlowModel
     }
 
     @Override
-    protected Mat deriveInput(Stack stack, ScaleFactor downfactor, Optional<double[]> subtractMeans)
+    protected Mat deriveInput(Stack stack, Optional<double[]> subtractMeans)
             throws OperationFailedException {
         // Scales the input to the largest acceptable-extent
         double[] toSubtract =
@@ -119,6 +118,11 @@ public class SegmentObjectsFromTensorFlowModel
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
+    }
+
+    @Override
+    protected Optional<String> inputName() {
+        return Optional.empty();
     }
 
     /**
@@ -179,10 +183,5 @@ public class SegmentObjectsFromTensorFlowModel
     /** Creates an array containing only zeros. */
     private static double[] arrayWithZeros(int size) {
         return new double[size];
-    }
-
-    @Override
-    protected Optional<String> inputName() {
-        return Optional.empty();
     }
 }
