@@ -54,7 +54,7 @@ class OutlineOutputHelper {
      * A XML file that encodes a point that uniquely lies on the object (and also another object if
      * a pair), assuming no objects overlap.
      */
-    private static final String OUTPUT_UNIQUE_POINT_XML = "unique_point";
+    public static final String OUTPUT_UNIQUE_POINT_XML = "unique_point";
 
     /** Prefix before the pair images outputted. */
     private static final String PREFIX_OUTLINE = "outline";

@@ -52,7 +52,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>featureReport</td><td>yes</td><td>A CSV file with the report-features as columns (and an ID column), one for each input.</td></tr>
+ * <tr><td>{@value #OUTPUT_REPORT}</td><td>yes</td><td>A CSV file with the report-features as columns (and an ID column), one for each input.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>

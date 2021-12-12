@@ -55,7 +55,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>aggregated</td><td>yes</td><td>a CSV file with each image and corresponding image-label.</td></tr>
+ * <tr><td>{@value #OUTPUT_AGGREGATED}</td><td>yes</td><td>a CSV file with each image and corresponding image-label.</td></tr>
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>

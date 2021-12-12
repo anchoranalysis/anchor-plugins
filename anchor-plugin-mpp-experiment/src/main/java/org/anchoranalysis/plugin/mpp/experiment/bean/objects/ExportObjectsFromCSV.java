@@ -86,8 +86,8 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.MapGroupToRow;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>outline</td><td>yes</td><td>RGB image displaying the outline of the extracted object in a cropped region around the objects.</td></tr>
- * <tr><td>unique_point</td><td>no</td><td>A XML file that stores a unique point on each extracted object (uniqueness only guaranteed if no objects overlap).</td></tr>
+ * <tr><td>{@value OutlineOutputHelper#OUTPUT_OUTLINE}</td><td>yes</td><td>RGB image displaying the outline of the extracted object in a cropped region around the objects.</td></tr>
+ * <tr><td>{@value OutlineOutputHelper#OUTPUT_UNIQUE_POINT_XML}</td><td>no</td><td>A XML file that stores a unique point on each extracted object (uniqueness only guaranteed if no objects overlap).</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>

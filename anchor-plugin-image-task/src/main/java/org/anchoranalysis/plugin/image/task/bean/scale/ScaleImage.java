@@ -79,8 +79,8 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>scaled</td><td>yes</td><td>A scaled copy of the input image.</td></tr>
- * <tr><td>scaledFlattened</td><td>no</td><td>A scaled copy of the maximum-intensity-projection of the input image.</td></tr>
+ * <tr><td>{@value #OUTPUT_SCALED}</td><td>yes</td><td>A scaled copy of the input image.</td></tr>
+ * <tr><td>{@value #OUTPUT_SCALED_FLATTENED}</td><td>no</td><td>A scaled copy of the maximum-intensity-projection of the input image.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>

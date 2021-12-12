@@ -7,12 +7,10 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
-import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 import org.anchoranalysis.feature.io.results.calculation.FeatureCSVWriterCreator;
 import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
 import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResultsFactory;
-import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
@@ -25,6 +23,17 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  *
  * <p>It supports concurrent access by multiple threads.
  *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>thumbnails</td><td>yes</td><td>a small picture for each row in the {@code features} CSV illustrating its content.</td></tr>
+ * </tbody>
+ * </table>
  * @author Owen Feehan
  */
 public class FeatureResultsAndThumbnails {
@@ -50,8 +59,6 @@ public class FeatureResultsAndThumbnails {
 
     private final FeatureExporterContext context;
 
-    private final FeatureNameList featureNames;
-
     public FeatureResultsAndThumbnails(
             FeatureOutputMetadata outputMetadata, FeatureExporterContext context)
             throws OutputWriteFailedException {
@@ -65,7 +72,6 @@ public class FeatureResultsAndThumbnails {
                 outputMetadata.outputNames().calculationResultsNeeded(outputEnabled);
         this.thumbnailsEnabled = outputEnabled.isOutputEnabled(OUTPUT_THUMBNAILS);
         this.context = context;
-        this.featureNames = outputMetadata.featureNamesNonAggregate();
     }
 
     /**
@@ -120,15 +126,6 @@ public class FeatureResultsAndThumbnails {
                                         thumbnails.maybeOutputThumbnail(
                                                 thumbnailStack, outputter, OUTPUT_THUMBNAILS));
             }
-        }
-
-        if (calculationResultsNeeded) {
-            // Exports results as a Dictionary
-            DictionaryExporter.export(
-                    featureNames,
-                    labelledResult.getResults(),
-                    FeatureOutputNames.OUTPUT_DICTIONARY,
-                    context.getContext());
         }
     }
 
