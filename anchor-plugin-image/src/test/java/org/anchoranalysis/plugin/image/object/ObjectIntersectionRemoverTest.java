@@ -50,7 +50,7 @@ class ObjectIntersectionRemoverTest {
 
         TwoIntersectingCirclesFixture.checkVolumesOnCircles(objectsBefore, " before");
 
-        // Remove the intersecting voxelts
+        // Remove the intersecting voxels
         ObjectCollection objectsAfter =
                 ObjectIntersectionRemover.removeIntersectingVoxels(
                         objectsBefore, TwoIntersectingCirclesFixture.DIMENSIONS, false);
