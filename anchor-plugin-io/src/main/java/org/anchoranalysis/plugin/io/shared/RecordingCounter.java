@@ -65,10 +65,10 @@ public class RecordingCounter<T> {
      * <p>Note that this output can be enabled with {@code OUTPUT_COPY} disabled, to produce a
      * "dummy mode" where files aren't copied, but a log-file is created as if they were.
      */
-    private static final String OUTPUT_COPY_LOG = "copy_log";
+    private static final String OUTPUT_COPY_LOG = "copyLog";
 
     /** A CSV file of paths and filenames and index for each source and destination file copied. */
-    private static final String OUTPUT_PATH_MAPPING = "path_mapping";
+    private static final String OUTPUT_PATH_MAPPING = "pathMapping";
 
     /** The counter. */
     private final Counter counter;

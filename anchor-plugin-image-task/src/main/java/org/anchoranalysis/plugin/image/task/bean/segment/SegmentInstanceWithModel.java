@@ -152,7 +152,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
      *
      * <p>The scaled version corresponds to the image inputted to the model for inference.
      */
-    private static final String OUTPUT_NAME_SCALED_SUFFIX = "_full_scale";
+    private static final String OUTPUT_NAME_SCALED_SUFFIX = "InputScale";
 
     private static final String MANIFEST_FUNCTION_INPUT_IMAGE = "input_image";
 

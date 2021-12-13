@@ -93,7 +93,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     private static final String OUTPUT_SCALED = "scaled";
 
     /** Output-name for a scaled copy the maximum-intensity-projection of the input image. */
-    private static final String OUTPUT_SCALED_FLATTENED = "scaled_flattened";
+    private static final String OUTPUT_SCALED_FLATTENED = "scaledFlattened";
 
     // START BEAN PROPERTIES
     /** Calculates what scale-factor to apply on the image. */
