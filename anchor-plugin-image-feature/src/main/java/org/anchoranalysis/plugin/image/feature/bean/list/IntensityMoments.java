@@ -37,7 +37,7 @@ import org.anchoranalysis.image.feature.bean.histogram.Mean;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Kurtosis;
 import org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Skewness;
-import org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.StdDev;
+import org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.StandardDeviation;
 import org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Sum;
 import org.anchoranalysis.plugin.image.feature.bean.histogram.statistic.Variance;
 import org.anchoranalysis.plugin.image.feature.bean.stack.intensity.Intensity;
@@ -90,7 +90,7 @@ public class IntensityMoments extends FeatureListProvider<FeatureInputStack> {
         FeatureList<FeatureInputStack> out = new FeatureList<>();
         out.add(createFeature(channelIndex, new Sum()));
         out.add(createFeature(channelIndex, new Mean()));
-        out.add(createFeature(channelIndex, new StdDev()));
+        out.add(createFeature(channelIndex, new StandardDeviation()));
         out.add(createFeature(channelIndex, new Variance()));
         out.add(createFeature(channelIndex, new Skewness()));
         out.add(createFeature(channelIndex, new Kurtosis()));

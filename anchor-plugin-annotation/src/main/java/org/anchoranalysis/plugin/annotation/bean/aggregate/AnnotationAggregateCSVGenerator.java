@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.core.value.TypedValue;
-import org.anchoranalysis.feature.io.csv.FeatureTableCSVGenerator;
+import org.anchoranalysis.feature.io.csv.table.FeatureTableCSVGenerator;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 

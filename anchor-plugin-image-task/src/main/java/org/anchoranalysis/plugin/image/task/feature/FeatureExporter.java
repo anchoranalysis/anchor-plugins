@@ -35,17 +35,16 @@ import lombok.Getter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
+import org.anchoranalysis.feature.io.csv.metadata.LabelHeaders;
+import org.anchoranalysis.feature.io.csv.results.FeatureCSVWriterFactory;
 import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
 import org.anchoranalysis.feature.io.results.FeatureOutputNames;
-import org.anchoranalysis.feature.io.results.LabelHeaders;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCSVWriterCreator;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
+import org.anchoranalysis.feature.io.results.LabelledResultsCollector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
@@ -95,7 +94,7 @@ public class FeatureExporter<S> {
             Supplier<S> featureSource,
             FeatureExporterContext context)
             throws OutputWriteFailedException {
-        this.featureNames = outputMetadata.featureNamesNonAggregate();
+        this.featureNames = outputMetadata.featureNamesNonAggregated();
         this.featureSource = featureSource;
         this.context = context;
         this.results = new FeatureResultsAndThumbnails(outputMetadata, context);
@@ -108,7 +107,7 @@ public class FeatureExporter<S> {
      * @param <T> feature input-type in store
      * @param features a list of beans to create the features.
      * @param metadataHeaders headers to describe any metadata.
-     * @param outputNames customizable output names used by {@link FeatureCalculationResults}.
+     * @param outputNames customizable output names used by {@link LabelledResultsCollector}.
      * @param context context.
      * @return a newly created {@link FeatureExporter}.
      * @throws CreateException if it cannot be successfully created.
@@ -219,22 +218,22 @@ public class FeatureExporter<S> {
      *     exports occur, otherwise not.
      * @param csvWriterCreator creates a CSV writer for a particular IO-context.
      * @param context IO-context.
-     * @throws OperationFailedException if any output cannot be written, or there is an error
+     * @throws OutputWriteFailedException if any output cannot be written, or there is an error
      *     closing open I/O.
      */
     public void closeAndWriteOutputs(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
-            Function<InputOutputContext, FeatureCSVWriterCreator> csvWriterCreator,
+            Function<InputOutputContext, FeatureCSVWriterFactory> csvWriterCreator,
             InputOutputContext context)
-            throws OperationFailedException {
+            throws OutputWriteFailedException {
         try {
             results.writeGroupedResults(
                     featuresAggregate, includeGroups, csvWriterCreator, context);
             results.closeAnyOpenIO();
             results = null;
         } catch (IOException | OutputWriteFailedException e) {
-            throw new OperationFailedException(e);
+            throw new OutputWriteFailedException(e);
         }
     }
 }

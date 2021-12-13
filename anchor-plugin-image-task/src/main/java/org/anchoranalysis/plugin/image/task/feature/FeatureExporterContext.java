@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.task.feature;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadata;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 

@@ -57,7 +57,7 @@ public final class TextFile extends ReporterAggregate<VoxelizedMarksWithEnergy>
         fileOutput =
                 TextFileOutputter.create(
                         "txt",
-                        Optional.of(new ManifestDescription("text", "event_log")),
+                        Optional.of(new ManifestDescription("text", "eventLog")),
                         initialization.getInitContext().getOutputter().getChecked(),
                         "eventLog");
     }

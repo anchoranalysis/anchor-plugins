@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.feature;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.csv.metadata.RowLabels;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 
 /**

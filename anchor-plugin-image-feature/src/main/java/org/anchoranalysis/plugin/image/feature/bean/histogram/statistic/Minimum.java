@@ -31,13 +31,13 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
-public class StdDev extends FeatureHistogramStatistic {
+public class Minimum extends FeatureHistogramStatistic {
 
     @Override
     protected double calculateStatisticFrom(Histogram histogram)
             throws FeatureCalculationException {
         try {
-            return histogram.standardDeviation();
+            return histogram.calculateMinimum();
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
