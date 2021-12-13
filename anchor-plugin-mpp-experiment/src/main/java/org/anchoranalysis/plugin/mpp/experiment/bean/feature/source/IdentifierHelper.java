@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.csv.metadata.RowLabels;
 import org.anchoranalysis.feature.io.name.CombinedName;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.SimpleName;

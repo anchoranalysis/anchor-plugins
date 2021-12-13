@@ -6,11 +6,10 @@ import java.util.function.Function;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.feature.input.FeatureInputResults;
+import org.anchoranalysis.feature.io.csv.results.FeatureCSVWriterFactory;
 import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
+import org.anchoranalysis.feature.io.results.LabelledResultsCollector;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCSVWriterCreator;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResultsFactory;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
@@ -34,6 +33,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  * <tr><td>thumbnails</td><td>yes</td><td>a small picture for each row in the {@code features} CSV illustrating its content.</td></tr>
  * </tbody>
  * </table>
+ *
  * @author Owen Feehan
  */
 public class FeatureResultsAndThumbnails {
@@ -41,7 +41,7 @@ public class FeatureResultsAndThumbnails {
     private static final String OUTPUT_THUMBNAILS = FeatureExporter.OUTPUT_THUMBNAILS;
 
     /** Where the results of feature-calculation are stored/outputted. */
-    private final FeatureCalculationResults results;
+    private final LabelledResultsCollector results;
 
     /** Outputs thumbnails. */
     private ThumbnailsWriter thumbnails = new ThumbnailsWriter();
@@ -59,12 +59,17 @@ public class FeatureResultsAndThumbnails {
 
     private final FeatureExporterContext context;
 
+    private final FeatureOutputMetadata outputMetadata;
+
     public FeatureResultsAndThumbnails(
             FeatureOutputMetadata outputMetadata, FeatureExporterContext context)
             throws OutputWriteFailedException {
+        this.outputMetadata = outputMetadata;
         this.results =
-                FeatureCalculationResultsFactory.create(
-                        outputMetadata, context::csvWriter, context.isRemoveNaNColumns());
+                new WriteWithGroups(
+                        outputMetadata.csvNonAggregated(),
+                        context::csvWriter,
+                        context.isRemoveNaNColumns());
         this.outputter = context.getContext().getOutputter().getChecked();
         MultiLevelOutputEnabled outputEnabled =
                 context.getContext().getOutputter().getChecked().getOutputsEnabled();
@@ -143,11 +148,12 @@ public class FeatureResultsAndThumbnails {
     public void writeGroupedResults(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
-            Function<InputOutputContext, FeatureCSVWriterCreator> csvWriterCreator,
+            Function<InputOutputContext, FeatureCSVWriterFactory> csvWriterCreator,
             InputOutputContext context)
             throws OutputWriteFailedException {
         synchronized (this) {
-            results.flushAndClose(featuresAggregate, includeGroups, csvWriterCreator, context);
+            results.flushAndClose(
+                    featuresAggregate, includeGroups, csvWriterCreator, outputMetadata, context);
         }
     }
 

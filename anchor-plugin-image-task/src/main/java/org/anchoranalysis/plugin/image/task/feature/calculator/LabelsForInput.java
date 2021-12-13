@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.image.task.feature.calculator;
 
 import java.util.Optional;
-import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.csv.metadata.RowLabels;
 
 /**
  * Calculates labels for a given input (and index).

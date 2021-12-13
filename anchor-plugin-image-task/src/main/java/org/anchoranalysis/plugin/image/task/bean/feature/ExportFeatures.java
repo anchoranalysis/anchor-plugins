@@ -50,6 +50,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
+import org.anchoranalysis.feature.io.csv.metadata.LabelHeaders;
 import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
@@ -59,6 +60,7 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
@@ -124,6 +126,9 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     /**
      * Features applied to each group to aggregate values (accepting {@link FeatureInputResults}).
+     *
+     * <p>If not specified, a default list of mean, standard-deviation, min, max etc. of every
+     * feature is used.
      */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate;
@@ -141,8 +146,17 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
             throws ExperimentExecutionException {
         try {
             FeatureExporterContext context = style.deriveContext(parameters.getContext());
-            return source.createExporter(
-                    source.headers(isGroupGeneratorDefined()), features, OUTPUT_RESULTS, context);
+
+            LabelHeaders headers = source.headers(isGroupGeneratorDefined());
+            FeatureExporter<S> exporter =
+                    source.createExporter(headers, features, OUTPUT_RESULTS, context);
+
+            if (featuresAggregate == null) {
+                featuresAggregate =
+                        AggregateFeaturesCreator.createDefaultFeatures(exporter.getFeatureNames());
+            }
+
+            return exporter;
         } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -150,6 +164,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     @Override
     public void doJobOnInput(InputBound<T, FeatureExporter<S>> input) throws JobExecutionException {
+
         try {
             Optional<String> groupName =
                     extractGroupNameFromGenerator(
@@ -181,7 +196,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
                     source.includeGroupInExperiment(isGroupGeneratorDefined()),
                     contextForWriter -> style.deriveContext(contextForWriter)::csvWriter,
                     context);
-        } catch (ProvisionFailedException | OperationFailedException e) {
+        } catch (ProvisionFailedException | OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -189,9 +204,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     @Override
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs()
-                .addEnabledOutputFirst(
-                        OUTPUT_RESULTS.getCsvFeaturesNonAggregated(),
-                        OUTPUT_RESULTS.getCsvFeaturesAggregated().get()); // NOSONAR
+                .addEnabledOutputFirst(OUTPUT_RESULTS.getCsvFeaturesNonAggregated()); // NOSONAR
     }
 
     @Override

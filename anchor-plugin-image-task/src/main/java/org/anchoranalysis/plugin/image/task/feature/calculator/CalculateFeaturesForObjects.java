@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.csv.metadata.RowLabels;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;

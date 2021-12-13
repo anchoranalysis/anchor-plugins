@@ -49,8 +49,8 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.io.csv.RowLabels;
-import org.anchoranalysis.feature.io.results.LabelHeaders;
+import org.anchoranalysis.feature.io.csv.metadata.LabelHeaders;
+import org.anchoranalysis.feature.io.csv.metadata.RowLabels;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
@@ -76,6 +76,7 @@ import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
@@ -95,9 +96,10 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  * <p>Various visualizations and export types are supported.
  *
  * <ul>
- * <li>Segmentation results in vairous forms (HDF5) for input into other scripts. (in HDF5 form and as a mask).
- * <li>Visualizations of the instances found (outlines, thumbnails etc.)
- * <li>A table of basic features (CSV) for each instance.
+ *   <li>Segmentation results in vairous forms (HDF5) for input into other scripts. (in HDF5 form
+ *       and as a mask).
+ *   <li>Visualizations of the instances found (outlines, thumbnails etc.)
+ *   <li>A table of basic features (CSV) for each instance.
  * </ul>
  *
  * <p>Specifically, the following outputs are produced:
@@ -279,7 +281,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
         try {
             sharedState.closeAndWriteOutputs(style);
             closeModelPool(sharedState.getModelPool(), context.getErrorReporter());
-        } catch (OperationFailedException e) {
+        } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -355,7 +357,6 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
         }
     }
 
-
     private static <T extends InferenceModel> void calculateFeaturesForImage(
             InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input,
             Stack stack,
@@ -393,7 +394,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
                                 instanceIdentifier,
                                 segments.get(index).getConfidence()));
     }
-    
+
     /** Constructs a {@link RowLabels} instance for a particular instance in a particular image. */
     private static RowLabels rowLabelsFor(
             String imageIdentifier, String instanceIdentifier, double confidence) {
@@ -427,9 +428,10 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
                             }
                         });
     }
-    
+
     /** Closes the model-pool, logging any error that may occur. */
-    private static void closeModelPool(ConcurrentModelPool<?> modelPool, ErrorReporter errorReporter) {
+    private static void closeModelPool(
+            ConcurrentModelPool<?> modelPool, ErrorReporter errorReporter) {
         try {
             modelPool.close();
         } catch (Exception e) {

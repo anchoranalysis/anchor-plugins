@@ -28,14 +28,14 @@ package org.anchoranalysis.plugin.image.task.segment;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.feature.io.csv.metadata.LabelHeaders;
 import org.anchoranalysis.feature.io.results.FeatureOutputNames;
-import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.inference.InferenceModel;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesStyle;
 import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
@@ -91,10 +91,10 @@ public class SharedStateSegmentInstance<T extends InferenceModel> {
      * Writes all the results that have been collected as a CSV file, and closes open I/O handles
      * and memory structures.
      *
-     * @throws OperationFailedException if any output cannot be written, or there is an error
+     * @throws OutputWriteFailedException if any output cannot be written, or there is an error
      *     closing open I/O.
      */
-    public void closeAndWriteOutputs(ExportFeaturesStyle style) throws OperationFailedException {
+    public void closeAndWriteOutputs(ExportFeaturesStyle style) throws OutputWriteFailedException {
         features.closeAndWriteOutputs(
                 Optional.empty(),
                 false,
