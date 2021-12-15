@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -46,7 +47,7 @@ import org.opencv.objdetect.HOGDescriptor;
  *
  * @author Owen Feehan
  */
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false) @NoArgsConstructor
 public class HOGParameters extends AnchorBean<HOGParameters> {
 
     private static final String BLOCK_SIZE = "block-size";
@@ -76,6 +77,15 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
+    
+    /**
+     * Creates with a particular {@link Interpolator}.
+     * 
+     * @param interpolator the interpolator.
+     */
+    public HOGParameters(Interpolator interpolator) {
+        this.interpolator = interpolator;
+    }
 
     /**
      * Calculates the size of the descriptor will be for a given image.

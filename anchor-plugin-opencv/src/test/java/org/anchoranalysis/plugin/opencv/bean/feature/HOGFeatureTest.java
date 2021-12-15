@@ -28,16 +28,22 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
+import org.anchoranalysis.io.imagej.bean.interpolator.ImageJ;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.image.load.CarImageLoader;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link HOGFeature}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 class HOGFeatureTest {
 
     private CarImageLoader loader = new CarImageLoader();
@@ -46,12 +52,12 @@ class HOGFeatureTest {
 
     @Test
     void testRGB() throws FeatureCalculationException {
-        assertFeatureValueFirst(loader.carRGBAsEnergy(), 0.01632116);
+        assertFeatureValueFirst(loader.carRGBAsEnergy(), 0.001620417227);
     }
 
     @Test
     void testGrayscale8bit() throws FeatureCalculationException {
-        assertFeatureValueFirst(loader.carGrayscale8BitAsEnergy(), 00.03600078);
+        assertFeatureValueFirst(loader.carGrayscale8BitAsEnergy(), 0.0027965);
     }
 
     @Test
@@ -77,7 +83,11 @@ class HOGFeatureTest {
 
     private double featureValueForIndex(EnergyStackWithoutParameters stack, int index)
             throws FeatureCalculationException {
+        
         HOGFeature feature = new HOGFeature(new SizeXY(64, 64), index);
+        // Need to explicitly set the default value for the interpolator
+        feature.setParameters( new HOGParameters( new ImageJ() ) );
+        
         return FeatureSession.calculateWith(
                 feature, new FeatureInputStack(stack), LoggingFixture.suppressedLogger());
     }
