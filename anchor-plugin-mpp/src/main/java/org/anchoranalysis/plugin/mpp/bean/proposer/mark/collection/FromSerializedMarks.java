@@ -55,7 +55,7 @@ public class FromSerializedMarks extends MarkCollectionProposer {
                 new ObjectInputStreamDeserializer<>();
         try {
             Path path = Paths.get(filePath);
-            return Optional.of(deserializer.deserialize(path, getLogger()));
+            return Optional.of(deserializer.deserialize(path, context.getOperationContext()));
         } catch (DeserializationFailedException e) {
             return Optional.empty();
         }

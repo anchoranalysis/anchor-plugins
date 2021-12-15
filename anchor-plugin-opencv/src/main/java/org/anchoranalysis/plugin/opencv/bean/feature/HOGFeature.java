@@ -85,7 +85,7 @@ public class HOGFeature extends FeatureStack {
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
-        if (resizeTo != null) {
+        if (resizeTo != null && parameters.getWindowSize() != null) {
             if (resizeTo.getWidth() < parameters.getWindowSize().getWidth()) {
                 throw new BeanMisconfiguredException(
                         "The resizeTo width is smaller than the window-width");

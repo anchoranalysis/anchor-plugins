@@ -36,6 +36,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -69,6 +70,8 @@ class MapPart extends NamedChannelsInputPart {
      * our purposes we treat it as if its 0
      */
     private final boolean useLastSeriesIndexOnly;
+
+    private final ExecutionTimeRecorder executionTimeRecorder;
     // END REQUIRED ARGUMENTS
 
     // We cache a certain amount of stacks read for particular series
@@ -181,7 +184,7 @@ class MapPart extends NamedChannelsInputPart {
                                     () ->
                                             new ImageIOException(
                                                     "A binding-path is needed in the delegate."));
-            openedFileMemo = stackReader.openFile(path);
+            openedFileMemo = stackReader.openFile(path, executionTimeRecorder);
         }
         return openedFileMemo;
     }

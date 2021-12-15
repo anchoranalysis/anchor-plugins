@@ -39,11 +39,11 @@ import org.anchoranalysis.image.core.object.scale.ScaledElements;
 import org.anchoranalysis.image.core.object.scale.Scaler;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.box.ScaleableBackground;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.IntersectingObjects;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
@@ -54,7 +54,7 @@ class FlattenAndScaler {
     /** Scaling-factor to apply to objects and stacks. */
     @Getter private final ScaleFactor scaleFactor;
 
-    private final Interpolator interpolator;
+    private final VoxelsResizer resizer;
 
     /** A scaled version of each object. */
     private ScaledElements<ObjectMask> objectsScaled;
@@ -80,7 +80,7 @@ class FlattenAndScaler {
      * @param overlappingObjects true if objects may overlap unscaled. false if this is never
      *     allowed. This influences whether scaling occurs collectively (to preserve tight borders
      *     between objects), or individually.
-     * @param interpolator interpolator for scaling stack.
+     * @param resizer interpolator for scaling stack.
      * @param targetSize the target size which objects will be scaled-down to fit inside.
      * @param backgroundSource an unscaled background image, if it exists.
      * @param backgroundChannelIndex which channel use in the background image, or -1 to use the
@@ -91,17 +91,17 @@ class FlattenAndScaler {
             StreamableCollection<BoundingBox> boundingBoxes,
             ObjectCollection allObjects,
             boolean overlappingObjects,
-            Interpolator interpolator,
+            VoxelsResizer resizer,
             Extent targetSize,
             Optional<Stack> backgroundSource,
             int backgroundChannelIndex)
             throws OperationFailedException {
         this.scaleFactor = ScaleFactorCalculator.soEachBoundingBoxFits(boundingBoxes, targetSize);
-        this.interpolator = interpolator;
+        this.resizer = resizer;
 
         this.background =
                 determineBackgroundMaybeOutlined(
-                        backgroundSource, backgroundChannelIndex, scaleFactor, interpolator);
+                        backgroundSource, backgroundChannelIndex, scaleFactor, resizer);
 
         this.sizeScaled = background.map(ScaleableBackground::extentAfterAnyScaling);
 
@@ -205,7 +205,7 @@ class FlattenAndScaler {
      * longer physically valid).
      */
     private Channel flattenScaleAndRemoveResolutionFromChannel(Channel channel) {
-        Channel scaled = channel.projectMax().scaleXY(scaleFactor, interpolator);
+        Channel scaled = channel.projectMax().scaleXY(scaleFactor, resizer);
         scaled.assignResolution(Optional.empty());
         return scaled;
     }
@@ -221,7 +221,7 @@ class FlattenAndScaler {
             Optional<Stack> backgroundSource,
             int backgroundChannelIndex,
             ScaleFactor scaleFactor,
-            Interpolator interpolator)
+            VoxelsResizer interpolator)
             throws OperationFailedException {
         BackgroundSelector backgroundHelper =
                 new BackgroundSelector(backgroundChannelIndex, scaleFactor, interpolator);

@@ -40,6 +40,8 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.log.error.ErrorReporterIntoString;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
@@ -108,7 +110,9 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
 
         SharedStateRememberConverted<U, S> sharedState = new SharedStateRememberConverted<>();
 
-        List<U> convertedInputs = convertListAndPopulateMap(inputs, sharedState);
+        List<U> convertedInputs =
+                convertListAndPopulateMap(
+                        inputs, sharedState, parameters.getExecutionTimeRecorder());
         sharedState.setSharedState(
                 task.beforeAnyJobIsExecuted(
                         outputter, concurrencyPlan, convertedInputs, parameters));
@@ -167,7 +171,9 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
     /** Convert all inputs, placing them into the map. */
     @SuppressWarnings("unchecked")
     private List<U> convertListAndPopulateMap(
-            List<T> inputs, SharedStateRememberConverted<U, S> sharedState)
+            List<T> inputs,
+            SharedStateRememberConverted<U, S> sharedState,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws ExperimentExecutionException {
 
         Optional<Path> directory = deriveCommonRootIfNeeded(inputs);
@@ -197,7 +203,9 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
                                     input,
                                     inputTypesExpected,
                                     directory,
-                                    logIntoString(conversionMessages));
+                                    new OperationContext(
+                                            executionTimeRecorder,
+                                            logIntoString(conversionMessages)));
             sharedState.rememberConverted(input, converted, conversionMessages);
             out.add(converted);
         }

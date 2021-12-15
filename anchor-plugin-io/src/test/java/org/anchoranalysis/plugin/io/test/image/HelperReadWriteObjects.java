@@ -31,6 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
 import org.anchoranalysis.image.io.object.output.hdf5.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.io.object.output.mask.RasterDirectoryObjectsGenerator;
@@ -67,6 +68,6 @@ class HelperReadWriteObjects {
 
         TestReaderWriterUtilities.ensureStackReader();
 
-        return ObjectCollectionReader.createFromPath(path, logger);
+        return ObjectCollectionReader.createFromPath(path, new OperationContext(logger));
     }
 }

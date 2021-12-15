@@ -41,6 +41,7 @@ import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
@@ -85,7 +86,8 @@ public class NamedChannelsAppend extends NamedChannelsBase {
                     createOutList(
                             listTemp,
                             progress.trackCurrentChild(),
-                            parameters.isDebugModeActivated());
+                            parameters.isDebugModeActivated(),
+                            parameters.getExecutionTimeRecorder());
 
             progress.incrementChild();
 
@@ -94,33 +96,44 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     }
 
     private List<NamedChannelsInputPart> createOutList(
-            List<NamedChannelsInputPart> listTemp, Progress progress, boolean debugMode)
+            List<NamedChannelsInputPart> listTemp,
+            Progress progress,
+            boolean debugMode,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws InputReadFailedException {
         try {
             return FunctionalProgress.mapListOptional(
-                    listTemp, progress, channels -> maybeAppend(channels, debugMode));
+                    listTemp,
+                    progress,
+                    channels -> maybeAppend(channels, debugMode, executionTimeRecorder));
         } catch (DerivePathException e) {
             throw new InputReadFailedException(e);
         }
     }
 
     private Optional<NamedChannelsInputPart> maybeAppend(
-            final NamedChannelsInputPart channels, boolean debugMode) throws DerivePathException {
+            final NamedChannelsInputPart channels,
+            boolean debugMode,
+            ExecutionTimeRecorder executionTimeRecorder)
+            throws DerivePathException {
         if (ignoreFileNotFoundAppend) {
 
             try {
-                return Optional.of(append(channels, debugMode));
+                return Optional.of(append(channels, debugMode, executionTimeRecorder));
             } catch (DerivePathException e) {
                 return Optional.empty();
             }
 
         } else {
-            return Optional.of(append(channels, debugMode));
+            return Optional.of(append(channels, debugMode, executionTimeRecorder));
         }
     }
 
     // We assume all the input files are single channel images
-    private NamedChannelsInputPart append(final NamedChannelsInputPart input, boolean debugMode)
+    private NamedChannelsInputPart append(
+            final NamedChannelsInputPart input,
+            boolean debugMode,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws DerivePathException {
 
         NamedChannelsInputPart out = input;
@@ -144,7 +157,14 @@ public class NamedChannelsAppend extends NamedChannelsBase {
                 }
             }
 
-            out = new AppendPart(out, namedPath.getName(), 0, outPath, getStackReader());
+            out =
+                    new AppendPart(
+                            out,
+                            namedPath.getName(),
+                            0,
+                            outPath,
+                            getStackReader(),
+                            executionTimeRecorder);
         }
 
         return out;

@@ -37,7 +37,7 @@ import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.annotation.io.mark.DualMarksAnnotationReader;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -61,7 +61,7 @@ public class DualMarksAnnotationAsObjects<T> extends ComparableSource {
 
     @Override
     public Findable<ObjectCollection> loadAsObjects(
-            Path reference, Dimensions dimensions, boolean debugMode, Logger logger)
+            Path reference, Dimensions dimensions, boolean debugMode, OperationContext context)
             throws InputReadFailedException {
 
         Path filePath;
@@ -72,7 +72,7 @@ public class DualMarksAnnotationAsObjects<T> extends ComparableSource {
         }
 
         DualMarksAnnotationReader<T> annotationReader = new DualMarksAnnotationReader<>(false);
-        Optional<DualMarksAnnotation<T>> annotation = annotationReader.read(filePath, logger);
+        Optional<DualMarksAnnotation<T>> annotation = annotationReader.read(filePath, context);
 
         if (annotation.isPresent()) {
             return objectsFromAnnotation(annotation.get(), filePath, dimensions);

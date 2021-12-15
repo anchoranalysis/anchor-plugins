@@ -32,8 +32,8 @@ import java.nio.file.Paths;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 
@@ -51,13 +51,12 @@ public class DeserializedManifest {
 
     private final File file;
     private final CheckedSupplier<Manifest, OperationFailedException> memoized;
-    private Logger logger;
 
     public DeserializedManifest(
-            File file, ManifestDeserializer manifestDeserializer, Logger logger) {
+            File file, ManifestDeserializer manifestDeserializer, OperationContext context) {
         this.file = file;
-        this.logger = logger;
-        this.memoized = CachedSupplier.cacheChecked(() -> getInternal(manifestDeserializer));
+        this.memoized =
+                CachedSupplier.cacheChecked(() -> getInternal(manifestDeserializer, context));
     }
 
     public Manifest get() throws OperationFailedException {
@@ -69,14 +68,15 @@ public class DeserializedManifest {
         return Paths.get(file.getParent());
     }
 
-    private Manifest getInternal(ManifestDeserializer manifestDeserializer)
+    private Manifest getInternal(
+            ManifestDeserializer manifestDeserializer, OperationContext context)
             throws OperationFailedException {
         try {
             if (!file.exists()) {
                 throw new OperationFailedException(
                         String.format("File %s cannot be found", file.getPath()));
             }
-            return manifestDeserializer.deserializeManifest(file, logger);
+            return manifestDeserializer.deserializeManifest(file, context);
         } catch (DeserializationFailedException e) {
             throw new OperationFailedException(e);
         }

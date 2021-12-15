@@ -118,7 +118,7 @@ public class ExportReportFeaturesFromMulti
                                     initialization,
                                     writer,
                                     Optional.of(input.getInput().identifier()),
-                                    input.getLogger()));
+                                    input.getContextJob().operationContext()));
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
         }

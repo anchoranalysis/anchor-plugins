@@ -28,14 +28,14 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.stack;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 
 /**
  * Create a thumbnail by scales an image to a particular size.
@@ -51,14 +51,14 @@ public class ScaleToSize extends ThumbnailFromStack {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private SizeXY size = new SizeXY(200, 200);
 
-    @BeanField @Getter @Setter private InterpolatorBean interpolator = new ImgLib2Lanczos();
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
 
-    private Interpolator interpolatorCreated;
+    private VoxelsResizer interpolatorCreated;
 
     @Override
     public void start() {
-        interpolatorCreated = interpolator.create();
+        interpolatorCreated = interpolator.voxelsResizer();
     }
 
     @Override

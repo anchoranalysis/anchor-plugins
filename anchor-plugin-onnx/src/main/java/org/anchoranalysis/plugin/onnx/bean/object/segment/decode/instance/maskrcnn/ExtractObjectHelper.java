@@ -65,6 +65,7 @@ class ExtractObjectHelper {
                                             maskVoxels.get(),
                                             box,
                                             factor,
+                                            context.getResizer(),
                                             dimensions,
                                             minMaskValue,
                                             context.getExecutionTimeRecorder()));

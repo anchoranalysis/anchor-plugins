@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.convert;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
@@ -63,7 +63,10 @@ class ConvertInputHelper {
     private final StackReader defaultStackReader;
 
     public <T extends NamedChannelsInput> InputFromManager convert(
-            T input, InputTypesExpected inputTypesExpected, Optional<Path> directory, Logger logger)
+            T input,
+            InputTypesExpected inputTypesExpected,
+            Optional<Path> directory,
+            OperationContext context)
             throws ExperimentExecutionException {
         Class<? extends InputFromManager> inputClass = input.getClass();
 
@@ -73,11 +76,11 @@ class ConvertInputHelper {
         } else if (inputTypesExpected.doesClassInheritFromAny(MultiInput.class)) {
             return new MultiInput(input);
         } else if (inputTypesExpected.doesClassInheritFromAny(StackSequenceInput.class)) {
-            return new ConvertNamedChannelsInputToStack(input);
+            return new ConvertNamedChannelsInputToStack(input, context.getExecutionTimeRecorder());
         } else if (inputTypesExpected.doesClassInheritFromAny(FileWithDirectoryInput.class)) {
             return convertToFileWithDirectory(input, directory);
         } else if (inputTypesExpected.doesClassInheritFromAny(ImageMetadataInput.class)) {
-            return convertToImageMetadata(input, logger);
+            return convertToImageMetadata(input, context);
         } else {
             throw new ExperimentExecutionException(
                     String.format(
@@ -113,19 +116,19 @@ class ConvertInputHelper {
 
     /** Converts to a {@link ImageMetadataInput}. */
     private <T extends NamedChannelsInput> ImageMetadataInput convertToImageMetadata(
-            T input, Logger logger) throws ExperimentExecutionException {
+            T input, OperationContext context) throws ExperimentExecutionException {
         try {
-            return new ImageMetadataInput(input.asFile(), () -> readImageMetadata(input, logger));
+            return new ImageMetadataInput(input.asFile(), () -> readImageMetadata(input, context));
         } catch (InputReadFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }
 
-    private <T extends NamedChannelsInput> ImageMetadata readImageMetadata(T input, Logger logger)
-            throws ImageIOException {
+    private <T extends NamedChannelsInput> ImageMetadata readImageMetadata(
+            T input, OperationContext context) throws ImageIOException {
         try {
             return imageMetadataReader.openFile(
-                    input.pathForBindingRequired(), defaultStackReader, logger);
+                    input.pathForBindingRequired(), defaultStackReader, context);
         } catch (InputReadFailedException e) {
             throw new ImageIOException("Failed to read image-metadata for the input.", e);
         }

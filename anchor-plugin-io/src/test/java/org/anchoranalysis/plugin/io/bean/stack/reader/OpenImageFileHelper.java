@@ -26,6 +26,8 @@
 package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.nio.file.Path;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
@@ -64,11 +66,13 @@ class OpenImageFileHelper {
      * Opens an image-file from the {@code subdirectory} passed to the constructor.
      *
      * @param filename the name of a file in {@code subdirectory} to open.
+     * @param executionTimeRecorder records the times of certain operations.
      * @return the opened file.
      * @throws ImageIOException if the file cannot be opened.
      */
-    public OpenedImageFile openFile(String filename) throws ImageIOException {
-        return reader.openFile(pathForFile(filename));
+    public OpenedImageFile openFile(String filename, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
+        return reader.openFile(pathForFile(filename), executionTimeRecorder);
     }
 
     /**
@@ -83,7 +87,10 @@ class OpenImageFileHelper {
     public OpenedImageFile openFile(
             String filename, CalculateOrientationChange orientationCorrection)
             throws ImageIOException {
-        return reader.openFile(pathForFile(filename), orientationCorrection);
+        return reader.openFile(
+                pathForFile(filename),
+                orientationCorrection,
+                ExecutionTimeRecorderIgnore.instance());
     }
 
     /**

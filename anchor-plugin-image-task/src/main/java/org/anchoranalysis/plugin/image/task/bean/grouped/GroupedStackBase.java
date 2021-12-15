@@ -33,6 +33,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -42,6 +43,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
@@ -66,6 +68,11 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
  */
 public abstract class GroupedStackBase<S, T>
         extends Task<ProvidesStackInput, GroupedSharedState<S, T>> {
+
+    // START BEAN PROPERTIES
+    /** The interpolator to use for scaling images. */
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
+    // END BEAN PROPERTIES
 
     private static final ManifestDirectoryDescription MANIFEST_DESCRIPTION_GROUP_FOLDER =
             new ManifestDirectoryDescription(

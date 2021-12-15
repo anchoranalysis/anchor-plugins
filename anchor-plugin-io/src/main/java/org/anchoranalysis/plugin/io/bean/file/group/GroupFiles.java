@@ -37,6 +37,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.channel.ChannelMap;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
@@ -131,10 +132,12 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
                 }
             }
         }
-        return inputs.withInputs(listFromMap(map, parameters.getLogger()));
+        return inputs.withInputs(
+                listFromMap(map, parameters.getExecutionTimeRecorder(), parameters.getLogger()));
     }
 
-    private List<NamedChannelsInput> listFromMap(GroupFilesMap map, Logger logger)
+    private List<NamedChannelsInput> listFromMap(
+            GroupFilesMap map, ExecutionTimeRecorder executionTimeRecorder, Logger logger)
             throws InputReadFailedException {
 
         List<File> files = new ArrayList<>();
@@ -147,7 +150,7 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
             // If we have a condition to check against
             if (checkParsedFilePathBag == null || checkParsedFilePathBag.accept(bag)) {
                 files.add(Paths.get(key).toFile());
-                openedFiles.add(new OpenedMultiFile(getStackReader(), bag));
+                openedFiles.add(new OpenedMultiFile(getStackReader(), bag, executionTimeRecorder));
             }
         }
 

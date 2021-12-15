@@ -25,12 +25,20 @@
  */
 package org.anchoranalysis.plugin.image.task.bean.segment;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
+import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.feature.bean.object.single.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
+import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
 import org.anchoranalysis.spatial.axis.Axis;
 
 /**
@@ -39,14 +47,36 @@ import org.anchoranalysis.spatial.axis.Axis;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class FeaturesCreator {
+class FeatureTableCreator {
+
+    private static final NamedFeatureStoreFactory STORE_FACTORY =
+            NamedFeatureStoreFactory.parametersOnly();
 
     /**
-     * Creates default features for describing the results of instance-segmentation
+     * Creates {@link FeatureTableCalculator} needed for calculating features on the segmented
+     * objects.
      *
-     * @return
+     * @param features any user-specified features, if they exist.
+     * @param combineObjects how objects are combined together, to form the feature-table.
+     * @return a newly created {@link FeatureTableCalculator}.
      */
-    public static NamedFeatureStore<FeatureInputSingleObject> defaultInstanceSegmentation() {
+    public static FeatureTableCalculator<FeatureInputSingleObject> tableCalculator(
+            Optional<List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>>> features,
+            EachObjectIndependently combineObjects)
+            throws CreateException {
+        if (features.isPresent()) {
+            return combineObjects.createFeatures(features.get(), STORE_FACTORY, true);
+        } else {
+            return combineObjects.createFeatures(FeatureTableCreator.defaultInstanceSegmentation());
+        }
+    }
+
+    /**
+     * Creates default features for describing the results of instance-segmentation.
+     *
+     * @return the default features.
+     */
+    private static NamedFeatureStore<FeatureInputSingleObject> defaultInstanceSegmentation() {
         NamedFeatureStore<FeatureInputSingleObject> store = new NamedFeatureStore<>();
         store.add("centerOfGravity.x", new CenterOfGravity(Axis.X));
         store.add("centerOfGravity.y", new CenterOfGravity(Axis.Y));

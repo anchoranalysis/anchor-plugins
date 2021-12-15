@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.primitive.StringSet;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -45,7 +46,7 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 public class BranchExtension extends StackReader {
 
     // START BEAN PROPERTIES
-    /** Any extensions to match (case insensitive) not including any leading period. */
+    /** Any extensions to match (case insensitive) excluding any leading period. */
     @BeanField @Getter @Setter private StringSet extensions;
 
     /** The reader to use if the extension matches. */
@@ -59,11 +60,12 @@ public class BranchExtension extends StackReader {
     private Set<String> extensionsLowercase;
 
     @Override
-    public OpenedImageFile openFile(Path path) throws ImageIOException {
+    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
         if (doesPathHaveExtension(path)) {
-            return readerMatching.openFile(path);
+            return readerMatching.openFile(path, executionTimeRecorder);
         } else {
-            return readerNotMatching.openFile(path);
+            return readerNotMatching.openFile(path, executionTimeRecorder);
         }
     }
 

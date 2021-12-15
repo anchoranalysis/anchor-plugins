@@ -34,6 +34,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
@@ -65,13 +66,18 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
      */
     private Optional<String> channelName;
 
+    /** Records the execution times of certain operations. */
+    private final ExecutionTimeRecorder executionTimeRecorder;
+
     /**
      * Create with an input.
      *
      * @param input the input to convert.
+     * @param executionTimeRecorder records the execution times of certain operations.
      */
-    public ConvertNamedChannelsInputToStack(NamedChannelsInput input) {
-        this(input, 0, Optional.empty());
+    public ConvertNamedChannelsInputToStack(
+            NamedChannelsInput input, ExecutionTimeRecorder executionTimeRecorder) {
+        this(input, 0, Optional.empty(), executionTimeRecorder);
     }
 
     /**
@@ -81,12 +87,17 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
      * @param timeIndex time-index to convert.
      * @param channelName by default all channels are converted into a stack. If set, only this
      *     channel is converted into a stack.
+     * @param executionTimeRecorder records the execution times of certain operations.
      */
     public ConvertNamedChannelsInputToStack(
-            NamedChannelsInput input, int timeIndex, Optional<String> channelName) {
+            NamedChannelsInput input,
+            int timeIndex,
+            Optional<String> channelName,
+            ExecutionTimeRecorder executionTimeRecorder) {
         super(input);
         this.timeIndex = timeIndex;
         this.channelName = channelName;
+        this.executionTimeRecorder = executionTimeRecorder;
     }
 
     @Override
@@ -129,11 +140,16 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
         try (ProgressMultiple progress = new ProgressMultiple(progressParent, 2)) {
 
             NamedChannelsForSeries channels =
-                    input.createChannelsForSeries(
-                            seriesIndex, progress.trackCurrentChild(), logger);
+                    executionTimeRecorder.recordExecutionTime(
+                            "Create channel for series",
+                            () ->
+                                    input.createChannelsForSeries(
+                                            seriesIndex, progress.trackCurrentChild(), logger));
             progress.incrementChild();
 
-            return new TimeSequence(stackFromChannels(channels, progress, logger));
+            return executionTimeRecorder.recordExecutionTime(
+                    "Derive stack from channels",
+                    () -> new TimeSequence(stackFromChannels(channels, progress, logger)));
 
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);

@@ -30,18 +30,18 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -54,7 +54,8 @@ public class ScaleXY extends ChannelProviderUnary {
     // Start BEAN PROPERTIES
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
 
-    @BeanField @Getter @Setter private InterpolatorBean interpolator = new ImgLib2Lanczos();
+    /** The interpolator to use for scaling images. */
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // End BEAN PROPERTIES
 
     @Override
@@ -63,7 +64,7 @@ public class ScaleXY extends ChannelProviderUnary {
             return scale(
                     channel,
                     scaleCalculator,
-                    interpolator.create(),
+                    interpolator.voxelsResizer(),
                     getInitialization().getSuggestedResize(),
                     getLogger().messageLogger());
         } catch (InitializeException e) {
@@ -74,7 +75,7 @@ public class ScaleXY extends ChannelProviderUnary {
     public static Channel scale(
             Channel channel,
             ScaleCalculator scaleCalculator,
-            Interpolator interpolator,
+            VoxelsResizer interpolator,
             Optional<ImageSizeSuggestion> suggestedResize,
             MessageLogger logger)
             throws ProvisionFailedException {

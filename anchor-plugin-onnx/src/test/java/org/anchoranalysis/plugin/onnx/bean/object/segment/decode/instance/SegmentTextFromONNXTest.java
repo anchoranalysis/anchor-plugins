@@ -1,10 +1,15 @@
 package org.anchoranalysis.plugin.onnx.bean.object.segment.decode.instance;
 
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.primitive.DoubleList;
+import org.anchoranalysis.bean.xml.RegisterBeanFactories;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.image.inference.bean.segment.instance.SuppressNonMaximum;
+import org.anchoranalysis.io.imagej.bean.interpolator.ImageJ;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ThresholdConfidence;
 import org.anchoranalysis.plugin.image.bean.scale.FitTo;
 import org.anchoranalysis.plugin.onnx.bean.object.segment.decode.instance.text.DecodeEAST;
@@ -36,6 +41,14 @@ class SegmentTextFromONNXTest extends InstanceSegmentationTestBase {
         segment.setIncludeBatchDimension(true);
         segment.setInterleaveChannels(true);
         segment.setReadFromResources(true);
+        
+        try {
+            RegisterBeanFactories.getDefaultInstances().putInstanceFor(Interpolator.class, new ImageJ());
+            segment.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
+        } catch (BeanMisconfiguredException e) {
+            throw new AnchorFriendlyRuntimeException(e);
+        }
+        
         return new SuppressNonMaximum<>(segment, new ThresholdConfidence(), false);
     }
 

@@ -36,6 +36,7 @@ import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 
 /**
  * Source of channels for aggregating.
@@ -47,11 +48,15 @@ public class ChannelSource {
 
     // START REQUIRED ARGUMENTS
     @Getter private final NamedStacks stackStore;
+
     private final ConsistentChannelChecker channelChecker;
-    // END REQUIRED ARGUMENTS
 
     /** Optionally resizes all extracted channels in XY */
     private final Optional<SizeXY> resizeTo;
+
+    /** Resizes images. */
+    private final VoxelsResizer resizer;
+    // END REQUIRED ARGUMENTS
 
     public Channel extractChannel(String stackName, boolean checkType)
             throws OperationFailedException {
@@ -105,7 +110,7 @@ public class ChannelSource {
 
     private Channel maybeResize(Channel channel) {
         if (resizeTo.isPresent()) {
-            return channel.resizeXY(resizeTo.get().getWidth(), resizeTo.get().getHeight());
+            return channel.resizeXY(resizeTo.get().getWidth(), resizeTo.get().getHeight(), resizer);
         } else {
             return channel;
         }

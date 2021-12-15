@@ -36,6 +36,7 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -61,6 +62,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
      * our purposes we treat it as if its 0.
      */
     private final boolean useLastSeriesIndexOnly;
+
+    private final ExecutionTimeRecorder executionTimeRecorder;
 
     private final Logger logger;
     // END: REQUIRED ARGUMENTS
@@ -159,7 +162,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                                     .orElseThrow(
                                             () ->
                                                     new ImageIOException(
-                                                            "A binding-path must be associated with this file")));
+                                                            "A binding-path must be associated with this file")),
+                            executionTimeRecorder);
         }
         return openedFileMemo;
     }

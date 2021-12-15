@@ -33,6 +33,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -68,6 +69,9 @@ class OpenedRasterOpenCV implements OpenedImageFile {
      * paths are not supported</a>.
      */
     private final Path path;
+
+    /** Records the execution time of operations. */
+    private final ExecutionTimeRecorder executionTimeRecorder;
     // END REQUIRED ARGUMENTS
 
     /** Lazily opened stack. */
@@ -79,13 +83,16 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     /**
      * Create with a specific path.
      *
-     * @param path the path to open
+     * @param path the path to open.
+     * @param executionTimeRecorder records the execution time of operations.
      * @throws ImageIOException if the path contains non-ASCII characters (e.g. unicode, which is
      *     unsupported by OpenCV).
      */
-    public OpenedRasterOpenCV(Path path) throws ImageIOException {
+    public OpenedRasterOpenCV(Path path, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
         if (CharMatcher.ascii().matchesAllOf(path.toString())) {
             this.path = path;
+            this.executionTimeRecorder = executionTimeRecorder;
         } else {
             throw new ImageIOException(
                     "Path contains non-ASCII characters, which is currently unsupported by OpenCV: "
@@ -160,11 +167,18 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     /** Opens the stack if has not already been opened. */
     private void openStackIfNecessary() throws ImageIOException {
-        Mat image = Imgcodecs.imread(path.toString());
-        try {
-            stack = ConvertFromMat.toStack(image);
-        } catch (OperationFailedException e) {
-            throw new ImageIOException("Failed to convert an OpenCV image structure to a stack", e);
+        if (stack == null) {
+            Mat image =
+                    executionTimeRecorder.recordExecutionTime(
+                            "imread with OpenCV", () -> Imgcodecs.imread(path.toString()));
+            try {
+                stack =
+                        executionTimeRecorder.recordExecutionTime(
+                                "Convert OpenCV to stack", () -> ConvertFromMat.toStack(image));
+            } catch (OperationFailedException e) {
+                throw new ImageIOException(
+                        "Failed to convert an OpenCV image structure to a stack", e);
+            }
         }
     }
 }

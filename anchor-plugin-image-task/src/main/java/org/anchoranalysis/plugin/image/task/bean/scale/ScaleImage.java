@@ -32,6 +32,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
@@ -44,6 +45,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -52,7 +54,6 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -104,6 +105,9 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
      * ensures only two binary-values are ouputted.
      */
     @BeanField @Getter @Setter private boolean binary = false;
+
+    /** The interpolator to use for scaling images. */
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
 
     @Override
@@ -232,7 +236,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
                 return ScaleXY.scale(
                         channel,
                         scaleCalculator,
-                        InterpolatorFactory.getInstance().rasterResizing(),
+                        interpolator.voxelsResizer(),
                         suggestedResize,
                         logger);
             }

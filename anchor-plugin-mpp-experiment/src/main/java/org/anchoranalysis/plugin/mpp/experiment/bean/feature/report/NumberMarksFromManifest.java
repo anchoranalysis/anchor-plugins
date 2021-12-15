@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
 import java.io.IOException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -37,11 +37,11 @@ import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 public class NumberMarksFromManifest extends ReportFeatureForManifest {
 
     @Override
-    public String featureDescription(DeserializedManifest param, Logger logger)
+    public String featureDescription(DeserializedManifest param, OperationContext context)
             throws OperationFailedException {
 
         FinderSerializedObject<MarkCollection> finder =
-                new FinderSerializedObject<>("marks", logger);
+                new FinderSerializedObject<>("marks", context);
 
         Manifest manifest = param.get();
 

@@ -23,4 +23,8 @@
  * THE SOFTWARE.
  * #L%
  */
+/**
+ * Non-bean classes for running an inference model with the <a href="https://onnxruntime.ai/">ONNX
+ * Runtime</a>.
+ */
 package org.anchoranalysis.plugin.onnx.model;

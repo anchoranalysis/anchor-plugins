@@ -31,17 +31,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
-import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
@@ -84,7 +84,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     @BeanField @Getter @Setter private int backgroundChannelIndex = -1;
 
     /** Interpolator used when scaling the background */
-    @BeanField @Getter @Setter private InterpolatorBean interpolator = new ImgLib2Lanczos();
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
 
     /**
      * The width of the outline. By default, it's 3 as it's nice to have a strongly easily-visible
@@ -114,12 +114,15 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
      *
      * <p>They are colored in blue.
      *
+     * @param interpolator how to resize an image.
      * @return a newly created instance of {@link OutlinePreserveRelativeSize} that colors
      *     unselected objects, but otherwise uses defaults.
      */
-    public static OutlinePreserveRelativeSize createToColorUnselectedObjects() {
+    public static OutlinePreserveRelativeSize createToColorUnselectedObjects(
+            Interpolator interpolator) {
         OutlinePreserveRelativeSize out = new OutlinePreserveRelativeSize();
         out.colorUnselectedObjects = new RGBColorBean(Color.BLUE);
+        out.interpolator = interpolator;
         return out;
     }
 
@@ -131,7 +134,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             throws OperationFailedException {
 
         if (!objects.isEmpty()) {
-            Interpolator interpolatorBackground = interpolator.create();
+            VoxelsResizer interpolatorBackground = interpolator.voxelsResizer();
 
             // Determine what to scale the objects and any background by
             FlattenAndScaler scaler =

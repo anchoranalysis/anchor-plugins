@@ -124,7 +124,11 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
             throws JobExecutionException {
 
         ChannelSource source =
-                new ChannelSource(store, sharedState.getChannelChecker(), Optional.empty());
+                new ChannelSource(
+                        store,
+                        sharedState.getChannelChecker(),
+                        Optional.empty(),
+                        getInterpolator().voxelsResizer());
 
         HistogramExtracter histogramExtracter =
                 new HistogramExtracter(source, channelMask, maskValue);

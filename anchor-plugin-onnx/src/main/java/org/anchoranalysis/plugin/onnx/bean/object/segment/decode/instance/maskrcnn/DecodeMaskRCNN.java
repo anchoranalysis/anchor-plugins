@@ -34,8 +34,10 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.inference.ImageInferenceContext;
 import org.anchoranalysis.image.inference.bean.segment.instance.DecodeInstanceSegmentation;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
@@ -83,6 +85,9 @@ public class DecodeMaskRCNN extends DecodeInstanceSegmentation<OnnxTensor> {
      * mask.
      */
     @BeanField @Getter @Setter private float minMaskValue = 0.5f;
+
+    /** The interpolator to use for scaling images. */
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
 
     @Override

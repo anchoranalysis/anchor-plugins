@@ -56,10 +56,15 @@ public class NamedChannels extends NamedChannelsBase {
     @Override
     public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
-        return fileInput.inputs(parameters).map(this::createPart);
-    }
-
-    private MapPart createPart(FileInput input) {
-        return new MapPart(input, getStackReader(), channelMap, useLastSeriesIndexOnly);
+        return fileInput
+                .inputs(parameters)
+                .map(
+                        input ->
+                                new MapPart(
+                                        input,
+                                        getStackReader(),
+                                        channelMap,
+                                        useLastSeriesIndexOnly,
+                                        parameters.getExecutionTimeRecorder()));
     }
 }

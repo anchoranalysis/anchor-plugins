@@ -35,7 +35,7 @@ import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -69,7 +69,7 @@ public class MaskAsObject extends ComparableSource {
 
     @Override
     public Findable<ObjectCollection> loadAsObjects(
-            Path reference, Dimensions dimensions, boolean debugMode, Logger logger)
+            Path reference, Dimensions dimensions, boolean debugMode, OperationContext context)
             throws InputReadFailedException {
 
         try {
@@ -79,7 +79,7 @@ public class MaskAsObject extends ComparableSource {
                 return new NotFound<>(maskPath, "No mask exists");
             }
 
-            Mask mask = MaskReader.openMask(stackReader, maskPath, createBinaryValues(), logger);
+            Mask mask = MaskReader.openMask(stackReader, maskPath, createBinaryValues(), context);
 
             return new Found<>(convertToObjects(mask));
 

@@ -30,9 +30,11 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedUnaryOperator;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
@@ -41,11 +43,10 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.object.scale.Scaler;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
@@ -61,7 +62,8 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
     @BeanField @Getter @Setter private int outlineWidth = 1;
 
-    @BeanField @Getter @Setter private boolean interpolate = true;
+    /** The interpolator to use. */
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
 
     @Override
@@ -71,9 +73,6 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             Optional<ObjectCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException {
-
-        Interpolator interpolator = createInterpolator();
-
         try {
             ScaleFactor scaleFactor =
                     determineScaleFactor(
@@ -84,7 +83,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             // Perform segmentation on scaled versions of the channel, mask and seeds
             ObjectCollection scaledSegmentationResult =
                     upstreamSegmentation.segment(
-                            scaleChannel(channel, scaleFactor, interpolator),
+                            scaleChannel(channel, scaleFactor, interpolator.voxelsResizer()),
                             scaleMask(objectMask, scaleFactor, extent),
                             scaleSeeds(seeds, scaleFactor, extent));
 
@@ -97,7 +96,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     }
 
     private Channel scaleChannel(
-            Channel channel, ScaleFactor scaleFactor, Interpolator interpolator) {
+            Channel channel, ScaleFactor scaleFactor, VoxelsResizer interpolator) {
         return channel.scaleXY(scaleFactor, interpolator);
     }
 
@@ -139,24 +138,24 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
      *
      * @param <T> optional-type
      * @param optional the optional to be scaled
-     * @param scaleFunc function to use for scaling
-     * @param textualDscrInError how to describe the optional in an error message
+     * @param scaleFunction function to use for scaling
+     * @param textualDescriptionInError how to describe the optional in an error message
      * @return an optional with either a scaled value or empty() depending on the input-option
      * @throws SegmentationFailedException if the scaling operation fails
      */
     private static <T> Optional<T> mapScale(
             Optional<T> optional,
-            CheckedUnaryOperator<T, OperationFailedException> scaleFunc,
-            String textualDscrInError)
+            CheckedUnaryOperator<T, OperationFailedException> scaleFunction,
+            String textualDescriptionInError)
             throws SegmentationFailedException {
         try {
             if (optional.isPresent()) {
-                return Optional.of(scaleFunc.apply(optional.get()));
+                return Optional.of(scaleFunction.apply(optional.get()));
             } else {
                 return Optional.empty();
             }
         } catch (OperationFailedException e) {
-            throw new SegmentationFailedException("Cannot scale " + textualDscrInError);
+            throw new SegmentationFailedException("Cannot scale " + textualDescriptionInError);
         }
     }
 
@@ -170,11 +169,5 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         }
 
         return seedsUnscaled.stream().map(object -> object.scale(scaleFactor, Optional.of(extent)));
-    }
-
-    private Interpolator createInterpolator() {
-        return interpolate
-                ? InterpolatorFactory.getInstance().rasterResizing()
-                : InterpolatorFactory.getInstance().noInterpolation();
     }
 }

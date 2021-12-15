@@ -29,6 +29,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -123,7 +124,8 @@ class RotateImageToMatchEXIFOrientationTest {
         Logger logger = LoggingFixture.suppressedLogger();
 
         Extent expectedExtent = new Extent(expectedWidth, expectedHeight, 1);
-        OpenedImageFile openedImageFile = loader.openFile(filename);
+        OpenedImageFile openedImageFile =
+                loader.openFile(filename, ExecutionTimeRecorderIgnore.instance());
         assertEquals(expectedExtent, openedImageFile.dimensionsForSeries(0, logger).extent());
 
         int firstVoxel = openedImageFile.open(logger).get(0).getChannel(0).extract().voxel(0, 0);

@@ -26,6 +26,7 @@
 package org.anchoranalysis.plugin.opencv.convert;
 
 import com.google.common.base.Preconditions;
+import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -36,6 +37,18 @@ import org.opencv.core.Mat;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class VoxelsRGBFromMat {
 
+    /**
+     * Assigns values to three {@link Channel}s from a {@link Mat} containing BGR voxels.
+     *
+     * <p>All {@link Channel}s must be the same size, and {@code mat} should contain a number of
+     * elements that is exactly three times an individual {@link Channel}'s size.
+     *
+     * @param mat the mat containing unsigned-byte voxels, interleaved for the channels in BGR
+     *     order.
+     * @param channelRed the <b>red</b> channel to assign voxels to.
+     * @param channelGreen the <b>blue</b> channel to assign voxels to.
+     * @param channelBlue the <b>green</b> channel to assign voxels to.
+     */
     public static void matToRGB(
             Mat mat, Channel channelRed, Channel channelGreen, Channel channelBlue) {
 
@@ -46,22 +59,22 @@ class VoxelsRGBFromMat {
         UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
         UnsignedByteBuffer blue = BufferHelper.extractByte(channelBlue);
 
-        byte[] arr = new byte[3];
+        ByteBuffer buffer = ByteBuffer.allocate(channelRed.extent().areaXY() * 3);
+        mat.get(0, 0, buffer.array());
 
-        for (int y = 0; y < extent.y(); y++) {
-            for (int x = 0; x < extent.x(); x++) {
-
-                mat.get(y, x, arr);
-
-                // OpenCV uses a BGR order as opposed to RGB in Anchor.
-                blue.putRaw(arr[0]);
-                green.putRaw(arr[1]);
-                red.putRaw(arr[2]);
-            }
+        while (buffer.hasRemaining()) {
+            // OpenCV uses a BGR order as opposed to RGB in Anchor.
+            blue.putRaw(buffer.get());
+            green.putRaw(buffer.get());
+            red.putRaw(buffer.get());
         }
 
         assert (!red.hasRemaining());
         assert (!green.hasRemaining());
         assert (!blue.hasRemaining());
+
+        blue.rewind();
+        red.rewind();
+        green.rewind();
     }
 }

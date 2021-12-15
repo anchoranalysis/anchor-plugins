@@ -72,6 +72,7 @@ public class Stacks extends InputManagerWithStackReader<StackSequenceInput> {
                                         file,
                                         getStackReader(),
                                         useLastSeriesIndexOnly,
+                                        parameters.getExecutionTimeRecorder(),
                                         parameters.getLogger()));
     }
 }

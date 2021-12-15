@@ -29,11 +29,14 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.spatial.box.Extent;
 import org.opencv.core.Size;
@@ -44,7 +47,7 @@ import org.opencv.objdetect.HOGDescriptor;
  *
  * @author Owen Feehan
  */
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false) @NoArgsConstructor
 public class HOGParameters extends AnchorBean<HOGParameters> {
 
     private static final String BLOCK_SIZE = "block-size";
@@ -70,7 +73,19 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 
     /** The number of bins in each histogram for a cell. */
     @BeanField @Getter @Setter private int numberBins = 9;
+
+    /** The interpolator to use for scaling images. */
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
+    
+    /**
+     * Creates with a particular {@link Interpolator}.
+     * 
+     * @param interpolator the interpolator.
+     */
+    public HOGParameters(Interpolator interpolator) {
+        this.interpolator = interpolator;
+    }
 
     /**
      * Calculates the size of the descriptor will be for a given image.

@@ -85,7 +85,7 @@ class InferFromHeaderTest {
 
         // The defaultStackReader  should never be called during testing, so we pass a null,
         // even though this isn't allowed.
-        return INSTANCE.openFile(path, null, LoggingFixture.suppressedLogger());
+        return INSTANCE.openFile(path, null, LoggingFixture.suppressedOperationContext());
     }
 
     private static InferFromHeader createInstance() {

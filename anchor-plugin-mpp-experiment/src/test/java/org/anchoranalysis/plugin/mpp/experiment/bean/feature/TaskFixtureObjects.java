@@ -36,6 +36,7 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+import org.anchoranalysis.io.imagej.bean.interpolator.ImageJ;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.bean.object.provider.Reference;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
@@ -50,7 +51,8 @@ class TaskFixtureObjects
                 FeatureInputSingleObject,
                 FeatureTableCalculator<FeatureInputSingleObject>> {
 
-    private CombineObjectsForFeatures<?> flexiFeatureTable = new EachObjectIndependently();
+    private CombineObjectsForFeatures<?> flexiFeatureTable =
+            new EachObjectIndependently(new ImageJ());
 
     public TaskFixtureObjects(TestLoader loader) throws CreateException {
         super(loader);

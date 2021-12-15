@@ -1,10 +1,10 @@
-package org.anchoranalysis.plugin.opencv.interpolator;
+package org.anchoranalysis.plugin.opencv.resizer;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.anchoranalysis.plugin.opencv.convert.VoxelBufferFromMat;
 import org.anchoranalysis.spatial.box.Extent;
@@ -14,11 +14,18 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 /**
- * Interpolates using OpenCV's {@code cv2.resize} function.
+ * Resizes {@link VoxelBuffer}s using OpenCV's {@code cv2.resize} function.
+ *
+ * <p>It uses {@link Imgproc#INTER_AREA} interpolation when downsampling, and {@link
+ * Imgproc#INTER_LINEAR} when upsampling.
+ *
+ * <p>See <a
+ * href="https://docs.opencv.org/3.1.0/da/d54/group__imgproc__transform.html#ga47a974309e9102f5f08231edc7e7529d">OpenCV's
+ * imresize documentation</a>.
  *
  * @author Owen Feehan
  */
-public class InterpolatorOpenCV extends Interpolator {
+public class VoxelsResizerOpenCV extends VoxelsResizer {
 
     @Override
     public boolean canValueRangeChange() {
@@ -26,7 +33,7 @@ public class InterpolatorOpenCV extends Interpolator {
     }
 
     @Override
-    protected VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+    protected VoxelBuffer<UnsignedByteBuffer> resizeByte(
             VoxelBuffer<UnsignedByteBuffer> voxelsSource,
             VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
@@ -37,7 +44,7 @@ public class InterpolatorOpenCV extends Interpolator {
     }
 
     @Override
-    protected VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+    protected VoxelBuffer<UnsignedShortBuffer> resizeShort(
             VoxelBuffer<UnsignedShortBuffer> voxelsSource,
             VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
@@ -48,7 +55,7 @@ public class InterpolatorOpenCV extends Interpolator {
     }
 
     @Override
-    protected VoxelBuffer<FloatBuffer> interpolateFloat(
+    protected VoxelBuffer<FloatBuffer> resizeFloat(
             VoxelBuffer<FloatBuffer> voxelsSource,
             VoxelBuffer<FloatBuffer> voxelsDestination,
             Extent extentSource,

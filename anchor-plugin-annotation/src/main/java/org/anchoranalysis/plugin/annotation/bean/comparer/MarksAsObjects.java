@@ -34,8 +34,8 @@ import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -67,7 +67,7 @@ public class MarksAsObjects extends ComparableSource {
 
     @Override
     public Findable<ObjectCollection> loadAsObjects(
-            Path reference, Dimensions dimensions, boolean debugMode, Logger logger)
+            Path reference, Dimensions dimensions, boolean debugMode, OperationContext context)
             throws InputReadFailedException {
 
         Path path = path(reference);
@@ -77,7 +77,7 @@ public class MarksAsObjects extends ComparableSource {
             return new NotFound<>(path, "No marks exist at path");
         }
 
-        return new Found<>(createObjects(path, dimensions, logger));
+        return new Found<>(createObjects(path, dimensions, context));
     }
 
     private Path path(Path filePathSource) throws InputReadFailedException {
@@ -88,12 +88,13 @@ public class MarksAsObjects extends ComparableSource {
         }
     }
 
-    private ObjectCollection createObjects(Path filePath, Dimensions dimensions, Logger logger)
+    private ObjectCollection createObjects(
+            Path filePath, Dimensions dimensions, OperationContext context)
             throws InputReadFailedException {
         MarkCollectionDeserializer deserialized = new MarkCollectionDeserializer();
         MarkCollection marks;
         try {
-            marks = deserialized.deserialize(filePath, logger);
+            marks = deserialized.deserialize(filePath, context);
         } catch (DeserializationFailedException e) {
             throw new InputReadFailedException(e);
         }

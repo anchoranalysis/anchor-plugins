@@ -34,9 +34,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.format.NonImageFileFormat;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.Manifest;
@@ -66,19 +66,22 @@ public class ManifestCouplingDefinition implements InputFromManager {
     /**
      * Adds job-manifests that don't have corresponding experiment-manifests.
      *
-     * @param jobFiles the files of the job manifests
-     * @param manifestDeserializer the deserializer to use
-     * @param logger the logger
+     * @param jobFiles the files of the job manifests.
+     * @param manifestDeserializer the deserializer to use.
+     * @param context context for reading a stack from the file-system.
      */
     public void addUncoupledJobs(
-            Collection<File> jobFiles, ManifestDeserializer manifestDeserializer, Logger logger) {
+            Collection<File> jobFiles,
+            ManifestDeserializer manifestDeserializer,
+            OperationContext context) {
 
         for (File file : jobFiles) {
 
             if (file.exists()) {
                 DeserializedManifest deserializedManifest =
-                        new DeserializedManifest(file, manifestDeserializer, logger);
-                listCoupledManifests.add(new CoupledManifests(deserializedManifest, 3, logger));
+                        new DeserializedManifest(file, manifestDeserializer, context);
+                listCoupledManifests.add(
+                        new CoupledManifests(deserializedManifest, 3, context.getLogger()));
             } else {
                 log.debug(String.format("File %s does not exist", file.getPath()));
             }
@@ -88,14 +91,14 @@ public class ManifestCouplingDefinition implements InputFromManager {
     public void addManifestExperimentFileSet(
             Collection<File> matchingFiles,
             ManifestDeserializer manifestDeserializer,
-            Logger logger)
+            OperationContext context)
             throws DeserializationFailedException {
 
         for (File experimentFile : matchingFiles) {
             // We deserialize each experimental manifest
 
             Manifest experimentManifest =
-                    manifestDeserializer.deserializeManifest(experimentFile, logger);
+                    manifestDeserializer.deserializeManifest(experimentFile, context);
 
             // We look for all experimental files in the manifest
             FinderExperimentFileDirectories finderExperimentFileDirectories =
@@ -108,7 +111,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
             for (MutableDirectory folderWrite : finderExperimentFileDirectories.getList()) {
                 CoupledManifests coupledManifests =
                         readManifestsFromDirectory(
-                                folderWrite, experimentManifest, manifestDeserializer, logger);
+                                folderWrite, experimentManifest, manifestDeserializer, context);
                 listCoupledManifests.add(coupledManifests);
                 mapExperimentalToImages.put(experimentManifest, coupledManifests);
             }
@@ -145,14 +148,15 @@ public class ManifestCouplingDefinition implements InputFromManager {
             MutableDirectory folderWrite,
             Manifest manifestExperimentRecorder,
             ManifestDeserializer manifestDeserializer,
-            Logger logger)
+            OperationContext context)
             throws DeserializationFailedException {
 
         DeserializedManifest manifestExperiment =
                 new DeserializedManifest(
-                        experimentManifestFile(folderWrite), manifestDeserializer, logger);
+                        experimentManifestFile(folderWrite), manifestDeserializer, context);
         try {
-            return new CoupledManifests(manifestExperimentRecorder, manifestExperiment, logger);
+            return new CoupledManifests(
+                    manifestExperimentRecorder, manifestExperiment, context.getLogger());
         } catch (PathDifferenceException e) {
             throw new DeserializationFailedException(e);
         }

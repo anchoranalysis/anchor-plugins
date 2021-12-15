@@ -48,13 +48,13 @@ public class DimensionsChecker {
     }
 
     /**
-     * Checks a channel to make sure it's the same size as an an existing channel
+     * Checks a channel to make sure it's the same size as an an existing channel.
      *
-     * @param channelToCheck the channel whose size will be compared
+     * @param channelToCheck the channel whose size will be compared.
      * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error
-     *     messages
+     *     messages.
      * @param dimFromChannel the dimensions it must equal from channel (identified as channel in
-     *     error messages)
+     *     error messages).
      * @throws ProvisionFailedException
      */
     public static void check(
@@ -81,13 +81,13 @@ public class DimensionsChecker {
 
     /**
      * Creates a new channel from a provider, making sure it's the same size as an an existing
-     * channel
+     * channel.
      *
-     * @param provider the provider to to create the channel
-     * @param providerName a user-meaningful string to identify the provider in error messages
+     * @param provider the provider to to create the channel.
+     * @param providerName a user-meaningful string to identify the provider in error messages.
      * @param channelSameSize the channel which it must be the same size as (referred to in error
-     *     messages as "channel")
-     * @return the newly created channel
+     *     messages as "channel").
+     * @return the newly created channel.
      * @throws ProvisionFailedException
      */
     public static Channel createSameSize(

@@ -35,8 +35,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
@@ -74,12 +74,13 @@ public class InferFromHeader extends ImageMetadataReader {
     // END BEAN PROPERTIES
 
     @Override
-    public ImageMetadata openFile(Path path, StackReader defaultStackReader, Logger logger)
+    public ImageMetadata openFile(
+            Path path, StackReader defaultStackReader, OperationContext context)
             throws ImageIOException {
 
         return OptionalUtilities.orElseGet(
-                attemptToPopulateFromMetadata(path, logger.errorReporter()),
-                () -> useFallbackReader(path, defaultStackReader, logger));
+                attemptToPopulateFromMetadata(path, context.getLogger().errorReporter()),
+                () -> useFallbackReader(path, defaultStackReader, context));
     }
 
     /**
@@ -106,8 +107,9 @@ public class InferFromHeader extends ImageMetadataReader {
 
     /** Use the fallback {@code ImageMetadataReader} to establish the metadata. */
     private ImageMetadata useFallbackReader(
-            Path path, StackReader defaultStackReader, Logger logger) throws ImageIOException {
-        return fallback.openFile(path, defaultStackReader, logger);
+            Path path, StackReader defaultStackReader, OperationContext context)
+            throws ImageIOException {
+        return fallback.openFile(path, defaultStackReader, context);
     }
 
     private static List<HeaderFormat> createDefaultFormats() {

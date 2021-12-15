@@ -32,7 +32,7 @@ import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -85,8 +85,10 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
     public void doJobOnInput(InputBound<AnnotationWithStrategy<S>, AggregateSharedState> input)
             throws JobExecutionException {
 
-        Optional<ImageAnnotation> ann = createFromInput(input.getInput(), input.getLogger());
-        ann.ifPresent(annotation -> input.getSharedState().getAnnotations().add(annotation));
+        Optional<ImageAnnotation> annotation =
+                createFromInput(input.getInput(), input.getContextJob().operationContext());
+        annotation.ifPresent(
+                annotationToAdd -> input.getSharedState().getAnnotations().add(annotationToAdd));
     }
 
     @Override
@@ -103,9 +105,11 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
     }
 
     private Optional<ImageAnnotation> createFromInput(
-            AnnotationWithStrategy<S> input, Logger logger) throws JobExecutionException {
+            AnnotationWithStrategy<S> input, OperationContext context)
+            throws JobExecutionException {
         try {
-            return input.label(logger).map(label -> new ImageAnnotation(input.identifier(), label));
+            return input.label(context)
+                    .map(label -> new ImageAnnotation(input.identifier(), label));
         } catch (OperationFailedException exc) {
             throw new JobExecutionException(exc);
         }
