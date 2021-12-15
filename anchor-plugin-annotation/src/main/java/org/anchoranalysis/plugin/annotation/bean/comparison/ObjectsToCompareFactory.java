@@ -32,6 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
@@ -69,7 +70,7 @@ class ObjectsToCompareFactory {
             throws JobExecutionException {
         Findable<ObjectCollection> findable =
                 createFindable(
-                        left, input, dimensions, context.isDebugEnabled(), context.getLogger());
+                        left, input, dimensions, context.isDebugEnabled(), context.operationContext());
         return foundOrLogAddUnnannotated(findable, objName, addAnnotation, context.getLogger());
     }
 
@@ -90,11 +91,11 @@ class ObjectsToCompareFactory {
             AnnotationComparisonInput<ProvidesStackInput> input,
             Dimensions dimensions,
             boolean debugMode,
-            Logger logger)
+            OperationContext context)
             throws JobExecutionException {
         try {
             return input.getComparerMultiplex(left)
-                    .loadAsObjects(input.pathForBindingRequired(), dimensions, debugMode, logger);
+                    .loadAsObjects(input.pathForBindingRequired(), dimensions, debugMode, context);
         } catch (InputReadFailedException e) {
             throw new JobExecutionException(e);
         }

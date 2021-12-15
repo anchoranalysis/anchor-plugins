@@ -95,7 +95,12 @@ class CalculateHOGDescriptor extends CalculationPart<float[], FeatureInputStack>
 
         if (resizeTo.isPresent()) {
             SizeXY size = resizeTo.get();
-            return stack.mapChannel(channel -> channel.resizeXY(size.getWidth(), size.getHeight()));
+            return stack.mapChannel(
+                    channel ->
+                            channel.resizeXY(
+                                    size.getWidth(),
+                                    size.getHeight(),
+                                    parameters.getInterpolator().voxelsResizer()));
         } else {
             return stack;
         }

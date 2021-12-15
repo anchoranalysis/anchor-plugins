@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Implementations of {@link org.anchoranalysis.image.bean.interpolator.InterpolatorBean} that call
+ * Implementations of {@link org.anchoranalysis.image.bean.interpolator.Interpolator} that call
  * ImageJ.
  */
 package org.anchoranalysis.plugin.imagej.bean.interpolator;

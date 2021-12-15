@@ -33,7 +33,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.box.ScaleableBackground;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -47,7 +47,7 @@ class BackgroundSelector {
 
     private int backgroundChannelIndex;
     private ScaleFactor scaleFactor;
-    private Interpolator interpolator;
+    private VoxelsResizer interpolator;
 
     public Optional<ScaleableBackground> determineBackground(Optional<Stack> backgroundSource)
             throws OperationFailedException {

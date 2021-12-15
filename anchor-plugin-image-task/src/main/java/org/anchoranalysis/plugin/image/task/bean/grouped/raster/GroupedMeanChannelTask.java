@@ -98,7 +98,10 @@ public class GroupedMeanChannelTask extends GroupedStackBase<Channel, RunningSum
 
         ChannelSource source =
                 new ChannelSource(
-                        store, sharedState.getChannelChecker(), Optional.ofNullable(resizeTo));
+                        store,
+                        sharedState.getChannelChecker(),
+                        Optional.ofNullable(resizeTo),
+                        getInterpolator().voxelsResizer());
 
         try {
             for (NamedChannel channel : getSelectChannels().selectChannels(source, true)) {

@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.io.output.bean.ReportFeature;
 
@@ -44,17 +44,17 @@ class ReportFeatureUtilities {
     }
 
     public static <T> List<TypedValue> elementList(
-            List<? extends ReportFeature<T>> list, T featureParam, Logger logger) {
+            List<? extends ReportFeature<T>> list, T featureParam, OperationContext context) {
 
         List<TypedValue> rowElements = new ArrayList<>();
 
         for (ReportFeature<T> feature : list) {
             String value;
             try {
-                value = feature.featureDescription(featureParam, logger);
+                value = feature.featureDescription(featureParam, context);
             } catch (OperationFailedException e) {
                 value = "error";
-                logger.errorReporter().recordError(ReportFeatureUtilities.class, e);
+                context.getLogger().errorReporter().recordError(ReportFeatureUtilities.class, e);
             }
 
             rowElements.add(new TypedValue(value, feature.isNumeric()));

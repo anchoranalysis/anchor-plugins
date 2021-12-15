@@ -31,6 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalFactory;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -60,11 +61,11 @@ public class ConvertNamedChannelsToStack extends InputManager<StackSequenceInput
     @Override
     public InputsWithDirectory<StackSequenceInput> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
-        return input.inputs(parameters).map(this::convert);
+        return input.inputs(parameters).map(inputToConvert -> convert(inputToConvert, parameters.getExecutionTimeRecorder()) );
     }
 
-    private StackSequenceInput convert(NamedChannelsInput input) {
+    private StackSequenceInput convert(NamedChannelsInput input, ExecutionTimeRecorder executionTimeRecorder) {
         return new ConvertNamedChannelsInputToStack(
-                input, timeIndex, OptionalFactory.create(channelName));
+                input, timeIndex, OptionalFactory.create(channelName), executionTimeRecorder);
     }
 }

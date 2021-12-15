@@ -34,8 +34,8 @@ import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -57,7 +57,7 @@ public class Objects extends ComparableSource {
 
     @Override
     public Findable<ObjectCollection> loadAsObjects(
-            Path filePathSource, Dimensions dimensions, boolean debugMode, Logger logger)
+            Path filePathSource, Dimensions dimensions, boolean debugMode, OperationContext context)
             throws InputReadFailedException {
 
         try {
@@ -67,7 +67,7 @@ public class Objects extends ComparableSource {
                 return new NotFound<>(objectsPath, "No objects exist");
             }
 
-            return new Found<>(ObjectCollectionReader.createFromPath(objectsPath, logger));
+            return new Found<>(ObjectCollectionReader.createFromPath(objectsPath, context));
 
         } catch (DerivePathException | DeserializationFailedException e) {
             throw new InputReadFailedException(e);

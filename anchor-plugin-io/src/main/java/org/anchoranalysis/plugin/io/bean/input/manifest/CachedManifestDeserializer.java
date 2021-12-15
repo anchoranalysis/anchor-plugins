@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.io.bean.input.manifest;
 import java.io.File;
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 
@@ -38,20 +38,20 @@ class CachedManifestDeserializer implements ManifestDeserializer {
 
     private LRUCache<File, Manifest> cachedItems;
 
-    private Logger logger;
+    private OperationContext context;
 
     // Cache, last-used gets deleted when the cacheSize is reached
     public CachedManifestDeserializer(final ManifestDeserializer delegate, int cacheSize) {
         cachedItems =
                 new LRUCache<>(
-                        cacheSize, serialized -> delegate.deserializeManifest(serialized, logger));
+                        cacheSize, serialized -> delegate.deserializeManifest(serialized, context));
     }
 
     @Override
-    public Manifest deserializeManifest(File file, Logger logger)
+    public Manifest deserializeManifest(File file, OperationContext context)
             throws DeserializationFailedException {
         try {
-            this.logger = logger;
+            this.context = context;
             return cachedItems.get(file);
         } catch (GetOperationFailedException e) {
             throw new DeserializationFailedException(e);

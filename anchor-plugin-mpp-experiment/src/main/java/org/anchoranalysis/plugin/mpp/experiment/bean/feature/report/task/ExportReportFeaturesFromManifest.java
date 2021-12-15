@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report.task;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -89,7 +89,7 @@ public class ExportReportFeaturesFromManifest
         try {
             Optional<CSVWriter> writer = createWriter(input.getOutputter().getChecked());
             if (writer.isPresent()) {
-                writeCSV(writer.get(), input.getInput(), input.getLogger());
+                writeCSV(writer.get(), input.getInput(), input.getContextJob().operationContext());
             }
 
         } catch (OutputWriteFailedException e) {
@@ -103,7 +103,7 @@ public class ExportReportFeaturesFromManifest
         // NOTHING TO DO
     }
 
-    private void writeCSV(CSVWriter writer, ManifestCouplingDefinition input, Logger logger)
+    private void writeCSV(CSVWriter writer, ManifestCouplingDefinition input, OperationContext context)
             throws JobExecutionException {
         try {
             writer.writeHeaders(headerNames(Optional.empty()));
@@ -112,7 +112,7 @@ public class ExportReportFeaturesFromManifest
             while (iterator.hasNext()) {
                 try {
                     writeFeaturesIntoReporter(
-                            iterator.next().getJobManifest(), writer, Optional.empty(), logger);
+                            iterator.next().getJobManifest(), writer, Optional.empty(), context);
                 } catch (NumberFormatException e) {
                     throw new JobExecutionException(e);
                 }

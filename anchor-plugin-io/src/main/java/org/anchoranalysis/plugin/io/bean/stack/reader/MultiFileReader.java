@@ -35,6 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -66,11 +67,11 @@ public class MultiFileReader extends StackReader {
     @BeanField @AllowEmpty @Getter @Setter private String regExFile = "";
 
     /** If non-empty a regular-expression is applied to directories. */
-    @BeanField @AllowEmpty @Getter @Setter private String regExDir = "";
+    @BeanField @AllowEmpty @Getter @Setter private String regExDirectory = "";
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path filePath) throws ImageIOException {
+    public OpenedImageFile openFile(Path filePath, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
 
         // We look at all other files in the same folder as our filepath to match our expression
 
@@ -87,7 +88,7 @@ public class MultiFileReader extends StackReader {
             }
         }
 
-        return new OpenedMultiFile(stackReader, bag);
+        return new OpenedMultiFile(stackReader, bag, executionTimeRecorder);
     }
 
     private File folderFromFile(Path filePath) {
@@ -107,7 +108,7 @@ public class MultiFileReader extends StackReader {
     }
 
     private IOFileFilter recurseFilter() {
-        return recurseSubfolders ? maybeRegExFilter(regExDir) : null;
+        return recurseSubfolders ? maybeRegExFilter(regExDirectory) : null;
     }
 
     private static IOFileFilter maybeRegExFilter(String regEx) {

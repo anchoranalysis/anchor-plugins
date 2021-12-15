@@ -49,7 +49,7 @@ public class TestLoaderMarks {
 
         MarkCollectionDeserializer deserializer = new MarkCollectionDeserializer();
         try {
-            return deserializer.deserialize(filePath, LoggingFixture.suppressedLogger());
+            return deserializer.deserialize(filePath, LoggingFixture.suppressedOperationContext());
         } catch (DeserializationFailedException e) {
             throw new TestDataLoadException(e);
         }

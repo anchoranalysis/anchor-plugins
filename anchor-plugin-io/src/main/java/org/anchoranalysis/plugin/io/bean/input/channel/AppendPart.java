@@ -34,6 +34,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -61,6 +62,8 @@ class AppendPart extends NamedChannelsInputPart {
     private final AdditionalChannel additionalChannel;
 
     private final StackReader stackReader;
+    
+    private final ExecutionTimeRecorder executionTimeRecorder;
     // END: REQUIRED ARGUMENTS
 
     private OpenedImageFile openedFileMemo;
@@ -70,10 +73,11 @@ class AppendPart extends NamedChannelsInputPart {
             String channelName,
             int channelIndex,
             PathSupplier filePath,
-            StackReader stackReader) {
+            StackReader stackReader, ExecutionTimeRecorder executionTimeRecorder) {
         this.toAppendTo = toAppendTo;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
         this.stackReader = stackReader;
+        this.executionTimeRecorder = executionTimeRecorder;
     }
 
     @Override
@@ -179,7 +183,7 @@ class AppendPart extends NamedChannelsInputPart {
             Path filePathAdditional = additionalChannel.getFilePath();
 
             if (openedFileMemo == null) {
-                openedFileMemo = stackReader.openFile(filePathAdditional);
+                openedFileMemo = stackReader.openFile(filePathAdditional, executionTimeRecorder);
             }
 
         } catch (DerivePathException e) {

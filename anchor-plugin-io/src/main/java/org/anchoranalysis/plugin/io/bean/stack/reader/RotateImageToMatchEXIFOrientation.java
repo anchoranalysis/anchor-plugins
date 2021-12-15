@@ -33,6 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -61,14 +62,15 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path path) throws ImageIOException {
-        return openFile(path, logger -> inferNeededOrientationChange(path, logger));
+    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
+        CalculateOrientationChange calculateOrientationChange = logger -> executionTimeRecorder.recordExecutionTime("Calculating orientation change", () -> inferNeededOrientationChange(path, logger));
+        return openFile(path, calculateOrientationChange, executionTimeRecorder);
     }
 
     @Override
-    public OpenedImageFile openFile(Path path, CalculateOrientationChange orientationCorrection)
+    public OpenedImageFile openFile(Path path, CalculateOrientationChange orientationCorrection, ExecutionTimeRecorder executionTimeRecorder)
             throws ImageIOException {
-        return reader.openFile(path, orientationCorrection);
+        return reader.openFile(path, orientationCorrection, executionTimeRecorder);
     }
 
     private static OrientationChange inferNeededOrientationChange(Path path, Logger logger)

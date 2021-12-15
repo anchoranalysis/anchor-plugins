@@ -32,8 +32,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.spatial.box.Extent;
 import org.opencv.core.Size;
@@ -70,6 +72,9 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 
     /** The number of bins in each histogram for a cell. */
     @BeanField @Getter @Setter private int numberBins = 9;
+
+    /** The interpolator to use for scaling images. */
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
 
     /**

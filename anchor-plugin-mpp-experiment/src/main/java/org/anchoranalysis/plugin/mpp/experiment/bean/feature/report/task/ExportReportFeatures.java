@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
@@ -88,9 +88,9 @@ public abstract class ExportReportFeatures<T extends InputFromManager, S, U> ext
     }
 
     protected void writeFeaturesIntoReporter(
-            U featureParam, CSVWriter writer, Optional<String> prefixValue, Logger logger) {
+            U featureParam, CSVWriter writer, Optional<String> prefixValue, OperationContext context) {
         List<TypedValue> rowElements =
-                ReportFeatureUtilities.elementList(listReportFeatures, featureParam, logger);
+                ReportFeatureUtilities.elementList(listReportFeatures, featureParam, context);
 
         if (prefixValue.isPresent()) {
             rowElements.add(0, new TypedValue(prefixValue.get(), false));

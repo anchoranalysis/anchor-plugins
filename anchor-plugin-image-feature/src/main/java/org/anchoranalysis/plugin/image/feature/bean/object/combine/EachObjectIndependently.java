@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
@@ -35,6 +36,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.calculator.SingleTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -49,7 +51,17 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureInputSingleObject> {
+
+    /**
+     * Create with a specific interpolator.
+     *
+     * @param interpolator interpolator used to resize images in thumbnail generation.
+     */
+    public EachObjectIndependently(Interpolator interpolator) {
+        super(interpolator);
+    }
 
     @Override
     public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(

@@ -29,10 +29,13 @@ package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -43,6 +46,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -62,15 +66,31 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  * @author Owen Feehan
  * @param <T> type of feature used in the table
  */
+@NoArgsConstructor
 public abstract class CombineObjectsForFeatures<T extends FeatureInput>
         extends AnchorBean<CombineObjectsForFeatures<T>> {
 
+    // START BEAN PROPERTIES
     /**
      * Generates a thumbnail representation of one or more combined objects, as form a single input.
+     *
+     * <p>If not set, a thumbnail will be created with an outline around selected and unselected
+     * objects.
      */
-    @BeanField @Getter @Setter
-    private ThumbnailFromObjects thumbnail =
-            OutlinePreserveRelativeSize.createToColorUnselectedObjects();
+    @BeanField @Getter @Setter @OptionalBean private ThumbnailFromObjects thumbnail;
+
+    /** Interpolator used to resize images in thumbnail generation. */
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
+    // END BEAN PROPERTIES
+
+    /**
+     * Create with a specific interpolator.
+     *
+     * @param interpolator interpolator used to resize images in thumbnail generation.
+     */
+    protected CombineObjectsForFeatures(Interpolator interpolator) {
+        this.interpolator = interpolator;
+    }
 
     /**
      * Creates features that will be applied on the objects. Features should always be duplicated
@@ -118,6 +138,12 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
         }
 
         if (thumbnailsEnabled) {
+
+            if (thumbnail == null) {
+                thumbnail =
+                        OutlinePreserveRelativeSize.createToColorUnselectedObjects(interpolator);
+            }
+
             try {
                 return new ListWithThumbnails<>(
                         inputs,
