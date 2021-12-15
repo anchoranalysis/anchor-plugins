@@ -60,7 +60,7 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
     @Getter protected final FeaturesLoader featureLoader;
 
     /**
-     * Create for a paricular {@link TestLoader}.
+     * Create for a particular {@link TestLoader}.
      *
      * <p>By default, use a big-sized energy-stack that functions with our feature-lists.
      *
