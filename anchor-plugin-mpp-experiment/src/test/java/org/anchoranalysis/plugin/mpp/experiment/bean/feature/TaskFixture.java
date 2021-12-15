@@ -36,6 +36,8 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
+import org.anchoranalysis.io.imagej.bean.interpolator.ImageJ;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
@@ -58,16 +60,12 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
     @Getter protected final FeaturesLoader featureLoader;
 
     /**
-     * Constructor
+     * Create for a paricular {@link TestLoader}.
      *
-     * <p>By default, use a big-sized energy-stack that functions with our feature-lists
+     * <p>By default, use a big-sized energy-stack that functions with our feature-lists.
      *
-     * <p>By default, load the features from PATH_FEATURES
-     *
-     * <p>By default, use Simple feature-mode. It can be changed to Merged-Pairs.
-     *
-     * @param loader
-     * @throws CreateException
+     * @param loader the loader.
+     * @throws CreateException if an energy-stack cannot be created.
      */
     public TaskFixture(TestLoader loader) throws CreateException {
         this.energyStack = createEnergyStack(true, false, true);
@@ -97,6 +95,8 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
         task.setFeaturesAggregate(featureLoader.aggregated());
         task.setGroup(new Constant("arbitraryGroup"));
 
+        
+        RegisterBeanFactories.getDefaultInstances().putInstanceFor(Interpolator.class, new ImageJ());
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
         } catch (BeanMisconfiguredException e) {
