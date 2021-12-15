@@ -88,7 +88,10 @@ public abstract class ExportReportFeatures<T extends InputFromManager, S, U> ext
     }
 
     protected void writeFeaturesIntoReporter(
-            U featureParam, CSVWriter writer, Optional<String> prefixValue, OperationContext context) {
+            U featureParam,
+            CSVWriter writer,
+            Optional<String> prefixValue,
+            OperationContext context) {
         List<TypedValue> rowElements =
                 ReportFeatureUtilities.elementList(listReportFeatures, featureParam, context);
 

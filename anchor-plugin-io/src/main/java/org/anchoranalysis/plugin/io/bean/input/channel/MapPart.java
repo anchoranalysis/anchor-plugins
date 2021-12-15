@@ -70,7 +70,7 @@ class MapPart extends NamedChannelsInputPart {
      * our purposes we treat it as if its 0
      */
     private final boolean useLastSeriesIndexOnly;
-    
+
     private final ExecutionTimeRecorder executionTimeRecorder;
     // END REQUIRED ARGUMENTS
 

@@ -62,13 +62,21 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
-        CalculateOrientationChange calculateOrientationChange = logger -> executionTimeRecorder.recordExecutionTime("Calculating orientation change", () -> inferNeededOrientationChange(path, logger));
+    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
+        CalculateOrientationChange calculateOrientationChange =
+                logger ->
+                        executionTimeRecorder.recordExecutionTime(
+                                "Calculating orientation change",
+                                () -> inferNeededOrientationChange(path, logger));
         return openFile(path, calculateOrientationChange, executionTimeRecorder);
     }
 
     @Override
-    public OpenedImageFile openFile(Path path, CalculateOrientationChange orientationCorrection, ExecutionTimeRecorder executionTimeRecorder)
+    public OpenedImageFile openFile(
+            Path path,
+            CalculateOrientationChange orientationCorrection,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws ImageIOException {
         return reader.openFile(path, orientationCorrection, executionTimeRecorder);
     }

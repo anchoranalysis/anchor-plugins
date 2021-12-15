@@ -62,7 +62,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
      * our purposes we treat it as if its 0.
      */
     private final boolean useLastSeriesIndexOnly;
-    
+
     private final ExecutionTimeRecorder executionTimeRecorder;
 
     private final Logger logger;
@@ -162,7 +162,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                                     .orElseThrow(
                                             () ->
                                                     new ImageIOException(
-                                                            "A binding-path must be associated with this file")), executionTimeRecorder);
+                                                            "A binding-path must be associated with this file")),
+                            executionTimeRecorder);
         }
         return openedFileMemo;
     }

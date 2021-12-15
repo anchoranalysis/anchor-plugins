@@ -99,7 +99,8 @@ public class RejectIfConditionXYResolution extends StackReader {
     }
 
     @Override
-    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
+    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
         OpenedImageFile openedFile = stackReader.openFile(path, executionTimeRecorder);
         return new OpenedRasterAlterDimensions(
                 openedFile, new MaybeRejectProcessor(relation.relation(), relation.threshold()));

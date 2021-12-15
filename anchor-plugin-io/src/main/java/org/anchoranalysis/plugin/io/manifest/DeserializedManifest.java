@@ -55,7 +55,8 @@ public class DeserializedManifest {
     public DeserializedManifest(
             File file, ManifestDeserializer manifestDeserializer, OperationContext context) {
         this.file = file;
-        this.memoized = CachedSupplier.cacheChecked(() -> getInternal(manifestDeserializer, context));
+        this.memoized =
+                CachedSupplier.cacheChecked(() -> getInternal(manifestDeserializer, context));
     }
 
     public Manifest get() throws OperationFailedException {
@@ -67,7 +68,8 @@ public class DeserializedManifest {
         return Paths.get(file.getParent());
     }
 
-    private Manifest getInternal(ManifestDeserializer manifestDeserializer, OperationContext context)
+    private Manifest getInternal(
+            ManifestDeserializer manifestDeserializer, OperationContext context)
             throws OperationFailedException {
         try {
             if (!file.exists()) {

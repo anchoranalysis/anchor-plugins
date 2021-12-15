@@ -44,7 +44,8 @@ public class OpenCVReader extends StackReader {
     }
 
     @Override
-    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
+    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
         CVInit.blockUntilLoaded();
         return new OpenedRasterOpenCV(path, executionTimeRecorder);
     }

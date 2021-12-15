@@ -71,14 +71,17 @@ public class ManifestCouplingDefinition implements InputFromManager {
      * @param context context for reading a stack from the file-system.
      */
     public void addUncoupledJobs(
-            Collection<File> jobFiles, ManifestDeserializer manifestDeserializer, OperationContext context) {
+            Collection<File> jobFiles,
+            ManifestDeserializer manifestDeserializer,
+            OperationContext context) {
 
         for (File file : jobFiles) {
 
             if (file.exists()) {
                 DeserializedManifest deserializedManifest =
                         new DeserializedManifest(file, manifestDeserializer, context);
-                listCoupledManifests.add(new CoupledManifests(deserializedManifest, 3, context.getLogger()));
+                listCoupledManifests.add(
+                        new CoupledManifests(deserializedManifest, 3, context.getLogger()));
             } else {
                 log.debug(String.format("File %s does not exist", file.getPath()));
             }
@@ -152,7 +155,8 @@ public class ManifestCouplingDefinition implements InputFromManager {
                 new DeserializedManifest(
                         experimentManifestFile(folderWrite), manifestDeserializer, context);
         try {
-            return new CoupledManifests(manifestExperimentRecorder, manifestExperiment, context.getLogger());
+            return new CoupledManifests(
+                    manifestExperimentRecorder, manifestExperiment, context.getLogger());
         } catch (PathDifferenceException e) {
             throw new DeserializationFailedException(e);
         }

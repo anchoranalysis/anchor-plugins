@@ -43,7 +43,8 @@ import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 public class AlwaysReject extends ImageMetadataReader {
 
     @Override
-    public ImageMetadata openFile(Path path, StackReader defaultStackReader, OperationContext context)
+    public ImageMetadata openFile(
+            Path path, StackReader defaultStackReader, OperationContext context)
             throws ImageIOException {
         throw new ImageIOException(
                 "This image has been rejected by the ImageMetadataReader by design.");

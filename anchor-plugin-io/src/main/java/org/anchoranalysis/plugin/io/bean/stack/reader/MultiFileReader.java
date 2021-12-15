@@ -71,7 +71,8 @@ public class MultiFileReader extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path filePath, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
+    public OpenedImageFile openFile(Path filePath, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
 
         // We look at all other files in the same folder as our filepath to match our expression
 

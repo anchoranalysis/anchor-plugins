@@ -70,7 +70,8 @@ class OpenImageFileHelper {
      * @return the opened file.
      * @throws ImageIOException if the file cannot be opened.
      */
-    public OpenedImageFile openFile(String filename, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
+    public OpenedImageFile openFile(String filename, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
         return reader.openFile(pathForFile(filename), executionTimeRecorder);
     }
 
@@ -86,7 +87,10 @@ class OpenImageFileHelper {
     public OpenedImageFile openFile(
             String filename, CalculateOrientationChange orientationCorrection)
             throws ImageIOException {
-        return reader.openFile(pathForFile(filename), orientationCorrection, ExecutionTimeRecorderIgnore.instance());
+        return reader.openFile(
+                pathForFile(filename),
+                orientationCorrection,
+                ExecutionTimeRecorderIgnore.instance());
     }
 
     /**

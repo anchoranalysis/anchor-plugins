@@ -88,7 +88,8 @@ public class MarksAsObjects extends ComparableSource {
         }
     }
 
-    private ObjectCollection createObjects(Path filePath, Dimensions dimensions, OperationContext context)
+    private ObjectCollection createObjects(
+            Path filePath, Dimensions dimensions, OperationContext context)
             throws InputReadFailedException {
         MarkCollectionDeserializer deserialized = new MarkCollectionDeserializer();
         MarkCollection marks;

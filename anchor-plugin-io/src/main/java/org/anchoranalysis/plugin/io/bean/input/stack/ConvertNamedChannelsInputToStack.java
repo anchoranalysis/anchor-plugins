@@ -65,7 +65,7 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
      * into a stack.
      */
     private Optional<String> channelName;
-    
+
     /** Records the execution times of certain operations. */
     private final ExecutionTimeRecorder executionTimeRecorder;
 
@@ -75,7 +75,8 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
      * @param input the input to convert.
      * @param executionTimeRecorder records the execution times of certain operations.
      */
-    public ConvertNamedChannelsInputToStack(NamedChannelsInput input, ExecutionTimeRecorder executionTimeRecorder) {
+    public ConvertNamedChannelsInputToStack(
+            NamedChannelsInput input, ExecutionTimeRecorder executionTimeRecorder) {
         this(input, 0, Optional.empty(), executionTimeRecorder);
     }
 
@@ -89,7 +90,10 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
      * @param executionTimeRecorder records the execution times of certain operations.
      */
     public ConvertNamedChannelsInputToStack(
-            NamedChannelsInput input, int timeIndex, Optional<String> channelName, ExecutionTimeRecorder executionTimeRecorder) {
+            NamedChannelsInput input,
+            int timeIndex,
+            Optional<String> channelName,
+            ExecutionTimeRecorder executionTimeRecorder) {
         super(input);
         this.timeIndex = timeIndex;
         this.channelName = channelName;
@@ -135,12 +139,17 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
 
         try (ProgressMultiple progress = new ProgressMultiple(progressParent, 2)) {
 
-            NamedChannelsForSeries channels = executionTimeRecorder.recordExecutionTime("Create channel for series", () ->
-                    input.createChannelsForSeries(
-                            seriesIndex, progress.trackCurrentChild(), logger));
+            NamedChannelsForSeries channels =
+                    executionTimeRecorder.recordExecutionTime(
+                            "Create channel for series",
+                            () ->
+                                    input.createChannelsForSeries(
+                                            seriesIndex, progress.trackCurrentChild(), logger));
             progress.incrementChild();
 
-            return executionTimeRecorder.recordExecutionTime("Derive stack from channels", () -> new TimeSequence(stackFromChannels(channels, progress, logger)));
+            return executionTimeRecorder.recordExecutionTime(
+                    "Derive stack from channels",
+                    () -> new TimeSequence(stackFromChannels(channels, progress, logger)));
 
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);

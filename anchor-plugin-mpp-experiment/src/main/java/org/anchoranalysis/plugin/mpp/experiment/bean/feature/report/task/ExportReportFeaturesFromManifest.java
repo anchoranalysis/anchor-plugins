@@ -103,7 +103,8 @@ public class ExportReportFeaturesFromManifest
         // NOTHING TO DO
     }
 
-    private void writeCSV(CSVWriter writer, ManifestCouplingDefinition input, OperationContext context)
+    private void writeCSV(
+            CSVWriter writer, ManifestCouplingDefinition input, OperationContext context)
             throws JobExecutionException {
         try {
             writer.writeHeaders(headerNames(Optional.empty()));

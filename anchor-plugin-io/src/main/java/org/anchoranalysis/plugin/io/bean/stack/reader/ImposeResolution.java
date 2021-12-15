@@ -65,9 +65,11 @@ public class ImposeResolution extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
+    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
         return new OpenedRasterAlterDimensions(
-                stackReader.openFile(path, executionTimeRecorder), existing -> Optional.of(resolutionToAssign(existing)));
+                stackReader.openFile(path, executionTimeRecorder),
+                existing -> Optional.of(resolutionToAssign(existing)));
     }
 
     private Resolution resolutionToAssign(Optional<Resolution> existing) throws ImageIOException {

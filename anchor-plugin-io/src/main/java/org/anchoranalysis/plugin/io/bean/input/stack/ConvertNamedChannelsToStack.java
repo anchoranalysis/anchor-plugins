@@ -61,10 +61,14 @@ public class ConvertNamedChannelsToStack extends InputManager<StackSequenceInput
     @Override
     public InputsWithDirectory<StackSequenceInput> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
-        return input.inputs(parameters).map(inputToConvert -> convert(inputToConvert, parameters.getExecutionTimeRecorder()) );
+        return input.inputs(parameters)
+                .map(
+                        inputToConvert ->
+                                convert(inputToConvert, parameters.getExecutionTimeRecorder()));
     }
 
-    private StackSequenceInput convert(NamedChannelsInput input, ExecutionTimeRecorder executionTimeRecorder) {
+    private StackSequenceInput convert(
+            NamedChannelsInput input, ExecutionTimeRecorder executionTimeRecorder) {
         return new ConvertNamedChannelsInputToStack(
                 input, timeIndex, OptionalFactory.create(channelName), executionTimeRecorder);
     }

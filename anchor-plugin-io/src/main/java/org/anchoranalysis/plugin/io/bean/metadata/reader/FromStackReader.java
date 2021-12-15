@@ -62,12 +62,14 @@ public class FromStackReader extends ImageMetadataReader {
     // END BEAN PROPERTIES
 
     @Override
-    public ImageMetadata openFile(Path path, StackReader defaultStackReader, OperationContext context)
+    public ImageMetadata openFile(
+            Path path, StackReader defaultStackReader, OperationContext context)
             throws ImageIOException {
 
         StackReader selectedReader = Optional.ofNullable(stackReader).orElse(defaultStackReader);
 
-        try (OpenedImageFile file = selectedReader.openFile(path, context.getExecutionTimeRecorder())) {
+        try (OpenedImageFile file =
+                selectedReader.openFile(path, context.getExecutionTimeRecorder())) {
             return file.metadata(seriesIndex, context.getLogger());
         }
     }

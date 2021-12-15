@@ -26,9 +26,9 @@
 package org.anchoranalysis.plugin.opencv.convert;
 
 import com.google.common.base.Preconditions;
+import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.nio.ByteBuffer;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.box.Extent;
@@ -39,11 +39,12 @@ class VoxelsRGBFromMat {
 
     /**
      * Assigns values to three {@link Channel}s from a {@link Mat} containing BGR voxels.
-     * 
-     * <p>All {@link Channel}s must be the same size, and {@code mat} should contain a number of elements that
-     * is exactly three times an individual {@link Channel}'s size.
-     * 
-     * @param mat the mat containing unsigned-byte voxels, interleaved for the channels in BGR order.
+     *
+     * <p>All {@link Channel}s must be the same size, and {@code mat} should contain a number of
+     * elements that is exactly three times an individual {@link Channel}'s size.
+     *
+     * @param mat the mat containing unsigned-byte voxels, interleaved for the channels in BGR
+     *     order.
      * @param channelRed the <b>red</b> channel to assign voxels to.
      * @param channelGreen the <b>blue</b> channel to assign voxels to.
      * @param channelBlue the <b>green</b> channel to assign voxels to.
@@ -60,8 +61,8 @@ class VoxelsRGBFromMat {
 
         ByteBuffer buffer = ByteBuffer.allocate(channelRed.extent().areaXY() * 3);
         mat.get(0, 0, buffer.array());
-        
-        while(buffer.hasRemaining()) {
+
+        while (buffer.hasRemaining()) {
             // OpenCV uses a BGR order as opposed to RGB in Anchor.
             blue.putRaw(buffer.get());
             green.putRaw(buffer.get());
@@ -71,7 +72,7 @@ class VoxelsRGBFromMat {
         assert (!red.hasRemaining());
         assert (!green.hasRemaining());
         assert (!blue.hasRemaining());
-        
+
         blue.rewind();
         red.rewind();
         green.rewind();

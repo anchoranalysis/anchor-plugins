@@ -38,8 +38,8 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReadAnnotationFromFile {
 
-    public static Optional<ImageLabelAnnotation> readCheckExists(Path path, OperationContext context)
-            throws InputReadFailedException {
+    public static Optional<ImageLabelAnnotation> readCheckExists(
+            Path path, OperationContext context) throws InputReadFailedException {
 
         if (path.toFile().exists()) {
             return readAssumeExists(path, context);
@@ -48,8 +48,8 @@ public class ReadAnnotationFromFile {
         }
     }
 
-    public static Optional<ImageLabelAnnotation> readAssumeExists(Path path, OperationContext context)
-            throws InputReadFailedException {
+    public static Optional<ImageLabelAnnotation> readAssumeExists(
+            Path path, OperationContext context) throws InputReadFailedException {
         ImageLabelAnnotationReader reader = new ImageLabelAnnotationReader();
         return reader.read(path, context);
     }

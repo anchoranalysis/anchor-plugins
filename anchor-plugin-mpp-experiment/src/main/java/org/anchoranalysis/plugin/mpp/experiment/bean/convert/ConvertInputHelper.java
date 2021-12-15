@@ -63,7 +63,10 @@ class ConvertInputHelper {
     private final StackReader defaultStackReader;
 
     public <T extends NamedChannelsInput> InputFromManager convert(
-            T input, InputTypesExpected inputTypesExpected, Optional<Path> directory, OperationContext context)
+            T input,
+            InputTypesExpected inputTypesExpected,
+            Optional<Path> directory,
+            OperationContext context)
             throws ExperimentExecutionException {
         Class<? extends InputFromManager> inputClass = input.getClass();
 
@@ -121,8 +124,8 @@ class ConvertInputHelper {
         }
     }
 
-    private <T extends NamedChannelsInput> ImageMetadata readImageMetadata(T input, OperationContext context)
-            throws ImageIOException {
+    private <T extends NamedChannelsInput> ImageMetadata readImageMetadata(
+            T input, OperationContext context) throws ImageIOException {
         try {
             return imageMetadataReader.openFile(
                     input.pathForBindingRequired(), defaultStackReader, context);

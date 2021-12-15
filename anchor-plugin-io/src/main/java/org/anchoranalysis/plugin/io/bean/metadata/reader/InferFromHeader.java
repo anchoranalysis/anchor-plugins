@@ -74,7 +74,8 @@ public class InferFromHeader extends ImageMetadataReader {
     // END BEAN PROPERTIES
 
     @Override
-    public ImageMetadata openFile(Path path, StackReader defaultStackReader, OperationContext context)
+    public ImageMetadata openFile(
+            Path path, StackReader defaultStackReader, OperationContext context)
             throws ImageIOException {
 
         return OptionalUtilities.orElseGet(
@@ -106,7 +107,8 @@ public class InferFromHeader extends ImageMetadataReader {
 
     /** Use the fallback {@code ImageMetadataReader} to establish the metadata. */
     private ImageMetadata useFallbackReader(
-            Path path, StackReader defaultStackReader, OperationContext context) throws ImageIOException {
+            Path path, StackReader defaultStackReader, OperationContext context)
+            throws ImageIOException {
         return fallback.openFile(path, defaultStackReader, context);
     }
 

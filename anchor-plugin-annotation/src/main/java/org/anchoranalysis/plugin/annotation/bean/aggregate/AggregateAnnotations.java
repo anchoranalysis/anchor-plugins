@@ -85,8 +85,10 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
     public void doJobOnInput(InputBound<AnnotationWithStrategy<S>, AggregateSharedState> input)
             throws JobExecutionException {
 
-        Optional<ImageAnnotation> annotation = createFromInput(input.getInput(), input.getContextJob().operationContext());
-        annotation.ifPresent(annotationToAdd -> input.getSharedState().getAnnotations().add(annotationToAdd));
+        Optional<ImageAnnotation> annotation =
+                createFromInput(input.getInput(), input.getContextJob().operationContext());
+        annotation.ifPresent(
+                annotationToAdd -> input.getSharedState().getAnnotations().add(annotationToAdd));
     }
 
     @Override
@@ -103,9 +105,11 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
     }
 
     private Optional<ImageAnnotation> createFromInput(
-            AnnotationWithStrategy<S> input, OperationContext context) throws JobExecutionException {
+            AnnotationWithStrategy<S> input, OperationContext context)
+            throws JobExecutionException {
         try {
-            return input.label(context).map(label -> new ImageAnnotation(input.identifier(), label));
+            return input.label(context)
+                    .map(label -> new ImageAnnotation(input.identifier(), label));
         } catch (OperationFailedException exc) {
             throw new JobExecutionException(exc);
         }

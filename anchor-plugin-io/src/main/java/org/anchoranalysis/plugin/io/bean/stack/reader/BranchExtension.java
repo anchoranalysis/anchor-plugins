@@ -60,7 +60,8 @@ public class BranchExtension extends StackReader {
     private Set<String> extensionsLowercase;
 
     @Override
-    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
+    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
         if (doesPathHaveExtension(path)) {
             return readerMatching.openFile(path, executionTimeRecorder);
         } else {

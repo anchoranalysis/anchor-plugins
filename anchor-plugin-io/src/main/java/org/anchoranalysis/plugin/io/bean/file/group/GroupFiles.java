@@ -132,10 +132,12 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
                 }
             }
         }
-        return inputs.withInputs(listFromMap(map, parameters.getExecutionTimeRecorder(), parameters.getLogger()));
+        return inputs.withInputs(
+                listFromMap(map, parameters.getExecutionTimeRecorder(), parameters.getLogger()));
     }
 
-    private List<NamedChannelsInput> listFromMap(GroupFilesMap map, ExecutionTimeRecorder executionTimeRecorder, Logger logger)
+    private List<NamedChannelsInput> listFromMap(
+            GroupFilesMap map, ExecutionTimeRecorder executionTimeRecorder, Logger logger)
             throws InputReadFailedException {
 
         List<File> files = new ArrayList<>();

@@ -62,7 +62,7 @@ class AppendPart extends NamedChannelsInputPart {
     private final AdditionalChannel additionalChannel;
 
     private final StackReader stackReader;
-    
+
     private final ExecutionTimeRecorder executionTimeRecorder;
     // END: REQUIRED ARGUMENTS
 
@@ -73,7 +73,8 @@ class AppendPart extends NamedChannelsInputPart {
             String channelName,
             int channelIndex,
             PathSupplier filePath,
-            StackReader stackReader, ExecutionTimeRecorder executionTimeRecorder) {
+            StackReader stackReader,
+            ExecutionTimeRecorder executionTimeRecorder) {
         this.toAppendTo = toAppendTo;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
         this.stackReader = stackReader;

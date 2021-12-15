@@ -110,7 +110,9 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
 
         SharedStateRememberConverted<U, S> sharedState = new SharedStateRememberConverted<>();
 
-        List<U> convertedInputs = convertListAndPopulateMap(inputs, sharedState, parameters.getExecutionTimeRecorder());
+        List<U> convertedInputs =
+                convertListAndPopulateMap(
+                        inputs, sharedState, parameters.getExecutionTimeRecorder());
         sharedState.setSharedState(
                 task.beforeAnyJobIsExecuted(
                         outputter, concurrencyPlan, convertedInputs, parameters));
@@ -169,7 +171,9 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
     /** Convert all inputs, placing them into the map. */
     @SuppressWarnings("unchecked")
     private List<U> convertListAndPopulateMap(
-            List<T> inputs, SharedStateRememberConverted<U, S> sharedState, ExecutionTimeRecorder executionTimeRecorder)
+            List<T> inputs,
+            SharedStateRememberConverted<U, S> sharedState,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws ExperimentExecutionException {
 
         Optional<Path> directory = deriveCommonRootIfNeeded(inputs);
@@ -199,8 +203,9 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
                                     input,
                                     inputTypesExpected,
                                     directory,
-                                    new OperationContext(executionTimeRecorder,logIntoString(conversionMessages))
-                                    );
+                                    new OperationContext(
+                                            executionTimeRecorder,
+                                            logIntoString(conversionMessages)));
             sharedState.rememberConverted(input, converted, conversionMessages);
             out.add(converted);
         }

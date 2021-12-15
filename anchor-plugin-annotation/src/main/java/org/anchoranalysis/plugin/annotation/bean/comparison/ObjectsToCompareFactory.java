@@ -70,7 +70,11 @@ class ObjectsToCompareFactory {
             throws JobExecutionException {
         Findable<ObjectCollection> findable =
                 createFindable(
-                        left, input, dimensions, context.isDebugEnabled(), context.operationContext());
+                        left,
+                        input,
+                        dimensions,
+                        context.isDebugEnabled(),
+                        context.operationContext());
         return foundOrLogAddUnnannotated(findable, objName, addAnnotation, context.getLogger());
     }
 

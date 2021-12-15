@@ -95,16 +95,14 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
                 definition.addUncoupledJobs(
                         manifestInputFileSet.create(parameters),
                         manifestDeserializer,
-                        parameters.getOperationContext()
-                        );
+                        parameters.getOperationContext());
             }
 
             if (manifestExperimentInputFileSet != null) {
                 definition.addManifestExperimentFileSet(
                         manifestExperimentInputFileSet.create(parameters),
                         manifestDeserializer,
-                        parameters.getOperationContext()
-                        );
+                        parameters.getOperationContext());
             }
 
             return definition;

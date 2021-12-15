@@ -84,7 +84,8 @@ public class MarkProposerStrategy extends SinglePathStrategy {
     }
 
     @Override
-    public Optional<String> annotationLabelFor(ProvidesStackInput item, OperationContext operationContext) {
+    public Optional<String> annotationLabelFor(
+            ProvidesStackInput item, OperationContext operationContext) {
         return Optional.empty();
     }
 }

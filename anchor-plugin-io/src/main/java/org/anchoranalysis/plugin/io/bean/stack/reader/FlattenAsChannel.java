@@ -56,7 +56,8 @@ public class FlattenAsChannel extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
+    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
         return new OpenedFlattenAsChannel(stackReader.openFile(path, executionTimeRecorder));
     }
 }

@@ -94,7 +94,8 @@ public class ReadVoxelExtentXml extends StackReader {
     }
 
     @Override
-    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder) throws ImageIOException {
+    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
 
         OpenedImageFile delegate = stackReader.openFile(path, executionTimeRecorder); // NOSONAR
 

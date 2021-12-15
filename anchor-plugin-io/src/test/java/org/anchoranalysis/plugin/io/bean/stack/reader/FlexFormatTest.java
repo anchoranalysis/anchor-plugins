@@ -67,7 +67,8 @@ class FlexFormatTest {
      */
     @Test
     void testSizeCAndT() throws ImageIOException {
-        OpenedImageFile openedFile = loader.openFile("001001007.flex", ExecutionTimeRecorderIgnore.instance());
+        OpenedImageFile openedFile =
+                loader.openFile("001001007.flex", ExecutionTimeRecorderIgnore.instance());
 
         assertEquals(1, openedFile.numberChannels(logger));
         assertEquals(1, openedFile.numberSeries());

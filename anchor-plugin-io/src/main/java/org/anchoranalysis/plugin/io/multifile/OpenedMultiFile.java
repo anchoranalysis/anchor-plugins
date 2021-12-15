@@ -139,7 +139,8 @@ public class OpenedMultiFile implements OpenedImageFile {
 
         for (FileDetails details : fileBag) {
 
-            OpenedImageFile imageFile = stackReader.openFile(details.getPath(), executionTimeRecorder);
+            OpenedImageFile imageFile =
+                    stackReader.openFile(details.getPath(), executionTimeRecorder);
             try {
                 TimeSequence timeSequence = imageFile.open(seriesIndex, progress, logger);
                 multiFile.add(
