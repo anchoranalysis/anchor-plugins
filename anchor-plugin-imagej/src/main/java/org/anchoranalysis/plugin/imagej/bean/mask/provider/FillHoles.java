@@ -32,9 +32,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
+import org.anchoranalysis.image.bean.nonbean.UnitValueException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
-import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
+import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueExtent;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFromObjects;
@@ -50,7 +50,7 @@ import org.anchoranalysis.spatial.box.Extent;
 public class FillHoles extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private UnitValueAreaOrVolume maxVolume = null;
+    @BeanField @OptionalBean @Getter @Setter private UnitValueExtent maxVolume = null;
 
     /** If true we do not fill any objects that touch the border */
     @BeanField @Getter @Setter private boolean skipAtBorder = true;

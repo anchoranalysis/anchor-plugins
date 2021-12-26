@@ -135,7 +135,7 @@ class InteresectingObjectsTestHelper {
                 message,
                 addId(feature),
                 new FeatureInputSingleObject(objectMask, CircleObjectFixture.energyStack()),
-                Optional.of(createInitialization(others).getSharedObjects()),
+                Optional.of(createInitialization(others).sharedObjects()),
                 expectedResult);
     }
 

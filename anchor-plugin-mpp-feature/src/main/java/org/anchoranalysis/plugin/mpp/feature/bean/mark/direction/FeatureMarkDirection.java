@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.initialization.FeatureInitialization;
-import org.anchoranalysis.image.bean.spatial.direction.VectorInDirection;
+import org.anchoranalysis.image.bean.spatial.direction.SpecifyVector;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
@@ -43,7 +43,7 @@ import org.anchoranalysis.spatial.point.Vector3d;
 public abstract class FeatureMarkDirection extends FeatureMark {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private VectorInDirection direction;
+    @BeanField @Getter @Setter private SpecifyVector direction;
     // END BEAN PROPERTIES
 
     private Vector3d vectorInDirection;

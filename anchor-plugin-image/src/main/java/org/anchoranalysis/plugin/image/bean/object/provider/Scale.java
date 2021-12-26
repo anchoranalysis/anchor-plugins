@@ -69,7 +69,7 @@ public class Scale extends WithDimensionsBase {
     private ScaleFactor calculateFactor(Dimensions dimensions) throws ProvisionFailedException {
         try {
             return scaleCalculator.calculate(
-                    Optional.of(dimensions), getInitialization().getSuggestedResize());
+                    Optional.of(dimensions), getInitialization().suggestedResize());
         } catch (OperationFailedException | InitializeException e) {
             throw new ProvisionFailedException(e);
         }

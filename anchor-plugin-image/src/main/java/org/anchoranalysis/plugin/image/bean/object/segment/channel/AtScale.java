@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedUnaryOperator;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
@@ -76,7 +76,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         try {
             ScaleFactor scaleFactor =
                     determineScaleFactor(
-                            channel.dimensions(), getInitialization().getSuggestedResize());
+                            channel.dimensions(), getInitialization().suggestedResize());
 
             Extent extent = channel.extent();
 

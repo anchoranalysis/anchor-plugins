@@ -29,7 +29,8 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.ye
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+
+import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;

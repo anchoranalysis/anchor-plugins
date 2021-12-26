@@ -41,7 +41,7 @@ import org.anchoranalysis.core.system.MemoryUtilities;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
