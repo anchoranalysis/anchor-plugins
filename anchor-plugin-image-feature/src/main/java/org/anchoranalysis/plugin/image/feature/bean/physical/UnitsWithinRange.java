@@ -32,8 +32,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
-import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
+import org.anchoranalysis.image.bean.nonbean.UnitValueException;
+import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueExtent;
 import org.anchoranalysis.image.bean.unitvalue.extent.volume.VolumeVoxels;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
@@ -59,7 +59,7 @@ public class UnitsWithinRange<T extends FeatureInputWithResolution> extends With
      *
      * <p>We default to volume as units, but it could also be area. It's arbitrary for 0-value.
      */
-    @BeanField @Getter @Setter private UnitValueAreaOrVolume min = new VolumeVoxels(0);
+    @BeanField @Getter @Setter private UnitValueExtent min = new VolumeVoxels(0);
 
     /**
      * Maximum-boundary for acceptable range
@@ -68,7 +68,7 @@ public class UnitsWithinRange<T extends FeatureInputWithResolution> extends With
      * infinity-value.
      */
     @BeanField @Getter @Setter
-    private UnitValueAreaOrVolume max = new VolumeVoxels(Double.MAX_VALUE);
+    private UnitValueExtent max = new VolumeVoxels(Double.MAX_VALUE);
     // END BEAN PROPERTIES
 
     @Override

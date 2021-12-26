@@ -54,7 +54,7 @@ public class ScaleXY extends MarkCollectionProvider {
         try {
             scaleFactor =
                     scaleCalculator.calculate(
-                            Optional.empty(), getInitialization().image().getSuggestedResize());
+                            Optional.empty(), getInitialization().image().suggestedResize());
         } catch (OperationFailedException | InitializeException e1) {
             throw new ProvisionFailedException(e1);
         }

@@ -163,9 +163,9 @@ class FeatureListMarksTest {
                 createAndStart(ConstantsInListFixture.create());
 
         ResultsVector rv1 = session.calculate(input1);
-        ConstantsInListFixture.checkResultVector(rv1);
+        ConstantsInListFixture.checkResultsVector(rv1);
 
         ResultsVector rv2 = session.calculate(input2);
-        ConstantsInListFixture.checkResultVector(rv2);
+        ConstantsInListFixture.checkResultsVector(rv2);
     }
 }

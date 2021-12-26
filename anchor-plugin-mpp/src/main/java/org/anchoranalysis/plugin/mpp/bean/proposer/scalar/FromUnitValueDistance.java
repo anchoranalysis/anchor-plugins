@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.spatial.direction.VectorInDirection;
+import org.anchoranalysis.image.bean.spatial.direction.SpecifyVector;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
@@ -43,7 +43,7 @@ public class FromUnitValueDistance extends ScalarProposer {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private UnitValueDistance unitValueDistance;
 
-    @BeanField @Getter @Setter private VectorInDirection directionVector;
+    @BeanField @Getter @Setter private SpecifyVector directionVector;
     // END BEAN PROPERTIES
 
     private DirectionVector directionVectorMemo;

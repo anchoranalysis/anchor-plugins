@@ -32,9 +32,9 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
+import org.anchoranalysis.image.bean.nonbean.UnitValueException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
+import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueExtent;
 import org.anchoranalysis.image.bean.unitvalue.extent.volume.VolumeVoxels;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -57,7 +57,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Provider<Mask> mask;
 
-    @BeanField @Getter @Setter private UnitValueAreaOrVolume minVolume = new VolumeVoxels(1);
+    @BeanField @Getter @Setter private UnitValueExtent minVolume = new VolumeVoxels(1);
 
     @BeanField @Getter @Setter private boolean bySlices = false;
 

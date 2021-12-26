@@ -4,7 +4,7 @@
 		<item config-class="org.anchoranalysis.plugin.mpp.feature.bean.mark.radii.EccentricityAxisAligned"/>
 		<item config-class="org.anchoranalysis.plugin.mpp.feature.bean.mark.radii.RadiiRatio"/>
 		<item config-class="org.anchoranalysis.plugin.mpp.feature.bean.mark.direction.DotProductOrientationToVector">
-			<direction x="0" y="0" z="1" config-class="org.anchoranalysis.image.bean.spatial.direction.VectorInDirection"/>
+			<direction x="0" y="0" z="1" config-class="org.anchoranalysis.image.bean.spatial.direction.SpecifyVector"/>
 		</item>
 	</list>
 </bean>

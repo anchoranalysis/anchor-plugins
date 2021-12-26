@@ -131,7 +131,7 @@ public class DefineOutputterWithEnergy extends DefineOutputter {
             S result = operation.process(initialization, energyStack);
 
             outputSharedObjects(
-                    initialization.getSharedObjects(),
+                    initialization.sharedObjects(),
                     Optional.of(energyStack),
                     context.getOutputter());
 

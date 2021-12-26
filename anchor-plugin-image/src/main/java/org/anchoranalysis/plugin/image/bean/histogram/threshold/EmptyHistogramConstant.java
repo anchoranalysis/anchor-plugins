@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
+import org.anchoranalysis.image.bean.threshold.CalculateLevelUnary;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
@@ -41,7 +41,7 @@ import org.anchoranalysis.math.histogram.Histogram;
  * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = true)
-public class EmptyHistogramConstant extends CalculateLevelOne {
+public class EmptyHistogramConstant extends CalculateLevelUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int value = 0;
@@ -51,7 +51,7 @@ public class EmptyHistogramConstant extends CalculateLevelOne {
     public int calculateLevel(Histogram histogram) throws OperationFailedException {
 
         if (!histogram.isEmpty()) {
-            return calculateLevelIncoming(histogram);
+            return calculateLevelFromDelegate(histogram);
         } else {
             return value;
         }

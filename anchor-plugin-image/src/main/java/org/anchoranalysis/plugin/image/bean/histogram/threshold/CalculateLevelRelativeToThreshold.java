@@ -32,11 +32,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
+import org.anchoranalysis.image.bean.threshold.CalculateLevelUnary;
 import org.anchoranalysis.math.histogram.Histogram;
 
 @EqualsAndHashCode(callSuper = true)
-public abstract class CalculateLevelRelativeToThreshold extends CalculateLevelOne {
+public abstract class CalculateLevelRelativeToThreshold extends CalculateLevelUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private CalculateLevel calculateLevelElse;
@@ -47,7 +47,7 @@ public abstract class CalculateLevelRelativeToThreshold extends CalculateLevelOn
     @Override
     public int calculateLevel(Histogram histogram) throws OperationFailedException {
 
-        int level = calculateLevelIncoming(histogram);
+        int level = calculateLevelFromDelegate(histogram);
         if (useElseInstead(level, threshold)) {
             return calculateLevelElse.calculateLevel(histogram);
         } else {

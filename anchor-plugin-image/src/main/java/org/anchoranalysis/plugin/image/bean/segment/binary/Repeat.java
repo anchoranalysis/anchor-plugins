@@ -31,16 +31,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationUnary;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-public class Repeat extends BinarySegmentationOne {
+public class Repeat extends BinarySegmentationUnary {
 
     // START BEAN PROPERTIES
     /**
@@ -55,14 +55,14 @@ public class Repeat extends BinarySegmentationOne {
             VoxelsUntyped voxels,
             BinarySegmentationParameters parameters,
             Optional<ObjectMask> objectMask,
-            BinarySegmentation sgmn)
+            BinarySegmentation segment)
             throws SegmentationFailedException {
 
         BinaryVoxels<UnsignedByteBuffer> outOld = null;
 
         int count = 0;
         while (count++ < iterations) {
-            BinaryVoxels<UnsignedByteBuffer> outNew = sgmn.segment(voxels, parameters, objectMask);
+            BinaryVoxels<UnsignedByteBuffer> outNew = segment.segment(voxels, parameters, objectMask);
 
             if (outNew == null) {
                 return outOld;

@@ -27,10 +27,11 @@
 package org.anchoranalysis.plugin.image.bean.segment.binary;
 
 import java.util.Optional;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationUnary;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -42,18 +43,18 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  *
  * @author Owen Feehan
  */
-public class Invert extends BinarySegmentationOne {
+public class Invert extends BinarySegmentationUnary {
 
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segmentFromExistingSegmentation(
             VoxelsUntyped voxels,
             BinarySegmentationParameters parameters,
             Optional<ObjectMask> objectMask,
-            BinarySegmentation sgmn)
+            BinarySegmentation segment)
             throws SegmentationFailedException {
 
         BinaryVoxels<UnsignedByteBuffer> voxelsSegmented =
-                sgmn.segment(voxels, parameters, objectMask);
+                segment.segment(voxels, parameters, objectMask);
         invertVoxels(voxelsSegmented);
         return voxelsSegmented;
     }

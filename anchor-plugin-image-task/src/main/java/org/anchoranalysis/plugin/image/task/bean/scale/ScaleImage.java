@@ -135,7 +135,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
                     InitializationFactory.createWithoutStacks(input.createInitializationContext());
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
-            initialization.copyStacksFrom(stacks);
+            initialization.addStacksFrom(stacks);
 
             populateAndOutput(initialization, input.getContextJob());
         } catch (OperationFailedException e) {
@@ -206,7 +206,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
                     Stack stackOut =
                             scaleStack(
                                     stackIn,
-                                    initialization.getSuggestedResize(),
+                                    initialization.suggestedResize(),
                                     context.getLogger().messageLogger());
 
                     stacksToAddTo.addStack(key, stackOut, enabledForKey);

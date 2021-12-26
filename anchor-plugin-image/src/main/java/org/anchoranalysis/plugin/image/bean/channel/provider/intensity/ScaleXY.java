@@ -65,7 +65,7 @@ public class ScaleXY extends ChannelProviderUnary {
                     channel,
                     scaleCalculator,
                     interpolator.voxelsResizer(),
-                    getInitialization().getSuggestedResize(),
+                    getInitialization().suggestedResize(),
                     getLogger().messageLogger());
         } catch (InitializeException e) {
             throw new ProvisionFailedException(e);
