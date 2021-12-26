@@ -29,10 +29,19 @@ package org.anchoranalysis.plugin.annotation.bean.aggregate;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
+/**
+ * An identifier for an image, together with a corresponding label.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
 @Value
 class ImageAnnotation {
 
+	/** The identifier. */
     private String identifier;
+    
+    /** The label. */
     private String label;
 }
