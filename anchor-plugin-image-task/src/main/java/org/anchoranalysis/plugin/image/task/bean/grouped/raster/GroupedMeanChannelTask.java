@@ -58,7 +58,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value #OUTPUT_MEAN}</td><td>yes</td><td>An image with the mean pixel value across all images, for each channel.</td></tr>
+ * <tr><td>{@value GroupedMeanChannelTask#OUTPUT_MEAN}</td><td>yes</td><td>An image with the mean pixel value across all images, for each channel.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>

@@ -37,7 +37,7 @@ import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Applies an ImageJ (2D) morphological operation to voxels
+ * Applies an ImageJ (2D) morphological operation to voxels.
  *
  * @author Owen Feehan
  */

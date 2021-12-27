@@ -74,9 +74,9 @@ import org.anchoranalysis.plugin.annotation.counter.ImageCounter;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value #OUTPUT_BY_IMAGE}</td><td>yes</td><td>a single CSV file showing summary statistics of matching <i>for all images</i>.</td></tr>
- * <tr><td>{@value #OUTPUT_BY_GROUP}</td><td>yes</td><td>a single CSV file showing summary statistics of matching <i>for all groups group of images</i>.</td></tr>
- * <tr><td>{@value #OUTPUT_OUTLINE}</td><td>yes</td><td>a file per image showing a colored representation of which annotations matched (or didn't) <i>for each image</i>.</td></tr>
+ * <tr><td>{@value CompareAnnotations#OUTPUT_BY_IMAGE}</td><td>yes</td><td>a single CSV file showing summary statistics of matching <i>for all images</i>.</td></tr>
+ * <tr><td>{@value CompareAnnotations#OUTPUT_BY_GROUP}</td><td>yes</td><td>a single CSV file showing summary statistics of matching <i>for all groups group of images</i>.</td></tr>
+ * <tr><td>{@value CompareAnnotations#OUTPUT_OUTLINE}</td><td>yes</td><td>a file per image showing a colored representation of which annotations matched (or didn't) <i>for each image</i>.</td></tr>
  * <tr><td rowspan="3"><i>outputs from the {@link AnnotationComparisonAssigner} in {@code assign}</i></td></tr>
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>

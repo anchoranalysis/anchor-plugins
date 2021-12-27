@@ -48,8 +48,8 @@ import org.anchoranalysis.plugin.io.bean.file.copy.naming.CopyFilesNaming;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value #OUTPUT_COPY_LOG}</td><td>no</td><td>a text log file showing each copy operation (and any skipped files).</td></tr>
- * <tr><td>{@value #OUTPUT_PATH_MAPPING}</td><td>no</td><td>a CSV file showing the source and destination paths for each copy operation (skipped files are not included)..</td></tr>
+ * <tr><td>{@value RecordingCounter#OUTPUT_COPY_LOG}</td><td>no</td><td>a text log file showing each copy operation (and any skipped files).</td></tr>
+ * <tr><td>{@value RecordingCounter#OUTPUT_PATH_MAPPING}</td><td>no</td><td>a CSV file showing the source and destination paths for each copy operation (skipped files are not included)..</td></tr>
  * </tbody>
  * </table>
  *

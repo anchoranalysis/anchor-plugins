@@ -103,7 +103,7 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  * <tr><td>{@value WriteSegmentationOutputsHelper#OUTPUT_OUTLINE}</td><td>yes</td><td>A RGB image showing the outline of segmented-objects on top of the input image (scaled to match the input image for model inference).</td></tr>
  * <tr><td>{@value WriteSegmentationOutputsHelper#OUTPUT_MERGED_AS_MASK}{@value WriteSegmentationOutputsHelper#OUTPUT_NAME_SCALED_SUFFIX}</td><td>no</td><td>Like <i>mask</i> but on the full-scale input image.</td></tr>
  * <tr><td>{@value WriteSegmentationOutputsHelper#OUTPUT_OUTLINE}{@value WriteSegmentationOutputsHelper#OUTPUT_NAME_SCALED_SUFFIX}</td><td>no</td><td>Like <i>outline</i> but on on the full-scale input image.</td></tr>
- * <tr><td>{@value #OUTPUT_SUMMARY_CSV}</td><td>yes</td><td>A CSV file showing basic feature of <i>all</i> segmented-objects across <i>all</i> input images.</td></tr>
+ * <tr><td>{@value SegmentInstanceWithModel#OUTPUT_SUMMARY_CSV}</td><td>yes</td><td>A CSV file showing basic feature of <i>all</i> segmented-objects across <i>all</i> input images.</td></tr>
  * <tr><td>{@value FeatureExporter#OUTPUT_THUMBNAILS}</td><td>yes</td><td>A directory of thumbnails showing the outline of <i>all</i> segmented objects on top of an extracted portion of the respective input-image.</td></tr>
  * <tr><td rowspan="3"><i>outputs inherited from {@link Task}</i></td></tr>
  * </tbody>
