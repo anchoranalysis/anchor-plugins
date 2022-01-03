@@ -56,10 +56,10 @@ public class Filter extends SegmentChannelIntoObjectsUnary {
             Channel channel,
             Optional<ObjectMask> object,
             Optional<ObjectCollection> seeds,
-            SegmentChannelIntoObjects upstreamSegmentation)
+            SegmentChannelIntoObjects upstreamSegmenter)
             throws SegmentationFailedException {
         return filterObjects(
-                upstreamSegmentation.segment(channel, object, seeds), channel.dimensions());
+                upstreamSegmenter.segment(channel, object, seeds), channel.dimensions());
     }
 
     private ObjectCollection filterObjects(ObjectCollection objects, Dimensions dim)

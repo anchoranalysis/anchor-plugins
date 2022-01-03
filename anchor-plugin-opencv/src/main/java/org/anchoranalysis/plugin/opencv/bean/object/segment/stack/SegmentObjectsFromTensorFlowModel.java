@@ -86,17 +86,16 @@ public class SegmentObjectsFromTensorFlowModel
     public ConcurrentModelPool<OpenCVModel> createModelPool(ConcurrencyPlan plan, Logger logger)
             throws CreateModelFailedException {
         // We disable all GPU inference as the current OpenCV library (from org.openpnp) does not
-        // support it
+        // support it.
 
         // Note an alternative library JavaCPP from bytedeco does support CUDA inference with OpenCV
-        // when one
-        // uses opencv-platform-gpu instead of opencv-platform. However, the presence of
-        // opencv-platform-gpu
-        // in the classpath creates problems (stalling in CVInit) when a CUDA-supported GPU isn't
-        // present.
+        // when one uses opencv-platform-gpu instead of opencv-platform. However, the presence of
+        // opencv-platform-gpu in the classpath creates problems (stalling in CVInit) when a
+    	// CUDA-supported GPU isn't present.
+    	//
         // This means this possibility isn't particularly attractive, so for now, it is decided to
-        // exclude GPU
-        // support from our OpenCV implementations.
+        // exclude GPU support from our OpenCV implementations.
+    	
         if (plan.numberGPUs() > 0) {
             logger.messageLogger()
                     .logFormatted(
@@ -162,8 +161,8 @@ public class SegmentObjectsFromTensorFlowModel
     /**
      * Reads the CNN model from the file-system in Tensorflow format.
      *
-     * @param model a Tensorflow model file in .pb format
-     * @param textGraph a Tensorflow text graph in .pbtxt format
+     * @param model a Tensorflow model file in {@code .pb} format.
+     * @param textGraph a Tensorflow text graph in {@code .pbtxt} format.
      * @return the loaded CNN model.
      */
     private static Net readNet(Path model, Optional<Path> textGraph) {

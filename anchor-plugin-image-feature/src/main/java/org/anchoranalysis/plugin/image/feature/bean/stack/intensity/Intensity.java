@@ -52,13 +52,13 @@ import org.anchoranalysis.plugin.image.feature.stack.calculation.CalculateHistog
 public class Intensity extends FeatureStack {
 
     // START BEAN PROPERTIES
-    /** Feature to apply to the histogram */
+    /** Feature to apply to the histogram. */
     @BeanField @Getter @Setter private Feature<FeatureInputHistogram> item = new Mean();
 
-    /** The channel that that forms the histogram */
+    /** The channel that that forms the histogram. */
     @BeanField @Getter @Setter private int energyIndex = 0;
 
-    /** Optionally, index of another channel that masks the histogram. -1 disables */
+    /** Optionally, index of another channel that masks the histogram. -1 disables. */
     @BeanField @Getter @Setter private int energyIndexMask = -1;
     // END BEAN PROEPRTIES
 

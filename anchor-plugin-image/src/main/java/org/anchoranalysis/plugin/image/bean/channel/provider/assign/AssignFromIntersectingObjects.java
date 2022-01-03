@@ -69,7 +69,7 @@ public class AssignFromIntersectingObjects extends ChannelProviderUnary {
         streamIntersectingObjects(source, target)
                 .forEach(
                         pair ->
-                                channel.assignValue(getValueForObject(extracter, pair._1()))
+                        channel.assignValue(getValueForObject(extracter, pair._1()))
                                         .toObject(pair._2()));
         return channel;
     }

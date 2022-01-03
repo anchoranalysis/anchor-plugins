@@ -66,7 +66,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
             Channel channel,
             Optional<ObjectMask> objectMask,
             Optional<ObjectCollection> seeds,
-            SegmentChannelIntoObjects upstreamSegmentation)
+            SegmentChannelIntoObjects upstreamSegmenter)
             throws SegmentationFailedException {
 
         if (objectMask.isPresent()) {
@@ -78,7 +78,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
         seeds.ifPresent(SegmentOnMaximumIntensityAndExpandInZ::flattenSeedsInZ);
 
         ObjectCollection objects =
-                upstreamSegmentation.segment(channel.projectMax(), Optional.empty(), seeds);
+                upstreamSegmenter.segment(channel.projectMax(), Optional.empty(), seeds);
 
         if (isAny3d(objects)) {
             throw new SegmentationFailedException(

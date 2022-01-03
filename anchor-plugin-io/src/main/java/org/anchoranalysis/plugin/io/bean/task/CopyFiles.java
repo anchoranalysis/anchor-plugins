@@ -71,7 +71,7 @@ import org.anchoranalysis.plugin.io.shared.RecordingCounter;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value #OUTPUT_COPY}</td><td>yes</td><td>a copied file for each input file.</td></tr>
+ * <tr><td>{@value CopyFiles#OUTPUT_COPY}</td><td>yes</td><td>a copied file for each input file.</td></tr>
  * <tr><td rowspan="3"><i>outputs from the {@link RecordingCounter}</i></td></tr>
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>

@@ -57,7 +57,7 @@ import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value #OUTPUT_COST_MATRIX}</td><td>no</td><td>a CSV file showing a matrix of costs calculated for the objects.</td></tr>
+ * <tr><td>{@value FeatureCostAssigner#OUTPUT_COST_MATRIX}</td><td>no</td><td>a CSV file showing a matrix of costs calculated for the objects.</td></tr>
  * </tbody>
  * </table>
  *

@@ -71,8 +71,8 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value #OUTPUT_HISTOGRAMS}</td><td>yes</td><td>A separate CSV histogram for each channel's voxels intensity.</td></tr>
- * <tr><td>{@value #OUTPUT_SUM}</td><td>yes</td><td>A histogram for the sum of each voxel's intensity across all channels.</td></tr>
+ * <tr><td>{@value ExportImageHistograms#OUTPUT_HISTOGRAMS}</td><td>yes</td><td>A separate CSV histogram for each channel's voxels intensity.</td></tr>
+ * <tr><td>{@value ExportImageHistograms#OUTPUT_SUM}</td><td>yes</td><td>A histogram for the sum of each voxel's intensity across all channels.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>

@@ -14,9 +14,9 @@ import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ThresholdConfi
 import org.anchoranalysis.plugin.image.bean.scale.FitTo;
 import org.anchoranalysis.plugin.onnx.bean.object.segment.decode.instance.text.DecodeEAST;
 import org.anchoranalysis.plugin.onnx.bean.object.segment.stack.SegmentObjectsFromONNXModel;
-import org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance.InstanceSegmentationTestBase;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.BoundingBoxFactory;
+import org.anchoranalysis.test.image.segment.InstanceSegmentationTestBase;
 
 /**
  * Tests {@link SegmentObjectsFromONNXModel} together with {@link DecodeEAST}.

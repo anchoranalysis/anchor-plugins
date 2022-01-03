@@ -85,7 +85,7 @@ import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value #OUTPUT_COPY}</td><td>yes</td><td>An image written in the default output format.</td></tr>
+ * <tr><td>{@value ConvertImageFormat#OUTPUT_COPY}</td><td>yes</td><td>An image written in the default output format.</td></tr>
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>

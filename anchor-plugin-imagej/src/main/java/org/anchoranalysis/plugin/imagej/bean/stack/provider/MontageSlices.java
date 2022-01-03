@@ -67,14 +67,14 @@ public class MontageSlices extends StackProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Stack createFromStack(Stack source) throws ProvisionFailedException {
+    public Stack createFromStack(Stack stack) throws ProvisionFailedException {
 
-        int numberSlices = source.dimensions().z();
+        int numberSlices = stack.dimensions().z();
 
         int numberColumns = numberColumns(numberSlices);
 
         try {
-            return source.mapChannel(
+            return stack.mapChannel(
                     channel ->
                             montageChannel(
                                     channel,
