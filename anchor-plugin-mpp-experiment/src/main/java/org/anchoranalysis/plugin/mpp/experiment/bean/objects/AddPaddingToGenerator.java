@@ -85,7 +85,7 @@ class AddPaddingToGenerator {
     private static ObjectMask maybePadObject(
             ObjectMask object, Dimensions dimensions, Padding padding) {
 
-        if (padding.noPadding()) {
+        if (padding.hasNoPadding()) {
             return object;
         }
 

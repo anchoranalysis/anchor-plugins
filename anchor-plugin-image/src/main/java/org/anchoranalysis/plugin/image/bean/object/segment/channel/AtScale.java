@@ -71,7 +71,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             Channel channel,
             Optional<ObjectMask> objectMask,
             Optional<ObjectCollection> seeds,
-            SegmentChannelIntoObjects upstreamSegmentation)
+            SegmentChannelIntoObjects upstreamSegmenter)
             throws SegmentationFailedException {
         try {
             ScaleFactor scaleFactor =
@@ -82,7 +82,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
             // Perform segmentation on scaled versions of the channel, mask and seeds
             ObjectCollection scaledSegmentationResult =
-                    upstreamSegmentation.segment(
+                    upstreamSegmenter.segment(
                             scaleChannel(channel, scaleFactor, interpolator.voxelsResizer()),
                             scaleMask(objectMask, scaleFactor, extent),
                             scaleSeeds(seeds, scaleFactor, extent));

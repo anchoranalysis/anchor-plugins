@@ -62,7 +62,7 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
 
     /**
      * The first intensity-value to consider as a valid object (e.g. usually 0 is ignored as
-     * background)
+     * background).
      */
     @BeanField @Getter @Setter private int startingIntensity = 1;
     // END BEAN PROPERTIES
@@ -76,8 +76,8 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
         checkUnsupported3D(channel);
 
         try {
-            int numColors = floodFillChannel(channel);
-            return objectsFromLabels(channel, numColors);
+            int numberColors = floodFillChannel(channel);
+            return objectsFromLabels(channel, numberColors);
 
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
@@ -86,11 +86,11 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
 
     /**
      * Flood fills a channel, converting it into objects each labelled with an incrementing integer
-     * id
+     * identifier.
      *
-     * @param channel channel to flood-fill
-     * @return the number of objects (each corresponding to intensity level 1.... N)
-     * @throws OperationFailedException
+     * @param channel channel to flood-fill.
+     * @return the number of objects (each corresponding to intensity level 1.... N).
+     * @throws OperationFailedException if the flood-filling fails to complete sucessfully.
      */
     private int floodFillChannel(Channel channel) throws OperationFailedException {
         ImageProcessor imageProcessor =

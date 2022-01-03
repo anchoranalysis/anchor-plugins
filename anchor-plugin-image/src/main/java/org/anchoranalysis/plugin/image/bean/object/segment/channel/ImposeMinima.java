@@ -55,7 +55,7 @@ public class ImposeMinima extends SegmentChannelIntoObjectsUnary {
             Channel channel,
             Optional<ObjectMask> objectMask,
             Optional<ObjectCollection> seeds,
-            SegmentChannelIntoObjects upstreamSegmentation)
+            SegmentChannelIntoObjects upstreamSegmenter)
             throws SegmentationFailedException {
 
         if (!seeds.isPresent()) {
@@ -63,7 +63,7 @@ public class ImposeMinima extends SegmentChannelIntoObjectsUnary {
         }
 
         try {
-            return upstreamSegmentation.segment(
+            return upstreamSegmenter.segment(
                     channelWithImposedMinima(channel, seeds.get(), objectMask), objectMask, seeds);
 
         } catch (OperationFailedException e) {

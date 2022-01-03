@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.histogram.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.HistogramProviderUnary;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
@@ -50,11 +50,11 @@ public class GreaterThanThreshold extends HistogramProviderUnary {
     // END BEAN PROPERTIES
 
     @Override
-    public Histogram createFromHistogram(Histogram histogram) throws CreateException {
+    public Histogram createFromHistogram(Histogram histogram) throws ProvisionFailedException {
         try {
             return HistogramThresholder.withCalculateLevel(histogram, calculateLevel);
         } catch (OperationFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 }
