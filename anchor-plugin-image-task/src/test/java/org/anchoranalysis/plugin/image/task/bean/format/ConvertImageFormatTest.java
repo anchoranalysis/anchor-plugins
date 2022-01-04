@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.test.experiment.task.TaskSingleInputHelper;
-import org.anchoranalysis.test.image.rasterwriter.ChannelSpecification;
+import org.anchoranalysis.test.image.stackwriter.ChannelSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

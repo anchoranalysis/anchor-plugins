@@ -31,8 +31,8 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
-import org.anchoranalysis.test.image.rasterwriter.RasterWriterTestBase;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
+import org.anchoranalysis.test.image.stackwriter.StackWriterTestBase;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -40,10 +40,10 @@ import org.junit.jupiter.api.Test;
  *
  * @author Owen Feehan
  */
-abstract class OMETestBase extends RasterWriterTestBase {
+abstract class OMETestBase extends StackWriterTestBase {
 
     private static final VoxelDataType[] SUPPORTED_VOXEL_TYPES =
-            RasterWriterTestBase.ALL_SUPPORTED_VOXEL_TYPES;
+            StackWriterTestBase.ALL_SUPPORTED_VOXEL_TYPES;
 
     static {
         ConfigureBioformatsLogging.instance().makeSureConfigured();

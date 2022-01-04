@@ -31,10 +31,10 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
-import org.anchoranalysis.test.image.rasterwriter.ChannelSpecification;
-import org.anchoranalysis.test.image.rasterwriter.IdentifierHelper;
-import org.anchoranalysis.test.image.rasterwriter.SavedFiles;
-import org.anchoranalysis.test.image.rasterwriter.StackTester;
+import org.anchoranalysis.test.image.stackwriter.ChannelSpecification;
+import org.anchoranalysis.test.image.stackwriter.IdentifierHelper;
+import org.anchoranalysis.test.image.stackwriter.SavedFiles;
+import org.anchoranalysis.test.image.stackwriter.StackTester;
 import org.junit.jupiter.api.Test;
 
 /**

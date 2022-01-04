@@ -90,7 +90,7 @@ class FeedbackGenerator<T> {
         }
 
         try {
-            feedbackReceiver.reportItr(reporting);
+            feedbackReceiver.reportIteration(reporting);
         } catch (ReporterException e) {
             errorReporter.recordError(FeedbackGenerator.class, e);
         }

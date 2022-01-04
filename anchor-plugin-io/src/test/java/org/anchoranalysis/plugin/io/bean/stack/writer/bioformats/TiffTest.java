@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.bioformats.bean.writer.Tiff;
-import org.anchoranalysis.test.image.rasterwriter.TiffTestBase;
+import org.anchoranalysis.test.image.stackwriter.TiffTestBase;
 
 /**
  * Tests writing TIFFs using the Bioformats plugin.
