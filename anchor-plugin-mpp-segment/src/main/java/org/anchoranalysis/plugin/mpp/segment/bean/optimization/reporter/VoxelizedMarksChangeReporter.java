@@ -35,7 +35,6 @@ import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
@@ -49,8 +48,6 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<VoxelizedMarksWithEnergy> {
 
     // START BEAN PARAMETERS
-    @BeanField @Getter @Setter private String manifestFunction = "marks";
-
     @BeanField @Getter @Setter private String outputName;
 
     @BeanField @Getter @Setter private int bundleSize = 1000;
@@ -60,21 +57,14 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
 
     private OutputSequenceIndexed<MarksWithEnergyBreakdown, Integer> outputSequence;
 
-    private Reporting<VoxelizedMarksWithEnergy> lastOptimizationStep;
-
     @Override
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
             throws ReporterException {
 
-        OutputPatternIntegerSuffix pattern =
-                new OutputPatternIntegerSuffix(
-                        outputName,
-                        10,
-                        true,
-                        Optional.of(new ManifestDescription("serialized", manifestFunction)));
+        OutputPatternIntegerSuffix pattern = new OutputPatternIntegerSuffix(outputName, 10, true);
 
         try {
-            outputSequence = createSequenceFactory(initialization).increasingIntegers(pattern);
+            outputSequence = createSequenceFactory(initialization).indexedWithInteger(pattern);
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }
@@ -88,7 +78,6 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
                         best ? reporting.getBestState() : reporting.getMarksAfterOptional(),
                         reporting.getIteration());
             }
-            lastOptimizationStep = reporting;
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }
@@ -100,12 +89,6 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
 
         if (outputSequence == null) {
             return;
-        }
-
-        if (outputSequence.isOn() && lastOptimizationStep != null) {
-            outputSequence
-                    .getSequenceType()
-                    .assignMaximumIndex(lastOptimizationStep.getIteration());
         }
     }
 
@@ -119,8 +102,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
 
         OutputterChecked outputter = initialization.getInitContext().getOutputter().getChecked();
 
-        Generator<MarksWithEnergyBreakdown> generator =
-                new ObjectOutputStreamGenerator<>(Optional.of(manifestFunction));
+        Generator<MarksWithEnergyBreakdown> generator = new ObjectOutputStreamGenerator<>();
 
         return new OutputSequenceFactory<>(generator, outputter);
     }

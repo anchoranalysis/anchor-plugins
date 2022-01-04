@@ -43,8 +43,6 @@ import org.anchoranalysis.plugin.image.task.bean.feature.source.FromHistogram;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DictionaryExporter {
 
-    private static final String MANIFEST_FUNCTION = "dictionary";
-
     public static void export(
             FeatureNameList featureNames,
             ResultsVector results,
@@ -58,9 +56,7 @@ class DictionaryExporter {
 
     private static void writeDictionary(
             ElementSupplier<Dictionary> dictionary, Outputter outputter, String outputName) {
-        outputter
-                .writerSelective()
-                .write(outputName, () -> new DictionaryGenerator(MANIFEST_FUNCTION), dictionary);
+        outputter.writerSelective().write(outputName, () -> new DictionaryGenerator(), dictionary);
     }
 
     private static Dictionary convert(

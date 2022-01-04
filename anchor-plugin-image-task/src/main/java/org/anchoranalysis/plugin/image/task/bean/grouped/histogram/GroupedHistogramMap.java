@@ -38,7 +38,7 @@ class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
     private final GroupedHistogramWriter writer;
 
     public GroupedHistogramMap(GroupedHistogramWriter writer, int maxValue) {
-        super("histogram", "histogram", () -> new Histogram(maxValue));
+        super("histogram", () -> new Histogram(maxValue));
         this.writer = writer;
     }
 

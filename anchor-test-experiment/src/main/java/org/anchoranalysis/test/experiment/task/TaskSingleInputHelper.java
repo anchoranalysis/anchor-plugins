@@ -161,7 +161,6 @@ public class TaskSingleInputHelper {
                 new ParametersExperiment(
                         new ExecutionArguments(Paths.get(".")),
                         "arbitraryExperimentName",
-                        Optional.empty(),
                         outputter,
                         prefixer,
                         context);

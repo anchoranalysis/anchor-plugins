@@ -45,10 +45,6 @@ public class VoxelizedMarksPeriodicReporter
     @BeanField @Getter @Setter private boolean secondary = false;
     // END BEAN PARAMETERS
 
-    public VoxelizedMarksPeriodicReporter() {
-        super("marks");
-    }
-
     @Override
     public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting) {
         // NOTHING TO DO

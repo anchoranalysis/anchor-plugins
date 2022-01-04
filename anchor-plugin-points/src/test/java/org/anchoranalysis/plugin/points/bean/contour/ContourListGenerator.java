@@ -106,9 +106,6 @@ class ContourListGenerator
     }
 
     private static MarksGenerator createDelegate(DrawObject drawObject) {
-        MarksGenerator delegate =
-                new MarksGenerator(drawObject, new IdentifyFromIteration<Overlay>());
-        delegate.setManifestDescriptionFunction("contourRepresentationRGB");
-        return delegate;
+        return new MarksGenerator(drawObject, new IdentifyFromIteration<Overlay>());
     }
 }

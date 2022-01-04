@@ -43,14 +43,8 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
         extends PeriodicSubdirectoryReporter<T> {
 
     // BEAN PARAMETERS
-    @BeanField @Getter @Setter private String manifestFunction;
-
     @BeanField @Getter @Setter private int bundleSize = 1000;
     // END BEAN PARAMETERS
-
-    protected ObjectSerializerPeriodicReporter(String defaultManifestFunction) {
-        this.manifestFunction = defaultManifestFunction;
-    }
 
     @Override
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initialization)
@@ -58,7 +52,7 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
 
         try {
             super.reportBegin(initialization);
-            initialize(new ObjectOutputStreamGenerator<>(Optional.of(manifestFunction)));
+            initialize(new ObjectOutputStreamGenerator<>());
 
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);

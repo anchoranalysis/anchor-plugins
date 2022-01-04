@@ -1,6 +1,5 @@
 package org.anchoranalysis.plugin.image.task.bean.segment;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -42,8 +41,6 @@ class WriteSegmentationOutputsHelper {
      */
     static final String OUTPUT_NAME_SCALED_SUFFIX = "InputScale";
 
-    private static final String MANIFEST_FUNCTION_INPUT_IMAGE = "input_image";
-
     // START REQUIRED ARGUMENTS
     /**
      * When true, the colors change for different objects in the image (using a default color set).
@@ -64,10 +61,7 @@ class WriteSegmentationOutputsHelper {
 
         WriterRouterErrors writer = outputter.writerSelective();
 
-        writer.write(
-                OUTPUT_INPUT_IMAGE,
-                () -> new StackGenerator(true, Optional.of(MANIFEST_FUNCTION_INPUT_IMAGE), false),
-                () -> stack);
+        writer.write(OUTPUT_INPUT_IMAGE, () -> new StackGenerator(true, false), () -> stack);
 
         writer.write(
                 OUTPUT_H5,

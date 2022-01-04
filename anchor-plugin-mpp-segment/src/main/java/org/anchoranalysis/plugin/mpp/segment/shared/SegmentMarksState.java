@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.segment.shared;
 
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
@@ -44,20 +43,13 @@ public class SegmentMarksState implements ExperimentState {
 
     private static final String OUTPUT_SERIALIZED = "kernelProposer";
 
-    private static final String MANIFEST_FUNCTION = OUTPUT_SERIALIZED;
-
     private KernelProposer<VoxelizedMarksWithEnergy, UpdatableMarksList> kernelProposer;
     private Define define;
 
     @Override
     public void outputBeforeAnyTasksAreExecuted(Outputter outputter) {
 
-        outputter
-                .writerSelective()
-                .write(
-                        "define",
-                        () -> new XStreamGenerator<Object>(Optional.of("define")),
-                        () -> define);
+        outputter.writerSelective().write("define", XStreamGenerator::new, () -> define);
     }
 
     // We just need any single kernel proposer to write out
@@ -65,9 +57,6 @@ public class SegmentMarksState implements ExperimentState {
     public void outputAfterAllTasksAreExecuted(Outputter outputter) {
         outputter
                 .writerSelective()
-                .write(
-                        OUTPUT_SERIALIZED,
-                        () -> new XStreamGenerator<Object>(Optional.of(MANIFEST_FUNCTION)),
-                        () -> kernelProposer);
+                .write(OUTPUT_SERIALIZED, XStreamGenerator::new, () -> kernelProposer);
     }
 }

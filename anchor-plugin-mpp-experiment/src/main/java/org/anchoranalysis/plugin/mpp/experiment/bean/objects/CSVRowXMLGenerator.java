@@ -28,11 +28,9 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Optional;
 import javax.xml.parsers.ParserConfigurationException;
 import org.anchoranalysis.core.serialize.XMLParser;
 import org.anchoranalysis.io.generator.xml.XMLGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.xml.XMLWriter;
@@ -50,11 +48,6 @@ class CSVRowXMLGenerator extends XMLGenerator<CSVRow> {
         } catch (OutputWriteFailedException | IOException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("xml", "objectPairsClass"));
     }
 
     private static Document csvRowAsXml(CSVRow element) throws OutputWriteFailedException {

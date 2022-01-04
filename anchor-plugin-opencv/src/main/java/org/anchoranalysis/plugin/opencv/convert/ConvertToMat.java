@@ -258,15 +258,15 @@ public class ConvertToMat {
         UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
         UnsignedByteBuffer blue = BufferHelper.extractByte(channelBlue);
 
-        // Its quicker to write all bytes at once to the OpenCV matrix
-        ByteBuffer out = ByteBuffer.allocate(channelRed.extent().areaXY() * 3);
+        // It's quickest to direct access the native memory via a direct ByteBuffer.
+        ByteBuffer out =
+                ByteBufferFromNativeAddress.wrapAddress(
+                        mat.dataAddr(), channelRed.extent().areaXY() * 3);
         while (red.hasRemaining()) {
             out.put(blue.getRaw());
             out.put(green.getRaw());
             out.put(red.getRaw());
         }
-        mat.put(0, 0, out.array());
-
         return mat;
     }
 }

@@ -89,9 +89,6 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
     private static final String OUTPUT_MARKS = "marks";
 
-    private static final Optional<String> MANIFEST_FUNCTION_SERIALIZED_MARKS =
-            Optional.of(OUTPUT_MARKS);
-
     // START BEAN PROPERTIES
     /** How to perform the segmentation. */
     @BeanField @Getter @Setter private SegmentIntoMarks segment;
@@ -183,12 +180,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
             Outputter outputter,
             NamedProviderStore<Stack> stacks,
             Logger logger) {
-        outputter
-                .writerSelective()
-                .write(
-                        OUTPUT_MARKS,
-                        () -> new XStreamGenerator<Object>(MANIFEST_FUNCTION_SERIALIZED_MARKS),
-                        () -> marks);
+        outputter.writerSelective().write(OUTPUT_MARKS, XStreamGenerator::new, () -> marks);
 
         try {
             DisplayStack backgroundStack =

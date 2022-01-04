@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -124,7 +125,11 @@ class OutlinePreserveRelativeSizeTest {
             ObjectCollection objects, boolean overlappingObjects) throws OperationFailedException {
         OutlinePreserveRelativeSize outline = createOutline(overlappingObjects);
         ThumbnailBatch<ObjectCollection> batch =
-                outline.start(objects, boundingBoxes(objects), Optional.of(BACKGROUND));
+                outline.start(
+                        objects,
+                        boundingBoxes(objects),
+                        Optional.of(BACKGROUND),
+                        ExecutionTimeRecorderIgnore.instance());
 
         try {
             List<DisplayStack> thumbnails = thumbnailsFor(batch, objects);

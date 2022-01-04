@@ -30,7 +30,6 @@ import java.io.PrintWriter;
 import java.util.Optional;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.io.generator.text.TextFileOutputter;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAggregate;
@@ -57,7 +56,6 @@ public final class TextFile extends ReporterAggregate<VoxelizedMarksWithEnergy>
         fileOutput =
                 TextFileOutputter.create(
                         "txt",
-                        Optional.of(new ManifestDescription("text", "eventLog")),
                         initialization.getInitContext().getOutputter().getChecked(),
                         "eventLog");
     }

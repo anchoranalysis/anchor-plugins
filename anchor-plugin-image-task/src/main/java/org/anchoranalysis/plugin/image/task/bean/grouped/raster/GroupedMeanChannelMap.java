@@ -38,15 +38,13 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
 class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
 
-    private static final String MANIFEST_FUNCTION = "channelMean";
-
     private final String outputName;
     /**
      * @param outputName the first-level output-name used to determine whether mean channels will be
      *     written or not
      */
     public GroupedMeanChannelMap(String outputName) {
-        super("channel", MANIFEST_FUNCTION, RunningSumChannel::new);
+        super("channel", RunningSumChannel::new);
         this.outputName = outputName;
     }
 
@@ -67,7 +65,7 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
                 .writerSecondLevel(outputName)
                 .write(
                         partName,
-                        () -> new ChannelGenerator(MANIFEST_FUNCTION),
+                        () -> new ChannelGenerator(),
                         () -> generatorWithMean(agg, outputType, partName, context));
     }
 

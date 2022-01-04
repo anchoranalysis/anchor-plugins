@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Function;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.input.FeatureInputResults;
@@ -123,6 +124,7 @@ public class FeatureResultsAndThumbnails {
         //  block to stop concurrent threads waiting needlessly. The thumbnail writing I/O remains
         // inside the synchronized
         //  block.
+        CheckedRunnable<OutputWriteFailedException> thumbnailOutputter = null;
         synchronized (this) {
             // Add results to grouped-map, and write to CSV file
             if (calculationResultsNeeded) {
@@ -130,11 +132,22 @@ public class FeatureResultsAndThumbnails {
             }
 
             if (thumbnailsEnabled && thumbnailStack.isPresent()) {
-                recorder.recordExecutionTime(
-                        "Writing thumbnail",
-                        () ->
-                                thumbnails.outputThumbnail(
-                                        thumbnailStack.get(), outputter, OUTPUT_THUMBNAILS));
+                // Perform the first part of the thumbnail outputting operation, deferring the
+                // second part
+                // until we are outside the synchronized block.
+                thumbnailOutputter =
+                        thumbnails.outputThumbnail(
+                                thumbnailStack.get(), outputter, OUTPUT_THUMBNAILS);
+            }
+        }
+
+        // Perform the second part of the thumbnail outputting operation (outside the synchronized
+        // block).
+        if (thumbnailOutputter != null) {
+            try {
+                recorder.recordExecutionTime("Writing thumbnail", thumbnailOutputter::run);
+            } catch (OutputWriteFailedException e) {
+                throw new OperationFailedException(e);
             }
         }
     }

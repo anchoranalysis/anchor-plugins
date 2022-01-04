@@ -41,6 +41,7 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -128,10 +129,10 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
             ObjectCollection objects,
             EnergyStack energyStack,
             boolean thumbnailsEnabled,
-            Logger logger)
+            OperationContext context)
             throws CreateException {
 
-        List<T> inputs = startBatchDeriveInputs(objects, energyStack, logger);
+        List<T> inputs = startBatchDeriveInputs(objects, energyStack, context.getLogger());
 
         if (inputs.isEmpty()) {
             return new ListWithThumbnails<>(inputs);
@@ -150,7 +151,8 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
                         thumbnail.start(
                                 objects,
                                 scaledBoundingBoxes(inputs),
-                                Optional.of(energyStack.asStack())));
+                                Optional.of(energyStack.asStack()),
+                                context.getExecutionTimeRecorder()));
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }

@@ -35,7 +35,6 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.generator.OneStageGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -59,10 +58,5 @@ class ObjectAsStringGenerator<T> extends OneStageGenerator<T> {
     @Override
     public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger) {
         return NonImageFileFormat.TEXT.extensionWithoutPeriod();
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("text", "object"));
     }
 }

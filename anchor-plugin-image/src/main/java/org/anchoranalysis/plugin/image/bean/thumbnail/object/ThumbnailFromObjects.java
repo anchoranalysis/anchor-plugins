@@ -29,6 +29,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
@@ -53,11 +54,13 @@ public abstract class ThumbnailFromObjects extends AnchorBean<ThumbnailFromObjec
      *     supplier is used as the stream may be desired multiple times.
      * @param background a stack that will be used to form the background (or some part of may be
      *     used)
+     * @param executionTimeRecorder TODO
      * @return a batch interface to create thumbnails for individual objects
      */
     public abstract ThumbnailBatch<ObjectCollection> start(
             ObjectCollection objects,
             StreamableCollection<BoundingBox> boundingBoxes,
-            Optional<Stack> background)
+            Optional<Stack> background,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws OperationFailedException;
 }

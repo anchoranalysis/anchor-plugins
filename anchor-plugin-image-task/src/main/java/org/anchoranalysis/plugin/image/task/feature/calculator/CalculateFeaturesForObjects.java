@@ -115,7 +115,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
                                                     objects,
                                                     energyStack,
                                                     context.isThumbnailsEnabled(),
-                                                    context.getLogger()));
+                                                    context.getOperationContext()));
 
             calculateManyFeaturesInto(inputs, labelsForInput);
 

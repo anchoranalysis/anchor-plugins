@@ -26,6 +26,7 @@
 package org.anchoranalysis.plugin.image.task.feature;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.OutputSequenceStackFactory;
@@ -40,29 +41,31 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  */
 class ThumbnailsWriter {
 
-    private static final String MANIFEST_FUNCTION_THUMBNAIL = "thumbnail";
-
     // Generates thumbnails, lazily if needed.
     private OutputSequenceIncrementing<Stack> thumbnailOutputSequence;
 
     /**
      * Outputs a thumbnail to the file-system.
      *
+     * <p>Part of this operation occurs immediately (so that it can be in a synchronized block), and
+     * the remainder is returned as a runnable to be executed later (which can be outside the
+     * synchronized block).
+     *
      * @param thumbnail the thumbnail to maybe output.
      * @param outputter the outputter.
      * @param outputName the name to use when outputting.
+     * @return a runnable, that when called, completes the remain part of the outputting operation.
      * @throws OperationFailedException if the thumbnail cannot be successfully outputted.
      */
-    public void outputThumbnail(
+    public CheckedRunnable<OutputWriteFailedException> outputThumbnail(
             DisplayStack thumbnail, OutputterChecked outputter, String outputName)
             throws OperationFailedException {
         try {
             if (thumbnailOutputSequence == null) {
-                OutputSequenceStackFactory factory =
-                        OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
+                OutputSequenceStackFactory factory = OutputSequenceStackFactory.always2D();
                 thumbnailOutputSequence = factory.incrementingByOne(outputName, outputter);
             }
-            thumbnailOutputSequence.add(thumbnail.deriveStack(false));
+            return thumbnailOutputSequence.addAsynchronously(thumbnail.deriveStack(false));
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }

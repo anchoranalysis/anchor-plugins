@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -130,7 +131,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     public ThumbnailBatch<ObjectCollection> start(
             ObjectCollection objects,
             StreamableCollection<BoundingBox> boundingBoxes,
-            Optional<Stack> backgroundSource)
+            Optional<Stack> backgroundSource,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws OperationFailedException {
 
         if (!objects.isEmpty()) {
@@ -148,7 +150,12 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
                             backgroundChannelIndex);
 
             return new ThumbnailBatchOutline(
-                    scaler, objects, size.asExtent(), outlineWidth, colorForUnselectedObjects());
+                    scaler,
+                    objects,
+                    size.asExtent(),
+                    outlineWidth,
+                    colorForUnselectedObjects(),
+                    executionTimeRecorder);
         } else {
             return objectForBatch -> {
                 throw new CreateException("No objects are expected in this batch");
