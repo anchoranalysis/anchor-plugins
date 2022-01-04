@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.spatial.box.Extent;
@@ -45,6 +46,9 @@ import org.opencv.objdetect.HOGDescriptor;
 /**
  * Parameters for calculating a HOG Descriptor covering window-size, block-size etc.
  *
+ * <p>This class should implement a meaningful {@link Object#equals(Object)} and {@link #hashCode()} on
+ * its properties as it may be used a {@link CalculationPart}. The {@code interpolator}) is disconsidered.
+ * 
  * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = false)
@@ -76,6 +80,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
     @BeanField @Getter @Setter private int numberBins = 9;
 
     /** The interpolator to use for scaling images. */
+    @EqualsAndHashCode.Exclude
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
 

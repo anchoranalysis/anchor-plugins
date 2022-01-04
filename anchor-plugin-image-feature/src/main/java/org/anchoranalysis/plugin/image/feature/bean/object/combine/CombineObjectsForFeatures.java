@@ -162,20 +162,20 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     }
 
     /**
-     * Selects objects from an input that will be used for thumbnail generation
+     * Selects objects from an input that will be used for thumbnail generation.
      *
      * @param input the input.
-     * @return the thumbnail
+     * @return the thumbnail.
      */
     public abstract ObjectCollection objectsForThumbnail(T input) throws CreateException;
 
     /**
-     * Derives a list of inputs from an object-collection
+     * Derives a list of inputs from an object-collection.
      *
-     * @param objects the object-collection
-     * @param energyStack energy-stack used during feature calculation
-     * @param logger logger
-     * @return the list of inputs
+     * @param objects the object-collection.
+     * @param energyStack energy-stack used during feature calculation.
+     * @param logger the logger.
+     * @return the list of inputs.
      * @throws CreateException
      */
     protected abstract List<T> startBatchDeriveInputs(
