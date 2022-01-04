@@ -34,10 +34,6 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 public class KernelIterDescriptionSerializerPeriodicReporter
         extends ObjectSerializerPeriodicReporter<KernelDecision> {
 
-    public KernelIterDescriptionSerializerPeriodicReporter() {
-        super("kernelIterDescription");
-    }
-
     @Override
     protected Optional<KernelDecision> generateIterableElement(
             Reporting<VoxelizedMarksWithEnergy> reporting) {

@@ -48,8 +48,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 class ObjectsCostMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
 
-    private static final String MANIFEST_FUNCTION = "objectsCostMatrix";
-
     private final int numberDecimalPlaces;
 
     /**
@@ -58,7 +56,6 @@ class ObjectsCostMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
      * @param numberDecimalPlaces the number of decimal places to use for the cost in the CSV file.
      */
     public ObjectsCostMatrixGenerator(int numberDecimalPlaces) {
-        super(MANIFEST_FUNCTION);
         this.numberDecimalPlaces = numberDecimalPlaces;
     }
 

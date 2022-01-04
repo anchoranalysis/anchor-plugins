@@ -49,8 +49,6 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.All;
@@ -72,13 +70,7 @@ public abstract class GroupedStackBase<S, T>
     // START BEAN PROPERTIES
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
-    // END BEAN PROPERTIES
 
-    private static final ManifestDirectoryDescription MANIFEST_DESCRIPTION_GROUP_FOLDER =
-            new ManifestDirectoryDescription(
-                    "groupedDirectory", "groupedStack", new StringsWithoutOrder());
-
-    // START BEAN PROPERTIES
     /**
      * If defined, translates a file-path into a group. If not-defined, all images are treated as
      * part of the same group
@@ -139,10 +131,7 @@ public abstract class GroupedStackBase<S, T>
                         .getGroupMap()
                         .outputGroupedData(
                                 sharedState.getChannelChecker(),
-                                context.maybeSubdirectory(
-                                        subdirectoryName,
-                                        MANIFEST_DESCRIPTION_GROUP_FOLDER,
-                                        false));
+                                context.maybeSubdirectory(subdirectoryName, false));
             }
 
         } catch (IOException e) {

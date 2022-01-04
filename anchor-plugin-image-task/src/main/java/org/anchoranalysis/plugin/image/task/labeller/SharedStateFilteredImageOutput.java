@@ -40,8 +40,6 @@ import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadata;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -52,10 +50,6 @@ import org.anchoranalysis.plugin.image.task.bean.labeller.ImageLabeller;
  * @param <T> type of initialization for the {@link ImageLabeller}.
  */
 public class SharedStateFilteredImageOutput<T> {
-
-    private static final ManifestDirectoryDescription MANIFEST_DIRECTORY_LABELS =
-            new ManifestDirectoryDescription(
-                    "labels", "labelled_outputs", new StringsWithoutOrder());
 
     private ImageLabeller<T> filter;
     private Outputter baseOutputter;
@@ -148,9 +142,7 @@ public class SharedStateFilteredImageOutput<T> {
 
     private void initFilterOutputters(Path pathForBinding) throws InitializeException {
         Optional<Outputter> outputterLabelsSubdirectory =
-                baseOutputter
-                        .writerSelective()
-                        .createSubdirectory(outputNameImages, MANIFEST_DIRECTORY_LABELS, false);
+                baseOutputter.writerSelective().createSubdirectory(outputNameImages, false);
         this.outputters =
                 OptionalUtilities.map(
                         outputterLabelsSubdirectory,

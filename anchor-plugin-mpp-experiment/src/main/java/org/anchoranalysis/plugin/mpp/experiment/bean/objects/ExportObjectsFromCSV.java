@@ -54,8 +54,6 @@ import org.anchoranalysis.image.voxel.object.IntersectingObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -97,10 +95,6 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.MapGroupToRow;
 public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCSVSharedState> {
 
     private static final String GROUP_SUBDIRECTORY = "groups";
-
-    private static final ManifestDirectoryDescription GROUP_MANIFEST_DESCRIPTION =
-            new ManifestDirectoryDescription(
-                    "groupedDirectory", "groupedOutline", new StringsWithoutOrder());
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter
@@ -144,9 +138,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
 
         FromCSVInput input = inputBound.getInput();
         InputOutputContext groupContext =
-                inputBound
-                        .getContextJob()
-                        .subdirectory(GROUP_SUBDIRECTORY, GROUP_MANIFEST_DESCRIPTION, false);
+                inputBound.getContextJob().subdirectory(GROUP_SUBDIRECTORY, false);
         try {
             IndexedCSVRows groupedRows =
                     inputBound

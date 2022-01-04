@@ -1,10 +1,37 @@
+/*-
+ * #%L
+ * anchor-plugin-image-task
+ * %%
+ * Copyright (C) 2010 - 2022 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.plugin.image.task.feature;
 
 import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Function;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.results.FeatureCSVWriterFactory;
 import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
@@ -93,21 +120,27 @@ public class FeatureResultsAndThumbnails {
      *     what outputs are enabled.
      * @param thumbnail supplies the thumbnail to write, which may or may not be called, depending
      *     on what outputs are enabled.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the operation cannot be successfully completed.
      */
     public void add(
             CheckedSupplier<LabelledResultsVector, OperationFailedException> resultToAdd,
             CheckedSupplier<Optional<DisplayStack>, OperationFailedException> thumbnail)
             throws OperationFailedException {
+
+        ExecutionTimeRecorder recorder = context.getContext().getExecutionTimeRecorder();
+
         // Synchronization is important to preserve identical order in thumbnails and in the
         // exported feature CSV file, as multiple threads will concurrently add results.
-        LabelledResultsVector labelledResult = null;
-        if (calculationResultsNeeded) {
-            labelledResult = resultToAdd.get();
-        }
+        LabelledResultsVector labelledResult =
+                calculationResultsNeeded
+                        ? recorder.recordExecutionTime(
+                                "Calculate labelled results", resultToAdd::get)
+                        : null;
 
         Optional<DisplayStack> thumbnailStack =
-                thumbnailsEnabled ? thumbnail.get() : Optional.empty();
+                thumbnailsEnabled
+                        ? recorder.recordExecutionTime("Thumbnail for input", thumbnail::get)
+                        : Optional.empty();
 
         // Adding to the results map and writing the thumbnail need to happen together in the same
         // synchronized block
@@ -116,20 +149,30 @@ public class FeatureResultsAndThumbnails {
         //  block to stop concurrent threads waiting needlessly. The thumbnail writing I/O remains
         // inside the synchronized
         //  block.
+        CheckedRunnable<OutputWriteFailedException> thumbnailOutputter = null;
         synchronized (this) {
             // Add results to grouped-map, and write to CSV file
             if (calculationResultsNeeded) {
-                results.add(labelledResult);
+                recorder.recordExecutionTime("Writing CSV", () -> results.add(labelledResult));
             }
 
-            if (thumbnailsEnabled) {
-                context.getContext()
-                        .getExecutionTimeRecorder()
-                        .recordExecutionTime(
-                                "Writing thumbnail",
-                                () ->
-                                        thumbnails.maybeOutputThumbnail(
-                                                thumbnailStack, outputter, OUTPUT_THUMBNAILS));
+            if (thumbnailsEnabled && thumbnailStack.isPresent()) {
+                // Perform the first part of the thumbnail outputting operation, deferring the
+                // second part
+                // until we are outside the synchronized block.
+                thumbnailOutputter =
+                        thumbnails.outputThumbnail(
+                                thumbnailStack.get(), outputter, OUTPUT_THUMBNAILS);
+            }
+        }
+
+        // Perform the second part of the thumbnail outputting operation (outside the synchronized
+        // block).
+        if (thumbnailOutputter != null) {
+            try {
+                recorder.recordExecutionTime("Writing thumbnail", thumbnailOutputter::run);
+            } catch (OutputWriteFailedException e) {
+                throw new OperationFailedException(e);
             }
         }
     }

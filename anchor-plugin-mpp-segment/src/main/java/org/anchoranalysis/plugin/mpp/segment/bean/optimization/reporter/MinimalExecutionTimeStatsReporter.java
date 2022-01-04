@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -89,11 +88,6 @@ public class MinimalExecutionTimeStatsReporter
         stats.setTotalExecutionTime(stopWatch.getTime());
         stopWatch.stop();
 
-        outputter
-                .writerSelective()
-                .write(
-                        outputName,
-                        () -> new XStreamGenerator<>(Optional.of("minimalExecutionTimeStats")),
-                        () -> stats);
+        outputter.writerSelective().write(outputName, XStreamGenerator::new, () -> stats);
     }
 }

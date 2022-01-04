@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.marks;
 
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -66,8 +65,6 @@ class MarksOutputter {
     /** XML serialized version of marks plus an energy breakdown */
     private static final String OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED = "optimalMarksWithEnergy";
 
-    private static final Optional<String> MANIFEST_FUNCTION_MARKS = Optional.of("marks");
-
     public static void outputResults(
             MarksWithEnergyBreakdown marks,
             DualStack dualStack,
@@ -99,10 +96,7 @@ class MarksOutputter {
     }
 
     private static void writeMarks(MarksWithEnergyBreakdown marks, WriterRouterErrors writer) {
-        writer.write(
-                OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED,
-                () -> new XStreamGenerator<>(MANIFEST_FUNCTION_MARKS),
-                () -> marks);
+        writer.write(OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED, XStreamGenerator::new, () -> marks);
     }
 
     private static void writeMarksAsRaster(
@@ -141,14 +135,8 @@ class MarksOutputter {
 
     private static void writeFinalMarks(
             ElementSupplier<MarkCollection> marks, WriterRouterErrors writer) {
-        writer.write(
-                OUTPUT_MARKS_XML_SERIALIZED,
-                () -> new XStreamGenerator<>(MANIFEST_FUNCTION_MARKS),
-                marks);
-        writer.write(
-                "finalMarksBinary",
-                () -> new ObjectOutputStreamGenerator<>(MANIFEST_FUNCTION_MARKS),
-                marks);
+        writer.write(OUTPUT_MARKS_XML_SERIALIZED, XStreamGenerator::new, marks);
+        writer.write("finalMarksBinary", ObjectOutputStreamGenerator::new, marks);
     }
 
     private static void outputMarksSize(

@@ -51,8 +51,6 @@ import org.apache.commons.lang.time.StopWatch;
 public class CSVReporterAggregated extends ReporterAggregate<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
 
-    public static final String MANIFEST_FUNCTION = "interval_aggregate_stats";
-
     private static final String OUTPUT_CSV_STATISTICS = "statisticsInterval";
 
     private Optional<TextFileOutput> csvOutput;
@@ -82,8 +80,7 @@ public class CSVReporterAggregated extends ReporterAggregate<VoxelizedMarksWithE
         super.reportBegin(initialization);
 
         this.csvOutput =
-                CSVReporterUtilities.createFileOutputFor(
-                        OUTPUT_CSV_STATISTICS, initialization, MANIFEST_FUNCTION);
+                CSVReporterUtilities.createFileOutputFor(OUTPUT_CSV_STATISTICS, initialization);
 
         timer = new StopWatch();
         timer.start();

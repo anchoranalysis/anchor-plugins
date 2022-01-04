@@ -47,7 +47,8 @@ import org.opencv.objdetect.HOGDescriptor;
  *
  * @author Owen Feehan
  */
-@EqualsAndHashCode(callSuper = false) @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class HOGParameters extends AnchorBean<HOGParameters> {
 
     private static final String BLOCK_SIZE = "block-size";
@@ -77,10 +78,10 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
-    
+
     /**
      * Creates with a particular {@link Interpolator}.
-     * 
+     *
      * @param interpolator the interpolator.
      */
     public HOGParameters(Interpolator interpolator) {

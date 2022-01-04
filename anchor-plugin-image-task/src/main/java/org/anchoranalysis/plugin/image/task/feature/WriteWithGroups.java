@@ -38,8 +38,6 @@ import org.anchoranalysis.feature.io.results.LabelledResultsCollector;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 import org.anchoranalysis.feature.io.results.group.GroupedResults;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
@@ -66,16 +64,6 @@ import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCach
  * @author Owen Feehan
  */
 class WriteWithGroups implements LabelledResultsCollector {
-
-    /** The highest-level group directory */
-    private static final ManifestDirectoryDescription MANIFEST_GROUP_ROOT =
-            new ManifestDirectoryDescription(
-                    "groupedResultsRoot", "featureCsv", new StringsWithoutOrder());
-
-    /** The second highest-level group directory */
-    private static final ManifestDirectoryDescription MANIFEST_GROUP_SUBROOT =
-            new ManifestDirectoryDescription(
-                    "groupedResults", "featureCsv", new StringsWithoutOrder());
 
     /** Where to write the non-aggregated results. */
     private final LabelledResultsCSVWriter nonAggregatedResults;
@@ -127,9 +115,7 @@ class WriteWithGroups implements LabelledResultsCollector {
 
         InputOutputContextSubdirectoryCache contextGroups =
                 new InputOutputContextSubdirectoryCache(
-                        context.subdirectory("grouped", MANIFEST_GROUP_ROOT, true),
-                        MANIFEST_GROUP_SUBROOT,
-                        true);
+                        context.subdirectory("grouped", true), true);
 
         groupedResults.writeGroupResults(
                 featuresAggregate,

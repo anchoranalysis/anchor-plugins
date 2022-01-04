@@ -38,7 +38,7 @@ public class AnnotationAggregateCSVGenerator
         extends FeatureTableCSVGenerator<List<ImageAnnotation>> {
 
     public AnnotationAggregateCSVGenerator() {
-        super("aggregateAnnotationLabel", Arrays.asList("id", "label"));
+        super(Arrays.asList("id", "label"));
     }
 
     @Override

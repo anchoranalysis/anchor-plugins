@@ -186,10 +186,7 @@ public class ImageAssignLabel<T>
             outputter
                     .get()
                     .writerSelective()
-                    .write(
-                            outputName,
-                            () -> new StackGenerator(true, Optional.of("raster"), false),
-                            () -> stack);
+                    .write(outputName, () -> new StackGenerator(true, false), () -> stack);
         }
     }
 }

@@ -38,7 +38,7 @@ import org.anchoranalysis.math.arithmetic.Counter;
 import org.anchoranalysis.plugin.io.bean.file.copy.naming.CopyFilesNaming;
 
 /**
- * A counter that also records a manifest of copied outputs in a message-log and CSV file.
+ * A counter that also records outputs in a message-log and CSV file.
  *
  * <p>The following outputs are produced:
  *

@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.plugin.image.task.feature;
 
-import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.OutputSequenceStackFactory;
@@ -41,26 +41,31 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  */
 class ThumbnailsWriter {
 
-    private static final String MANIFEST_FUNCTION_THUMBNAIL = "thumbnail";
-
     // Generates thumbnails, lazily if needed.
     private OutputSequenceIncrementing<Stack> thumbnailOutputSequence;
 
     /**
-     * Outputs a thumbnail if it exists, and the outputter allows it.
+     * Outputs a thumbnail to the file-system.
+     *
+     * <p>Part of this operation occurs immediately (so that it can be in a synchronized block), and
+     * the remainder is returned as a runnable to be executed later (which can be outside the
+     * synchronized block).
      *
      * @param thumbnail the thumbnail to maybe output.
      * @param outputter the outputter.
      * @param outputName the name to use when outputting.
+     * @return a runnable, that when called, completes the remain part of the outputting operation.
      * @throws OperationFailedException if the thumbnail cannot be successfully outputted.
      */
-    public void maybeOutputThumbnail(
-            Optional<DisplayStack> thumbnail, OutputterChecked outputter, String outputName)
+    public CheckedRunnable<OutputWriteFailedException> outputThumbnail(
+            DisplayStack thumbnail, OutputterChecked outputter, String outputName)
             throws OperationFailedException {
         try {
-            if (thumbnail.isPresent()) {
-                outputThumbnail(thumbnail.get(), outputter, outputName);
+            if (thumbnailOutputSequence == null) {
+                OutputSequenceStackFactory factory = OutputSequenceStackFactory.always2D();
+                thumbnailOutputSequence = factory.incrementingByOne(outputName, outputter);
             }
+            return thumbnailOutputSequence.addAsynchronously(thumbnail.deriveStack(false));
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
@@ -69,17 +74,5 @@ class ThumbnailsWriter {
     /** Deletes the stored thumbnails from memory. */
     public void removeStoredThumbnails() {
         thumbnailOutputSequence = null;
-    }
-
-    /** Outputs a thumbnail to the file-system. */
-    private void outputThumbnail(
-            DisplayStack thumbnail, OutputterChecked outputter, String outputName)
-            throws OutputWriteFailedException {
-        if (thumbnailOutputSequence == null) {
-            OutputSequenceStackFactory factory =
-                    OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
-            thumbnailOutputSequence = factory.incrementingByOne(outputName, outputter);
-        }
-        thumbnailOutputSequence.add(thumbnail.deriveStack(false));
     }
 }

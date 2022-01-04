@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
@@ -109,6 +110,10 @@ public class FeatureCalculationContext<S> {
 
     public Logger getLogger() {
         return context.getLogger();
+    }
+
+    public OperationContext getOperationContext() {
+        return context.operationContext();
     }
 
     private boolean areThumbnailsEnabled(InputOutputContext context) {

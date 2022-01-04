@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.opencv.convert;
 
 import com.google.common.base.Preconditions;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.function.BiConsumer;
 import lombok.AccessLevel;
@@ -257,12 +258,15 @@ public class ConvertToMat {
         UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
         UnsignedByteBuffer blue = BufferHelper.extractByte(channelBlue);
 
-        extent.iterateOverXY(
-                point -> {
-                    // Note BGR format in OpenCV
-                    byte[] colArr = new byte[] {blue.getRaw(), green.getRaw(), red.getRaw()};
-                    mat.put(point.y(), point.x(), colArr);
-                });
+        // It's quickest to direct access the native memory via a direct ByteBuffer.
+        ByteBuffer out =
+                ByteBufferFromNativeAddress.wrapAddress(
+                        mat.dataAddr(), channelRed.extent().areaXY() * 3);
+        while (red.hasRemaining()) {
+            out.put(blue.getRaw());
+            out.put(green.getRaw());
+            out.put(red.getRaw());
+        }
         return mat;
     }
 }

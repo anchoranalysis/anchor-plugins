@@ -59,8 +59,9 @@ class VoxelsRGBFromMat {
         UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
         UnsignedByteBuffer blue = BufferHelper.extractByte(channelBlue);
 
-        ByteBuffer buffer = ByteBuffer.allocate(channelRed.extent().areaXY() * 3);
-        mat.get(0, 0, buffer.array());
+        ByteBuffer buffer =
+                ByteBufferFromNativeAddress.wrapAddress(
+                        mat.dataAddr(), channelRed.extent().areaXY() * 3);
 
         while (buffer.hasRemaining()) {
             // OpenCV uses a BGR order as opposed to RGB in Anchor.

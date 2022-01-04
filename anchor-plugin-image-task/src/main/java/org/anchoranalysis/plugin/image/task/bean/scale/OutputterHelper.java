@@ -147,8 +147,7 @@ class OutputterHelper {
             boolean suppressOutputNameIfPossible,
             boolean always2D)
             throws OutputWriteFailedException {
-        ElementWriterSupplier<Stack> writerSupplier =
-                () -> new StackGenerator("scaledImage", always2D);
+        ElementWriterSupplier<Stack> writerSupplier = () -> new StackGenerator(always2D);
         ElementSupplier<Stack> elementSupplier = () -> extractArbitraryStack(stacks);
         if (suppressOutputNameIfPossible) {
             writer.writeWithoutName(outputName, writerSupplier, elementSupplier);

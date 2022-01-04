@@ -30,6 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.box.DrawObjectOnStackGenerator;
@@ -54,6 +55,7 @@ class ThumbnailBatchOutline implements ThumbnailBatch<ObjectCollection> {
     private final Extent sceneSizeScaled;
     private final Extent sceneSizeUnscaled;
     private final Optional<Color> colorUnselectedObjects;
+    private final ExecutionTimeRecorder recorder;
 
     /**
      * Sets up the generator and the related {@code sceneExtentScaled} variable.
@@ -65,13 +67,15 @@ class ThumbnailBatchOutline implements ThumbnailBatch<ObjectCollection> {
      * @param outlineWidth how strong to draw the outline of objects in the thumbnails.
      * @param colorUnselectedObjects what color to draw the outline of unselected objects for. If
      *     {@link Optional#empty()}, these objects are not drawn at all.
+     * @param recorder records the execution-time of particular operations.
      */
     public ThumbnailBatchOutline(
             FlattenAndScaler scaler,
             ObjectCollection objectsUnscaled,
             Extent sceneSizeUnscaled,
             int outlineWidth,
-            Optional<Color> colorUnselectedObjects) {
+            Optional<Color> colorUnselectedObjects,
+            ExecutionTimeRecorder recorder) {
         this.scaler = scaler;
 
         this.colorUnselectedObjects = colorUnselectedObjects;
@@ -79,6 +83,8 @@ class ThumbnailBatchOutline implements ThumbnailBatch<ObjectCollection> {
         this.sceneSizeUnscaled = sceneSizeUnscaled;
 
         this.sceneSizeScaled = scaler.extentFromStackOrObjects(objectsUnscaled);
+
+        this.recorder = recorder;
 
         // Create a generator that draws objects on the background
         this.generator =
@@ -107,8 +113,12 @@ class ThumbnailBatchOutline implements ThumbnailBatch<ObjectCollection> {
             assert centeredBox.extent().equals(sceneSizeUnscaled);
             assert sceneSizeScaled.contains(centeredBox);
 
+            BoundedList<ObjectMask> objectsToDisplay =
+                    determineObjectsForGenerator(objectsScaled, centeredBox);
             Stack transformed =
-                    generator.transform(determineObjectsForGenerator(objectsScaled, centeredBox));
+                    recorder.recordExecutionTime(
+                            "Transforming thumbnail objects",
+                            () -> generator.transform(objectsToDisplay));
             return DisplayStack.create(transformed);
 
         } catch (OutputWriteFailedException | OperationFailedException e) {
@@ -123,11 +133,12 @@ class ThumbnailBatchOutline implements ThumbnailBatch<ObjectCollection> {
         // Add any other objects which intersect with the scaled-bounding box, excluding
         //  the object themselves
         if (colorUnselectedObjects.isPresent()) {
-            return objectsMapped.addObjectsNoBoundingBoxChange(
+            ObjectCollection intersectingObjects =
                     scaler.objectsThatIntersectWith(
-                                    objectsMapped.boundingBox(),
-                                    ObjectCollectionFactory.of(objectsScaled.list()))
-                            .asList());
+                            objectsMapped.boundingBox(),
+                            ObjectCollectionFactory.of(objectsScaled.list()));
+
+            return objectsMapped.addObjectsNoBoundingBoxChange(intersectingObjects.asList());
         } else {
             return objectsMapped;
         }
