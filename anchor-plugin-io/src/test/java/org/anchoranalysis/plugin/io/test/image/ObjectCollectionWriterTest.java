@@ -45,7 +45,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Writes an object-collection to the filesystem, then reads it back again, and makes sure it is
  * identical
  *
- * @author feehano
+ * @author Owen Feehan
  */
 class ObjectCollectionWriterTest {
 

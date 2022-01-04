@@ -65,7 +65,7 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
                 .writerSecondLevel(outputName)
                 .write(
                         partName,
-                        () -> new ChannelGenerator(),
+                        ChannelGenerator::new,
                         () -> generatorWithMean(agg, outputType, partName, context));
     }
 

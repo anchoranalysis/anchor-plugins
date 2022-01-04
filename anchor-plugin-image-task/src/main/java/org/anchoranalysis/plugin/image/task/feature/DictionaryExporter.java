@@ -56,7 +56,7 @@ class DictionaryExporter {
 
     private static void writeDictionary(
             ElementSupplier<Dictionary> dictionary, Outputter outputter, String outputName) {
-        outputter.writerSelective().write(outputName, () -> new DictionaryGenerator(), dictionary);
+        outputter.writerSelective().write(outputName, DictionaryGenerator::new, dictionary);
     }
 
     private static Dictionary convert(

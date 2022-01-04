@@ -97,12 +97,12 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * Creates features that will be applied on the objects. Features should always be duplicated
      * from the input list.
      *
-     * @param featuresSingleObject beans defining features to be applied to single-objects
-     * @param storeFactory creates as new {@link NamedFeatureStore} as needed
+     * @param featuresSingleObject beans defining features to be applied to single-objects.
+     * @param storeFactory creates as new {@link NamedFeatureStore} as needed.
      * @param suppressErrors when true, exceptions aren't thrown when feature-calculations fail, but
      *     rather a log error message is written.
      * @return a calculator for feature tables that may apply various features derived from {@code
-     *     featuresSingleObject}
+     *     featuresSingleObject}.
      * @throws CreateException
      */
     public abstract FeatureTableCalculator<T> createFeatures(
@@ -118,11 +118,11 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * Derives a list of inputs (i.e. rows in a feature table) and starts a batch of related
      * thumbnail generation.
      *
-     * @param objects the objects from which inputs are derived
-     * @param energyStack energy-stack used during feature calculation
-     * @param thumbnailsEnabled whether thumbnail-generation is enabled
-     * @param logger logger
-     * @return the list of inputs
+     * @param objects the objects from which inputs are derived.
+     * @param energyStack energy-stack used during feature calculation.
+     * @param thumbnailsEnabled whether thumbnail-generation is enabled.
+     * @param context context in which the operation occurs.
+     * @return the list of inputs.
      * @throws CreateException
      */
     public ListWithThumbnails<T, ObjectCollection> deriveInputsStartBatch(
@@ -164,7 +164,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     /**
      * Selects objects from an input that will be used for thumbnail generation
      *
-     * @param input the input
+     * @param input the input.
      * @return the thumbnail
      */
     public abstract ObjectCollection objectsForThumbnail(T input) throws CreateException;

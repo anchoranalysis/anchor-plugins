@@ -145,10 +145,12 @@ public class ExportReportFeatures extends Task<MultiInput, CSVWriter> {
         writer.close();
     }
 
+    @Override
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_REPORT);
     }
 
+    @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }

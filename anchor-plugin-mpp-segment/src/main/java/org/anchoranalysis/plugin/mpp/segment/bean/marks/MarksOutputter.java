@@ -96,10 +96,7 @@ class MarksOutputter {
     }
 
     private static void writeMarks(MarksWithEnergyBreakdown marks, WriterRouterErrors writer) {
-        writer.write(
-                OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED,
-                () -> new XStreamGenerator<>(),
-                () -> marks);
+        writer.write(OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED, XStreamGenerator::new, () -> marks);
     }
 
     private static void writeMarksAsRaster(
@@ -138,8 +135,8 @@ class MarksOutputter {
 
     private static void writeFinalMarks(
             ElementSupplier<MarkCollection> marks, WriterRouterErrors writer) {
-        writer.write(OUTPUT_MARKS_XML_SERIALIZED, () -> new XStreamGenerator<>(), marks);
-        writer.write("finalMarksBinary", () -> new ObjectOutputStreamGenerator<>(), marks);
+        writer.write(OUTPUT_MARKS_XML_SERIALIZED, XStreamGenerator::new, marks);
+        writer.write("finalMarksBinary", ObjectOutputStreamGenerator::new, marks);
     }
 
     private static void outputMarksSize(
