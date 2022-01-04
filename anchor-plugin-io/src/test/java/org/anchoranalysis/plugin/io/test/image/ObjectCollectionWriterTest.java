@@ -62,35 +62,17 @@ class ObjectCollectionWriterTest {
     void testHdf5()
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
-        testWriteRead(true);
-    }
-
-    @Test
-    void testTIFFDirectory()
-            throws SetOperationFailedException, DeserializationFailedException,
-                    BindFailedException {
-        testWriteRead(false);
-    }
-
-    private void testWriteRead(boolean hdf5)
-            throws SetOperationFailedException, DeserializationFailedException,
-                    BindFailedException {
-
         ObjectCollection objects = fixture.createMockObjects(2, 7);
-        writeObjects(objects, directory, generator(hdf5, false));
+        writeObjects(objects, directory, generator(true, false));
 
         ObjectCollection objectsRead =
-                readObjects(outputPathExpected(hdf5, directory), LoggingFixture.suppressedLogger());
+                readObjects(outputPathExpected(directory), LoggingFixture.suppressedLogger());
 
         assertEquals(objects.size(), objectsRead.size(), "Objects size");
         assertTrue(objects.equalsDeep(objectsRead));
     }
 
-    private static Path outputPathExpected(boolean hdf5, Path path) {
-        if (hdf5) {
-            return path.resolve("objects.h5");
-        } else {
-            return path.resolve("objects");
-        }
+    private static Path outputPathExpected(Path path) {
+        return path.resolve("objects.h5");
     }
 }
