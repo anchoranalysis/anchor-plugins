@@ -46,7 +46,7 @@ public class NullReporter<T> extends FeedbackReceiverBean<T> {
     }
 
     @Override
-    public void reportItr(Reporting<T> reporting) {
+    public void reportIteration(Reporting<T> reporting) {
         // NOTHING TO DO
     }
 

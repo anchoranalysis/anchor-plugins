@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.io.imagej.bean.stack.writer.PNG;
-import org.anchoranalysis.test.image.rasterwriter.PNGTestBase;
+import org.anchoranalysis.test.image.stackwriter.PNGTestBase;
 
 /**
  * Tests {@link PNG}, the ImageJ PNG writer.

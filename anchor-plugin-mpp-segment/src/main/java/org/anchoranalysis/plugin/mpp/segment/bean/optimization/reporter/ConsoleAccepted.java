@@ -49,7 +49,7 @@ public class ConsoleAccepted extends FeedbackReceiverBean<VoxelizedMarksWithEner
     }
 
     @Override
-    public void reportItr(Reporting<VoxelizedMarksWithEnergy> reporting) {
+    public void reportIteration(Reporting<VoxelizedMarksWithEnergy> reporting) {
 
         if (reporting.isAccepted()) {
 

@@ -71,7 +71,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     }
 
     @Override
-    public void reportItr(Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException {
+    public void reportIteration(Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException {
         try {
             if (reporting.isAccepted() && outputSequence != null) {
                 addToSequenceWriter(

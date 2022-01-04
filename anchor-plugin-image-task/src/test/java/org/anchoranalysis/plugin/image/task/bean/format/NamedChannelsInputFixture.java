@@ -41,7 +41,7 @@ import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.test.image.StackFixture;
-import org.anchoranalysis.test.image.rasterwriter.ChannelSpecification;
+import org.anchoranalysis.test.image.stackwriter.ChannelSpecification;
 
 class NamedChannelsInputFixture extends NamedChannelsInput {
 

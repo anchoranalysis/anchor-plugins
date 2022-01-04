@@ -51,7 +51,6 @@ import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubdire
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
-import org.anchoranalysis.overlay.identifier.IdentifierFromOverlay;
 
 public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergyBreakdown> {
 
@@ -72,7 +71,7 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
         }
 
         Generator<ColoredMarksWithDisplayStack> iterableRaster =
-                new MarksGenerator(new Outline(), new IdentifierFromOverlay());
+                new MarksGenerator(new Outline(), (overlay,iteration) -> overlay.getIdentifier());
 
         // This no longer needs to be combined, it's a legacy of when a HTML reporter was attached
         //   cleaning up woould be nice

@@ -50,7 +50,7 @@ public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEner
     private Optional<TextFileOutput> csvOutput;
 
     @Override
-    public void reportItr(Reporting<VoxelizedMarksWithEnergy> reporting) {
+    public void reportIteration(Reporting<VoxelizedMarksWithEnergy> reporting) {
         // NOTHING TO DO
     }
 

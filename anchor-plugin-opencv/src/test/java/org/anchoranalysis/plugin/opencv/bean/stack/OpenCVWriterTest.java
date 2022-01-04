@@ -26,7 +26,7 @@
 package org.anchoranalysis.plugin.opencv.bean.stack;
 
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
-import org.anchoranalysis.test.image.rasterwriter.PNGTestBase;
+import org.anchoranalysis.test.image.stackwriter.PNGTestBase;
 
 class OpenCVWriterTest extends PNGTestBase {
 

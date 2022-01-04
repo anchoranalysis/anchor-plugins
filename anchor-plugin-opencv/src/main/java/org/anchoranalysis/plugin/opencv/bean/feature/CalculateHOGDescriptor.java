@@ -63,7 +63,6 @@ class CalculateHOGDescriptor extends CalculationPart<float[], FeatureInputStack>
     @Override
     protected float[] execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
-        	System.out.println("Executing CalculateHOGDescriptor");
             Stack stack = extractStack(input.getEnergyStackRequired());
             checkSize(stack.extent());
             return extractHOGDescriptor(stack);
