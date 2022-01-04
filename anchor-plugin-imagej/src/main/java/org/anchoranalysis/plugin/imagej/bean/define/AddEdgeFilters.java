@@ -50,17 +50,17 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
     private static final String NAME_GAUSSIAN = "Blurred";
 
     // START BEAN PROPERTIES
-    /** The ID of the channel that provides the input to the filter */
+    /** The ID of the channel that provides the input to the filter. */
     @BeanField @Getter @Setter private String channelID;
 
     @BeanField @Positive @Getter @Setter private double medianRadiusMeters = 0;
 
     @BeanField @Positive @Getter @Setter private double gaussianSigmaMeters = 0;
 
-    /** If true, the median filter is included */
+    /** If true, the median filter is included. */
     @BeanField @Getter @Setter private boolean median = true;
 
-    /** If true, the Gaussian filter is included */
+    /** If true, the Gaussian filter is included. */
     @BeanField @Getter @Setter private boolean gaussian = true;
     // END BEAN PROPERTIES
 
