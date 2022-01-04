@@ -24,6 +24,7 @@
  * #L%
  */
 /**
- * Segmenting a {@link org.anchoranalysis.image.core.stack.Stack} using the ONNX Runtime to produce an {@link org.anchoranalysis.image.voxel.object.ObjectCollection}.
+ * Segmenting a {@link org.anchoranalysis.image.core.stack.Stack} using the ONNX Runtime to produce
+ * an {@link org.anchoranalysis.image.voxel.object.ObjectCollection}.
  */
 package org.anchoranalysis.plugin.onnx.bean.object.segment.stack;

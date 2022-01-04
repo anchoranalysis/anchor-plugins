@@ -41,14 +41,15 @@ class SegmentTextFromONNXTest extends InstanceSegmentationTestBase {
         segment.setIncludeBatchDimension(true);
         segment.setInterleaveChannels(true);
         segment.setReadFromResources(true);
-        
+
         try {
-            RegisterBeanFactories.getDefaultInstances().putInstanceFor(Interpolator.class, new ImageJ());
+            RegisterBeanFactories.getDefaultInstances()
+                    .putInstanceFor(Interpolator.class, new ImageJ());
             segment.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
         } catch (BeanMisconfiguredException e) {
             throw new AnchorFriendlyRuntimeException(e);
         }
-        
+
         return new SuppressNonMaximum<>(segment, new ThresholdConfidence(), false);
     }
 

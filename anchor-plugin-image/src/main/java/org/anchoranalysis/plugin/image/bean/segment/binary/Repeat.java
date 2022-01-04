@@ -62,7 +62,8 @@ public class Repeat extends BinarySegmentationUnary {
 
         int count = 0;
         while (count++ < iterations) {
-            BinaryVoxels<UnsignedByteBuffer> outNew = segment.segment(voxels, parameters, objectMask);
+            BinaryVoxels<UnsignedByteBuffer> outNew =
+                    segment.segment(voxels, parameters, objectMask);
 
             if (outNew == null) {
                 return outOld;

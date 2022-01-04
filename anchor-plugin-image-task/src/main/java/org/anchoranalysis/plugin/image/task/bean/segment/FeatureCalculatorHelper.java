@@ -62,14 +62,19 @@ class FeatureCalculatorHelper {
 
         String imageIdentifier = input.getInput().identifier();
 
-        calculator.calculateForObjects(
-                objects,
-                energyStack,
-                (instanceIdentifier, groupGeneratorName, index) ->
-                        rowLabelsFor(
-                                imageIdentifier,
-                                instanceIdentifier,
-                                segments.get(index).getConfidence()));
+        input.getContextJob()
+                .getExecutionTimeRecorder()
+                .recordExecutionTime(
+                        "Calculate for objects",
+                        () ->
+                                calculator.calculateForObjects(
+                                        objects,
+                                        energyStack,
+                                        (instanceIdentifier, groupGeneratorName, index) ->
+                                                rowLabelsFor(
+                                                        imageIdentifier,
+                                                        instanceIdentifier,
+                                                        segments.get(index).getConfidence())));
     }
 
     /** Constructs a {@link RowLabels} instance for a particular instance in a particular image. */

@@ -66,21 +66,31 @@ public class VoxelsResizerOpenCV extends VoxelsResizer {
     }
 
     /** Performs the resize operation from one {@link Mat} to another. */
-    private static Mat resize(Mat unscaled, Extent extentSource, Extent extentDestination, int type) {
+    private static Mat resize(
+            Mat unscaled, Extent extentSource, Extent extentDestination, int type) {
         Size size = new Size(extentDestination.x(), extentDestination.y());
         Mat scaled = new Mat(size, type);
         // See
         // https://docs.opencv.org/3.1.0/da/d54/group__imgproc__transform.html#ga47a974309e9102f5f08231edc7e7529d
-        Imgproc.resize(unscaled, scaled, size, 0.0, 0.0, selectInterpolator(extentSource, extentDestination));
+        Imgproc.resize(
+                unscaled,
+                scaled,
+                size,
+                0.0,
+                0.0,
+                selectInterpolator(extentSource, extentDestination));
         return scaled;
     }
-    
-    /** Multiplexes between {@value ImgProc#INTER_AREA} (if downsampling) and {@value ImgProc#INTER_LINEAR} if upsampling. */ 
+
+    /**
+     * Multiplexes between {@value ImgProc#INTER_AREA} (if downsampling) and {@value
+     * ImgProc#INTER_LINEAR} if upsampling.
+     */
     private static int selectInterpolator(Extent source, Extent destination) {
-    	if (destination.anyDimensionIsLargerThan(source)) {
-    		return Imgproc.INTER_LINEAR;
-    	} else {
-    		return Imgproc.INTER_AREA;
-    	}
+        if (destination.anyDimensionIsLargerThan(source)) {
+            return Imgproc.INTER_LINEAR;
+        } else {
+            return Imgproc.INTER_AREA;
+        }
     }
 }

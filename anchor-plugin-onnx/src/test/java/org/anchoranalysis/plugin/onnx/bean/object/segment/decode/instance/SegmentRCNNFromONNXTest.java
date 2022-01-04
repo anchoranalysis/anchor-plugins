@@ -36,14 +36,15 @@ class SegmentRCNNFromONNXTest extends InstanceSegmentationTestBase {
         segment.setScaleInput(new ToDimensions(1088, 800));
         segment.setInputName("image");
         segment.setReadFromResources(true);
-        
+
         try {
-            RegisterBeanFactories.getDefaultInstances().putInstanceFor(Interpolator.class, new ImageJ());
+            RegisterBeanFactories.getDefaultInstances()
+                    .putInstanceFor(Interpolator.class, new ImageJ());
             segment.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
         } catch (BeanMisconfiguredException e) {
             throw new AnchorFriendlyRuntimeException(e);
         }
-        
+
         return new SuppressNonMaximum<>(segment, new RemoveOverlappingObjects(), false);
     }
 }

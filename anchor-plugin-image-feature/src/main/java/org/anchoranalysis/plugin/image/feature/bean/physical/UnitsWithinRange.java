@@ -67,8 +67,7 @@ public class UnitsWithinRange<T extends FeatureInputWithResolution> extends With
      * <p>We default to volume as units, but it could also be area. It's arbitrary for
      * infinity-value.
      */
-    @BeanField @Getter @Setter
-    private UnitValueExtent max = new VolumeVoxels(Double.MAX_VALUE);
+    @BeanField @Getter @Setter private UnitValueExtent max = new VolumeVoxels(Double.MAX_VALUE);
     // END BEAN PROPERTIES
 
     @Override

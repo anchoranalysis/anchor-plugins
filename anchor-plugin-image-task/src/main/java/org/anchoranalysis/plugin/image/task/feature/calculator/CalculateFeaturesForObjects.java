@@ -82,7 +82,14 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
             ObjectCollectionProvider provider, LabelsForInput labelsForInput)
             throws OperationFailedException {
         ObjectCollection objects =
-                objectsFromProvider(provider, initialization.getImage(), context.getLogger());
+                context.getExecutionTimeRecorder()
+                        .recordExecutionTime(
+                                "Objects from provider",
+                                () ->
+                                        objectsFromProvider(
+                                                provider,
+                                                initialization.getImage(),
+                                                context.getLogger()));
         calculateForObjects(objects, initialization.getEnergyStack(), labelsForInput);
     }
 
@@ -100,11 +107,15 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
             throws OperationFailedException {
         try {
             ListWithThumbnails<T, ObjectCollection> inputs =
-                    table.deriveInputsStartBatch(
-                            objects,
-                            energyStack,
-                            context.isThumbnailsEnabled(),
-                            context.getLogger());
+                    context.getExecutionTimeRecorder()
+                            .recordExecutionTime(
+                                    "Derive inputs start batch",
+                                    () ->
+                                            table.deriveInputsStartBatch(
+                                                    objects,
+                                                    energyStack,
+                                                    context.isThumbnailsEnabled(),
+                                                    context.getLogger()));
 
             calculateManyFeaturesInto(inputs, labelsForInput);
 

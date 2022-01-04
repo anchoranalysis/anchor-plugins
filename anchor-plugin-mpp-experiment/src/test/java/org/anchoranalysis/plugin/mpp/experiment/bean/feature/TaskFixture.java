@@ -95,8 +95,8 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
         task.setFeaturesAggregate(featureLoader.aggregated());
         task.setGroup(new Constant("arbitraryGroup"));
 
-        
-        RegisterBeanFactories.getDefaultInstances().putInstanceFor(Interpolator.class, new ImageJ());
+        RegisterBeanFactories.getDefaultInstances()
+                .putInstanceFor(Interpolator.class, new ImageJ());
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
         } catch (BeanMisconfiguredException e) {

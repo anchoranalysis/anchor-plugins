@@ -31,17 +31,16 @@ import lombok.Value;
 
 /**
  * An identifier for an image, together with a corresponding label.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 @Value
 class ImageAnnotation {
 
-	/** The identifier. */
+    /** The identifier. */
     private String identifier;
-    
+
     /** The label. */
     private String label;
 }

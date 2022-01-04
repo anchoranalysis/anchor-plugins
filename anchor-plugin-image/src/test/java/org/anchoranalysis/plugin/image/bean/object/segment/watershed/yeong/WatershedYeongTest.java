@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
-
 import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;

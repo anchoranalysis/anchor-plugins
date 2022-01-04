@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.plugin.image.task.feature;
 
-import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -47,20 +46,23 @@ class ThumbnailsWriter {
     private OutputSequenceIncrementing<Stack> thumbnailOutputSequence;
 
     /**
-     * Outputs a thumbnail if it exists, and the outputter allows it.
+     * Outputs a thumbnail to the file-system.
      *
      * @param thumbnail the thumbnail to maybe output.
      * @param outputter the outputter.
      * @param outputName the name to use when outputting.
      * @throws OperationFailedException if the thumbnail cannot be successfully outputted.
      */
-    public void maybeOutputThumbnail(
-            Optional<DisplayStack> thumbnail, OutputterChecked outputter, String outputName)
+    public void outputThumbnail(
+            DisplayStack thumbnail, OutputterChecked outputter, String outputName)
             throws OperationFailedException {
         try {
-            if (thumbnail.isPresent()) {
-                outputThumbnail(thumbnail.get(), outputter, outputName);
+            if (thumbnailOutputSequence == null) {
+                OutputSequenceStackFactory factory =
+                        OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
+                thumbnailOutputSequence = factory.incrementingByOne(outputName, outputter);
             }
+            thumbnailOutputSequence.add(thumbnail.deriveStack(false));
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
@@ -69,17 +71,5 @@ class ThumbnailsWriter {
     /** Deletes the stored thumbnails from memory. */
     public void removeStoredThumbnails() {
         thumbnailOutputSequence = null;
-    }
-
-    /** Outputs a thumbnail to the file-system. */
-    private void outputThumbnail(
-            DisplayStack thumbnail, OutputterChecked outputter, String outputName)
-            throws OutputWriteFailedException {
-        if (thumbnailOutputSequence == null) {
-            OutputSequenceStackFactory factory =
-                    OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
-            thumbnailOutputSequence = factory.incrementingByOne(outputName, outputter);
-        }
-        thumbnailOutputSequence.add(thumbnail.deriveStack(false));
     }
 }

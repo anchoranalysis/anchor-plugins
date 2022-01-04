@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.results.FeatureCSVWriterFactory;
 import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
@@ -93,21 +94,27 @@ public class FeatureResultsAndThumbnails {
      *     what outputs are enabled.
      * @param thumbnail supplies the thumbnail to write, which may or may not be called, depending
      *     on what outputs are enabled.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the operation cannot be successfully completed.
      */
     public void add(
             CheckedSupplier<LabelledResultsVector, OperationFailedException> resultToAdd,
             CheckedSupplier<Optional<DisplayStack>, OperationFailedException> thumbnail)
             throws OperationFailedException {
+
+        ExecutionTimeRecorder recorder = context.getContext().getExecutionTimeRecorder();
+
         // Synchronization is important to preserve identical order in thumbnails and in the
         // exported feature CSV file, as multiple threads will concurrently add results.
-        LabelledResultsVector labelledResult = null;
-        if (calculationResultsNeeded) {
-            labelledResult = resultToAdd.get();
-        }
+        LabelledResultsVector labelledResult =
+                calculationResultsNeeded
+                        ? recorder.recordExecutionTime(
+                                "Calculate labelled results", resultToAdd::get)
+                        : null;
 
         Optional<DisplayStack> thumbnailStack =
-                thumbnailsEnabled ? thumbnail.get() : Optional.empty();
+                thumbnailsEnabled
+                        ? recorder.recordExecutionTime("Thumbnail for input", thumbnail::get)
+                        : Optional.empty();
 
         // Adding to the results map and writing the thumbnail need to happen together in the same
         // synchronized block
@@ -119,17 +126,15 @@ public class FeatureResultsAndThumbnails {
         synchronized (this) {
             // Add results to grouped-map, and write to CSV file
             if (calculationResultsNeeded) {
-                results.add(labelledResult);
+                recorder.recordExecutionTime("Writing CSV", () -> results.add(labelledResult));
             }
 
-            if (thumbnailsEnabled) {
-                context.getContext()
-                        .getExecutionTimeRecorder()
-                        .recordExecutionTime(
-                                "Writing thumbnail",
-                                () ->
-                                        thumbnails.maybeOutputThumbnail(
-                                                thumbnailStack, outputter, OUTPUT_THUMBNAILS));
+            if (thumbnailsEnabled && thumbnailStack.isPresent()) {
+                recorder.recordExecutionTime(
+                        "Writing thumbnail",
+                        () ->
+                                thumbnails.outputThumbnail(
+                                        thumbnailStack.get(), outputter, OUTPUT_THUMBNAILS));
             }
         }
     }
