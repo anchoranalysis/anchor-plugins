@@ -221,10 +221,10 @@ class FlattenAndScaler {
             Optional<Stack> backgroundSource,
             int backgroundChannelIndex,
             ScaleFactor scaleFactor,
-            VoxelsResizer interpolator)
+            VoxelsResizer resizer)
             throws OperationFailedException {
         BackgroundSelector backgroundHelper =
-                new BackgroundSelector(backgroundChannelIndex, scaleFactor, interpolator);
+                new BackgroundSelector(backgroundChannelIndex, scaleFactor, resizer);
         return backgroundHelper.determineBackground(backgroundSource);
     }
 }

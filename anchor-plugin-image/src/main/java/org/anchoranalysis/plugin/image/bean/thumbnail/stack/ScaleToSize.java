@@ -54,11 +54,11 @@ public class ScaleToSize extends ThumbnailFromStack {
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
 
-    private VoxelsResizer interpolatorCreated;
+    private VoxelsResizer resizerCreated;
 
     @Override
     public void start() {
-        interpolatorCreated = interpolator.voxelsResizer();
+        resizerCreated = interpolator.voxelsResizer();
     }
 
     @Override
@@ -73,7 +73,7 @@ public class ScaleToSize extends ThumbnailFromStack {
                                                     .resizeXY(
                                                             size.getWidth(),
                                                             size.getHeight(),
-                                                            interpolatorCreated));
+                                                            resizerCreated));
 
             return DisplayStack.create(resized);
 

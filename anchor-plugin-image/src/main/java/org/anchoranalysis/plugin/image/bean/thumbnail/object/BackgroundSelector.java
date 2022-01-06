@@ -47,7 +47,7 @@ class BackgroundSelector {
 
     private int backgroundChannelIndex;
     private ScaleFactor scaleFactor;
-    private VoxelsResizer interpolator;
+    private VoxelsResizer resizer;
 
     public Optional<ScaleableBackground> determineBackground(Optional<Stack> backgroundSource)
             throws OperationFailedException {
@@ -58,7 +58,7 @@ class BackgroundSelector {
             throws OperationFailedException {
         try {
             return determineBackground(backgroundSource)
-                    .map(stack -> ScaleableBackground.scaleBy(stack, scaleFactor, interpolator));
+                    .map(stack -> ScaleableBackground.scaleBy(stack, scaleFactor, resizer));
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
