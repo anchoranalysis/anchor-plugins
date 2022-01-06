@@ -95,6 +95,18 @@ public class ToDimensions extends ScaleCalculator {
     }
 
     /**
+     * Create with specific lengths for X and Y dimensions and {@code preserveAspectRatio}.
+     *
+     * @param sizeX the size of the X-dimension.
+     * @param sizeY the size of the X-dimension.
+     * @param preserveAspectRatio if true, the ratio between x and y is kept constant when scaling.
+     */
+    public ToDimensions(int sizeX, int sizeY, boolean preserveAspectRatio) {
+        this(sizeX, sizeY);
+        this.preserveAspectRatio = preserveAspectRatio;
+    }
+
+    /**
      * Create with specific {@code dimensions} and {@code preserveAspectRatio}.
      *
      * @param dimensions the dimensions the source image/entity is desired to be scaled to.
