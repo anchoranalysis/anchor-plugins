@@ -36,12 +36,12 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.file.FileNamerContext;
 import org.anchoranalysis.io.input.file.NamedFile;
 import org.anchoranalysis.plugin.io.bean.file.namer.patternspan.PatternSpan;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.junit.jupiter.api.Test;
 
 class PatternSpanTest {
 
-    private static final Logger LOGGER = LoggingFixture.suppressedLogger();
+    private static final Logger LOGGER = LoggerFixture.suppressedLogger();
 
     @Test
     void testSimple() throws InputReadFailedException {

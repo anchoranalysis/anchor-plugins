@@ -75,7 +75,7 @@ public class ScaleXY extends ChannelProviderUnary {
     public static Channel scale(
             Channel channel,
             ScaleCalculator scaleCalculator,
-            VoxelsResizer interpolator,
+            VoxelsResizer resizer,
             Optional<ImageSizeSuggestion> suggestedResize,
             MessageLogger logger)
             throws ProvisionFailedException {
@@ -87,7 +87,7 @@ public class ScaleXY extends ChannelProviderUnary {
 
             logger.logFormatted("Scale Factor: %s", scaleFactor.toString());
 
-            Channel channelOut = channel.scaleXY(scaleFactor, interpolator);
+            Channel channelOut = channel.scaleXY(scaleFactor, resizer);
 
             logResolution("Outgoing", channelOut, logger);
 

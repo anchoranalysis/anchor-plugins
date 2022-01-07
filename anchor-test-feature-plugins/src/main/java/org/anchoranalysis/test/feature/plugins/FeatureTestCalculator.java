@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.shared.SharedFeatures;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureTestCalculator {
@@ -113,7 +113,7 @@ public class FeatureTestCalculator {
                             feature,
                             initialization,
                             new SharedFeatures(),
-                            LoggingFixture.suppressedLogger());
+                            LoggerFixture.suppressedLogger());
 
             return calculator.calculate(input);
         } catch (InitializeException e) {

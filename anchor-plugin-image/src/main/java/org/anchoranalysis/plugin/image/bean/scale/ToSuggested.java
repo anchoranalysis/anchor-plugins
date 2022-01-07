@@ -26,7 +26,9 @@
 package org.anchoranalysis.plugin.image.bean.scale;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -40,6 +42,8 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
+@AllArgsConstructor
 public class ToSuggested extends ScaleCalculator {
 
     // START BEAN PROPERTIES

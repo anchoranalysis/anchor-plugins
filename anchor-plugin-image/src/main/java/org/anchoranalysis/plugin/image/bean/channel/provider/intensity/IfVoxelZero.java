@@ -45,14 +45,8 @@ import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
  * Creates a new channel which is a merged version of two input channels according to rules.
  *
  * <ul>
- *   <li>If the voxel in
- *       <pre>channel</pre>
- *       is non-zero, then the corresponding output is
- *       <pre>channel</pre>
- *   <li>If the voxel in
- *       <pre>channel</pre>
- *       is zero, then the corresponding output is
- *       <pre>channelIfVoxelZero</pre>
+ *   <li>If the voxel in {@code channel} is <i>non-zero</i>, then the corresponding output is {@code channel}.
+ *   <li>If the voxel in {@code channel} is <i>zero</i>, then the corresponding output is {@code channelIfVoxelZero}.
  * </ul>
  *
  * <p>The two channels must be the same size.
@@ -107,17 +101,17 @@ public class IfVoxelZero extends ChannelProviderUnary {
      * <p>Neither channel's input is changed. The operation is <i>immutable</i>.
      *
      * @param channel the channel that is checked to be zero/non-zero, and whose pixels form the
-     *     output (maybe multipled) if non-zero
-     * @param channelIfPixelZero the channel that forms the output if {@code channel} is zero
-     * @param combinedType the type to use for the newly created channel
-     * @param multFactorIfNonZero the multiplication factor to apply on non-zero pixels
-     * @return a newly created merged channel according to the above rules
+     *     output (maybe multipled) if non-zero.
+     * @param channelIfPixelZero the channel that forms the output if {@code channel} is zero.
+     * @param combinedType the type to use for the newly created channel.
+     * @param multiplierIfNonZero the multiplier to apply on non-zero pixels.
+     * @return a newly created merged channel according to the above rules.
      */
     public static Channel mergeViaZeroCheck(
             Channel channel,
             Channel channelIfPixelZero,
             VoxelDataType combinedType,
-            double multFactorIfNonZero) {
+            double multiplierIfNonZero) {
 
         Channel channelOut = ChannelFactory.instance().create(channel.dimensions(), combinedType);
 
@@ -126,7 +120,7 @@ public class IfVoxelZero extends ChannelProviderUnary {
                 channelOut.voxels(),
                 channel.voxels(),
                 channelIfPixelZero.voxels(),
-                multFactorIfNonZero);
+                multiplierIfNonZero);
 
         return channelOut;
     }

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
 import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -121,7 +121,7 @@ class RotateImageToMatchEXIFOrientationTest {
             String filename, int expectedWidth, int expectedHeight, int expectedCornerIntensity)
             throws ImageIOException {
 
-        Logger logger = LoggingFixture.suppressedLogger();
+        Logger logger = LoggerFixture.suppressedLogger();
 
         Extent expectedExtent = new Extent(expectedWidth, expectedHeight, 1);
         OpenedImageFile openedImageFile =

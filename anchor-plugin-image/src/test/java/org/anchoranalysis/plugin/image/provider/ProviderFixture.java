@@ -48,7 +48,7 @@ import org.anchoranalysis.image.io.ImageInitializationFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.image.InputOutputContextFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -99,7 +99,7 @@ public class ProviderFixture {
     public static <T extends ImageBean<T>> T createInitMergePair(CreateProvider<T> funcCreate)
             throws CreateException {
 
-        Logger logger = LoggingFixture.suppressedLogger();
+        Logger logger = LoggerFixture.suppressedLogger();
 
         T provider = funcCreate.create(logger);
         ProviderFixture.initProvider(provider, logger);

@@ -36,7 +36,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 
@@ -81,7 +81,7 @@ class MergeTestHelper {
             MergeBase provider)
             throws OperationFailedException {
 
-        Logger logger = LoggingFixture.suppressedLogger();
+        Logger logger = LoggerFixture.suppressedLogger();
 
         try {
             ProviderFixture.initProvider(provider, logger);

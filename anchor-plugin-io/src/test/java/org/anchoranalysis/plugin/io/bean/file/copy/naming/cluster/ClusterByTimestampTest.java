@@ -46,7 +46,7 @@ import org.anchoranalysis.plugin.io.bean.file.namer.LastDirectories;
 import org.anchoranalysis.plugin.io.bean.input.files.NamedFilesWithDirectory;
 import org.anchoranalysis.plugin.io.file.copy.ClusterMembership;
 import org.anchoranalysis.plugin.io.input.path.CopyContext;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -114,7 +114,7 @@ class ClusterByTimestampTest {
     private static List<FileWithDirectoryInput> createInputs(Path source)
             throws InputReadFailedException {
         InputManagerParameters parameters =
-                new InputManagerParameters(LoggingFixture.suppressedOperationContext());
+                new InputManagerParameters(LoggerFixture.suppressedOperationContext());
 
         return createFiles(source).inputs(parameters).inputs();
     }

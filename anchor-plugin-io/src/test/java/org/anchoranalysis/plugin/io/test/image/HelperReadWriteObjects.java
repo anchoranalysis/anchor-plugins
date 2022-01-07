@@ -39,8 +39,8 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.anchoranalysis.test.image.io.OutputterFixture;
-import org.anchoranalysis.test.image.io.TestReaderWriterUtilities;
 
 class HelperReadWriteObjects {
 
@@ -66,7 +66,7 @@ class HelperReadWriteObjects {
     public static ObjectCollection readObjects(Path path, Logger logger)
             throws DeserializationFailedException {
 
-        TestReaderWriterUtilities.ensureStackReader();
+        BeanInstanceMapFixture.ensureStackReader();
 
         return ObjectCollectionReader.createFromPath(path, new OperationContext(logger));
     }

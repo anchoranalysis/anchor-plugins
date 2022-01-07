@@ -136,7 +136,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             throws OperationFailedException {
 
         if (!objects.isEmpty()) {
-            VoxelsResizer interpolatorBackground = interpolator.voxelsResizer();
+            VoxelsResizer resizerBackground = interpolator.voxelsResizer();
 
             // Determine what to scale the objects and any background by
             FlattenAndScaler scaler =
@@ -144,7 +144,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
                             boundingBoxes,
                             objects,
                             overlappingObjects,
-                            interpolatorBackground,
+                            resizerBackground,
                             size.asExtent(),
                             backgroundSource,
                             backgroundChannelIndex);

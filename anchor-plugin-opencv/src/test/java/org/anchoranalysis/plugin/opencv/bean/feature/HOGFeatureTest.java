@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.io.imagej.bean.interpolator.ImageJ;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.image.load.CarImageLoader;
 import org.junit.jupiter.api.Test;
 
@@ -98,6 +98,6 @@ class HOGFeatureTest {
         }
 
         return FeatureSession.calculateWith(
-                feature, new FeatureInputStack(stack), LoggingFixture.suppressedLogger());
+                feature, new FeatureInputStack(stack), LoggerFixture.suppressedLogger());
     }
 }

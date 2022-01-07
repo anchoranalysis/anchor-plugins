@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities;
 import org.anchoranalysis.test.image.EnergyStackFixture;
@@ -153,7 +153,7 @@ class FeatureListMarksTest {
 
     private static <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart(
             FeatureList<T> features) throws InitializeException {
-        return FeatureSession.with(features, LoggingFixture.suppressedLogger());
+        return FeatureSession.with(features, LoggerFixture.suppressedLogger());
     }
 
     private void testConstantsInList(FeatureInput input1, FeatureInput input2)

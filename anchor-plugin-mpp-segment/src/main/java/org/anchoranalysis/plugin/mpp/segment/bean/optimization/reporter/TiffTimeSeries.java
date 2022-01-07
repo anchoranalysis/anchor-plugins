@@ -71,7 +71,7 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
         }
 
         Generator<ColoredMarksWithDisplayStack> iterableRaster =
-                new MarksGenerator(new Outline(), (overlay,iteration) -> overlay.getIdentifier());
+                new MarksGenerator(new Outline(), (overlay, iteration) -> overlay.getIdentifier());
 
         // This no longer needs to be combined, it's a legacy of when a HTML reporter was attached
         //   cleaning up woould be nice
