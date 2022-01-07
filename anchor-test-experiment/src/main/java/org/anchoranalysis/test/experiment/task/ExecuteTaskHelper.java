@@ -68,7 +68,7 @@ import org.anchoranalysis.test.image.io.OutputterFixture;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TaskSingleInputHelper {
+public class ExecuteTaskHelper {
 
     /**
      * Executes a task on a single-input.

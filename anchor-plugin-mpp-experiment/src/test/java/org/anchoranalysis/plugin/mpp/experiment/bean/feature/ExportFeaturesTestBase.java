@@ -39,7 +39,7 @@ import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesStyle;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.ExportFeaturesTaskFixture;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.MultiInputFixture;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.experiment.task.TaskSingleInputHelper;
+import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
@@ -129,7 +129,7 @@ public abstract class ExportFeaturesTestBase<
             // we switch back to the old settings for comparison.
             task.setStyle(new ExportFeaturesStyle(false, false, false));
 
-            TaskSingleInputHelper.runTaskAndCompareOutputs(
+            ExecuteTaskHelper.runTaskAndCompareOutputs(
                     input,
                     task,
                     directory,

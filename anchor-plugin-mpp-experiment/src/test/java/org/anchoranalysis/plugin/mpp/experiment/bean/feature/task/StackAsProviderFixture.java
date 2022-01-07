@@ -56,12 +56,12 @@ class StackAsProviderFixture implements ProvidesStackInput {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stackCollection,
+            NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
             Progress progress,
             Logger logger)
             throws OperationFailedException {
-        addToStoreWithName(name, stackCollection, 0, progress, logger);
+        addToStoreWithName(name, stacks, 0, progress, logger);
     }
 
     @Override

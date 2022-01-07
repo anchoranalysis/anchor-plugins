@@ -39,7 +39,6 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.bean.scale.ToDimensions;
 import org.anchoranalysis.plugin.image.bean.scale.ToSuggested;
-import org.anchoranalysis.plugin.image.task.bean.scale.ScaleImage;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
@@ -77,7 +76,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value ScaleImage#OUTPUT_MONTAGE}</td><td>yes</td><td>The montage of all the input images.</td></tr>
+ * <tr><td>{@value Montage#OUTPUT_MONTAGE}</td><td>yes</td><td>The montage of all the input images.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>

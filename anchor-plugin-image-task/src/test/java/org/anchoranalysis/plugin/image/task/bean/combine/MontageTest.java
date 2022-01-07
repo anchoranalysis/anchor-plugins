@@ -11,7 +11,7 @@ import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.experiment.task.TaskSingleInputHelper;
+import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
 import org.junit.jupiter.api.Test;
@@ -58,7 +58,7 @@ class MontageTest {
         List<StackSequenceInput> inputs =
                 createInputs(path, LoggerFixture.suppressedOperationContext());
 
-        TaskSingleInputHelper.runTaskAndCompareOutputs(
+        ExecuteTaskHelper.runTaskAndCompareOutputs(
                 inputs, task, directory, "montage/expectedOutput/six", FILENAMES_TO_COMPARE);
     }
 

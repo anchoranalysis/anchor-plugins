@@ -31,7 +31,7 @@ import java.util.List;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.test.experiment.task.TaskSingleInputHelper;
+import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
 import org.anchoranalysis.test.image.stackwriter.ChannelSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -90,7 +90,7 @@ class ConvertImageFormatTest {
 
         NamedChannelsInputFixture input = new NamedChannelsInputFixture(channelSpecification);
 
-        TaskSingleInputHelper.runTaskAndCompareOutputs(
+        ExecuteTaskHelper.runTaskAndCompareOutputs(
                 input, task, directory, "convert/" + resourceDirectorySuffix, filenamesToCompare);
     }
 }
