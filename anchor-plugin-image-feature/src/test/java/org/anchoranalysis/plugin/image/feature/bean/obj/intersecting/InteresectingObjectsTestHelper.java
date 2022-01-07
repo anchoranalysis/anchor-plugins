@@ -38,7 +38,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
 import org.anchoranalysis.test.feature.plugins.objects.CircleObjectFixture;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
@@ -152,7 +152,7 @@ class InteresectingObjectsTestHelper {
         SharedObjects sharedObjects =
                 new SharedObjects(
                         new CommonContext(
-                                LoggingFixture.suppressedLogger(), Mockito.mock(Path.class)));
+                                LoggerFixture.suppressedLogger(), Mockito.mock(Path.class)));
 
         sharedObjects.getOrCreate(ObjectCollection.class).add(ID, () -> others);
 

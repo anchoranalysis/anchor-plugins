@@ -36,7 +36,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -66,7 +66,7 @@ class ObjectCollectionWriterTest {
         writeObjects(objects, directory, generator(true, false));
 
         ObjectCollection objectsRead =
-                readObjects(outputPathExpected(directory), LoggingFixture.suppressedLogger());
+                readObjects(outputPathExpected(directory), LoggerFixture.suppressedLogger());
 
         assertEquals(objects.size(), objectsRead.size(), "Objects size");
         assertTrue(objects.equalsDeep(objectsRead));

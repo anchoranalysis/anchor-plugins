@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.io.bean.metadata.header.HeaderFormat;
 import org.anchoranalysis.plugin.io.bean.metadata.header.JPEG;
 import org.anchoranalysis.plugin.io.bean.metadata.header.PNG;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 
@@ -85,7 +85,7 @@ class InferFromHeaderTest {
 
         // The defaultStackReader  should never be called during testing, so we pass a null,
         // even though this isn't allowed.
-        return INSTANCE.openFile(path, null, LoggingFixture.suppressedOperationContext());
+        return INSTANCE.openFile(path, null, LoggerFixture.suppressedOperationContext());
     }
 
     private static InferFromHeader createInstance() {

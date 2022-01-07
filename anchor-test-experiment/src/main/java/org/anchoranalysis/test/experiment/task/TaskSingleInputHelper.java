@@ -35,6 +35,7 @@ import static org.mockito.Mockito.when;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -75,19 +76,51 @@ public class TaskSingleInputHelper {
      * @param <T> input type
      * @param <S> shared-state type
      * @param <V> task type
-     * @param input the input for the task
-     * @param task the task to run
+     * @param input the input for the task.
+     * @param task the task to run.
      * @param pathDirectoryOutput an absolute path to a directory where outputs of the task will be
-     *     placed
+     *     placed.
      * @param pathDirectorySaved a path (relative to the {@code src/test/resources}) to a directory
-     *     of saved-results to compare with
+     *     of saved-results to compare with.
      * @param pathsFileToCompare paths (relative to the {@code src/test/resources}) to check that
-     *     are identical
-     * @throws OperationFailedException if anything goes wrong
+     *     are identical.
+     * @throws OperationFailedException if anything goes wrong.
      */
     public static <T extends InputFromManager, S, V extends Task<T, S>>
             void runTaskAndCompareOutputs(
                     T input,
+                    V task,
+                    Path pathDirectoryOutput,
+                    String pathDirectorySaved,
+                    Iterable<String> pathsFileToCompare)
+                    throws OperationFailedException {
+        runTaskAndCompareOutputs(
+                Arrays.asList(input),
+                task,
+                pathDirectoryOutput,
+                pathDirectorySaved,
+                pathsFileToCompare);
+    }
+
+    /**
+     * Executes a task on a multiple inputs.
+     *
+     * @param <T> input type
+     * @param <S> shared-state type
+     * @param <V> task type
+     * @param inputs the inputs for the task.
+     * @param task the task to run.
+     * @param pathDirectoryOutput an absolute path to a directory where outputs of the task will be
+     *     placed.
+     * @param pathDirectorySaved a path (relative to the {@code src/test/resources}) to a directory
+     *     of saved-results to compare with.
+     * @param pathsFileToCompare paths (relative to the {@code src/test/resources}) to check that
+     *     are identical.
+     * @throws OperationFailedException if anything goes wrong.
+     */
+    public static <T extends InputFromManager, S, V extends Task<T, S>>
+            void runTaskAndCompareOutputs(
+                    List<T> input,
                     V task,
                     Path pathDirectoryOutput,
                     String pathDirectorySaved,
@@ -115,7 +148,7 @@ public class TaskSingleInputHelper {
      * @throws OperationFailedException if anything goes wrong
      */
     private static <T extends InputFromManager, S, V extends Task<T, S>>
-            boolean runTaskOnSingleInput(T input, V task, Path pathForOutputs)
+            boolean runTaskOnSingleInput(List<T> inputs, V task, Path pathForOutputs)
                     throws OperationFailedException {
 
         try {
@@ -135,11 +168,22 @@ public class TaskSingleInputHelper {
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleCPUProcessor(0);
             S sharedState =
                     task.beforeAnyJobIsExecuted(
-                            outputter, concurrencyPlan, Arrays.asList(input), parametersExperiment);
+                            outputter, concurrencyPlan, inputs, parametersExperiment);
 
             try {
-                return task.executeJob(
-                        new ParametersUnbound<>(parametersExperiment, input, sharedState, false));
+                boolean successful = true;
+                for (T input : inputs) {
+                    successful =
+                            successful
+                                    && task.executeJob(
+                                            new ParametersUnbound<>(
+                                                    parametersExperiment,
+                                                    input,
+                                                    sharedState,
+                                                    false));
+                }
+                return successful;
+
             } finally {
                 task.afterAllJobsAreExecuted(sharedState, parametersExperiment.getContext());
             }

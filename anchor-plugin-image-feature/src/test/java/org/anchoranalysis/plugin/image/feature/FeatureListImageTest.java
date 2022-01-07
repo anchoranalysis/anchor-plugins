@@ -43,7 +43,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
@@ -157,7 +157,7 @@ class FeatureListImageTest {
 
     private <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart(
             FeatureList<T> features) throws InitializeException {
-        return FeatureSession.with(features, LoggingFixture.suppressedLogger());
+        return FeatureSession.with(features, LoggerFixture.suppressedLogger());
     }
 
     /**

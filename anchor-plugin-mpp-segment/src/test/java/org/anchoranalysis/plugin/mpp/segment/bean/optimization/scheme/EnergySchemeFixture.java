@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatur
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.ind.Size;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap.OverlapNumVoxels;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnergySchemeFixture {
@@ -60,7 +60,7 @@ public class EnergySchemeFixture {
         return new EnergySchemeWithSharedFeatures(
                 createEnergyScheme(weightOverlap),
                 new SharedFeatures(),
-                LoggingFixture.suppressedLogger());
+                LoggerFixture.suppressedLogger());
     }
 
     private static EnergyScheme createEnergyScheme(double weightOverlap) throws CreateException {

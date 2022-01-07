@@ -37,7 +37,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -99,7 +99,7 @@ class MergeToIncreaseObjectFeatureTest {
             ToDoubleFunction<FeatureInputSingleObject> calculationFunction)
             throws CreateException {
 
-        Logger logger = LoggingFixture.suppressedLogger();
+        Logger logger = LoggerFixture.suppressedLogger();
 
         MergeToIncreaseObjectFeature provider = new MergeToIncreaseObjectFeature();
 

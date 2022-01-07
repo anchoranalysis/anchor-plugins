@@ -95,8 +95,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         }
     }
 
-    private Channel scaleChannel(
-            Channel channel, ScaleFactor scaleFactor, VoxelsResizer resizer) {
+    private Channel scaleChannel(Channel channel, ScaleFactor scaleFactor, VoxelsResizer resizer) {
         return channel.scaleXY(scaleFactor, resizer);
     }
 

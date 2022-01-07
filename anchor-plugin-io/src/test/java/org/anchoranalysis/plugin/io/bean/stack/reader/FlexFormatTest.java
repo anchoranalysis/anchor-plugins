@@ -34,7 +34,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -48,7 +48,7 @@ class FlexFormatTest {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
     }
 
-    private Logger logger = LoggingFixture.suppressedLogger();
+    private Logger logger = LoggerFixture.suppressedLogger();
 
     private OpenImageFileHelper loader =
             new OpenImageFileHelper("exampleFormats", new BioformatsReader());

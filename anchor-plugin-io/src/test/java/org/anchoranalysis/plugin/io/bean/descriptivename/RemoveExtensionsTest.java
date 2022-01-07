@@ -38,12 +38,12 @@ import org.anchoranalysis.io.input.file.FileNamerContext;
 import org.anchoranalysis.io.input.file.NamedFile;
 import org.anchoranalysis.plugin.io.bean.file.namer.NormalizedPath;
 import org.anchoranalysis.plugin.io.bean.file.namer.RemoveExtension;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.junit.jupiter.api.Test;
 
 class RemoveExtensionsTest {
 
-    private static final Logger LOGGER = LoggingFixture.suppressedLogger();
+    private static final Logger LOGGER = LoggerFixture.suppressedLogger();
 
     @Test
     void testPreserveExt() throws InputReadFailedException {

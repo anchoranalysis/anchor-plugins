@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.slice.combine;
+package org.anchoranalysis.plugin.image.task.bean.combine;
 
 import java.nio.file.Path;
 import java.util.List;

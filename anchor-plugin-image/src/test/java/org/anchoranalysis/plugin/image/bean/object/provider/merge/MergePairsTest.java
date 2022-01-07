@@ -42,7 +42,7 @@ import org.anchoranalysis.image.feature.bean.object.pair.Minimum;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -93,7 +93,7 @@ class MergePairsTest {
     private static MergePairs createMergePair(ObjectCollection objects, int threshold)
             throws CreateException {
 
-        Logger logger = LoggingFixture.suppressedLogger();
+        Logger logger = LoggerFixture.suppressedLogger();
 
         MergePairs provider = new MergePairs();
 

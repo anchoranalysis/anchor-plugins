@@ -106,6 +106,8 @@ class CompareHelper {
         try {
             if (ImageFileFormat.TIFF.matches(relativePath)) {
                 return comparer.compareTwoImages(relativePath);
+            } else if (ImageFileFormat.PNG.matches(relativePath)) {
+                return comparer.compareTwoImages(relativePath);
             } else if (NonImageFileFormat.CSV.matches(relativePath)) {
                 return comparer.compareTwoCsvFiles(
                         relativePath, CSV_COMPARER, System.out); // NOSONAR
