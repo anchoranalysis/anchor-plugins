@@ -24,13 +24,13 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.task;
 
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 
-class MultiInputFixture {
+public class MultiInputFixture {
 
     public static final String OBJECTS_NAME = "objectsTest";
 

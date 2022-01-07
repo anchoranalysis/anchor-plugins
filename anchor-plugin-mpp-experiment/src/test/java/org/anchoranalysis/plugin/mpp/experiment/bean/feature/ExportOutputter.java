@@ -32,10 +32,11 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.format.NonImageFileFormat;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.MultiInputFixture;
 
 /** Helpful routines and constants related to outputting for {@link ExportFeaturesObjectTest}. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class ExportOutputter {
+public class ExportOutputter {
 
     // Saved output locations for particular tests
     public static final String OUTPUT_DIRECTORY_SIMPLE_1 = "simple01/";

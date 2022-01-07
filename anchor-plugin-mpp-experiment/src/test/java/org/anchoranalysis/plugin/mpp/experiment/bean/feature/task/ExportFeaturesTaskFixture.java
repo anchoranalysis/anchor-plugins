@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.task;
 
 import java.util.List;
 import lombok.Getter;
@@ -53,7 +53,8 @@ import org.anchoranalysis.test.image.EnergyStackFixture;
  * @param <V> row-source that is duplicated for each new thread (to prevent any concurrency issues)
  */
 @Accessors(fluent = true)
-abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEnergy, V> {
+public abstract class ExportFeaturesTaskFixture<
+        S extends InputFromManager, T extends FeatureInputEnergy, V> {
 
     @Getter private EnergyStackWithoutParameters energyStack;
 
@@ -67,7 +68,7 @@ abstract class TaskFixture<S extends InputFromManager, T extends FeatureInputEne
      * @param loader the loader.
      * @throws CreateException if an energy-stack cannot be created.
      */
-    public TaskFixture(TestLoader loader) throws CreateException {
+    public ExportFeaturesTaskFixture(TestLoader loader) throws CreateException {
         this.energyStack = createEnergyStack(true, false, true);
         this.featureLoader = new FeaturesLoader(loader);
     }

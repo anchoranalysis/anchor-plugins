@@ -45,8 +45,10 @@ import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
  * Creates a new channel which is a merged version of two input channels according to rules.
  *
  * <ul>
- *   <li>If the voxel in {@code channel} is <i>non-zero</i>, then the corresponding output is {@code channel}.
- *   <li>If the voxel in {@code channel} is <i>zero</i>, then the corresponding output is {@code channelIfVoxelZero}.
+ *   <li>If the voxel in {@code channel} is <i>non-zero</i>, then the corresponding output is {@code
+ *       channel}.
+ *   <li>If the voxel in {@code channel} is <i>zero</i>, then the corresponding output is {@code
+ *       channelIfVoxelZero}.
  * </ul>
  *
  * <p>The two channels must be the same size.

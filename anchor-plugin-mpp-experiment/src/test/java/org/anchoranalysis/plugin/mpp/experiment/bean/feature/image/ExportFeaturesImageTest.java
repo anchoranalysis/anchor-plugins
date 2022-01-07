@@ -23,12 +23,14 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.image;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportFeaturesTestBase;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.ExportFeaturesTaskFixture;
 import org.junit.jupiter.api.Test;
 
 class ExportFeaturesImageTest
@@ -53,7 +55,8 @@ class ExportFeaturesImageTest
     /** Tests a single channel image <b>with</b> an accompanying image resolution. */
     @Test
     void testSingle() throws OperationFailedException {
-        testOnTask(OUTPUT_DIRECTORY_SINGLE_CHANNEL, TaskFixture::useSingleChannelEnergy);
+        testOnTask(
+                OUTPUT_DIRECTORY_SINGLE_CHANNEL, ExportFeaturesTaskFixture::useSingleChannelEnergy);
     }
 
     /** Tests a three channel image <b>with</b> an accompanying image resolution. */
@@ -67,6 +70,7 @@ class ExportFeaturesImageTest
     /** Tests a single channel image <b>without</b> an accompanying image resolution. */
     @Test
     void testWithoutResolution() throws OperationFailedException {
-        testOnTask(OUTPUT_DIRECTORY_WITHOUT_RESOLUTION, TaskFixture::removeResolution);
+        testOnTask(
+                OUTPUT_DIRECTORY_WITHOUT_RESOLUTION, ExportFeaturesTaskFixture::removeResolution);
     }
 }

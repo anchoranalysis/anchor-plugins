@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.task;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

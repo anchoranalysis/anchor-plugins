@@ -45,9 +45,7 @@ class MontageTest {
 
     @TempDir Path directory;
 
-    /**
-     * Combines six inputs of different sizes and colors.
-     */
+    /** Combines six inputs of different sizes and colors. */
     @Test
     void testSix() throws OperationFailedException, ImageIOException {
 

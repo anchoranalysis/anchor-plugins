@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.image;
 
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
@@ -35,10 +35,13 @@ import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FromImage;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.ExportFeaturesTaskFixture;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.FeaturesLoader;
 import org.anchoranalysis.test.TestLoader;
 
 class TaskFixtureStack
-        extends TaskFixture<ProvidesStackInput, FeatureInputStack, FeatureList<FeatureInputStack>> {
+        extends ExportFeaturesTaskFixture<
+                ProvidesStackInput, FeatureInputStack, FeatureList<FeatureInputStack>> {
 
     public TaskFixtureStack(TestLoader loader) throws CreateException {
         super(loader);

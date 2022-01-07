@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.object;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

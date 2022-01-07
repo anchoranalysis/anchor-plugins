@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.object;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,10 +43,13 @@ import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObject
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.PairNeighbors;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.source.FromObjects;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.ExportFeaturesTaskFixture;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.FeaturesLoader;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.MultiInputFixture;
 import org.anchoranalysis.test.TestLoader;
 
-class TaskFixtureObjects
-        extends TaskFixture<
+class TaskFixtureObject
+        extends ExportFeaturesTaskFixture<
                 MultiInput,
                 FeatureInputSingleObject,
                 FeatureTableCalculator<FeatureInputSingleObject>> {
@@ -54,7 +57,7 @@ class TaskFixtureObjects
     private CombineObjectsForFeatures<?> flexiFeatureTable =
             new EachObjectIndependently(new ImageJ());
 
-    public TaskFixtureObjects(TestLoader loader) throws CreateException {
+    public TaskFixtureObject(TestLoader loader) throws CreateException {
         super(loader);
     }
 

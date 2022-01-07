@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.task;
 
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
@@ -37,8 +37,12 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.test.TestLoader;
 
-/** Loads features-lists of different types from particular XML files */
-class FeaturesLoader {
+/**
+ * Loads features-lists of different types from particular XML files.
+ *
+ * @author Owen Feehan
+ */
+public class FeaturesLoader {
 
     /** The "single" and "pair" and "image" features in use. */
     private LoadFeatures<FeatureInputSingleObject> single;

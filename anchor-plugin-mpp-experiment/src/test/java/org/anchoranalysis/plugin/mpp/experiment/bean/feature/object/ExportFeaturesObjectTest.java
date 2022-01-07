@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.object;
 
 import static org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportOutputter.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,6 +40,9 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.feature.bean.dimensions.Extent;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.ExportFeaturesTestBase;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.ExportFeaturesTaskFixture;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.MultiInputFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.jupiter.api.Test;
 
@@ -57,12 +60,12 @@ class ExportFeaturesObjectTest
                 MultiInput,
                 FeatureInputSingleObject,
                 FeatureTableCalculator<FeatureInputSingleObject>,
-                TaskFixtureObjects> {
+                TaskFixtureObject> {
 
     private static final String EXPECTED_OUTPUT_SUBDIRECTORY = "object";
 
     ExportFeaturesObjectTest() {
-        super(EXPECTED_OUTPUT_SUBDIRECTORY, true, TaskFixtureObjects::new);
+        super(EXPECTED_OUTPUT_SUBDIRECTORY, true, TaskFixtureObject::new);
     }
 
     @Test
@@ -71,7 +74,9 @@ class ExportFeaturesObjectTest
                 OperationFailedException.class,
                 () ->
                         // The saved directory is irrelevant because an exception is thrown
-                        testOnTask(OUTPUT_DIRECTORY_IRRELEVANT, TaskFixture::useSmallEnergy));
+                        testOnTask(
+                                OUTPUT_DIRECTORY_IRRELEVANT,
+                                ExportFeaturesTaskFixture::useSmallEnergy));
     }
 
     @Test
