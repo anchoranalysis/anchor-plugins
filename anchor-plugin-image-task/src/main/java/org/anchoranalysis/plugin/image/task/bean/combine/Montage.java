@@ -8,8 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -139,6 +141,27 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      * aspect-ratio, but while strictly keeping a tabular form.
      */
     @BeanField @Getter @Setter private BoxAligner aligner = new Grow(true);
+
+    /**
+     * When true, the unique identifier associated with each image, is drawn on the bottom of the
+     * image.
+     */
+    @BeanField @Getter @Setter private boolean label = true;
+
+    /**
+     * When {@code label==true}, this determines the height of the label.
+     *
+     * <p>Otherwise, it is ignored.
+     *
+     * <p>It indicates what portion of the average-image-height (when projected into the image) should the label approximately occupy.
+     *
+     * <p>It defaults to {@code 0.05) i.e. the label should typically occupy 5% of the average image-height.
+     *
+     * <p>It can be adjusted to make the label larger or smaller, relative to the image that is being labelled.
+     *
+     * <p>Note that a lower minimum exists of label font-size, below which it will not become smaller.
+     */
+    @BeanField @Getter @Setter @Positive private double ratioHeightForLabel = 0.05;
     // END BEAN PROPERTIES
 
     @Override
@@ -190,18 +213,31 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
         }
 
         try {
-            input.getSharedState().copyStackInto(stack, input.getInput().pathForBindingRequired());
+            Optional<String> stackLabel =
+                    OptionalFactory.create(label, input.getInput()::identifier);
+            input.getSharedState()
+                    .copyStackInto(stack, input.getInput().pathForBindingRequired(), stackLabel);
 
         } catch (InputReadFailedException e) {
             throw new JobExecutionException("Cannot establish an input path", e);
         } catch (OperationFailedException e) {
-            throw new JobExecutionException("Cannot copy input-stack into combined stack", e);
+            throw new JobExecutionException("Cannot copy input-image into montaged image", e);
         }
     }
 
     @Override
     public void afterAllJobsAreExecuted(MontageSharedState sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
+
+        try {
+            if (label) {
+                sharedState.drawAllLabels(ratioHeightForLabel);
+            }
+        } catch (OperationFailedException e) {
+            throw new ExperimentExecutionException(
+                    "A problem occurred drawing labels on the montaged image", e);
+        }
+
         // Write the combined stack
         context.getOutputter()
                 .writerSelective()
@@ -229,10 +265,10 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     /**
      * Determines the scaled size for a particular image, which is used to populate the table. The
      * final size will be approximately similar, but not necessarily identical.
-     * 
-     * <p>The size is read from the file-system from a {@code imageMetadataReader} as this often
-     * is much quicker than reading the entire raster (which will occur later in parallel when
-     * actually reading the image).
+     *
+     * <p>The size is read from the file-system from a {@code imageMetadataReader} as this often is
+     * much quicker than reading the entire raster (which will occur later in parallel when actually
+     * reading the image).
      */
     private Extent scaledSizeFor(
             Path imagePath, Optional<ImageSizeSuggestion> suggestedResize, OperationContext context)

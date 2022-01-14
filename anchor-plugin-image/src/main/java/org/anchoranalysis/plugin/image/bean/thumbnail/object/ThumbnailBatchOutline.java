@@ -77,14 +77,11 @@ class ThumbnailBatchOutline implements ThumbnailBatch<ObjectCollection> {
             Optional<Color> colorUnselectedObjects,
             ExecutionTimeRecorder recorder) {
         this.scaler = scaler;
-
         this.colorUnselectedObjects = colorUnselectedObjects;
-
         this.sceneSizeUnscaled = sceneSizeUnscaled;
+        this.recorder = recorder;
 
         this.sceneSizeScaled = scaler.extentFromStackOrObjects(objectsUnscaled);
-
-        this.recorder = recorder;
 
         // Create a generator that draws objects on the background
         this.generator =
