@@ -119,7 +119,7 @@ class FlattenAndScaler {
 
     private ObjectMask clipToScaledSizeIfKnown(ObjectMask object) {
         if (sizeScaled.isPresent()) {
-            return object.clipTo(sizeScaled.get());
+            return object.clampTo(sizeScaled.get());
         } else {
             return object;
         }

@@ -105,7 +105,7 @@ class ExtractObjectHelper {
         int indexMin = boxIndex * 4;
         Point3d min = new Point3d(buffer.get(indexMin), buffer.get(indexMin + 1), 0.0);
         Point3d max = new Point3d(buffer.get(indexMin + 2), buffer.get(indexMin + 3), 0.0);
-        return new BoundingBox(
+        return BoundingBox.createReuse(
                 PointConverter.intFromDouble(min, true), PointConverter.intFromDouble(max, true));
     }
 

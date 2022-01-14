@@ -48,7 +48,7 @@ class RelativeUtilities {
      */
     public static BoundingBox relativizeBox(BoundingBox box, ObjectMask objectRelativeBase) {
         BoundingBox boxIntersectRelative =
-                new BoundingBox(
+                BoundingBox.createReuse(
                         box.relativePositionTo(objectRelativeBase.boundingBox()), box.extent());
         return boxIntersectRelative.clampTo(objectRelativeBase.boundingBox().extent());
     }

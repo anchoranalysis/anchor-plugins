@@ -40,6 +40,6 @@ class GrowUtilities {
 
         Point3i cornerMin = new Point3i(boundingBox.cornerMin());
         cornerMin.subtract(subExtent);
-        return new BoundingBox(cornerMin, boundingBox.extent().growBy(2));
+        return BoundingBox.createReuse(cornerMin, boundingBox.extent().growBy(2));
     }
 }

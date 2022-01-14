@@ -23,6 +23,7 @@ import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.bean.spatial.arrange.align.Grow;
+import org.anchoranalysis.image.bean.spatial.arrange.fill.Fill;
 import org.anchoranalysis.image.bean.spatial.arrange.tile.Tile;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
@@ -64,7 +65,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  *       heights are known, and an arrangement can be determined. This occurs through the {@code
  *       imageMetadataReader} which is often much quicker than opening an image with the {@code
  *       stackReader} but this is not always the case.
- *   <li>Then in <i>parallel</b> each image is read from the file-system and added to the combined
+ *   <li>Then in <i>parallel</i> each image is read from the file-system and added to the combined
  *       image.
  * </ul>
  *
@@ -116,7 +117,27 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     /** How to resize images. */
     @DefaultInstance @BeanField @Getter @Setter private Interpolator interpolator;
 
-    /** How to align a smaller image inside a larger cell. */
+    /**
+     * When true, the images may vary in width/height in their respective rows to fill space, while
+     * preserving the aspect-ratio of each image.
+     */
+    @BeanField @Getter @Setter private boolean varyImageSize = true;
+
+    /**
+     * When true, the location of an image in the grid, as well as the number of images in each row
+     * are both allowed to vary to fill space.
+     *
+     * <p>When true, {@code varyImageSize} will always be considered also as {@code true}.
+     */
+    @BeanField @Getter @Setter private boolean varyImageLocation = true;
+
+    /**
+     * When {@code varyImageSize==false} and {@code varyImageLocation==false}, how to align a
+     * smaller image inside a larger cell. Otherwise ignored.
+     *
+     * <p>By default, the smaller image grows as much as possible, while preserving the
+     * aspect-ratio, but while strictly keeping a tabular form.
+     */
     @BeanField @Getter @Setter private BoxAligner aligner = new Grow(true);
     // END BEAN PROPERTIES
 
@@ -132,8 +153,6 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             throw new ExperimentExecutionException("No inputs exist, so no montage can be created");
         }
 
-        StackArranger arranger = createArranger(inputs.size());
-
         try {
             // The binding-paths for all the inputs
             Stream<Path> paths =
@@ -142,10 +161,13 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
                             InputReadFailedException.class,
                             StackSequenceInput::pathForBindingRequired);
 
+            StackArranger arranger = createArranger(inputs.size());
+
             // Create the shared-state
             Optional<ImageSizeSuggestion> suggestedSize =
                     parameters.getExperimentArguments().task().getSize();
             OperationContext context = parameters.getContext().operationContext();
+
             return MontageSharedStateFactory.create(
                     paths,
                     arranger,
@@ -207,6 +229,10 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     /**
      * Determines the scaled size for a particular image, which is used to populate the table. The
      * final size will be approximately similar, but not necessarily identical.
+     * 
+     * <p>The size is read from the file-system from a {@code imageMetadataReader} as this often
+     * is much quicker than reading the entire raster (which will occur later in parallel when
+     * actually reading the image).
      */
     private Extent scaledSizeFor(
             Path imagePath, Optional<ImageSizeSuggestion> suggestedResize, OperationContext context)
@@ -215,7 +241,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             ImageMetadata metadata = imageMetadataReader.openFile(imagePath, stackReader, context);
             ScaleFactor factor =
                     scale.calculate(Optional.of(metadata.getDimensions()), suggestedResize);
-            return metadata.getDimensions().extent().scaleXYBy(factor);
+            return metadata.getDimensions().extent().scaleXYBy(factor, true);
         } catch (ImageIOException e) {
             throw new ExperimentExecutionException(
                     "Cannot read the image-metadata for file at: " + imagePath, e);
@@ -228,17 +254,27 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     /** Creates the {@link StackArranger} that will determine the tabular pattern. */
     private StackArranger createArranger(int numberInputs) {
 
-        // Determine number of columns and rows, so that they are both similar (as close to a square
-        // as possible).
-        int columns = (int) Math.ceil(Math.sqrt(numberInputs));
-        int rows = (int) Math.ceil(((double) numberInputs) / columns);
+        // Determine number of rows, so to give a similar number of rows and columns (as close to a
+        // square as possible).
+        int rows = (int) Math.ceil(Math.sqrt(numberInputs));
 
-        // Tiling the images into a tabular form.
-        Tile tile = new Tile();
-        tile.setNumberColumns(columns);
-        tile.setNumberRows(rows);
-        tile.setAligner(aligner);
-        return tile;
+        if (varyImageSize) {
+            // Completely fill space, allowing for a different number of rows and columns
+            Fill fill = new Fill();
+            fill.setNumberRows(rows);
+            fill.setVaryNumberImagesPerRow(varyImageLocation);
+            return fill;
+        } else {
+
+            int columns = (int) Math.ceil(((double) numberInputs) / rows);
+
+            // A strictly tabular form, where each image must fit inside its cell-size.
+            Tile tile = new Tile();
+            tile.setNumberColumns(columns);
+            tile.setNumberRows(rows);
+            tile.setAligner(aligner);
+            return tile;
+        }
     }
 
     /** The default {@link ScaleCalculator} if no other is provided. */

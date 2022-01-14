@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import org.anchoranalysis.core.functional.unchecked.IntBinaryOperation;
+import java.util.function.IntBinaryOperator;
 import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase;
 
 public class MaxTwoChannels extends TwoVoxelMappingBase {
 
-    public MaxTwoChannels(IntBinaryOperation operation) {
+    public MaxTwoChannels(IntBinaryOperator operation) {
         super(Math::max);
     }
 }

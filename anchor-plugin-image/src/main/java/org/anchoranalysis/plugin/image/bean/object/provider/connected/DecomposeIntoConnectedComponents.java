@@ -65,7 +65,7 @@ public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUn
 
         ObjectCollection objects = createObjectMasks.createUnsignedByte(unconnected.binaryVoxels());
 
-        // Adjust the crnr of each object, by adding on the original starting point of our
+        // Adjust the corner of each object, by adding on the original starting point of our
         // object-mask
         return objects.shiftBy(unconnected.boundingBox().cornerMin());
     }

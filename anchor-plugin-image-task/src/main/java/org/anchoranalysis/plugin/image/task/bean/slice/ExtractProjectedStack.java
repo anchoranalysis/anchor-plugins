@@ -71,35 +71,34 @@ class ExtractProjectedStack {
         if (!extent.isPresent() || channelIn.extent().equals(extent.get())) {
             return channelIn;
         } else {
-            Point3i crnrPos = createTarget(channelIn.dimensions(), extent.get());
+            Point3i corner = createTarget(channelIn.dimensions(), extent.get());
 
-            BoundingBox boxToProject = boxToProject(crnrPos, channelIn.extent(), extent.get());
+            BoundingBox boxToProject = boxToProject(corner, channelIn.extent(), extent.get());
 
-            BoundingBox boxSrc = boxSrc(boxToProject, channelIn.dimensions());
+            BoundingBox boxSource = boxSource(boxToProject, channelIn.dimensions());
 
-            return copyPixels(boxSrc, boxToProject, channelIn, extent.get());
+            return copyPixels(boxSource, boxToProject, channelIn, extent.get());
         }
     }
 
     private static Point3i createTarget(Dimensions dimensions, Extent extent) {
-        Point3i crnrPos = new Point3i();
-        crnrPos.setX((extent.x() - dimensions.x()) / 2);
-        crnrPos.setY((extent.y() - dimensions.y()) / 2);
-        crnrPos.setZ(0);
-        return crnrPos;
+        Point3i corner =
+                new Point3i(
+                        (extent.x() - dimensions.x()) / 2, (extent.y() - dimensions.y()) / 2, 0);
+        return corner;
     }
 
     private static BoundingBox boxToProject(
-            Point3i crnrPos, Extent extentChannel, Extent extentTarget) {
-        return new BoundingBox(crnrPos, extentChannel)
+            Point3i corner, Extent extentChannel, Extent extentTarget) {
+        return BoundingBox.createReuse(corner, extentChannel)
                 .intersection()
                 .with(new BoundingBox(extentTarget))
                 .orElseThrow(AnchorImpossibleSituationException::new);
     }
 
-    private static BoundingBox boxSrc(BoundingBox boxToProject, Dimensions dimensions) {
-        Point3i srcCrnrPos = createSourceCorner(boxToProject, dimensions);
-        return new BoundingBox(srcCrnrPos, boxToProject.extent());
+    private static BoundingBox boxSource(BoundingBox boxToProject, Dimensions dimensions) {
+        Point3i sourceCorner = createSourceCorner(boxToProject, dimensions);
+        return BoundingBox.createReuse(sourceCorner, boxToProject.extent());
     }
 
     private static Point3i createSourceCorner(BoundingBox boxToProject, Dimensions dimensions) {

@@ -59,7 +59,7 @@ class PointsFromInsideHelper {
         this.boundingBox = box;
         this.voxelsFilled = maskFilled.binaryVoxels();
         this.cornerMin = box.cornerMin();
-        this.cornerMax = box.calculateCornerMax();
+        this.cornerMax = box.calculateCornerMaxInclusive();
     }
 
     public List<Point3i> convexOnly(

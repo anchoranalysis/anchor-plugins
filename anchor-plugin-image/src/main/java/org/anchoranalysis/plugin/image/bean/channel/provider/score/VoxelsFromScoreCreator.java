@@ -128,7 +128,7 @@ class VoxelsFromScoreCreator {
         Extent eMask = object.binaryVoxels().extent();
 
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMaxInclusive();
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 

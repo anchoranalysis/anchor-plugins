@@ -39,7 +39,7 @@ class TypedValueUtilities {
     public static List<String> createArrayFromList(List<String[]> list, int index)
             throws OperationFailedException {
 
-        List<String> out = new ArrayList<>();
+        List<String> out = new ArrayList<>(list.size());
 
         for (String[] s : list) {
             out.add(removeQuotes(s[index]));
@@ -50,7 +50,7 @@ class TypedValueUtilities {
     public static List<TypedValue> createTypedArrayFromList(List<String[]> list, int index)
             throws OperationFailedException {
 
-        List<TypedValue> out = new ArrayList<>();
+        List<TypedValue> out = new ArrayList<>(list.size());
 
         for (String[] s : list) {
             addGuessType(out, s[index]);
@@ -60,7 +60,7 @@ class TypedValueUtilities {
 
     public static List<String> listFromArray(String[] arr) throws OperationFailedException {
 
-        List<String> out = new ArrayList<>();
+        List<String> out = new ArrayList<>(arr.length);
 
         for (String s : arr) {
             out.add(removeQuotes(s));
@@ -70,7 +70,7 @@ class TypedValueUtilities {
 
     public static List<TypedValue> typeArray(String[] arr) throws OperationFailedException {
 
-        List<TypedValue> out = new ArrayList<>();
+        List<TypedValue> out = new ArrayList<>(arr.length);
 
         for (String s : arr) {
             addGuessType(out, s);

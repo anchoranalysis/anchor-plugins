@@ -76,7 +76,8 @@ public class Box extends FromDimensionsBase {
 
     private BoundingBox createBox(Dimensions dimensions) {
         BoundingBox box =
-                new BoundingBox(new Point3d(minX, minY, minZ), new Point3d(maxX, maxY, maxZ));
+                BoundingBox.createReuse(
+                        new Point3d(minX, minY, minZ), new Point3d(maxX, maxY, maxZ));
 
         // Make sure box is inside channel
         return box.clampTo(dimensions.extent());

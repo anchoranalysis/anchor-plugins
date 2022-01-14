@@ -169,7 +169,7 @@ class NaiveGreedyMerge {
     private static ObjectMask createSinglePixelObject(Point3i point) {
         Extent extent = new Extent(1, 1, 1);
         BinaryVoxels<UnsignedByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOn(extent);
-        return new ObjectMask(new BoundingBox(point, extent), voxels);
+        return new ObjectMask(BoundingBox.createReuse(point, extent), voxels);
     }
 
     private static void removeTwoIndices(ObjectCollection objects, int i, int j) {

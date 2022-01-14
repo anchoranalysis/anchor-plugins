@@ -62,14 +62,14 @@ class ObjectCollectionFixture {
     }
 
     private ObjectMask mockObject() {
-        Extent e = randomExtent();
-        Point3i crnr = randomCorner(e);
-        return mockObject(crnr, e);
+        Extent extent = randomExtent();
+        Point3i corner = randomCorner(extent);
+        return mockObject(corner, extent);
     }
 
     private ObjectMask mockObject(Point3i corner, Extent extent) {
 
-        ObjectMask object = new ObjectMask(new BoundingBox(corner, extent));
+        ObjectMask object = new ObjectMask(BoundingBox.createReuse(corner, extent));
 
         int volumeXY = extent.areaXY();
         for (int z = 0; z < extent.z(); z++) {

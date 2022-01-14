@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -48,9 +49,10 @@ public class All extends FromStacks {
     public List<NamedChannel> selectChannels(ChannelSource source, boolean checkType)
             throws OperationFailedException {
 
-        List<NamedChannel> out = new ArrayList<>();
+        Set<String> keys = source.getStackStore().keys();
+        List<NamedChannel> out = new ArrayList<>(keys.size());
 
-        for (String key : source.getStackStore().keys()) {
+        for (String key : keys) {
 
             out.addAll(extractAllChannels(source, key, checkType));
         }
@@ -66,7 +68,7 @@ public class All extends FromStacks {
             // We make a single histogram
             Stack stack = source.getStackStore().getException(stackName);
 
-            List<NamedChannel> out = new ArrayList<>();
+            List<NamedChannel> out = new ArrayList<>(stack.getNumberChannels());
             for (int i = 0; i < stack.getNumberChannels(); i++) {
 
                 String outputName = stackName + createSuffix(i, stack.getNumberChannels() > 1);
