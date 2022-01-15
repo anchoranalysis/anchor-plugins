@@ -29,6 +29,8 @@ import java.nio.FloatBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -40,6 +42,11 @@ import org.opencv.core.Mat;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class VoxelsFromMat {
+
+    public static Channel toChannel(Mat mat, Extent extent) throws OperationFailedException {
+        Voxels<?> voxels = VoxelsFromMat.toVoxels(mat, extent);
+        return ChannelFactory.instance().create(voxels);
+    }
 
     public static Voxels<?> toVoxels( // NOSONAR
             Mat mat, Extent extent) throws OperationFailedException {

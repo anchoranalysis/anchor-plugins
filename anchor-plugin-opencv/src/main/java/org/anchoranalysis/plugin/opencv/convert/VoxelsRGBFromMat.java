@@ -26,12 +26,18 @@
 package org.anchoranalysis.plugin.opencv.convert;
 
 import com.google.common.base.Preconditions;
-import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.spatial.box.Extent;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -45,37 +51,29 @@ class VoxelsRGBFromMat {
      *
      * @param mat the mat containing unsigned-byte voxels, interleaved for the channels in BGR
      *     order.
-     * @param channelRed the <b>red</b> channel to assign voxels to.
-     * @param channelGreen the <b>blue</b> channel to assign voxels to.
-     * @param channelBlue the <b>green</b> channel to assign voxels to.
+     * @param extent the size of a channel.
+     * @return a newly created {@link Stack}, containing three channels, in respective RGB order.
+     * @throws OperationFailedException if the {@link Mat} contains an invalid channel type, or
+     *     otherwise unable to complete successfully.
      */
-    public static void matToRGB(
-            Mat mat, Channel channelRed, Channel channelGreen, Channel channelBlue) {
+    public static Stack matToRGB(Mat mat, Extent extent) throws OperationFailedException {
 
-        Extent extent = channelRed.extent();
         Preconditions.checkArgument(extent.z() == 1);
 
-        UnsignedByteBuffer red = BufferHelper.extractByte(channelRed);
-        UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
-        UnsignedByteBuffer blue = BufferHelper.extractByte(channelBlue);
+        List<Mat> split = new ArrayList<>(3);
+        Core.split(mat, split);
 
-        ByteBuffer buffer =
-                ByteBufferFromNativeAddress.wrapAddress(
-                        mat.dataAddr(), channelRed.extent().areaXY() * 3);
-
-        while (buffer.hasRemaining()) {
-            // OpenCV uses a BGR order as opposed to RGB in Anchor.
-            blue.putRaw(buffer.get());
-            green.putRaw(buffer.get());
-            red.putRaw(buffer.get());
+        try {
+            return new Stack(
+                    true,
+                    VoxelsFromMat.toChannel(split.get(2), extent),
+                    VoxelsFromMat.toChannel(split.get(1), extent),
+                    VoxelsFromMat.toChannel(split.get(0), extent));
+        } catch (IncorrectImageSizeException e) {
+            throw new AnchorImpossibleSituationException();
+        } catch (CreateException e) {
+            throw new OperationFailedException(
+                    "Unable to create a stack from the the three extacted channels", e);
         }
-
-        assert (!red.hasRemaining());
-        assert (!green.hasRemaining());
-        assert (!blue.hasRemaining());
-
-        blue.rewind();
-        red.rewind();
-        green.rewind();
     }
 }

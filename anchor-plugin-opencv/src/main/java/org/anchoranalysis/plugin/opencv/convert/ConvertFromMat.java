@@ -29,14 +29,11 @@ import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.spatial.box.Extent;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -67,37 +64,17 @@ public class ConvertFromMat {
 
     /** Converts to a {@link Stack} with a single channel. */
     private static Stack toGrayscale(Mat mat) throws OperationFailedException {
-        Voxels<?> voxels = VoxelsFromMat.toVoxels(mat, dimensionsFrom(mat).extent());
+        Voxels<?> voxels = VoxelsFromMat.toVoxels(mat, extentFrom(mat));
         return new Stack(ChannelFactory.instance().create(voxels));
     }
 
     /** Converts to a {@link Stack} with three channels (RGB). */
     private static Stack toRGB(Mat mat) throws OperationFailedException {
-        Stack stack = createEmptyStack(dimensionsFrom(mat), 3, true);
-        VoxelsRGBFromMat.matToRGB(
-                mat, stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
-        return stack;
-    }
-
-    /** Create a {@link Stack} with a number of newly-created empty (zero-valued) channels. */
-    private static Stack createEmptyStack(Dimensions dimensions, int numberChannels, boolean rgb) {
-        Stack stack = new Stack(rgb);
-        FunctionalIterate.repeat(
-                numberChannels,
-                () -> {
-                    try {
-                        stack.addChannel(
-                                ChannelFactory.instance()
-                                        .create(dimensions, UnsignedByteVoxelType.INSTANCE));
-                    } catch (IncorrectImageSizeException e) {
-                        throw new AnchorImpossibleSituationException();
-                    }
-                });
-        return stack;
+        return VoxelsRGBFromMat.matToRGB(mat, extentFrom(mat));
     }
 
     /** Infer the {@link Dimensions} for an image from a {@link Mat}. */
-    private static Dimensions dimensionsFrom(Mat mat) throws OperationFailedException {
+    private static Extent extentFrom(Mat mat) throws OperationFailedException {
         int width = mat.size(1);
         int height = mat.size(0);
 
@@ -108,6 +85,6 @@ public class ConvertFromMat {
 
         Preconditions.checkArgument(width > 0);
         Preconditions.checkArgument(height > 0);
-        return new Dimensions(width, height, 1);
+        return new Extent(width, height, 1);
     }
 }
