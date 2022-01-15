@@ -23,7 +23,7 @@ import org.anchoranalysis.spatial.point.Point2d;
  * <ul>
  *   <li>to avoid repeated redundant computational effort create the needed ImageJ classes, each
  *       time that a label is written.
- *   <li>to be aware of the maximimum width of the identifiers, to help sensibly pick a label size.
+ *   <li>to be aware of the maximum width of the identifiers, to help sensibly pick a label size.
  * </ul>
  *
  * <p>It is

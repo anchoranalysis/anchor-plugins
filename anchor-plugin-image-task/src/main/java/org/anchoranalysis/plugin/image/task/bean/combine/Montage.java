@@ -146,7 +146,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      * When true, the unique identifier associated with each image, is drawn on the bottom of the
      * image.
      */
-    @BeanField @Getter @Setter private boolean label = true;
+    @BeanField @Getter @Setter private boolean label = false;
 
     /**
      * When {@code label==true}, this determines the height of the label.
