@@ -36,8 +36,11 @@ import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesStyle;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.ExportFeaturesTaskFixture;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.MultiInputFixture;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.experiment.task.TaskSingleInputHelper;
+import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
+import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
@@ -53,11 +56,11 @@ import org.junit.jupiter.api.io.TempDir;
  * @param <U> shared-state type
  * @param <V> type of fixture used for creating tasks
  */
-abstract class ExportFeaturesTestBase<
+public abstract class ExportFeaturesTestBase<
         S extends InputFromManager,
         T extends FeatureInputEnergy,
         U,
-        V extends TaskFixture<S, T, U>> {
+        V extends ExportFeaturesTaskFixture<S, T, U>> {
 
     private static Path EXPECTED_RESULTS_BASE = Paths.get("expectedOutput");
 
@@ -71,6 +74,10 @@ abstract class ExportFeaturesTestBase<
 
     private CheckedFunction<TestLoader, V, CreateException> fixtureCreator;
 
+    static {
+        BeanInstanceMapFixture.ensureStackWriter(true);
+    }
+
     @TempDir Path directory;
 
     /**
@@ -78,7 +85,7 @@ abstract class ExportFeaturesTestBase<
      *
      * @param subdirectoryExpected the name of the sub-directory where the results will be found
      */
-    ExportFeaturesTestBase(
+    public ExportFeaturesTestBase(
             String subdirectoryExpected,
             boolean additionalOutputs,
             CheckedFunction<TestLoader, V, CreateException> fixtureCreator) {
@@ -127,7 +134,7 @@ abstract class ExportFeaturesTestBase<
             // we switch back to the old settings for comparison.
             task.setStyle(new ExportFeaturesStyle(false, false, false));
 
-            TaskSingleInputHelper.runTaskAndCompareOutputs(
+            ExecuteTaskHelper.runTaskAndCompareOutputs(
                     input,
                     task,
                     directory,

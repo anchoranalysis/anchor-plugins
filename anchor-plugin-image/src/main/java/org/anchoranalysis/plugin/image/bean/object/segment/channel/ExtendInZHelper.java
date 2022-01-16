@@ -66,7 +66,7 @@ class ExtendInZHelper {
         BoundedVoxels<UnsignedByteBuffer> newMask =
                 VoxelsFactory.getUnsignedByte().createBounded(newBBox);
 
-        ReadableTuple3i max = newBBox.calculateCornerMax();
+        ReadableTuple3i max = newBBox.calculateCornerMaxInclusive();
         Point3i point = new Point3i();
 
         BinaryValuesByte binaryValues = mask3D.binaryValues().asByte();
@@ -103,7 +103,7 @@ class ExtendInZHelper {
         Point3i cornerMin = copyPointChangeZ(existing.cornerMin(), 0);
         Extent extent = copyExtentChangeZ(existing.extent(), z);
 
-        return new BoundingBox(cornerMin, extent);
+        return BoundingBox.createReuse(cornerMin, extent);
     }
 
     private static Point3i copyPointChangeZ(ReadableTuple3i in, int z) {

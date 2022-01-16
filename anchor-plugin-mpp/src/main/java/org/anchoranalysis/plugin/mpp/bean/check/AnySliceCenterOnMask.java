@@ -46,16 +46,16 @@ public class AnySliceCenterOnMask extends CheckMarkWithMask {
     @Override
     public boolean check(Mark mark, RegionMap regionMap, EnergyStack energyStack)
             throws CheckException {
-        Point3d cp = mark.centerPoint();
-        if (isPointOnMask(cp, energyStack, AnySliceCenterOnMask::derivePoint)) {
+        Point3d center = mark.centerPoint();
+        if (isPointOnMask(center, energyStack, AnySliceCenterOnMask::derivePoint)) {
             return true;
         }
 
         BoundingBox box = mark.boxAllRegions(energyStack.dimensions());
-        ReadableTuple3i cornerMax = box.calculateCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMaxInclusive();
         for (int z = box.cornerMin().z(); z <= cornerMax.z(); z++) {
-            Point3d cpSlice = new Point3d(cp.x(), cp.y(), z);
-            if (isPointOnMask(cpSlice, energyStack, AnySliceCenterOnMask::derivePoint)) {
+            Point3d centerSlice = new Point3d(center.x(), center.y(), z);
+            if (isPointOnMask(centerSlice, energyStack, AnySliceCenterOnMask::derivePoint)) {
                 return true;
             }
         }

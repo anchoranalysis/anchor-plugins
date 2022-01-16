@@ -252,16 +252,13 @@ public class ConvertToMat {
         Extent extent = channelRed.extent();
         Preconditions.checkArgument(extent.z() == 1);
 
-        Mat mat = createEmptyMat(channelRed.extent(), CvType.CV_8UC3);
+        ByteBuffer out = ByteBuffer.allocateDirect(channelRed.extent().areaXY() * 3);
+        Mat mat = new Mat(extent.y(), extent.x(), CvType.CV_8UC3, out);
 
         UnsignedByteBuffer red = BufferHelper.extractByte(channelRed);
         UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
         UnsignedByteBuffer blue = BufferHelper.extractByte(channelBlue);
 
-        // It's quickest to direct access the native memory via a direct ByteBuffer.
-        ByteBuffer out =
-                ByteBufferFromNativeAddress.wrapAddress(
-                        mat.dataAddr(), channelRed.extent().areaXY() * 3);
         while (red.hasRemaining()) {
             out.put(blue.getRaw());
             out.put(green.getRaw());

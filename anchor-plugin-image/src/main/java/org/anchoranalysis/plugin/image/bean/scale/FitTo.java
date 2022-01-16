@@ -100,7 +100,7 @@ public class FitTo extends ScaleCalculator {
         if (preserveAspectRatio) {
             ScaleFactor scaleFactor =
                     RelativeScaleCalculator.relativeScalePreserveAspectRatio(originalSize, target);
-            return originalSize.scaleXYBy(scaleFactor);
+            return originalSize.scaleXYBy(scaleFactor, true);
         } else {
             return target;
         }

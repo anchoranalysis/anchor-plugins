@@ -195,7 +195,7 @@ public class TraverseOuterContourOnImage extends TraverseOuterCounter {
         // We create a raster around the point, maxDistance*2 in both directions, so long as it
         // doesn't escape the region
         BoundingBox box =
-                new BoundingBox(
+                BoundingBox.createReuse(
                         Point3i.immutableSubtract(point, width),
                         Point3i.immutableAdd(point, width));
         return box.clampTo(clampTo);

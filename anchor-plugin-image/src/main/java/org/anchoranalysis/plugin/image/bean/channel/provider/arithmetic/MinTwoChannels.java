@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import org.anchoranalysis.core.functional.unchecked.IntBinaryOperation;
+import org.anchoranalysis.core.functional.unchecked.IntBinaryPredicate;
 import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase;
 
 public class MinTwoChannels extends TwoVoxelMappingBase {
 
-    public MinTwoChannels(IntBinaryOperation operation) {
+    public MinTwoChannels(IntBinaryPredicate operation) {
         super(Math::min);
     }
 }

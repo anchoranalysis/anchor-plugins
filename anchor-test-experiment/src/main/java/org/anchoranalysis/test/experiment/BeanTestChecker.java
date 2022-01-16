@@ -55,6 +55,7 @@ public class BeanTestChecker {
      *
      * @param <T> bean-type
      * @param bean bean to check
+     * @return the bean that was checked.
      */
     public static <T extends AnchorBean<?>> T check(T bean) {
         try {
@@ -74,6 +75,7 @@ public class BeanTestChecker {
      * @param bean the bean to check and initialize.
      * @param initialization initialization-parameters.
      * @param logger the logger.
+     * @return the bean that was checked and initialized.
      */
     public static <T extends InitializableBean<?, P>, P extends BeanInitialization> T checkAndInit(
             T bean, P initialization, Logger logger) {

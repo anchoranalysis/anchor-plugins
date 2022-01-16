@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
@@ -40,15 +41,23 @@ class MontageSharedStateFactory {
             Stream<Path> paths,
             StackArranger arranger,
             VoxelsResizer resizer,
-            CheckedFunction<Path, Extent, ExperimentExecutionException> deriveExtent)
+            CheckedFunction<Path, Extent, ExperimentExecutionException> deriveExtent,
+            ExecutionTimeRecorder recorder)
             throws ExperimentExecutionException {
 
         // The sizes for each image to place into the arrangement (e.g. table)
-        List<Pair<Path, Extent>> sizes = deriveExtentForAllInputs(paths, deriveExtent);
+        List<Pair<Path, Extent>> sizes =
+                recorder.recordExecutionTime(
+                        "Deriving initially the size of each image",
+                        () -> deriveExtentForAllInputs(paths, deriveExtent));
 
         try {
             StackArrangement arrangement =
-                    arranger.arrangeStacks(sizes.stream().map(Pair::getSecond).iterator());
+                    recorder.recordExecutionTime(
+                            "Arranging the stacks",
+                            () ->
+                                    arranger.arrangeStacks(
+                                            sizes.stream().map(Pair::getSecond).iterator()));
 
             // Create the shared state with the bounding-box mapping and overall size for the
             // combined image.

@@ -72,7 +72,7 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
                 return false;
             }
 
-            ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
+            ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMaxInclusive();
             if (cornerMax.z() == (dimensions.get().z() - 1)) {
                 return false;
             }

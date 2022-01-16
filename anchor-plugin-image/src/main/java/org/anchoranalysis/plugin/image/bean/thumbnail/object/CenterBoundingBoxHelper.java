@@ -111,7 +111,7 @@ class CenterBoundingBoxHelper {
         assert (sceneExtent.contains(cornerLeft));
         assert (sceneExtent.contains(cornerRight));
 
-        return new BoundingBox(cornerLeft, cornerRight);
+        return BoundingBox.createReuse(cornerLeft, cornerRight);
     }
 
     /** Creates a new point where negative-values are retained, and non-negative values are zero */

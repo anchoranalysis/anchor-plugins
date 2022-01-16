@@ -97,13 +97,13 @@ public class ExtendInZWithinContainer extends WithContainerBase {
             throws CreateException {
 
         int zLow = container.boundingBox().cornerMin().z();
-        int zHigh = container.boundingBox().calculateCornerMax().z();
+        int zHigh = container.boundingBox().calculateCornerMaxInclusive().z();
 
         Extent extent = objectFlattened.boundingBox().extent().duplicateChangeZ(zHigh - zLow + 1);
         ReadableTuple3i cornerMin =
                 objectFlattened.boundingBox().cornerMin().duplicateChangeZ(zLow);
 
-        return new BoundingBox(cornerMin, extent)
+        return BoundingBox.createReuse(cornerMin, extent)
                 .intersection()
                 .with(container.boundingBox())
                 .orElseThrow(() -> new CreateException("Bounding boxes don't intersect"));

@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import org.anchoranalysis.core.functional.unchecked.IntBinaryOperation;
+import org.anchoranalysis.core.functional.unchecked.IntBinaryPredicate;
 import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase;
 
 public class SubtractTwoChannels extends TwoVoxelMappingBase {
 
-    public SubtractTwoChannels(IntBinaryOperation operation) {
+    public SubtractTwoChannels(IntBinaryPredicate operation) {
         super((a, b) -> a - b);
     }
 }

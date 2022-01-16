@@ -53,7 +53,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
 
     @BeanField @NonEmpty @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeatures =
-            new ArrayList<>();
+            new ArrayList<>(0);
 
     @BeanField @Getter @Setter private StackProvider stackEnergy;
     // END BEAN PROPERTIES

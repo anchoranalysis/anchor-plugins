@@ -8,8 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -21,8 +23,10 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
+import org.anchoranalysis.image.bean.spatial.arrange.align.Align;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.bean.spatial.arrange.align.Grow;
+import org.anchoranalysis.image.bean.spatial.arrange.fill.Fill;
 import org.anchoranalysis.image.bean.spatial.arrange.tile.Tile;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
@@ -37,9 +41,9 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.scale.ToDimensions;
 import org.anchoranalysis.plugin.image.bean.scale.ToSuggested;
-import org.anchoranalysis.plugin.image.task.bean.scale.ScaleImage;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
@@ -53,7 +57,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * <p>By default, each image will be scaled to approximately 600x480 (but usually not exactly this,
  * to preserve aspect ratio, and fill available space).
  *
- * <p>The {@link TaskArguments#size} will take priority over this default if set, or any bean
+ * <p>The {@link TaskArguments#getSize} will take priority over this default if set, or any bean
  * assigned to {@code scale}.
  *
  * <p>Any 3D images are flattened into a 2D image using a maximum-intensity projection.
@@ -65,7 +69,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  *       heights are known, and an arrangement can be determined. This occurs through the {@code
  *       imageMetadataReader} which is often much quicker than opening an image with the {@code
  *       stackReader} but this is not always the case.
- *   <li>Then in <i>parallel</b> each image is read from the file-system and added to the combined
+ *   <li>Then in <i>parallel</i> each image is read from the file-system and added to the combined
  *       image.
  * </ul>
  *
@@ -77,7 +81,8 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value ScaleImage#OUTPUT_MONTAGE}</td><td>yes</td><td>The montage of all the input images.</td></tr>
+ * <tr><td>{@value Montage#OUTPUT_UNLABELLED}</td><td>yes</td><td>The montage of all the input images - <b>without</b> a label indicating the identifier of each image.</td></tr>
+ * <tr><td>{@value Montage#OUTPUT_LABELLED}</td><td>yes</td><td>The montage of all the input images - <b>with</b> a label indicating the identifier of each image.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
@@ -86,8 +91,11 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  */
 public class Montage extends Task<StackSequenceInput, MontageSharedState> {
 
-    /** The combined version of the stacks. */
-    private static final String OUTPUT_MONTAGE = "montage";
+    /** The combined version of the stacks - without a label. */
+    static final String OUTPUT_UNLABELLED = "unlabelled";
+
+    /** The combined version of the stacks - with a label. */
+    static final String OUTPUT_LABELLED = "labelled";
 
     /**
      * Number of pixels <i>width</i> to scale an image to approximately, if no alternative is
@@ -117,8 +125,52 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     /** How to resize images. */
     @DefaultInstance @BeanField @Getter @Setter private Interpolator interpolator;
 
-    /** How to align a smaller image inside a larger cell. */
+    /**
+     * When true, the images may vary in width/height in their respective rows to fill space, while
+     * preserving the aspect-ratio of each image.
+     */
+    @BeanField @Getter @Setter private boolean varyImageSize = true;
+
+    /**
+     * When true, the location of an image in the grid, as well as the number of images in each row
+     * are both allowed to vary to fill space.
+     *
+     * <p>When true, {@code varyImageSize} will always be considered also as {@code true}.
+     */
+    @BeanField @Getter @Setter private boolean varyImageLocation = true;
+
+    /**
+     * When {@code varyImageSize==false} and {@code varyImageLocation==false}, how to align a
+     * smaller image inside a larger cell. Otherwise ignored.
+     *
+     * <p>By default, the smaller image grows as much as possible, while preserving the
+     * aspect-ratio, but while strictly keeping a tabular form.
+     */
     @BeanField @Getter @Setter private BoxAligner aligner = new Grow(true);
+
+    /**
+     * When {@code label==true}, this determines the height of the label.
+     *
+     * <p>Otherwise, it is ignored.
+     *
+     * <p>It indicates what portion of the average-image-height (when projected into the image) should the label approximately occupy.
+     *
+     * <p>It defaults to {@code 0.05} i.e. the label should typically occupy 5% of the average image-height.
+     *
+     * <p>It can be adjusted to make the label larger or smaller, relative to the image that is being labelled.
+     *
+     * <p>Note that a lower minimum exists of label font-size, below which it will not become smaller.
+     */
+    @BeanField @Getter @Setter @Positive private double ratioHeightForLabel = 0.05;
+
+    /**
+     * When {@code label==false} and {@code varyImageLocation==false}, how to align the label with
+     * its asosicated image.
+     *
+     * <p>By default, it is horizontally-centered at the bottom of the image.
+     */
+    @BeanField @Getter @Setter
+    private BoxAligner alignerLabel = new Align("center", "bottom", "bottom");
     // END BEAN PROPERTIES
 
     @Override
@@ -133,8 +185,6 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             throw new ExperimentExecutionException("No inputs exist, so no montage can be created");
         }
 
-        StackArranger arranger = createArranger(inputs.size());
-
         try {
             // The binding-paths for all the inputs
             Stream<Path> paths =
@@ -143,15 +193,19 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
                             InputReadFailedException.class,
                             StackSequenceInput::pathForBindingRequired);
 
+            StackArranger arranger = createArranger(inputs.size());
+
             // Create the shared-state
             Optional<ImageSizeSuggestion> suggestedSize =
                     parameters.getExperimentArguments().task().getSize();
             OperationContext context = parameters.getContext().operationContext();
+
             return MontageSharedStateFactory.create(
                     paths,
                     arranger,
                     interpolator.voxelsResizer(),
-                    path -> scaledSizeFor(path, suggestedSize, context));
+                    path -> scaledSizeFor(path, suggestedSize, context),
+                    context.getExecutionTimeRecorder());
         } catch (InputReadFailedException e) {
             throw new ExperimentExecutionException("Cannot establish an input path", e);
         }
@@ -169,25 +223,48 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
         }
 
         try {
-            input.getSharedState().copyStackInto(stack, input.getInput().pathForBindingRequired());
+            Optional<String> stackLabel =
+                    OptionalFactory.create(
+                            labelsEnabled(input.getOutputter()), input.getInput()::identifier);
 
-        } catch (InputReadFailedException e) {
+            Path path = input.getInput().pathForBindingRequired();
+            input.getContextExperiment()
+                    .getExecutionTimeRecorder()
+                    .recordExecutionTime(
+                            "Copy and scale stack into montage",
+                            () -> input.getSharedState().copyStackInto(stack, path, stackLabel));
+
+        } catch (InputReadFailedException | OperationFailedException e) {
             throw new JobExecutionException("Cannot establish an input path", e);
-        } catch (OperationFailedException e) {
-            throw new JobExecutionException("Cannot copy input-stack into combined stack", e);
         }
     }
 
     @Override
     public void afterAllJobsAreExecuted(MontageSharedState sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
-        // Write the combined stack
-        context.getOutputter()
-                .writerSelective()
-                .write(
-                        OUTPUT_MONTAGE,
-                        () -> new StackGenerator(true),
-                        sharedState.getStack()::asStack);
+
+        writeMontage(context.getOutputter().writerSelective(), OUTPUT_UNLABELLED, sharedState);
+
+        try {
+            if (labelsEnabled(context.getOutputter())) {
+
+                context.getExecutionTimeRecorder()
+                        .recordExecutionTime(
+                                "Draw all labels",
+                                () -> sharedState.drawAllLabels(ratioHeightForLabel, alignerLabel));
+                writeMontage(
+                        context.getOutputter().writerPermissive(), OUTPUT_LABELLED, sharedState);
+            }
+        } catch (OperationFailedException e) {
+            throw new ExperimentExecutionException(
+                    "A problem occurred drawing labels on the montaged image", e);
+        }
+    }
+
+    /** Write the montaged image to the file-system */
+    private void writeMontage(
+            WriterRouterErrors writer, String outputName, MontageSharedState sharedState) {
+        writer.write(outputName, () -> new StackGenerator(true), sharedState.getStack()::asStack);
     }
 
     @Override
@@ -202,12 +279,16 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_MONTAGE);
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_LABELLED);
     }
 
     /**
      * Determines the scaled size for a particular image, which is used to populate the table. The
      * final size will be approximately similar, but not necessarily identical.
+     *
+     * <p>The size is read from the file-system from a {@code imageMetadataReader} as this often is
+     * much quicker than reading the entire raster (which will occur later in parallel when actually
+     * reading the image).
      */
     private Extent scaledSizeFor(
             Path imagePath, Optional<ImageSizeSuggestion> suggestedResize, OperationContext context)
@@ -216,7 +297,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             ImageMetadata metadata = imageMetadataReader.openFile(imagePath, stackReader, context);
             ScaleFactor factor =
                     scale.calculate(Optional.of(metadata.getDimensions()), suggestedResize);
-            return metadata.getDimensions().extent().scaleXYBy(factor);
+            return metadata.getDimensions().extent().scaleXYBy(factor, true);
         } catch (ImageIOException e) {
             throw new ExperimentExecutionException(
                     "Cannot read the image-metadata for file at: " + imagePath, e);
@@ -229,17 +310,32 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     /** Creates the {@link StackArranger} that will determine the tabular pattern. */
     private StackArranger createArranger(int numberInputs) {
 
-        // Determine number of columns and rows, so that they are both similar (as close to a square
-        // as possible).
-        int columns = (int) Math.ceil(Math.sqrt(numberInputs));
-        int rows = (int) Math.ceil(((double) numberInputs) / columns);
+        // Determine number of rows, so to give a similar number of rows and columns (as close to a
+        // square as possible).
+        int rows = (int) Math.ceil(Math.sqrt(numberInputs));
 
-        // Tiling the images into a tabular form.
-        Tile tile = new Tile();
-        tile.setNumberColumns(columns);
-        tile.setNumberRows(rows);
-        tile.setAligner(aligner);
-        return tile;
+        if (varyImageSize) {
+            // Completely fill space, allowing for a different number of rows and columns
+            Fill fill = new Fill();
+            fill.setNumberRows(rows);
+            fill.setVaryNumberImagesPerRow(varyImageLocation);
+            return fill;
+        } else {
+
+            int columns = (int) Math.ceil(((double) numberInputs) / rows);
+
+            // A strictly tabular form, where each image must fit inside its cell-size.
+            Tile tile = new Tile();
+            tile.setNumberColumns(columns);
+            tile.setNumberRows(rows);
+            tile.setAligner(aligner);
+            return tile;
+        }
+    }
+
+    /** Is labelling enabled as an output? */
+    private boolean labelsEnabled(Outputter outputter) {
+        return outputter.outputsEnabled().isOutputEnabled(OUTPUT_LABELLED);
     }
 
     /** The default {@link ScaleCalculator} if no other is provided. */

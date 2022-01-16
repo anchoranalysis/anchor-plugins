@@ -106,7 +106,7 @@ class SquareIterator implements Iterator<BoundingBox> {
 
         Extent squareExtent = new Extent(endX - startX, extentY, extentZ);
 
-        return new BoundingBox(corner, squareExtent);
+        return BoundingBox.createDuplicate(corner, squareExtent);
     }
 
     private void moveToY(int y) {
