@@ -26,8 +26,9 @@ import org.junit.jupiter.api.io.TempDir;
  */
 class MontageTest {
 
+	/** We don't test the labelled output as fonts vary on windows and linux. */
     private static List<String> FILENAMES_TO_COMPARE =
-            Arrays.asList(Montage.OUTPUT_UNLABELLED + ".png", Montage.OUTPUT_LABELLED + ".png");
+            Arrays.asList(Montage.OUTPUT_UNLABELLED + ".png");
 
     /** The respective colors of the six images. */
     private static List<String> FILENAMES =

@@ -60,7 +60,8 @@ public class MontageSharedState {
      *     the combined image.
      * @param label if set, this label is drawn onto the bottom of the image. if not set, nothing
      *     occurs.
-     * @throws OperationFailedException if no matching bounding-box exists.
+     * @throws OperationFailedException if no matching bounding-box exists, or the copying otherwise
+     *     fails.
      */
     public void copyStackInto(Stack source, Path path, Optional<String> label)
             throws OperationFailedException {
@@ -68,15 +69,22 @@ public class MontageSharedState {
         BoundingBox box = boxes.get(path);
 
         if (box == null) {
-            throw new OperationFailedException("Cannot find bounding-box to place " + path);
+            throw new OperationFailedException(
+                    "Cannot find bounding-box to place image `" + path + "` into the montage.");
         }
 
-        Stack sourceResized = source.mapChannel(channel -> channel.resizeXY(box.extent(), resizer));
+        try {
+            Stack sourceResized =
+                    source.mapChannel(channel -> channel.resizeXY(box.extent(), resizer));
 
-        StackCopierAtBox.copyImageInto(sourceResized, stack.asStack(), box);
+            StackCopierAtBox.copyImageInto(sourceResized, stack.asStack(), box);
 
-        if (label.isPresent()) {
-            labels.add(label.get(), box);
+            if (label.isPresent()) {
+                labels.add(label.get(), box);
+            }
+        } catch (OperationFailedException e) {
+            throw new OperationFailedException(
+                    "An error occurred copying the image `" + path + "` into the montage.", e);
         }
     }
 

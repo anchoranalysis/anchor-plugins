@@ -204,7 +204,8 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
                     paths,
                     arranger,
                     interpolator.voxelsResizer(),
-                    path -> scaledSizeFor(path, suggestedSize, context));
+                    path -> scaledSizeFor(path, suggestedSize, context),
+                    context.getExecutionTimeRecorder());
         } catch (InputReadFailedException e) {
             throw new ExperimentExecutionException("Cannot establish an input path", e);
         }
@@ -225,13 +226,16 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             Optional<String> stackLabel =
                     OptionalFactory.create(
                             labelsEnabled(input.getOutputter()), input.getInput()::identifier);
-            input.getSharedState()
-                    .copyStackInto(stack, input.getInput().pathForBindingRequired(), stackLabel);
 
-        } catch (InputReadFailedException e) {
+            Path path = input.getInput().pathForBindingRequired();
+            input.getContextExperiment()
+                    .getExecutionTimeRecorder()
+                    .recordExecutionTime(
+                            "Copy and scale stack into montage",
+                            () -> input.getSharedState().copyStackInto(stack, path, stackLabel));
+
+        } catch (InputReadFailedException | OperationFailedException e) {
             throw new JobExecutionException("Cannot establish an input path", e);
-        } catch (OperationFailedException e) {
-            throw new JobExecutionException("Cannot copy input-image into montaged image", e);
         }
     }
 
@@ -243,7 +247,11 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
 
         try {
             if (labelsEnabled(context.getOutputter())) {
-                sharedState.drawAllLabels(ratioHeightForLabel, alignerLabel);
+
+                context.getExecutionTimeRecorder()
+                        .recordExecutionTime(
+                                "Draw all labels",
+                                () -> sharedState.drawAllLabels(ratioHeightForLabel, alignerLabel));
                 writeMontage(
                         context.getOutputter().writerPermissive(), OUTPUT_LABELLED, sharedState);
             }
