@@ -41,6 +41,7 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.scale.ToDimensions;
 import org.anchoranalysis.plugin.image.bean.scale.ToSuggested;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
@@ -80,7 +81,8 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value Montage#OUTPUT_MONTAGE}</td><td>yes</td><td>The montage of all the input images.</td></tr>
+ * <tr><td>{@value Montage#OUTPUT_UNLABELLED}</td><td>yes</td><td>The montage of all the input images - <b>without</b> a label indicating the identifier of each image.</td></tr>
+ * <tr><td>{@value Montage#OUTPUT_LABELLED}</td><td>yes</td><td>The montage of all the input images - <b>with</b> a label indicating the identifier of each image.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
@@ -89,8 +91,11 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  */
 public class Montage extends Task<StackSequenceInput, MontageSharedState> {
 
-    /** The combined version of the stacks. */
-    private static final String OUTPUT_MONTAGE = "montage";
+    /** The combined version of the stacks - without a label. */
+    static final String OUTPUT_UNLABELLED = "unlabelled";
+
+    /** The combined version of the stacks - with a label. */
+    static final String OUTPUT_LABELLED = "labelled";
 
     /**
      * Number of pixels <i>width</i> to scale an image to approximately, if no alternative is
@@ -142,12 +147,6 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      * aspect-ratio, but while strictly keeping a tabular form.
      */
     @BeanField @Getter @Setter private BoxAligner aligner = new Grow(true);
-
-    /**
-     * When true, the unique identifier associated with each image, is drawn on the bottom of the
-     * image.
-     */
-    @BeanField @Getter @Setter private boolean label = false;
 
     /**
      * When {@code label==true}, this determines the height of the label.
@@ -224,7 +223,8 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
 
         try {
             Optional<String> stackLabel =
-                    OptionalFactory.create(label, input.getInput()::identifier);
+                    OptionalFactory.create(
+                            labelsEnabled(input.getOutputter()), input.getInput()::identifier);
             input.getSharedState()
                     .copyStackInto(stack, input.getInput().pathForBindingRequired(), stackLabel);
 
@@ -239,22 +239,24 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     public void afterAllJobsAreExecuted(MontageSharedState sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
 
+        writeMontage(context.getOutputter().writerSelective(), OUTPUT_UNLABELLED, sharedState);
+
         try {
-            if (label) {
+            if (labelsEnabled(context.getOutputter())) {
                 sharedState.drawAllLabels(ratioHeightForLabel, alignerLabel);
+                writeMontage(
+                        context.getOutputter().writerPermissive(), OUTPUT_LABELLED, sharedState);
             }
         } catch (OperationFailedException e) {
             throw new ExperimentExecutionException(
                     "A problem occurred drawing labels on the montaged image", e);
         }
+    }
 
-        // Write the combined stack
-        context.getOutputter()
-                .writerSelective()
-                .write(
-                        OUTPUT_MONTAGE,
-                        () -> new StackGenerator(true),
-                        sharedState.getStack()::asStack);
+    /** Write the montaged image to the file-system */
+    private void writeMontage(
+            WriterRouterErrors writer, String outputName, MontageSharedState sharedState) {
+        writer.write(outputName, () -> new StackGenerator(true), sharedState.getStack()::asStack);
     }
 
     @Override
@@ -269,7 +271,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_MONTAGE);
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_LABELLED);
     }
 
     /**
@@ -321,6 +323,11 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             tile.setAligner(aligner);
             return tile;
         }
+    }
+
+    /** Is labelling enabled as an output? */
+    private boolean labelsEnabled(Outputter outputter) {
+        return outputter.outputsEnabled().isOutputEnabled(OUTPUT_LABELLED);
     }
 
     /** The default {@link ScaleCalculator} if no other is provided. */

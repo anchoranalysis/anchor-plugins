@@ -26,7 +26,8 @@ import org.junit.jupiter.api.io.TempDir;
  */
 class MontageTest {
 
-    private static List<String> FILENAMES_TO_COMPARE = Arrays.asList("montage.png");
+    private static List<String> FILENAMES_TO_COMPARE =
+            Arrays.asList(Montage.OUTPUT_UNLABELLED + ".png", Montage.OUTPUT_LABELLED + ".png");
 
     /** The respective colors of the six images. */
     private static List<String> FILENAMES =
@@ -72,14 +73,6 @@ class MontageTest {
         task.setVaryImageLocation(false);
         task.setVaryImageSize(false);
         doTest(task, "varyNeither");
-    }
-
-    /** With labelling as per default settings. */
-    @Test
-    void testLabelDefault() throws OperationFailedException, ImageIOException {
-        Montage task = new Montage();
-        task.setLabel(true);
-        doTest(task, "labelDefault");
     }
 
     private void doTest(Montage task, String expectedOutputSubdirectory)
