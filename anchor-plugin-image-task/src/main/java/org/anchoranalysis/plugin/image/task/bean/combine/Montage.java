@@ -16,6 +16,7 @@ import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.arguments.TaskArguments;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -57,8 +58,8 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * <p>By default, each image will be scaled to approximately 600x480 (but usually not exactly this,
  * to preserve aspect ratio, and fill available space).
  *
- * <p>The {@link TaskArguments#getSize} will take priority over this default if set, or any bean
- * assigned to {@code scale}.
+ * <p>Any size suggestion passed via arguments will take priority over this default if set, or any bean
+ * assigned to {@code scale} (in that order of precedence).
  *
  * <p>Any 3D images are flattened into a 2D image using a maximum-intensity projection.
  *
