@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
@@ -61,10 +62,12 @@ class MontageLabels {
      * @param stack the image to draw onto.
      * @param ratioHeightForLabel how much of the average box height should the label approximately
      *     be sized to.
+     * @param aligner how to align the label on its respective associated image.
      * @throws OperationFailedException if {@code stack} cannot be converted into an {@link
      *     ImageProcessor}.
      */
-    public void flush(RGBStack stack, double ratioHeightForLabel) throws OperationFailedException {
+    public void flush(RGBStack stack, double ratioHeightForLabel, BoxAligner aligner)
+            throws OperationFailedException {
         int fontSize = 0;
         try {
             // Iterate through each of the RGB channels respectively, and draw the text in the
@@ -88,10 +91,10 @@ class MontageLabels {
                 processor.setColor(extractColorComponent(TEXT_COLOR, channel));
                 processor.setFontSize(fontSize);
 
-                // TODO check the width of the font, and remove characters if necessary to make it
-                // compliant
                 Color background = extractColorComponent(FILL_COLOR, channel);
-                labels.forEach(label -> label.drawOnProcessor(processor, background));
+                for (LabelToWrite label : labels) {
+                    label.drawOnProcessor(processor, background, aligner);
+                }
             }
             labels = null;
         } catch (ImageJConversionException e) {
@@ -103,7 +106,7 @@ class MontageLabels {
     private int calculateFontSize(ImageProcessor processor, double ratioHeightForLabel) {
         // Converts sumSizes into the average size in each dimension
         sumSizes.scale(1.0 / labels.size());
-        FontSizeCalculator calculator = new FontSizeCalculator(processor);
+        FontSizeCalculator calculator = new FontSizeCalculator(processor, labels.stream());
         return calculator.calculateOptimalFontSize(sumSizes, ratioHeightForLabel);
     }
 

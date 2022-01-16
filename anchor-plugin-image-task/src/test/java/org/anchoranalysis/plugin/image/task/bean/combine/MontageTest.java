@@ -74,6 +74,14 @@ class MontageTest {
         doTest(task, "varyNeither");
     }
 
+    /** With labelling as per default settings. */
+    @Test
+    void testLabelDefault() throws OperationFailedException, ImageIOException {
+        Montage task = new Montage();
+        task.setLabel(true);
+        doTest(task, "labelDefault");
+    }
+
     private void doTest(Montage task, String expectedOutputSubdirectory)
             throws ImageIOException, OperationFailedException {
 

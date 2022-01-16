@@ -6,6 +6,7 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackCopierAtBox;
+import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
@@ -87,9 +88,11 @@ public class MontageSharedState {
      *
      * @param ratioHeightForLabel how much of the average box height should the label approximately
      *     be sized to.
+     * @param aligner how to align the label on its respective associated image.
      * @throws OperationFailedException if the labels cannot be successfully drawn.
      */
-    public void drawAllLabels(double ratioHeightForLabel) throws OperationFailedException {
-        labels.flush(stack, ratioHeightForLabel);
+    public void drawAllLabels(double ratioHeightForLabel, BoxAligner aligner)
+            throws OperationFailedException {
+        labels.flush(stack, ratioHeightForLabel, aligner);
     }
 }

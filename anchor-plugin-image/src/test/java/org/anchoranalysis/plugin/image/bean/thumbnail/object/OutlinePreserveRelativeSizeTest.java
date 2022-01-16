@@ -76,9 +76,9 @@ class OutlinePreserveRelativeSizeTest {
     @TempDir Path temporaryDirectory;
 
     private WriteThumbnailsIntoDirectory writer;
-    
+
     static {
-    	BeanInstanceMapFixture.ensureStackWriter(true);
+        BeanInstanceMapFixture.ensureStackWriter(true);
     }
 
     @BeforeEach

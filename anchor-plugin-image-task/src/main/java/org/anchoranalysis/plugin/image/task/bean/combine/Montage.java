@@ -23,6 +23,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
+import org.anchoranalysis.image.bean.spatial.arrange.align.Align;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.bean.spatial.arrange.align.Grow;
 import org.anchoranalysis.image.bean.spatial.arrange.fill.Fill;
@@ -162,6 +163,15 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      * <p>Note that a lower minimum exists of label font-size, below which it will not become smaller.
      */
     @BeanField @Getter @Setter @Positive private double ratioHeightForLabel = 0.05;
+
+    /**
+     * When {@code label==false} and {@code varyImageLocation==false}, how to align the label with
+     * its asosicated image.
+     *
+     * <p>By default, it is horizontally-centered at the bottom of the image.
+     */
+    @BeanField @Getter @Setter
+    private BoxAligner alignerLabel = new Align("center", "bottom", "bottom");
     // END BEAN PROPERTIES
 
     @Override
@@ -231,7 +241,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
 
         try {
             if (label) {
-                sharedState.drawAllLabels(ratioHeightForLabel);
+                sharedState.drawAllLabels(ratioHeightForLabel, alignerLabel);
             }
         } catch (OperationFailedException e) {
             throw new ExperimentExecutionException(
