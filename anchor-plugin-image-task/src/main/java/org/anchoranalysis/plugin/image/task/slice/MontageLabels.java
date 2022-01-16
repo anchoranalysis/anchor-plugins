@@ -34,6 +34,8 @@ class MontageLabels {
 
     private static final RGBColor TEXT_COLOR = new RGBColor(255, 255, 0);
 
+    private static final RGBColor FILL_COLOR = new RGBColor(0, 0, 255);
+
     /** A running sum of the x- and y- sizes of the queued bounding-boxes. */
     private Point2d sumSizes = new Point2d();
 
@@ -82,15 +84,14 @@ class MontageLabels {
                     fontSize = calculateFontSize(processor, ratioHeightForLabel);
                 }
 
-                int colorComponent = TEXT_COLOR.get(channel);
-
                 processor.setJustification(ImageProcessor.LEFT_JUSTIFY);
-                processor.setColor(new Color(colorComponent, colorComponent, colorComponent));
+                processor.setColor(extractColorComponent(TEXT_COLOR, channel));
                 processor.setFontSize(fontSize);
 
                 // TODO check the width of the font, and remove characters if necessary to make it
                 // compliant
-                labels.forEach(label -> label.drawOnProcessor(processor));
+                Color background = extractColorComponent(FILL_COLOR, channel);
+                labels.forEach(label -> label.drawOnProcessor(processor, background));
             }
             labels = null;
         } catch (ImageJConversionException e) {
@@ -104,5 +105,14 @@ class MontageLabels {
         sumSizes.scale(1.0 / labels.size());
         FontSizeCalculator calculator = new FontSizeCalculator(processor);
         return calculator.calculateOptimalFontSize(sumSizes, ratioHeightForLabel);
+    }
+
+    /**
+     * Uses the component from only one part (R, G or B) of {@code color} for all parts of a newly
+     * created {@link Color}.
+     */
+    private static Color extractColorComponent(RGBColor color, int index) {
+        int component = color.get(index);
+        return new Color(component, component, component);
     }
 }

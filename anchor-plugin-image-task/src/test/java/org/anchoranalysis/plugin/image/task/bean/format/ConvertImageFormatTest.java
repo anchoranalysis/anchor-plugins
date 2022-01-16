@@ -55,7 +55,7 @@ class ConvertImageFormatTest {
     static {
         BeanInstanceMapFixture.ensureStackWriter(true);
     }
-    
+
     @BeforeAll
     static void setup() {
         RegisterBeanFactories.registerAllPackageBeanFactories();
