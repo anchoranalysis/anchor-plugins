@@ -51,7 +51,7 @@ public class MontageSharedState {
      * Copies a {@link Stack} into a {@link BoundingBox} in the combined image, resizing if
      * necessary.
      *
-     * <p>Any associated label is added to a queue, to be later drawn when {@link #drawAllLabels()}
+     * <p>Any associated label is added to a queue, to be later drawn when {@link #drawAllLabels}
      * is executed.
      *
      * @param source the image to copy from, not necessarily matching the final destination size. It

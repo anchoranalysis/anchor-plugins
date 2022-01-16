@@ -57,7 +57,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * <p>By default, each image will be scaled to approximately 600x480 (but usually not exactly this,
  * to preserve aspect ratio, and fill available space).
  *
- * <p>The {@link TaskArguments#size} will take priority over this default if set, or any bean
+ * <p>The {@link TaskArguments#getSize} will take priority over this default if set, or any bean
  * assigned to {@code scale}.
  *
  * <p>Any 3D images are flattened into a 2D image using a maximum-intensity projection.
@@ -155,7 +155,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      *
      * <p>It indicates what portion of the average-image-height (when projected into the image) should the label approximately occupy.
      *
-     * <p>It defaults to {@code 0.05) i.e. the label should typically occupy 5% of the average image-height.
+     * <p>It defaults to {@code 0.05} i.e. the label should typically occupy 5% of the average image-height.
      *
      * <p>It can be adjusted to make the label larger or smaller, relative to the image that is being labelled.
      *
