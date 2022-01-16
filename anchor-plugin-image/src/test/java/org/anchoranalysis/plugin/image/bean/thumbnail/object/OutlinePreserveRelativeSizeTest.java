@@ -48,6 +48,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 import org.anchoranalysis.test.image.EnergyStackFixture;
+import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -75,6 +76,10 @@ class OutlinePreserveRelativeSizeTest {
     @TempDir Path temporaryDirectory;
 
     private WriteThumbnailsIntoDirectory writer;
+    
+    static {
+    	BeanInstanceMapFixture.ensureStackWriter(true);
+    }
 
     @BeforeEach
     void setup() {
