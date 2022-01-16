@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackCopierAtBox;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.core.stack.RGBStack;
@@ -27,7 +28,7 @@ public class MontageSharedState {
     @Getter private final RGBStack stack;
 
     /** The positions in {@code stack} for each respective input image. */
-    private final Map<Path, BoundingBox> boxes;
+    private final Map<Path, BoundingBoxEnclosed> boxes;
 
     /** How to resize an image. */
     private final VoxelsResizer resizer;
@@ -41,7 +42,7 @@ public class MontageSharedState {
      * @param resizer how to resize images.
      */
     public MontageSharedState(
-            Map<Path, BoundingBox> boxes, Extent sizeCombined, VoxelsResizer resizer) {
+            Map<Path, BoundingBoxEnclosed> boxes, Extent sizeCombined, VoxelsResizer resizer) {
         this.boxes = boxes;
         this.stack = new RGBStack(sizeCombined);
         this.resizer = resizer;
@@ -51,8 +52,8 @@ public class MontageSharedState {
      * Copies a {@link Stack} into a {@link BoundingBox} in the combined image, resizing if
      * necessary.
      *
-     * <p>Any associated label is added to a queue, to be later drawn when {@link #drawAllLabels}
-     * is executed.
+     * <p>Any associated label is added to a queue, to be later drawn when {@link #drawAllLabels} is
+     * executed.
      *
      * @param source the image to copy from, not necessarily matching the final destination size. It
      *     is resized as necessary.
@@ -66,7 +67,7 @@ public class MontageSharedState {
     public void copyStackInto(Stack source, Path path, Optional<String> label)
             throws OperationFailedException {
 
-        BoundingBox box = boxes.get(path);
+        BoundingBoxEnclosed box = boxes.get(path);
 
         if (box == null) {
             throw new OperationFailedException(
@@ -75,12 +76,12 @@ public class MontageSharedState {
 
         try {
             Stack sourceResized =
-                    source.mapChannel(channel -> channel.resizeXY(box.extent(), resizer));
+                    source.mapChannel(channel -> channel.resizeXY(box.getBox().extent(), resizer));
 
-            StackCopierAtBox.copyImageInto(sourceResized, stack.asStack(), box);
+            StackCopierAtBox.copyImageInto(sourceResized, stack.asStack(), box.getBox());
 
             if (label.isPresent()) {
-                labels.add(label.get(), box);
+                labels.add(label.get(), box.getEnclosing());
             }
         } catch (OperationFailedException e) {
             throw new OperationFailedException(

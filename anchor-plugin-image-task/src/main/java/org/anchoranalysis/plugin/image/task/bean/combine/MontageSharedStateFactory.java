@@ -10,11 +10,11 @@ import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
-import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.apache.commons.math3.util.Pair;
 
@@ -69,9 +69,9 @@ class MontageSharedStateFactory {
     }
 
     /** Map each path to the corresponding bounding-box from the arrangement. */
-    private static Map<Path, BoundingBox> mapFromArrangement(
+    private static Map<Path, BoundingBoxEnclosed> mapFromArrangement(
             List<Pair<Path, Extent>> sizes, StackArrangement arrangement) {
-        Map<Path, BoundingBox> boxMapping = new HashMap<>();
+        Map<Path, BoundingBoxEnclosed> boxMapping = new HashMap<>();
         for (int i = 0; i < sizes.size(); i++) {
             boxMapping.put(sizes.get(i).getFirst(), arrangement.get(i));
         }
