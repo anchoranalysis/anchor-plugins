@@ -40,6 +40,7 @@ import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.ExportFeatures
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.MultiInputFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
+import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
@@ -72,6 +73,10 @@ public abstract class ExportFeaturesTestBase<
     private boolean additionalOutputs;
 
     private CheckedFunction<TestLoader, V, CreateException> fixtureCreator;
+
+    static {
+        BeanInstanceMapFixture.ensureStackWriter(true);
+    }
 
     @TempDir Path directory;
 

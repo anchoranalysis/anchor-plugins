@@ -35,6 +35,12 @@ class MontageTest {
 
     // START: Ensure needed instances exist in the default BeanInstanceMap
     private static StackReader stackReader = BeanInstanceMapFixture.ensureStackReader();
+
+    static {
+        BeanInstanceMapFixture.ensureStackWriter(false);
+        BeanInstanceMapFixture.ensureImageMetadataReader();
+        BeanInstanceMapFixture.ensureInterpolator();
+    }
     // END: Ensure needed instances exist in the default BeanInstanceMap
 
     private TestLoaderImage loader =
@@ -70,11 +76,7 @@ class MontageTest {
 
     private void doTest(Montage task, String expectedOutputSubdirectory)
             throws ImageIOException, OperationFailedException {
-    	
-        BeanInstanceMapFixture.ensureStackWriter(false);
-        BeanInstanceMapFixture.ensureImageMetadataReader();
-        BeanInstanceMapFixture.ensureInterpolator();
-        
+
         Path path = loader.getLoader().resolveTestPath("montage/input/six");
         BeanInstanceMapFixture.check(task);
 

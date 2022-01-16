@@ -59,8 +59,8 @@ import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.test.image.io.OutputManagerForImagesFixture;
 import org.anchoranalysis.test.image.io.OutputterFixture;
+import org.anchoranalysis.test.io.output.OutputManagerFixture;
 
 /**
  * Executes a task on a single-input outputting into a specific directory.
@@ -154,7 +154,7 @@ public class ExecuteTaskHelper {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
             OutputManager outputManager =
-                    OutputManagerForImagesFixture.createOutputManager(Optional.of(pathForOutputs));
+                    OutputManagerFixture.createOutputManager(Optional.of(pathForOutputs));
 
             Outputter outputter = OutputterFixture.outputter(outputManager);
 
