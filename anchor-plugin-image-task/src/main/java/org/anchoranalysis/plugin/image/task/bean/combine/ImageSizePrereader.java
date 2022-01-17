@@ -74,9 +74,7 @@ class ImageSizePrereader {
             throws ExperimentExecutionException {
         List<Pair<Path, Extent>> out = new LinkedList<>();
         int index = 1;
-        Iterator<StackSequenceInput> iterator = inputs.iterator();
-        while (iterator.hasNext()) {
-            StackSequenceInput input = iterator.next();
+        for(StackSequenceInput input : inputs) {
 
             Optional<Extent> size = Optional.empty();
             try {
@@ -100,7 +98,7 @@ class ImageSizePrereader {
                             "Pre-reading image size (%d of %d) %s: %s",
                             index++,
                             inputs.size(),
-                            size.isPresent() ? "succeeded" : "failed",
+                            size.isPresent() ? "succeeded" : "  failed",
                             input.identifier());
         }
         return out;
