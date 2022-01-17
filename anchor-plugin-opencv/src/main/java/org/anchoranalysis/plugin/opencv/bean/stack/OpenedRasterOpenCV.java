@@ -26,14 +26,12 @@
 package org.anchoranalysis.plugin.opencv.bean.stack;
 
 import com.google.common.base.CharMatcher;
-
-import lombok.RequiredArgsConstructor;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Logger;
@@ -61,9 +59,9 @@ import org.opencv.imgcodecs.Imgcodecs;
  *
  * <p>However, unlike many other libraries, OpenCV has the advantage of automatically correcting the
  * orientation (to give correct widths and heights) where EXIF rotation information is present.
- * 
- * <p>When a file-path contains non-ASCII characters, then a slower method must be used to open files
- * (approximately 4 times slower) than when a path contains only ASCII characters.
+ *
+ * <p>When a file-path contains non-ASCII characters, then a slower method must be used to open
+ * files (approximately 4 times slower) than when a path contains only ASCII characters.
  *
  * @author Owen Feehan
  */

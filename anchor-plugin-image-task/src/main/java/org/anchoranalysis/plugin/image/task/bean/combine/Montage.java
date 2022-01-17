@@ -3,14 +3,12 @@ package org.anchoranalysis.plugin.image.task.bean.combine;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.OperationContext;
@@ -28,10 +26,8 @@ import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.bean.spatial.arrange.align.Grow;
 import org.anchoranalysis.image.bean.spatial.arrange.fill.Fill;
 import org.anchoranalysis.image.bean.spatial.arrange.tile.Tile;
-import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
@@ -45,8 +41,6 @@ import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.scale.ToDimensions;
 import org.anchoranalysis.plugin.image.bean.scale.ToSuggested;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
-import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Creates a montage of images, by tiling them side-by-side.
@@ -189,30 +183,21 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             throw new ExperimentExecutionException("No inputs exist, so no montage can be created");
         }
 
-        try {
-            // The binding-paths for all the inputs
-            Stream<Path> paths =
-                    CheckedStream.map(
-                            inputs.stream(),
-                            InputReadFailedException.class,
-                            StackSequenceInput::pathForBindingRequired);
+        OperationContext context = parameters.getContext().operationContext();
 
-            StackArranger arranger = createArranger(inputs.size());
+        ImageSizePrereader prereader =
+                new ImageSizePrereader(
+                        scale,
+                        imageMetadataReader,
+                        stackReader,
+                        parameters.getExperimentArguments().task().getSize(),
+                        context);
 
-            // Create the shared-state
-            Optional<ImageSizeSuggestion> suggestedSize =
-                    parameters.getExperimentArguments().task().getSize();
-            OperationContext context = parameters.getContext().operationContext();
-
-            return MontageSharedStateFactory.create(
-                    paths,
-                    arranger,
-                    interpolator.voxelsResizer(),
-                    path -> scaledSizeFor(path, suggestedSize, context),
-                    context.getExecutionTimeRecorder());
-        } catch (InputReadFailedException e) {
-            throw new ExperimentExecutionException("Cannot establish an input path", e);
-        }
+        return MontageSharedStateFactory.create(
+                prereader.deriveSizeForAllInputs(inputs),
+                createArranger(inputs.size()),
+                interpolator.voxelsResizer(),
+                context.getExecutionTimeRecorder());
     }
 
     @Override
@@ -295,31 +280,6 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     @Override
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_LABELLED);
-    }
-
-    /**
-     * Determines the scaled size for a particular image, which is used to populate the table. The
-     * final size will be approximately similar, but not necessarily identical.
-     *
-     * <p>The size is read from the file-system from a {@code imageMetadataReader} as this often is
-     * much quicker than reading the entire raster (which will occur later in parallel when actually
-     * reading the image).
-     */
-    private Extent scaledSizeFor(
-            Path imagePath, Optional<ImageSizeSuggestion> suggestedResize, OperationContext context)
-            throws ExperimentExecutionException {
-        try {
-            ImageMetadata metadata = imageMetadataReader.openFile(imagePath, stackReader, context);
-            ScaleFactor factor =
-                    scale.calculate(Optional.of(metadata.getDimensions()), suggestedResize);
-            return metadata.getDimensions().extent().scaleXYBy(factor, true);
-        } catch (ImageIOException e) {
-            throw new ExperimentExecutionException(
-                    "Cannot read the image-metadata for file at: " + imagePath, e);
-        } catch (OperationFailedException e) {
-            throw new ExperimentExecutionException(
-                    "Cannot calculate scale for file at: " + imagePath, e);
-        }
     }
 
     /** Creates the {@link StackArranger} that will determine the tabular pattern. */
