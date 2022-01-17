@@ -106,8 +106,7 @@ public class MontageSharedState {
     }
 
     /**
-     * Draw all labels that have been queued during calls to {@link #copyStackInto(Stack, Path,
-     * Optional)}.
+     * Draw all labels that have been queued during calls to {@link #copyStackInto}.
      *
      * <p>Once called, this class is no longer usable, and no subsequent methods should be called.
      *
