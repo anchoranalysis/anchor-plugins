@@ -218,13 +218,6 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     @Override
     public void doJobOnInput(InputBound<StackSequenceInput, MontageSharedState> input)
             throws JobExecutionException {
-        Stack stack;
-        try {
-            stack = input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
-        } catch (OperationFailedException e) {
-            throw new JobExecutionException(
-                    "Cannot extract a stack representation from the input", e);
-        }
 
         try {
             Optional<String> stackLabel =
@@ -236,10 +229,28 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
                     .getExecutionTimeRecorder()
                     .recordExecutionTime(
                             "Copy and scale stack into montage",
-                            () -> input.getSharedState().copyStackInto(stack, path, stackLabel));
+                            () ->
+                                    input.getSharedState()
+                                            .copyStackInto(
+                                                    () -> readStackFromInput(input),
+                                                    path,
+                                                    stackLabel));
 
         } catch (InputReadFailedException | OperationFailedException e) {
-            throw new JobExecutionException("Cannot establish an input path", e);
+            throw new JobExecutionException(
+                    "An error occurred copying the input image into the montage: "
+                            + input.getInput().identifier(),
+                    e);
+        }
+    }
+
+    private Stack readStackFromInput(InputBound<StackSequenceInput, MontageSharedState> input)
+            throws InputReadFailedException {
+        try {
+            return input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
+        } catch (OperationFailedException e) {
+            throw new InputReadFailedException(
+                    "Cannot extract a stack representation from the input", e);
         }
     }
 
