@@ -3,20 +3,17 @@ package org.anchoranalysis.plugin.image.task.bean.combine;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.arguments.TaskArguments;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -29,10 +26,8 @@ import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.bean.spatial.arrange.align.Grow;
 import org.anchoranalysis.image.bean.spatial.arrange.fill.Fill;
 import org.anchoranalysis.image.bean.spatial.arrange.tile.Tile;
-import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
@@ -46,8 +41,6 @@ import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.scale.ToDimensions;
 import org.anchoranalysis.plugin.image.bean.scale.ToSuggested;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
-import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Creates a montage of images, by tiling them side-by-side.
@@ -58,8 +51,8 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * <p>By default, each image will be scaled to approximately 600x480 (but usually not exactly this,
  * to preserve aspect ratio, and fill available space).
  *
- * <p>Any size suggestion passed via arguments will take priority over this default if set, or any bean
- * assigned to {@code scale} (in that order of precedence).
+ * <p>Any size suggestion passed via arguments will take priority over this default if set, or any
+ * bean assigned to {@code scale} (in that order of precedence).
  *
  * <p>Any 3D images are flattened into a 2D image using a maximum-intensity projection.
  *
@@ -154,13 +147,17 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      *
      * <p>Otherwise, it is ignored.
      *
-     * <p>It indicates what portion of the average-image-height (when projected into the image) should the label approximately occupy.
+     * <p>It indicates what portion of the average-image-height (when projected into the image)
+     * should the label approximately occupy.
      *
-     * <p>It defaults to {@code 0.05} i.e. the label should typically occupy 5% of the average image-height.
+     * <p>It defaults to {@code 0.05} i.e. the label should typically occupy 5% of the average
+     * image-height.
      *
-     * <p>It can be adjusted to make the label larger or smaller, relative to the image that is being labelled.
+     * <p>It can be adjusted to make the label larger or smaller, relative to the image that is
+     * being labelled.
      *
-     * <p>Note that a lower minimum exists of label font-size, below which it will not become smaller.
+     * <p>Note that a lower minimum exists of label font-size, below which it will not become
+     * smaller.
      */
     @BeanField @Getter @Setter @Positive private double ratioHeightForLabel = 0.05;
 
@@ -186,42 +183,26 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             throw new ExperimentExecutionException("No inputs exist, so no montage can be created");
         }
 
-        try {
-            // The binding-paths for all the inputs
-            Stream<Path> paths =
-                    CheckedStream.map(
-                            inputs.stream(),
-                            InputReadFailedException.class,
-                            StackSequenceInput::pathForBindingRequired);
+        OperationContext context = parameters.getContext().operationContext();
 
-            StackArranger arranger = createArranger(inputs.size());
+        ImageSizePrereader prereader =
+                new ImageSizePrereader(
+                        scale,
+                        imageMetadataReader,
+                        stackReader,
+                        parameters.getExperimentArguments().task().getSize(),
+                        context);
 
-            // Create the shared-state
-            Optional<ImageSizeSuggestion> suggestedSize =
-                    parameters.getExperimentArguments().task().getSize();
-            OperationContext context = parameters.getContext().operationContext();
-
-            return MontageSharedStateFactory.create(
-                    paths,
-                    arranger,
-                    interpolator.voxelsResizer(),
-                    path -> scaledSizeFor(path, suggestedSize, context),
-                    context.getExecutionTimeRecorder());
-        } catch (InputReadFailedException e) {
-            throw new ExperimentExecutionException("Cannot establish an input path", e);
-        }
+        return MontageSharedStateFactory.create(
+                prereader.deriveSizeForAllInputs(inputs),
+                createArranger(inputs.size()),
+                interpolator.voxelsResizer(),
+                context.getExecutionTimeRecorder());
     }
 
     @Override
     public void doJobOnInput(InputBound<StackSequenceInput, MontageSharedState> input)
             throws JobExecutionException {
-        Stack stack;
-        try {
-            stack = input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
-        } catch (OperationFailedException e) {
-            throw new JobExecutionException(
-                    "Cannot extract a stack representation from the input", e);
-        }
 
         try {
             Optional<String> stackLabel =
@@ -233,10 +214,28 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
                     .getExecutionTimeRecorder()
                     .recordExecutionTime(
                             "Copy and scale stack into montage",
-                            () -> input.getSharedState().copyStackInto(stack, path, stackLabel));
+                            () ->
+                                    input.getSharedState()
+                                            .copyStackInto(
+                                                    () -> readStackFromInput(input),
+                                                    path,
+                                                    stackLabel));
 
         } catch (InputReadFailedException | OperationFailedException e) {
-            throw new JobExecutionException("Cannot establish an input path", e);
+            throw new JobExecutionException(
+                    "An error occurred copying the input image into the montage: "
+                            + input.getInput().identifier(),
+                    e);
+        }
+    }
+
+    private Stack readStackFromInput(InputBound<StackSequenceInput, MontageSharedState> input)
+            throws InputReadFailedException {
+        try {
+            return input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
+        } catch (OperationFailedException e) {
+            throw new InputReadFailedException(
+                    "Cannot extract a stack representation from the input", e);
         }
     }
 
@@ -283,36 +282,11 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_LABELLED);
     }
 
-    /**
-     * Determines the scaled size for a particular image, which is used to populate the table. The
-     * final size will be approximately similar, but not necessarily identical.
-     *
-     * <p>The size is read from the file-system from a {@code imageMetadataReader} as this often is
-     * much quicker than reading the entire raster (which will occur later in parallel when actually
-     * reading the image).
-     */
-    private Extent scaledSizeFor(
-            Path imagePath, Optional<ImageSizeSuggestion> suggestedResize, OperationContext context)
-            throws ExperimentExecutionException {
-        try {
-            ImageMetadata metadata = imageMetadataReader.openFile(imagePath, stackReader, context);
-            ScaleFactor factor =
-                    scale.calculate(Optional.of(metadata.getDimensions()), suggestedResize);
-            return metadata.getDimensions().extent().scaleXYBy(factor, true);
-        } catch (ImageIOException e) {
-            throw new ExperimentExecutionException(
-                    "Cannot read the image-metadata for file at: " + imagePath, e);
-        } catch (OperationFailedException e) {
-            throw new ExperimentExecutionException(
-                    "Cannot calculate scale for file at: " + imagePath, e);
-        }
-    }
-
     /** Creates the {@link StackArranger} that will determine the tabular pattern. */
     private StackArranger createArranger(int numberInputs) {
 
         // Determine number of rows, so to give a similar number of rows and columns (as close to a
-        // square as possible).
+        // square as possible, ignoring the aspectRatio).
         int rows = (int) Math.ceil(Math.sqrt(numberInputs));
 
         if (varyImageSize) {

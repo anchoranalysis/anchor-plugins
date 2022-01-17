@@ -5,11 +5,14 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackCopierAtBox;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
+import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
@@ -27,7 +30,7 @@ public class MontageSharedState {
     @Getter private final RGBStack stack;
 
     /** The positions in {@code stack} for each respective input image. */
-    private final Map<Path, BoundingBox> boxes;
+    private final Map<Path, BoundingBoxEnclosed> boxes;
 
     /** How to resize an image. */
     private final VoxelsResizer resizer;
@@ -41,7 +44,7 @@ public class MontageSharedState {
      * @param resizer how to resize images.
      */
     public MontageSharedState(
-            Map<Path, BoundingBox> boxes, Extent sizeCombined, VoxelsResizer resizer) {
+            Map<Path, BoundingBoxEnclosed> boxes, Extent sizeCombined, VoxelsResizer resizer) {
         this.boxes = boxes;
         this.stack = new RGBStack(sizeCombined);
         this.resizer = resizer;
@@ -51,22 +54,29 @@ public class MontageSharedState {
      * Copies a {@link Stack} into a {@link BoundingBox} in the combined image, resizing if
      * necessary.
      *
-     * <p>Any associated label is added to a queue, to be later drawn when {@link #drawAllLabels}
-     * is executed.
+     * <p>Any associated label is added to a queue, to be later drawn when {@link #drawAllLabels} is
+     * executed.
      *
-     * @param source the image to copy from, not necessarily matching the final destination size. It
-     *     is resized as necessary.
+     * <p>The {@link Stack} is read only lazily, to try and prevent errors until {@link
+     * BoundingBoxEnclosed} is retrieved, so that a label can always be written, even in the event
+     * of copying failure.
+     *
+     * @param source supplies the image to copy from, not necessarily matching the final destination
+     *     size. It is resized as necessary.
      * @param path the corresponding path to identify the appropriate {@link BoundingBox} to use in
      *     the combined image.
      * @param label if set, this label is drawn onto the bottom of the image. if not set, nothing
      *     occurs.
-     * @throws OperationFailedException if no matching bounding-box exists, or the copying otherwise
-     *     fails.
+     * @throws OperationFailedException if no matching bounding-box exists, or the input cannot be
+     *     successfully read, or copying otherwise fails.
      */
-    public void copyStackInto(Stack source, Path path, Optional<String> label)
+    public void copyStackInto(
+            CheckedSupplier<Stack, InputReadFailedException> source,
+            Path path,
+            Optional<String> label)
             throws OperationFailedException {
 
-        BoundingBox box = boxes.get(path);
+        BoundingBoxEnclosed box = boxes.get(path);
 
         if (box == null) {
             throw new OperationFailedException(
@@ -75,22 +85,28 @@ public class MontageSharedState {
 
         try {
             Stack sourceResized =
-                    source.mapChannel(channel -> channel.resizeXY(box.extent(), resizer));
+                    source.get()
+                            .mapChannel(
+                                    channel -> channel.resizeXY(box.getBox().extent(), resizer));
 
-            StackCopierAtBox.copyImageInto(sourceResized, stack.asStack(), box);
+            StackCopierAtBox.copyImageInto(sourceResized, stack.asStack(), box.getBox());
 
             if (label.isPresent()) {
-                labels.add(label.get(), box);
+                labels.add(label.get(), box.getEnclosing(), false);
             }
-        } catch (OperationFailedException e) {
-            throw new OperationFailedException(
-                    "An error occurred copying the image `" + path + "` into the montage.", e);
+
+        } catch (InputReadFailedException e) {
+
+            if (label.isPresent()) {
+                labels.add(label.get(), box.getEnclosing(), true);
+            }
+
+            throw new OperationFailedException(e);
         }
     }
 
     /**
-     * Draw all labels that have been queued during calls to {@link #copyStackInto(Stack, Path,
-     * Optional)}.
+     * Draw all labels that have been queued during calls to {@link #copyStackInto}.
      *
      * <p>Once called, this class is no longer usable, and no subsequent methods should be called.
      *

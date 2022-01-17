@@ -35,7 +35,9 @@ class MontageLabels {
 
     private static final RGBColor TEXT_COLOR = new RGBColor(255, 255, 0);
 
-    private static final RGBColor FILL_COLOR = new RGBColor(0, 0, 255);
+    private static final RGBColor FILL_COLOR_SUCCESSFUL = new RGBColor(0, 0, 255);
+
+    private static final RGBColor FILL_COLOR_ERRORED = new RGBColor(255, 0, 0);
 
     /** A running sum of the x- and y- sizes of the queued bounding-boxes. */
     private Point2d sumSizes = new Point2d();
@@ -48,9 +50,10 @@ class MontageLabels {
      *
      * @param text the label to draw.
      * @param box the location to draw it at.
+     * @param errored whether an error occurred copying the image corresponding to this label.
      */
-    public synchronized void add(String text, BoundingBox box) {
-        labels.add(new LabelToWrite(text, box));
+    public synchronized void add(String text, BoundingBox box, boolean errored) {
+        labels.add(new LabelToWrite(text, box, errored));
         sumSizes.add(box.extent().x(), box.extent().y());
     }
 
@@ -91,9 +94,11 @@ class MontageLabels {
                 processor.setColor(extractColorComponent(TEXT_COLOR, channel));
                 processor.setFontSize(fontSize);
 
-                Color background = extractColorComponent(FILL_COLOR, channel);
+                Color backgroundSuccessful = extractColorComponent(FILL_COLOR_SUCCESSFUL, channel);
+                Color backgroundErrored = extractColorComponent(FILL_COLOR_ERRORED, channel);
                 for (LabelToWrite label : labels) {
-                    label.drawOnProcessor(processor, background, aligner);
+                    label.drawOnProcessor(
+                            processor, backgroundSuccessful, backgroundErrored, aligner);
                 }
             }
             labels = null;

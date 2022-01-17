@@ -26,9 +26,12 @@
 package org.anchoranalysis.plugin.opencv.bean.stack;
 
 import com.google.common.base.CharMatcher;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Logger;
@@ -44,6 +47,7 @@ import org.anchoranalysis.image.io.stack.time.TimeSequence;
 import org.anchoranalysis.io.bioformats.metadata.ImageTimestampsAttributesFactory;
 import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
@@ -56,8 +60,12 @@ import org.opencv.imgcodecs.Imgcodecs;
  * <p>However, unlike many other libraries, OpenCV has the advantage of automatically correcting the
  * orientation (to give correct widths and heights) where EXIF rotation information is present.
  *
+ * <p>When a file-path contains non-ASCII characters, then a slower method must be used to open
+ * files (approximately 4 times slower) than when a path contains only ASCII characters.
+ *
  * @author Owen Feehan
  */
+@RequiredArgsConstructor
 class OpenedRasterOpenCV implements OpenedImageFile {
 
     // START REQUIRED ARGUMENTS
@@ -79,26 +87,6 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     /** Lazily recorded timestamps. */
     private ImageTimestampsAttributes timestamps;
-
-    /**
-     * Create with a specific path.
-     *
-     * @param path the path to open.
-     * @param executionTimeRecorder records the execution time of operations.
-     * @throws ImageIOException if the path contains non-ASCII characters (e.g. unicode, which is
-     *     unsupported by OpenCV).
-     */
-    public OpenedRasterOpenCV(Path path, ExecutionTimeRecorder executionTimeRecorder)
-            throws ImageIOException {
-        if (CharMatcher.ascii().matchesAllOf(path.toString())) {
-            this.path = path;
-            this.executionTimeRecorder = executionTimeRecorder;
-        } else {
-            throw new ImageIOException(
-                    "Path contains non-ASCII characters, which is currently unsupported by OpenCV: "
-                            + path);
-        }
-    }
 
     @Override
     public TimeSequence open(int seriesIndex, Progress progress, Logger logger)
@@ -168,17 +156,56 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     /** Opens the stack if has not already been opened. */
     private void openStackIfNecessary() throws ImageIOException {
         if (stack == null) {
-            Mat image =
-                    executionTimeRecorder.recordExecutionTime(
-                            "imread with OpenCV", () -> Imgcodecs.imread(path.toString()));
             try {
+                Mat image = readDecodeMat(path, executionTimeRecorder);
                 stack =
                         executionTimeRecorder.recordExecutionTime(
                                 "Convert OpenCV to stack", () -> ConvertFromMat.toStack(image));
-            } catch (OperationFailedException e) {
+            } catch (OperationFailedException | IOException e) {
                 throw new ImageIOException(
                         "Failed to convert an OpenCV image structure to a stack", e);
             }
+        }
+    }
+
+    /**
+     * Reads an image at {@code path} and decodes into a {@link Mat}.
+     *
+     * <p>Two methods are used, in order of preference:
+     *
+     * <ol>
+     *   <li>Using {@link Imgcodecs#imread} where possible (it only supports paths with ASCII
+     *       characters) as it is much more efficient.
+     *   <li>Using {@link Imgcodecs.imdecode} on a byte-array. This is slower as it involves loading
+     *       all bytes in the JVM and moving back into native code, and then back into the JVM.
+     * </ol>
+     *
+     * <p>The second method seems to be approximately 4 times slower empirically.
+     *
+     * <p>See this <a
+     * href="https://stackoverflow.com/questions/43185605/how-do-i-read-an-image-from-a-path-with-unicode-characters">Stack
+     * Overflow post</a> for more details on the problem/
+     *
+     * @param path the path to read the file from.
+     * @param recorder records execution times.
+     * @return the image read from the file-system.
+     * @throws IOException if the bytes for the file cannot be read form the file-system (when a
+     *     non-ascii path).
+     */
+    private Mat readDecodeMat(Path path, ExecutionTimeRecorder recorder) throws IOException {
+        String pathAsString = path.toString();
+        boolean isAscii = CharMatcher.ascii().matchesAllOf(pathAsString);
+        if (isAscii) {
+            return recorder.recordExecutionTime(
+                    "imread with OpenCV", () -> Imgcodecs.imread(pathAsString));
+        } else {
+            byte[] bytes =
+                    recorder.recordExecutionTime(
+                            "Reading file bytes (non-ascii path)", () -> Files.readAllBytes(path));
+            Mat mat = new MatOfByte(bytes);
+            return recorder.recordExecutionTime(
+                    "imgdecode with OpenCV (non-ascii path)",
+                    () -> Imgcodecs.imdecode(mat, Imgcodecs.IMREAD_UNCHANGED));
         }
     }
 }
