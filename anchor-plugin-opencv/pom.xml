@@ -79,15 +79,14 @@
 
 	<!--  START: OpenCV dependencies -->
 
+	<!--  See: https://github.com/openpnp/opencv -->
 	<dependency>
 		    <groupId>org.openpnp</groupId>
 		    <artifactId>opencv</artifactId>
 		    <version>4.5.1-2</version>
 	</dependency>
-	
-        
+	        
     <!--  END: OpenCV dependencies -->
-
 
     <!-- START: Test dependencies -->
     <dependency>

@@ -67,6 +67,13 @@ import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
  *       image.
  * </ul>
  *
+ * <p>If a particular image is errored during the first step, it is omitted from the montage
+ * entirely, and an error will register with its respective job in the second step.
+ *
+ * <p>If a particular image succeeds in the first step, but fails in the second step, an error will
+ * register with the respective job, and its place on the montage will be entirely black - apart
+ * from a label of background red color, if labelling is enabled.
+ *
  * <p>The following outputs are produced:
  *
  * <table>
@@ -229,16 +236,6 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
         }
     }
 
-    private Stack readStackFromInput(InputBound<StackSequenceInput, MontageSharedState> input)
-            throws InputReadFailedException {
-        try {
-            return input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
-        } catch (OperationFailedException e) {
-            throw new InputReadFailedException(
-                    "Cannot extract a stack representation from the input", e);
-        }
-    }
-
     @Override
     public void afterAllJobsAreExecuted(MontageSharedState sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
@@ -259,12 +256,6 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             throw new ExperimentExecutionException(
                     "A problem occurred drawing labels on the montaged image", e);
         }
-    }
-
-    /** Write the montaged image to the file-system */
-    private void writeMontage(
-            WriterRouterErrors writer, String outputName, MontageSharedState sharedState) {
-        writer.write(outputName, () -> new StackGenerator(true), sharedState.getStack()::asStack);
     }
 
     @Override
@@ -311,6 +302,23 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     /** Is labelling enabled as an output? */
     private boolean labelsEnabled(Outputter outputter) {
         return outputter.outputsEnabled().isOutputEnabled(OUTPUT_LABELLED);
+    }
+
+    /** Reads a {@link Stack} to montage from the input. */
+    private Stack readStackFromInput(InputBound<StackSequenceInput, MontageSharedState> input)
+            throws InputReadFailedException {
+        try {
+            return input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
+        } catch (OperationFailedException e) {
+            throw new InputReadFailedException(
+                    "Cannot extract a stack representation from the input", e);
+        }
+    }
+
+    /** Write the montaged image to the file-system */
+    private void writeMontage(
+            WriterRouterErrors writer, String outputName, MontageSharedState sharedState) {
+        writer.write(outputName, () -> new StackGenerator(true), sharedState.getStack()::asStack);
     }
 
     /** The default {@link ScaleCalculator} if no other is provided. */

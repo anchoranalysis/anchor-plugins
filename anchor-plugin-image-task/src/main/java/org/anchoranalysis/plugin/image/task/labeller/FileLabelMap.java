@@ -39,7 +39,7 @@ import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.ReadByLine;
 
 /**
- * @author feehano
+ * @author Owen Feehan
  * @param <T> key-type
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -46,7 +46,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  * <p>This is equivalent to applying a logical AND operation on each voxel for the binary-mask AND
  * object-mask.
  *
- * @author feehano
+ * @author Owen Feehan
  */
 public class AndObjectsWithMasks extends ObjectCollectionProviderUnary {
 

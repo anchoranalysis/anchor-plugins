@@ -39,7 +39,7 @@ import org.anchoranalysis.image.core.mask.Mask;
  *
  * <p>It always creates a new mask for the result, without consuming the input.
  *
- * @author feehano
+ * @author Owen Feehan
  */
 public class ExteriorContour extends MaskProviderUnary {
 

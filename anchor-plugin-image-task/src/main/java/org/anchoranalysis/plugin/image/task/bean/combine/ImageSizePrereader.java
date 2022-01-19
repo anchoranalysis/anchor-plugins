@@ -73,7 +73,7 @@ class ImageSizePrereader {
             throws ExperimentExecutionException {
         List<Pair<Path, Extent>> out = new LinkedList<>();
         int index = 1;
-        for(StackSequenceInput input : inputs) {
+        for (StackSequenceInput input : inputs) {
 
             Optional<Extent> size = Optional.empty();
             try {

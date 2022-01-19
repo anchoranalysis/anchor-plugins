@@ -57,7 +57,7 @@ class EnsureContiguousPathLoops {
     /**
      * A left and right index
      *
-     * @author feehano
+     * @author Owen Feehan
      */
     @Accessors(fluent = true)
     @AllArgsConstructor

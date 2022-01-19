@@ -46,7 +46,7 @@ import org.anchoranalysis.spatial.point.PointConverter;
  *
  * <p>This only currently works in 2D on coplanar (XY) points.
  *
- * @author feehano
+ * @author Owen Feehan
  */
 public class DrawLineAlongConvexHull extends ObjectCollectionProviderUnary {
 

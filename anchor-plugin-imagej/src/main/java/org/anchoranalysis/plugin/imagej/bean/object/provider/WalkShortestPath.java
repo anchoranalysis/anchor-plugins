@@ -48,7 +48,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
  *
  * <p>This ensures the two points are connected (4/6 neighborhood)
  *
- * @author feehano
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class WalkShortestPath {

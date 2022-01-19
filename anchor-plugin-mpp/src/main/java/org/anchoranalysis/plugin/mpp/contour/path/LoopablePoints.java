@@ -38,7 +38,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  * A set of points that can be looped, so as to form a path that ends with the same point that it
  * begins with.... without breaking continuity.
  *
- * @author feehano
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 @Accessors(fluent = true)
