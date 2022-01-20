@@ -25,7 +25,7 @@ import org.anchoranalysis.spatial.box.Extent;
  */
 public class MontageSharedState {
 
-    private MontageLabels labels;
+    private final MontageLabels labels;
 
     /** The stack into which individual images are written. */
     @Getter private final RGBStack stack;
@@ -43,7 +43,7 @@ public class MontageSharedState {
      *     Stack}.
      * @param sizeCombined the size of the combined {@link Stack}.
      * @param resizer how to resize images.
-     * @param records the execution time of certain operations.
+     * @param executionTimeRecorder records the execution time of certain operations.
      */
     public MontageSharedState(
             Map<Path, BoundingBoxEnclosed> boxes,
