@@ -81,7 +81,7 @@ class FontSizeCalculator {
                             fontSize -> calculateStringHeight(fontSize, processor),
                             fontSize ->
                                     calculateStringWidth(processor)
-                                            > labelWidthBounds.getBox().extent().x());
+                                            > labelWidthBounds.getBoxImage().extent().x());
             return search.findOptimalInput(MINIMUM_FONT_SIZE);
         } else {
             // This font is known to correspond to a height of approximately 15
