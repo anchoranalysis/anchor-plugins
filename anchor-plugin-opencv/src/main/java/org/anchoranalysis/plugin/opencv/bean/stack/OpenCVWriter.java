@@ -48,12 +48,14 @@ public class OpenCVWriter extends OneOrThreeChannelsWriter {
     }
 
     @Override
-    protected synchronized void writeStackAfterCheck(Stack stack, Path filePath)
-            throws ImageIOException {
+    protected void writeStackAfterCheck(Stack stack, Path filePath) throws ImageIOException {
         CVInit.blockUntilLoaded();
 
         try {
-            Imgcodecs.imwrite(filePath.toString(), ConvertToMat.fromStack(stack));
+            boolean success = Imgcodecs.imwrite(filePath.toString(), ConvertToMat.fromStack(stack));
+            if (!success) {
+                throw new ImageIOException("OpenCV's imwrite failed to write: " + filePath);
+            }
         } catch (CreateException e) {
             throw WriterErrorMessageHelper.generalWriteException(OpenCVWriter.class, filePath, e);
         }

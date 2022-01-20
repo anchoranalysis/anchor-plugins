@@ -55,7 +55,8 @@ import org.anchoranalysis.image.inference.segment.MultiScaleObject;
  * GitHub source</a>, which also describes its inputs and outputs.
  *
  * <p>This <a href="https://github.com/microsoft/onnxruntime/issues/1670">issue</a> may also be
- * relevant, discussing the error message that occurs when the size above is not used as the input.
+ * relevant: it mentions an error message that occurs when a different sized input to the above is
+ * used.
  *
  * @author Owen Feehan
  */

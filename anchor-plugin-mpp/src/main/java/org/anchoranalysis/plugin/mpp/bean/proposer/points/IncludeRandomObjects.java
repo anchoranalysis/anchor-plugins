@@ -49,7 +49,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  * 1. Iterates over each object 2. For each object, with a random probability of 0.5, includes all
  * pixels inside the object
  *
- * @author feehano
+ * @author Owen Feehan
  */
 public class IncludeRandomObjects extends PointsProposer {
 

@@ -37,7 +37,7 @@ import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
 /**
  * Returns only the objects that intersect with at least one object in the container
  *
- * @author feehano
+ * @author Owen Feehan
  */
 public class IntersectsWithContainer extends WithContainerBase {
 

@@ -252,8 +252,28 @@ public class ConvertToMat {
         Extent extent = channelRed.extent();
         Preconditions.checkArgument(extent.z() == 1);
 
-        ByteBuffer out = ByteBuffer.allocateDirect(channelRed.extent().areaXY() * 3);
-        Mat mat = new Mat(extent.y(), extent.x(), CvType.CV_8UC3, out);
+        // This is currently the fastest viable method, as we cannot find a way to reliably access
+        // the direct-{@link ByteBuffer}s
+        // in native memory in an OpenCV Mat. Hopefully underlying library will expose new
+        // functionality in an API in future for this.
+        //
+        // The JavaCPP Presets version of OpenCV contains functions to access native memory in a Mat
+        // but
+        //   the library suffers from very long loading time, so we choose the OpenPNP version
+        // instead.
+        //
+        // It was also attempted to call a {@link ByteBuffer#allocateDirect} and pass it into the
+        // {@link Mat}
+        // constructor (where a {@link ByteBuffer} can be accepted}. This appears to function, but
+        // as soon
+        // breaks down in an unexplained way later. I suspect this is because the native-memory is
+        // being
+        // deallocated after the corresponding {@link ByteBufffer} in the java program is garbage
+        // collected.
+        // So we cannot use this method.
+
+        ByteBuffer out = ByteBuffer.allocate(channelRed.extent().areaXY() * 3);
+        Mat mat = new Mat(extent.y(), extent.x(), CvType.CV_8UC3);
 
         UnsignedByteBuffer red = BufferHelper.extractByte(channelRed);
         UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
@@ -264,6 +284,7 @@ public class ConvertToMat {
             out.put(green.getRaw());
             out.put(red.getRaw());
         }
+        mat.put(0, 0, out.array());
         return mat;
     }
 }

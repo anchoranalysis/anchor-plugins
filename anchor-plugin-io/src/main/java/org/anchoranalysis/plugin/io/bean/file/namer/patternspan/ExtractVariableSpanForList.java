@@ -70,7 +70,16 @@ class ExtractVariableSpanForList {
 
     private static NamedFile namedFileFor(
             ExtractVariableSpan extractVariableSpan, int fileIndex, File file) {
-        return new NamedFile(extractVariableSpan.extractSpanPortionFor(fileIndex), file);
+        String identifier = extractVariableSpan.extractSpanPortionFor(fileIndex);
+
+        // As an identifier may not start or end with white space, we remove it.
+        // We assume this is extremely unlikely to ever create a duplication with another entry.
+        // We also change any backslashes into forward slashes.
+        identifier = identifier.trim();
+
+        identifier = FilePathToUnixStyleConverter.toStringUnixStyle(identifier);
+
+        return new NamedFile(identifier, file);
     }
 
     private static List<NamedFile> listPrepend(String prefix, List<NamedFile> list) {

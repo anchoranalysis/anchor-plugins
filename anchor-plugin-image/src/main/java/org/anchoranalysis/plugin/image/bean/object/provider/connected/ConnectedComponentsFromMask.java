@@ -50,7 +50,7 @@ import org.apache.commons.lang.time.StopWatch;
 /**
  * Converts a binary-mask into its connected components
  *
- * @author feehano
+ * @author Owen Feehan
  */
 public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
