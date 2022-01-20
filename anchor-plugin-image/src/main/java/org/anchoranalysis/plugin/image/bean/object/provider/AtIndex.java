@@ -35,8 +35,9 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 
 /**
- * Creates a new object-collection with only a single element (at a particular index) in the
- * existing collection.
+ * Extract a single {@link ObjectMask} into a new collection.
+ * 
+ * <p>The element to extract is identified by its index in the existing collection.
  *
  * @author Owen Feehan
  */
