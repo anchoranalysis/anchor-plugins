@@ -48,8 +48,7 @@ public class OpenCVWriter extends OneOrThreeChannelsWriter {
     }
 
     @Override
-    protected void writeStackAfterCheck(Stack stack, Path filePath)
-            throws ImageIOException {
+    protected void writeStackAfterCheck(Stack stack, Path filePath) throws ImageIOException {
         CVInit.blockUntilLoaded();
 
         try {
