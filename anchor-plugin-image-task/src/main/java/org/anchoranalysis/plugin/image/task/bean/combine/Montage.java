@@ -204,7 +204,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
                 prereader.deriveSizeForAllInputs(inputs),
                 createArranger(inputs.size()),
                 interpolator.voxelsResizer(),
-                context.getExecutionTimeRecorder());
+                context);
     }
 
     @Override

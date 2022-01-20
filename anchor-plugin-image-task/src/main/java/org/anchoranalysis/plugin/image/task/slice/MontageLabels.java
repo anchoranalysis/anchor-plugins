@@ -4,8 +4,10 @@ import ij.process.ImageProcessor;
 import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
@@ -31,6 +33,7 @@ import org.anchoranalysis.spatial.point.Point2d;
  *
  * @author Owen Feehan
  */
+@RequiredArgsConstructor
 class MontageLabels {
 
     private static final RGBColor TEXT_COLOR = new RGBColor(255, 255, 0);
@@ -38,6 +41,11 @@ class MontageLabels {
     private static final RGBColor FILL_COLOR_SUCCESSFUL = new RGBColor(0, 0, 255);
 
     private static final RGBColor FILL_COLOR_ERRORED = new RGBColor(255, 0, 0);
+
+    // START REQUIRED ARGUMENTS
+    /** Records the execution time of certain operations. */
+    private final ExecutionTimeRecorder executionTimeRecorder;
+    // END REQUIRED ARGUMENTS
 
     /** A running sum of the x- and y- sizes of the queued bounding-boxes. */
     private Point2d sumSizes = new Point2d();
@@ -96,9 +104,16 @@ class MontageLabels {
 
                 Color backgroundSuccessful = extractColorComponent(FILL_COLOR_SUCCESSFUL, channel);
                 Color backgroundErrored = extractColorComponent(FILL_COLOR_ERRORED, channel);
+
                 for (LabelToWrite label : labels) {
-                    label.drawOnProcessor(
-                            processor, backgroundSuccessful, backgroundErrored, aligner);
+                    executionTimeRecorder.recordExecutionTime(
+                            "Writing the label on a single image channel",
+                            () ->
+                                    label.drawOnProcessor(
+                                            processor,
+                                            backgroundSuccessful,
+                                            backgroundErrored,
+                                            aligner));
                 }
             }
             labels = null;

@@ -6,6 +6,7 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackCopierAtBox;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
@@ -24,7 +25,7 @@ import org.anchoranalysis.spatial.box.Extent;
  */
 public class MontageSharedState {
 
-    private MontageLabels labels = new MontageLabels();
+    private final MontageLabels labels;
 
     /** The stack into which individual images are written. */
     @Getter private final RGBStack stack;
@@ -42,12 +43,17 @@ public class MontageSharedState {
      *     Stack}.
      * @param sizeCombined the size of the combined {@link Stack}.
      * @param resizer how to resize images.
+     * @param executionTimeRecorder records the execution time of certain operations.
      */
     public MontageSharedState(
-            Map<Path, BoundingBoxEnclosed> boxes, Extent sizeCombined, VoxelsResizer resizer) {
+            Map<Path, BoundingBoxEnclosed> boxes,
+            Extent sizeCombined,
+            VoxelsResizer resizer,
+            ExecutionTimeRecorder executionTimeRecorder) {
         this.boxes = boxes;
         this.stack = new RGBStack(sizeCombined);
         this.resizer = resizer;
+        this.labels = new MontageLabels(executionTimeRecorder);
     }
 
     /**

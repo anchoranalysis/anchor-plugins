@@ -11,6 +11,9 @@ import org.anchoranalysis.spatial.box.Extent;
 /** A label to be written on an image. */
 class LabelToWrite {
 
+    /** We insist the text label has at least 6 pixels (3 on either side) free from the borders. */
+    private static final int MARGIN_PIXELS = 6;
+
     /** The text of the label to write, including any error suffix string when applicable. */
     @Getter private String text;
 
@@ -18,7 +21,10 @@ class LabelToWrite {
      * The entire bounding-box associated with the image that is being written, with which {@code
      * label} is associated.
      */
-    @Getter private BoundingBox box;
+    @Getter private BoundingBox boxImage;
+
+    /** Where to locate the text. */
+    private BoundingBox boxText;
 
     /** Whether an error occurred copying the image corresponding to this label. */
     private boolean errored;
@@ -33,7 +39,7 @@ class LabelToWrite {
      * @param errored whether an error occurred copying the image corresponding to this label.
      */
     public LabelToWrite(String text, BoundingBox box, boolean errored) {
-        this.box = box;
+        this.boxImage = box;
         this.errored = errored;
         if (errored) {
             this.text = text + " (errored)";
@@ -59,11 +65,8 @@ class LabelToWrite {
             Color backgroundErrored,
             BoxAligner aligner)
             throws OperationFailedException {
-        // Determine how many pixels will the string occupy. This is unfortunately only approximate.
 
-        Extent textSize = calculateTextSize(processor).minimum(box.extent());
-
-        BoundingBox textBox = aligner.align(textSize, box);
+        BoundingBox textBox = calculateTextPosition(aligner, processor);
 
         processor.drawString(
                 text,
@@ -78,14 +81,59 @@ class LabelToWrite {
      * @return the ratio.
      */
     public double ratioNumberCharactersToWidth() {
-        return ((double) text.length()) / box.extent().x();
+        return ((double) text.length()) / boxImage.extent().x();
+    }
+
+    /** Calculates where to locate the text, caching it for future calls to other channels. */
+    private BoundingBox calculateTextPosition(BoxAligner aligner, ImageProcessor processor)
+            throws OperationFailedException {
+        if (boxText == null) {
+            Extent textSize = calculateSizeMaybeReduceText(processor);
+            boxText = aligner.align(textSize, boxImage);
+        }
+        return boxText;
+    }
+
+    /**
+     * Calculates the size of the text, removing characters if necessary to let it fit in
+     * comfortable.
+     *
+     * <p>When characters are removed, three dots are suffixed as an indication.
+     *
+     * <p>i.e. {@code too_big_label_for_image} might become {@code too_big_lab...} on different
+     * channels.
+     *
+     * @param processor the processor that is being draw upon.
+     * @return the size of the text.
+     */
+    private Extent calculateSizeMaybeReduceText(ImageProcessor processor) {
+
+        Extent textSize = calculateTextSize(text, processor).minimum(boxImage.extent());
+
+        // Maximum width allowed
+        int maximumPermittedWidth = Math.max(boxImage.extent().x() - MARGIN_PIXELS, MARGIN_PIXELS);
+
+        // Reduce the label by a certain fraction of the characters (which are not all equal in
+        // width but
+        // this is an approximation).
+
+        if (textSize.x() > maximumPermittedWidth) {
+            double fractionToKeep = ((double) maximumPermittedWidth / textSize.x());
+            int numberCharactersToKeep =
+                    Math.max((int) Math.floor(text.length() * fractionToKeep) - 3, 0);
+            // We add three dots at the end to suggest the label has been shorted
+            this.text = text.substring(0, numberCharactersToKeep) + "...";
+            return calculateTextSize(text, processor);
+        } else {
+            return textSize;
+        }
     }
 
     /**
      * Calculates the number of pixels the text occupies on the screen approximately, across both X
      * and Y dimensions.
      */
-    private Extent calculateTextSize(ImageProcessor processor) {
+    private static Extent calculateTextSize(String text, ImageProcessor processor) {
         int width = processor.getStringWidth(text);
         int height = (int) Math.ceil(processor.getStringBounds(text).getHeight());
         return new Extent(width, height);

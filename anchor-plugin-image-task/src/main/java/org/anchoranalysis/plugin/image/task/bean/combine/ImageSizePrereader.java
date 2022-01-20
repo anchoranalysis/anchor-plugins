@@ -1,11 +1,11 @@
 package org.anchoranalysis.plugin.image.task.bean.combine;
 
 import java.nio.file.Path;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
@@ -16,6 +16,7 @@ import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReade
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.math.arithmetic.Counter;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.apache.commons.math3.util.Pair;
@@ -60,47 +61,57 @@ class ImageSizePrereader {
      */
     public List<Pair<Path, Extent>> deriveSizeForAllInputs(List<StackSequenceInput> inputs)
             throws ExperimentExecutionException {
-        return context.getExecutionTimeRecorder()
-                .recordExecutionTime(
-                        "Deriving initially the size of each image", () -> deriveSizes(inputs));
+        context.getLogger()
+                .messageLogger()
+                .logFormatted(
+                        "Prereading %d images in parallel across multiple cores", inputs.size());
+        Counter counter = new Counter();
+        return FunctionalList.mapToListOptional(
+                inputs,
+                ExperimentExecutionException.class,
+                true,
+                input -> sizeFromInput(input, counter, inputs.size()));
     }
 
     /**
-     * Extract a {@link Extent} for each {@link Path} representing an input image, without recording
-     * execution-time.
+     * Derives an {@link Extent} for a particular {@link StackSequenceInput}, returning it with its
+     * associated path.
      */
-    private List<Pair<Path, Extent>> deriveSizes(List<StackSequenceInput> inputs)
+    private Optional<Pair<Path, Extent>> sizeFromInput(
+            StackSequenceInput input, Counter counter, int numberInputs)
             throws ExperimentExecutionException {
-        List<Pair<Path, Extent>> out = new LinkedList<>();
-        int index = 1;
-        for (StackSequenceInput input : inputs) {
+        Optional<Extent> size = Optional.empty();
+        try {
+            Path path = input.pathForBindingRequired();
 
-            Optional<Extent> size = Optional.empty();
-            try {
-                Path path = input.pathForBindingRequired();
-
-                size = scaledSizeFor(path);
-                if (size.isPresent()) {
-                    out.add(new Pair<>(path, size.get()));
-                }
-            } catch (InputReadFailedException e) {
-                context.getLogger()
-                        .errorReporter()
-                        .recordError(
-                                ImageSizePrereader.class,
-                                "Cannot determine input path: " + input.identifier());
+            // Assign, as it is checked in the final log for success
+            size =
+                    context.getExecutionTimeRecorder()
+                            .recordExecutionTime(
+                                    "Prereading image size", () -> scaledSizeFor(path));
+            return size.map(extent -> new Pair<>(path, extent));
+        } catch (InputReadFailedException e) {
+            context.getLogger()
+                    .errorReporter()
+                    .recordError(
+                            ImageSizePrereader.class,
+                            "Cannot determine input path: " + input.identifier());
+            return Optional.empty();
+        } finally {
+            int index;
+            synchronized (counter) {
+                index = counter.getCount();
+                counter.increment();
             }
-
             context.getLogger()
                     .messageLogger()
                     .logFormatted(
                             "Pre-reading image size (%d of %d) %s: %s",
-                            index++,
-                            inputs.size(),
+                            index,
+                            numberInputs,
                             size.isPresent() ? "succeeded" : "  failed",
                             input.identifier());
         }
-        return out;
     }
 
     /**

@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed;
@@ -29,6 +29,7 @@ class MontageSharedStateFactory {
      *     was derived from.
      * @param arranger how to arrange the images into a {@link StackArrangement}.
      * @param resizer how to resize an image.
+     * @param context operation context.
      * @return the newly created shared-state.
      * @throws ExperimentExecutionException if a stack arrangement cannot be successfully
      *     determined.
@@ -37,21 +38,26 @@ class MontageSharedStateFactory {
             List<Pair<Path, Extent>> sizes,
             StackArranger arranger,
             VoxelsResizer resizer,
-            ExecutionTimeRecorder recorder)
+            OperationContext context)
             throws ExperimentExecutionException {
 
         try {
             StackArrangement arrangement =
-                    recorder.recordExecutionTime(
-                            "Arranging the stacks",
-                            () ->
-                                    arranger.arrangeStacks(
-                                            sizes.stream().map(Pair::getSecond).iterator()));
+                    context.getExecutionTimeRecorder()
+                            .recordExecutionTime(
+                                    "Arranging the stacks",
+                                    () ->
+                                            arranger.arrangeStacks(
+                                                    sizes.stream().map(Pair::getSecond).iterator(),
+                                                    context));
 
             // Create the shared state with the bounding-box mapping and overall size for the
             // combined image.
             return new MontageSharedState(
-                    mapFromArrangement(sizes, arrangement), arrangement.extent(), resizer);
+                    mapFromArrangement(sizes, arrangement),
+                    arrangement.extent(),
+                    resizer,
+                    context.getExecutionTimeRecorder());
         } catch (ArrangeStackException e) {
             throw new ExperimentExecutionException("Cannot determine a stack arrangement for", e);
         }
