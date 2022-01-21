@@ -105,7 +105,7 @@ public class GroupedMeanChannelTask extends GroupedStackBase<Channel, RunningSum
 
         try {
             for (NamedChannel channel : getSelectChannels().selectChannels(source, true)) {
-                sharedState.getGroupMap().add(groupName, channel.getName(), channel.getChannel());
+                sharedState.getGroupMap().add(groupName, channel.getName(), channel.getChannel().projectMax());
             }
 
         } catch (OperationFailedException e) {

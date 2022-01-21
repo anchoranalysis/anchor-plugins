@@ -76,17 +76,7 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
             InputOutputContext context)
             throws OutputWriteFailedException {
         try {
-            Channel mean = agg.createMeanChannel(outputType);
-
-            context.getMessageReporter()
-                    .logFormatted(
-                            "Writing channel %s with %d items and numPixels>100=%d and outputType=%s",
-                            channelName,
-                            agg.count(),
-                            mean.voxelsGreaterThan(100).count(),
-                            outputType);
-
-            return mean;
+            return agg.createMeanChannel(outputType);
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
