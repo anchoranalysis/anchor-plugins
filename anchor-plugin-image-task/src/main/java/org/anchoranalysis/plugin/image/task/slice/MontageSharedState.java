@@ -101,7 +101,7 @@ public class MontageSharedState {
                 labels.add(label.get(), box.getEnclosing(), false);
             }
 
-        } catch (InputReadFailedException e) {
+        } catch (Exception e) {
 
             if (label.isPresent()) {
                 labels.add(label.get(), box.getEnclosing(), true);

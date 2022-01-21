@@ -166,32 +166,29 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
         stacks.add(name, () -> convert(progress, getDelegate(), seriesIndex, logger));
     }
 
+    /** Derives a {@link Stack} from a {@link NamedChannelsForSeries} that may be RGB or grayscale or neither. */
     private Stack stackFromChannels(
             NamedChannelsForSeries channels, ProgressMultiple progress, Logger logger)
             throws OperationFailedException {
         try {
             if (channelName.isPresent()) {
+            	// Create a stack with a specific channel only
                 return new Stack(extractChannel(channels, channelName.get(), progress, logger));
-            } else if (channels.isRGB()) {
-                return rgbStackFromChannels(channels, progress, logger);
+            } else if (channels.isRGB() && channels.numberChannels()==3) {
+            	// If it's marked as RGB and has exactly three channels, extract them into a stack, in theright order.
+                return buildStackFromRGBChannelNames(channels, progress, logger);
             } else {
+            	// Otherwise build a stack with the channel names in arbitrary order
                 return channels.allChannelsAsStack(timeIndex, logger).get();
             }
         } catch (ImageIOException | GetOperationFailedException e) {
             throw new OperationFailedException(e);
         }
     }
-
-    private Stack rgbStackFromChannels(
-            NamedChannelsForSeries channels, ProgressMultiple progress, Logger logger)
-            throws OperationFailedException {
-        if (channels.numberChannels() != 3) {
-            throw new OperationFailedException(
-                    "There must be exactly 3 channels for a RGB stack, but there are "
-                            + channels.numberChannels());
-        }
-
-        try {
+    
+    /** Builds a stack, from the expected standardized names for color channels in RGB. */
+    private Stack buildStackFromRGBChannelNames(NamedChannelsForSeries channels, ProgressMultiple progress, Logger logger) throws OperationFailedException {
+    	try {
             return new Stack(
                     true,
                     extractChannel(channels, RGBChannelNames.RED, progress, logger),
@@ -201,9 +198,10 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
             throw new AnchorImpossibleSituationException();
         } catch (GetOperationFailedException e) {
             throw new OperationFailedException(e);
-        }
+        }    	
     }
 
+    /** Extracts a single channel with the name {@code channelName}. */
     private Channel extractChannel(
             NamedChannelsForSeries channels,
             String channelName,

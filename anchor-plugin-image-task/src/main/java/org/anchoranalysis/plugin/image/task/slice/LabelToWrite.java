@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.image.task.slice;
 
 import ij.process.ImageProcessor;
 import java.awt.Color;
+import java.awt.Rectangle;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
@@ -11,8 +12,8 @@ import org.anchoranalysis.spatial.box.Extent;
 /** A label to be written on an image. */
 class LabelToWrite {
 
-    /** We insist the text label has at least 6 pixels (3 on either side) free from the borders. */
-    private static final int MARGIN_PIXELS = 6;
+    /** We insist the text label has at least 16 pixels (8 on either side) free from the borders. */
+    private static final int MARGIN_PIXELS = 16;
 
     /** The text of the label to write, including any error suffix string when applicable. */
     @Getter private String text;
@@ -108,7 +109,7 @@ class LabelToWrite {
      */
     private Extent calculateSizeMaybeReduceText(ImageProcessor processor) {
 
-        Extent textSize = calculateTextSize(text, processor).minimum(boxImage.extent());
+        Extent textSize = calculateTextSize(text, processor);
 
         // Maximum width allowed
         int maximumPermittedWidth = Math.max(boxImage.extent().x() - MARGIN_PIXELS, MARGIN_PIXELS);
@@ -134,8 +135,9 @@ class LabelToWrite {
      * and Y dimensions.
      */
     private static Extent calculateTextSize(String text, ImageProcessor processor) {
-        int width = processor.getStringWidth(text);
-        int height = (int) Math.ceil(processor.getStringBounds(text).getHeight());
+        Rectangle bounds = processor.getStringBounds(text);
+        int width = (int) Math.ceil(bounds.getWidth());
+        int height = (int) Math.ceil(bounds.getHeight());
         return new Extent(width, height);
     }
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Positive;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.progress.ProgressIgnore;
@@ -26,6 +27,7 @@ import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.bean.spatial.arrange.align.Grow;
 import org.anchoranalysis.image.bean.spatial.arrange.fill.Fill;
 import org.anchoranalysis.image.bean.spatial.arrange.tile.Tile;
+import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
@@ -308,8 +310,9 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     private Stack readStackFromInput(InputBound<StackSequenceInput, MontageSharedState> input)
             throws InputReadFailedException {
         try {
-            return input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
-        } catch (OperationFailedException e) {
+            Stack stack = input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
+            return DisplayStack.create(stack.extractUpToThreeChannels()).deriveStack(false);
+        } catch (OperationFailedException | CreateException e) {
             throw new InputReadFailedException(
                     "Cannot extract a stack representation from the input", e);
         }
