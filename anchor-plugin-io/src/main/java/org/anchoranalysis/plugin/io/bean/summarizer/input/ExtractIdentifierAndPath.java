@@ -45,8 +45,8 @@ public class ExtractIdentifierAndPath<T extends InputFromManager>
     protected Optional<String> extractFrom(T input) {
         return Optional.of(
                 String.format(
-                        "%s\t -> %s",
-                        input.identifier(), input.pathForBinding().map(Path::toString).orElse("")));
+                        "%s\t%n  -> %s",
+                        input.pathForBinding().map(Path::toString).orElse(""), input.identifier()));
     }
 
     @Override
