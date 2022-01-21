@@ -92,15 +92,17 @@ class MontageLabels {
                         ConvertToImageProcessor.from(stack.getChannel(channel).voxels(), 0);
 
                 // We calculate the font-size only on the processor for the first channel, otherwise
-                // it is identical
-                // We need the processor to estimate the font size
-                if (channel == 0) {
-                    fontSize = calculateFontSize(processor, ratioHeightForLabel);
-                }
+                // it is identical. We need the processor to estimate the font size
+                // We only bother if we are written labels
+                if (!labels.isEmpty()) {
+                    if (channel == 0 && !labels.isEmpty()) {
+                        fontSize = calculateFontSize(processor, ratioHeightForLabel);
+                    }
 
-                processor.setJustification(ImageProcessor.LEFT_JUSTIFY);
-                processor.setColor(extractColorComponent(TEXT_COLOR, channel));
-                processor.setFontSize(fontSize);
+                    processor.setJustification(ImageProcessor.LEFT_JUSTIFY);
+                    processor.setColor(extractColorComponent(TEXT_COLOR, channel));
+                    processor.setFontSize(fontSize);
+                }
 
                 Color backgroundSuccessful = extractColorComponent(FILL_COLOR_SUCCESSFUL, channel);
                 Color backgroundErrored = extractColorComponent(FILL_COLOR_ERRORED, channel);

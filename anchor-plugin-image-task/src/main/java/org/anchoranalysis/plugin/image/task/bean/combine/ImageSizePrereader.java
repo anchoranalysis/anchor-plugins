@@ -4,14 +4,12 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
-import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
@@ -127,22 +125,16 @@ class ImageSizePrereader {
             ImageMetadata metadata = imageMetadataReader.openFile(imagePath, stackReader, context);
             ScaleFactor factor =
                     scale.calculate(Optional.of(metadata.getDimensions()), suggestedResize);
-            return Optional.of(metadata.getDimensions().extent().scaleXYBy(factor, true));
-        } catch (ImageIOException e) {
+            return Optional.of(
+                    metadata.getDimensions().extent().flattenZ().scaleXYBy(factor, true));
+        } catch (Exception e) {
+            // Catch all exceptions, and give up after recording an error in the log.
             context.getLogger()
                     .errorReporter()
                     .recordError(
                             Montage.class,
                             new ExperimentExecutionException(
                                     "Cannot read the image-metadata for file at: " + imagePath, e));
-            return Optional.empty();
-        } catch (OperationFailedException e) {
-            context.getLogger()
-                    .errorReporter()
-                    .recordError(
-                            Montage.class,
-                            new ExperimentExecutionException(
-                                    "Cannot calculate scale for file at: " + imagePath, e));
             return Optional.empty();
         }
     }

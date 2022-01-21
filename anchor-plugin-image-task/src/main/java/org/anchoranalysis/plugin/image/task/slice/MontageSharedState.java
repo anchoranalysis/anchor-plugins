@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackCopierAtBox;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
@@ -69,24 +70,29 @@ public class MontageSharedState {
      *
      * @param source supplies the image to copy from, not necessarily matching the final destination
      *     size. It is resized as necessary.
+     * @param identifier the unique identifier for the image, so it can be included in error
+     *     messages.
      * @param path the corresponding path to identify the appropriate {@link BoundingBox} to use in
      *     the combined image.
      * @param label if set, this label is drawn onto the bottom of the image. if not set, nothing
      *     occurs.
-     * @throws OperationFailedException if no matching bounding-box exists, or the input cannot be
+     * @throws JobExecutionException if no matching bounding-box exists, or the input cannot be
      *     successfully read, or copying otherwise fails.
      */
     public void copyStackInto(
             CheckedSupplier<Stack, InputReadFailedException> source,
+            String identifier,
             Path path,
             Optional<String> label)
-            throws OperationFailedException {
+            throws JobExecutionException {
 
         BoundingBoxEnclosed box = boxes.get(path);
 
         if (box == null) {
-            throw new OperationFailedException(
-                    "Cannot find bounding-box to place image `" + path + "` into the montage.");
+            throw new JobExecutionException(
+                    String.format(
+                            "An error occurred pre-reading the image size for %s so it is omitted from the montage.",
+                            identifier));
         }
 
         try {
@@ -107,7 +113,8 @@ public class MontageSharedState {
                 labels.add(label.get(), box.getEnclosing(), true);
             }
 
-            throw new OperationFailedException(e);
+            throw new JobExecutionException(
+                    "An error occurred copying the input image into the montage: " + identifier, e);
         }
     }
 
