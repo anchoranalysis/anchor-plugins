@@ -30,8 +30,8 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Creates a string where each line is an element.
- * 
- * <p>The string representation for each element is printed as a line. 
+ *
+ * <p>The string representation for each element is printed as a line.
  *
  * @author Owen Feehan
  * @param <T> type of entity to summarize (its string representation is taken)

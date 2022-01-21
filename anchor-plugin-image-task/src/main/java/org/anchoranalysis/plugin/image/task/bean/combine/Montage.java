@@ -310,7 +310,8 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     private Stack readStackFromInput(InputBound<StackSequenceInput, MontageSharedState> input)
             throws InputReadFailedException {
         try {
-            Stack stack = input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
+            Stack stack =
+                    input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
             return DisplayStack.create(stack.extractUpToThreeChannels()).deriveStack(false);
         } catch (OperationFailedException | CreateException e) {
             throw new InputReadFailedException(

@@ -28,6 +28,10 @@ package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.value.StringUtilities;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -41,16 +45,47 @@ import org.anchoranalysis.io.input.InputFromManager;
 public class ExtractIdentifierAndPath<T extends InputFromManager>
         extends SummarizerInputFromManager<T, String> {
 
+    // START BEAN PROPERTIES
+    /**
+     * The maximum width permitted for an identifier, so that it is printed as one line. Otherwise
+     * it is printed as two lines.
+     */
+    @BeanField @Getter @Setter private int maxPathWidth = 40;
+    // END BEAN PROPERTIES
+
     @Override
     protected Optional<String> extractFrom(T input) {
+        String identifier = input.identifier();
+        String path = input.pathForBinding().map(Path::toString).orElse("<no identifier>");
         return Optional.of(
-                String.format(
-                        "%s\t%n  -> %s",
-                        input.pathForBinding().map(Path::toString).orElse(""), input.identifier()));
+                String.format(formatString(path.length()), maybePadPath(path), identifier));
     }
 
     @Override
     public boolean requiresImageMetadata() {
         return false;
+    }
+
+    /** How to display the two strings, one-line or two-lines. */
+    private String formatString(int identifierWidth) {
+        if (identifierWidth <= maxPathWidth) {
+            // One line
+            return "%s -> %s";
+        } else {
+            // Multiline
+            return "%s%n   -> %s";
+        }
+    }
+
+    /**
+     * Adds whitespace to the right to bring {@code identifier} to a fixed width, but only if it
+     * will be displayed one-line.
+     */
+    private String maybePadPath(String identifier) {
+        if (identifier.length() <= maxPathWidth) {
+            return StringUtilities.rightPad(identifier, maxPathWidth);
+        } else {
+            return identifier;
+        }
     }
 }
