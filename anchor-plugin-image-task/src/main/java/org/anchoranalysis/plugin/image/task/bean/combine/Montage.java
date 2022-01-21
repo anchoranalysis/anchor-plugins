@@ -43,6 +43,8 @@ import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.scale.ToDimensions;
 import org.anchoranalysis.plugin.image.bean.scale.ToSuggested;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
+import org.anchoranalysis.spatial.box.Extent;
+import org.apache.commons.math3.util.Pair;
 
 /**
  * Creates a montage of images, by tiling them side-by-side.
@@ -202,9 +204,10 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
                         parameters.getExperimentArguments().task().getSize(),
                         context);
 
+        List<Pair<Path, Extent>> prereadSizes = prereader.deriveSizeForAllInputs(inputs);
         return MontageSharedStateFactory.create(
-                prereader.deriveSizeForAllInputs(inputs),
-                createArranger(inputs.size()),
+                prereadSizes,
+                createArranger(prereadSizes.size()),
                 interpolator.voxelsResizer(),
                 context);
     }
@@ -227,13 +230,15 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
                                     input.getSharedState()
                                             .copyStackInto(
                                                     () -> readStackFromInput(input),
+                                                    input.getInput().identifier(),
                                                     path,
                                                     stackLabel));
 
-        } catch (InputReadFailedException | OperationFailedException e) {
+        } catch (InputReadFailedException e) {
             throw new JobExecutionException(
-                    "An error occurred copying the input image into the montage: "
-                            + input.getInput().identifier(),
+                    String.format(
+                            "An error occurred copying the input image into the montage: %s",
+                            input.getInput().identifier()),
                     e);
         }
     }
@@ -276,11 +281,11 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     }
 
     /** Creates the {@link StackArranger} that will determine the tabular pattern. */
-    private StackArranger createArranger(int numberInputs) {
+    private StackArranger createArranger(int numberImagesToArrange) {
 
         // Determine number of rows, so to give a similar number of rows and columns (as close to a
         // square as possible, ignoring the aspectRatio).
-        int rows = (int) Math.ceil(Math.sqrt(numberInputs));
+        int rows = (int) Math.ceil(Math.sqrt(numberImagesToArrange));
 
         if (varyImageSize) {
             // Completely fill space, allowing for a different number of rows and columns
@@ -290,7 +295,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             return fill;
         } else {
 
-            int columns = (int) Math.ceil(((double) numberInputs) / rows);
+            int columns = (int) Math.ceil(((double) numberImagesToArrange) / rows);
 
             // A strictly tabular form, where each image must fit inside its cell-size.
             Tile tile = new Tile();
