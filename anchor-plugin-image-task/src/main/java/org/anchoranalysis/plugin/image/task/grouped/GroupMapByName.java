@@ -35,6 +35,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.name.MapCreate;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
