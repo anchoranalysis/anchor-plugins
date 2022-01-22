@@ -3,9 +3,9 @@ package org.anchoranalysis.plugin.image.bean.channel.aggregator;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
-import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityProjection;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.image.voxel.projection.MeanIntensityProjection;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
