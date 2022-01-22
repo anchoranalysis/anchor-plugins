@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.convert;
 
-import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
+import org.anchoranalysis.image.bean.channel.ConvertChannelTo;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ToUnsignedByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -35,6 +35,7 @@ public class ScaleByTypeToByte extends ConvertChannelTo<UnsignedByteBuffer> {
 
     @Override
     public ChannelConverter<UnsignedByteBuffer> createConverter() {
-        return new ToUnsignedByte(new org.anchoranalysis.image.voxel.convert.ToByteScaleByType());
+        return new ToUnsignedByte(
+                new org.anchoranalysis.image.voxel.convert.ToUnsignedByteScaleByType());
     }
 }

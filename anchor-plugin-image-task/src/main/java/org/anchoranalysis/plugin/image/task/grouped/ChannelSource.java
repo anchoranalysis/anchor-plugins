@@ -98,7 +98,7 @@ public class ChannelSource {
             Channel channel = stack.getChannel(index);
 
             if (checkType) {
-                channelChecker.checkChannelType(channel.getVoxelDataType());
+                channelChecker.checkChannelType(channel.getVoxelDataType(), stack.isRGB());
             }
 
             return maybeResize(channel);

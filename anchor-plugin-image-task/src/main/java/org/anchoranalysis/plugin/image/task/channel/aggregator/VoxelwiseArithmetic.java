@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
+package org.anchoranalysis.plugin.image.task.channel.aggregator;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
