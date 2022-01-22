@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.functional.FunctionalListParallel;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
@@ -64,10 +64,9 @@ class ImageSizePrereader {
                 .logFormatted(
                         "Prereading %d images in parallel across multiple cores", inputs.size());
         Counter counter = new Counter();
-        return FunctionalList.mapToListOptional(
+        return FunctionalListParallel.mapToListOptional(
                 inputs,
                 ExperimentExecutionException.class,
-                true,
                 input -> sizeFromInput(input, counter, inputs.size()));
     }
 

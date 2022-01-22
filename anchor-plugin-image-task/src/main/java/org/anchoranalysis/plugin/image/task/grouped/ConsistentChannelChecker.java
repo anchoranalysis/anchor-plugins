@@ -41,13 +41,22 @@ public class ConsistentChannelChecker {
     @Getter private long maxValue = 0; // Unset
     @Getter private VoxelDataType channelType;
 
+    /** Whether the channel originates from an RGB image or not. */
+    @Getter private boolean fromRGB = true;
+
     /** Checks that a channel has the same type (max value) as the others */
-    public void checkChannelType(VoxelDataType channelType) throws SetOperationFailedException {
+    public void checkChannelType(VoxelDataType channelType, boolean fromRGB)
+            throws SetOperationFailedException {
         long maxValueChannel = channelType.maxValue();
         if (!isMaxValueSet()) {
             setMaxValue(maxValueChannel);
             this.channelType = channelType;
+            this.fromRGB = fromRGB;
         } else {
+            if (fromRGB != this.fromRGB) {
+                throw new SetOperationFailedException(
+                        "All images must originate from an RGB image or not");
+            }
             if (getMaxValue() != maxValueChannel) {
                 throw new SetOperationFailedException(
                         "All images must have data-types of the same histogram size");

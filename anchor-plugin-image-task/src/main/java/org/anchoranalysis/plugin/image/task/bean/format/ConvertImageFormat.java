@@ -46,7 +46,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
+import org.anchoranalysis.image.bean.channel.ConvertChannelTo;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;

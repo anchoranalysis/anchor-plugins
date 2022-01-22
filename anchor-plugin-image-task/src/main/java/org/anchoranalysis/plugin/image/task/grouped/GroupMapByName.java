@@ -26,7 +26,10 @@
 
 package org.anchoranalysis.plugin.image.task.grouped;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -37,6 +40,7 @@ import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
+import org.apache.commons.math3.util.Pair;
 
 /**
  * Adds items to aggregate structures identified uniquely by a name, and allows these items to be
@@ -58,11 +62,12 @@ public abstract class GroupMapByName<S, T> {
     /**
      * Creates a group-map.
      *
-     * @param nounT a word to describe a single instance of T in user error messages
-     * @param createEmpty
+     * @param nounT a word to describe a single instance of T in user error messages.
+     * @param createAggregator called to create a new aggregator, whenever needed e.g. for a
+     *     particular group.
      */
-    protected GroupMapByName(String nounT, Supplier<T> createEmpty) {
-        this.map = new MapCreate<>(createEmpty);
+    protected GroupMapByName(String nounT, Supplier<T> createAggregator) {
+        this.map = new MapCreate<>(createAggregator);
         this.nounT = nounT;
     }
 
@@ -110,24 +115,42 @@ public abstract class GroupMapByName<S, T> {
         // written without a subdirectory
         // If there are two parts, it is assumed that the first-part is a group-name (a separate
         // subdirectory) and the second-part is written without a subdirectory
+
+        // Rather than write each entry, individually, we want to write them one directory at a time
+        // to give the implementation a chance, to process multiple entries for the same directory
+        // together.
+
+        // We create a list of all entries, sorted by their subdirectory context
+        Multimap<InputOutputContext, Pair<String, T>> indexedBySubdirectory =
+                MultimapBuilder.hashKeys().arrayListValues().build();
         for (Entry<MultiName, T> entry : map.entrySet()) {
 
             MultiName name = entry.getKey();
+            indexedBySubdirectory.put(
+                    subdirectoryCache.get(name.firstPart()),
+                    new Pair<>(name.secondPart(), entry.getValue()));
+        }
 
-            writeGroupOutputInSubdirectory(
-                    name.secondPart(),
-                    entry.getValue(),
-                    channelChecker,
-                    subdirectoryCache.get(name.firstPart()));
+        // Process each output subdirectory collectively
+        for (InputOutputContext subdirectory : indexedBySubdirectory.keySet()) {
+            outputGroupIntoSubdirectory(
+                    indexedBySubdirectory.get(subdirectory), channelChecker, subdirectory);
         }
     }
 
-    protected abstract void addTo(S ind, T agg) throws OperationFailedException;
+    protected abstract void addTo(S channelToAdd, T aggregator) throws OperationFailedException;
 
-    protected abstract void writeGroupOutputInSubdirectory(
-            String partName,
-            T agg,
+    /**
+     * Output a particular group into a subdirectory.
+     *
+     * @param namedAggregators all the aggregators for this group.
+     * @param channelChecker what was used to ensure all {@link Channel}s had identical attributes.
+     * @param subdirectory the subdirectory into which outputting occurs.
+     * @throws IOException if unable to output successfully.
+     */
+    protected abstract void outputGroupIntoSubdirectory(
+            Collection<Pair<String, T>> namedAggregators,
             ConsistentChannelChecker channelChecker,
-            InputOutputContext context)
+            InputOutputContext subdirectory)
             throws IOException;
 }

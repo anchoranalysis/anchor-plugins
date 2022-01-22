@@ -27,11 +27,13 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 import java.io.IOException;
+import java.util.Collection;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
+import org.apache.commons.math3.util.Pair;
 
 class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
 
@@ -43,17 +45,25 @@ class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
     }
 
     @Override
-    protected void addTo(Histogram ind, Histogram agg) throws OperationFailedException {
-        agg.addHistogram(ind);
+    protected void addTo(Histogram channelToAdd, Histogram aggregator)
+            throws OperationFailedException {
+        aggregator.addHistogram(channelToAdd);
     }
 
     @Override
-    protected void writeGroupOutputInSubdirectory(
-            String partName,
-            Histogram agg,
+    protected void outputGroupIntoSubdirectory(
+            Collection<Pair<String, Histogram>> namedAggregators,
             ConsistentChannelChecker channelChecker,
-            InputOutputContext context)
+            InputOutputContext subdirectory)
             throws IOException {
-        writer.writeHistogramToFile(agg, partName, context);
+        // We can write these group outputs in parallel, as we no longer in the parallel part of
+        // Anchor's task execution
+        namedAggregators.parallelStream()
+                .forEach(
+                        namedAggregator ->
+                                writer.writeHistogramToFile(
+                                        namedAggregator.getSecond(),
+                                        namedAggregator.getFirst(),
+                                        subdirectory));
     }
 }

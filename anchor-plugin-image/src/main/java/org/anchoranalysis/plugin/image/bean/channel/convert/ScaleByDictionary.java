@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.value.Dictionary;
-import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
+import org.anchoranalysis.image.bean.channel.ConvertChannelTo;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ToUnsignedByteScaleByMinMaxValue;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
