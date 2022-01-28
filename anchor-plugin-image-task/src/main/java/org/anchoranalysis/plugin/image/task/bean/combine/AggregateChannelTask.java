@@ -88,37 +88,38 @@ public class AggregateChannelTask extends GroupedStackBase<Channel, ChannelAggre
                 outputNameForGroups(), () -> aggregator.duplicateBean(), context.getLogger());
     }
 
-	@Override
-	protected void processIndividual(String name, Channel individual,
-			CheckedBiConsumer<String, Channel, OperationFailedException> consumeIndividual, InputOutputContext context)
-			throws OperationFailedException {
-	   	
+    @Override
+    protected void processIndividual(
+            String name,
+            Channel individual,
+            CheckedBiConsumer<String, Channel, OperationFailedException> consumeIndividual,
+            InputOutputContext context)
+            throws OperationFailedException {
+
         if (getResizeTo() != null) {
             if (slicewise) {
                 addImagesSlicewise(consumeIndividual, name, individual);
             } else {
-                addImageEntirety(
-                		consumeIndividual, name, individual.projectMax());
+                addImageEntirety(consumeIndividual, name, individual.projectMax());
             }
         } else {
             addImageEntirety(consumeIndividual, name, individual);
         }
-		
-	}
+    }
 
-	@Override
-	protected CheckedFunction<Channel, Channel, CreateException> createChannelDeriver(ChannelSource source)
-			throws OperationFailedException {
-		return channel -> channel;
-	}
+    @Override
+    protected CheckedFunction<Channel, Channel, CreateException> createChannelDeriver(
+            ChannelSource source) throws OperationFailedException {
+        return channel -> channel;
+    }
 
     /** Add an image as a whole to the aggregation. */
     private void addImageEntirety(
-    		CheckedBiConsumer<String,Channel,OperationFailedException> addChannelToMap,
+            CheckedBiConsumer<String, Channel, OperationFailedException> addChannelToMap,
             String channelName,
             Channel channel)
             throws OperationFailedException {
-    	addChannelToMap.accept(channelName, channel);
+        addChannelToMap.accept(channelName, channel);
     }
 
     /**
@@ -128,14 +129,14 @@ public class AggregateChannelTask extends GroupedStackBase<Channel, ChannelAggre
      * Optional, NamedChannel)}.
      */
     private void addImagesSlicewise(
-    		CheckedBiConsumer<String,Channel,OperationFailedException> addChannelToMap,
-            String name, Channel channel)
+            CheckedBiConsumer<String, Channel, OperationFailedException> addChannelToMap,
+            String name,
+            Channel channel)
             throws OperationFailedException {
         // Add slice by slice
         int numberSlices = channel.extent().z();
         for (int z = 0; z < numberSlices; z++) {
-        	addChannelToMap.accept(name, channel.extractSlice(z));
+            addChannelToMap.accept(name, channel.extractSlice(z));
         }
     }
-
 }

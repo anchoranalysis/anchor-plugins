@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels;
 
 import java.util.Set;
 import java.util.stream.Stream;
-
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
@@ -52,8 +51,11 @@ public class All extends FromStacks {
 
         Set<String> keys = source.getStackStore().keys();
 
-        Stream<NamedChannels> stream = CheckedStream.map(keys.stream(), OperationFailedException.class, key -> 
-    		extractAllChannels(source, key, checkType) );
+        Stream<NamedChannels> stream =
+                CheckedStream.map(
+                        keys.stream(),
+                        OperationFailedException.class,
+                        key -> extractAllChannels(source, key, checkType));
         return new NamedChannels(stream);
     }
 

@@ -44,14 +44,12 @@ public class One extends FromStacks {
     // START BEAN FIELDS
     /**
      * If defined, processing only occurs the stack with this specific name and index.
-     * 
+     *
      * <p>Otherwise processing occurs on all input stacks.
      */
     @BeanField @Getter @Setter private String stackName;
 
-    /**
-     * The index of the channel to retrieve from {@code stackName}.
-     */
+    /** The index of the channel to retrieve from {@code stackName}. */
     @BeanField @Getter @Setter private int channelIndex = 0;
     // END BEAN FIELDS
 

@@ -68,12 +68,12 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 
 /**
  * Base class for stacks (usually each channel from an image) that are somehow grouped-together.
- * 
+ *
  * <p>Two types of entities are considered:
- * 
+ *
  * <ul>
- * <li>The <b>individual</b> type, to which a {@link Channel} is converted in the image.
- * <li>The <b>aggregated</b> type, when multiple <i>individual</i> types are combined.
+ *   <li>The <b>individual</b> type, to which a {@link Channel} is converted in the image.
+ *   <li>The <b>aggregated</b> type, when multiple <i>individual</i> types are combined.
  * </ul>
  *
  * @author Owen Feehan
@@ -95,10 +95,10 @@ public abstract class GroupedStackBase<S, T>
 
     /** Selects which channels are included, optionally renaming. */
     @BeanField @Getter @Setter private FromStacks selectChannels = new All();
-    
+
     /**
-     * If set, each channel is scaled to a specific size before aggregation (useful for
-     * combining different sized images)
+     * If set, each channel is scaled to a specific size before aggregation (useful for combining
+     * different sized images)
      */
     @BeanField @OptionalBean @Getter @Setter private SizeXY resizeTo;
     // END BEAN PROPERTIES
@@ -120,7 +120,9 @@ public abstract class GroupedStackBase<S, T>
             List<ProvidesStackInput> inputs,
             ParametersExperiment parameters)
             throws ExperimentExecutionException {
-        return new GroupedSharedState<>( checker -> this.createGroupMap(checker, parameters.getContext().operationContext()));
+        return new GroupedSharedState<>(
+                checker ->
+                        this.createGroupMap(checker, parameters.getContext().operationContext()));
     }
 
     @Override
@@ -182,30 +184,36 @@ public abstract class GroupedStackBase<S, T>
      * @param context supporting entities for the operation.
      * @return a newly created map.
      */
-    protected abstract GroupMapByName<S, T> createGroupMap(ConsistentChannelChecker channelChecker, OperationContext context);
-    
+    protected abstract GroupMapByName<S, T> createGroupMap(
+            ConsistentChannelChecker channelChecker, OperationContext context);
+
     /**
      * A function to derive the <i>individual</i> type used for aggregation from a {@link Channel}.
-     * 
+     *
      * @param source how to retrieve a {@link Channel}, appropriately-sized.
-     * @return a function, that given a {@link Channel} will return an individual element of type {@code T}.
+     * @return a function, that given a {@link Channel} will return an individual element of type
+     *     {@code T}.
      */
-    protected abstract CheckedFunction<Channel,S,CreateException> createChannelDeriver(ChannelSource source) throws OperationFailedException;
-    
+    protected abstract CheckedFunction<Channel, S, CreateException> createChannelDeriver(
+            ChannelSource source) throws OperationFailedException;
+
     /**
-     * Processes each derived <i>individual</i> element from a {@link Channel}, calling {@code consumeIndividual} one or more times.
-     * 
+     * Processes each derived <i>individual</i> element from a {@link Channel}, calling {@code
+     * consumeIndividual} one or more times.
+     *
      * @param name the name of the channel.
      * @param individual the derived-individual element.
-     * @param consumeIndividual a function that should be called one or more times for the individual element, or sub-elements of it.
+     * @param consumeIndividual a function that should be called one or more times for the
+     *     individual element, or sub-elements of it.
      * @param context supporting entities for the operation.
      * @throws OperationFailedException if anything goes wrong during processing.
      */
     protected abstract void processIndividual(
-    		String name,
-    		S individual,
-            CheckedBiConsumer<String,S,OperationFailedException> consumeIndividual,
-            InputOutputContext context) throws OperationFailedException;
+            String name,
+            S individual,
+            CheckedBiConsumer<String, S, OperationFailedException> consumeIndividual,
+            InputOutputContext context)
+            throws OperationFailedException;
 
     /**
      * Processes one set of named-stacks.
@@ -229,24 +237,27 @@ public abstract class GroupedStackBase<S, T>
                         sharedState.getChannelChecker(),
                         Optional.ofNullable(resizeTo),
                         getInterpolator().voxelsResizer());
-        
+
         try {
-        	CheckedFunction<Channel,S,CreateException> deriveIndividualFromChannel = createChannelDeriver(source);
-        	
-        	NamedChannels channels = getSelectChannels().selectChannels(source, true);
-        	
-        	sharedState.getChannelNamesChecker().checkChannelNames(channels.names(), channels.isRgb());
-        	
+            CheckedFunction<Channel, S, CreateException> deriveIndividualFromChannel =
+                    createChannelDeriver(source);
+
+            NamedChannels channels = getSelectChannels().selectChannels(source, true);
+
+            sharedState
+                    .getChannelNamesChecker()
+                    .checkChannelNames(channels.names(), channels.isRgb());
+
             for (Map.Entry<String, Channel> entry : channels) {
 
-            	S individual = deriveIndividualFromChannel.apply(entry.getValue());
-            	
+                S individual = deriveIndividualFromChannel.apply(entry.getValue());
+
                 processIndividual(
-                    entry.getKey(),
-                    individual,
-                    (name, histogram) -> sharedState.getGroupMap().add(groupName, name, individual),
-                    context
-                );
+                        entry.getKey(),
+                        individual,
+                        (name, histogram) ->
+                                sharedState.getGroupMap().add(groupName, name, individual),
+                        context);
             }
 
         } catch (OperationFailedException | CreateException e) {

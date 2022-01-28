@@ -47,15 +47,15 @@ class MontageTest extends StackIOTestBase {
         task.setVaryImageSize(false);
         doTest(task, "varyNeither");
     }
-        
+
     @SuppressWarnings("unchecked")
-	private void doTest(Montage task, String expectedOutputSubdirectory)
+    private void doTest(Montage task, String expectedOutputSubdirectory)
             throws ImageIOException, OperationFailedException {
 
         BeanInstanceMapFixture.check(task);
 
         ExecuteTaskHelper.runTaskAndCompareOutputs(
-        		(List<StackSequenceInput>) ColoredStacksInputFixture.createInputs(STACK_READER),
+                (List<StackSequenceInput>) ColoredStacksInputFixture.createInputs(STACK_READER),
                 task,
                 directory,
                 "montage/expectedOutput/" + expectedOutputSubdirectory,

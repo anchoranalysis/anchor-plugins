@@ -115,7 +115,7 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
     @Override
     protected GroupMapByName<Histogram, Histogram> createGroupMap(
             ConsistentChannelChecker channelChecker, OperationContext context) {
-    	int maxIntensityValue = (int) channelChecker.getVoxelDataType().maxValue();
+        int maxIntensityValue = (int) channelChecker.getVoxelDataType().maxValue();
         return new GroupedHistogramMap(createWriter(), maxIntensityValue);
     }
 
@@ -123,18 +123,19 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
     protected Optional<String> subdirectoryForGroupOutputs() {
         return Optional.of(OUTPUT_SUM);
     }
-    
+
     @Override
-    protected CheckedFunction<Channel,Histogram, CreateException> createChannelDeriver(ChannelSource source) throws OperationFailedException {
-    	Optional<Mask> mask = MaskExtracter.extractMask(source, channelMask, maskValue);
-    	return channel -> HistogramFromObjectsFactory.createFrom(channel, mask);
+    protected CheckedFunction<Channel, Histogram, CreateException> createChannelDeriver(
+            ChannelSource source) throws OperationFailedException {
+        Optional<Mask> mask = MaskExtracter.extractMask(source, channelMask, maskValue);
+        return channel -> HistogramFromObjectsFactory.createFrom(channel, mask);
     }
-    
+
     @Override
     protected void processIndividual(
-    		String name,
+            String name,
             Histogram individual,
-            CheckedBiConsumer<String,Histogram,OperationFailedException> consumeIndividual,
+            CheckedBiConsumer<String, Histogram, OperationFailedException> consumeIndividual,
             InputOutputContext context)
             throws OperationFailedException {
 

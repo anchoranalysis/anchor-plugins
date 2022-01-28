@@ -49,8 +49,8 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.apache.commons.math3.util.Pair;
 
 /**
- * Creates a {@link ChannelAggregator} for each group, and writes the aggregated {@link NamedChannels} to
- * the file-system.
+ * Creates a {@link ChannelAggregator} for each group, and writes the aggregated {@link
+ * NamedChannels} to the file-system.
  *
  * @param <T> the aggregator that combines {@link NamedChannels}s
  * @author Owen Feehan
@@ -59,12 +59,13 @@ class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByNa
 
     private final String outputName;
     private final Logger logger;
-    
+
     /**
      * @param outputName the first-level output-name used to determine whether mean channels will be
      *     written or not
      */
-    public GroupedChannelAggregator(String outputName, Supplier<T> createAggregator, Logger logger) {
+    public GroupedChannelAggregator(
+            String outputName, Supplier<T> createAggregator, Logger logger) {
         super("channel", createAggregator);
         this.outputName = outputName;
         this.logger = logger;
@@ -72,7 +73,7 @@ class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByNa
 
     @Override
     protected void addTo(Channel channelToAdd, T aggregator) throws OperationFailedException {
-    	aggregator.addChannel(channelToAdd, logger);
+        aggregator.addChannel(channelToAdd, logger);
     }
 
     @Override

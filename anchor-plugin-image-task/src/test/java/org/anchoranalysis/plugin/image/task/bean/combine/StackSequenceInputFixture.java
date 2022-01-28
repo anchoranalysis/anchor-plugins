@@ -51,18 +51,20 @@ public class StackSequenceInputFixture implements StackSequenceInput {
         this.path = directory.resolve(filename);
         this.stack = reader.readStack(path, context);
     }
-    
+
     /**
      * Create from an existing {@link Stack}.
-     * 
+     *
      * @param stack the stack.
-     * @param directory the associated directory (which is not actually read, but helps for the associated input path).
-     * @param filename the associated filename (which is not actually read, but helps for the associated input path).
+     * @param directory the associated directory (which is not actually read, but helps for the
+     *     associated input path).
+     * @param filename the associated filename (which is not actually read, but helps for the
+     *     associated input path).
      */
     public StackSequenceInputFixture(Stack stack, String directory, String filename) {
-    	this.stack = stack;
-    	this.path = Paths.get(directory).resolve(filename);
-    	this.filename = filename;
+        this.stack = stack;
+        this.path = Paths.get(directory).resolve(filename);
+        this.filename = filename;
     }
 
     @Override

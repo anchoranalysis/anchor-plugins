@@ -47,9 +47,7 @@ import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 public class ChannelSource {
 
     // START REQUIRED ARGUMENTS
-	/** 
-	 * A named set of {@link Stack}s from which {@link Channel}s may be extracted.
-	 */
+    /** A named set of {@link Stack}s from which {@link Channel}s may be extracted. */
     @Getter private final NamedStacks stackStore;
 
     /** How to check that the {@link Channel}s have consistent voxel data-type. */
@@ -64,13 +62,15 @@ public class ChannelSource {
 
     /**
      * Extracts a {@link Channel} from a particular {@link Stack} in {@code stackStore}.
-     * 
+     *
      * <p>This {@link Stack} must be single-channeled.
-     * 
+     *
      * @param stackName the name of the {@link Stack} which contains the channel.
-     * @param checkType if true, a call occurs to {@code channelChecker} to ensure all {@link Channel}s have consistent voxel data-type.
+     * @param checkType if true, a call occurs to {@code channelChecker} to ensure all {@link
+     *     Channel}s have consistent voxel data-type.
      * @return the extracted {@link Channel}, reused from {@code stackStore}.
-     * @throws OperationFailedException if the {@link Stack} is not single-channeled, or if non consistent voxel data-type occurs.
+     * @throws OperationFailedException if the {@link Stack} is not single-channeled, or if non
+     *     consistent voxel data-type occurs.
      */
     public Channel extractChannel(String stackName, boolean checkType)
             throws OperationFailedException {

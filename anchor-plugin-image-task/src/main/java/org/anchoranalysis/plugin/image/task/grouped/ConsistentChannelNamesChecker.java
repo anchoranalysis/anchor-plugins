@@ -27,8 +27,9 @@
 package org.anchoranalysis.plugin.image.task.grouped;
 
 import java.util.Set;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import lombok.Getter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.core.channel.Channel; // NOSONAR
 
 /**
  * Checks that each image has an identical set of {@link Channel}-names, and RGB-state.
@@ -37,40 +38,41 @@ import lombok.Getter;
  */
 public class ConsistentChannelNamesChecker {
 
-	/**
-	 * The names of {@link Channel}s that are consistent across all images.
-	 */
-	@Getter
-    private Set<String> channelNames;
+    /** The names of {@link Channel}s that are consistent across all images. */
+    @Getter private Set<String> channelNames;
 
-	/**
+    /**
      * Whether the {@link Stack} from which the {@link Channel}s originate was RGB or not.
-     * 
+     *
      * <p>This must also be consistent across all images.
      */
     private boolean rgb;
-	
+
     /**
      * Checks that the channel-names are consistent.
-     * 
+     *
      * @param channelNames the names of the channels to check.
      * @param rgb whether these channels originate from an image that is RGB or not.
-     * @throws OperationFailedException if the image do not have identical channel-names or RGB status.
+     * @throws OperationFailedException if the image do not have identical channel-names or RGB
+     *     status.
      */
     public void checkChannelNames(Set<String> channelNames, boolean rgb)
             throws OperationFailedException {
-    	assert(!channelNames.isEmpty());
-        if (this.channelNames==null) {
+        assert (!channelNames.isEmpty());
+        if (this.channelNames == null) {
             this.channelNames = channelNames;
             this.rgb = rgb;
         } else {
             if (!this.channelNames.equals(channelNames)) {
                 throw new OperationFailedException(
-                        String.format("All images must have identical channel-names, but they are not consistent: %s versus %s", this.channelNames, channelNames));
+                        String.format(
+                                "All images must have identical channel-names, but they are not consistent: %s versus %s",
+                                this.channelNames, channelNames));
             }
-            
-            if (this.rgb!=rgb) {
-            	throw new OperationFailedException("All images must be either RGB, or not-RGB, but a mixture is not allowed");
+
+            if (this.rgb != rgb) {
+                throw new OperationFailedException(
+                        "All images must be either RGB, or not-RGB, but a mixture is not allowed");
             }
         }
     }

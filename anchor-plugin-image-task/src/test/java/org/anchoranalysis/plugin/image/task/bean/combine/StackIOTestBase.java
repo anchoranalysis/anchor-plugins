@@ -1,14 +1,13 @@
 package org.anchoranalysis.plugin.image.task.bean.combine;
 
 import java.nio.file.Path;
-
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Base class for tests that read or write image-stacks.
- * 
+ *
  * @author Owen Feehan
  */
 abstract class StackIOTestBase {
@@ -22,7 +21,7 @@ abstract class StackIOTestBase {
         BeanInstanceMapFixture.ensureInterpolator();
     }
     // END: Ensure needed instances exist in the default BeanInstanceMap
-    
+
     /** Where the output is written to. */
     @TempDir Path directory;
 }

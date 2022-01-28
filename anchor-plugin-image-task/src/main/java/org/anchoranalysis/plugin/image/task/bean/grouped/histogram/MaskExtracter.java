@@ -26,11 +26,9 @@
 
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
-import java.util.Optional;
-
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
@@ -38,25 +36,29 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 
 /** Extracts a histogram from an image for a given key */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MaskExtracter {
 
-    public static Optional<Mask> extractMask(ChannelSource source, String maskStackName, int maskValue) throws OperationFailedException {
-    	if (!maskStackName.isEmpty()) {
+    public static Optional<Mask> extractMask(
+            ChannelSource source, String maskStackName, int maskValue)
+            throws OperationFailedException {
+        if (!maskStackName.isEmpty()) {
             Channel extracted = source.extractChannel(maskStackName, false);
-            return Optional.of( new Mask(extracted, createMaskBinaryValues(maskValue)) );
-    	} else {
-    		return Optional.empty();
-    	}
+            return Optional.of(new Mask(extracted, createMaskBinaryValues(maskValue)));
+        } else {
+            return Optional.empty();
+        }
     }
 
-    private static BinaryValuesInt createMaskBinaryValues(int maskValue) throws OperationFailedException {
+    private static BinaryValuesInt createMaskBinaryValues(int maskValue)
+            throws OperationFailedException {
         if (maskValue == 255) {
             return new BinaryValuesInt(0, 255);
         } else if (maskValue == 0) {
             return new BinaryValuesInt(255, 0);
         } else {
-            throw new OperationFailedException("Only mask-values of 255 or 0 are current supported");
+            throw new OperationFailedException(
+                    "Only mask-values of 255 or 0 are current supported");
         }
     }
 }
