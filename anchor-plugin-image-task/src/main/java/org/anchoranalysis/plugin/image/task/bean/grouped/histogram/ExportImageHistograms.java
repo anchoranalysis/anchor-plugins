@@ -31,19 +31,22 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.bean.task.Task;
-import org.anchoranalysis.image.core.stack.named.NamedStacks;
+import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
-import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
-import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 
 /**
  * Exports a histogram of voxel intensities as a CSV file for each channel of an image.
@@ -111,67 +114,41 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
 
     @Override
     protected GroupMapByName<Histogram, Histogram> createGroupMap(
-            ConsistentChannelChecker channelChecker) {
-        return new GroupedHistogramMap(createWriter(), (int) channelChecker.getMaxValue());
-    }
-
-    @Override
-    protected void processStacks(
-            NamedStacks store,
-            Optional<String> groupName,
-            GroupedSharedState<Histogram, Histogram> sharedState,
-            InputOutputContext context)
-            throws JobExecutionException {
-
-        ChannelSource source =
-                new ChannelSource(
-                        store,
-                        sharedState.getChannelChecker(),
-                        Optional.empty(),
-                        getInterpolator().voxelsResizer());
-
-        HistogramExtracter histogramExtracter =
-                new HistogramExtracter(source, channelMask, maskValue);
-
-        try {
-            for (NamedChannel channel : getSelectChannels().selectChannels(source, true)) {
-
-                addHistogramFromChannel(
-                        channel, histogramExtracter, groupName, sharedState.getGroupMap(), context);
-            }
-
-        } catch (OperationFailedException e) {
-            throw new JobExecutionException(e);
-        }
+            ConsistentChannelChecker channelChecker, OperationContext context) {
+    	int maxIntensityValue = (int) channelChecker.getVoxelDataType().maxValue();
+        return new GroupedHistogramMap(createWriter(), maxIntensityValue);
     }
 
     @Override
     protected Optional<String> subdirectoryForGroupOutputs() {
         return Optional.of(OUTPUT_SUM);
     }
-
-    private void addHistogramFromChannel(
-            NamedChannel channel,
-            HistogramExtracter histogramExtracter,
-            Optional<String> groupName,
-            GroupMapByName<Histogram, Histogram> groupMap,
-            InputOutputContext context)
-            throws JobExecutionException {
-
-        // Histogram is local to this function to keep it thread-safe.
-        Histogram histogram = histogramExtracter.extractFrom(channel.getChannel());
-
-        createWriter().writeHistogramToFile(histogram, channel.getName(), context);
-
-        groupMap.add(groupName, channel.getName(), histogram);
+    
+    @Override
+    protected CheckedFunction<Channel,Histogram, CreateException> createChannelDeriver(ChannelSource source) throws OperationFailedException {
+    	Optional<Mask> mask = MaskExtracter.extractMask(source, channelMask, maskValue);
+    	return channel -> HistogramFromObjectsFactory.createFrom(channel, mask);
     }
+    
+    @Override
+    protected void processIndividual(
+    		String name,
+            Histogram individual,
+            CheckedBiConsumer<String,Histogram,OperationFailedException> consumeIndividual,
+            InputOutputContext context)
+            throws OperationFailedException {
 
-    private GroupedHistogramWriter createWriter() {
-        return new GroupedHistogramWriter(OUTPUT_HISTOGRAMS, csvIgnoreZeros);
+        createWriter().writeHistogramToFile(individual, name, context);
+
+        consumeIndividual.accept(name, individual);
     }
 
     @Override
     protected String outputNameForGroups() {
         return OUTPUT_SUM;
+    }
+
+    private GroupedHistogramWriter createWriter() {
+        return new GroupedHistogramWriter(OUTPUT_HISTOGRAMS, csvIgnoreZeros);
     }
 }

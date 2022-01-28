@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.image.task.bean.combine;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
@@ -35,7 +36,7 @@ public class StackSequenceInputFixture implements StackSequenceInput {
     private final Stack stack;
 
     /**
-     * Create for a particular directory and filename.
+     * Create by reading from the file-system.
      *
      * @param directory the directory of the image to be read.
      * @param filename the filename of the image to be read.
@@ -49,6 +50,19 @@ public class StackSequenceInputFixture implements StackSequenceInput {
         this.filename = filename;
         this.path = directory.resolve(filename);
         this.stack = reader.readStack(path, context);
+    }
+    
+    /**
+     * Create from an existing {@link Stack}.
+     * 
+     * @param stack the stack.
+     * @param directory the associated directory (which is not actually read, but helps for the associated input path).
+     * @param filename the associated filename (which is not actually read, but helps for the associated input path).
+     */
+    public StackSequenceInputFixture(Stack stack, String directory, String filename) {
+    	this.stack = stack;
+    	this.path = Paths.get(directory).resolve(filename);
+    	this.filename = filename;
     }
 
     @Override

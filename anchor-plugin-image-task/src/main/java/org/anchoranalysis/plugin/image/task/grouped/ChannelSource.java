@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 
 /**
- * Source of channels for aggregating.
+ * Extracts a set of {@link Channel]s from a {@link NamedStacks}, optionally resizing.
  *
  * <p>Checks may be applied to make sure all channels have the same-type
  */
@@ -47,17 +47,31 @@ import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 public class ChannelSource {
 
     // START REQUIRED ARGUMENTS
+	/** 
+	 * A named set of {@link Stack}s from which {@link Channel}s may be extracted.
+	 */
     @Getter private final NamedStacks stackStore;
 
+    /** How to check that the {@link Channel}s have consistent voxel data-type. */
     private final ConsistentChannelChecker channelChecker;
 
-    /** Optionally resizes all extracted channels in XY */
+    /** If set, resizes all extracted channels in the XY dimensions. */
     private final Optional<SizeXY> resizeTo;
 
-    /** Resizes images. */
+    /** How to resize the {@link Channel}s. */
     private final VoxelsResizer resizer;
     // END REQUIRED ARGUMENTS
 
+    /**
+     * Extracts a {@link Channel} from a particular {@link Stack} in {@code stackStore}.
+     * 
+     * <p>This {@link Stack} must be single-channeled.
+     * 
+     * @param stackName the name of the {@link Stack} which contains the channel.
+     * @param checkType if true, a call occurs to {@code channelChecker} to ensure all {@link Channel}s have consistent voxel data-type.
+     * @return the extracted {@link Channel}, reused from {@code stackStore}.
+     * @throws OperationFailedException if the {@link Stack} is not single-channeled, or if non consistent voxel data-type occurs.
+     */
     public Channel extractChannel(String stackName, boolean checkType)
             throws OperationFailedException {
 
@@ -94,18 +108,13 @@ public class ChannelSource {
 
     public Channel extractChannel(Stack stack, boolean checkType, int index)
             throws OperationFailedException {
-        try {
-            Channel channel = stack.getChannel(index);
+        Channel channel = stack.getChannel(index);
 
-            if (checkType) {
-                channelChecker.checkChannelType(channel.getVoxelDataType(), stack.isRGB());
-            }
-
-            return maybeResize(channel);
-        } catch (SetOperationFailedException e) {
-            throw new OperationFailedException(
-                    String.format("Cannot extract channel %d from stack", index), e);
+        if (checkType) {
+            channelChecker.checkChannelType(channel);
         }
+
+        return maybeResize(channel);
     }
 
     private Channel maybeResize(Channel channel) {

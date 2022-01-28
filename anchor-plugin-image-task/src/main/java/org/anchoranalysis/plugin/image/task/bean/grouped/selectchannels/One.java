@@ -26,15 +26,13 @@
 
 package org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
-import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 
 /**
  * Selects one specific channel from a set of stacks
@@ -45,21 +43,25 @@ public class One extends FromStacks {
 
     // START BEAN FIELDS
     /**
-     * If defined, processing only occurs the stack with this specific stack and index. Otherwise
-     * processing occurs on all input stacks
+     * If defined, processing only occurs the stack with this specific name and index.
+     * 
+     * <p>Otherwise processing occurs on all input stacks.
      */
     @BeanField @Getter @Setter private String stackName;
 
+    /**
+     * The index of the channel to retrieve from {@code stackName}.
+     */
     @BeanField @Getter @Setter private int channelIndex = 0;
     // END BEAN FIELDS
 
     @Override
-    public List<NamedChannel> selectChannels(ChannelSource source, boolean checkType)
+    public NamedChannels selectChannels(ChannelSource source, boolean checkType)
             throws OperationFailedException {
         Channel channel = source.extractChannel(stackName, checkType, channelIndex);
 
-        List<NamedChannel> out = new ArrayList<>();
-        out.add(new NamedChannel(stackName, channel));
+        NamedChannels out = new NamedChannels(false);
+        out.add(stackName, channel);
         return out;
     }
 }

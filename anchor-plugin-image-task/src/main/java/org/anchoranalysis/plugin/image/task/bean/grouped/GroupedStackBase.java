@@ -29,14 +29,19 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -44,6 +49,9 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
+import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
+import org.anchoranalysis.image.bean.spatial.SizeXY;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
@@ -53,12 +61,20 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.All;
 import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.FromStacks;
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
+import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
+import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 
 /**
  * Base class for stacks (usually each channel from an image) that are somehow grouped-together.
+ * 
+ * <p>Two types of entities are considered:
+ * 
+ * <ul>
+ * <li>The <b>individual</b> type, to which a {@link Channel} is converted in the image.
+ * <li>The <b>aggregated</b> type, when multiple <i>individual</i> types are combined.
+ * </ul>
  *
  * @author Owen Feehan
  * @param <S> individual-type
@@ -79,6 +95,12 @@ public abstract class GroupedStackBase<S, T>
 
     /** Selects which channels are included, optionally renaming. */
     @BeanField @Getter @Setter private FromStacks selectChannels = new All();
+    
+    /**
+     * If set, each channel is scaled to a specific size before aggregation (useful for
+     * combining different sized images)
+     */
+    @BeanField @OptionalBean @Getter @Setter private SizeXY resizeTo;
     // END BEAN PROPERTIES
 
     @Override
@@ -98,7 +120,7 @@ public abstract class GroupedStackBase<S, T>
             List<ProvidesStackInput> inputs,
             ParametersExperiment parameters)
             throws ExperimentExecutionException {
-        return new GroupedSharedState<>(this::createGroupMap);
+        return new GroupedSharedState<>( checker -> this.createGroupMap(checker, parameters.getContext().operationContext()));
     }
 
     @Override
@@ -157,25 +179,80 @@ public abstract class GroupedStackBase<S, T>
      *
      * @param channelChecker checks that the channels of all relevant stacks have the same size and
      *     data-type.
-     * @return a newly created map
+     * @param context supporting entities for the operation.
+     * @return a newly created map.
      */
-    protected abstract GroupMapByName<S, T> createGroupMap(ConsistentChannelChecker channelChecker);
+    protected abstract GroupMapByName<S, T> createGroupMap(ConsistentChannelChecker channelChecker, OperationContext context);
+    
+    /**
+     * A function to derive the <i>individual</i> type used for aggregation from a {@link Channel}.
+     * 
+     * @param source how to retrieve a {@link Channel}, appropriately-sized.
+     * @return a function, that given a {@link Channel} will return an individual element of type {@code T}.
+     */
+    protected abstract CheckedFunction<Channel,S,CreateException> createChannelDeriver(ChannelSource source) throws OperationFailedException;
+    
+    /**
+     * Processes each derived <i>individual</i> element from a {@link Channel}, calling {@code consumeIndividual} one or more times.
+     * 
+     * @param name the name of the channel.
+     * @param individual the derived-individual element.
+     * @param consumeIndividual a function that should be called one or more times for the individual element, or sub-elements of it.
+     * @param context supporting entities for the operation.
+     * @throws OperationFailedException if anything goes wrong during processing.
+     */
+    protected abstract void processIndividual(
+    		String name,
+    		S individual,
+            CheckedBiConsumer<String,S,OperationFailedException> consumeIndividual,
+            InputOutputContext context) throws OperationFailedException;
 
     /**
      * Processes one set of named-stacks.
      *
      * @param stacks the named-stacks (usually each channel from an image).
-     * @param groupName the name of the group
-     * @param sharedState shared-state
-     * @param context context for reading/writing
-     * @throws JobExecutionException if anything goes wrong
+     * @param groupName the name of the group.
+     * @param sharedState shared-state.
+     * @param context context for reading/writing.
+     * @throws JobExecutionException if anything goes wrong.
      */
-    protected abstract void processStacks(
-            NamedStacks stacks,
+    private void processStacks(
+            NamedStacks store,
             Optional<String> groupName,
             GroupedSharedState<S, T> sharedState,
             InputOutputContext context)
-            throws JobExecutionException;
+            throws JobExecutionException {
+
+        ChannelSource source =
+                new ChannelSource(
+                        store,
+                        sharedState.getChannelChecker(),
+                        Optional.ofNullable(resizeTo),
+                        getInterpolator().voxelsResizer());
+        
+        try {
+        	CheckedFunction<Channel,S,CreateException> deriveIndividualFromChannel = createChannelDeriver(source);
+        	
+        	NamedChannels channels = getSelectChannels().selectChannels(source, true);
+        	
+        	sharedState.getChannelNamesChecker().checkChannelNames(channels.names(), channels.isRgb());
+        	
+            for (Map.Entry<String, Channel> entry : channels) {
+
+            	S individual = deriveIndividualFromChannel.apply(entry.getValue());
+            	
+                processIndividual(
+                    entry.getKey(),
+                    individual,
+                    (name, histogram) -> sharedState.getGroupMap().add(groupName, name, individual),
+                    context
+                );
+            }
+
+        } catch (OperationFailedException | CreateException e) {
+            throw new JobExecutionException(e);
+        }
+    }
 
     private Optional<String> extractGroupName(Optional<Path> path, boolean debugEnabled)
             throws JobExecutionException {

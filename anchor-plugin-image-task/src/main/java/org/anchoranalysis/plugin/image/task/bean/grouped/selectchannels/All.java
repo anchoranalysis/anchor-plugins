@@ -26,14 +26,15 @@
 
 package org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
+
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
-import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 
 /**
  * Selects all possible channels from all possible stacks
@@ -46,21 +47,17 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 public class All extends FromStacks {
 
     @Override
-    public List<NamedChannel> selectChannels(ChannelSource source, boolean checkType)
+    public NamedChannels selectChannels(ChannelSource source, boolean checkType)
             throws OperationFailedException {
 
         Set<String> keys = source.getStackStore().keys();
-        List<NamedChannel> out = new ArrayList<>(keys.size());
 
-        for (String key : keys) {
-
-            out.addAll(extractAllChannels(source, key, checkType));
-        }
-
-        return out;
+        Stream<NamedChannels> stream = CheckedStream.map(keys.stream(), OperationFailedException.class, key -> 
+    		extractAllChannels(source, key, checkType) );
+        return new NamedChannels(stream);
     }
 
-    private List<NamedChannel> extractAllChannels(
+    private NamedChannels extractAllChannels(
             ChannelSource source, String stackName, boolean checkType)
             throws OperationFailedException {
 
@@ -68,12 +65,11 @@ public class All extends FromStacks {
             // We make a single histogram
             Stack stack = source.getStackStore().getException(stackName);
 
-            List<NamedChannel> out = new ArrayList<>(stack.getNumberChannels());
+            NamedChannels out = new NamedChannels(stack.isRGB());
             for (int i = 0; i < stack.getNumberChannels(); i++) {
 
                 String outputName = stackName + createSuffix(i, stack.getNumberChannels() > 1);
-
-                out.add(new NamedChannel(outputName, source.extractChannel(stack, checkType, i)));
+                out.add(outputName, source.extractChannel(stack, checkType, i));
             }
             return out;
 
