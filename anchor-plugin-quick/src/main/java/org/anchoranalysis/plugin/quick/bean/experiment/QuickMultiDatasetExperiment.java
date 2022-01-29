@@ -71,7 +71,7 @@ import org.anchoranalysis.io.output.bean.OutputManager;
  * @param <S> shared-state
  */
 public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends Experiment
-        implements ReplaceInputManager, ReplaceOutputManager {
+        implements ReplaceInputManager<T>, ReplaceOutputManager {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String directoryDataset;
@@ -136,10 +136,9 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
         delegate.firstLocalise(getLocalPath(), logExperimentPath, logTaskPath, output);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void replaceInputManager(InputManager<?> inputManager) throws OperationFailedException {
-        this.replacementInputManager = (InputManager<T>) inputManager;
+    public void replaceInputManager(InputManager<T> inputManager) throws OperationFailedException {
+        this.replacementInputManager = inputManager;
     }
 
     @Override

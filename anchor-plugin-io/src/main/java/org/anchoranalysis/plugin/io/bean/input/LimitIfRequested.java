@@ -2,7 +2,7 @@
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,11 @@
  * THE SOFTWARE.
  * #L%
  */
-
 package org.anchoranalysis.plugin.io.bean.input;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
+import java.util.Optional;
+
+import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
@@ -36,24 +35,22 @@ import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
- * Limits the number of input-objects to a certain hard-maximum
- *
- * <p>If there's more input-objects than the maximum, the first maxNumItems are chosen
+ * Like {@link Limit} if it is requested in the {@link InputContextParameters}, makes no change to the inputs.
  *
  * @author Owen Feehan
- * @param <T> input-type.
+ * @param <T> input-object type
  */
-public class Limit<T extends InputFromManager> extends InputManagerUnary<T> {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int maxNumberItems = 0;
-    // END BEAN PROPERTIES
+public class LimitIfRequested<T extends InputFromManager> extends InputManagerUnary<T> {
 
     @Override
     protected InputsWithDirectory<T> inputsFromDelegate(
             InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
-    	LimitHelper.limitInputsIfNecessary(fromDelegate.listIterator(), maxNumberItems, parameters);
+
+    	Optional<Integer> option = parameters.getInputContext().getLimitUpper();
+        if (option.isPresent()) {
+        	LimitHelper.limitInputsIfNecessary(fromDelegate.listIterator(), option.get(), parameters);
+        }
         return fromDelegate;
     }
 }
