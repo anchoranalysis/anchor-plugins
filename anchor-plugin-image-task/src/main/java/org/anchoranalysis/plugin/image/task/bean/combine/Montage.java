@@ -25,8 +25,7 @@ import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.bean.spatial.arrange.align.Align;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.bean.spatial.arrange.align.Grow;
-import org.anchoranalysis.image.bean.spatial.arrange.fill.Fill;
-import org.anchoranalysis.image.bean.spatial.arrange.tile.Tile;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -41,7 +40,6 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.scale.ToDimensions;
-import org.anchoranalysis.plugin.image.bean.scale.ToSuggested;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
 import org.anchoranalysis.spatial.box.Extent;
 import org.apache.commons.math3.util.Pair;
@@ -52,11 +50,18 @@ import org.apache.commons.math3.util.Pair;
  * <p>The images are tiled into a grid formation, to have a approximately similar number of rows and
  * columns.
  *
- * <p>By default, each image will be scaled to approximately 600x480 (but usually not exactly this,
- * to preserve aspect ratio, and fill available space).
+ * <p>The size of the montage is determined by two factors, {@code varyImageSize} and an optional
+ * suggestion on size.
  *
- * <p>Any size suggestion passed via arguments will take priority over this default if set, or any
- * bean assigned to {@code scale} (in that order of precedence).
+ * <p>When {@code varyImageSize==false}, by default each image will be scaled to approximately
+ * 600x480, preserving aspect ratio, as per {@code fixedSizeScaler}. However, a size suggestion in
+ * the form of a uniform scaling constant, will override this, and be applied instead to each image.
+ * Other size suggestions are disallowed.
+ *
+ * <p>When {@code varyImageSize==true}, by default the combined image will have the smaller of
+ * {@code varyingSizeWidth} and {@code varyingSizeWidthRatio} (as calculated against the average
+ * row-size). However, suggestions offering a fixed-width (but no height should be specified), or a
+ * constant scaling-factor will override this. Other size suggestions are disallowed.
  *
  * <p>Any 3D images are flattened into a 2D image using a maximum-intensity projection.
  *
@@ -102,18 +107,6 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     /** The combined version of the stacks - with a label. */
     static final String OUTPUT_LABELLED = "labelled";
 
-    /**
-     * Number of pixels <i>width</i> to scale an image to approximately, if no alternative is
-     * provided in {@code scale}.
-     */
-    private static final int DEFAULT_WIDTH_SCALE = 600;
-
-    /**
-     * Number of pixels <i>height</i> to scale an image to approximately, if no alternative is
-     * provided in {@code scale}.
-     */
-    private static final int DEFAULT_HEIGHT_SCALE = 480;
-
     // START BEAN PROPERTIES
     /** How to read the {@link ImageMetadata} from the file-system. */
     @DefaultInstance @BeanField @Getter @Setter private ImageMetadataReader imageMetadataReader;
@@ -123,9 +116,6 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      * reader.
      */
     @DefaultInstance @BeanField @Getter @Setter private StackReader stackReader;
-
-    /** How much to scale each image by, before fitting to the montage. */
-    @BeanField @Getter @Setter private ScaleCalculator scale = defaultScaleCalculator();
 
     /** How to resize images. */
     @DefaultInstance @BeanField @Getter @Setter private Interpolator interpolator;
@@ -174,12 +164,37 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
 
     /**
      * When {@code label==false} and {@code varyImageLocation==false}, how to align the label with
-     * its asosicated image.
+     * its associated image.
      *
      * <p>By default, it is horizontally-centered at the bottom of the image.
      */
     @BeanField @Getter @Setter
     private BoxAligner alignerLabel = new Align("center", "bottom", "bottom");
+
+    /**
+     * How to calculate the size of each image, when {@code varyImageSize==false}.
+     *
+     * <p>Otherwise, it is irrelevant.
+     */
+    @BeanField @Getter @Setter
+    private ScaleCalculator fixedSizeScaler = new ToDimensions(600, 480, true);
+
+    /**
+     * If no specific width or scaling-factor is suggested, this determines the default width that
+     * the combined-montage should have, when {@code varyImageSize==true}.
+     *
+     * <p>The eventual width will be the minimum of this and the width calculated from {@code
+     * varyingSizeWidthRatio}.
+     */
+    @BeanField @Getter @Setter private int varyingSizeWidth = 2048;
+
+    /**
+     * If no specific width or scaling-factor is suggested, this determines the default percentage
+     * of the existing size, the combined-montage should have, when {@code varyImageSize==true}.
+     *
+     * <p>The eventual width will be the minimum of this and {@code varyingSizeWidth}.
+     */
+    @BeanField @Getter @Setter private double varyingSizeWidthRatio = 0.1;
     // END BEAN PROPERTIES
 
     @Override
@@ -197,19 +212,20 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
         OperationContext context = parameters.getContext().operationContext();
 
         ImageSizePrereader prereader =
-                new ImageSizePrereader(
-                        scale,
-                        imageMetadataReader,
-                        stackReader,
-                        parameters.getExperimentArguments().task().getSize(),
-                        context);
+                new ImageSizePrereader(imageMetadataReader, stackReader, context);
 
-        List<Pair<Path, Extent>> prereadSizes = prereader.deriveSizeForAllInputs(inputs);
-        return MontageSharedStateFactory.create(
-                prereadSizes,
-                createArranger(prereadSizes.size()),
-                interpolator.voxelsResizer(),
-                context);
+        List<Pair<Path, Extent>> imageSizes = prereader.imageSizesFor(inputs);
+
+        try {
+            StackArranger arranger =
+                    createArranger(
+                            imageSizes, parameters.getExperimentArguments().task().getSize());
+            return MontageSharedStateFactory.create(
+                    imageSizes, arranger, interpolator.voxelsResizer(), context);
+        } catch (OperationFailedException e) {
+            throw new ExperimentExecutionException(
+                    "An error occurred arranging the images in the montage", e);
+        }
     }
 
     @Override
@@ -280,29 +296,32 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_LABELLED);
     }
 
-    /** Creates the {@link StackArranger} that will determine the tabular pattern. */
-    private StackArranger createArranger(int numberImagesToArrange) {
+    /**
+     * Creates the {@link StackArranger} that will determine the tabular pattern in the montage.
+     *
+     * @param imageSizes the size of each image to arrange. This list may or may not be be modified
+     *     by this function, to change the sizes, if desired for subsequent processing. If changed,
+     *     the order of each element remains invariant, as well as the size of the list.
+     * @param suggestedSize any suggestion passed by the user for how large the montage should be.
+     * @return the newly created {@link StackArranger}.
+     * @throws OperationFailedException
+     */
+    private StackArranger createArranger(
+            List<Pair<Path, Extent>> imageSizes, Optional<ImageSizeSuggestion> suggestedSize)
+            throws OperationFailedException {
+
+        int numberImagesToArrange = imageSizes.size();
 
         // Determine number of rows, so to give a similar number of rows and columns (as close to a
         // square as possible, ignoring the aspectRatio).
-        int rows = (int) Math.ceil(Math.sqrt(numberImagesToArrange));
+        int numberRows = (int) Math.ceil(Math.sqrt(numberImagesToArrange));
 
         if (varyImageSize) {
-            // Completely fill space, allowing for a different number of rows and columns
-            Fill fill = new Fill();
-            fill.setNumberRows(rows);
-            fill.setVaryNumberImagesPerRow(varyImageLocation);
-            return fill;
+            return new VaryingImageSizeArranger(varyingSizeWidth, varyingSizeWidthRatio)
+                    .create(numberRows, suggestedSize, varyImageLocation);
         } else {
-
-            int columns = (int) Math.ceil(((double) numberImagesToArrange) / rows);
-
-            // A strictly tabular form, where each image must fit inside its cell-size.
-            Tile tile = new Tile();
-            tile.setNumberColumns(columns);
-            tile.setNumberRows(rows);
-            tile.setAligner(aligner);
-            return tile;
+            return new FixedImageSizeArranger(fixedSizeScaler, aligner)
+                    .create(numberRows, suggestedSize, imageSizes);
         }
     }
 
@@ -328,12 +347,5 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     private void writeMontage(
             WriterRouterErrors writer, String outputName, MontageSharedState sharedState) {
         writer.write(outputName, () -> new StackGenerator(true), sharedState.getStack()::asStack);
-    }
-
-    /** The default {@link ScaleCalculator} if no other is provided. */
-    private static ScaleCalculator defaultScaleCalculator() {
-        ScaleCalculator fallback =
-                new ToDimensions(DEFAULT_WIDTH_SCALE, DEFAULT_HEIGHT_SCALE, true);
-        return new ToSuggested(fallback);
     }
 }

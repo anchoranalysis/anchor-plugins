@@ -33,7 +33,8 @@ import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
 /**
- * Like {@link Shuffle} if requested in the {@link InputContextParameters} otherwise makes no change to the inputs.
+ * Like {@link Shuffle} if requested in the {@link InputContextParameters} otherwise makes no change
+ * to the inputs.
  *
  * @author Owen Feehan
  * @param <T> input-object type

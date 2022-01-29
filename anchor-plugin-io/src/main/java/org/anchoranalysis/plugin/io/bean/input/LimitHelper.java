@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.ListIterator;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.MessageLogger;
@@ -42,11 +41,13 @@ import org.anchoranalysis.io.input.bean.InputManagerParameters;
 class LimitHelper {
 
     /**
-     * Limits then number of elements in a list of inputs, by accepting the first {@code keepNumberItems} elements until the limit is reached.
-     * 
+     * Limits then number of elements in a list of inputs, by accepting the first {@code
+     * keepNumberItems} elements until the limit is reached.
+     *
      * <p>A log message is also written, if this occurs.
-     * 
-     * <p>If the number of inputs is less than {@code maxNumberItems} no change occurs to {@code list} and no log message is written.
+     *
+     * <p>If the number of inputs is less than {@code maxNumberItems} no change occurs to {@code
+     * list} and no log message is written.
      *
      * <p>Note that {@code list} is manipulated in-place.
      *
@@ -56,21 +57,27 @@ class LimitHelper {
      * @param totalNumberItems the (maximum) the total number of items in the list.
      * @param parameters the {@link InputManager} parameters.
      */
-    public static <T> void limitInputsIfNecessary(ListIterator<T> iterator, int keepNumberItems, int totalNumberItems, InputManagerParameters parameters) {
+    public static <T> void limitInputsIfNecessary(
+            ListIterator<T> iterator,
+            int keepNumberItems,
+            int totalNumberItems,
+            InputManagerParameters parameters) {
         MessageLogger logger = parameters.getLogger().messageLogger();
-        
+
         int count = 0;
 
         while (iterator.hasNext()) {
-        	iterator.next();
-        	if (count==keepNumberItems) {
-        		logger.logFormatted("Limiting the number of inputs, by accepting only the first %d inputs from %d.", keepNumberItems, totalNumberItems);
-                logger.logEmptyLine();	
-        	}
-        	if (count>=keepNumberItems) {
-        		iterator.remove();
+            iterator.next();
+            if (count == keepNumberItems) {
+                logger.logFormatted(
+                        "Limiting the number of inputs, by accepting only the first %d inputs from %d.",
+                        keepNumberItems, totalNumberItems);
+                logger.logEmptyLine();
             }
-        	count++;
+            if (count >= keepNumberItems) {
+                iterator.remove();
+            }
+            count++;
         }
     }
 }

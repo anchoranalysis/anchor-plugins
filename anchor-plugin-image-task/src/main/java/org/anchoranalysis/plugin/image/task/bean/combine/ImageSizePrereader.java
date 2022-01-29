@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalListParallel;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
-import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
-import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -16,7 +14,6 @@ import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.math.arithmetic.Counter;
 import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.apache.commons.math3.util.Pair;
 
 /**
@@ -31,9 +28,6 @@ import org.apache.commons.math3.util.Pair;
 class ImageSizePrereader {
 
     // START REQUIRED ARGUMENTS
-    /** How much to scale each image by, before fitting to the montage. */
-    private final ScaleCalculator scale;
-
     /** How to read the {@link ImageMetadata} from the file-system. */
     private final ImageMetadataReader imageMetadataReader;
 
@@ -43,21 +37,18 @@ class ImageSizePrereader {
      */
     private final StackReader stackReader;
 
-    /** Suggestion on how to scale the images. */
-    private final Optional<ImageSizeSuggestion> suggestedResize;
-
     /** Logging and execution time recording. */
     private final OperationContext context;
     // END REQUIRED ARGUMENTS
 
     /**
-     * Extract a {@link Extent} for each {@link Path} representing an input image.
+     * Extract the image-size for each {@link StackSequenceInput}.
      *
      * @param inputs the input images.
-     * @return a newly created list of the derived {@link Extent} for each selected path. This may
-     *     not be the size size as {@code paths}, as if an error occurs, the element is dropped.
+     * @return a newly created list of the image-sizes for each input. This may not be the size size
+     *     as {@code paths}, as if an error occurs, the element is dropped.
      */
-    public List<Pair<Path, Extent>> deriveSizeForAllInputs(List<StackSequenceInput> inputs) {
+    public List<Pair<Path, Extent>> imageSizesFor(List<StackSequenceInput> inputs) {
         context.getLogger()
                 .messageLogger()
                 .logFormatted(
@@ -120,10 +111,7 @@ class ImageSizePrereader {
     private Optional<Extent> scaledSizeFor(Path imagePath) {
         try {
             ImageMetadata metadata = imageMetadataReader.openFile(imagePath, stackReader, context);
-            ScaleFactor factor =
-                    scale.calculate(Optional.of(metadata.getDimensions()), suggestedResize);
-            return Optional.of(
-                    metadata.getDimensions().extent().flattenZ().scaleXYBy(factor, true));
+            return Optional.of(metadata.getDimensions().extent().flattenZ());
         } catch (Exception e) {
             // Catch all exceptions, and give up after recording an error in the log.
             context.getLogger()

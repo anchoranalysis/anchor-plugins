@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.plugin.io.bean.input;
 
+import io.vavr.control.Either;
 import java.util.Optional;
-
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -34,10 +34,9 @@ import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
-import io.vavr.control.Either;
-
 /**
- * Like {@link Limit} if it is requested in the {@link InputContextParameters}, makes no change to the inputs.
+ * Like {@link Limit} if it is requested in the {@link InputContextParameters}, makes no change to
+ * the inputs.
  *
  * @author Owen Feehan
  * @param <T> input-object type
@@ -49,20 +48,25 @@ public class LimitIfRequested<T extends InputFromManager> extends InputManagerUn
             InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
 
-    	int totalNumberInputs = fromDelegate.inputs().size();
-    	Optional<Integer> option = parameters.getInputContext().getLimitUpper().map( either -> calculateLimit(either, totalNumberInputs));
+        int totalNumberInputs = fromDelegate.inputs().size();
+        Optional<Integer> option =
+                parameters
+                        .getInputContext()
+                        .getLimitUpper()
+                        .map(either -> calculateLimit(either, totalNumberInputs));
         if (option.isPresent()) {
-        	LimitHelper.limitInputsIfNecessary(fromDelegate.listIterator(), option.get(), totalNumberInputs, parameters);
+            LimitHelper.limitInputsIfNecessary(
+                    fromDelegate.listIterator(), option.get(), totalNumberInputs, parameters);
         }
         return fromDelegate;
     }
-    
+
     /** Calculates the number of inputs to use as a limit. */
-    private static int calculateLimit(Either<Integer,Double> limitUpper, int totalNumberInputs) {
-    	if (limitUpper.isLeft()) {
-    		return limitUpper.getLeft();
-    	} else {
-    		return (int) Math.round(limitUpper.get() * totalNumberInputs);
-    	}
+    private static int calculateLimit(Either<Integer, Double> limitUpper, int totalNumberInputs) {
+        if (limitUpper.isLeft()) {
+            return limitUpper.getLeft();
+        } else {
+            return (int) Math.round(limitUpper.get() * totalNumberInputs);
+        }
     }
 }

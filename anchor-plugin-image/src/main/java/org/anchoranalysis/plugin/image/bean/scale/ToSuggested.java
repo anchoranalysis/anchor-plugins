@@ -60,7 +60,9 @@ public class ToSuggested extends ScaleCalculator {
             Optional<ImageSizeSuggestion> suggestedResize)
             throws OperationFailedException {
         if (suggestedResize.isPresent()) {
-            return suggestedResize.get().calculateScaleFactor(dimensionsToBeScaled);
+            return suggestedResize
+                    .get()
+                    .calculateScaleFactor(dimensionsToBeScaled.map(Dimensions::extent));
         } else {
             return fallback.calculate(dimensionsToBeScaled, suggestedResize);
         }
