@@ -34,6 +34,8 @@ import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
+import io.vavr.control.Either;
+
 /**
  * Like {@link Limit} if it is requested in the {@link InputContextParameters}, makes no change to the inputs.
  *
@@ -47,10 +49,20 @@ public class LimitIfRequested<T extends InputFromManager> extends InputManagerUn
             InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
 
-    	Optional<Integer> option = parameters.getInputContext().getLimitUpper();
+    	int totalNumberInputs = fromDelegate.inputs().size();
+    	Optional<Integer> option = parameters.getInputContext().getLimitUpper().map( either -> calculateLimit(either, totalNumberInputs));
         if (option.isPresent()) {
-        	LimitHelper.limitInputsIfNecessary(fromDelegate.listIterator(), option.get(), parameters);
+        	LimitHelper.limitInputsIfNecessary(fromDelegate.listIterator(), option.get(), totalNumberInputs, parameters);
         }
         return fromDelegate;
+    }
+    
+    /** Calculates the number of inputs to use as a limit. */
+    private static int calculateLimit(Either<Integer,Double> limitUpper, int totalNumberInputs) {
+    	if (limitUpper.isLeft()) {
+    		return limitUpper.getLeft();
+    	} else {
+    		return (int) Math.round(limitUpper.get() * totalNumberInputs);
+    	}
     }
 }

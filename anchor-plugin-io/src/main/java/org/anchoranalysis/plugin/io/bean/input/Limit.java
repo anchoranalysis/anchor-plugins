@@ -53,7 +53,7 @@ public class Limit<T extends InputFromManager> extends InputManagerUnary<T> {
     protected InputsWithDirectory<T> inputsFromDelegate(
             InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
-    	LimitHelper.limitInputsIfNecessary(fromDelegate.listIterator(), maxNumberItems, parameters);
+    	LimitHelper.limitInputsIfNecessary(fromDelegate.listIterator(), maxNumberItems, fromDelegate.inputs().size(), parameters);
         return fromDelegate;
     }
 }

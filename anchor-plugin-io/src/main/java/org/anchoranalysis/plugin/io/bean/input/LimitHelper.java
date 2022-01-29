@@ -42,7 +42,7 @@ import org.anchoranalysis.io.input.bean.InputManagerParameters;
 class LimitHelper {
 
     /**
-     * Limits then number of elements in a list of inputs, by accepting the first {@code maxNumberItems} elements until the limit is reached.
+     * Limits then number of elements in a list of inputs, by accepting the first {@code keepNumberItems} elements until the limit is reached.
      * 
      * <p>A log message is also written, if this occurs.
      * 
@@ -52,23 +52,25 @@ class LimitHelper {
      *
      * @param <T> element-type in list.
      * @param list the list to be possibly be cropped.
-     * @param maxNumberItems the maximum number of items on the list.
+     * @param keepNumberItems the (maximum) number of items to keep on the list.
+     * @param totalNumberItems the (maximum) the total number of items in the list.
      * @param parameters the {@link InputManager} parameters.
      */
-    public static <T> void limitInputsIfNecessary(ListIterator<T> iterator, int maxNumberItems, InputManagerParameters parameters) {
+    public static <T> void limitInputsIfNecessary(ListIterator<T> iterator, int keepNumberItems, int totalNumberItems, InputManagerParameters parameters) {
         MessageLogger logger = parameters.getLogger().messageLogger();
         
         int count = 0;
 
         while (iterator.hasNext()) {
-        	count++;
-        	if (count==maxNumberItems) {
-        		logger.logFormatted("Limiting the number of inputs, by accepting only the first %d elements.", maxNumberItems);
+        	iterator.next();
+        	if (count==keepNumberItems) {
+        		logger.logFormatted("Limiting the number of inputs, by accepting only the first %d inputs from %d.", keepNumberItems, totalNumberItems);
                 logger.logEmptyLine();	
         	}
-        	if (count>=maxNumberItems) {
+        	if (count>=keepNumberItems) {
         		iterator.remove();
             }
+        	count++;
         }
     }
 }
