@@ -82,10 +82,7 @@ class ExtractProjectedStack {
     }
 
     private static Point3i createTarget(Dimensions dimensions, Extent extent) {
-        Point3i corner =
-                new Point3i(
-                        (extent.x() - dimensions.x()) / 2, (extent.y() - dimensions.y()) / 2, 0);
-        return corner;
+        return new Point3i((extent.x() - dimensions.x()) / 2, (extent.y() - dimensions.y()) / 2, 0);
     }
 
     private static BoundingBox boxToProject(

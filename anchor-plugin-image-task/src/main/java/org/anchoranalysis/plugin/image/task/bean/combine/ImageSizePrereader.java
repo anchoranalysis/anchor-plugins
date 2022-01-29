@@ -96,7 +96,7 @@ class ImageSizePrereader {
             return Optional.empty();
         } finally {
             int index;
-            synchronized (counter) {
+            synchronized (this) {
                 index = counter.getCount();
                 counter.increment();
             }
@@ -119,7 +119,7 @@ class ImageSizePrereader {
      * much quicker than reading the entire raster (which will occur later in parallel when actually
      * reading the image).
      */
-    private Optional<Extent> scaledSizeFor(Path imagePath) throws ExperimentExecutionException {
+    private Optional<Extent> scaledSizeFor(Path imagePath) {
         try {
             ImageMetadata metadata = imageMetadataReader.openFile(imagePath, stackReader, context);
             ScaleFactor factor =

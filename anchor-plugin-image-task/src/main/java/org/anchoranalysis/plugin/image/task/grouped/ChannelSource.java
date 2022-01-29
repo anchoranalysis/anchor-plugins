@@ -39,7 +39,7 @@ import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 
 /**
- * Extracts a set of {@link Channel]s from a {@link NamedStacks}, optionally resizing.
+ * Extracts a set of {@link Channel}s from a {@link NamedStacks}, optionally resizing.
  *
  * <p>Checks may be applied to make sure all channels have the same-type
  */
