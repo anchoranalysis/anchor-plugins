@@ -23,5 +23,5 @@ abstract class StackIOTestBase {
     // END: Ensure needed instances exist in the default BeanInstanceMap
 
     /** Where the output is written to. */
-    @TempDir Path directory;
+    @TempDir protected Path directory; // NOSONAR
 }

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.grouped;
 
+import com.google.common.base.Preconditions;
 import java.util.Set;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -58,7 +59,7 @@ public class ConsistentChannelNamesChecker {
      */
     public void checkChannelNames(Set<String> channelNames, boolean rgb)
             throws OperationFailedException {
-        assert (!channelNames.isEmpty());
+        Preconditions.checkArgument(!channelNames.isEmpty());
         if (this.channelNames == null) {
             this.channelNames = channelNames;
             this.rgb = rgb;

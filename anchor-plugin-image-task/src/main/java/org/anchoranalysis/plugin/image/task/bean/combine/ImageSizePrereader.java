@@ -57,8 +57,7 @@ class ImageSizePrereader {
      * @return a newly created list of the derived {@link Extent} for each selected path. This may
      *     not be the size size as {@code paths}, as if an error occurs, the element is dropped.
      */
-    public List<Pair<Path, Extent>> deriveSizeForAllInputs(List<StackSequenceInput> inputs)
-            throws ExperimentExecutionException {
+    public List<Pair<Path, Extent>> deriveSizeForAllInputs(List<StackSequenceInput> inputs) {
         context.getLogger()
                 .messageLogger()
                 .logFormatted(
@@ -75,8 +74,7 @@ class ImageSizePrereader {
      * associated path.
      */
     private Optional<Pair<Path, Extent>> sizeFromInput(
-            StackSequenceInput input, Counter counter, int numberInputs)
-            throws ExperimentExecutionException {
+            StackSequenceInput input, Counter counter, int numberInputs) {
         Optional<Extent> size = Optional.empty();
         try {
             Path path = input.pathForBindingRequired();

@@ -110,8 +110,8 @@ class FontSizeCalculator {
      *     bounding-box).
      */
     private static LabelToWrite calculateLabelWithMaxWidthRatio(Stream<LabelToWrite> labels) {
-        return labels.max(
-                        Comparator.comparing(LabelToWrite::ratioNumberCharactersToWidth)) // NOSONAR
+        return labels.max( // NOSONAR
+                        Comparator.comparing(LabelToWrite::ratioNumberCharactersToWidth))
                 .get();
     }
 

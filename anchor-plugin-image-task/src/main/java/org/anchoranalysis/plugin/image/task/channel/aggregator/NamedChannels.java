@@ -33,14 +33,14 @@ public class NamedChannels implements Iterable<Entry<String, Channel>> {
     /**
      * Creates by combining multiple existing existing {@link NamedChannels}.
      *
-     * @param source the {@link NamedChannels} to combine.
+     * @param channelsToCombine the {@link NamedChannels} to combine.
      * @throws OperationFailedException if the RGB-state is inconsistent across {@link Stack}s.
      */
     public NamedChannels(Stream<NamedChannels> channelsToCombine) throws OperationFailedException {
 
-        boolean rgb = false;
         boolean first = true;
 
+        // The RGB state is true only when true of all channels, false otherwise.
         Iterator<NamedChannels> iterator = channelsToCombine.iterator();
         while (iterator.hasNext()) {
 
