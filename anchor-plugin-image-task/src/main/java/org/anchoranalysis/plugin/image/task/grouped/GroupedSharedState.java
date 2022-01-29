@@ -28,26 +28,35 @@ package org.anchoranalysis.plugin.image.task.grouped;
 
 import java.util.function.Function;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
+import org.anchoranalysis.image.core.channel.Channel; // NOSONAR
 
 /**
- * Commonality between shared state for gouped export tasks
+ * Commonality between shared state for grouped export tasks.
  *
  * @author Owen Feehan
  * @param <S> individual-type
  * @param <T> aggregate-type
  */
+@RequiredArgsConstructor
 public class GroupedSharedState<S, T> {
 
+    /** Checks that {@link Channel}s have a consistent voxel-data type. */
     @Getter private ConsistentChannelChecker channelChecker = new ConsistentChannelChecker();
+
+    /**
+     * Checks that each image provides a consistent set of channels, and that they have the same
+     * RGB-state.
+     */
+    @Getter
+    private ConsistentChannelNamesChecker channelNamesChecker = new ConsistentChannelNamesChecker();
 
     private GroupMapByName<S, T> groupMap;
 
+    // START REQUIRED ARGUMENTS
     private final Function<ConsistentChannelChecker, GroupMapByName<S, T>> createGroupMap;
-
-    public GroupedSharedState(
-            Function<ConsistentChannelChecker, GroupMapByName<S, T>> createGroupMap) {
-        this.createGroupMap = createGroupMap;
-    }
+    // END REQUIRED ARGUMENTS
 
     public GroupMapByName<S, T> getGroupMap() {
 

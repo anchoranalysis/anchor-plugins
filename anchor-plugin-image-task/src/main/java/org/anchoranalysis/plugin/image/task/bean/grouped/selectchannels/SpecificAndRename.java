@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.plugin.image.bean.channel.provider.FromStack;
+import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
-import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 
 /**
  * Selects a specific set of channels from stacks, each identified by a stack-name and channel index
@@ -50,28 +50,22 @@ public class SpecificAndRename extends FromStacks {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannel> selectChannels(ChannelSource source, boolean checkType)
+    public NamedChannels selectChannels(ChannelSource source, boolean checkType)
             throws OperationFailedException {
 
-        List<NamedChannel> out = new ArrayList<>();
+        NamedChannels out = new NamedChannels(false);
 
-        for (NamedBean<FromStack> nb : list) {
-
-            out.add(channelFromRef(nb, source, checkType));
+        for (NamedBean<FromStack> namedBean : list) {
+            out.add(namedBean.getName(), channelFromReference(namedBean, source, checkType));
         }
 
         return out;
     }
 
-    private static NamedChannel channelFromRef(
-            NamedBean<FromStack> nb, ChannelSource source, boolean checkType)
+    private static Channel channelFromReference(
+            NamedBean<FromStack> namedBean, ChannelSource source, boolean checkType)
             throws OperationFailedException {
-
-        FromStack ref = nb.getItem();
-
-        Channel channel =
-                source.extractChannel(ref.getStackProviderID(), checkType, ref.getChannelIndex());
-
-        return new NamedChannel(nb.getName(), channel);
+        FromStack ref = namedBean.getItem();
+        return source.extractChannel(ref.getStackProviderID(), checkType, ref.getChannelIndex());
     }
 }

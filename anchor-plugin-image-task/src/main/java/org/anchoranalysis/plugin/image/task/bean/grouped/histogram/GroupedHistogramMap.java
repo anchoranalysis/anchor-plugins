@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 import java.io.IOException;
 import java.util.Collection;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.apache.commons.math3.util.Pair;
 

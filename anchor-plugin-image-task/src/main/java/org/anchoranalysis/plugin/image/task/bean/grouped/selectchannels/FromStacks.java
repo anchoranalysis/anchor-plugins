@@ -26,11 +26,10 @@
 
 package org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels;
 
-import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
-import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 
 /** Selects a a subset of channels from a set of stacks */
 public abstract class FromStacks extends AnchorBean<FromStacks> {
@@ -39,6 +38,6 @@ public abstract class FromStacks extends AnchorBean<FromStacks> {
      * Takes a stack-collection and extracts a set of references to particular channels (each with a
      * name)
      */
-    public abstract List<NamedChannel> selectChannels(ChannelSource source, boolean checkType)
+    public abstract NamedChannels selectChannels(ChannelSource source, boolean checkType)
             throws OperationFailedException;
 }

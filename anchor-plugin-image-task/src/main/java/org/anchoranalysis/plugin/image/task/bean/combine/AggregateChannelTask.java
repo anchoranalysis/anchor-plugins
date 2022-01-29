@@ -5,19 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.bean.channel.ChannelAggregator;
-import org.anchoranalysis.image.bean.spatial.SizeXY;
+import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
-import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 
 /**
@@ -54,12 +54,6 @@ public class AggregateChannelTask extends GroupedStackBase<Channel, ChannelAggre
 
     // START BEAN PROPERTIES
     /**
-     * If set, each channel is scaled to a specific size before the mean is calculated (useful for
-     * combining different sized images)
-     */
-    @BeanField @OptionalBean @Getter @Setter private SizeXY resizeTo;
-
-    /**
      * When true, a 3D image is added slice-by-slice to the aggregation, treating each slice as a
      * separate image.
      */
@@ -73,28 +67,8 @@ public class AggregateChannelTask extends GroupedStackBase<Channel, ChannelAggre
     // END BEAN PROPERTIES
 
     @Override
-    protected void processStacks(
-            NamedStacks store,
-            Optional<String> groupName,
-            GroupedSharedState<Channel, ChannelAggregator> sharedState,
-            InputOutputContext context)
-            throws JobExecutionException {
-
-        ChannelSource source =
-                new ChannelSource(
-                        store,
-                        sharedState.getChannelChecker(),
-                        Optional.ofNullable(resizeTo),
-                        getInterpolator().voxelsResizer());
-
-        try {
-            for (NamedChannel channel : getSelectChannels().selectChannels(source, true)) {
-                addImageToAggregation(sharedState.getGroupMap(), groupName, channel);
-            }
-
-        } catch (OperationFailedException e) {
-            throw new JobExecutionException(e);
-        }
+    public OutputEnabledMutable defaultOutputs() {
+        return super.defaultOutputs().addEnabledOutputFirst(outputName);
     }
 
     @Override
@@ -108,43 +82,44 @@ public class AggregateChannelTask extends GroupedStackBase<Channel, ChannelAggre
     }
 
     @Override
-    public OutputEnabledMutable defaultOutputs() {
-        return super.defaultOutputs().addEnabledOutputFirst(outputName);
+    protected GroupMapByName<Channel, ChannelAggregator> createGroupMap(
+            ConsistentChannelChecker channelChecker, OperationContext context) {
+        return new GroupedChannelAggregator<>(
+                outputNameForGroups(), () -> aggregator.duplicateBean(), context.getLogger());
     }
 
     @Override
-    protected GroupMapByName<Channel, ChannelAggregator> createGroupMap(
-            ConsistentChannelChecker channelChecker) {
-        return new GroupedChannelAggregator<>(
-                outputNameForGroups(), () -> aggregator.duplicateBean());
-    }
+    protected void processIndividual(
+            String name,
+            Channel individual,
+            CheckedBiConsumer<String, Channel, OperationFailedException> consumeIndividual,
+            InputOutputContext context)
+            throws OperationFailedException {
 
-    /** Adds a particular image to the ongoing aggregation. */
-    private void addImageToAggregation(
-            GroupMapByName<Channel, ChannelAggregator> groupMap,
-            Optional<String> groupName,
-            NamedChannel channel)
-            throws JobExecutionException {
-        if (resizeTo != null) {
+        if (getResizeTo() != null) {
             if (slicewise) {
-                addImagesSlicewise(groupMap, groupName, channel);
+                addImagesSlicewise(consumeIndividual, name, individual);
             } else {
-                addImageEntirety(
-                        groupMap, groupName, channel.getName(), channel.getChannel().projectMax());
+                addImageEntirety(consumeIndividual, name, individual.projectMax());
             }
         } else {
-            addImageEntirety(groupMap, groupName, channel.getName(), channel.getChannel());
+            addImageEntirety(consumeIndividual, name, individual);
         }
+    }
+
+    @Override
+    protected CheckedFunction<Channel, Channel, CreateException> createChannelDeriver(
+            ChannelSource source) throws OperationFailedException {
+        return channel -> channel;
     }
 
     /** Add an image as a whole to the aggregation. */
     private void addImageEntirety(
-            GroupMapByName<Channel, ChannelAggregator> groupMap,
-            Optional<String> groupName,
+            CheckedBiConsumer<String, Channel, OperationFailedException> addChannelToMap,
             String channelName,
             Channel channel)
-            throws JobExecutionException {
-        groupMap.add(groupName, channelName, channel);
+            throws OperationFailedException {
+        addChannelToMap.accept(channelName, channel);
     }
 
     /**
@@ -154,14 +129,14 @@ public class AggregateChannelTask extends GroupedStackBase<Channel, ChannelAggre
      * Optional, NamedChannel)}.
      */
     private void addImagesSlicewise(
-            GroupMapByName<Channel, ChannelAggregator> groupMap,
-            Optional<String> groupName,
-            NamedChannel channel)
-            throws JobExecutionException {
+            CheckedBiConsumer<String, Channel, OperationFailedException> addChannelToMap,
+            String name,
+            Channel channel)
+            throws OperationFailedException {
         // Add slice by slice
-        int numberSlices = channel.getChannel().extent().z();
+        int numberSlices = channel.extent().z();
         for (int z = 0; z < numberSlices; z++) {
-            groupMap.add(groupName, channel.getName(), channel.getChannel().extractSlice(z));
+            addChannelToMap.accept(name, channel.extractSlice(z));
         }
     }
 }

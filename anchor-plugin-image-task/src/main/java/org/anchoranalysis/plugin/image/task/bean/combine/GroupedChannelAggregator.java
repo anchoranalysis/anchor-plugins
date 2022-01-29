@@ -33,7 +33,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.bean.channel.ChannelAggregator;
+import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
@@ -42,32 +44,36 @@ import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
 import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
+import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.apache.commons.math3.util.Pair;
 
 /**
- * Creates a {@link ChannelAggregator} for each group, and writes the aggregated {@link Channel} to
- * the file-system.
+ * Creates a {@link ChannelAggregator} for each group, and writes the aggregated {@link
+ * NamedChannels} to the file-system.
  *
- * @param <T> the aggregator that combines {@link Channel}s
+ * @param <T> the aggregator that combines {@link NamedChannels}s
  * @author Owen Feehan
  */
 class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByName<Channel, T> {
 
     private final String outputName;
+    private final Logger logger;
+
     /**
      * @param outputName the first-level output-name used to determine whether mean channels will be
      *     written or not
      */
-    public GroupedChannelAggregator(String outputName, Supplier<T> createAggregator) {
+    public GroupedChannelAggregator(
+            String outputName, Supplier<T> createAggregator, Logger logger) {
         super("channel", createAggregator);
         this.outputName = outputName;
+        this.logger = logger;
     }
 
     @Override
     protected void addTo(Channel channelToAdd, T aggregator) throws OperationFailedException {
-        aggregator.addChannel(channelToAdd);
+        aggregator.addChannel(channelToAdd, logger);
     }
 
     @Override

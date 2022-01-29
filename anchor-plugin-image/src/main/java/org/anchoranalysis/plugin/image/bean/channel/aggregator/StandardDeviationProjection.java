@@ -9,8 +9,9 @@ import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Projection of the standard-deviation of voxels values across all inputs.
- * 
- * <p>This occurs similarly to {@link MeanProjection} but calculates the standard-deviation rather than the mean for each voxel.
+ *
+ * <p>This occurs similarly to {@link MeanProjection} but calculates the standard-deviation rather
+ * than the mean for each voxel.
  *
  * @author Owen Feehan
  * @param <T> buffer type used for aggregation {@link UnsignedByteBuffer} etc.

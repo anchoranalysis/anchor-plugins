@@ -4,6 +4,8 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
@@ -20,6 +22,7 @@ import org.apache.commons.math3.util.Pair;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MontageSharedStateFactory {
 
     /**

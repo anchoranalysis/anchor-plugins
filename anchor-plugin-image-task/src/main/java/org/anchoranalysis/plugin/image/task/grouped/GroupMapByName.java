@@ -35,10 +35,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.name.MapCreate;
-import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
+import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 import org.apache.commons.math3.util.Pair;
@@ -73,13 +73,13 @@ public abstract class GroupMapByName<S, T> {
     }
 
     /**
-     * Adds an item with an identifier
+     * Adds an item with a non-group identifier, and also optionally a group identifier.
      *
-     * @throws JobExecutionException
+     * @throws OperationFailedException if the operation cannot successfully complete.
      */
     public synchronized void add(
             Optional<String> groupIdentifier, String nonGroupIdentifier, S itemToAdd)
-            throws JobExecutionException {
+            throws OperationFailedException {
 
         MultiName identifier = MultiNameFactory.create(groupIdentifier, nonGroupIdentifier);
 
@@ -87,7 +87,7 @@ public abstract class GroupMapByName<S, T> {
             addTo(itemToAdd, map.computeIfAbsent(identifier));
 
         } catch (OperationFailedException e) {
-            throw new JobExecutionException(
+            throw new OperationFailedException(
                     String.format(
                             "An error occurred combining the %s created for: %s",
                             nounT, identifier),
@@ -123,14 +123,7 @@ public abstract class GroupMapByName<S, T> {
 
         // We create a list of all entries, sorted by their subdirectory context
         Multimap<InputOutputContext, Pair<String, T>> indexedBySubdirectory =
-                MultimapBuilder.hashKeys().arrayListValues().build();
-        for (Entry<MultiName, T> entry : map.entrySet()) {
-
-            MultiName name = entry.getKey();
-            indexedBySubdirectory.put(
-                    subdirectoryCache.get(name.firstPart()),
-                    new Pair<>(name.secondPart(), entry.getValue()));
-        }
+                createIndex(subdirectoryCache);
 
         // Process each output subdirectory collectively
         for (InputOutputContext subdirectory : indexedBySubdirectory.keySet()) {
@@ -154,4 +147,22 @@ public abstract class GroupMapByName<S, T> {
             ConsistentChannelChecker channelChecker,
             InputOutputContext subdirectory)
             throws IOException;
+
+    /**
+     * Creates a {@link MultiMap} from {@code map} where each subdirectory forms a key, and the name
+     * and element-type become corresponding values.
+     */
+    private Multimap<InputOutputContext, Pair<String, T>> createIndex(
+            InputOutputContextSubdirectoryCache subdirectoryCache) {
+        Multimap<InputOutputContext, Pair<String, T>> indexedBySubdirectory =
+                MultimapBuilder.hashKeys().arrayListValues().build();
+        for (Entry<MultiName, T> entry : map.entrySet()) {
+
+            MultiName name = entry.getKey();
+            indexedBySubdirectory.put(
+                    subdirectoryCache.get(name.firstPart()),
+                    new Pair<>(name.secondPart(), entry.getValue()));
+        }
+        return indexedBySubdirectory;
+    }
 }

@@ -26,12 +26,11 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import org.anchoranalysis.core.functional.unchecked.IntBinaryPredicate;
 import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase;
 
 public class MultiplyTwoChannels extends TwoVoxelMappingBase {
 
-    public MultiplyTwoChannels(IntBinaryPredicate operation) {
+    public MultiplyTwoChannels() {
         super((a, b) -> a * b);
     }
 }

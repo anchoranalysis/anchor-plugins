@@ -141,11 +141,11 @@ public class ExecuteTaskHelper {
      * @param <T> input type
      * @param <S> shared-state type
      * @param <V> task type
-     * @param inputs the input for the task,
-     * @param task the task to run,
-     * @param pathForOutputs a directory where outputs of the task will be placed,
-     * @return true if successful, false otherwise,
-     * @throws OperationFailedException if anything goes wrong,
+     * @param inputs the input for the task.
+     * @param task the task to run.
+     * @param pathForOutputs a directory where outputs of the task will be placed.
+     * @return true if successful, false otherwise.
+     * @throws OperationFailedException if anything goes wrong.
      */
     private static <T extends InputFromManager, S, V extends Task<T, S>> boolean runTaskOnInputs(
             List<T> inputs, V task, Path pathForOutputs) throws OperationFailedException {

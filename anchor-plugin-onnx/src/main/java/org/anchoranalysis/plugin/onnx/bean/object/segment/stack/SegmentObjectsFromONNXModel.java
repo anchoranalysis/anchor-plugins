@@ -112,12 +112,7 @@ public class SegmentObjectsFromONNXModel
     protected OnnxTensor deriveInput(Stack stack, Optional<double[]> subtractMeans)
             throws OperationFailedException {
 
-        // Change from RGB to BGR
-        try {
-            stack = new Stack(false, stack.getChannel(2), stack.getChannel(1), stack.getChannel(0));
-        } catch (IncorrectImageSizeException | CreateException e1) {
-            throw new AnchorImpossibleSituationException();
-        }
+        stack = convertToBGR(stack);
 
         FloatBuffer bufferTensor =
                 BufferFromStack.createFrom(stack, subtractMeans, interleaveChannels);
@@ -216,5 +211,14 @@ public class SegmentObjectsFromONNXModel
             }
         }
         return modelAsBytes;
+    }
+
+    /** Change from RGB to BGR. */
+    private static Stack convertToBGR(Stack stack) {
+        try {
+            return new Stack(false, stack.getChannel(2), stack.getChannel(1), stack.getChannel(0));
+        } catch (IncorrectImageSizeException | CreateException e1) {
+            throw new AnchorImpossibleSituationException();
+        }
     }
 }

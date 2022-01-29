@@ -46,6 +46,7 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 @AllArgsConstructor
 public abstract class TwoVoxelMappingBase extends ChannelProviderBinary {
 
+    /** How to form an output voxel from the respective two input voxels. */
     private final IntBinaryOperator operation;
 
     @Override

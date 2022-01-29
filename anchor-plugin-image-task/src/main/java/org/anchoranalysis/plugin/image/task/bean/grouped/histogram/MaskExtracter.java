@@ -26,57 +26,39 @@
 
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
-import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
+import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
-import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
-import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 
 /** Extracts a histogram from an image for a given key */
-@AllArgsConstructor
-class HistogramExtracter {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+class MaskExtracter {
 
-    private final ChannelSource source;
-    private final String keyMask;
-    private final int maskValue;
-
-    public Histogram extractFrom(Channel channel) throws JobExecutionException {
-
-        try {
-            if (!keyMask.isEmpty()) {
-                return HistogramFromObjectsFactory.createFrom(channel, extractMask(keyMask));
-            } else {
-                return HistogramFactory.createFrom(channel.voxels());
-            }
-
-        } catch (CreateException e) {
-            throw new JobExecutionException("Cannot create histogram", e);
+    public static Optional<Mask> extractMask(
+            ChannelSource source, String maskStackName, int maskValue)
+            throws OperationFailedException {
+        if (!maskStackName.isEmpty()) {
+            Channel extracted = source.extractChannel(maskStackName, false);
+            return Optional.of(new Mask(extracted, createMaskBinaryValues(maskValue)));
+        } else {
+            return Optional.empty();
         }
     }
 
-    private Mask extractMask(String stackName) throws JobExecutionException {
-        try {
-            Channel extracted = source.extractChannel(stackName, false);
-            return new Mask(extracted, createMaskBinaryValues());
-
-        } catch (OperationFailedException e) {
-            throw new JobExecutionException(e);
-        }
-    }
-
-    private BinaryValuesInt createMaskBinaryValues() throws JobExecutionException {
+    private static BinaryValuesInt createMaskBinaryValues(int maskValue)
+            throws OperationFailedException {
         if (maskValue == 255) {
             return new BinaryValuesInt(0, 255);
         } else if (maskValue == 0) {
             return new BinaryValuesInt(255, 0);
         } else {
-            throw new JobExecutionException("Only mask-values of 255 or 0 are current supported");
+            throw new OperationFailedException(
+                    "Only mask-values of 255 or 0 are current supported");
         }
     }
 }
