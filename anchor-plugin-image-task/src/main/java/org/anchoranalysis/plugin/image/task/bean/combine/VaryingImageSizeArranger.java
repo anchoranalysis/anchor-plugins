@@ -20,7 +20,7 @@ class VaryingImageSizeArranger {
      * If no specific width or scaling-factor is suggested, this determines the default width, the
      * combined-montage should have.
      *
-     * <p>The eventual width will be the minimum of this and the width calculated from {@code
+     * <p>The eventual width will be the maximum of this and the width calculated from {@code
      * defaultWidthRatio}.
      */
     private final int defaultWidth;
@@ -29,7 +29,7 @@ class VaryingImageSizeArranger {
      * If no specific width or scaling-factor is suggested, this determines the default percentage
      * of the existing size, the combined-montage should have.
      *
-     * <p>The eventual width will be the minimum of this and {@code defaultWidth}.
+     * <p>The eventual width will be the maximum of this and {@code defaultWidth}.
      */
     private final double defaultWidthRatio;
 

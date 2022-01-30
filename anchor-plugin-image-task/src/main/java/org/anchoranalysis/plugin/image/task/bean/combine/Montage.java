@@ -58,7 +58,7 @@ import org.apache.commons.math3.util.Pair;
  * the form of a uniform scaling constant, will override this, and be applied instead to each image.
  * Other size suggestions are disallowed.
  *
- * <p>When {@code varyImageSize==true}, by default the combined image will have the smaller of
+ * <p>When {@code varyImageSize==true}, by default the combined image will have the larger of
  * {@code varyingSizeWidth} and {@code varyingSizeWidthRatio} (as calculated against the average
  * row-size). However, suggestions offering a fixed-width (but no height should be specified), or a
  * constant scaling-factor will override this. Other size suggestions are disallowed.
@@ -183,16 +183,16 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      * If no specific width or scaling-factor is suggested, this determines the default width that
      * the combined-montage should have, when {@code varyImageSize==true}.
      *
-     * <p>The eventual width will be the minimum of this and the width calculated from {@code
+     * <p>The eventual width will be the maximum of this and the width calculated from {@code
      * varyingSizeWidthRatio}.
      */
-    @BeanField @Getter @Setter private int varyingSizeWidth = 2048;
+    @BeanField @Getter @Setter private int varyingSizeWidth = 1024;
 
     /**
      * If no specific width or scaling-factor is suggested, this determines the default percentage
      * of the existing size, the combined-montage should have, when {@code varyImageSize==true}.
      *
-     * <p>The eventual width will be the minimum of this and {@code varyingSizeWidth}.
+     * <p>The eventual width will be the maximum of this and {@code varyingSizeWidth}.
      */
     @BeanField @Getter @Setter private double varyingSizeWidthRatio = 0.1;
     // END BEAN PROPERTIES
