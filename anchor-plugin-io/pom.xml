@@ -124,6 +124,12 @@
 		    <artifactId>slf4j-api</artifactId>
 		    <version>1.7.6</version>
 		</dependency>
+		
+		<dependency>
+	        <groupId>io.vavr</groupId>
+	        <artifactId>vavr</artifactId>
+	        <version>${vavr.version}</version>
+    	</dependency>
 
 
         <!-- START: Test dependencies -->

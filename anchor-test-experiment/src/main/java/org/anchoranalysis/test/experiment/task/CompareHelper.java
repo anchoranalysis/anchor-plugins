@@ -45,7 +45,7 @@ import org.anchoranalysis.test.image.csv.CSVComparer;
 class CompareHelper {
 
     /**
-     * Toggles a behaviour that replaces reference files with newly created onces in certain
+     * Toggles a behavior that replaces reference files with newly created ones in certain
      * circumstances.
      *
      * <p>If true, and an {@link #assertIdentical} fails, the first path in the comparer (the newly

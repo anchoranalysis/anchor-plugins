@@ -74,7 +74,7 @@ import org.apache.commons.lang.StringUtils;
  * <p>his allows many parameters of {@link QuickMultiDatasetStructuredExperiment} to be easily set.
  */
 public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S> extends Experiment
-        implements ReplaceInputManager, ReplaceOutputManager {
+        implements ReplaceInputManager<T>, ReplaceOutputManager {
 
     // START BEAN PROPERTIES
     /**
@@ -127,7 +127,7 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
     }
 
     @Override
-    public void replaceInputManager(InputManager<?> inputManager) throws OperationFailedException {
+    public void replaceInputManager(InputManager<T> inputManager) throws OperationFailedException {
         populateDelegateIfNeeded();
         delegate.replaceInputManager(inputManager);
     }
