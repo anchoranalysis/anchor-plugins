@@ -54,8 +54,12 @@ class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByNa
     private final String outputNameDefault;
 
     /**
-     * @param outputName the first-level output-name used to determine whether mean channels will be
-     *     written or not
+     * Create with a particular output-name and method to create aggregators.
+     * 
+     * @param outputName the first-level output-name used to determine channels will be
+     *     written or not.
+     * @param createAggregator how to create a new aggregator as needed.
+     * @param logger the logger.
      */
     public GroupedChannelAggregator(
             String outputName, Supplier<T> createAggregator, Logger logger) {

@@ -36,7 +36,7 @@ class OutputChannelsAsRGB {
      */
     public static <T> Optional<Map<String, T>> canOutputAsRGB(
             Collection<Entry<String, T>> namedElements) {
-        if (namedElements.size() == 3) {
+        if (namedElements.size() == 3 || namedElements.size() == 4) {
             // Consider writing the channels together as an RGB stack rather than separately
             // If there is an alpha channel with the RGB, it is ignored.
 
