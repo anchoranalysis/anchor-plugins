@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.quick.bean.file.path.derive;
+package org.anchoranalysis.plugin.io.bean.path.derive;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -34,37 +34,47 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.bean.path.Identity;
 import org.anchoranalysis.io.input.path.DerivePathException;
 
 /**
  * Removes the file-name from a path, but keeps the directories and preserves the file-extension.
  *
- * <p>Specifically, a file-path of form {@code somedir/somename.ext} and converts to {@code
- * somedir.ext}.
+ * <p>Specifically, a file-path of form {@code somedirectory/somename.ext} and converts to {@code
+ * somedirectory.ext}.
  *
  * @author Owen Feehan
  */
 public class CollapseFileName extends DerivePath {
 
     // START BEAN FIELDS
-    @BeanField @Getter @Setter private DerivePath derivePath;
+    /** Called as a delegate to provide a {@code source} {@link Path}. */
+    @BeanField @Getter @Setter private DerivePath derivePath = new Identity();
+
+    /** When true, the extension is appended to the directory. */
+    @BeanField @Getter @Setter private boolean keepExtension = false;
     // END BEAN FIELDS
 
     @Override
     public Path deriveFrom(Path source, boolean debugMode) throws DerivePathException {
         Path path = derivePath.deriveFrom(source, debugMode);
         try {
-            return collapse(path);
+            return createDerivedPath(path);
         } catch (CreateException e) {
             throw new DerivePathException(e);
         }
     }
 
-    private static Path collapse(Path path) throws CreateException {
+    /** Creates the derived-path. */
+    private Path createDerivedPath(Path source) throws CreateException {
 
-        PathTwoParts pathParts = new PathTwoParts(path);
+        PathTwoParts pathParts = new PathTwoParts(source);
 
-        Optional<String> extension = ExtensionUtilities.extractExtension(pathParts.getSecond());
-        return ExtensionUtilities.appendExtension(pathParts.getFirst(), extension);
+        if (keepExtension) {
+            Optional<String> extension = ExtensionUtilities.extractExtension(pathParts.getSecond());
+            return ExtensionUtilities.appendExtension(pathParts.getFirst(), extension);
+        } else {
+            return pathParts.getFirst();
+        }
     }
 }

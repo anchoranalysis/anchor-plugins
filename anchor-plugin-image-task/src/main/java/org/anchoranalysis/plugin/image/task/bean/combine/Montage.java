@@ -58,10 +58,10 @@ import org.apache.commons.math3.util.Pair;
  * the form of a uniform scaling constant, will override this, and be applied instead to each image.
  * Other size suggestions are disallowed.
  *
- * <p>When {@code varyImageSize==true}, by default the combined image will have the larger of
- * {@code varyingSizeWidth} and {@code varyingSizeWidthRatio} (as calculated against the average
- * row-size). However, suggestions offering a fixed-width (but no height should be specified), or a
- * constant scaling-factor will override this. Other size suggestions are disallowed.
+ * <p>When {@code varyImageSize==true}, by default the combined image will have the larger of {@code
+ * varyingSizeWidth} and {@code varyingSizeWidthRatio} (as calculated against the average row-size).
+ * However, suggestions offering a fixed-width (but no height should be specified), or a constant
+ * scaling-factor will override this. Other size suggestions are disallowed.
  *
  * <p>Any 3D images are flattened into a 2D image using a maximum-intensity projection.
  *

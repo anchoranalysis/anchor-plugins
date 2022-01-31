@@ -26,22 +26,20 @@
 
 package org.anchoranalysis.plugin.image.task.grouped;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
 import org.anchoranalysis.core.identifier.name.MapCreate;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
 import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
-import org.apache.commons.math3.util.Pair;
 
 /**
  * Adds items to aggregate structures identified uniquely by a name, and allows these items to be
@@ -51,25 +49,37 @@ import org.apache.commons.math3.util.Pair;
  * the output at the end into sub-directories.
  *
  * @author Owen Feehan
- * @param <S> individual-item type
- * @param <T> aggregate-item type (combines many individual types)
+ * @param <S> single item type
+ * @param <T> aggregator type
  */
 public abstract class GroupMapByName<S, T> {
 
-    private final MapCreate<MultiName, T> map;
+    /**
+     * A map of maps, indexing first by the <b>first part</b> of the {@link MultiName} and secondly
+     * by the <b>second part</b>.
+     */
+    private final MapCreate<Optional<String>, MapCreate<String, T>> map;
 
     private final String nounT;
+
+    /** Adds a single-item into an aggregator. */
+    private final CheckedBiConsumer<S, T, OperationFailedException> addSingleToAggregator;
 
     /**
      * Creates a group-map.
      *
      * @param nounT a word to describe a single instance of T in user error messages.
+     * @param addSingleToAggregator adds a single-item into an aggregator.
      * @param createAggregator called to create a new aggregator, whenever needed e.g. for a
      *     particular group.
      */
-    protected GroupMapByName(String nounT, Supplier<T> createAggregator) {
-        this.map = new MapCreate<>(createAggregator);
+    protected GroupMapByName(
+            String nounT,
+            Supplier<T> createAggregator,
+            CheckedBiConsumer<S, T, OperationFailedException> addSingleToAggregator) {
+        this.map = new MapCreate<>(() -> new MapCreate<>(createAggregator));
         this.nounT = nounT;
+        this.addSingleToAggregator = addSingleToAggregator;
     }
 
     /**
@@ -78,15 +88,16 @@ public abstract class GroupMapByName<S, T> {
      * @throws OperationFailedException if the operation cannot successfully complete.
      */
     public synchronized void add(
-            Optional<String> groupIdentifier, String nonGroupIdentifier, S itemToAdd)
+            Optional<String> groupIdentifier, String nonGroupIdentifier, S singleItemToAdd)
             throws OperationFailedException {
-
-        MultiName identifier = MultiNameFactory.create(groupIdentifier, nonGroupIdentifier);
-
         try {
-            addTo(itemToAdd, map.computeIfAbsent(identifier));
+            // Get the correct aggregate structure
+            T aggregator = map.computeIfAbsent(groupIdentifier).computeIfAbsent(nonGroupIdentifier);
+            addSingleToAggregator.accept(singleItemToAdd, aggregator);
 
         } catch (OperationFailedException e) {
+
+            MultiName identifier = MultiNameFactory.create(groupIdentifier, nonGroupIdentifier);
             throw new OperationFailedException(
                     String.format(
                             "An error occurred combining the %s created for: %s",
@@ -96,73 +107,65 @@ public abstract class GroupMapByName<S, T> {
     }
 
     /**
-     * Outputs the "grouped" data to the filesystem
+     * Outputs the "grouped" data to the filesystem.
      *
-     * @param channelChecker channel checker
-     * @param context
-     * @throws IOException if something goes wrong, or if includeGroupName is false, but more than
-     *     one group-names exist
+     * @param channelChecker what checks that {@link Channel}s are consistent.
+     * @param context where to perform the outputting.
+     * @throws IOException if outputting doesn't occur successfully.
      */
     public void outputGroupedData(
             ConsistentChannelChecker channelChecker, InputOutputContext context)
             throws IOException {
 
-        // We wish to create a new output-manager only once for each primary key, so we store them
-        // in a hashmap
-        InputOutputContextSubdirectoryCache subdirectoryCache =
-                new InputOutputContextSubdirectoryCache(context, false);
-
-        // If there is one part-only, it is assumed that there is no group (for all items) and it is
+        // If there is a second part-only in the MultiName, it is assumed that there is no group
+        // (for all items) and it is
         // written without a subdirectory
-        // If there are two parts, it is assumed that the first-part is a group-name (a separate
+        // If there are two parts in the MultiName, it is assumed that the first-part is a
+        // group-name (a separate
         // subdirectory) and the second-part is written without a subdirectory
 
-        // Rather than write each entry, individually, we want to write them one directory at a time
-        // to give the implementation a chance, to process multiple entries for the same directory
-        // together.
-
-        // We create a list of all entries, sorted by their subdirectory context
-        Multimap<InputOutputContext, Pair<String, T>> indexedBySubdirectory =
-                createIndex(subdirectoryCache);
-
         // Process each output subdirectory collectively
-        for (InputOutputContext subdirectory : indexedBySubdirectory.keySet()) {
+        for (Map.Entry<Optional<String>, MapCreate<String, T>> entryGroup : map.entrySet()) {
             outputGroupIntoSubdirectory(
-                    indexedBySubdirectory.get(subdirectory), channelChecker, subdirectory);
+                    entryGroup.getValue().entrySet(),
+                    channelChecker,
+                    multipleOutputs ->
+                            maybeCreateSubdirectory(multipleOutputs, context, entryGroup.getKey()),
+                    entryGroup.getKey());
         }
     }
-
-    protected abstract void addTo(S channelToAdd, T aggregator) throws OperationFailedException;
 
     /**
      * Output a particular group into a subdirectory.
      *
      * @param namedAggregators all the aggregators for this group.
      * @param channelChecker what was used to ensure all {@link Channel}s had identical attributes.
-     * @param subdirectory the subdirectory into which outputting occurs.
+     * @param createContext the subdirectory into which outputting occurs, given a boolean which is
+     *     true (when multiple outputs occur), or false (when a single output occurs).
+     * @param outputNameSingle the output-name to use if there is only a single output, (in which
+     *     case {@code createContext} should always be called with false).
      * @throws IOException if unable to output successfully.
      */
     protected abstract void outputGroupIntoSubdirectory(
-            Collection<Pair<String, T>> namedAggregators,
+            Collection<Map.Entry<String, T>> namedAggregators,
             ConsistentChannelChecker channelChecker,
-            InputOutputContext subdirectory)
+            Function<Boolean, InputOutputContext> createContext,
+            Optional<String> outputNameSingle)
             throws IOException;
 
     /**
-     * Creates a {@link MultiMap} from {@code map} where each subdirectory forms a key, and the name
-     * and element-type become corresponding values.
+     * Creates a subdirectory if grouping is occuring <b>and</b> multipleOutputs occur.
+     *
+     * @param multipleOutputs whether each group will produce multiple outputs or a single output.
+     * @param context the context in which to maybe create a subdirectory, or else use as-is.
+     * @param groupKey the key associated with the particular group.
      */
-    private Multimap<InputOutputContext, Pair<String, T>> createIndex(
-            InputOutputContextSubdirectoryCache subdirectoryCache) {
-        Multimap<InputOutputContext, Pair<String, T>> indexedBySubdirectory =
-                MultimapBuilder.hashKeys().arrayListValues().build();
-        for (Entry<MultiName, T> entry : map.entrySet()) {
-
-            MultiName name = entry.getKey();
-            indexedBySubdirectory.put(
-                    subdirectoryCache.get(name.firstPart()),
-                    new Pair<>(name.secondPart(), entry.getValue()));
+    private static InputOutputContext maybeCreateSubdirectory(
+            boolean multipleOutputs, InputOutputContext context, Optional<String> groupKey) {
+        if (groupKey.isPresent() && multipleOutputs) {
+            return context.subdirectory(groupKey.get(), false);
+        } else {
+            return context;
         }
-        return indexedBySubdirectory;
     }
 }

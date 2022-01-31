@@ -28,42 +28,42 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 import java.io.IOException;
 import java.util.Collection;
-import org.anchoranalysis.core.exception.OperationFailedException;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
-import org.apache.commons.math3.util.Pair;
 
 class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
 
     private final GroupedHistogramWriter writer;
 
     public GroupedHistogramMap(GroupedHistogramWriter writer, int maxValue) {
-        super("histogram", () -> new Histogram(maxValue));
+        super(
+                "histogram",
+                () -> new Histogram(maxValue),
+                (single, aggregagor) -> aggregagor.addHistogram(single));
         this.writer = writer;
     }
 
     @Override
-    protected void addTo(Histogram channelToAdd, Histogram aggregator)
-            throws OperationFailedException {
-        aggregator.addHistogram(channelToAdd);
-    }
-
-    @Override
     protected void outputGroupIntoSubdirectory(
-            Collection<Pair<String, Histogram>> namedAggregators,
+            Collection<Map.Entry<String, Histogram>> namedAggregators,
             ConsistentChannelChecker channelChecker,
-            InputOutputContext subdirectory)
+            Function<Boolean, InputOutputContext> createContext,
+            Optional<String> outputNameSingle)
             throws IOException {
         // We can write these group outputs in parallel, as we no longer in the parallel part of
         // Anchor's task execution
+        InputOutputContext context = createContext.apply(namedAggregators.size() > 1);
         namedAggregators.parallelStream()
                 .forEach(
                         namedAggregator ->
                                 writer.writeHistogramToFile(
-                                        namedAggregator.getSecond(),
-                                        namedAggregator.getFirst(),
-                                        subdirectory));
+                                        namedAggregator.getValue(),
+                                        outputNameSingle.orElse(namedAggregator.getKey()),
+                                        context));
     }
 }

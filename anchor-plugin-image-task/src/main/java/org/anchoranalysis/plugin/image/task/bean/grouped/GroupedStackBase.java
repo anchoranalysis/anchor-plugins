@@ -55,7 +55,8 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.bean.grouper.Grouper;
+import org.anchoranalysis.io.input.bean.grouper.WithoutGrouping;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -87,11 +88,8 @@ public abstract class GroupedStackBase<S, T>
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
 
-    /**
-     * If defined, translates a file-path into a group. If not-defined, all images are treated as
-     * part of the same group
-     */
-    @BeanField @OptionalBean @Getter @Setter private DerivePath group;
+    /** How to partition the inputs into groups. */
+    @BeanField @OptionalBean @Getter @Setter private Grouper group = new WithoutGrouping();
 
     /** Selects which channels are included, optionally renaming. */
     @BeanField @Getter @Setter private FromStacks selectChannels = new All();
@@ -120,6 +118,12 @@ public abstract class GroupedStackBase<S, T>
             List<ProvidesStackInput> inputs,
             ParametersExperiment parameters)
             throws ExperimentExecutionException {
+
+        // TODO
+        // If grouping is enabled, create a map that counts the number of inputs for each group
+        // This can then be used to reference-count the aggregate structure, so that it is outputted
+        // automatically when the group is finished.
+
         return new GroupedSharedState<>(
                 checker ->
                         this.createGroupMap(checker, parameters.getContext().operationContext()));
@@ -133,8 +137,7 @@ public abstract class GroupedStackBase<S, T>
         InputOutputContext context = input.getContextJob();
 
         // Extract a group name
-        Optional<String> groupName =
-                extractGroupName(inputStack.pathForBinding(), context.isDebugEnabled());
+        Optional<String> groupName = deriveGroup(inputStack.identifierAsPath());
 
         processStacks(
                 GroupedStackBase.extractInputStacks(inputStack, context.getLogger()),
@@ -244,6 +247,7 @@ public abstract class GroupedStackBase<S, T>
 
             NamedChannels channels = getSelectChannels().selectChannels(source, true);
 
+            // Check that the channel-names are consistent across inputs.
             sharedState
                     .getChannelNamesChecker()
                     .checkChannelNames(channels.names(), channels.isRgb());
@@ -265,23 +269,25 @@ public abstract class GroupedStackBase<S, T>
         }
     }
 
-    private Optional<String> extractGroupName(Optional<Path> path, boolean debugEnabled)
-            throws JobExecutionException {
+    /**
+     * Derives a group-key for {@code identifier} or {@link Optional#empty} if grouping is disabled.
+     */
+    private Optional<String> deriveGroup(Path identifier) throws JobExecutionException {
 
-        // 	Return an arbitrary group-name if there's no binding-path, or a group-generator is not
-        // defined
-        if (group == null || !path.isPresent()) {
+        // Exit early, if no grouping is defined
+        if (!group.isGroupingEnabled()) {
             return Optional.empty();
         }
 
         try {
-            return Optional.of(group.deriveFrom(path.get(), debugEnabled).toString());
+            return Optional.of(group.deriveGroupKey(identifier));
         } catch (DerivePathException e) {
             throw new JobExecutionException(
-                    String.format("Cannot establish a group-identifier for: %s", path), e);
+                    String.format("Cannot establish a group-identifier for: %s", identifier), e);
         }
     }
 
+    /** Creates a {@link NamedStacks} from a {@link ProvidesStackInput}. */
     private static NamedStacks extractInputStacks(ProvidesStackInput input, Logger logger)
             throws JobExecutionException {
         try {

@@ -172,7 +172,12 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
     private static PathSupplier cachedOutPathFor(
             DerivePath outputPathGenerator, Supplier<Optional<Path>> pathInput, boolean debugMode) {
-        return cachePathSupplier(() -> outputPathGenerator.deriveFrom(pathInput, debugMode));
+        return cachePathSupplier(
+                () ->
+                        outputPathGenerator
+                                .deriveFrom(pathInput, debugMode)
+                                .toAbsolutePath()
+                                .normalize());
     }
 
     private static PathSupplier cachePathSupplier(PathSupplier supplier) {
