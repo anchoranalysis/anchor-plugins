@@ -33,9 +33,9 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.bean.channel.ChannelAggregator;
-import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
@@ -55,16 +55,24 @@ class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByNa
 
     /**
      * Create with a particular output-name and method to create aggregators.
-     * 
-     * @param outputName the first-level output-name used to determine channels will be
-     *     written or not.
+     *
+     * @param outputName the first-level output-name used to determine channels will be written or
+     *     not.
+     * @param groupIdentifiers a stream with each group-identifier that should be added to the map.
+     * @param outputContext the directory to write output to.
      * @param createAggregator how to create a new aggregator as needed.
      * @param logger the logger.
      */
     public GroupedChannelAggregator(
-            String outputName, Supplier<T> createAggregator, Logger logger) {
+            String outputName,
+            Stream<Optional<String>> groupIdentifiers,
+            Optional<InputOutputContext> outputContext,
+            Supplier<T> createAggregator,
+            Logger logger) {
         super(
                 "channel",
+                groupIdentifiers,
+                outputContext,
                 createAggregator,
                 (single, aggregagor) -> aggregagor.addChannel(single, logger));
         this.outputNameDefault = outputName;
@@ -73,7 +81,6 @@ class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByNa
     @Override
     protected void outputGroupIntoSubdirectory(
             Collection<Entry<String, T>> namedAggregators,
-            ConsistentChannelChecker channelChecker,
             Function<Boolean, InputOutputContext> createContext,
             Optional<String> outputNameSingle)
             throws IOException {

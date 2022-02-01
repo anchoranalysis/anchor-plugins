@@ -55,10 +55,11 @@ public class GroupedSharedState<S, T> {
     private GroupMapByName<S, T> groupMap;
 
     // START REQUIRED ARGUMENTS
+    /** How to create the group-map when needed. */
     private final Function<ConsistentChannelChecker, GroupMapByName<S, T>> createGroupMap;
     // END REQUIRED ARGUMENTS
 
-    public GroupMapByName<S, T> getGroupMap() {
+    public synchronized GroupMapByName<S, T> getGroupMap() {
 
         if (groupMap == null) {
             this.groupMap = createGroupMap.apply(channelChecker);

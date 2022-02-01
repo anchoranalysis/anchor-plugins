@@ -28,18 +28,20 @@ package org.anchoranalysis.plugin.image.task.grouped;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+import org.anchoranalysis.core.collection.MapCreate;
+import org.anchoranalysis.core.collection.MapCreateCountdown;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
-import org.anchoranalysis.core.identifier.name.MapCreate;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
-import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
-import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.apache.commons.math3.util.Pair;
 
 /**
  * Adds items to aggregate structures identified uniquely by a name, and allows these items to be
@@ -58,7 +60,7 @@ public abstract class GroupMapByName<S, T> {
      * A map of maps, indexing first by the <b>first part</b> of the {@link MultiName} and secondly
      * by the <b>second part</b>.
      */
-    private final MapCreate<Optional<String>, MapCreate<String, T>> map;
+    private final MapCreateCountdown<Optional<String>, MapCreate<String, T>> map;
 
     private final String nounT;
 
@@ -69,15 +71,27 @@ public abstract class GroupMapByName<S, T> {
      * Creates a group-map.
      *
      * @param nounT a word to describe a single instance of T in user error messages.
-     * @param addSingleToAggregator adds a single-item into an aggregator.
+     * @param groupIdentifiers a stream with each group-identifier that should be added to the map.
+     * @param outputContext the subdirectory to output into. If not set, no outputs occur.
      * @param createAggregator called to create a new aggregator, whenever needed e.g. for a
      *     particular group.
+     * @param addSingleToAggregator adds a single-item into an aggregator.
      */
     protected GroupMapByName(
             String nounT,
+            Stream<Optional<String>> groupIdentifiers,
+            Optional<InputOutputContext> outputContext,
             Supplier<T> createAggregator,
             CheckedBiConsumer<S, T, OperationFailedException> addSingleToAggregator) {
-        this.map = new MapCreate<>(() -> new MapCreate<>(createAggregator));
+        this.map =
+                new MapCreateCountdown<>(
+                        () -> new MapCreate<>(createAggregator),
+                        (groupIdentifier, groupMap) ->
+                                outputGroup(groupIdentifier, groupMap, outputContext));
+        // Increment the reference count for each instance of a group-identifier
+        // This allows the map to already output each group, when all images have been processed
+        // for that group
+        groupIdentifiers.forEach(map::increment);
         this.nounT = nounT;
         this.addSingleToAggregator = addSingleToAggregator;
     }
@@ -85,61 +99,27 @@ public abstract class GroupMapByName<S, T> {
     /**
      * Adds an item with a non-group identifier, and also optionally a group identifier.
      *
+     * @param singleItemsToAdd the single-items to add, each with a corresponding non-group name.
      * @throws OperationFailedException if the operation cannot successfully complete.
      */
     public synchronized void add(
-            Optional<String> groupIdentifier, String nonGroupIdentifier, S singleItemToAdd)
+            Optional<String> groupIdentifier, List<Pair<String, S>> singleItemsToAdd)
             throws OperationFailedException {
-        try {
-            // Get the correct aggregate structure
-            T aggregator = map.computeIfAbsent(groupIdentifier).computeIfAbsent(nonGroupIdentifier);
-            addSingleToAggregator.accept(singleItemToAdd, aggregator);
 
-        } catch (OperationFailedException e) {
-
-            MultiName identifier = MultiNameFactory.create(groupIdentifier, nonGroupIdentifier);
-            throw new OperationFailedException(
-                    String.format(
-                            "An error occurred combining the %s created for: %s",
-                            nounT, identifier),
-                    e);
-        }
-    }
-
-    /**
-     * Outputs the "grouped" data to the filesystem.
-     *
-     * @param channelChecker what checks that {@link Channel}s are consistent.
-     * @param context where to perform the outputting.
-     * @throws IOException if outputting doesn't occur successfully.
-     */
-    public void outputGroupedData(
-            ConsistentChannelChecker channelChecker, InputOutputContext context)
-            throws IOException {
-
-        // If there is a second part-only in the MultiName, it is assumed that there is no group
-        // (for all items) and it is
-        // written without a subdirectory
-        // If there are two parts in the MultiName, it is assumed that the first-part is a
-        // group-name (a separate
-        // subdirectory) and the second-part is written without a subdirectory
-
-        // Process each output subdirectory collectively
-        for (Map.Entry<Optional<String>, MapCreate<String, T>> entryGroup : map.entrySet()) {
-            outputGroupIntoSubdirectory(
-                    entryGroup.getValue().entrySet(),
-                    channelChecker,
-                    multipleOutputs ->
-                            maybeCreateSubdirectory(multipleOutputs, context, entryGroup.getKey()),
-                    entryGroup.getKey());
-        }
+        map.processElementDecrement(
+                groupIdentifier,
+                value -> {
+                    // Add to the aggregator making sure not to guard
+                    synchronized (value) {
+                        addAllItemsToMap(groupIdentifier, value, singleItemsToAdd);
+                    }
+                });
     }
 
     /**
      * Output a particular group into a subdirectory.
      *
      * @param namedAggregators all the aggregators for this group.
-     * @param channelChecker what was used to ensure all {@link Channel}s had identical attributes.
      * @param createContext the subdirectory into which outputting occurs, given a boolean which is
      *     true (when multiple outputs occur), or false (when a single output occurs).
      * @param outputNameSingle the output-name to use if there is only a single output, (in which
@@ -148,10 +128,67 @@ public abstract class GroupMapByName<S, T> {
      */
     protected abstract void outputGroupIntoSubdirectory(
             Collection<Map.Entry<String, T>> namedAggregators,
-            ConsistentChannelChecker channelChecker,
             Function<Boolean, InputOutputContext> createContext,
             Optional<String> outputNameSingle)
             throws IOException;
+
+    /** Adds all the single-items to an aggregator retrieved from {@code map}. */
+    private void addAllItemsToMap(
+            Optional<String> groupIdentifier,
+            MapCreate<String, T> map,
+            List<Pair<String, S>> singleItemsToAdd)
+            throws OperationFailedException {
+        for (Pair<String, S> pair : singleItemsToAdd) {
+
+            try {
+                T aggregator = map.computeIfAbsent(pair.getFirst());
+                addSingleToAggregator.accept(pair.getSecond(), aggregator);
+            } catch (OperationFailedException e) {
+
+                MultiName identifier = MultiNameFactory.create(groupIdentifier, pair.getFirst());
+                throw new OperationFailedException(
+                        String.format(
+                                "An error occurred combining the %s created for: %s",
+                                nounT, identifier),
+                        e);
+            }
+        }
+    }
+
+    /**
+     * Outputs data for a single "group" to the filesystem.
+     *
+     * @param groupIdentifier the identifier of the group to output (if it exists).
+     * @param groupMap the corresponding map of elements for {@code groupIdentifier}.
+     * @param context in which directory to perform the outputting.
+     * @throws IOException if outputting doesn't occur successfully.
+     */
+    private void outputGroup(
+            Optional<String> groupIdentifier,
+            MapCreate<String, T> groupMap,
+            Optional<InputOutputContext> outputContext)
+            throws OperationFailedException {
+        try {
+            if (outputContext.isPresent()) {
+                // If there is a second part-only in the MultiName, it is assumed that there is no
+                // group
+                // (for all items) and it is
+                // written without a subdirectory
+                // If there are two parts in the MultiName, it is assumed that the first-part is a
+                // group-name (a separate
+                // subdirectory) and the second-part is written without a subdirectory
+                outputGroupIntoSubdirectory(
+                        groupMap.entrySet(),
+                        multipleOutputs ->
+                                maybeCreateSubdirectory(
+                                        multipleOutputs, outputContext.get(), groupIdentifier),
+                        groupIdentifier);
+            }
+
+        } catch (IOException e) {
+            throw new OperationFailedException(e);
+        }
+    }
 
     /**
      * Creates a subdirectory if grouping is occuring <b>and</b> multipleOutputs occur.

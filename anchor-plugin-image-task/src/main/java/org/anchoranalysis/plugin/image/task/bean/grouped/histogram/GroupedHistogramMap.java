@@ -31,7 +31,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
+import java.util.stream.Stream;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
@@ -40,9 +40,15 @@ class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
 
     private final GroupedHistogramWriter writer;
 
-    public GroupedHistogramMap(GroupedHistogramWriter writer, int maxValue) {
+    public GroupedHistogramMap(
+            GroupedHistogramWriter writer,
+            Stream<Optional<String>> groupIdentifiers,
+            Optional<InputOutputContext> outputContext,
+            int maxValue) {
         super(
                 "histogram",
+                groupIdentifiers,
+                outputContext,
                 () -> new Histogram(maxValue),
                 (single, aggregagor) -> aggregagor.addHistogram(single));
         this.writer = writer;
@@ -51,7 +57,6 @@ class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
     @Override
     protected void outputGroupIntoSubdirectory(
             Collection<Map.Entry<String, Histogram>> namedAggregators,
-            ConsistentChannelChecker channelChecker,
             Function<Boolean, InputOutputContext> createContext,
             Optional<String> outputNameSingle)
             throws IOException {

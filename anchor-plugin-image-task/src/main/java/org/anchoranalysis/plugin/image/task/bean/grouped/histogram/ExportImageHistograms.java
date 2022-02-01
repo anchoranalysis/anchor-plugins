@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -114,9 +115,13 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
 
     @Override
     protected GroupMapByName<Histogram, Histogram> createGroupMap(
-            ConsistentChannelChecker channelChecker, OperationContext context) {
+            ConsistentChannelChecker channelChecker,
+            Stream<Optional<String>> groupIdentifiers,
+            Optional<InputOutputContext> outputContext,
+            OperationContext operationContext) {
         int maxIntensityValue = (int) channelChecker.getVoxelDataType().maxValue();
-        return new GroupedHistogramMap(createWriter(), maxIntensityValue);
+        return new GroupedHistogramMap(
+                createWriter(), groupIdentifiers, outputContext, maxIntensityValue);
     }
 
     @Override
