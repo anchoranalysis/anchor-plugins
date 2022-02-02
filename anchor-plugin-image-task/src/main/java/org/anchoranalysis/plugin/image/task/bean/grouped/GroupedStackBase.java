@@ -26,11 +26,12 @@
 
 package org.anchoranalysis.plugin.image.task.bean.grouped;
 
-import java.io.IOException;
 import java.nio.file.Path;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -38,6 +39,8 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
@@ -55,7 +58,8 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.bean.grouper.Grouper;
+import org.anchoranalysis.io.input.bean.grouper.WithoutGrouping;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -65,6 +69,7 @@ import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
+import org.apache.commons.math3.util.Pair;
 
 /**
  * Base class for stacks (usually each channel from an image) that are somehow grouped-together.
@@ -87,18 +92,15 @@ public abstract class GroupedStackBase<S, T>
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
 
-    /**
-     * If defined, translates a file-path into a group. If not-defined, all images are treated as
-     * part of the same group
-     */
-    @BeanField @OptionalBean @Getter @Setter private DerivePath group;
+    /** How to partition the inputs into groups. */
+    @BeanField @OptionalBean @Getter @Setter private Grouper group = new WithoutGrouping();
 
     /** Selects which channels are included, optionally renaming. */
     @BeanField @Getter @Setter private FromStacks selectChannels = new All();
 
     /**
      * If set, each channel is scaled to a specific size before aggregation (useful for combining
-     * different sized images)
+     * different sized images).
      */
     @BeanField @OptionalBean @Getter @Setter private SizeXY resizeTo;
     // END BEAN PROPERTIES
@@ -120,9 +122,37 @@ public abstract class GroupedStackBase<S, T>
             List<ProvidesStackInput> inputs,
             ParametersExperiment parameters)
             throws ExperimentExecutionException {
+
+        // TODO
+        // If grouping is enabled, create a map that counts the number of inputs for each group
+        // This can then be used to reference-count the aggregate structure, so that it is outputted
+        // automatically when the group is finished.
+
+        OperationContext operationContext = parameters.getContext().operationContext();
+
+        boolean outputEnabled =
+                parameters
+                        .getContext()
+                        .getOutputter()
+                        .outputsEnabled()
+                        .isOutputEnabled(outputNameForGroups());
+        Optional<InputOutputContext> outputContext =
+                OptionalFactory.createChecked(
+                        outputEnabled,
+                        () ->
+                                parameters
+                                        .getContext()
+                                        .maybeSubdirectory(subdirectoryForGroupOutputs(), false));
+
+        List<Optional<String>> groupIdentifiers = allGroupIdentifiers(inputs);
+
         return new GroupedSharedState<>(
                 checker ->
-                        this.createGroupMap(checker, parameters.getContext().operationContext()));
+                        this.createGroupMap(
+                                checker,
+                                groupIdentifiers.stream(),
+                                outputContext,
+                                operationContext));
     }
 
     @Override
@@ -133,8 +163,7 @@ public abstract class GroupedStackBase<S, T>
         InputOutputContext context = input.getContextJob();
 
         // Extract a group name
-        Optional<String> groupName =
-                extractGroupName(inputStack.pathForBinding(), context.isDebugEnabled());
+        Optional<String> groupName = deriveGroup(inputStack.identifierAsPath());
 
         processStacks(
                 GroupedStackBase.extractInputStacks(inputStack, context.getLogger()),
@@ -147,20 +176,7 @@ public abstract class GroupedStackBase<S, T>
     public void afterAllJobsAreExecuted(
             GroupedSharedState<S, T> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
-
-        try {
-            Optional<String> subdirectoryName = subdirectoryForGroupOutputs();
-            if (context.getOutputter().outputsEnabled().isOutputEnabled(outputNameForGroups())) {
-                sharedState
-                        .getGroupMap()
-                        .outputGroupedData(
-                                sharedState.getChannelChecker(),
-                                context.maybeSubdirectory(subdirectoryName, false));
-            }
-
-        } catch (IOException e) {
-            throw new ExperimentExecutionException(e);
-        }
+        // NOTHING TO DO
     }
 
     /**
@@ -181,11 +197,16 @@ public abstract class GroupedStackBase<S, T>
      *
      * @param channelChecker checks that the channels of all relevant stacks have the same size and
      *     data-type.
-     * @param context supporting entities for the operation.
+     * @param groupIdentifiers a stream with each group-identifier that should be added to the map.
+     * @param outputContext where to write results to when a group is processed.
+     * @param operationContext supporting entities for the operation.
      * @return a newly created map.
      */
     protected abstract GroupMapByName<S, T> createGroupMap(
-            ConsistentChannelChecker channelChecker, OperationContext context);
+            ConsistentChannelChecker channelChecker,
+            Stream<Optional<String>> groupIdentifiers,
+            Optional<InputOutputContext> outputContext,
+            OperationContext operationContext);
 
     /**
      * A function to derive the <i>individual</i> type used for aggregation from a {@link Channel}.
@@ -231,19 +252,24 @@ public abstract class GroupedStackBase<S, T>
             InputOutputContext context)
             throws JobExecutionException {
 
-        ChannelSource source =
-                new ChannelSource(
-                        store,
-                        sharedState.getChannelChecker(),
-                        Optional.ofNullable(resizeTo),
-                        getInterpolator().voxelsResizer());
+        // We collect every individual element to add to the aggregated in a list
+        // so that it is one operation when they are added to the group map
+        List<Pair<String, S>> toAdd = new LinkedList<>();
 
         try {
+            ChannelSource source =
+                    new ChannelSource(
+                            store,
+                            sharedState.getChannelChecker(),
+                            Optional.ofNullable(resizeTo),
+                            getInterpolator().voxelsResizer());
+
             CheckedFunction<Channel, S, CreateException> deriveIndividualFromChannel =
                     createChannelDeriver(source);
 
             NamedChannels channels = getSelectChannels().selectChannels(source, true);
 
+            // Check that the channel-names are consistent across inputs.
             sharedState
                     .getChannelNamesChecker()
                     .checkChannelNames(channels.names(), channels.isRgb());
@@ -255,33 +281,56 @@ public abstract class GroupedStackBase<S, T>
                 processIndividual(
                         entry.getKey(),
                         individual,
-                        (name, histogram) ->
-                                sharedState.getGroupMap().add(groupName, name, individual),
+                        (name, histogram) -> toAdd.add(new Pair<>(name, individual)),
                         context);
             }
 
         } catch (OperationFailedException | CreateException e) {
             throw new JobExecutionException(e);
+        } finally {
+            // We always call this, even if there is nothing to add, so the group-map
+            // can be reference counted appropriate
+            try {
+                sharedState.getGroupMap().add(groupName, toAdd);
+            } catch (OperationFailedException e) {
+                throw new JobExecutionException("An error occurred updating the group map", e);
+            }
         }
     }
 
-    private Optional<String> extractGroupName(Optional<Path> path, boolean debugEnabled)
-            throws JobExecutionException {
+    /**
+     * Derives a group-key for {@code identifier} or {@link Optional#empty} if grouping is disabled.
+     */
+    private Optional<String> deriveGroup(Path identifier) throws JobExecutionException {
 
-        // 	Return an arbitrary group-name if there's no binding-path, or a group-generator is not
-        // defined
-        if (group == null || !path.isPresent()) {
+        // Exit early, if no grouping is defined
+        if (!group.isGroupingEnabled()) {
             return Optional.empty();
         }
 
         try {
-            return Optional.of(group.deriveFrom(path.get(), debugEnabled).toString());
+            return Optional.of(group.deriveGroupKey(identifier));
         } catch (DerivePathException e) {
             throw new JobExecutionException(
-                    String.format("Cannot establish a group-identifier for: %s", path), e);
+                    String.format("Cannot establish a group-identifier for: %s", identifier), e);
         }
     }
 
+    /** Extracts a group-identifier for every input. */
+    private List<Optional<String>> allGroupIdentifiers(List<ProvidesStackInput> inputs)
+            throws ExperimentExecutionException {
+        try {
+            return FunctionalList.mapToList(
+                    inputs,
+                    DerivePathException.class,
+                    input -> group.deriveGroupKeyOptional(input.identifierAsPath()));
+        } catch (DerivePathException e) {
+            throw new ExperimentExecutionException(
+                    "Unable to derive a group identifier for an input", e);
+        }
+    }
+
+    /** Creates a {@link NamedStacks} from a {@link ProvidesStackInput}. */
     private static NamedStacks extractInputStacks(ProvidesStackInput input, Logger logger)
             throws JobExecutionException {
         try {

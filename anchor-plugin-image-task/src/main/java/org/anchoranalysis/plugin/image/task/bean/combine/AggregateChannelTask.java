@@ -1,6 +1,7 @@
 package org.anchoranalysis.plugin.image.task.bean.combine;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -83,9 +84,16 @@ public class AggregateChannelTask extends GroupedStackBase<Channel, ChannelAggre
 
     @Override
     protected GroupMapByName<Channel, ChannelAggregator> createGroupMap(
-            ConsistentChannelChecker channelChecker, OperationContext context) {
+            ConsistentChannelChecker channelChecker,
+            Stream<Optional<String>> groupIdentifiers,
+            Optional<InputOutputContext> outputContext,
+            OperationContext operationContext) {
         return new GroupedChannelAggregator<>(
-                outputNameForGroups(), () -> aggregator.duplicateBean(), context.getLogger());
+                outputNameForGroups(),
+                groupIdentifiers,
+                outputContext,
+                () -> aggregator.duplicateBean(),
+                operationContext.getLogger());
     }
 
     @Override

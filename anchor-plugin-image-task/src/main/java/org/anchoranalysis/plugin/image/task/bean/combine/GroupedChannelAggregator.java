@@ -29,24 +29,17 @@ package org.anchoranalysis.plugin.image.task.bean.combine;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import java.util.stream.Stream;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.bean.channel.ChannelAggregator;
-import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
-import org.anchoranalysis.image.core.stack.RGBChannelNames;
-import org.anchoranalysis.image.core.stack.RGBStack;
-import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
-import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
-import org.apache.commons.math3.util.Pair;
 
 /**
  * Creates a {@link ChannelAggregator} for each group, and writes the aggregated {@link
@@ -57,101 +50,56 @@ import org.apache.commons.math3.util.Pair;
  */
 class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByName<Channel, T> {
 
-    private final String outputName;
-    private final Logger logger;
+    /** The output-name to use, if not overriden. */
+    private final String outputNameDefault;
 
     /**
-     * @param outputName the first-level output-name used to determine whether mean channels will be
-     *     written or not
+     * Create with a particular output-name and method to create aggregators.
+     *
+     * @param outputName the first-level output-name used to determine channels will be written or
+     *     not.
+     * @param groupIdentifiers a stream with each group-identifier that should be added to the map.
+     * @param outputContext the directory to write output to.
+     * @param createAggregator how to create a new aggregator as needed.
+     * @param logger the logger.
      */
     public GroupedChannelAggregator(
-            String outputName, Supplier<T> createAggregator, Logger logger) {
-        super("channel", createAggregator);
-        this.outputName = outputName;
-        this.logger = logger;
-    }
-
-    @Override
-    protected void addTo(Channel channelToAdd, T aggregator) throws OperationFailedException {
-        aggregator.addChannel(channelToAdd, logger);
+            String outputName,
+            Stream<Optional<String>> groupIdentifiers,
+            Optional<InputOutputContext> outputContext,
+            Supplier<T> createAggregator,
+            Logger logger) {
+        super(
+                "channel",
+                groupIdentifiers,
+                outputContext,
+                createAggregator,
+                (single, aggregagor) -> aggregagor.addChannel(single, logger));
+        this.outputNameDefault = outputName;
     }
 
     @Override
     protected void outputGroupIntoSubdirectory(
-            Collection<Pair<String, T>> namedAggregators,
-            ConsistentChannelChecker channelChecker,
-            InputOutputContext subdirectory)
+            Collection<Entry<String, T>> namedAggregators,
+            Function<Boolean, InputOutputContext> createContext,
+            Optional<String> outputNameSingle)
             throws IOException {
 
-        if (namedAggregators.size() == 3) {
-            // Consider writing the channels together as an RGB stack rather than separately
-            // If there is an alpha channel with the RGB, it is ignored.
+        Optional<Map<String, T>> channelsMap = OutputChannelsAsRGB.canOutputAsRGB(namedAggregators);
 
-            // Build a map between each channel-name and the aggregator, and check if the keys of
-            // the map correspond
-            // exactly to what we expect in RGB
-            Map<String, T> channelsMap =
-                    namedAggregators.stream()
-                            .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
-            if (RGBChannelNames.isValidNameSet(channelsMap.keySet(), false)
-                    || RGBChannelNames.isValidNameSet(channelsMap.keySet(), true)) {
-                outputChannelsAsRGB(channelsMap, subdirectory);
-                return;
-            }
-        }
-        outputChannelsSeparately(namedAggregators, subdirectory);
-    }
-
-    /** Write each {@link Channel} separately into the group subdirectory. */
-    private void outputChannelsSeparately(
-            Collection<Pair<String, T>> namedAggregators, InputOutputContext subdirectory) {
-        // We can write these group outputs in parallel, as we no longer in the parallel part of
-        // Anchor's task execution
-        namedAggregators.parallelStream()
-                .forEach(
-                        pair ->
-                                subdirectory
-                                        .getOutputter()
-                                        .writerSecondLevel(outputName)
-                                        .write(
-                                                pair.getFirst(),
-                                                ChannelGenerator::new,
-                                                () -> aggregatedChannel(pair.getSecond())));
-    }
-
-    private void outputChannelsAsRGB(Map<String, T> channels, InputOutputContext subdirectory)
-            throws IOException {
-        try {
-            RGBStack stack =
-                    new RGBStack(
-                            extractChannel(channels, RGBChannelNames.RED),
-                            extractChannel(channels, RGBChannelNames.GREEN),
-                            extractChannel(channels, RGBChannelNames.BLUE));
-
-            subdirectory
-                    .getOutputter()
-                    .writerPermissive()
-                    .write(outputName, () -> new StackGenerator(true), stack::asStack);
-
-        } catch (OperationFailedException e) {
-            throw new IOException(
-                    "Unable to extract a particular color channel to output an aggregate as a RGB",
-                    e);
-        } catch (IncorrectImageSizeException e) {
-            throw new AnchorImpossibleSituationException();
+        if (channelsMap.isPresent()) {
+            OutputChannelsAsRGB.output(
+                    name -> channelsMap.get().get(name).aggregatedChannel(),
+                    createContext.apply(false),
+                    resolveOutputName(outputNameSingle));
+        } else {
+            OutputChannelsSeparately.output(
+                    namedAggregators, () -> resolveOutputName(outputNameSingle), createContext);
         }
     }
 
-    private Channel extractChannel(Map<String, T> channels, String channelName)
-            throws OperationFailedException {
-        return channels.get(channelName).aggregatedChannel();
-    }
-
-    private Channel aggregatedChannel(T aggregator) throws OutputWriteFailedException {
-        try {
-            return aggregator.aggregatedChannel();
-        } catch (OperationFailedException e) {
-            throw new OutputWriteFailedException("Failed to create aggregated channel", e);
-        }
+    /** Uses {@link outputName} if possible, otherwise fallsback to {@code outputNameDefault}. */
+    private String resolveOutputName(Optional<String> outputName) {
+        return outputName.orElse(outputNameDefault);
     }
 }

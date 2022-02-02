@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.quick.bean.file.path.derive;
+package org.anchoranalysis.plugin.io.bean.path.derive;
 
 import java.nio.file.Path;
 import lombok.Getter;

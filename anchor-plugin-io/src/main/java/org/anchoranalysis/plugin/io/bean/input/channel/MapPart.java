@@ -160,6 +160,11 @@ class MapPart extends NamedChannelsInputPart {
         return openedFile().metadata(seriesIndex, logger);
     }
 
+    @Override
+    public String toString() {
+        return delegate.toString();
+    }
+
     /** Create a channel-map, reusing the existing map, if it already exists. */
     private NamedEntries channelMap(Logger logger) throws ImageIOException {
         if (channelMap == null) {

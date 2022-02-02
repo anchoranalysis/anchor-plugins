@@ -34,10 +34,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.regex.RegExSimple;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.plugin.io.bean.path.derive.CollapseFileName;
 import org.anchoranalysis.plugin.io.bean.path.derive.InsertRegExGroups;
+import org.anchoranalysis.plugin.io.bean.path.derive.RemoveTrailingDirectory;
 import org.anchoranalysis.plugin.io.bean.path.derive.Rooted;
-import org.anchoranalysis.plugin.quick.bean.file.path.derive.CollapseFileName;
-import org.anchoranalysis.plugin.quick.bean.file.path.derive.RemoveTrailingDirectory;
 
 public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> {
 
