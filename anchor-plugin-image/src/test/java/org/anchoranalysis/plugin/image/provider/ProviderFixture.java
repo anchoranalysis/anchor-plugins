@@ -31,8 +31,6 @@ import static org.mockito.Mockito.when;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
@@ -50,6 +48,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.image.InputOutputContextFixture;
+import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProviderFixture {
@@ -109,13 +108,13 @@ public class ProviderFixture {
     public static <T extends ImageBean<T>> void initProvider(ImageBean<T> provider, Logger logger)
             throws CreateException {
         try {
-            provider.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
+            BeanInstanceMapFixture.check(provider);
 
             provider.initialize(
                     ImageInitializationFactory.create(InputOutputContextFixture.withLogger(logger)),
                     logger);
 
-        } catch (BeanMisconfiguredException | InitializeException e) {
+        } catch (InitializeException e) {
             throw new CreateException(e);
         }
     }

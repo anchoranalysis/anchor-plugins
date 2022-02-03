@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.quick.bean.experiment;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
@@ -154,15 +153,10 @@ public class QuickExperiment<S> extends Experiment {
 
         delegate.setInput(createInputManagerImageFile(search));
 
-        try {
-            delegate.setOutput(
-                    createOutputManager(
-                            search.getDirectoryAsPathEnsureAbsolute(
-                                    arguments.createInputContext())));
-
-        } catch (IOException e) {
-            throw new ExperimentExecutionException(e);
-        }
+        delegate.setOutput(
+                createOutputManager(
+                        search.getDirectoryAsPathEnsureAbsolute(
+                                arguments.inputContextParameters())));
     }
 
     private SequentialProcessor<MultiInput, S> createTask() {

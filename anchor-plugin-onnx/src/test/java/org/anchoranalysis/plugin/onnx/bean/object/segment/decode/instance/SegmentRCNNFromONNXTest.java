@@ -25,10 +25,6 @@
  */
 package org.anchoranalysis.plugin.onnx.bean.object.segment.decode.instance;
 
-import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.inference.bean.reduce.RemoveOverlappingObjects;
 import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.image.inference.bean.segment.instance.SuppressNonMaximum;
@@ -38,6 +34,7 @@ import org.anchoranalysis.plugin.onnx.bean.object.segment.decode.instance.maskrc
 import org.anchoranalysis.plugin.onnx.bean.object.segment.stack.SegmentObjectsFromONNXModel;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.BoundingBoxFactory;
+import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.anchoranalysis.test.image.segment.InstanceSegmentationTestBase;
 
 /**
@@ -62,13 +59,8 @@ class SegmentRCNNFromONNXTest extends InstanceSegmentationTestBase {
         segment.setInputName("image");
         segment.setReadFromResources(true);
 
-        try {
-            RegisterBeanFactories.getDefaultInstances()
-                    .putInstanceFor(Interpolator.class, new ImageJ());
-            segment.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
-        } catch (BeanMisconfiguredException e) {
-            throw new AnchorFriendlyRuntimeException(e);
-        }
+        BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
+        BeanInstanceMapFixture.check(segment);
 
         return new SuppressNonMaximum<>(segment, new RemoveOverlappingObjects(), false);
     }

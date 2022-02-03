@@ -29,16 +29,14 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.io.imagej.bean.interpolator.ImageJ;
 import org.anchoranalysis.test.LoggerFixture;
+import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.anchoranalysis.test.image.load.CarImageLoader;
 import org.junit.jupiter.api.Test;
 
@@ -89,13 +87,8 @@ class HOGFeatureTest {
 
         HOGFeature feature = new HOGFeature(new SizeXY(64, 64), index);
 
-        try {
-            RegisterBeanFactories.getDefaultInstances()
-                    .putInstanceFor(Interpolator.class, new ImageJ());
-            feature.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
-        } catch (BeanMisconfiguredException e) {
-            throw new FeatureCalculationException(e);
-        }
+        BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
+        BeanInstanceMapFixture.check(feature);
 
         return FeatureSession.calculateWith(
                 feature, new FeatureInputStack(stack), LoggerFixture.suppressedLogger());
