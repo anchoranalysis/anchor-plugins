@@ -150,7 +150,7 @@ public class ExecuteTaskHelper {
             List<T> inputs, V task, Path pathForOutputs) throws OperationFailedException {
 
         try {
-        	BeanInstanceMapFixture.check(task);
+            BeanInstanceMapFixture.check(task);
 
             OutputManager outputManager =
                     OutputManagerFixture.createOutputManager(Optional.of(pathForOutputs));
@@ -186,9 +186,7 @@ public class ExecuteTaskHelper {
                 task.afterAllJobsAreExecuted(sharedState, parametersExperiment.getContext());
             }
 
-        } catch (ExperimentExecutionException
-                | JobExecutionException
-                | BindFailedException exc) {
+        } catch (ExperimentExecutionException | JobExecutionException | BindFailedException exc) {
             throw new OperationFailedException(exc);
         }
     }

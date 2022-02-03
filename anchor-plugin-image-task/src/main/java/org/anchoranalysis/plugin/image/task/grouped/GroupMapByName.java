@@ -109,7 +109,8 @@ public abstract class GroupMapByName<S, T> {
         map.processElementDecrement(
                 groupIdentifier,
                 value -> {
-                    // Add to the aggregator making sure not to guard against concurrent modification
+                    // Add to the aggregator making sure not to guard against concurrent
+                    // modification
                     synchronized (value) {
                         addAllItemsToMap(groupIdentifier, value, singleItemsToAdd);
                     }
@@ -174,7 +175,7 @@ public abstract class GroupMapByName<S, T> {
                 // group (for all items) and it is written without a subdirectory
                 // If there are two parts in the MultiName, it is assumed that the first-part is a
                 // group-name (a separate subdirectory) and the second-part is written without a
-            	// subdirectory.
+                // subdirectory.
                 outputGroupIntoSubdirectory(
                         groupMap.entrySet(),
                         multipleOutputs ->

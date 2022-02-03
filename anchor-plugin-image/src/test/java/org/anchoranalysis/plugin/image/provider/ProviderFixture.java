@@ -108,7 +108,7 @@ public class ProviderFixture {
     public static <T extends ImageBean<T>> void initProvider(ImageBean<T> provider, Logger logger)
             throws CreateException {
         try {
-        	BeanInstanceMapFixture.check(provider);
+            BeanInstanceMapFixture.check(provider);
 
             provider.initialize(
                     ImageInitializationFactory.create(InputOutputContextFixture.withLogger(logger)),

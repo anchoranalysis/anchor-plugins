@@ -59,8 +59,8 @@ class SegmentRCNNFromONNXTest extends InstanceSegmentationTestBase {
         segment.setInputName("image");
         segment.setReadFromResources(true);
 
-    	BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
-    	BeanInstanceMapFixture.check(segment);
+        BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
+        BeanInstanceMapFixture.check(segment);
 
         return new SuppressNonMaximum<>(segment, new RemoveOverlappingObjects(), false);
     }

@@ -96,7 +96,7 @@ public abstract class ExportFeaturesTaskFixture<
 
         BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
         BeanInstanceMapFixture.check(task);
-        
+
         return task;
     }
 
