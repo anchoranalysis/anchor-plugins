@@ -65,7 +65,7 @@ public abstract class ProjectableBufferAggregator<T> extends ChannelAggregator {
 
     @Override
     protected Optional<Dimensions> existingDimensions() {
-        return Optional.ofNullable(dimensions);
+        return Optional.ofNullable( maybeDropResolution(dimensions) );
     }
 
     @SuppressWarnings("unchecked")
