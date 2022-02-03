@@ -39,8 +39,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -59,6 +57,7 @@ import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.anchoranalysis.test.image.io.OutputterFixture;
 import org.anchoranalysis.test.io.output.OutputManagerFixture;
 
@@ -151,7 +150,7 @@ public class ExecuteTaskHelper {
             List<T> inputs, V task, Path pathForOutputs) throws OperationFailedException {
 
         try {
-            task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
+        	BeanInstanceMapFixture.check(task);
 
             OutputManager outputManager =
                     OutputManagerFixture.createOutputManager(Optional.of(pathForOutputs));
@@ -189,7 +188,6 @@ public class ExecuteTaskHelper {
 
         } catch (ExperimentExecutionException
                 | JobExecutionException
-                | BeanMisconfiguredException
                 | BindFailedException exc) {
             throw new OperationFailedException(exc);
         }

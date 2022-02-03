@@ -30,13 +30,10 @@ import java.util.List;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.io.imagej.bean.interpolator.ImageJ;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
@@ -44,6 +41,7 @@ import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.io.bean.path.derive.Constant;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.EnergyStackFixture;
+import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 
 /**
  * A fixture that creates a {@link ExportFeatures} task.
@@ -96,14 +94,9 @@ public abstract class ExportFeaturesTaskFixture<
         task.setFeaturesAggregate(featureLoader.aggregated());
         task.setGroup(new Constant("arbitraryGroup"));
 
-        RegisterBeanFactories.getDefaultInstances()
-                .putInstanceFor(Interpolator.class, new ImageJ());
-        try {
-            task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
-        } catch (BeanMisconfiguredException e) {
-            throw new CreateException(e);
-        }
-
+        BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
+        BeanInstanceMapFixture.check(task);
+        
         return task;
     }
 
