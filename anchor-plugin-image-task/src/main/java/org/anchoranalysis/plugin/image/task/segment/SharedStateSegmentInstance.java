@@ -68,7 +68,8 @@ public class SharedStateSegmentInstance<T extends InferenceModel> {
         FeatureOutputNames outputNames = new FeatureOutputNames(outputNameFeatures, false, false);
 
         this.features =
-                FeatureExporter.create(outputNames, featureTable, identifierHeaders, context);
+                FeatureExporter.create(
+                        outputNames, featureTable, identifierHeaders, Optional.empty(), context);
         this.context = context;
     }
 

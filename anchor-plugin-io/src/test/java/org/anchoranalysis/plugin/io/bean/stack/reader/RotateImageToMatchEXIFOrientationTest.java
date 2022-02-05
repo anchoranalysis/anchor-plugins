@@ -128,7 +128,8 @@ class RotateImageToMatchEXIFOrientationTest {
                 loader.openFile(filename, ExecutionTimeRecorderIgnore.instance());
         assertEquals(expectedExtent, openedImageFile.dimensionsForSeries(0, logger).extent());
 
-        int firstVoxel = openedImageFile.open(logger).get(0).getChannel(0).extract().voxel(0, 0);
+        int firstVoxel =
+                openedImageFile.open(logger).getFrame(0).getChannel(0).extract().voxel(0, 0);
         assertTrue(Math.abs(expectedCornerIntensity - firstVoxel) <= INTENSITY_TOLERANCE);
     }
 

@@ -52,6 +52,7 @@ public class OpenCVWriter extends OneOrThreeChannelsWriter {
         CVInit.blockUntilLoaded();
 
         try {
+
             boolean success = Imgcodecs.imwrite(filePath.toString(), ConvertToMat.fromStack(stack));
             if (!success) {
                 throw new ImageIOException("OpenCV's imwrite failed to write: " + filePath);

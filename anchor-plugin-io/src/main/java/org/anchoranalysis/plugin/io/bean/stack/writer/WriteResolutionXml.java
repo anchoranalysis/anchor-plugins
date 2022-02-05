@@ -37,7 +37,6 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
-import org.anchoranalysis.image.io.stack.StackSeries;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
 
@@ -71,16 +70,6 @@ public class WriteResolutionXml extends StackWriter {
             throws ImageIOException {
         writer.writeStack(stack, filePath, options);
         writeResolutionXml(filePath, stack.resolution());
-    }
-
-    @Override
-    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
-            throws ImageIOException {
-        writer.writeStackSeries(stackSeries, filePath, options);
-
-        // We assume all the stacks in the series have the same dimension, and write only one
-        // metadata file
-        writeResolutionXml(filePath, stackSeries.get(0).resolution());
     }
 
     private void writeResolutionXml(Path filePath, Optional<Resolution> resolution)

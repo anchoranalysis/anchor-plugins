@@ -35,15 +35,14 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
-import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -62,7 +61,7 @@ class MapPart extends NamedChannelsInputPart {
     // START REQUIRED ARGUMENTS
     private final FileInput delegate;
     private final StackReader stackReader;
-    private final ChannelMap channelMapCreator;
+    private final ChannelMapCreator channelMapCreator;
 
     /**
      * This is to correct for a problem with formats such as czi where the seriesIndex doesn't
@@ -76,7 +75,7 @@ class MapPart extends NamedChannelsInputPart {
 
     // We cache a certain amount of stacks read for particular series
     private OpenedImageFile openedFileMemo = null;
-    private NamedEntries channelMap = null;
+    private ChannelMap channelMap = null;
 
     @Override
     public Dimensions dimensions(int stackIndexInSeries, Logger logger) throws ImageIOException {
@@ -94,13 +93,13 @@ class MapPart extends NamedChannelsInputPart {
 
     @Override
     public boolean hasChannel(String channelName, Logger logger) throws ImageIOException {
-        return channelMap(logger).keySet().contains(channelName);
+        return channelMap(logger).names().contains(channelName);
     }
 
     // Where most of our time is being taken up when opening a raster
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Logger logger)
+            throws ImageIOException {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
@@ -166,10 +165,10 @@ class MapPart extends NamedChannelsInputPart {
     }
 
     /** Create a channel-map, reusing the existing map, if it already exists. */
-    private NamedEntries channelMap(Logger logger) throws ImageIOException {
+    private ChannelMap channelMap(Logger logger) throws ImageIOException {
         if (channelMap == null) {
             try {
-                channelMap = channelMapCreator.createMap(openedFileMemo, logger);
+                channelMap = channelMapCreator.create(openedFileMemo, logger);
             } catch (CreateException e) {
                 throw new ImageIOException("Failed to create channel-map", e);
             }

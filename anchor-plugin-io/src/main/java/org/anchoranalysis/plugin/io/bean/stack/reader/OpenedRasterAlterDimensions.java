@@ -30,14 +30,13 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 /**
  * An {@link OpenedImageFile} whose dimensions will be altered from those specified in the
@@ -71,15 +70,14 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress, Logger logger)
-            throws ImageIOException {
-        TimeSequence sequence = delegate.open(seriesIndex, progress, logger);
+    public TimeSeries open(int seriesIndex, Logger logger) throws ImageIOException {
+        TimeSeries series = delegate.open(seriesIndex, logger);
 
-        for (Stack stack : sequence) {
+        for (Stack stack : series) {
             Optional<Resolution> resolution = processor.maybeUpdatedResolution(stack.resolution());
             resolution.ifPresent(stack::assignResolution);
         }
-        return sequence;
+        return series;
     }
 
     @Override

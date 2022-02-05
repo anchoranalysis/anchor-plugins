@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
@@ -55,17 +55,11 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
     public InputsWithDirectory<T> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
 
-        try (ProgressMultiple progressMultiple =
-                new ProgressMultiple(parameters.getProgress(), list.size())) {
+        List<T> out = new LinkedList<>();
 
-            ArrayList<T> out = new ArrayList<>();
-
-            for (InputManager<T> inputManager : list) {
-                out.addAll(inputManager.inputs(parameters).inputs());
-
-                progressMultiple.incrementChild();
-            }
-            return new InputsWithDirectory<>(out);
+        for (InputManager<T> inputManager : list) {
+            out.addAll(inputManager.inputs(parameters).inputs());
         }
+        return new InputsWithDirectory<>(out);
     }
 }

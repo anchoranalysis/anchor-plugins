@@ -11,7 +11,6 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalFactory;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -334,8 +333,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     private Stack readStackFromInput(InputBound<StackSequenceInput, MontageSharedState> input)
             throws InputReadFailedException {
         try {
-            Stack stack =
-                    input.getInput().asStack(ProgressIgnore.get(), input.getLogger()).projectMax();
+            Stack stack = input.getInput().asStack(input.getLogger()).projectMax();
             return DisplayStack.create(stack.extractUpToThreeChannels()).deriveStack(false);
         } catch (OperationFailedException | CreateException e) {
             throw new InputReadFailedException(

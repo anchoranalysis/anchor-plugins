@@ -36,9 +36,9 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.io.imagej.bean.interpolator.ImageJ;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.bean.grouper.WithoutGrouping;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
-import org.anchoranalysis.plugin.io.bean.path.derive.Constant;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
@@ -92,7 +92,7 @@ public abstract class ExportFeaturesTaskFixture<
         task.setSource(createSource(energyStack, featureLoader));
         task.setFeatures(createFeatures(featureLoader));
         task.setFeaturesAggregate(featureLoader.aggregated());
-        task.setGroup(new Constant("arbitraryGroup"));
+        task.setGroup(new WithoutGrouping());
 
         BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
         BeanInstanceMapFixture.check(task);

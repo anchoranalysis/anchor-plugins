@@ -39,7 +39,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -96,7 +96,7 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
 
     @BeanField @Getter @Setter private boolean requireAllFilesMatch = false;
 
-    @BeanField @Getter @Setter private ChannelMap imgChannelMapCreator;
+    @BeanField @Getter @Setter private ChannelMapCreator imgChannelMapCreator;
 
     @BeanField @Getter @Setter private FileNamer namer = new LastDirectories(2);
 

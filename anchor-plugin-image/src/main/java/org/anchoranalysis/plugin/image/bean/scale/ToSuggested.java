@@ -48,7 +48,7 @@ public class ToSuggested extends ScaleCalculator {
 
     // START BEAN PROPERTIES
     /**
-     * Used as a delegate to calculate the scale if {@code suggestedResize} is empty when passed to
+     * Used as a delegate to calculate the scale if {@code suggestedSize} is empty when passed to
      * {@link #calculate}.
      */
     @BeanField @Getter @Setter private ScaleCalculator fallback;
@@ -56,15 +56,14 @@ public class ToSuggested extends ScaleCalculator {
 
     @Override
     public ScaleFactor calculate(
-            Optional<Dimensions> dimensionsToBeScaled,
-            Optional<ImageSizeSuggestion> suggestedResize)
+            Optional<Dimensions> dimensionsToBeScaled, Optional<ImageSizeSuggestion> suggestedSize)
             throws OperationFailedException {
-        if (suggestedResize.isPresent()) {
-            return suggestedResize
+        if (suggestedSize.isPresent()) {
+            return suggestedSize
                     .get()
                     .calculateScaleFactor(dimensionsToBeScaled.map(Dimensions::extent));
         } else {
-            return fallback.calculate(dimensionsToBeScaled, suggestedResize);
+            return fallback.calculate(dimensionsToBeScaled, suggestedSize);
         }
     }
 }

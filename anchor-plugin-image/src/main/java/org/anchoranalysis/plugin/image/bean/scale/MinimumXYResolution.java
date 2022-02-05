@@ -45,8 +45,7 @@ public class MinimumXYResolution extends ScaleCalculator {
 
     @Override
     public ScaleFactor calculate(
-            Optional<Dimensions> dimensionsToBeScaled,
-            Optional<ImageSizeSuggestion> suggestedResize)
+            Optional<Dimensions> dimensionsToBeScaled, Optional<ImageSizeSuggestion> suggestedSize)
             throws OperationFailedException {
 
         Resolution resolution =

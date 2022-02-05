@@ -47,6 +47,6 @@ public class InitializationFactory {
 
     public static ImageInitialization createWithoutStacks(InitializationContext context) {
         return ImageInitializationFactory.create(
-                context.getInputOutput(), context.getSuggestedResize());
+                context.getInputOutput(), context.getSuggestedSize());
     }
 }

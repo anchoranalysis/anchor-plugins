@@ -32,8 +32,6 @@ import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationExcep
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -43,8 +41,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
-import org.anchoranalysis.image.io.stack.input.TimeSequenceSupplier;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
 
 /**
@@ -101,31 +98,28 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
     }
 
     @Override
-    public TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex, Logger logger)
+    public TimeSeries createStackSequenceForSeries(int seriesIndex, Logger logger)
             throws ImageIOException {
-        return progress -> convert(progress, getDelegate(), seriesIndex, logger);
+        try {
+            return convert(getDelegate(), seriesIndex, logger);
+        } catch (OperationFailedException e) {
+            throw new ImageIOException(e);
+        }
     }
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
         String stackName = channelName.orElse(DEFAULT_STACK_NAME);
-        addConvertedInputToStacks(stackName, stacks, seriesIndex, progress, logger);
+        addConvertedInputToStacks(stackName, stacks, seriesIndex, logger);
     }
 
     @Override
     public void addToStoreWithName(
-            String name,
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            String name, NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
-        addConvertedInputToStacks(name, stacks, seriesIndex, progress, logger);
+        addConvertedInputToStacks(name, stacks, seriesIndex, logger);
     }
 
     @Override
@@ -133,23 +127,17 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
         return getDelegate().numberFrames();
     }
 
-    private TimeSequence convert(
-            Progress progressParent, NamedChannelsInput input, int seriesIndex, Logger logger)
+    private TimeSeries convert(NamedChannelsInput input, int seriesIndex, Logger logger)
             throws OperationFailedException {
 
-        try (ProgressMultiple progress = new ProgressMultiple(progressParent, 2)) {
-
+        try {
             NamedChannelsForSeries channels =
                     executionTimeRecorder.recordExecutionTime(
                             "Create channel for series",
-                            () ->
-                                    input.createChannelsForSeries(
-                                            seriesIndex, progress.trackCurrentChild(), logger));
-            progress.incrementChild();
-
+                            () -> input.createChannelsForSeries(seriesIndex, logger));
             return executionTimeRecorder.recordExecutionTime(
                     "Derive stack from channels",
-                    () -> new TimeSequence(stackFromChannels(channels, progress, logger)));
+                    () -> new TimeSeries(stackFromChannels(channels, logger)));
 
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);
@@ -157,30 +145,25 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
     }
 
     private void addConvertedInputToStacks(
-            String name,
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            String name, NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
-        stacks.add(name, () -> convert(progress, getDelegate(), seriesIndex, logger));
+        stacks.add(name, () -> convert(getDelegate(), seriesIndex, logger));
     }
 
     /**
      * Derives a {@link Stack} from a {@link NamedChannelsForSeries} that may be RGB or grayscale or
      * neither.
      */
-    private Stack stackFromChannels(
-            NamedChannelsForSeries channels, ProgressMultiple progress, Logger logger)
+    private Stack stackFromChannels(NamedChannelsForSeries channels, Logger logger)
             throws OperationFailedException {
         try {
             if (channelName.isPresent()) {
                 // Create a stack with a specific channel only
-                return new Stack(extractChannel(channels, channelName.get(), progress, logger));
+                return new Stack(extractChannel(channels, channelName.get(), logger));
             } else if (channels.isRGB() && channels.numberChannels() == 3) {
                 // If it's marked as RGB and has exactly three channels, extract them into a stack,
                 // in theright order.
-                return buildStackFromRGBChannelNames(channels, progress, logger);
+                return buildStackFromRGBChannelNames(channels, logger);
             } else {
                 // Otherwise build a stack with the channel names in arbitrary order
                 return channels.allChannelsAsStack(timeIndex, logger).get();
@@ -191,15 +174,14 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
     }
 
     /** Builds a stack, from the expected standardized names for color channels in RGB. */
-    private Stack buildStackFromRGBChannelNames(
-            NamedChannelsForSeries channels, ProgressMultiple progress, Logger logger)
+    private Stack buildStackFromRGBChannelNames(NamedChannelsForSeries channels, Logger logger)
             throws OperationFailedException {
         try {
             return new Stack(
                     true,
-                    extractChannel(channels, RGBChannelNames.RED, progress, logger),
-                    extractChannel(channels, RGBChannelNames.GREEN, progress, logger),
-                    extractChannel(channels, RGBChannelNames.BLUE, progress, logger));
+                    extractChannel(channels, RGBChannelNames.RED, logger),
+                    extractChannel(channels, RGBChannelNames.GREEN, logger),
+                    extractChannel(channels, RGBChannelNames.BLUE, logger));
         } catch (IncorrectImageSizeException | CreateException e) {
             throw new AnchorImpossibleSituationException();
         } catch (GetOperationFailedException e) {
@@ -209,11 +191,8 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
 
     /** Extracts a single channel with the name {@code channelName}. */
     private Channel extractChannel(
-            NamedChannelsForSeries channels,
-            String channelName,
-            ProgressMultiple progress,
-            Logger logger)
+            NamedChannelsForSeries channels, String channelName, Logger logger)
             throws GetOperationFailedException {
-        return channels.getChannel(channelName, timeIndex, progress.trackCurrentChild(), logger);
+        return channels.getChannel(channelName, timeIndex, logger);
     }
 }

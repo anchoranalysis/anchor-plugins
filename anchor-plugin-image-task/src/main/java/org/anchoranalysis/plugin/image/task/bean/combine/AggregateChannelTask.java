@@ -85,7 +85,7 @@ public class AggregateChannelTask extends GroupedStackBase<Channel, ChannelAggre
     @Override
     protected GroupMapByName<Channel, ChannelAggregator> createGroupMap(
             ConsistentChannelChecker channelChecker,
-            Stream<Optional<String>> groupIdentifiers,
+            Optional<Stream<String>> groupIdentifiers,
             Optional<InputOutputContext> outputContext,
             OperationContext operationContext) {
         return new GroupedChannelAggregator<>(
@@ -100,6 +100,7 @@ public class AggregateChannelTask extends GroupedStackBase<Channel, ChannelAggre
     protected void processIndividual(
             String name,
             Channel individual,
+            boolean partOfGroup,
             CheckedBiConsumer<String, Channel, OperationFailedException> consumeIndividual,
             InputOutputContext context)
             throws OperationFailedException {

@@ -49,6 +49,7 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.input.grouper.InputGrouper;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
@@ -134,12 +135,14 @@ public class FromObjects<T extends FeatureInput>
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features,
             FeatureOutputNames outputNames,
+            Optional<InputGrouper> grouper,
             FeatureExporterContext context)
             throws CreateException {
         try {
             FeatureTableCalculator<T> tableCalculator =
                     combine.createFeatures(features, STORE_FACTORY, suppressErrors);
-            return FeatureExporter.create(outputNames, tableCalculator, metadataHeaders, context);
+            return FeatureExporter.create(
+                    outputNames, tableCalculator, metadataHeaders, grouper, context);
         } catch (InitializeException e) {
             throw new CreateException(e);
         }

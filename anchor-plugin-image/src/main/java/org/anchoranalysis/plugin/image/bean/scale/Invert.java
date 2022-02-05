@@ -50,9 +50,8 @@ public class Invert extends ScaleCalculator {
 
     @Override
     public ScaleFactor calculate(
-            Optional<Dimensions> dimensionsToBeScaled,
-            Optional<ImageSizeSuggestion> suggestedResize)
+            Optional<Dimensions> dimensionsToBeScaled, Optional<ImageSizeSuggestion> suggestedSize)
             throws OperationFailedException {
-        return scaleCalculator.calculate(dimensionsToBeScaled, suggestedResize).invert();
+        return scaleCalculator.calculate(dimensionsToBeScaled, suggestedSize).invert();
     }
 }

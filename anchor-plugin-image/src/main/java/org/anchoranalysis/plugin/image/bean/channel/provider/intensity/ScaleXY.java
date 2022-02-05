@@ -65,7 +65,7 @@ public class ScaleXY extends ChannelProviderUnary {
                     channel,
                     scaleCalculator,
                     interpolator.voxelsResizer(),
-                    getInitialization().suggestedResize(),
+                    getInitialization().suggestedSize(),
                     getLogger().messageLogger());
         } catch (InitializeException e) {
             throw new ProvisionFailedException(e);
@@ -76,14 +76,14 @@ public class ScaleXY extends ChannelProviderUnary {
             Channel channel,
             ScaleCalculator scaleCalculator,
             VoxelsResizer resizer,
-            Optional<ImageSizeSuggestion> suggestedResize,
+            Optional<ImageSizeSuggestion> suggestedSize,
             MessageLogger logger)
             throws ProvisionFailedException {
         try {
             logResolution("Incoming", channel, logger);
 
             ScaleFactor scaleFactor =
-                    scaleCalculator.calculate(Optional.of(channel.dimensions()), suggestedResize);
+                    scaleCalculator.calculate(Optional.of(channel.dimensions()), suggestedSize);
 
             logger.logFormatted("Scale Factor: %s", scaleFactor.toString());
 

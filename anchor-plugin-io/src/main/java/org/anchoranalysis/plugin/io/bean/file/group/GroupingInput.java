@@ -32,14 +32,12 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
+import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
@@ -55,10 +53,10 @@ class GroupingInput extends NamedChannelsInput {
     /** The opened raster with multiple files. */
     private final OpenedImageFile openedFile;
 
-    private final ChannelMap channelMapCreator;
+    private final ChannelMapCreator channelMapCreator;
     // END REQUIRED ARGUMENTS
 
-    private NamedEntries channelMap;
+    private ChannelMap channelMap;
 
     private String inputName;
 
@@ -73,8 +71,8 @@ class GroupingInput extends NamedChannelsInput {
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Logger logger)
+            throws ImageIOException {
         ensureChannelMapExists(logger);
         return new NamedChannelsForSeriesMap(openedFile, channelMap, seriesIndex);
     }
@@ -92,7 +90,7 @@ class GroupingInput extends NamedChannelsInput {
     @Override
     public int numberChannels(Logger logger) throws ImageIOException {
         ensureChannelMapExists(logger);
-        return channelMap.keySet().size();
+        return channelMap.names().size();
     }
 
     @Override
@@ -102,8 +100,7 @@ class GroupingInput extends NamedChannelsInput {
 
     @Override
     public ImageMetadata metadata(int seriesIndex, Logger logger) throws ImageIOException {
-        NamedChannelsForSeries channels =
-                createChannelsForSeries(seriesIndex, ProgressIgnore.get(), logger);
+        NamedChannelsForSeries channels = createChannelsForSeries(seriesIndex, logger);
         ImageTimestampsAttributes timestamps = openedFile.timestamps();
         return new ImageMetadata(
                 channels.dimensions(logger),
@@ -128,7 +125,7 @@ class GroupingInput extends NamedChannelsInput {
         // Lazy creation
         if (channelMap == null) {
             try {
-                channelMap = channelMapCreator.createMap(openedFile, logger);
+                channelMap = channelMapCreator.create(openedFile, logger);
             } catch (CreateException e) {
                 throw new ImageIOException("Failed to create a channel-map", e);
             }

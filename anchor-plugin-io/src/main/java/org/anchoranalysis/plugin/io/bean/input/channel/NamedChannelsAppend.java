@@ -38,9 +38,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.cache.CachedSupplier;
-import org.anchoranalysis.core.functional.FunctionalProgress;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressMultiple;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -69,42 +67,33 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     public InputsWithDirectory<NamedChannelsInputPart> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
 
-        try (ProgressMultiple progress = new ProgressMultiple(parameters.getProgress(), 2)) {
+        InputsWithDirectory<NamedChannelsInputPart> inputs = input.inputs(parameters);
 
-            InputsWithDirectory<NamedChannelsInputPart> inputs = input.inputs(parameters);
+        Iterator<NamedChannelsInputPart> iterator = inputs.iterator();
 
-            Iterator<NamedChannelsInputPart> iterator = inputs.iterator();
-
-            progress.incrementChild();
-
-            List<NamedChannelsInputPart> listTemp = new ArrayList<>();
-            while (iterator.hasNext()) {
-                listTemp.add(iterator.next());
-            }
-
-            List<NamedChannelsInputPart> outList =
-                    createOutList(
-                            listTemp,
-                            progress.trackCurrentChild(),
-                            parameters.isDebugModeActivated(),
-                            parameters.getExecutionTimeRecorder());
-
-            progress.incrementChild();
-
-            return inputs.withInputs(outList);
+        List<NamedChannelsInputPart> listTemp = new ArrayList<>();
+        while (iterator.hasNext()) {
+            listTemp.add(iterator.next());
         }
+
+        List<NamedChannelsInputPart> outList =
+                createOutList(
+                        listTemp,
+                        parameters.isDebugModeActivated(),
+                        parameters.getExecutionTimeRecorder());
+
+        return inputs.withInputs(outList);
     }
 
     private List<NamedChannelsInputPart> createOutList(
             List<NamedChannelsInputPart> listTemp,
-            Progress progress,
             boolean debugMode,
             ExecutionTimeRecorder executionTimeRecorder)
             throws InputReadFailedException {
         try {
-            return FunctionalProgress.mapListOptional(
+            return FunctionalList.mapToListOptional(
                     listTemp,
-                    progress,
+                    DerivePathException.class,
                     channels -> maybeAppend(channels, debugMode, executionTimeRecorder));
         } catch (DerivePathException e) {
             throw new InputReadFailedException(e);

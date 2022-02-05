@@ -103,7 +103,7 @@ class FlattenAndScaler {
                 determineBackgroundMaybeOutlined(
                         backgroundSource, backgroundChannelIndex, scaleFactor, resizer);
 
-        this.sizeScaled = background.map(ScaleableBackground::extentAfterAnyScaling);
+        this.sizeScaled = background.map(ScaleableBackground::sizeAfterAnyScaling);
 
         this.objectsScaled =
                 Scaler.scaleObjects(

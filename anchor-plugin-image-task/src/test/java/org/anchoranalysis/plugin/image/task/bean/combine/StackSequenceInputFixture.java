@@ -6,14 +6,12 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
-import org.anchoranalysis.image.io.stack.input.TimeSequenceSupplier;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 /**
  * Implementation of {@link StackSequenceInput} that reads a {@link Stack} from a particular {@code
@@ -69,21 +67,14 @@ public class StackSequenceInputFixture implements StackSequenceInput {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
-        addToStoreWithName(DEFAULT_STACK_IDENTIFIER, stacks, seriesIndex, progress, logger);
+        addToStoreWithName(DEFAULT_STACK_IDENTIFIER, stacks, seriesIndex, logger);
     }
 
     @Override
     public void addToStoreWithName(
-            String name,
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            String name, NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
         stacks.add(name, () -> createTimeSequence());
     }
@@ -104,12 +95,12 @@ public class StackSequenceInputFixture implements StackSequenceInput {
     }
 
     @Override
-    public TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex, Logger logger)
+    public TimeSeries createStackSequenceForSeries(int seriesIndex, Logger logger)
             throws ImageIOException {
-        return progress -> createTimeSequence();
+        return createTimeSequence();
     }
 
-    private TimeSequence createTimeSequence() {
-        return new TimeSequence(stack);
+    private TimeSeries createTimeSequence() {
+        return new TimeSeries(stack);
     }
 }

@@ -43,6 +43,7 @@ import org.anchoranalysis.feature.io.name.SimpleName;
 import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.grouper.InputGrouper;
 import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
@@ -82,9 +83,10 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<S>>> features,
             FeatureOutputNames outputNames,
+            Optional<InputGrouper> grouper,
             FeatureExporterContext context)
             throws CreateException {
-        return FeatureExporter.create(features, metadataHeaders, outputNames, context);
+        return FeatureExporter.create(features, metadataHeaders, outputNames, grouper, context);
     }
 
     @Override

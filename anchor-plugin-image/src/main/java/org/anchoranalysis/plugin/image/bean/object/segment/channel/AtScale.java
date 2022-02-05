@@ -75,8 +75,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             throws SegmentationFailedException {
         try {
             ScaleFactor scaleFactor =
-                    determineScaleFactor(
-                            channel.dimensions(), getInitialization().suggestedResize());
+                    determineScaleFactor(channel.dimensions(), getInitialization().suggestedSize());
 
             Extent extent = channel.extent();
 
@@ -115,10 +114,10 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     }
 
     private ScaleFactor determineScaleFactor(
-            Dimensions dimensions, Optional<ImageSizeSuggestion> suggestedResize)
+            Dimensions dimensions, Optional<ImageSizeSuggestion> suggestedSize)
             throws SegmentationFailedException {
         try {
-            return scaleCalculator.calculate(Optional.of(dimensions), suggestedResize);
+            return scaleCalculator.calculate(Optional.of(dimensions), suggestedSize);
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException("Cannot calculate scale", e);
         }

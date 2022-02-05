@@ -30,8 +30,6 @@ import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
@@ -85,15 +83,14 @@ class NamedChannelsInputFixture extends NamedChannelsInput {
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, Progress progress, Logger logger) throws ImageIOException {
+    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Logger logger)
+            throws ImageIOException {
         return new NamedChannelsForSeriesFixture(stack);
     }
 
     @Override
     public ImageMetadata metadata(int seriesIndex, Logger logger) throws ImageIOException {
-        NamedChannelsForSeries channels =
-                createChannelsForSeries(seriesIndex, ProgressIgnore.get(), logger);
+        NamedChannelsForSeries channels = createChannelsForSeries(seriesIndex, logger);
         ZonedDateTime now = ZonedDateTime.now();
         return new ImageMetadata(
                 channels.dimensions(logger),

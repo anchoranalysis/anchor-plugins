@@ -34,13 +34,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -57,7 +57,9 @@ import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.grouper.Grouper;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.grouper.InputGrouper;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -110,12 +112,8 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     /** Source of feature-values to be exported. */
     @BeanField @Getter @Setter private FeatureSource<T, S, U> source;
 
-    /**
-     * If non-null, this file-path is used to determine the group of the file.
-     *
-     * <p>If null, no group is included.
-     */
-    @BeanField @OptionalBean @Getter @Setter private DerivePath group;
+    /** Includes an additional group column in CSVs, and creates group-specific feature files. */
+    @BeanField @Getter @Setter @DefaultInstance private Grouper group;
 
     /** Translates an input file name to a unique ID. */
     @BeanField @OptionalBean @Getter @Setter private DerivePath id;
@@ -147,9 +145,12 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
         try {
             FeatureExporterContext context = style.deriveContext(parameters.getContext());
 
+            Optional<InputGrouper> grouper =
+                    group.createInputGrouper(
+                            parameters.getExperimentArguments().task().getGroupIndexRange());
             LabelHeaders headers = source.headers(isGroupGeneratorDefined());
             FeatureExporter<S> exporter =
-                    source.createExporter(headers, features, OUTPUT_RESULTS, context);
+                    source.createExporter(headers, features, OUTPUT_RESULTS, grouper, context);
 
             if (featuresAggregate == null) {
                 featuresAggregate =
@@ -169,7 +170,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
             Optional<String> groupName =
                     extractGroupNameFromGenerator(
                             input.getInput().pathForBindingRequired(),
-                            input.getContextJob().isDebugEnabled());
+                            input.getSharedState().getGrouper());
 
             FeatureCalculationContext<S> calculationContext =
                     input.getSharedState()
@@ -229,18 +230,9 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     }
 
     /** Determines the group name corresponding to an {@code inputPath} and the group-generator. */
-    private Optional<String> extractGroupNameFromGenerator(Path inputPath, boolean debugMode)
-            throws DerivePathException {
-        return filePathAsIdentifier(Optional.ofNullable(group), inputPath, debugMode);
-    }
-
-    private static Optional<String> filePathAsIdentifier(
-            Optional<DerivePath> generator, Path path, boolean debugMode)
-            throws DerivePathException {
+    private Optional<String> extractGroupNameFromGenerator(
+            Path inputPath, Optional<InputGrouper> grouper) throws DerivePathException {
         return OptionalUtilities.map(
-                generator,
-                gen ->
-                        FilePathToUnixStyleConverter.toStringUnixStyle(
-                                gen.deriveFrom(path, debugMode)));
+                grouper, grouperInternal -> grouperInternal.deriveGroupKeyOptional(inputPath));
     }
 }

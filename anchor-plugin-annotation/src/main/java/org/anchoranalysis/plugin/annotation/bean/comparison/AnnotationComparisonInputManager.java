@@ -34,9 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.comparer.ComparableSource;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.FunctionalProgress;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressMultiple;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -64,33 +62,23 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
     public InputsWithDirectory<AnnotationComparisonInput<T>> inputs(
             InputManagerParameters parameters) throws InputReadFailedException {
 
-        try (ProgressMultiple progressMultiple =
-                new ProgressMultiple(parameters.getProgress(), 2)) {
+        InputsWithDirectory<T> inputs = input.inputs(parameters);
 
-            InputsWithDirectory<T> inputs = input.inputs(parameters);
+        Iterator<T> iterator = inputs.iterator();
 
-            Iterator<T> iterator = inputs.iterator();
-
-            progressMultiple.incrementChild();
-
-            List<T> tempList = new ArrayList<>();
-            while (iterator.hasNext()) {
-                tempList.add(iterator.next());
-            }
-
-            List<AnnotationComparisonInput<T>> outList =
-                    createListInputWithAnnotationPath(
-                            tempList, progressMultiple.trackCurrentChild());
-            progressMultiple.incrementChild();
-            return inputs.withInputs(outList);
+        List<T> tempList = new ArrayList<>();
+        while (iterator.hasNext()) {
+            tempList.add(iterator.next());
         }
+
+        List<AnnotationComparisonInput<T>> outList = createListInputWithAnnotationPath(tempList);
+        return inputs.withInputs(outList);
     }
 
     private List<AnnotationComparisonInput<T>> createListInputWithAnnotationPath(
-            List<T> listInputs, Progress progress) {
-        return FunctionalProgress.mapList(
+            List<T> listInputs) {
+        return FunctionalList.mapToList(
                 listInputs,
-                progress,
                 inputFromList ->
                         new AnnotationComparisonInput<>(
                                 inputFromList,

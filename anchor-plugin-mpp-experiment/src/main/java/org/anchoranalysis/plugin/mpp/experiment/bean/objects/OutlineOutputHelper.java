@@ -115,13 +115,12 @@ class OutlineOutputHelper {
     }
 
     private static DrawCroppedObjectsGenerator croppedObjectsGenerator(
-            DisplayStack background, ColorList colorList, Padding padding) {
+            DisplayStack background, ColorList colors, Padding padding) {
 
         DrawObject drawer = new Outline(1, false);
 
         DrawCroppedObjectsGenerator delegate =
-                new DrawCroppedObjectsGenerator(drawer, background, colorList);
-        delegate.setPadding(padding);
+                new DrawCroppedObjectsGenerator(drawer, background, padding, colors);
         return delegate;
     }
 }

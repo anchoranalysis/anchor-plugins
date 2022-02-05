@@ -33,25 +33,24 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
-import org.anchoranalysis.image.io.bean.channel.ChannelMap;
-import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
+import org.anchoranalysis.image.io.bean.channel.IndexedChannel;
+import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /** For an image with a single channel */
 @NoArgsConstructor
 @AllArgsConstructor
-public class SingleChannel extends ChannelMap {
+public class SingleChannel extends ChannelMapCreator {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String channelName = "defaultName";
     // END BEAN PROPERTIES
 
     @Override
-    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger)
-            throws CreateException {
-        NamedEntries map = new NamedEntries();
-        map.add(new ChannelEntry(channelName, 0));
+    public ChannelMap create(OpenedImageFile openedFile, Logger logger) throws CreateException {
+        ChannelMap map = new ChannelMap();
+        map.add(new IndexedChannel(channelName, 0));
         return map;
     }
 }
