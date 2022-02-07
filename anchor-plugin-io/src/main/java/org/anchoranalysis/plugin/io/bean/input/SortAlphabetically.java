@@ -44,6 +44,6 @@ public class SortAlphabetically<T extends InputFromManager> extends InputManager
     protected InputsWithDirectory<T> inputsFromDelegate(
             InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
-    	return SortHelper.sortInputs(fromDelegate);
+        return SortHelper.sortInputs(fromDelegate);
     }
 }

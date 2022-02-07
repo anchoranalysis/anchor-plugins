@@ -14,8 +14,8 @@ import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.input.path.ExtractPathElementRange;
 
 /**
- * When a {@link IndexRangeNegative} is passed as an argument, an {@link InputGrouper} is constructed
- * that extracts elements from a {@link Path}.
+ * When a {@link IndexRangeNegative} is passed as an argument, an {@link InputGrouper} is
+ * constructed that extracts elements from a {@link Path}.
  *
  * <p>See {@link ExtractPathElementRange#extract} for how this occurs.
  *
