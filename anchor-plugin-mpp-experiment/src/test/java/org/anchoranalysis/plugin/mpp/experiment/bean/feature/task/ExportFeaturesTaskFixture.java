@@ -26,7 +26,12 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.task;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import java.util.List;
+import java.util.Optional;
+
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.NamedBean;
@@ -36,12 +41,13 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.io.imagej.bean.interpolator.ImageJ;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.input.bean.grouper.WithoutGrouping;
+import org.anchoranalysis.io.input.bean.grouper.Grouper;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
+import org.mockito.Mockito;
 
 /**
  * A fixture that creates a {@link ExportFeatures} task.
@@ -53,6 +59,8 @@ import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 @Accessors(fluent = true)
 public abstract class ExportFeaturesTaskFixture<
         S extends InputFromManager, T extends FeatureInputEnergy, V> {
+	
+	private static final String GROUP = "arbitraryGroup";
 
     @Getter private EnergyStackWithoutParameters energyStack;
 
@@ -92,7 +100,8 @@ public abstract class ExportFeaturesTaskFixture<
         task.setSource(createSource(energyStack, featureLoader));
         task.setFeatures(createFeatures(featureLoader));
         task.setFeaturesAggregate(featureLoader.aggregated());
-        task.setGroup(new WithoutGrouping());
+                
+        task.setGroup(createGrouperMock());
 
         BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
         BeanInstanceMapFixture.check(task);
@@ -111,5 +120,12 @@ public abstract class ExportFeaturesTaskFixture<
             boolean bigSizeEnergy, boolean singleChannel, boolean includeResolution) {
         return EnergyStackFixture.create(bigSizeEnergy, false, singleChannel, includeResolution)
                 .withoutParameters();
+    }
+    
+    /** Create a {@link Grouper} that always assigns a constant string as the group. */ 
+    private static Grouper createGrouperMock() {
+    	Grouper grouper = Mockito.mock(Grouper.class);
+        when(grouper.createInputGrouper(any())).thenReturn(Optional.of(value -> GROUP));
+        return grouper;
     }
 }
