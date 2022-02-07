@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.opencv;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -82,7 +82,7 @@ public class CVFindContours {
             // https://docs.opencv.org/2.4/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=findcontours#findcontours
             Mat mat = ConvertToMat.fromObject(object.duplicate());
 
-            List<MatOfPoint> contours = new ArrayList<>();
+            List<MatOfPoint> contours = new LinkedList<>();
             Imgproc.findContours(
                     mat, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 

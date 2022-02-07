@@ -79,7 +79,7 @@ public class OnnxModel implements ImageInferenceModel<OnnxTensor> {
 
     private static List<OnnxTensor> tensorsFromResult(Result result, List<String> outputNames)
             throws OperationFailedException {
-        List<OnnxTensor> out = new ArrayList<>();
+        List<OnnxTensor> out = new ArrayList<>(outputNames.size());
         for (String identifier : outputNames) {
             OnnxTensor resultTensor =
                     (OnnxTensor)

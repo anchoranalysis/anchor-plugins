@@ -38,7 +38,7 @@ class LimitUtilities {
 
     public static List<File> apply(Collection<File> filesIn, int maxNumItems) {
 
-        ArrayList<File> filesOut = new ArrayList<>();
+        ArrayList<File> filesOut = new ArrayList<>( Math.min(filesIn.size(), maxNumItems));
 
         int i = 0;
         for (File f : filesIn) {

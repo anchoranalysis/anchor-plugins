@@ -32,6 +32,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithoutDirectory;
@@ -45,12 +46,6 @@ public class Combine extends FilesProviderWithoutDirectory {
 
     @Override
     public List<File> create(InputManagerParameters parameters) throws FilesProviderException {
-
-        List<File> combined = new ArrayList<>();
-
-        for (FilesProvider provider : list) {
-            combined.addAll(provider.create(parameters));
-        }
-        return combined;
+        return FunctionalList.flatMapToList(list, FilesProviderException.class, provider -> provider.create(parameters));
     }
 }

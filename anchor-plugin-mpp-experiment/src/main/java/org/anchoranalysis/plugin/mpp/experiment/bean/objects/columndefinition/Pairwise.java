@@ -52,7 +52,7 @@ public class Pairwise extends ColumnDefinition {
             CSVRow csvRow, IntersectingObjects<ObjectMask> allObjects)
             throws OperationFailedException {
 
-        ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties();
+        ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties(2);
 
         ObjectMask object1 = columnFirst.findObjectFromCSVRow(allObjects, csvRow);
         ObjectMask object2 = columnSecond.findObjectFromCSVRow(allObjects, csvRow);

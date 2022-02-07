@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.opencv.segment;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -54,7 +54,7 @@ public class OpenCVModel implements ImageInferenceModel<Mat> {
             List<String> outputNames,
             CheckedFunction<List<Mat>, S, OperationFailedException> convertFunction)
             throws OperationFailedException {
-        List<Mat> output = new ArrayList<>();
+        List<Mat> output = new LinkedList<>();
         model.setInput(input);
         model.forward(output, outputNames);
         return convertFunction.apply(output);

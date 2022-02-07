@@ -104,7 +104,7 @@ public class DecodeEAST extends DecodeInstanceSegmentation<OnnxTensor> {
     private List<Integer> indicesAboveThreshold(FloatBuffer scores) {
         scores.rewind();
 
-        List<Integer> indices = new ArrayList<>();
+        List<Integer> indices = new ArrayList<>(scores.capacity());
         for (int i = 0; i < scores.capacity(); i++) {
             if (scores.get() >= minConfidence) {
                 indices.add(i);
@@ -124,7 +124,7 @@ public class DecodeEAST extends DecodeInstanceSegmentation<OnnxTensor> {
             DualScale<MarkToObjectConverter> converter,
             ExecutionTimeRecorder executionTimeRecorder) {
 
-        List<LabelledWithConfidence<MultiScaleObject>> out = new ArrayList<>();
+        List<LabelledWithConfidence<MultiScaleObject>> out = new ArrayList<>(indices.size());
 
         int height = (int) geometryTensor.getInfo().getShape()[2];
 
