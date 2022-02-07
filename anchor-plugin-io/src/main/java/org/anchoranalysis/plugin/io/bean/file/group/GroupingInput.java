@@ -38,8 +38,8 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
 import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.channel.map.OpenedNamedChannels;
 import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
+import org.anchoranalysis.image.io.channel.map.OpenedNamedChannels;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 

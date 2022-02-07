@@ -40,8 +40,8 @@ import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
-import org.anchoranalysis.image.io.channel.map.OpenedNamedChannels;
 import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
+import org.anchoranalysis.image.io.channel.map.OpenedNamedChannels;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.input.file.FileInput;
 
@@ -56,13 +56,16 @@ import org.anchoranalysis.io.input.file.FileInput;
 class MapPart extends NamedChannelsInputPart {
 
     // START REQUIRED ARGUMENTS
-	/** The underlying {@link FileInput} from where the name-channels ahve been read. */
+    /** The underlying {@link FileInput} from where the name-channels ahve been read. */
     private final FileInput fileInput;
-    
+
     /** How to read an image from the file-system */
     private final StackReader stackReader;
-    
-    /** How to create a {@link ChannelMap} to assign names to all or a subset of {@link Channel}s in the opened file. */
+
+    /**
+     * How to create a {@link ChannelMap} to assign names to all or a subset of {@link Channel}s in
+     * the opened file.
+     */
     private final ChannelMapCreator channelMapCreator;
 
     /**
@@ -72,15 +75,13 @@ class MapPart extends NamedChannelsInputPart {
      */
     private final boolean useLastSeriesIndexOnly;
 
-    /**
-     * Records the execution-times of certain operations.
-     */
+    /** Records the execution-times of certain operations. */
     private final ExecutionTimeRecorder executionTimeRecorder;
     // END REQUIRED ARGUMENTS
 
     /** The currently opened-image-file. Lazily opened, null until first created. */
     private OpenedImageFile openedFile = null;
-    
+
     /** The channel-map. Lazy. Null until first created. */
     private ChannelMap channelMap = null;
 
@@ -173,7 +174,8 @@ class MapPart extends NamedChannelsInputPart {
     private OpenedImageFile openedFile() throws ImageIOException {
         if (openedFile == null) {
             Path path =
-                    fileInput.pathForBinding()
+                    fileInput
+                            .pathForBinding()
                             .orElseThrow(
                                     () ->
                                             new ImageIOException(

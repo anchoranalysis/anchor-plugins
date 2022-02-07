@@ -37,8 +37,8 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.image.io.channel.map.NamedChannelsConcatenate;
-import org.anchoranalysis.image.io.channel.map.OpenedNamedChannels;
 import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
+import org.anchoranalysis.image.io.channel.map.OpenedNamedChannels;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.input.path.PathSupplier;
@@ -64,9 +64,9 @@ class AppendPart extends NamedChannelsInputPart {
     private final ExecutionTimeRecorder executionTimeRecorder;
     // END: REQUIRED ARGUMENTS
 
-    /** 
+    /**
      * The currently opened image-file.
-     * 
+     *
      * <p>This is lazily opened, and is null, until first created.
      */
     private OpenedImageFile openedFile;
@@ -102,8 +102,9 @@ class AppendPart extends NamedChannelsInputPart {
 
         openRasterIfNecessary();
 
-        NamedChannelsMap opened = new OpenedNamedChannels(
-                openedFile, additionalChannel.createChannelMap(), seriesIndex); 
+        NamedChannelsMap opened =
+                new OpenedNamedChannels(
+                        openedFile, additionalChannel.createChannelMap(), seriesIndex);
         return new NamedChannelsConcatenate(existing, opened);
     }
 

@@ -4,21 +4,17 @@ import static org.junit.Assert.assertThrows;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
-import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.io.input.bean.grouper.WithoutGrouping;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
+import org.anchoranalysis.plugin.io.bean.grouper.RemoveLastElement;
 import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.Test;
@@ -37,7 +33,7 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
      */
     @Test
     void testResize() throws OperationFailedException, ImageIOException {
-        doTest(true, Optional.empty());
+        doTest(true, false, Optional.empty());
     }
 
     /**
@@ -51,7 +47,10 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
                 () ->
                         doTest(
                                 true,
-                                Optional.of(createStack(UnsignedShortVoxelType.INSTANCE, true))));
+                                false,
+                                Optional.of(
+                                        CreateVoxelsHelper.createStack(
+                                                UnsignedShortVoxelType.INSTANCE, true))));
     }
 
     /**
@@ -65,8 +64,11 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
                 () ->
                         doTest(
                                 true,
+                                false,
                                 Optional.of(
-                                        new Stack(createChannel(UnsignedByteVoxelType.INSTANCE)))));
+                                        new Stack(
+                                                CreateVoxelsHelper.createChannel(
+                                                        UnsignedByteVoxelType.INSTANCE)))));
     }
 
     /**
@@ -80,7 +82,16 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
                 () ->
                         doTest(
                                 true,
-                                Optional.of(createStack(UnsignedByteVoxelType.INSTANCE, false))));
+                                false,
+                                Optional.of(
+                                        CreateVoxelsHelper.createStack(
+                                                UnsignedByteVoxelType.INSTANCE, false))));
+    }
+
+    /** Resizes the input images to a common size, while also using <b>groups</b> */
+    @Test
+    void testGroups() throws OperationFailedException, ImageIOException {
+        doTest(true, true, Optional.empty());
     }
 
     /**
@@ -88,13 +99,14 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
      *
      * @param resizeTo when true, all images are resized to a common size. when false, their sizes
      *     remain unchanged.
+     * @param groups when true, grouping is enabled.
      * @param additionalStack when set, adds an additional input based on {@link Stack}.
      * @throws OperationFailedException when thrown by {@link
      *     ExecuteTaskHelper#runTaskAndCompareOutputs(List,
      *     org.anchoranalysis.experiment.bean.task.Task, java.nio.file.Path, String, Iterable)}.
      * @throws ImageIOException when thrown by {@link ColoredStacksInputFixture#createInputs}.
      */
-    protected void doTest(boolean resizeTo, Optional<Stack> additionalStack)
+    protected void doTest(boolean resizeTo, boolean groups, Optional<Stack> additionalStack)
             throws OperationFailedException, ImageIOException {
         @SuppressWarnings("unchecked")
         List<ProvidesStackInput> inputs =
@@ -103,9 +115,9 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
         if (additionalStack.isPresent()) {
             inputs.add(
                     new StackSequenceInputFixture(
-                            additionalStack.get(), "someDir", "someFilename"));
+                            additionalStack.get(), "someDir", "someFilename", Optional.empty()));
         }
-        doTest(resizeTo, inputs);
+        doTest(resizeTo, groups, inputs);
     }
 
     /**
@@ -113,17 +125,16 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
      *
      * @param resizeTo when true, all images are resized to a common size. when false, their sizes
      *     remain unchanged.
+     * @param groups when true, grouping is enabled.
      * @param inputs the inputs for the task in the test.
      * @throws OperationFailedException when thrown by {@link
      *     ExecuteTaskHelper#runTaskAndCompareOutputs(List,
      *     org.anchoranalysis.experiment.bean.task.Task, java.nio.file.Path, String, Iterable)}.
      */
-    protected void doTest(boolean resizeTo, List<ProvidesStackInput> inputs)
+    protected void doTest(boolean resizeTo, boolean groups, List<ProvidesStackInput> inputs)
             throws OperationFailedException {
 
-        GroupedStackBase<?, ?> task = createTask();
-
-        task.setResizeTo(resizeTo ? new SizeXY(4, 6) : null);
+        GroupedStackBase<?, ?> task = createTaskWithOptions(resizeTo, groups);
 
         BeanInstanceMapFixture.check(task);
 
@@ -132,7 +143,7 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
                 task,
                 directory,
                 resizeTo ? subdirectoryResized() : subdirectoryNotResized(),
-                filenamesToCompare());
+                filenamesToCompare(groups));
     }
 
     /**
@@ -148,9 +159,10 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
     /**
      * The names of the filenames to compare.
      *
+     * @param groups whether the inputs are partitioned into groups or not.
      * @return the filenames.
      */
-    protected abstract Iterable<String> filenamesToCompare();
+    protected abstract List<String> filenamesToCompare(boolean groups);
 
     /**
      * The name of subdirectory where the expected-output exists, when inputs are resized.
@@ -166,21 +178,16 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
      */
     protected abstract String subdirectoryNotResized();
 
-    /** Creates a three-channeled {@link Stack] with the same channel-names as the existing inputs. */
-    private static Stack createStack(VoxelDataType voxelDataType, boolean rgb) {
-        try {
-            return new Stack(
-                    rgb,
-                    createChannel(voxelDataType),
-                    createChannel(voxelDataType),
-                    createChannel(voxelDataType));
-        } catch (CreateException | IncorrectImageSizeException e) {
-            throw new AnchorImpossibleSituationException();
-        }
+    /** Creates the task to be tested, including setting group / resize options. */
+    private GroupedStackBase<?, ?> createTaskWithOptions(boolean resizeTo, boolean groups) {
+        GroupedStackBase<?, ?> task = createTask();
+        task.setGroup(groups ? new RemoveLastElement() : new WithoutGrouping());
+        task.setResizeTo(resizeTo ? new SizeXY(4, 6) : null);
+        return task;
     }
 
-    /** Creates a {@link Channel} with a particular data-type. */
-    private static Channel createChannel(VoxelDataType voxelDataType) {
-        return ChannelFactory.instance().create(new Dimensions(5, 6, 1), voxelDataType);
+    /** Creates a new list that adds a prefix to each item in an existing list. */
+    protected static List<String> prependStrings(String prefix, List<String> list) {
+        return FunctionalList.mapToList(list, element -> prefix + element);
     }
 }

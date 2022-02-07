@@ -102,6 +102,13 @@
 	  <scope>test</scope>
   	</dependency>
 
+	<dependency>
+	  <groupId>${project.groupId}</groupId>  	
+  	  <artifactId>anchor-plugin-io</artifactId>
+  	  <version>0.0.8-SNAPSHOT</version>
+  	  <scope>test</scope>
+  	</dependency>
+
   </dependencies>
   
 </project>

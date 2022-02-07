@@ -190,8 +190,7 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
     }
 
     /** Extracts a single channel with the name {@code channelName}. */
-    private Channel extractChannel(
-            NamedChannelsMap channels, String channelName, Logger logger)
+    private Channel extractChannel(NamedChannelsMap channels, String channelName, Logger logger)
             throws GetOperationFailedException {
         return channels.getChannel(channelName, timeIndex, logger);
     }

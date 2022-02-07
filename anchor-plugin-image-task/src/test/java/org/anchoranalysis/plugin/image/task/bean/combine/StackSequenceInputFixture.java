@@ -30,6 +30,9 @@ public class StackSequenceInputFixture implements StackSequenceInput {
     /** The path to the image that was read, combining directory and {@code filename}. */
     private final Path path;
 
+    /** The identifier. */
+    private final Optional<String> identifier;
+
     /** The image read from the file-system. */
     private final Stack stack;
 
@@ -39,13 +42,19 @@ public class StackSequenceInputFixture implements StackSequenceInput {
      * @param directory the directory of the image to be read.
      * @param filename the filename of the image to be read.
      * @param reader how to read the image.
+     * @param identifier when defined, this is used as the identifier, otherwise the filename.
      * @param context context for reading the image.
      * @throws ImageIOException if the image cannot be successfully read.
      */
     public StackSequenceInputFixture(
-            Path directory, String filename, StackReader reader, OperationContext context)
+            Path directory,
+            String filename,
+            StackReader reader,
+            Optional<String> identifier,
+            OperationContext context)
             throws ImageIOException {
         this.filename = filename;
+        this.identifier = identifier;
         this.path = directory.resolve(filename);
         this.stack = reader.readStack(path, context);
     }
@@ -58,11 +67,14 @@ public class StackSequenceInputFixture implements StackSequenceInput {
      *     associated input path).
      * @param filename the associated filename (which is not actually read, but helps for the
      *     associated input path).
+     * @param identifier when defined, this is used as the identifier, otherwise the filename.
      */
-    public StackSequenceInputFixture(Stack stack, String directory, String filename) {
+    public StackSequenceInputFixture(
+            Stack stack, String directory, String filename, Optional<String> identifier) {
         this.stack = stack;
         this.path = Paths.get(directory).resolve(filename);
         this.filename = filename;
+        this.identifier = identifier;
     }
 
     @Override
@@ -86,7 +98,7 @@ public class StackSequenceInputFixture implements StackSequenceInput {
 
     @Override
     public String identifier() {
-        return filename;
+        return identifier.orElse(filename);
     }
 
     @Override
