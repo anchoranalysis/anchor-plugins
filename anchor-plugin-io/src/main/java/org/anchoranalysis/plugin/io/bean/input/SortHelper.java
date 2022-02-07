@@ -7,8 +7,6 @@ import java.util.List;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
-import org.anchoranalysis.io.input.bean.InputManagerParameters;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

@@ -26,9 +26,6 @@
 
 package org.anchoranalysis.plugin.io.bean.input;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
