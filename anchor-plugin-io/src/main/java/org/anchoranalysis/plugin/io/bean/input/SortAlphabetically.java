@@ -47,8 +47,6 @@ public class SortAlphabetically<T extends InputFromManager> extends InputManager
     protected InputsWithDirectory<T> inputsFromDelegate(
             InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException {
-        List<T> list = new ArrayList<>(fromDelegate.inputs());
-        Collections.sort(list, (T o1, T o2) -> o1.identifier().compareTo(o2.identifier()));
-        return fromDelegate.withInputs(list);
+    	return SortHelper.sortInputs(fromDelegate);
     }
 }
