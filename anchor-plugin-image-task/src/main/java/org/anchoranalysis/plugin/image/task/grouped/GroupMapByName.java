@@ -116,13 +116,7 @@ public abstract class GroupMapByName<S, T> {
             throws OperationFailedException {
 
         CheckedConsumer<MapCreate<String, T>, OperationFailedException> operation =
-                value -> {
-                    // Add to the aggregator making sure not to guard against concurrent
-                    // modification
-                    synchronized (value) {
-                        addAllItemsToMap(groupIdentifier, value, singleItemsToAdd);
-                    }
-                };
+                value -> addAllItemsToMap(groupIdentifier, value, singleItemsToAdd);
         if (groupIdentifier.isPresent()) {
             map.processElementDecrement(groupIdentifier, operation);
         } else {

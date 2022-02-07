@@ -31,7 +31,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
-
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.NamedBean;
@@ -59,8 +58,8 @@ import org.mockito.Mockito;
 @Accessors(fluent = true)
 public abstract class ExportFeaturesTaskFixture<
         S extends InputFromManager, T extends FeatureInputEnergy, V> {
-	
-	private static final String GROUP = "arbitraryGroup";
+
+    private static final String GROUP = "arbitraryGroup";
 
     @Getter private EnergyStackWithoutParameters energyStack;
 
@@ -100,7 +99,7 @@ public abstract class ExportFeaturesTaskFixture<
         task.setSource(createSource(energyStack, featureLoader));
         task.setFeatures(createFeatures(featureLoader));
         task.setFeaturesAggregate(featureLoader.aggregated());
-                
+
         task.setGroup(createGrouperMock());
 
         BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
@@ -121,10 +120,10 @@ public abstract class ExportFeaturesTaskFixture<
         return EnergyStackFixture.create(bigSizeEnergy, false, singleChannel, includeResolution)
                 .withoutParameters();
     }
-    
-    /** Create a {@link Grouper} that always assigns a constant string as the group. */ 
+
+    /** Create a {@link Grouper} that always assigns a constant string as the group. */
     private static Grouper createGrouperMock() {
-    	Grouper grouper = Mockito.mock(Grouper.class);
+        Grouper grouper = Mockito.mock(Grouper.class);
         when(grouper.createInputGrouper(any())).thenReturn(Optional.of(value -> GROUP));
         return grouper;
     }

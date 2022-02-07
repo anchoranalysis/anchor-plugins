@@ -95,7 +95,6 @@ public abstract class GroupedStackBase<S, T>
 
     /** How to partition the inputs into groups. */
     @BeanField @OptionalBean @Getter @Setter @DefaultInstance private Grouper group;
-    ;
 
     /** Selects which channels are included, optionally renaming. */
     @BeanField @Getter @Setter private FromStacks selectChannels = new All();
@@ -303,15 +302,29 @@ public abstract class GroupedStackBase<S, T>
             }
 
         } catch (OperationFailedException | CreateException e) {
-            throw new JobExecutionException(e);
-        } finally {
+
             // We always call this, even if there is nothing to add, so the group-map
             // can be reference counted appropriate
-            try {
-                sharedState.getGroupMap().add(groupName, toAdd);
-            } catch (OperationFailedException e) {
-                throw new JobExecutionException("An error occurred updating the group map", e);
-            }
+            addToGroupMap(sharedState, groupName, toAdd);
+
+            throw new JobExecutionException(e);
+        }
+
+        // We always call this, even if there is nothing to add, so the group-map
+        // can be reference counted appropriate
+        addToGroupMap(sharedState, groupName, toAdd);
+    }
+
+    /** Adds {@code toAdd} to the group-map. */
+    private void addToGroupMap(
+            GroupedSharedState<S, T> sharedState,
+            Optional<String> groupName,
+            List<Pair<String, S>> toAdd)
+            throws JobExecutionException {
+        try {
+            sharedState.getGroupMap().add(groupName, toAdd);
+        } catch (OperationFailedException e) {
+            throw new JobExecutionException("An error occurred updating the group map", e);
         }
     }
 
