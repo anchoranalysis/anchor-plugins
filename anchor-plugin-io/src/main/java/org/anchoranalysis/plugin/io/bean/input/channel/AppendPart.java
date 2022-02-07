@@ -26,11 +26,8 @@
 
 package org.anchoranalysis.plugin.io.bean.input.channel;
 
-import java.io.File;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
@@ -39,9 +36,9 @@ import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesConcatenate;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsConcatenate;
+import org.anchoranalysis.image.io.channel.map.OpenedNamedChannels;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.input.path.PathSupplier;
@@ -60,12 +57,19 @@ class AppendPart extends NamedChannelsInputPart {
     /** The additional channel to append. */
     private final AdditionalChannel additionalChannel;
 
+    /** How to read images from the file-system. */
     private final StackReader stackReader;
 
+    /** Recording the execution-time of each operation. */
     private final ExecutionTimeRecorder executionTimeRecorder;
     // END: REQUIRED ARGUMENTS
 
-    private OpenedImageFile openedFileMemo;
+    /** 
+     * The currently opened image-file.
+     * 
+     * <p>This is lazily opened, and is null, until first created.
+     */
+    private OpenedImageFile openedFile;
 
     public AppendPart(
             NamedChannelsInputPart toAppendTo,
@@ -91,28 +95,16 @@ class AppendPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public boolean hasChannel(String channelName, Logger logger) throws ImageIOException {
-
-        if (additionalChannel.getName().equals(channelName)) {
-            return true;
-        }
-        return toAppendTo.hasChannel(channelName, logger);
-    }
-
-    @Override
-    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Logger logger)
+    public NamedChannelsMap createChannelsForSeries(int seriesIndex, Logger logger)
             throws ImageIOException {
 
-        NamedChannelsForSeries existing = toAppendTo.createChannelsForSeries(seriesIndex, logger);
+        NamedChannelsMap existing = toAppendTo.createChannelsForSeries(seriesIndex, logger);
 
         openRasterIfNecessary();
 
-        NamedChannelsForSeriesConcatenate out = new NamedChannelsForSeriesConcatenate();
-        out.add(existing);
-        out.add(
-                new NamedChannelsForSeriesMap(
-                        openedFileMemo, additionalChannel.createChannelMap(), seriesIndex));
-        return out;
+        NamedChannelsMap opened = new OpenedNamedChannels(
+                openedFile, additionalChannel.createChannelMap(), seriesIndex); 
+        return new NamedChannelsConcatenate(existing, opened);
     }
 
     @Override
@@ -121,25 +113,8 @@ class AppendPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public List<Path> pathForBindingForAllChannels() throws OperationFailedException {
-        try {
-            List<Path> list = toAppendTo.pathForBindingForAllChannels();
-            list.add(additionalChannel.getFilePath());
-            return list;
-
-        } catch (DerivePathException e) {
-            throw new OperationFailedException(e);
-        }
-    }
-
-    @Override
     public Optional<Path> pathForBinding() {
         return toAppendTo.pathForBinding();
-    }
-
-    @Override
-    public File getFile() {
-        return toAppendTo.getFile();
     }
 
     @Override
@@ -167,9 +142,9 @@ class AppendPart extends NamedChannelsInputPart {
 
     @Override
     public void close(ErrorReporter errorReporter) {
-        if (openedFileMemo != null) {
+        if (openedFile != null) {
             try {
-                openedFileMemo.close();
+                openedFile.close();
             } catch (ImageIOException e) {
                 errorReporter.recordError(AppendPart.class, e);
             }
@@ -181,8 +156,8 @@ class AppendPart extends NamedChannelsInputPart {
         try {
             Path filePathAdditional = additionalChannel.getFilePath();
 
-            if (openedFileMemo == null) {
-                openedFileMemo = stackReader.openFile(filePathAdditional, executionTimeRecorder);
+            if (openedFile == null) {
+                openedFile = stackReader.openFile(filePathAdditional, executionTimeRecorder);
             }
 
         } catch (DerivePathException e) {

@@ -38,8 +38,8 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
 import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
+import org.anchoranalysis.image.io.channel.map.OpenedNamedChannels;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
@@ -71,10 +71,10 @@ class GroupingInput extends NamedChannelsInput {
     }
 
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Logger logger)
+    public NamedChannelsMap createChannelsForSeries(int seriesIndex, Logger logger)
             throws ImageIOException {
         ensureChannelMapExists(logger);
-        return new NamedChannelsForSeriesMap(openedFile, channelMap, seriesIndex);
+        return new OpenedNamedChannels(openedFile, channelMap, seriesIndex);
     }
 
     @Override
@@ -100,7 +100,7 @@ class GroupingInput extends NamedChannelsInput {
 
     @Override
     public ImageMetadata metadata(int seriesIndex, Logger logger) throws ImageIOException {
-        NamedChannelsForSeries channels = createChannelsForSeries(seriesIndex, logger);
+        NamedChannelsMap channels = createChannelsForSeries(seriesIndex, logger);
         ImageTimestampsAttributes timestamps = openedFile.timestamps();
         return new ImageMetadata(
                 channels.dimensions(logger),

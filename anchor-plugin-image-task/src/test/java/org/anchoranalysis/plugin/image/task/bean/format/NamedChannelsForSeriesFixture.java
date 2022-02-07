@@ -44,11 +44,11 @@ import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 /**
- * Exposes a {@link NamedChannelsForSeries} with a certain number of channels.
+ * Exposes a {@link NamedChannelsMap} with a certain number of channels.
  *
  * <p>The channels are named: {@code channel00, channel01, channel02} etc. unless it's an RGB-stack,
  * in which case they are named {@code red, green, blue}.
@@ -56,7 +56,7 @@ import org.anchoranalysis.image.io.stack.time.TimeSeries;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
+class NamedChannelsForSeriesFixture implements NamedChannelsMap {
 
     private static final Pattern PATTERN = Pattern.compile("^channel(\\d\\d)$");
 
@@ -132,13 +132,13 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
 
     @Override
     public void addAsSeparateChannels(
-            NamedProviderStore<TimeSeries> stacks, int timeIndex, Logger logger)
+            NamedProviderStore<TimeSeries> destination, int timeIndex, Logger logger)
             throws OperationFailedException {
         throwUnsupportedException();
     }
 
     @Override
-    public void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Logger logger)
+    public void addAsSeparateChannels(NamedStacks destination, int timeIndex, Logger logger)
             throws OperationFailedException {
         throwUnsupportedException();
     }

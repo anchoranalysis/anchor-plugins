@@ -51,7 +51,7 @@ import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
 import org.anchoranalysis.image.io.stack.output.OutputSequenceStackFactory;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
@@ -166,7 +166,7 @@ public class ConvertImageFormat
             throws JobExecutionException {
 
         try {
-            NamedChannelsForSeries channels =
+            NamedChannelsMap channels =
                     createNamedChannels(input.getInput(), seriesIndex, context.getLogger());
 
             ChannelGetter channelGetter = channels;
@@ -251,7 +251,7 @@ public class ConvertImageFormat
         }
     }
 
-    private NamedChannelsForSeries createNamedChannels(
+    private NamedChannelsMap createNamedChannels(
             NamedChannelsInput input, int seriesIndex, Logger logger) throws ImageIOException {
         return input.createChannelsForSeries(seriesIndex, logger);
     }

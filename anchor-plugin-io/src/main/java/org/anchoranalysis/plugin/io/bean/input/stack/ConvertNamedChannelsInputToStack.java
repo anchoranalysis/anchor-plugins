@@ -39,7 +39,7 @@ import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
@@ -131,7 +131,7 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
             throws OperationFailedException {
 
         try {
-            NamedChannelsForSeries channels =
+            NamedChannelsMap channels =
                     executionTimeRecorder.recordExecutionTime(
                             "Create channel for series",
                             () -> input.createChannelsForSeries(seriesIndex, logger));
@@ -151,10 +151,10 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
     }
 
     /**
-     * Derives a {@link Stack} from a {@link NamedChannelsForSeries} that may be RGB or grayscale or
+     * Derives a {@link Stack} from a {@link NamedChannelsMap} that may be RGB or grayscale or
      * neither.
      */
-    private Stack stackFromChannels(NamedChannelsForSeries channels, Logger logger)
+    private Stack stackFromChannels(NamedChannelsMap channels, Logger logger)
             throws OperationFailedException {
         try {
             if (channelName.isPresent()) {
@@ -174,7 +174,7 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
     }
 
     /** Builds a stack, from the expected standardized names for color channels in RGB. */
-    private Stack buildStackFromRGBChannelNames(NamedChannelsForSeries channels, Logger logger)
+    private Stack buildStackFromRGBChannelNames(NamedChannelsMap channels, Logger logger)
             throws OperationFailedException {
         try {
             return new Stack(
@@ -191,7 +191,7 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
 
     /** Extracts a single channel with the name {@code channelName}. */
     private Channel extractChannel(
-            NamedChannelsForSeries channels, String channelName, Logger logger)
+            NamedChannelsMap channels, String channelName, Logger logger)
             throws GetOperationFailedException {
         return channels.getChannel(channelName, timeIndex, logger);
     }

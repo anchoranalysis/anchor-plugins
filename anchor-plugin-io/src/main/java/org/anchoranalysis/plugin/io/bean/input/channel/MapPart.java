@@ -26,10 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.input.channel;
 
-import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
@@ -43,8 +40,8 @@ import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeriesMap;
+import org.anchoranalysis.image.io.channel.map.OpenedNamedChannels;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.input.file.FileInput;
 
@@ -59,8 +56,13 @@ import org.anchoranalysis.io.input.file.FileInput;
 class MapPart extends NamedChannelsInputPart {
 
     // START REQUIRED ARGUMENTS
-    private final FileInput delegate;
+	/** The underlying {@link FileInput} from where the name-channels ahve been read. */
+    private final FileInput fileInput;
+    
+    /** How to read an image from the file-system */
     private final StackReader stackReader;
+    
+    /** How to create a {@link ChannelMap} to assign names to all or a subset of {@link Channel}s in the opened file. */
     private final ChannelMapCreator channelMapCreator;
 
     /**
@@ -70,11 +72,16 @@ class MapPart extends NamedChannelsInputPart {
      */
     private final boolean useLastSeriesIndexOnly;
 
+    /**
+     * Records the execution-times of certain operations.
+     */
     private final ExecutionTimeRecorder executionTimeRecorder;
     // END REQUIRED ARGUMENTS
 
-    // We cache a certain amount of stacks read for particular series
-    private OpenedImageFile openedFileMemo = null;
+    /** The currently opened-image-file. Lazily opened, null until first created. */
+    private OpenedImageFile openedFile = null;
+    
+    /** The channel-map. Lazy. Null until first created. */
     private ChannelMap channelMap = null;
 
     @Override
@@ -91,14 +98,9 @@ class MapPart extends NamedChannelsInputPart {
         }
     }
 
-    @Override
-    public boolean hasChannel(String channelName, Logger logger) throws ImageIOException {
-        return channelMap(logger).names().contains(channelName);
-    }
-
     // Where most of our time is being taken up when opening a raster
     @Override
-    public NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Logger logger)
+    public NamedChannelsMap createChannelsForSeries(int seriesIndex, Logger logger)
             throws ImageIOException {
 
         // We always use the last one
@@ -106,29 +108,17 @@ class MapPart extends NamedChannelsInputPart {
             seriesIndex = openedFile().numberSeries() - 1;
         }
 
-        return new NamedChannelsForSeriesMap(openedFile(), channelMap(logger), seriesIndex);
+        return new OpenedNamedChannels(openedFile(), channelMap(logger), seriesIndex);
     }
 
     @Override
     public String identifier() {
-        return delegate.identifier();
-    }
-
-    @Override
-    public List<Path> pathForBindingForAllChannels() {
-        ArrayList<Path> out = new ArrayList<>();
-        pathForBinding().ifPresent(out::add);
-        return out;
+        return fileInput.identifier();
     }
 
     @Override
     public Optional<Path> pathForBinding() {
-        return delegate.pathForBinding();
-    }
-
-    @Override
-    public File getFile() {
-        return delegate.getFile();
+        return fileInput.pathForBinding();
     }
 
     @Override
@@ -144,14 +134,14 @@ class MapPart extends NamedChannelsInputPart {
     @Override
     public void close(ErrorReporter errorReporter) {
 
-        if (openedFileMemo != null) {
+        if (openedFile != null) {
             try {
-                openedFileMemo.close();
+                openedFile.close();
             } catch (ImageIOException e) {
                 errorReporter.recordError(MapPart.class, e);
             }
         }
-        delegate.close(errorReporter);
+        fileInput.close(errorReporter);
     }
 
     @Override
@@ -161,14 +151,14 @@ class MapPart extends NamedChannelsInputPart {
 
     @Override
     public String toString() {
-        return delegate.toString();
+        return fileInput.toString();
     }
 
     /** Create a channel-map, reusing the existing map, if it already exists. */
     private ChannelMap channelMap(Logger logger) throws ImageIOException {
         if (channelMap == null) {
             try {
-                channelMap = channelMapCreator.create(openedFileMemo, logger);
+                channelMap = channelMapCreator.create(openedFile, logger);
             } catch (CreateException e) {
                 throw new ImageIOException("Failed to create channel-map", e);
             }
@@ -181,15 +171,15 @@ class MapPart extends NamedChannelsInputPart {
      * already exists.
      */
     private OpenedImageFile openedFile() throws ImageIOException {
-        if (openedFileMemo == null) {
+        if (openedFile == null) {
             Path path =
-                    delegate.pathForBinding()
+                    fileInput.pathForBinding()
                             .orElseThrow(
                                     () ->
                                             new ImageIOException(
                                                     "A binding-path is needed in the delegate."));
-            openedFileMemo = stackReader.openFile(path, executionTimeRecorder);
+            openedFile = stackReader.openFile(path, executionTimeRecorder);
         }
-        return openedFileMemo;
+        return openedFile;
     }
 }
