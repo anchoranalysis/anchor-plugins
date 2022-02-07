@@ -65,7 +65,7 @@ class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByNa
      */
     public GroupedChannelAggregator(
             String outputName,
-            Stream<Optional<String>> groupIdentifiers,
+            Optional<Stream<String>> groupIdentifiers,
             Optional<InputOutputContext> outputContext,
             Supplier<T> createAggregator,
             Logger logger) {
@@ -98,7 +98,7 @@ class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByNa
         }
     }
 
-    /** Uses {@link outputName} if possible, otherwise fallsback to {@code outputNameDefault}. */
+    /** Uses {@link outputName} if possible, otherwise falls back to {@code outputNameDefault}. */
     private String resolveOutputName(Optional<String> outputName) {
         return outputName.orElse(outputNameDefault);
     }

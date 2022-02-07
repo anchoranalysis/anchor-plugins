@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.bean.feature.source;
 
 import java.util.List;
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.CreateException;
@@ -37,6 +38,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.metadata.LabelHeaders;
 import org.anchoranalysis.feature.io.results.FeatureOutputNames;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.grouper.InputGrouper;
 import org.anchoranalysis.plugin.image.task.feature.FeatureCalculationContext;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
@@ -58,6 +60,7 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
      * @param metadataHeaders headers to use for additional "metadata" before feature-results.
      * @param features the features to calculate.
      * @param outputNames the names of various kind of outputs.
+     * @param grouper when defined, assigns each input to a group.
      * @param context IO-context.
      * @return a newly created {@link FeatureExporter} as matches this source of features.
      * @throws CreateException if it cannot be created.
@@ -66,6 +69,7 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<U>>> features,
             FeatureOutputNames outputNames,
+            Optional<InputGrouper> grouper,
             FeatureExporterContext context)
             throws CreateException;
 

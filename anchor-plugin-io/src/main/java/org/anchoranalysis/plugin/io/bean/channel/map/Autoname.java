@@ -34,9 +34,9 @@ import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
-import org.anchoranalysis.image.io.bean.channel.ChannelMap;
-import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
+import org.anchoranalysis.image.io.bean.channel.IndexedChannel;
+import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
@@ -52,15 +52,14 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
  *
  * @author Owen Feehan
  */
-public class Autoname extends ChannelMap {
+public class Autoname extends ChannelMapCreator {
 
     private static final String[] RGB_CHANNEL_NAMES = RGBChannelNames.asArray(true);
 
     @Override
-    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger)
-            throws CreateException {
+    public ChannelMap create(OpenedImageFile openedFile, Logger logger) throws CreateException {
 
-        NamedEntries map = new NamedEntries();
+        ChannelMap map = new ChannelMap();
 
         try {
             Optional<List<String>> names = openedFile.channelNames(logger);
@@ -83,9 +82,9 @@ public class Autoname extends ChannelMap {
     }
 
     private static void addEntryToMap(
-            NamedEntries map, Optional<List<String>> names, boolean rgb, int channelIndex) {
+            ChannelMap map, Optional<List<String>> names, boolean rgb, int channelIndex) {
         String entryName = nameFor(channelIndex, names, rgb);
-        map.add(new ChannelEntry(entryName, channelIndex));
+        map.add(new IndexedChannel(entryName, channelIndex));
     }
 
     private static String nameFor(int channelIndex, Optional<List<String>> names, boolean rgb) {

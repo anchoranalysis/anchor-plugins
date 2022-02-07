@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.image.task.bean.combine;
 
 import static org.junit.Assert.assertThrows;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,7 @@ class AggregateChannelTaskTest extends GroupedStackTestBase {
      */
     @Test
     void testDoNotResize() throws OperationFailedException, ImageIOException {
-        assertThrows(OperationFailedException.class, () -> doTest(false, Optional.empty()));
+        assertThrows(OperationFailedException.class, () -> doTest(false, false, Optional.empty()));
     }
 
     @Override
@@ -42,8 +43,15 @@ class AggregateChannelTaskTest extends GroupedStackTestBase {
     }
 
     @Override
-    protected Iterable<String> filenamesToCompare() {
-        return FILENAMES_TO_COMPARE;
+    protected List<String> filenamesToCompare(boolean groups) {
+        if (groups) {
+            List<String> combined = new ArrayList<>(FILENAMES_TO_COMPARE.size() * 2);
+            combined.addAll(prependStrings(ColoredStacksInputFixture.GROUP1, FILENAMES_TO_COMPARE));
+            combined.addAll(prependStrings(ColoredStacksInputFixture.GROUP2, FILENAMES_TO_COMPARE));
+            return combined;
+        } else {
+            return FILENAMES_TO_COMPARE;
+        }
     }
 
     @Override

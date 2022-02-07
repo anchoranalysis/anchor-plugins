@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.input.channel;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
@@ -48,7 +48,7 @@ public class NamedChannels extends NamedChannelsBase {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<FileInput> fileInput;
 
-    @BeanField @Getter @Setter private ChannelMap channelMap = new Autoname();
+    @BeanField @Getter @Setter private ChannelMapCreator channelMap = new Autoname();
 
     @BeanField @Getter @Setter private boolean useLastSeriesIndexOnly = false;
     // END BEAN PROPERTIES

@@ -35,14 +35,12 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
-import org.anchoranalysis.image.io.stack.input.TimeSequenceSupplier;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.io.input.file.FileInput;
 
 @RequiredArgsConstructor
@@ -89,7 +87,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         }
     }
 
-    public TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex, Logger logger)
+    @Override
+    public TimeSeries createStackSequenceForSeries(int seriesIndex, Logger logger)
             throws ImageIOException {
 
         // We always use the last one
@@ -101,28 +100,21 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            NamedProviderStore<TimeSeries> stackCollection, int seriesIndex, Logger logger)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }
 
     @Override
     public void addToStoreWithName(
-            String name,
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            String name, NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
 
         stacks.add(
                 name,
                 () -> {
                     try {
-                        return createStackSequenceForSeries(seriesIndex, logger).get(progress);
+                        return createStackSequenceForSeries(seriesIndex, logger);
                     } catch (ImageIOException e) {
                         throw new OperationFailedException(e);
                     }
@@ -168,14 +160,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         return openedFileMemo;
     }
 
-    private TimeSequenceSupplier openRasterAsOperation(
-            OpenedImageFile openedFile, int seriesIndex) {
-        return progress -> {
-            try {
-                return openedFile.open(seriesIndex, progress, logger);
-            } catch (ImageIOException e) {
-                throw new OperationFailedException(e);
-            }
-        };
+    private TimeSeries openRasterAsOperation(OpenedImageFile openedFile, int seriesIndex)
+            throws ImageIOException {
+        return openedFile.open(seriesIndex, logger);
     }
 }

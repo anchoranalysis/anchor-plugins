@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.io.bean.input.channel;
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
-import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.bean.channel.IndexedChannel;
+import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.input.path.PathSupplier;
 
@@ -46,9 +46,9 @@ class AdditionalChannel {
     /** Supplies a file-path associated with the additional channel */
     private PathSupplier filePath;
 
-    public NamedEntries createChannelMap() {
-        NamedEntries map = new NamedEntries();
-        map.add(new ChannelEntry(name, index));
+    public ChannelMap createChannelMap() {
+        ChannelMap map = new ChannelMap();
+        map.add(new IndexedChannel(name, index));
         return map;
     }
 

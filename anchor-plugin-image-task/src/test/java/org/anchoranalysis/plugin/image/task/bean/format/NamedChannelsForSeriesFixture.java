@@ -38,18 +38,17 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 /**
- * Exposes a {@link NamedChannelsForSeries} with a certain number of channels.
+ * Exposes a {@link NamedChannelsMap} with a certain number of channels.
  *
  * <p>The channels are named: {@code channel00, channel01, channel02} etc. unless it's an RGB-stack,
  * in which case they are named {@code red, green, blue}.
@@ -57,7 +56,7 @@ import org.anchoranalysis.image.io.stack.time.TimeSequence;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
+class NamedChannelsForSeriesFixture implements NamedChannelsMap {
 
     private static final Pattern PATTERN = Pattern.compile("^channel(\\d\\d)$");
 
@@ -73,10 +72,10 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
     }
 
     @Override
-    public Channel getChannel(String channelName, int timeIndex, Progress progress, Logger logger)
+    public Channel getChannel(String channelName, int timeIndex, Logger logger)
             throws GetOperationFailedException {
 
-        return getChannelOptional(channelName, timeIndex, progress, logger)
+        return getChannelOptional(channelName, timeIndex, logger)
                 .orElseThrow(
                         () ->
                                 new GetOperationFailedException(
@@ -84,7 +83,7 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
     }
 
     @Override
-    public int sizeT(Progress progress, Logger logger) throws ImageIOException {
+    public int sizeT(Logger logger) throws ImageIOException {
         return 1;
     }
 
@@ -99,8 +98,7 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
     }
 
     @Override
-    public Optional<Channel> getChannelOptional(
-            String channelName, int timeIndex, Progress progress, Logger logger)
+    public Optional<Channel> getChannelOptional(String channelName, int timeIndex, Logger logger)
             throws GetOperationFailedException {
         if (timeIndex == 0) {
             if (stack.isRGB()) {
@@ -134,14 +132,13 @@ class NamedChannelsForSeriesFixture implements NamedChannelsForSeries {
 
     @Override
     public void addAsSeparateChannels(
-            NamedProviderStore<TimeSequence> stacks, int timeIndex, Logger logger)
+            NamedProviderStore<TimeSeries> destination, int timeIndex, Logger logger)
             throws OperationFailedException {
         throwUnsupportedException();
     }
 
     @Override
-    public void addAsSeparateChannels(
-            NamedStacks stacks, int timeIndex, Progress progress, Logger logger)
+    public void addAsSeparateChannels(NamedStacks destination, int timeIndex, Logger logger)
             throws OperationFailedException {
         throwUnsupportedException();
     }

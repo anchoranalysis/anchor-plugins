@@ -116,7 +116,7 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
     @Override
     protected GroupMapByName<Histogram, Histogram> createGroupMap(
             ConsistentChannelChecker channelChecker,
-            Stream<Optional<String>> groupIdentifiers,
+            Optional<Stream<String>> groupIdentifiers,
             Optional<InputOutputContext> outputContext,
             OperationContext operationContext) {
         int maxIntensityValue = (int) channelChecker.getVoxelDataType().maxValue();
@@ -140,10 +140,14 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
     protected void processIndividual(
             String name,
             Histogram individual,
+            boolean partOfGroup,
             CheckedBiConsumer<String, Histogram, OperationFailedException> consumeIndividual,
             InputOutputContext context)
             throws OperationFailedException {
 
+        // We only write the individual file, if it's not part of a group. Otherwise we rely on the
+        // group
+        // to write an appropriate histogram.
         createWriter().writeHistogramToFile(individual, name, context);
 
         consumeIndividual.accept(name, individual);

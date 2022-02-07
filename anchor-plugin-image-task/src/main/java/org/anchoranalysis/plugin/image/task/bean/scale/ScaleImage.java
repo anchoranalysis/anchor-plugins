@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -129,7 +128,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     public void doJobOnInput(InputBound<StackSequenceInput, NoSharedState> input)
             throws JobExecutionException {
         try {
-            NamedStacks stacks = input.getInput().asSet(ProgressIgnore.get(), input.getLogger());
+            NamedStacks stacks = input.getInput().asSet(input.getLogger());
 
             ImageInitialization initialization =
                     InitializationFactory.createWithoutStacks(input.createInitializationContext());
@@ -206,7 +205,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
                     Stack stackOut =
                             scaleStack(
                                     stackIn,
-                                    initialization.suggestedResize(),
+                                    initialization.suggestedSize(),
                                     context.getLogger().messageLogger());
 
                     stacksToAddTo.addStack(key, stackOut, enabledForKey);
@@ -221,23 +220,23 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     }
 
     private Stack scaleStack(
-            Stack stack, Optional<ImageSizeSuggestion> suggestedResize, MessageLogger logger)
+            Stack stack, Optional<ImageSizeSuggestion> suggestedSize, MessageLogger logger)
             throws OperationFailedException {
-        return stack.mapChannel(channel -> scaleChannel(channel, suggestedResize, logger));
+        return stack.mapChannel(channel -> scaleChannel(channel, suggestedSize, logger));
     }
 
     private Channel scaleChannel(
-            Channel channel, Optional<ImageSizeSuggestion> suggestedResize, MessageLogger logger)
+            Channel channel, Optional<ImageSizeSuggestion> suggestedSize, MessageLogger logger)
             throws OperationFailedException {
         try {
             if (binary) {
-                return scaleChannelAsMask(channel, suggestedResize);
+                return scaleChannelAsMask(channel, suggestedSize);
             } else {
                 return ScaleXY.scale(
                         channel,
                         scaleCalculator,
                         interpolator.voxelsResizer(),
-                        suggestedResize,
+                        suggestedSize,
                         logger);
             }
         } catch (ProvisionFailedException e) {
@@ -245,13 +244,12 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
         }
     }
 
-    private Channel scaleChannelAsMask(
-            Channel channel, Optional<ImageSizeSuggestion> suggestedResize)
+    private Channel scaleChannelAsMask(Channel channel, Optional<ImageSizeSuggestion> suggestedSize)
             throws ProvisionFailedException {
         Mask mask = new Mask(channel);
         Mask maskScaled =
                 org.anchoranalysis.plugin.image.bean.mask.provider.ScaleXY.scale(
-                        mask, scaleCalculator, suggestedResize);
+                        mask, scaleCalculator, suggestedSize);
         return maskScaled.channel();
     }
 }

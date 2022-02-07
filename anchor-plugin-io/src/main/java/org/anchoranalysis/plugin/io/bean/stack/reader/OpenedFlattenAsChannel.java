@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -38,7 +37,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 /**
  * Like a {@link OpenedImageFile} but considers frames and series as if they were instead additional
@@ -58,8 +57,7 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress, Logger logger)
-            throws ImageIOException {
+    public TimeSeries open(int seriesIndex, Logger logger) throws ImageIOException {
         // We open each-series, verify assumptions, and combine the channels
 
         try {
@@ -67,12 +65,12 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
             int numberSeries = delegate.numberSeries();
             for (int i = 0; i < numberSeries; i++) {
 
-                TimeSequence sequence = delegate.open(seriesIndex, progress, logger);
+                TimeSeries series = delegate.open(seriesIndex, logger);
 
-                addStack(extractStacksAndVerify(sequence, logger), out);
+                addStack(extractStacksAndVerify(series, logger), out);
             }
 
-            return new TimeSequence(out);
+            return new TimeSeries(out);
 
         } catch (IncorrectImageSizeException e) {
             throw new ImageIOException(
@@ -124,7 +122,7 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
         return delegate.timestamps();
     }
 
-    private List<Stack> extractStacksAndVerify(TimeSequence sequence, Logger logger)
+    private List<Stack> extractStacksAndVerify(TimeSeries sequence, Logger logger)
             throws ImageIOException {
 
         int expectedNumberChannels = delegate.numberChannels(logger);
@@ -141,7 +139,7 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
 
         for (int i = 0; i < sequence.size(); i++) {
 
-            Stack stack = sequence.get(i);
+            Stack stack = sequence.getFrame(i);
 
             if (stack.getNumberChannels() != expectedNumberChannels) {
                 throw new ImageIOException(

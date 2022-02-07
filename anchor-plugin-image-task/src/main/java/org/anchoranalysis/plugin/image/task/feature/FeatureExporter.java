@@ -49,6 +49,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
+import org.anchoranalysis.io.input.grouper.InputGrouper;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
@@ -77,6 +78,9 @@ public class FeatureExporter<S> {
     /** Saved store feature calculation results, and writes associated thumbnails. */
     @Getter private FeatureResultsAndThumbnails results;
 
+    /** When defined, assigns each input to a group. */
+    @Getter private final Optional<InputGrouper> grouper;
+
     /** Context for outputting operations. */
     private FeatureExporterContext context;
 
@@ -86,16 +90,19 @@ public class FeatureExporter<S> {
      * @param outputMetadata headers and output-name for the feature CSV file that is written.
      * @param featureSource source of rows in the feature-table (called independently for each
      *     thread).
+     * @param grouper when defined, assigns each input to a group.
      * @param context context for exporting features.
      * @throws OutputWriteFailedException
      */
     public FeatureExporter(
             FeatureOutputMetadata outputMetadata,
             Supplier<S> featureSource,
+            Optional<InputGrouper> grouper,
             FeatureExporterContext context)
             throws OutputWriteFailedException {
         this.featureNames = outputMetadata.featureNamesNonAggregated();
         this.featureSource = featureSource;
+        this.grouper = grouper;
         this.context = context;
         this.results = new FeatureResultsAndThumbnails(outputMetadata, context);
     }
@@ -108,6 +115,7 @@ public class FeatureExporter<S> {
      * @param features a list of beans to create the features.
      * @param metadataHeaders headers to describe any metadata.
      * @param outputNames customizable output names used by {@link LabelledResultsCollector}.
+     * @param grouper when defined, assigns each input to a group.
      * @param context context.
      * @return a newly created {@link FeatureExporter}.
      * @throws CreateException if it cannot be successfully created.
@@ -116,6 +124,7 @@ public class FeatureExporter<S> {
             List<NamedBean<FeatureListProvider<T>>> features,
             LabelHeaders metadataHeaders,
             FeatureOutputNames outputNames,
+            Optional<InputGrouper> grouper,
             FeatureExporterContext context)
             throws CreateException {
         try {
@@ -123,6 +132,7 @@ public class FeatureExporter<S> {
                     STORE_FACTORY.createNamedFeatureList(features),
                     metadataHeaders,
                     outputNames,
+                    grouper,
                     context);
         } catch (ProvisionFailedException e) {
             throw new CreateException(e);
@@ -135,6 +145,7 @@ public class FeatureExporter<S> {
      * @param <T> feature input-type in store
      * @param featureStore a list of beans to create the features.
      * @param metadataHeaders headers to describe any metadata.
+     * @param grouper when defined, assigns each input to a group.
      * @param context context.
      * @return a newly created {@link FeatureExporter}.
      * @throws CreateException if it cannot be successfully created.
@@ -143,6 +154,7 @@ public class FeatureExporter<S> {
             NamedFeatureStore<T> featureStore,
             LabelHeaders metadataHeaders,
             FeatureOutputNames outputNames,
+            Optional<InputGrouper> grouper,
             FeatureExporterContext context)
             throws CreateException {
         try {
@@ -150,6 +162,7 @@ public class FeatureExporter<S> {
                     new FeatureOutputMetadata(
                             metadataHeaders, featureStore.featureNames(), outputNames),
                     featureStore.duplicate()::features,
+                    grouper,
                     context);
         } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
@@ -163,6 +176,7 @@ public class FeatureExporter<S> {
      * @param features a table calculator for features.
      * @param identifierHeaders headers to describe the identifier metadata before the feature
      *     values.
+     * @param grouper when defined, assigns each input to a group.
      * @param context context.
      * @param <T> feature input-type in store
      * @return a newly created {@link FeatureExporter}.
@@ -172,6 +186,7 @@ public class FeatureExporter<S> {
             FeatureOutputNames outputNames,
             FeatureTableCalculator<T> features,
             LabelHeaders identifierHeaders,
+            Optional<InputGrouper> grouper,
             FeatureExporterContext context)
             throws CreateException {
         try {
@@ -179,6 +194,7 @@ public class FeatureExporter<S> {
                     new FeatureOutputMetadata(
                             identifierHeaders, features.createFeatureNames(), outputNames),
                     features::duplicateForNewThread,
+                    grouper,
                     context);
         } catch (OutputWriteFailedException e) {
             throw new CreateException(e);

@@ -31,8 +31,8 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
-import org.anchoranalysis.image.io.bean.channel.ChannelMap;
+import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
+import org.anchoranalysis.image.io.bean.channel.IndexedChannel;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.file.FileInput;
@@ -47,7 +47,7 @@ class NamedChannelsCreator {
             InputManager<FileInput> files,
             String mainChannelName,
             int mainChannelIndex,
-            List<ChannelEntry> additionalChannels,
+            List<IndexedChannel> additionalChannels,
             StackReader stackReader)
             throws BeanMisconfiguredException {
         NamedChannels namedChannels = new NamedChannels();
@@ -58,21 +58,21 @@ class NamedChannelsCreator {
         return namedChannels;
     }
 
-    private static ChannelMap createChannelMap(
-            String mainChannelName, int mainChannelIndex, List<ChannelEntry> additionalChannels)
+    private static ChannelMapCreator createChannelMap(
+            String mainChannelName, int mainChannelIndex, List<IndexedChannel> additionalChannels)
             throws BeanMisconfiguredException {
         FromEntries define = new FromEntries();
         define.setList(listEntries(mainChannelName, mainChannelIndex, additionalChannels));
         return define;
     }
 
-    private static List<ChannelEntry> listEntries(
-            String mainChannelName, int mainChannelIndex, List<ChannelEntry> additionalChannels)
+    private static List<IndexedChannel> listEntries(
+            String mainChannelName, int mainChannelIndex, List<IndexedChannel> additionalChannels)
             throws BeanMisconfiguredException {
-        List<ChannelEntry> out = new ArrayList<>();
+        List<IndexedChannel> out = new ArrayList<>();
         addChannelEntry(out, mainChannelName, mainChannelIndex);
 
-        for (ChannelEntry entry : additionalChannels) {
+        for (IndexedChannel entry : additionalChannels) {
 
             if (entry.getIndex() == mainChannelIndex) {
                 throw new BeanMisconfiguredException(
@@ -86,7 +86,7 @@ class NamedChannelsCreator {
         return out;
     }
 
-    private static void addChannelEntry(List<ChannelEntry> list, String name, int index) {
-        list.add(new ChannelEntry(name, index));
+    private static void addChannelEntry(List<IndexedChannel> list, String name, int index) {
+        list.add(new IndexedChannel(name, index));
     }
 }

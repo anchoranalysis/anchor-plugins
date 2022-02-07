@@ -30,7 +30,6 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
-import org.anchoranalysis.image.io.stack.StackSeries;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
@@ -51,12 +50,6 @@ public abstract class StackWriterDelegateBase extends StackWriter {
     public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
         selectDelegate(options).writeStack(stack, filePath, options);
-    }
-
-    @Override
-    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
-            throws ImageIOException {
-        selectDelegate(options).writeStackSeries(stackSeries, filePath, options);
     }
 
     /**

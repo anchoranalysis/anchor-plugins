@@ -38,8 +38,6 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.ProgressConsole;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -51,10 +49,9 @@ import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.channel.ChannelFilter;
 import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
 import org.anchoranalysis.image.io.stack.output.OutputSequenceStackFactory;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
@@ -107,9 +104,6 @@ public class ConvertImageFormat
      * <p>It is always suppressed if only a single series exists.
      */
     @BeanField @Getter @Setter private boolean suppressSeries = false;
-
-    /** Optionally, includes only certain channels when converting. */
-    @BeanField @OptionalBean @Getter @Setter private ChannelFilter channelFilter = null;
 
     /** Optionally, how to convert from one bit-depth to another (scaling, clamping etc.) */
     @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo<?> channelConverter = null;
@@ -172,13 +166,13 @@ public class ConvertImageFormat
             throws JobExecutionException {
 
         try {
-            NamedChannelsForSeries channels =
+            NamedChannelsMap channels =
                     createNamedChannels(input.getInput(), seriesIndex, context.getLogger());
 
-            ChannelGetter channelGetter = maybeAddFilter(channels, context);
+            ChannelGetter channelGetter = channels;
 
             if (channelConverter != null) {
-                channelGetter = maybeAddConverter(channelGetter);
+                channelGetter = maybeAddConverter(channels);
             }
 
             // This is where the input image is typically read for the first time, so we profile
@@ -187,9 +181,7 @@ public class ConvertImageFormat
                     context.getExecutionTimeRecorder()
                             .recordExecutionTime(
                                     "Determining number of timepoints",
-                                    () ->
-                                            channels.sizeT(
-                                                    ProgressIgnore.get(), context.getLogger()));
+                                    () -> channels.sizeT(context.getLogger()));
 
             convertEachTimepoint(
                     seriesIndex,
@@ -259,9 +251,9 @@ public class ConvertImageFormat
         }
     }
 
-    private NamedChannelsForSeries createNamedChannels(
+    private NamedChannelsMap createNamedChannels(
             NamedChannelsInput input, int seriesIndex, Logger logger) throws ImageIOException {
-        return input.createChannelsForSeries(seriesIndex, new ProgressConsole(1), logger);
+        return input.createChannelsForSeries(seriesIndex, logger);
     }
 
     private void addStackToOutput(
@@ -287,16 +279,6 @@ public class ConvertImageFormat
                     ConversionPolicy.CHANGE_EXISTING_CHANNEL);
         } else {
             return channelGetter;
-        }
-    }
-
-    private ChannelGetter maybeAddFilter(
-            NamedChannelsForSeries channels, InputOutputContext context) {
-        if (channelFilter != null) {
-            channelFilter.initialize(channels, context);
-            return channelFilter;
-        } else {
-            return channels;
         }
     }
 

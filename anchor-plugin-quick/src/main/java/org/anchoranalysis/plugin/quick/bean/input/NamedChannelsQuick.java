@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
+import org.anchoranalysis.image.io.bean.channel.IndexedChannel;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.channel.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -76,7 +76,7 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
     @BeanField @Getter @Setter private int mainChannelIndex = 0;
 
     /** Additional channels other than the main one, which are located in the main raster file */
-    @BeanField @Getter @Setter private List<ChannelEntry> additionalChannels = new ArrayList<>();
+    @BeanField @Getter @Setter private List<IndexedChannel> additionalChannels = new ArrayList<>();
 
     /** Channels that are located in a separate raster file adjacent to the main raster file */
     @BeanField @Getter @Setter private List<AdjacentFile> adjacentChannels = new ArrayList<>();

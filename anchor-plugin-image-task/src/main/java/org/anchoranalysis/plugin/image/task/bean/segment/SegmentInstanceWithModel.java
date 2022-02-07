@@ -39,7 +39,6 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -60,7 +59,7 @@ import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackInto
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.inference.InferenceModel;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
@@ -305,11 +304,10 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
                         "Reading input stacks",
                         () -> {
                             try {
-                                TimeSequence sequence =
+                                TimeSeries series =
                                         input.getInput()
-                                                .createStackSequenceForSeries(0, input.getLogger())
-                                                .get(ProgressIgnore.get());
-                                return sequence.get(0);
+                                                .createStackSequenceForSeries(0, input.getLogger());
+                                return series.getFrame(0);
 
                             } catch (ImageIOException e) {
                                 throw new OperationFailedException(e);

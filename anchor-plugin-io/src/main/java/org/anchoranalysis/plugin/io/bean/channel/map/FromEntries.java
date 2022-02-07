@@ -32,20 +32,20 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
-import org.anchoranalysis.image.io.bean.channel.ChannelMap;
-import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
+import org.anchoranalysis.image.io.bean.channel.IndexedChannel;
+import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
-public class FromEntries extends ChannelMap {
+public class FromEntries extends ChannelMapCreator {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<ChannelEntry> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<IndexedChannel> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
-    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger) {
-        NamedEntries out = new NamedEntries();
+    public ChannelMap create(OpenedImageFile openedFile, Logger logger) {
+        ChannelMap out = new ChannelMap();
         list.stream().forEach(out::add);
         return out;
     }

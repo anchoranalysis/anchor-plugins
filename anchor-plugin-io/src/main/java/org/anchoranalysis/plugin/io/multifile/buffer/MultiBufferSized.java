@@ -27,9 +27,11 @@
 package org.anchoranalysis.plugin.io.multifile.buffer;
 
 import java.util.Optional;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.plugin.io.multifile.SizeExtents;
 
@@ -69,11 +71,10 @@ public class MultiBufferSized {
         }
     }
 
-    public TimeSequence createSequence(VoxelDataType dataType) {
-        TimeSequence tsOut = new TimeSequence();
-        for (int t = 0; t < sizeT; t++) {
-            tsOut.add(buffers.createStackForIndex(t, dimensions, dataType));
-        }
-        return tsOut;
+    public TimeSeries createSequence(VoxelDataType dataType) {
+        Stream<Stack> stacks =
+                IntStream.range(0, sizeT)
+                        .mapToObj(t -> buffers.createStackForIndex(t, dimensions, dataType));
+        return new TimeSeries(stacks);
     }
 }

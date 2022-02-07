@@ -31,16 +31,15 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
-import org.anchoranalysis.image.io.bean.channel.ChannelMap;
-import org.anchoranalysis.image.io.channel.input.NamedEntries;
+import org.anchoranalysis.image.io.bean.channel.ChannelMapCreator;
+import org.anchoranalysis.image.io.bean.channel.IndexedChannel;
+import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
-public class FromMetadata extends ChannelMap {
+public class FromMetadata extends ChannelMapCreator {
 
     @Override
-    public NamedEntries createMap(OpenedImageFile openedFile, Logger logger)
-            throws CreateException {
+    public ChannelMap create(OpenedImageFile openedFile, Logger logger) throws CreateException {
 
         try {
             Optional<List<String>> names = openedFile.channelNames(logger);
@@ -49,9 +48,9 @@ public class FromMetadata extends ChannelMap {
                         "No channels names are associated with the opened image-file");
             }
 
-            NamedEntries map = new NamedEntries();
+            ChannelMap map = new ChannelMap();
             for (int index = 0; index < names.get().size(); index++) {
-                map.add(new ChannelEntry(names.get().get(index), index));
+                map.add(new IndexedChannel(names.get().get(index), index));
             }
             return map;
         } catch (ImageIOException e) {

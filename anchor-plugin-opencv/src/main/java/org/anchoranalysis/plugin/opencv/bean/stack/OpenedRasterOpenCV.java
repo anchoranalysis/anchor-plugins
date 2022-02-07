@@ -35,7 +35,6 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
@@ -43,7 +42,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.io.bioformats.metadata.ImageTimestampsAttributesFactory;
 import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
 import org.opencv.core.Mat;
@@ -89,10 +88,9 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     private ImageTimestampsAttributes timestamps;
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress, Logger logger)
-            throws ImageIOException {
+    public TimeSeries open(int seriesIndex, Logger logger) throws ImageIOException {
         openStackIfNecessary();
-        return new TimeSequence(stack);
+        return new TimeSeries(stack);
     }
 
     @Override

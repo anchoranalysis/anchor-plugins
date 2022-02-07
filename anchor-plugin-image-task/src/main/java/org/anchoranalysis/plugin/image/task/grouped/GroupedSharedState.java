@@ -26,11 +26,13 @@
 
 package org.anchoranalysis.plugin.image.task.grouped;
 
+import java.util.Optional;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.image.core.channel.Channel; // NOSONAR
+import org.anchoranalysis.io.input.grouper.InputGrouper;
 
 /**
  * Commonality between shared state for grouped export tasks.
@@ -55,6 +57,9 @@ public class GroupedSharedState<S, T> {
     private GroupMapByName<S, T> groupMap;
 
     // START REQUIRED ARGUMENTS
+    /** How to group the inputs. */
+    @Getter private final Optional<InputGrouper> grouper;
+
     /** How to create the group-map when needed. */
     private final Function<ConsistentChannelChecker, GroupMapByName<S, T>> createGroupMap;
     // END REQUIRED ARGUMENTS

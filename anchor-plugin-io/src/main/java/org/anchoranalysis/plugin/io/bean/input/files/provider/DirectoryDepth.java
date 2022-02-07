@@ -33,7 +33,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectoryString;
 import org.anchoranalysis.io.input.file.FilesProviderException;
@@ -49,18 +48,15 @@ public class DirectoryDepth extends FilesProviderWithDirectoryString {
     public List<File> matchingFilesForDirectory(Path directory, InputManagerParameters parameters)
             throws FilesProviderException {
 
-        String[] filesDir = directory.toFile().list();
+        String[] filesDirectory = directory.toFile().list();
 
-        if (filesDir == null) {
+        if (filesDirectory == null) {
             throw new FilesProviderException(
                     String.format("Path %s is not valid. Cannot enumerate directory.", directory));
         }
 
-        int numFiles = filesDir.length;
-
-        try (ProgressMultiple progressMultiple =
-                new ProgressMultiple(parameters.getProgress(), numFiles)) {
-            WalkToDepth walkTo = new WalkToDepth(exactDepth, progressMultiple);
+        WalkToDepth walkTo = new WalkToDepth(exactDepth);
+        try {
             return walkTo.findDirs(directory.toFile());
         } catch (IOException e) {
             throw new FilesProviderException(e);

@@ -72,8 +72,7 @@ public class FitTo extends ScaleCalculator {
 
     @Override
     public ScaleFactor calculate(
-            Optional<Dimensions> dimensionsToBeScaled,
-            Optional<ImageSizeSuggestion> suggestedResize)
+            Optional<Dimensions> dimensionsToBeScaled, Optional<ImageSizeSuggestion> suggestedSize)
             throws OperationFailedException {
 
         if (!dimensionsToBeScaled.isPresent()) {

@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
+import org.anchoranalysis.image.io.bean.channel.IndexedChannel;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
@@ -65,7 +65,7 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
      * <p>If this list has at least one, then we treat the main raster file not as a stack, but
      * break it into separate channels that are each presented as a separate stack to the MultiInput
      */
-    @BeanField @Getter @Setter private List<ChannelEntry> additionalChannels = new ArrayList<>();
+    @BeanField @Getter @Setter private List<IndexedChannel> additionalChannels = new ArrayList<>();
 
     /**
      * If true, a raster-stack is treated as a single-channel, even if multiple exist (and no

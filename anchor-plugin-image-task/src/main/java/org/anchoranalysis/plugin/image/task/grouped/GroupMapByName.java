@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -38,6 +39,7 @@ import org.anchoranalysis.core.collection.MapCreate;
 import org.anchoranalysis.core.collection.MapCreateCountdown;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedConsumer;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -79,7 +81,7 @@ public abstract class GroupMapByName<S, T> {
      */
     protected GroupMapByName(
             String nounT,
-            Stream<Optional<String>> groupIdentifiers,
+            Optional<Stream<String>> groupIdentifiers,
             Optional<InputOutputContext> outputContext,
             Supplier<T> createAggregator,
             CheckedBiConsumer<S, T, OperationFailedException> addSingleToAggregator) {
@@ -88,10 +90,17 @@ public abstract class GroupMapByName<S, T> {
                         () -> new MapCreate<>(createAggregator),
                         (groupIdentifier, groupMap) ->
                                 outputGroup(groupIdentifier, groupMap, outputContext));
-        // Increment the reference count for each instance of a group-identifier
-        // This allows the map to already output each group, when all images have been processed
-        // for that group
-        groupIdentifiers.forEach(map::increment);
+
+        if (groupIdentifiers.isPresent()) {
+            // Increment the reference count for each instance of a group-identifier
+            // This allows the map to already output each group, when all images have been processed
+            // for that group
+            groupIdentifiers.get().forEach(identifier -> map.increment(Optional.of(identifier)));
+        } else {
+            // Create one entry in the map for an empty-group. It's count will never be decremented.
+            map.increment(Optional.empty());
+        }
+
         this.nounT = nounT;
         this.addSingleToAggregator = addSingleToAggregator;
     }
@@ -106,15 +115,28 @@ public abstract class GroupMapByName<S, T> {
             Optional<String> groupIdentifier, List<Pair<String, S>> singleItemsToAdd)
             throws OperationFailedException {
 
-        map.processElementDecrement(
-                groupIdentifier,
+        CheckedConsumer<MapCreate<String, T>, OperationFailedException> operation =
                 value -> {
                     // Add to the aggregator making sure not to guard against concurrent
                     // modification
                     synchronized (value) {
                         addAllItemsToMap(groupIdentifier, value, singleItemsToAdd);
                     }
-                });
+                };
+        if (groupIdentifier.isPresent()) {
+            map.processElementDecrement(groupIdentifier, operation);
+        } else {
+            map.processElement(groupIdentifier, operation);
+        }
+    }
+
+    /**
+     * Outputs any groups that have not already been outputted.
+     *
+     * @throws OperationFailedException if thrown by the outputting.
+     */
+    public void outputAnyRemainingGroups() throws OperationFailedException {
+        map.cleanUpRemaining();
     }
 
     /**
@@ -171,13 +193,16 @@ public abstract class GroupMapByName<S, T> {
             throws OperationFailedException {
         try {
             if (outputContext.isPresent()) {
+
+                Set<Map.Entry<String, T>> entries = groupMap.entrySet();
+
                 // If there is a second part-only in the MultiName, it is assumed that there is no
                 // group (for all items) and it is written without a subdirectory
                 // If there are two parts in the MultiName, it is assumed that the first-part is a
                 // group-name (a separate subdirectory) and the second-part is written without a
                 // subdirectory.
                 outputGroupIntoSubdirectory(
-                        groupMap.entrySet(),
+                        entries,
                         multipleOutputs ->
                                 maybeCreateSubdirectory(
                                         multipleOutputs, outputContext.get(), groupIdentifier),
@@ -190,7 +215,7 @@ public abstract class GroupMapByName<S, T> {
     }
 
     /**
-     * Creates a subdirectory if grouping is occuring <b>and</b> multipleOutputs occur.
+     * Creates a subdirectory if grouping is occurring <b>and</b> multipleOutputs occur.
      *
      * @param multipleOutputs whether each group will produce multiple outputs or a single output.
      * @param context the context in which to maybe create a subdirectory, or else use as-is.

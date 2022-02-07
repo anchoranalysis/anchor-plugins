@@ -41,6 +41,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.OptionalFactory;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
@@ -59,7 +60,7 @@ import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.input.bean.grouper.Grouper;
-import org.anchoranalysis.io.input.bean.grouper.WithoutGrouping;
+import org.anchoranalysis.io.input.grouper.InputGrouper;
 import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -93,7 +94,8 @@ public abstract class GroupedStackBase<S, T>
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
 
     /** How to partition the inputs into groups. */
-    @BeanField @OptionalBean @Getter @Setter private Grouper group = new WithoutGrouping();
+    @BeanField @OptionalBean @Getter @Setter @DefaultInstance private Grouper group;
+    ;
 
     /** Selects which channels are included, optionally renaming. */
     @BeanField @Getter @Setter private FromStacks selectChannels = new All();
@@ -144,13 +146,19 @@ public abstract class GroupedStackBase<S, T>
                                         .getContext()
                                         .maybeSubdirectory(subdirectoryForGroupOutputs(), false));
 
-        List<Optional<String>> groupIdentifiers = allGroupIdentifiers(inputs);
+        Optional<InputGrouper> grouper =
+                group.createInputGrouper(
+                        parameters.getExperimentArguments().task().getGroupIndexRange());
+        Optional<List<String>> groupIdentifiers =
+                OptionalUtilities.map(
+                        grouper, grouperInternal -> allGroupIdentifiers(inputs, grouperInternal));
 
         return new GroupedSharedState<>(
+                grouper,
                 checker ->
                         this.createGroupMap(
                                 checker,
-                                groupIdentifiers.stream(),
+                                groupIdentifiers.map(List::stream),
                                 outputContext,
                                 operationContext));
     }
@@ -163,7 +171,8 @@ public abstract class GroupedStackBase<S, T>
         InputOutputContext context = input.getContextJob();
 
         // Extract a group name
-        Optional<String> groupName = deriveGroup(inputStack.identifierAsPath());
+        Optional<String> groupName =
+                deriveGroup(inputStack.identifierAsPath(), input.getSharedState().getGrouper());
 
         processStacks(
                 GroupedStackBase.extractInputStacks(inputStack, context.getLogger()),
@@ -176,7 +185,12 @@ public abstract class GroupedStackBase<S, T>
     public void afterAllJobsAreExecuted(
             GroupedSharedState<S, T> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
-        // NOTHING TO DO
+        // If no grouping was applied, it's now time to output the aggregate
+        try {
+            sharedState.getGroupMap().outputAnyRemainingGroups();
+        } catch (OperationFailedException e) {
+            throw new ExperimentExecutionException("An error occurred outputting an aggregate", e);
+        }
     }
 
     /**
@@ -204,7 +218,7 @@ public abstract class GroupedStackBase<S, T>
      */
     protected abstract GroupMapByName<S, T> createGroupMap(
             ConsistentChannelChecker channelChecker,
-            Stream<Optional<String>> groupIdentifiers,
+            Optional<Stream<String>> groupIdentifiers,
             Optional<InputOutputContext> outputContext,
             OperationContext operationContext);
 
@@ -224,6 +238,7 @@ public abstract class GroupedStackBase<S, T>
      *
      * @param name the name of the channel.
      * @param individual the derived-individual element.
+     * @param partOfGroup true when the item is part of a group, false otherwise.
      * @param consumeIndividual a function that should be called one or more times for the
      *     individual element, or sub-elements of it.
      * @param context supporting entities for the operation.
@@ -232,6 +247,7 @@ public abstract class GroupedStackBase<S, T>
     protected abstract void processIndividual(
             String name,
             S individual,
+            boolean partOfGroup,
             CheckedBiConsumer<String, S, OperationFailedException> consumeIndividual,
             InputOutputContext context)
             throws OperationFailedException;
@@ -281,6 +297,7 @@ public abstract class GroupedStackBase<S, T>
                 processIndividual(
                         entry.getKey(),
                         individual,
+                        groupName.isPresent(),
                         (name, histogram) -> toAdd.add(new Pair<>(name, individual)),
                         context);
             }
@@ -301,15 +318,13 @@ public abstract class GroupedStackBase<S, T>
     /**
      * Derives a group-key for {@code identifier} or {@link Optional#empty} if grouping is disabled.
      */
-    private Optional<String> deriveGroup(Path identifier) throws JobExecutionException {
-
-        // Exit early, if no grouping is defined
-        if (!group.isGroupingEnabled()) {
-            return Optional.empty();
-        }
-
+    private Optional<String> deriveGroup(Path identifier, Optional<InputGrouper> grouper)
+            throws JobExecutionException {
         try {
-            return Optional.of(group.deriveGroupKey(identifier));
+            if (!grouper.isPresent()) {
+                return Optional.empty();
+            }
+            return Optional.of(grouper.get().deriveGroupKeyOptional(identifier));
         } catch (DerivePathException e) {
             throw new JobExecutionException(
                     String.format("Cannot establish a group-identifier for: %s", identifier), e);
@@ -317,13 +332,13 @@ public abstract class GroupedStackBase<S, T>
     }
 
     /** Extracts a group-identifier for every input. */
-    private List<Optional<String>> allGroupIdentifiers(List<ProvidesStackInput> inputs)
+    private List<String> allGroupIdentifiers(List<ProvidesStackInput> inputs, InputGrouper grouper)
             throws ExperimentExecutionException {
         try {
             return FunctionalList.mapToList(
                     inputs,
                     DerivePathException.class,
-                    input -> group.deriveGroupKeyOptional(input.identifierAsPath()));
+                    input -> grouper.deriveGroupKeyOptional(input.identifierAsPath()));
         } catch (DerivePathException e) {
             throw new ExperimentExecutionException(
                     "Unable to derive a group identifier for an input", e);

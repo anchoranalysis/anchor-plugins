@@ -36,13 +36,18 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
+/**
+ * Implementation of {@link GroupMapByName} for aggregating histograms.
+ *
+ * @author Owen Feehan
+ */
 class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
 
     private final GroupedHistogramWriter writer;
 
     public GroupedHistogramMap(
             GroupedHistogramWriter writer,
-            Stream<Optional<String>> groupIdentifiers,
+            Optional<Stream<String>> groupIdentifiers,
             Optional<InputOutputContext> outputContext,
             int maxValue) {
         super(
@@ -60,15 +65,19 @@ class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
             Function<Boolean, InputOutputContext> createContext,
             Optional<String> outputNameSingle)
             throws IOException {
+
+        // Only use the groupIdentifier as an identifier, if there is a single histogram to output.
+        Optional<String> singleIdentifier =
+                namedAggregators.size() > 1 ? Optional.empty() : outputNameSingle;
+
         // We can write these group outputs in parallel, as we no longer in the parallel part of
         // Anchor's task execution
         InputOutputContext context = createContext.apply(namedAggregators.size() > 1);
-        namedAggregators.parallelStream()
-                .forEach(
-                        namedAggregator ->
-                                writer.writeHistogramToFile(
-                                        namedAggregator.getValue(),
-                                        outputNameSingle.orElse(namedAggregator.getKey()),
-                                        context));
+        namedAggregators.forEach(
+                namedAggregator ->
+                        writer.writeHistogramToFile(
+                                namedAggregator.getValue(),
+                                singleIdentifier.orElse(namedAggregator.getKey()),
+                                context));
     }
 }
