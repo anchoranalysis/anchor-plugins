@@ -148,7 +148,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
             Optional<InputGrouper> grouper =
                     group.createInputGrouper(
                             parameters.getExperimentArguments().task().getGroupIndexRange());
-            LabelHeaders headers = source.headers(isGroupGeneratorDefined());
+            LabelHeaders headers = source.headers(grouper.isPresent());
             FeatureExporter<S> exporter =
                     source.createExporter(headers, features, OUTPUT_RESULTS, grouper, context);
 
@@ -194,7 +194,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
         try {
             sharedState.closeAndWriteOutputs(
                     featuresAggregateAsStore(),
-                    source.includeGroupInExperiment(isGroupGeneratorDefined()),
+                    source.includeGroupInExperiment(sharedState.getGrouper().isPresent()),
                     contextForWriter -> style.deriveContext(contextForWriter)::csvWriter,
                     context);
         } catch (ProvisionFailedException | OutputWriteFailedException e) {
@@ -216,10 +216,6 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     @Override
     public InputTypesExpected inputTypesExpected() {
         return source.inputTypesExpected();
-    }
-
-    private boolean isGroupGeneratorDefined() {
-        return group != null;
     }
 
     private Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregateAsStore()
