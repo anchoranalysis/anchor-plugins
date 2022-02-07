@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.plugin.io.bean.input;
 
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -32,15 +33,27 @@ import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.InputManagerUnary;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Like {@link Shuffle} if requested in the {@link InputContextParameters} otherwise makes no change
  * to the inputs.
+ * 
+ * <p>If a shuffle is requested, the inputs may be sorted alphabetically (depending on {@code sortIfNotRequested}.
+ * 
+ * <p>The operations are coupled, as sorting makes no sense when shuffling is occurring, but is often desirable otherwise.
  *
  * @author Owen Feehan
  * @param <T> input-object type
  */
 public class ShuffleIfRequested<T extends InputFromManager> extends InputManagerUnary<T> {
 
+	// START BEAN PROPERTIES
+	/** When true, the inputs are sorted alphabetically, if a shuffle is <b>not</b> requested. */
+	@BeanField @Getter @Setter private boolean sortIfNotRequested = false;
+	// END BEAN PROPERTIES
+	
     @Override
     protected InputsWithDirectory<T> inputsFromDelegate(
             InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
@@ -48,7 +61,12 @@ public class ShuffleIfRequested<T extends InputFromManager> extends InputManager
 
         if (parameters.getInputContext().isShuffle()) {
             ShuffleHelper.shuffleInputs(fromDelegate.inputs(), parameters);
-        }
-        return fromDelegate;
+            return fromDelegate;
+        } else if (sortIfNotRequested) {
+    		return SortHelper.sortInputs(fromDelegate);
+    	} else {
+    		// Neither shuffling or sorting
+    		return fromDelegate;
+    	}
     }
 }
