@@ -91,8 +91,8 @@ class ContourListGenerator
         }
     }
 
-    private static PointList createMarkForContour(Contour c, boolean round) {
-        return PointListFactory.createMarkFromPoints3f(c.getPoints());
+    private static PointList createMarkForContour(Contour contour, boolean round) {
+        return PointListFactory.createMarkFromPoints3f(contour.getPoints());
     }
 
     private static MarkCollection createMarksFromContourList(List<Contour> contourList) {

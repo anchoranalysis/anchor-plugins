@@ -52,9 +52,7 @@ public class Single extends ColumnDefinition {
             CSVRow csvRow, IntersectingObjects<ObjectMask> allObjects)
             throws OperationFailedException {
 
-        ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties();
-        objects.add(column.findObjectFromCSVRow(allObjects, csvRow));
-        return objects;
+        return new ObjectCollectionWithProperties(column.findObjectFromCSVRow(allObjects, csvRow));
     }
 
     @Override

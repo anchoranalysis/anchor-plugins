@@ -38,8 +38,7 @@ import lombok.NoArgsConstructor;
 class SortUtilities {
 
     public static List<File> sortFiles(Collection<File> files) {
-        List<File> out = new ArrayList<>();
-        out.addAll(files);
+        List<File> out = new ArrayList<>(files);
         Collections.sort(out);
         return out;
     }
