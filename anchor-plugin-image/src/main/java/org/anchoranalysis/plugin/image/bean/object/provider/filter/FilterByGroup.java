@@ -38,6 +38,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.MatchedObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 
 public class FilterByGroup extends ObjectCollectionProviderFilterBase {
@@ -49,7 +50,7 @@ public class FilterByGroup extends ObjectCollectionProviderFilterBase {
     @Override
     protected ObjectCollection createFromObjects(
             ObjectCollection objects,
-            Optional<ObjectCollection> objectsRejected,
+            Optional<List<ObjectMask>> objectsRejected,
             Optional<Dimensions> dim)
             throws ProvisionFailedException {
 

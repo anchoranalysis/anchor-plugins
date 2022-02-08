@@ -26,15 +26,22 @@
 package org.anchoranalysis.plugin.image.object;
 
 import com.google.common.base.Preconditions;
-import lombok.Getter;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
@@ -47,21 +54,22 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class ColoredObjectCollection {
 
     /**
-     * The objects in the collection. This will always have the same number of items as {@code
-     * colors}.
+     * Each object-mask and corresponding color in the collection.
      */
-    @Getter private final ObjectCollection objects;
+    private final List<ColoredObject> list;
 
-    /**
-     * The colors in the collection. This will always have the same number of items as {@code
-     * objects}.
-     */
-    @Getter private final ColorList colors;
-
-    /** Create with an empty collection. */
+	/** Create with an empty collection. */
     public ColoredObjectCollection() {
-        this.objects = new ObjectCollection();
-        this.colors = new ColorList();
+        this.list = new LinkedList<>();
+    }
+    
+	/** 
+	 * Create from a stream of {@link ColoredObject}s.
+	 * 
+	 * @param stream the stream.
+	 */
+    public ColoredObjectCollection(Stream<ColoredObject> stream) {
+        this.list = stream.collect(Collectors.toList());
     }
 
     /**
@@ -71,8 +79,7 @@ public class ColoredObjectCollection {
      * @param color the color
      */
     public ColoredObjectCollection(ObjectMask object, RGBColor color) {
-        this.objects = ObjectCollectionFactory.of(object);
-        this.colors = new ColorList(color);
+    	this.list = Arrays.asList( new ColoredObject(object,color) );
     }
 
     /**
@@ -85,8 +92,7 @@ public class ColoredObjectCollection {
      */
     public ColoredObjectCollection(ObjectCollection objects, ColorList colors) {
         Preconditions.checkArgument(objects.size() == colors.size());
-        this.objects = objects;
-        this.colors = colors;
+        this.list = FunctionalList.zip(objects.asList(), colors.asList(), ColoredObject::new);
     }
 
     /**
@@ -101,14 +107,48 @@ public class ColoredObjectCollection {
 
         try {
             // If objects were created, add some corresponding colors
-            OptionalProviderFactory.create(provider)
-                    .ifPresent(
-                            objectsCreated -> {
-                                objects.addAll(objectsCreated);
-                                colors.addMultiple(color, objectsCreated.size());
-                            });
+            Optional<ObjectCollection> objects = OptionalProviderFactory.create(provider);
+            if (objects.isPresent()) {
+                addObjectsToList(objects.get(), color);
+            }
         } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
+    }
+    
+    /**
+     * A maximum-intensity projection.
+     *
+     * <p>This flattens across z-dimension, setting a voxel to <i>on</i> if it is <i>on</i> in any
+     * one slice.
+     *
+     * <p>This is an <b>immutable</b> operation.
+     *
+     * @return a new {@link ColoredObject} flattened in Z dimension.
+     */
+	public ColoredObjectCollection flattenZ() {
+		return new ColoredObjectCollection( list.stream().map(ColoredObject::flattenZ) );
+	}
+	
+	/**
+	 * Derives a {@link ColorList} from the collection.
+	 * 
+	 * @return a newly created list of colors, in identical order to the collection.
+	 */
+	public ColorList deriveColorList() {
+		return new ColorList(list.stream().map( colored -> colored.getColor()));
+	}
+	
+	/**
+	 * Creates a stream of {@link ObjectWithProperties} derived from the collection.
+	 * 
+	 * @return a newly created stream, in identical order to the collection.
+	 */
+	public Stream<ObjectWithProperties> streamObjectWithProperties() {
+		return list.stream().map( colored -> new ObjectWithProperties(colored.getObject()));
+	}
+    
+    private void addObjectsToList(ObjectCollection objects, RGBColor color) {
+    	objects.asList().forEach( object -> list.add(new ColoredObject(object, color)));
     }
 }

@@ -26,7 +26,8 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -91,12 +92,12 @@ public class Mser extends SegmentChannelIntoObjects {
     private <T extends Type<T>> ObjectCollection convertOutputToObjects(MserTree<T> tree)
             throws CreateException {
         return ObjectCollectionFactory.mapFrom(
-                tree, mser -> ObjectFromPointsFactory.create(convertPixelPoints(mser)));
+                tree, CreateException.class, mser -> ObjectFromPointsFactory.create(convertPixelPoints(mser)));
     }
 
-    private static List<Point3i> convertPixelPoints(
+    private static Collection<Point3i> convertPixelPoints(
             net.imglib2.algorithm.componenttree.mser.Mser<?> mser) {
-        List<Point3i> out = new ArrayList<>();
+    	List<Point3i> out = new LinkedList<>();
         for (Localizable localizable : mser) {
             out.add(new Point3i(localizable.getIntPosition(0), localizable.getIntPosition(1), 0));
         }

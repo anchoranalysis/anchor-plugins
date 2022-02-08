@@ -26,11 +26,13 @@
 
 package org.anchoranalysis.plugin.image.bean.object.filter.combine;
 
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Applies multiples filter with logical AND i.e. an object must pass all objects in the list to
@@ -44,7 +46,7 @@ public class And extends ObjectFilterCombine {
     public ObjectCollection filter(
             ObjectCollection objects,
             Optional<Dimensions> dim,
-            Optional<ObjectCollection> objectsRejected)
+            Optional<List<ObjectMask>> objectsRejected)
             throws OperationFailedException {
 
         ObjectCollection running = objects;
