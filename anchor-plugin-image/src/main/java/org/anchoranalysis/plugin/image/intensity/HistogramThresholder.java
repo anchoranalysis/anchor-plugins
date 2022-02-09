@@ -35,7 +35,7 @@ import org.anchoranalysis.math.histogram.Histogram;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramThresholder {
 
-    /** Retains the portion of the histogram greater or equal to the calculated-level */
+    /** Retains the portion of the histogram greater or equal to the calculated-level. */
     public static Histogram withCalculateLevel(Histogram histogram, CalculateLevel calculateLevel)
             throws OperationFailedException {
         int threshold = calculateLevel.calculateLevel(histogram);
