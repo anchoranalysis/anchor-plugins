@@ -67,9 +67,9 @@ import org.apache.commons.lang.StringUtils;
  */
 public class IntensityMoments extends FeatureListProvider<FeatureInputStack> {
 
-	/** Number of features that are added <i>per channel</i>. */
-	private static final int NUMBER_FEATURES = 6;
-	
+    /** Number of features that are added <i>per channel</i>. */
+    private static final int NUMBER_FEATURES = 6;
+
     // START BEAN PROPERTIES
     /**
      * An upper limit on the number of channels in the energy-stack for which we create features.
@@ -79,7 +79,8 @@ public class IntensityMoments extends FeatureListProvider<FeatureInputStack> {
 
     @Override
     public FeatureList<FeatureInputStack> get() throws ProvisionFailedException {
-        FeatureList<FeatureInputStack> out = new FeatureList<>(NUMBER_FEATURES * maximumNumberChannels);
+        FeatureList<FeatureInputStack> out =
+                new FeatureList<>(NUMBER_FEATURES * maximumNumberChannels);
 
         for (int channelIndex = 0; channelIndex < maximumNumberChannels; channelIndex++) {
             out.addAll(featuresForChannel(channelIndex));

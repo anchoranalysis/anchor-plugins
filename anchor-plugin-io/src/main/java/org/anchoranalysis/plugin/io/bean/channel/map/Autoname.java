@@ -65,7 +65,7 @@ public class Autoname extends ChannelMapCreator {
             Optional<List<String>> names = openedFile.channelNames(logger);
 
             boolean rgb =
-                    openedFile.isRGB()
+                    openedFile.isRGB(logger)
                             && (openedFile.numberChannels(logger) == 3
                                     || openedFile.numberChannels(logger) == 4);
 

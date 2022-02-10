@@ -26,41 +26,35 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.filter;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
-import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithOptionalDimensionsBase;
 
 public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectFilter filter;
-
-    @BeanField @OptionalBean @Getter @Setter
-    private ObjectCollectionProvider
-            objectsRejected; // The rejected objects are put here (OPTIONAL)
     // END BEAN PROPERTIES
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects)
             throws ProvisionFailedException {
-        return createFromObjects(
-                objects, OptionalProviderFactory.create(objectsRejected), createDims());
+        return createFromObjects(objects, Optional.empty(), createDims());
     }
 
     protected ObjectCollection filter(
             ObjectCollection objects,
             Optional<Dimensions> dim,
-            Optional<ObjectCollection> objectsRejected)
+            Optional<List<ObjectMask>> objectsRejected)
             throws ProvisionFailedException {
         try {
             return filter.filter(objects, dim, objectsRejected);
@@ -71,7 +65,7 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
 
     protected abstract ObjectCollection createFromObjects(
             ObjectCollection objects,
-            Optional<ObjectCollection> objectsRejected,
+            Optional<List<ObjectMask>> objectsRejected,
             Optional<Dimensions> dim)
             throws ProvisionFailedException;
 }

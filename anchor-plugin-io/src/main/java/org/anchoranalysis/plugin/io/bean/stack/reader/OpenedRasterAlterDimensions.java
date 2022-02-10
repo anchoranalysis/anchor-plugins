@@ -110,8 +110,8 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
     }
 
     @Override
-    public boolean isRGB() throws ImageIOException {
-        return delegate.isRGB();
+    public boolean isRGB(Logger logger) throws ImageIOException {
+        return delegate.isRGB(logger);
     }
 
     @Override

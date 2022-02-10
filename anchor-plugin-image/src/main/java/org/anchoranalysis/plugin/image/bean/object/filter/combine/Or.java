@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.object.filter.combine;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -48,7 +49,7 @@ public class Or extends ObjectFilterCombine {
     public ObjectCollection filter(
             ObjectCollection objectsToFilter,
             Optional<Dimensions> dim,
-            Optional<ObjectCollection> objectsRejected)
+            Optional<List<ObjectMask>> objectsRejected)
             throws OperationFailedException {
 
         // Stores any successful items in a set
@@ -56,7 +57,8 @@ public class Or extends ObjectFilterCombine {
 
         // Adds the rejected-objects
         objectsRejected.ifPresent(
-                rejected -> rejected.addAll(determineRejected(objectsToFilter, setAccepted)));
+                rejected ->
+                        rejected.addAll(determineRejected(objectsToFilter, setAccepted).asList()));
 
         // Creates the accepted-objects
         return ObjectCollectionFactory.fromSet(setAccepted);

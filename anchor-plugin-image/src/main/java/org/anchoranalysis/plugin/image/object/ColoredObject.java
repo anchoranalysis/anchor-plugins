@@ -2,7 +2,7 @@
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2022 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,24 +23,39 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.plugin.image.object;
 
-package org.anchoranalysis.plugin.image.bean.object.provider.filter;
-
-import java.util.List;
-import java.util.Optional;
-import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import lombok.AllArgsConstructor;
+import lombok.Value;
+import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-public class Filter extends ObjectCollectionProviderFilterBase {
+/**
+ * An {@link ObjectMask} with an associated color.
+ *
+ * @author Owen Feehan
+ */
+@Value
+@AllArgsConstructor
+public class ColoredObject {
 
-    @Override
-    protected ObjectCollection createFromObjects(
-            ObjectCollection objects,
-            Optional<List<ObjectMask>> objectsRejected,
-            Optional<Dimensions> dim)
-            throws ProvisionFailedException {
-        return filter(objects, dim, objectsRejected);
+    /** The object-mask. */
+    private ObjectMask object;
+
+    /** The RGB color. */
+    private RGBColor color;
+
+    /**
+     * A maximum-intensity projection.
+     *
+     * <p>This flattens across z-dimension, setting a voxel to <i>on</i> if it is <i>on</i> in any
+     * one slice.
+     *
+     * <p>This is an <b>immutable</b> operation.
+     *
+     * @return a new {@link ColoredObject} flattened in Z dimension.
+     */
+    public ColoredObject flattenZ() {
+        return new ColoredObject(object.flattenZ(), color);
     }
 }

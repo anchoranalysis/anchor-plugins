@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.filter;
 
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
@@ -44,7 +45,7 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
     public ObjectCollection filter(
             ObjectCollection objectsToFilter,
             Optional<Dimensions> dimensions,
-            Optional<ObjectCollection> objectsRejected)
+            Optional<List<ObjectMask>> objectsRejected)
             throws OperationFailedException {
 
         if (!precondition(objectsToFilter)) {

@@ -160,7 +160,7 @@ public class ConvertNamedChannelsInputToStack extends InputFromManagerDelegate<N
             if (channelName.isPresent()) {
                 // Create a stack with a specific channel only
                 return new Stack(extractChannel(channels, channelName.get(), logger));
-            } else if (channels.isRGB() && channels.numberChannels() == 3) {
+            } else if (channels.isRGB(logger) && channels.numberChannels() == 3) {
                 // If it's marked as RGB and has exactly three channels, extract them into a stack,
                 // in theright order.
                 return buildStackFromRGBChannelNames(channels, logger);

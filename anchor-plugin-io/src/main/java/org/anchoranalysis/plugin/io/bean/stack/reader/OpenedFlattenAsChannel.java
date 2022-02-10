@@ -103,7 +103,7 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
     }
 
     @Override
-    public boolean isRGB() throws ImageIOException {
+    public boolean isRGB(Logger logger) throws ImageIOException {
         return false;
     }
 

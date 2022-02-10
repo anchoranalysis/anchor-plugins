@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -35,10 +34,7 @@ import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
@@ -48,8 +44,6 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.object.draw.Filled;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.image.io.object.output.rgb.DrawObjectsGenerator;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
@@ -107,10 +101,7 @@ public abstract class ColoredBase extends StackProvider {
 
     private Stack drawOnBackground(ColoredObjectCollection objects, DisplayStack background)
             throws CreateException {
-        return drawOnBackgroundAfterFlattening(
-                maybeFlatten(objects.getObjects()),
-                maybeFlatten(background),
-                Optional.of(objects.getColors()));
+        return drawOnBackgroundAfterFlattening(maybeFlatten(objects), maybeFlatten(background));
     }
 
     private DrawObject createDrawer() {
@@ -130,20 +121,18 @@ public abstract class ColoredBase extends StackProvider {
     }
 
     private Stack drawOnBackgroundAfterFlattening(
-            ObjectCollection objects, DisplayStack background, Optional<ColorList> colors)
-            throws CreateException {
+            ColoredObjectCollection objects, DisplayStack background) throws CreateException {
 
+        // TODO come up with a more efficient way that feed in a separate list of objects and colors
         try {
-            ColorList colorsSelected =
-                    OptionalUtilities.orElseGet(
-                            colors, () -> DEFAULT_COLOR_SET_GENERATOR.createList(objects.size()));
-
             DrawObjectsGenerator generator =
                     DrawObjectsGenerator.withBackgroundAndColors(
-                            createDrawer(), background, colorsSelected);
-            return generator.transform(new ObjectCollectionWithProperties(objects));
+                            createDrawer(), background, objects.deriveColorList());
+            ObjectCollectionWithProperties objectsToTransform =
+                    new ObjectCollectionWithProperties(objects.streamObjectWithProperties());
+            return generator.transform(objectsToTransform);
 
-        } catch (OutputWriteFailedException | OperationFailedException e) {
+        } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
         }
     }
@@ -156,9 +145,9 @@ public abstract class ColoredBase extends StackProvider {
         }
     }
 
-    private ObjectCollection maybeFlatten(ObjectCollection objects) {
+    private ColoredObjectCollection maybeFlatten(ColoredObjectCollection objects) {
         if (flatten) {
-            return objects.stream().map(ObjectMask::flattenZ);
+            return objects.flattenZ();
         } else {
             return objects;
         }

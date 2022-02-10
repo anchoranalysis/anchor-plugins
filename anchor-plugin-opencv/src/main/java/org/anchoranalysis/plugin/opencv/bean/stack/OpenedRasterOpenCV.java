@@ -25,42 +25,30 @@
  */
 package org.anchoranalysis.plugin.opencv.bean.stack;
 
-import com.google.common.base.CharMatcher;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalFactory;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.stack.CalculateOrientationChange;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.io.bioformats.metadata.ImageTimestampsAttributesFactory;
 import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.imgcodecs.Imgcodecs;
 
 /**
  * An opened-image file using the OpenCV library.
- *
- * <p>Note that when <i>reading image metadata</i> only, this is computionally slow, as the entire
- * image must be loaded into memory to determine the width and height. Users are recommended to use
- * another library for this purpose.
- *
- * <p>However, unlike many other libraries, OpenCV has the advantage of automatically correcting the
- * orientation (to give correct widths and heights) where EXIF rotation information is present.
- *
- * <p>When a file-path contains non-ASCII characters, then a slower method must be used to open
- * files (approximately 4 times slower) than when a path contains only ASCII characters.
  *
  * @author Owen Feehan
  */
@@ -79,6 +67,15 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     /** Records the execution time of operations. */
     private final ExecutionTimeRecorder executionTimeRecorder;
+
+    /** Calculates any change needed in orientation. */
+    private final Optional<CalculateOrientationChange> calculateOrientation;
+
+    /** A prefix used in the identifiers used for recording execution time. */
+    private final String executionTimePrefix;
+
+    /** How to read a {@link Mat} for a particular {@link Path}. */
+    private final CheckedFunction<Path, Mat, IOException> readDecodeMat;
     // END REQUIRED ARGUMENTS
 
     /** Lazily opened stack. */
@@ -89,7 +86,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     @Override
     public TimeSeries open(int seriesIndex, Logger logger) throws ImageIOException {
-        openStackIfNecessary();
+        openStackIfNecessary(logger);
         return new TimeSeries(stack);
     }
 
@@ -100,14 +97,14 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     @Override
     public Optional<List<String>> channelNames(Logger logger) throws ImageIOException {
-        openStackIfNecessary();
+        openStackIfNecessary(logger);
         boolean includeAlpha = numberChannels(logger) == 4;
         return OptionalFactory.create(stack.isRGB(), RGBChannelNames.asList(includeAlpha));
     }
 
     @Override
     public int numberChannels(Logger logger) throws ImageIOException {
-        openStackIfNecessary();
+        openStackIfNecessary(logger);
         return stack.getNumberChannels();
     }
 
@@ -118,7 +115,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     @Override
     public int bitDepth(Logger logger) throws ImageIOException {
-        openStackIfNecessary();
+        openStackIfNecessary(logger);
         if (!stack.allChannelsHaveIdenticalType()) {
             throw new ImageIOException(
                     "Not all channels have identical channel type, so not calculating bit-depth.");
@@ -127,8 +124,8 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     }
 
     @Override
-    public boolean isRGB() throws ImageIOException {
-        openStackIfNecessary();
+    public boolean isRGB(Logger logger) throws ImageIOException {
+        openStackIfNecessary(logger);
         return stack.isRGB();
     }
 
@@ -139,7 +136,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     @Override
     public Dimensions dimensionsForSeries(int seriesIndex, Logger logger) throws ImageIOException {
-        openStackIfNecessary();
+        openStackIfNecessary(logger);
         return stack.dimensions();
     }
 
@@ -152,58 +149,26 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     }
 
     /** Opens the stack if has not already been opened. */
-    private void openStackIfNecessary() throws ImageIOException {
+    private void openStackIfNecessary(Logger logger) throws ImageIOException {
         if (stack == null) {
+
             try {
-                Mat image = readDecodeMat(path, executionTimeRecorder);
+                Mat image =
+                        executionTimeRecorder.recordExecutionTime(
+                                executionTimePrefix + "reading/decoding the image.",
+                                () -> readDecodeMat.apply(path));
+
+                OrientationChanger.changeOrientationIfNecessary(
+                        image, calculateOrientation, logger);
+
                 stack =
                         executionTimeRecorder.recordExecutionTime(
-                                "Convert OpenCV to stack", () -> ConvertFromMat.toStack(image));
+                                executionTimePrefix + "convert OpenCV to stack",
+                                () -> ConvertFromMat.toStack(image));
             } catch (OperationFailedException | IOException e) {
                 throw new ImageIOException(
                         "Failed to convert an OpenCV image structure to a stack", e);
             }
-        }
-    }
-
-    /**
-     * Reads an image at {@code path} and decodes into a {@link Mat}.
-     *
-     * <p>Two methods are used, in order of preference:
-     *
-     * <ol>
-     *   <li>Using {@link Imgcodecs#imread} where possible (it only supports paths with ASCII
-     *       characters) as it is much more efficient.
-     *   <li>Using {@link Imgcodecs.imdecode} on a byte-array. This is slower as it involves loading
-     *       all bytes in the JVM and moving back into native code, and then back into the JVM.
-     * </ol>
-     *
-     * <p>The second method seems to be approximately 4 times slower empirically.
-     *
-     * <p>See this <a
-     * href="https://stackoverflow.com/questions/43185605/how-do-i-read-an-image-from-a-path-with-unicode-characters">Stack
-     * Overflow post</a> for more details on the problem/
-     *
-     * @param path the path to read the file from.
-     * @param recorder records execution times.
-     * @return the image read from the file-system.
-     * @throws IOException if the bytes for the file cannot be read form the file-system (when a
-     *     non-ascii path).
-     */
-    private Mat readDecodeMat(Path path, ExecutionTimeRecorder recorder) throws IOException {
-        String pathAsString = path.toString();
-        boolean isAscii = CharMatcher.ascii().matchesAllOf(pathAsString);
-        if (isAscii) {
-            return recorder.recordExecutionTime(
-                    "imread with OpenCV", () -> Imgcodecs.imread(pathAsString));
-        } else {
-            byte[] bytes =
-                    recorder.recordExecutionTime(
-                            "Reading file bytes (non-ascii path)", () -> Files.readAllBytes(path));
-            Mat mat = new MatOfByte(bytes);
-            return recorder.recordExecutionTime(
-                    "imgdecode with OpenCV (non-ascii path)",
-                    () -> Imgcodecs.imdecode(mat, Imgcodecs.IMREAD_UNCHANGED));
         }
     }
 }

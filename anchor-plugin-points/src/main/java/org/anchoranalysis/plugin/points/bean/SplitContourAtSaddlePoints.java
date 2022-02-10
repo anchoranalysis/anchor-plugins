@@ -90,7 +90,9 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
             throws OperationFailedException {
         try {
             return ObjectCollectionFactory.mapFrom(
-                    contourList, contour -> createObjectFromContour(contour, true));
+                    contourList,
+                    CreateException.class,
+                    contour -> createObjectFromContour(contour, true));
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
