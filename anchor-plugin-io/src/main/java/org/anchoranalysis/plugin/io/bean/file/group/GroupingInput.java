@@ -106,7 +106,7 @@ class GroupingInput extends NamedChannelsInput {
                 channels.dimensions(logger),
                 numberChannels(logger),
                 numberFrames(),
-                channels.isRGB(),
+                channels.isRGB(logger),
                 bitDepth(logger),
                 timestamps.getAttributes(),
                 timestamps.getAcqusitionTime());

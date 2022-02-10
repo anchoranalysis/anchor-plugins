@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.color.ColorList;
@@ -53,21 +52,19 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  */
 public class ColoredObjectCollection {
 
-    /**
-     * Each object-mask and corresponding color in the collection.
-     */
+    /** Each object-mask and corresponding color in the collection. */
     private final List<ColoredObject> list;
 
-	/** Create with an empty collection. */
+    /** Create with an empty collection. */
     public ColoredObjectCollection() {
         this.list = new LinkedList<>();
     }
-    
-	/** 
-	 * Create from a stream of {@link ColoredObject}s.
-	 * 
-	 * @param stream the stream.
-	 */
+
+    /**
+     * Create from a stream of {@link ColoredObject}s.
+     *
+     * @param stream the stream.
+     */
     public ColoredObjectCollection(Stream<ColoredObject> stream) {
         this.list = stream.collect(Collectors.toList());
     }
@@ -79,7 +76,7 @@ public class ColoredObjectCollection {
      * @param color the color
      */
     public ColoredObjectCollection(ObjectMask object, RGBColor color) {
-    	this.list = Arrays.asList( new ColoredObject(object,color) );
+        this.list = Arrays.asList(new ColoredObject(object, color));
     }
 
     /**
@@ -115,7 +112,7 @@ public class ColoredObjectCollection {
             throw new OperationFailedException(e);
         }
     }
-    
+
     /**
      * A maximum-intensity projection.
      *
@@ -126,29 +123,29 @@ public class ColoredObjectCollection {
      *
      * @return a new {@link ColoredObject} flattened in Z dimension.
      */
-	public ColoredObjectCollection flattenZ() {
-		return new ColoredObjectCollection( list.stream().map(ColoredObject::flattenZ) );
-	}
-	
-	/**
-	 * Derives a {@link ColorList} from the collection.
-	 * 
-	 * @return a newly created list of colors, in identical order to the collection.
-	 */
-	public ColorList deriveColorList() {
-		return new ColorList(list.stream().map( colored -> colored.getColor()));
-	}
-	
-	/**
-	 * Creates a stream of {@link ObjectWithProperties} derived from the collection.
-	 * 
-	 * @return a newly created stream, in identical order to the collection.
-	 */
-	public Stream<ObjectWithProperties> streamObjectWithProperties() {
-		return list.stream().map( colored -> new ObjectWithProperties(colored.getObject()));
-	}
-    
+    public ColoredObjectCollection flattenZ() {
+        return new ColoredObjectCollection(list.stream().map(ColoredObject::flattenZ));
+    }
+
+    /**
+     * Derives a {@link ColorList} from the collection.
+     *
+     * @return a newly created list of colors, in identical order to the collection.
+     */
+    public ColorList deriveColorList() {
+        return new ColorList(list.stream().map(colored -> colored.getColor()));
+    }
+
+    /**
+     * Creates a stream of {@link ObjectWithProperties} derived from the collection.
+     *
+     * @return a newly created stream, in identical order to the collection.
+     */
+    public Stream<ObjectWithProperties> streamObjectWithProperties() {
+        return list.stream().map(colored -> new ObjectWithProperties(colored.getObject()));
+    }
+
     private void addObjectsToList(ObjectCollection objects, RGBColor color) {
-    	objects.asList().forEach( object -> list.add(new ColoredObject(object, color)));
+        objects.asList().forEach(object -> list.add(new ColoredObject(object, color)));
     }
 }

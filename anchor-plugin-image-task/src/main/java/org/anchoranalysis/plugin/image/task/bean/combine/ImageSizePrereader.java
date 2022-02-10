@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,7 +39,6 @@ import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.math.arithmetic.Counter;
 import org.anchoranalysis.spatial.box.Extent;
-import org.apache.commons.math3.util.Pair;
 
 /**
  * Reads the size of each image initially, before normal (parallel) task execution.
@@ -73,7 +72,7 @@ class ImageSizePrereader {
      * @return a newly created list of the image-sizes for each input. This may not be the size size
      *     as {@code paths}, as if an error occurs, the element is dropped.
      */
-    public List<Pair<Path, Extent>> imageSizesFor(List<StackSequenceInput> inputs) {
+    public List<SizeMapping> imageSizesFor(List<StackSequenceInput> inputs) {
         context.getLogger()
                 .messageLogger()
                 .logFormatted(
@@ -89,7 +88,7 @@ class ImageSizePrereader {
      * Derives an {@link Extent} for a particular {@link StackSequenceInput}, returning it with its
      * associated path.
      */
-    private Optional<Pair<Path, Extent>> sizeFromInput(
+    private Optional<SizeMapping> sizeFromInput(
             StackSequenceInput input, Counter counter, int numberInputs) {
         Optional<Extent> size = Optional.empty();
         try {
@@ -100,7 +99,7 @@ class ImageSizePrereader {
                     context.getExecutionTimeRecorder()
                             .recordExecutionTime(
                                     "Prereading image size", () -> scaledSizeFor(path));
-            return size.map(extent -> new Pair<>(path, extent));
+            return size.map(extent -> new SizeMapping(path, extent));
         } catch (InputReadFailedException e) {
             context.getLogger()
                     .errorReporter()

@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.plugin.image.task.bean.combine;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -40,7 +39,6 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.apache.commons.math3.util.Pair;
 
 /**
  * Creates a {@link StackArranger} when the image-size <b>is not allowed vary</b>.
@@ -68,9 +66,7 @@ class FixedImageSizeArranger {
      * @throws OperationFailedException if an invalid {@code suggestedSize} is assigned.
      */
     public StackArranger create(
-            int numberRows,
-            Optional<ImageSizeSuggestion> suggestion,
-            List<Pair<Path, Extent>> imageSizes)
+            int numberRows, Optional<ImageSizeSuggestion> suggestion, List<SizeMapping> imageSizes)
             throws OperationFailedException {
         // Apply a scaling factor to the images, as we don't wish to use their original sizes
         scaleAllImages(imageSizes, suggestion);
@@ -87,29 +83,27 @@ class FixedImageSizeArranger {
 
     /** Scale each element in {@code imageSizes}. */
     private void scaleAllImages(
-            List<Pair<Path, Extent>> imageSizes, Optional<ImageSizeSuggestion> suggestion)
+            List<SizeMapping> imageSizes, Optional<ImageSizeSuggestion> suggestion)
             throws OperationFailedException {
         Optional<ScaleFactor> scaleFactor =
                 OptionalUtilities.map(suggestion, FixedImageSizeArranger::extractScaleFactor);
 
-        for (int i = 0; i < imageSizes.size(); i++) {
-            imageSizes.set(i, scalePair(imageSizes.get(i), scaleFactor));
+        for (SizeMapping mapping : imageSizes) {
+            scaleSizeMapping(mapping, scaleFactor);
         }
     }
 
     /** Scales the {@link Extent} in a pair. */
-    private Pair<Path, Extent> scalePair(
-            Pair<Path, Extent> pair, Optional<ScaleFactor> scaleFactor) {
+    private void scaleSizeMapping(SizeMapping mapping, Optional<ScaleFactor> scaleFactor) {
         try {
             if (scaleFactor.isPresent()) {
-                Extent second = pair.getSecond().scaleXYBy(scaleFactor.get(), true);
-                return new Pair<>(pair.getFirst(), second);
+                Extent second = mapping.getExtent().scaleXYBy(scaleFactor.get(), true);
+                mapping.assignExtent(second);
             } else {
-                Dimensions dimensions = new Dimensions(pair.getSecond());
+                Dimensions dimensions = new Dimensions(mapping.getExtent());
                 ScaleFactor factor =
                         fixedSizeScaler.calculate(Optional.of(dimensions), Optional.empty());
-                Extent second = pair.getSecond().scaleXYBy(factor, true);
-                return new Pair<>(pair.getFirst(), second);
+                mapping.assignExtent(mapping.getExtent().scaleXYBy(factor, true));
             }
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();

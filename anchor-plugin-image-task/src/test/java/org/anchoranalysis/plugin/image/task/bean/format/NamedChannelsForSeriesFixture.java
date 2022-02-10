@@ -93,7 +93,7 @@ class NamedChannelsForSeriesFixture implements NamedChannelsMap {
     }
 
     @Override
-    public boolean isRGB() throws ImageIOException {
+    public boolean isRGB(Logger logger) throws ImageIOException {
         return stack.isRGB();
     }
 

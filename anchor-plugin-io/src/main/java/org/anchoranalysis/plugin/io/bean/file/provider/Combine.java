@@ -46,6 +46,7 @@ public class Combine extends FilesProviderWithoutDirectory {
 
     @Override
     public List<File> create(InputManagerParameters parameters) throws FilesProviderException {
-        return FunctionalList.flatMapToList(list, FilesProviderException.class, provider -> provider.create(parameters));
+        return FunctionalList.flatMapToList(
+                list, FilesProviderException.class, provider -> provider.create(parameters));
     }
 }

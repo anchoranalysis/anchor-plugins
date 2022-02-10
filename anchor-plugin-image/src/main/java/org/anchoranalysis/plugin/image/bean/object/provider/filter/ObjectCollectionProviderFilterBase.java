@@ -48,8 +48,7 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects)
             throws ProvisionFailedException {
-        return createFromObjects(
-                objects, Optional.empty(), createDims());
+        return createFromObjects(objects, Optional.empty(), createDims());
     }
 
     protected ObjectCollection filter(

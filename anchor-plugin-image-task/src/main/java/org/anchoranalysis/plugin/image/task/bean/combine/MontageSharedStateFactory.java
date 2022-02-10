@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,8 +39,6 @@ import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
-import org.anchoranalysis.spatial.box.Extent;
-import org.apache.commons.math3.util.Pair;
 
 /**
  * Creates a {@link MontageSharedState}.
@@ -63,7 +61,7 @@ class MontageSharedStateFactory {
      *     determined.
      */
     public static MontageSharedState create(
-            List<Pair<Path, Extent>> sizes,
+            List<SizeMapping> sizes,
             StackArranger arranger,
             VoxelsResizer resizer,
             OperationContext context)
@@ -76,7 +74,9 @@ class MontageSharedStateFactory {
                                     "Arranging the stacks",
                                     () ->
                                             arranger.arrangeStacks(
-                                                    sizes.stream().map(Pair::getSecond).iterator(),
+                                                    sizes.stream()
+                                                            .map(SizeMapping::getExtent)
+                                                            .iterator(),
                                                     context));
 
             // Create the shared state with the bounding-box mapping and overall size for the
@@ -93,10 +93,10 @@ class MontageSharedStateFactory {
 
     /** Map each path to the corresponding bounding-box from the arrangement. */
     private static Map<Path, BoundingBoxEnclosed> mapFromArrangement(
-            List<Pair<Path, Extent>> sizes, StackArrangement arrangement) {
+            List<SizeMapping> sizes, StackArrangement arrangement) {
         Map<Path, BoundingBoxEnclosed> boxMapping = new HashMap<>();
         for (int i = 0; i < sizes.size(); i++) {
-            boxMapping.put(sizes.get(i).getFirst(), arrangement.get(i));
+            boxMapping.put(sizes.get(i).getPath(), arrangement.get(i));
         }
         return boxMapping;
     }

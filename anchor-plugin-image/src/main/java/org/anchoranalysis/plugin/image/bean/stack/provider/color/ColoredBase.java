@@ -101,10 +101,7 @@ public abstract class ColoredBase extends StackProvider {
 
     private Stack drawOnBackground(ColoredObjectCollection objects, DisplayStack background)
             throws CreateException {
-        return drawOnBackgroundAfterFlattening(
-                maybeFlatten(objects),
-                maybeFlatten(background)
-                );
+        return drawOnBackgroundAfterFlattening(maybeFlatten(objects), maybeFlatten(background));
     }
 
     private DrawObject createDrawer() {
@@ -124,15 +121,15 @@ public abstract class ColoredBase extends StackProvider {
     }
 
     private Stack drawOnBackgroundAfterFlattening(
-            ColoredObjectCollection objects, DisplayStack background)
-            throws CreateException {
+            ColoredObjectCollection objects, DisplayStack background) throws CreateException {
 
-    	// TODO come up with a more efficient way that feed in a separate list of objects and colors
+        // TODO come up with a more efficient way that feed in a separate list of objects and colors
         try {
             DrawObjectsGenerator generator =
                     DrawObjectsGenerator.withBackgroundAndColors(
                             createDrawer(), background, objects.deriveColorList());
-            ObjectCollectionWithProperties objectsToTransform = new ObjectCollectionWithProperties( objects.streamObjectWithProperties() );
+            ObjectCollectionWithProperties objectsToTransform =
+                    new ObjectCollectionWithProperties(objects.streamObjectWithProperties());
             return generator.transform(objectsToTransform);
 
         } catch (OutputWriteFailedException e) {

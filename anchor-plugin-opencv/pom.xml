@@ -63,6 +63,12 @@
 	  <artifactId>anchor-image-inference</artifactId>
 	  <version>0.0.1-SNAPSHOT</version>
 	</dependency>
+		     
+	<dependency>
+	  <groupId>${project.groupId}</groupId>     
+      <artifactId>anchor-plugin-io</artifactId>
+  	  <version>0.0.8-SNAPSHOT</version>
+  	 </dependency>
         	
 	<dependency>
         <groupId>io.vavr</groupId>
@@ -75,7 +81,7 @@
        <artifactId>mockito-core</artifactId>
        <version>${mockito.version}</version>
      </dependency>
-    
+   
 
 	<!--  START: OpenCV dependencies -->
 

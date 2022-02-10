@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,26 +25,26 @@
  */
 package org.anchoranalysis.plugin.image.object;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
-
 /**
  * An {@link ObjectMask} with an associated color.
- * 
+ *
  * @author Owen Feehan
  */
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public class ColoredObject {
 
-	/** The object-mask. */
-	private ObjectMask object;
+    /** The object-mask. */
+    private ObjectMask object;
 
-	/** The RGB color. */
-	private RGBColor color;
-	
+    /** The RGB color. */
+    private RGBColor color;
+
     /**
      * A maximum-intensity projection.
      *
@@ -55,7 +55,7 @@ public class ColoredObject {
      *
      * @return a new {@link ColoredObject} flattened in Z dimension.
      */
-	public ColoredObject flattenZ() {
-		return new ColoredObject(object.flattenZ(), color);
-	}
+    public ColoredObject flattenZ() {
+        return new ColoredObject(object.flattenZ(), color);
+    }
 }

@@ -52,7 +52,9 @@ class MinimaStore {
 
     public ObjectCollection createObjects() throws CreateException {
         return ObjectCollectionFactory.mapFrom(
-                list, CreateException.class, minima -> CreateObjectFromPoints.create(minima.getListPoints()));
+                list,
+                CreateException.class,
+                minima -> CreateObjectFromPoints.create(minima.getListPoints()));
     }
 
     public int size() {

@@ -57,7 +57,8 @@ public class Or extends ObjectFilterCombine {
 
         // Adds the rejected-objects
         objectsRejected.ifPresent(
-                rejected -> rejected.addAll(determineRejected(objectsToFilter, setAccepted).asList()));
+                rejected ->
+                        rejected.addAll(determineRejected(objectsToFilter, setAccepted).asList()));
 
         // Creates the accepted-objects
         return ObjectCollectionFactory.fromSet(setAccepted);
