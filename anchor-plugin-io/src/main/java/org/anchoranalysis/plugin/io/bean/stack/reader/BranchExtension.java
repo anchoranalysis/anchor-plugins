@@ -26,12 +26,13 @@
 package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.nio.file.Path;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.primitive.StringSet;
+import org.anchoranalysis.core.collection.StringSetTrie;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -57,7 +58,7 @@ public class BranchExtension extends StackReader {
     // END BEAN PROPERTIES
 
     /** Lazily create a lowercase version of extensions, as first needed. */
-    private Set<String> extensionsLowercase;
+    private StringSetTrie extensionsLowercase;
 
     @Override
     public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder)
@@ -71,14 +72,17 @@ public class BranchExtension extends StackReader {
 
     private void createLowercaseExtensionsIfNecessary() {
         if (extensionsLowercase == null) {
-            extensionsLowercase =
-                    extensions.stream().map(String::toLowerCase).collect(Collectors.toSet());
+            extensionsLowercase = new StringSetTrie(extensions.set());
         }
     }
 
     private boolean doesPathHaveExtension(Path path) {
         createLowercaseExtensionsIfNecessary();
-        String pathLowercase = path.toString().toLowerCase();
-        return extensionsLowercase.stream().anyMatch(pathLowercase::endsWith);
+        Optional<String> extension = ExtensionUtilities.extractExtension(path.toString().toLowerCase());
+        if (extension.isPresent()) {
+        	return extensionsLowercase.contains(extension.get());
+        } else {
+        	return false;
+        }
     }
 }
