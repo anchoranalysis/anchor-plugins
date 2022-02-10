@@ -217,6 +217,17 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      * <p>The eventual width will be the maximum of this and {@code varyingSizeWidth}.
      */
     @BeanField @Getter @Setter private double varyingSizeWidthRatio = 0.1;
+    
+    /**
+     * An ideal approximate ratio of the number of rows to the number of columns.
+     * 
+     * <p>When {@code == 1.0}, then the algorithm tries to have approximately <i>the same number of rows as columns</i>.
+     * 
+     * <p>When {@code > 1.0), then the algorithm tries to have <i>more rows than columns</i>, to match the ratio {@code number_rows / number_columns}.
+     * 
+     * <p>When {@code < 1.0), then the algorithm tries to have <i>more columns than rows</i>, to match the ratio {@code number_rows / number_columns}.
+     */
+    @BeanField @Getter @Setter private double ratioRowsToColumns = 1.0;
     // END BEAN PROPERTIES
 
     @Override
@@ -332,11 +343,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             List<SizeMapping> imageSizes, Optional<ImageSizeSuggestion> suggestedSize)
             throws OperationFailedException {
 
-        int numberImagesToArrange = imageSizes.size();
-
-        // Determine number of rows, so to give a similar number of rows and columns (as close to a
-        // square as possible, ignoring the aspectRatio).
-        int numberRows = (int) Math.ceil(Math.sqrt(numberImagesToArrange));
+        int numberRows = calculateNumberRows(imageSizes.size());
 
         if (varyImageSize) {
             return new VaryingImageSizeArranger(varyingSizeWidth, varyingSizeWidthRatio)
@@ -345,6 +352,20 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
             return new FixedImageSizeArranger(fixedSizeScaler, aligner)
                     .create(numberRows, suggestedSize, imageSizes);
         }
+    }
+    
+    /** 
+     * Determine the number of rows.
+     * 
+     * <p>This occurs so that {@code number_rows / number_columns}, approximately matches {@code ratioRowsToColumns}.
+     * 
+     * See the javadoc documentation for {@code ratioRowsToColumns} to understand its influence.
+     *
+     * @param numberImagesToArrange the total number of images to arrange in a table, with rows and columns.
+     * @return the number of rows to use.
+     */
+    private int calculateNumberRows(int numberImagesToArrange) {
+    	return (int) Math.ceil(Math.sqrt(numberImagesToArrange) * ratioRowsToColumns);
     }
 
     /** Is labelling enabled as an output? */
