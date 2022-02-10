@@ -33,6 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -46,6 +47,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -108,6 +110,9 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
      * written
      */
     @BeanField @Getter @Setter private boolean keepEntireImage = false;
+
+    /** How to convert an image to be displayed to the user. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     @Override
@@ -236,7 +241,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
             throws CreateException {
 
         Generator<BoundedList<ObjectMask>> generator =
-                new BuildGeneratorHelper(outlineWidth)
+                new BuildGeneratorHelper(outlineWidth, displayer)
                         .forStacks(
                                 dimensions,
                                 stacks.subset(outputRGBOutline),

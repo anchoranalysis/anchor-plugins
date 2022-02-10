@@ -36,6 +36,7 @@ import org.anchoranalysis.annotation.io.assignment.generator.AssignmentColorPool
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
 import org.anchoranalysis.annotation.io.assignment.generator.DrawColoredObjects;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.VeryBright;
 import org.anchoranalysis.core.exception.CreateException;
@@ -49,6 +50,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
@@ -122,6 +124,9 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
     @BeanField @Getter @Setter private boolean replaceMatchesWithSolids = true;
 
     @BeanField @Getter @Setter private ColorScheme colorsUnpaired = new VeryBright();
+
+    /** How to convert an image to be displayed to the user. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     @Override
@@ -244,7 +249,7 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
         try {
             NamedStacks stacks = new NamedStacks();
             input.getInput().addToStoreInferNames(stacks, logger);
-            return DisplayStack.create(stacks.getException(background));
+            return displayer.deriveFrom(stacks.getException(background));
 
         } catch (CreateException | OperationFailedException e) {
             throw new JobExecutionException(e);

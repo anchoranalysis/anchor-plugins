@@ -33,6 +33,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.functional.StreamableCollection;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.scale.ScaledElements;
@@ -51,10 +52,12 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 @RequiredArgsConstructor
 class FlattenAndScaler {
 
+    // START REQUIRED ARGUMENTS
     /** Scaling-factor to apply to objects and stacks. */
     @Getter private final ScaleFactor scaleFactor;
 
     private final VoxelsResizer resizer;
+    // END REQUIRED ARGUMENTS
 
     /** A scaled version of each object. */
     private ScaledElements<ObjectMask> objectsScaled;
@@ -85,6 +88,7 @@ class FlattenAndScaler {
      * @param backgroundSource an unscaled background image, if it exists.
      * @param backgroundChannelIndex which channel use in the background image, or -1 to use the
      *     entire stack.
+     * @param displayer How to convert the background to a suitable image to display.
      * @throws OperationFailedException if there are too many objects.
      */
     public FlattenAndScaler(
@@ -93,15 +97,12 @@ class FlattenAndScaler {
             boolean overlappingObjects,
             VoxelsResizer resizer,
             Extent targetSize,
-            Optional<Stack> backgroundSource,
-            int backgroundChannelIndex)
+            CheckedFunction<ScaleFactor, Optional<ScaleableBackground>, OperationFailedException>
+                    backgroundCreator)
             throws OperationFailedException {
         this.scaleFactor = ScaleFactorCalculator.soEachBoundingBoxFits(boundingBoxes, targetSize);
         this.resizer = resizer;
-
-        this.background =
-                determineBackgroundMaybeOutlined(
-                        backgroundSource, backgroundChannelIndex, scaleFactor, resizer);
+        this.background = backgroundCreator.apply(scaleFactor);
 
         this.sizeScaled = background.map(ScaleableBackground::sizeAfterAnyScaling);
 
@@ -215,16 +216,5 @@ class FlattenAndScaler {
         return ExtentToFitBoundingBoxes.derive(
                 objects.streamStandardJava()
                         .map(object -> object.boundingBox().scale(scaleFactor).flattenZ()));
-    }
-
-    private static Optional<ScaleableBackground> determineBackgroundMaybeOutlined(
-            Optional<Stack> backgroundSource,
-            int backgroundChannelIndex,
-            ScaleFactor scaleFactor,
-            VoxelsResizer resizer)
-            throws OperationFailedException {
-        BackgroundSelector backgroundHelper =
-                new BackgroundSelector(backgroundChannelIndex, scaleFactor, resizer);
-        return backgroundHelper.determineBackground(backgroundSource);
     }
 }

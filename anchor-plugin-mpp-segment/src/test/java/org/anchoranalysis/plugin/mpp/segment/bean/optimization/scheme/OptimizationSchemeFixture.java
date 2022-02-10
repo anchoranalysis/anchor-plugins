@@ -32,6 +32,8 @@ import org.anchoranalysis.bean.initializable.parameters.NullInitialization;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.image.bean.displayer.IntensityQuantiles;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkFactory;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
@@ -55,6 +57,8 @@ import org.anchoranalysis.test.image.InputOutputContextFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OptimizationSchemeFixture {
+
+    private static final StackDisplayer DISPLAYER = new IntensityQuantiles();
 
     /** A simulated annealing scheme using direct-assign mode. */
     public static <T> OptimizationScheme<T, T, UpdatableMarksList> simulatedAnnealing(
@@ -118,7 +122,7 @@ class OptimizationSchemeFixture {
         return new OptimizationContext(
                 "testExperiment",
                 energyScheme,
-                new DualStack(energyStack),
+                new DualStack(energyStack, DISPLAYER),
                 new TriggerTerminationCondition(),
                 context,
                 new RandomNumberGeneratorMersenne(true),

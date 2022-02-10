@@ -30,6 +30,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.box.ScaleableBackground;
@@ -48,6 +49,7 @@ class BackgroundSelector {
     private int backgroundChannelIndex;
     private ScaleFactor scaleFactor;
     private VoxelsResizer resizer;
+    private StackDisplayer displayer;
 
     public Optional<ScaleableBackground> determineBackground(Optional<Stack> backgroundSource)
             throws OperationFailedException {
@@ -80,14 +82,13 @@ class BackgroundSelector {
         if (numberChannels == 0) {
             return Optional.empty();
         } else if (numberChannels == 3 || numberChannels == 1) {
-            return Optional.of(DisplayStack.create(backgroundSource));
+            return Optional.of(displayer.deriveFrom(backgroundSource));
         } else {
             return Optional.of(extractChannelAsStack(backgroundSource, 0));
         }
     }
 
-    private static DisplayStack extractChannelAsStack(Stack stack, int index)
-            throws CreateException {
-        return DisplayStack.create(stack.getChannel(index));
+    private DisplayStack extractChannelAsStack(Stack stack, int index) throws CreateException {
+        return displayer.deriveFrom(stack.getChannel(index));
     }
 }

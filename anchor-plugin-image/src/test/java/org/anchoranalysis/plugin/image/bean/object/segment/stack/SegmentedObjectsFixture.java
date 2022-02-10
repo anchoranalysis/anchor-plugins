@@ -29,10 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
+import org.anchoranalysis.image.bean.displayer.IntensityQuantiles;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.segment.DualScale;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.inference.segment.MultiScaleObject;
+import org.anchoranalysis.image.inference.segment.SegmentedBackground;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.spatial.box.Extent;
@@ -67,6 +70,8 @@ public class SegmentedObjectsFixture {
 
     private static final Stack BACKGROUND = new Stack(new Extent(100, 200, 5));
 
+    private static final StackDisplayer DISPLAYER = new IntensityQuantiles();
+
     /**
      * Creates a {@link SegmentedObjects} containing two possible class-labels and corresponding
      * objects.
@@ -97,10 +102,10 @@ public class SegmentedObjectsFixture {
             addObjects(CLASS_LABEL_CUT_OFF_CORNERS, cutOffCornerObjects, list);
         }
 
-        return new SegmentedObjects(
-                list,
-                new DualScale<>(BACKGROUND, BACKGROUND),
-                ExecutionTimeRecorderIgnore.instance());
+        SegmentedBackground background =
+                new SegmentedBackground(new DualScale<>(BACKGROUND, BACKGROUND), DISPLAYER);
+
+        return new SegmentedObjects(list, background, ExecutionTimeRecorderIgnore.instance());
     }
 
     private static void addObjects(

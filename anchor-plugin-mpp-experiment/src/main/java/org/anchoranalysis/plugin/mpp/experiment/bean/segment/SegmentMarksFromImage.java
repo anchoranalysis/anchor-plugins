@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
@@ -48,6 +49,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -95,6 +97,9 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
     /** If non-empty, a dictionary that is passed to the segmentation procedure. */
     @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
+
+    /** How to convert an image to be displayed to the user. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     @Override
@@ -184,7 +189,8 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
         try {
             DisplayStack backgroundStack =
-                    BackgroundCreator.createBackground(stacks, segment.getBackgroundStackName());
+                    BackgroundCreator.createBackground(
+                            stacks, segment.getBackgroundStackName(), displayer);
 
             new MarksVisualization(marks, outputter, backgroundStack).write();
         } catch (CreateException e) {

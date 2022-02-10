@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -41,6 +42,7 @@ import org.anchoranalysis.core.system.MemoryUtilities;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -129,6 +131,9 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
      * <p>Otherwise, the random-number-generator seeds from the system clock.
      */
     @BeanField @Getter @Setter private boolean fixRandomSeed = false;
+
+    /** How to convert an image to be displayed to the user. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     private EnergySchemeWithSharedFeatures energySchemeShared;
@@ -270,7 +275,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     private DualStack wrapWithBackground(EnergyStack energyStack, NamedProviderStore<Stack> store)
             throws CreateException {
         DisplayStack background =
-                BackgroundCreator.createBackground(store, getBackgroundStackName());
+                BackgroundCreator.createBackground(store, getBackgroundStackName(), displayer);
         return new DualStack(energyStack, background);
     }
 
