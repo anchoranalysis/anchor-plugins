@@ -126,7 +126,10 @@ public class MontageSharedState {
                             .mapChannel(
                                     channel -> channel.resizeXY(box.getBox().extent(), resizer));
 
-            StackCopierAtBox.copyImageInto(sourceResized, stack.asStack(), box.getBox());
+            // Prevent two threads updating the stack at the same time
+            synchronized(this) {
+            	StackCopierAtBox.copyImageInto(sourceResized, stack.asStack(), box.getBox());
+            }
 
             if (label.isPresent()) {
                 labels.add(label.get(), box.getEnclosing(), false);
