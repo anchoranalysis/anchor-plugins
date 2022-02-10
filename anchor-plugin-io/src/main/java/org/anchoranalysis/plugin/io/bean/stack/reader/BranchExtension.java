@@ -72,7 +72,7 @@ public class BranchExtension extends StackReader {
 
     private void createLowercaseExtensionsIfNecessary() {
         if (extensionsLowercase == null) {
-            extensionsLowercase = new StringSetTrie(extensions.set());
+            extensionsLowercase = new StringSetTrie(extensions.stream().map(String::toLowerCase));
         }
     }
 
