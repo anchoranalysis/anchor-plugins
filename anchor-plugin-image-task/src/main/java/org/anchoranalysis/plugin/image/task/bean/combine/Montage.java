@@ -223,9 +223,9 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      * 
      * <p>When {@code == 1.0}, then the algorithm tries to have approximately <i>the same number of rows as columns</i>.
      * 
-     * <p>When {@code > 1.0), then the algorithm tries to have <i>more rows than columns</i>, to match the ratio {@code number_rows / number_columns}.
+     * <p>When {@code > 1.0}, then the algorithm tries to have <i>more rows than columns</i>, to match the ratio {@code number_rows / number_columns}.
      * 
-     * <p>When {@code < 1.0), then the algorithm tries to have <i>more columns than rows</i>, to match the ratio {@code number_rows / number_columns}.
+     * <p>When {@code < 1.0}, then the algorithm tries to have <i>more columns than rows</i>, to match the ratio {@code number_rows / number_columns}.
      */
     @BeanField @Getter @Setter private double ratioRowsToColumns = 1.0;
     // END BEAN PROPERTIES
