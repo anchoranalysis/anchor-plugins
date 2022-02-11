@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
 import com.google.common.base.Preconditions;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.core.functional.FunctionalList;
@@ -35,9 +35,9 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 class EqualVoxelsPlateau {
 
-    @Getter private List<PointWithNeighbor> pointsEdge = Arrays.asList();
+    @Getter private List<PointWithNeighbor> pointsEdge = new LinkedList<>();
 
-    @Getter private List<Point3i> pointsInner = Arrays.asList();
+    @Getter private List<Point3i> pointsInner = new LinkedList<>();
 
     public void addEdge(Point3i point, int neighborIndex) {
         Preconditions.checkArgument(neighborIndex >= 0);
