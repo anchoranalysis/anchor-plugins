@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.image.bean.object.filter.combine;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -46,19 +45,11 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class Or extends ObjectFilterCombine {
 
     @Override
-    public ObjectCollection filter(
-            ObjectCollection objectsToFilter,
-            Optional<Dimensions> dim,
-            Optional<List<ObjectMask>> objectsRejected)
+    public ObjectCollection filter(ObjectCollection objectsToFilter, Optional<Dimensions> dim)
             throws OperationFailedException {
 
         // Stores any successful items in a set
         Set<ObjectMask> setAccepted = findAcceptedObjects(objectsToFilter, dim);
-
-        // Adds the rejected-objects
-        objectsRejected.ifPresent(
-                rejected ->
-                        rejected.addAll(determineRejected(objectsToFilter, setAccepted).asList()));
 
         // Creates the accepted-objects
         return ObjectCollectionFactory.fromSet(setAccepted);
@@ -71,15 +62,9 @@ public class Or extends ObjectFilterCombine {
         Set<ObjectMask> setAccepted = new HashSet<>();
 
         for (ObjectFilter indFilter : getList()) {
-            setAccepted.addAll(indFilter.filter(objectsToFilter, dim, Optional.empty()).asList());
+            setAccepted.addAll(indFilter.filter(objectsToFilter, dim).asList());
         }
 
         return setAccepted;
-    }
-
-    /** Determines which objects are rejected */
-    private static ObjectCollection determineRejected(
-            ObjectCollection objectsToFilter, Set<ObjectMask> setAccepted) {
-        return objectsToFilter.stream().filter(object -> !setAccepted.contains(object));
     }
 }

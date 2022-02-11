@@ -71,7 +71,9 @@ public class ObjectWithMaximumFeatureFromEachMatchedCollection
             List<MatchedObject> listMatches = matcher.findMatch(objects);
 
             return ObjectCollectionFactory.mapFromOptional(
-                    listMatches, owm -> findMax(session, owm.getMatches()));
+                    listMatches,
+                    FeatureCalculationException.class,
+                    owm -> findMax(session, owm.getMatches()));
 
         } catch (OperationFailedException | FeatureCalculationException e) {
             throw new ProvisionFailedException(e);

@@ -57,7 +57,7 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
             Optional<List<ObjectMask>> objectsRejected)
             throws ProvisionFailedException {
         try {
-            return filter.filter(objects, dim, objectsRejected);
+            return filter.filter(objects, dim);
         } catch (OperationFailedException e) {
             throw new ProvisionFailedException(e);
         }

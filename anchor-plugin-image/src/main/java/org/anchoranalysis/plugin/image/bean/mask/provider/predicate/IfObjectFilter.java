@@ -58,9 +58,7 @@ public class IfObjectFilter extends IfPredicateBase {
         try {
             ObjectCollection objects =
                     filter.filter(
-                            ObjectCollectionFactory.of(objectMask),
-                            Optional.of(mask.dimensions()),
-                            Optional.empty());
+                            ObjectCollectionFactory.of(objectMask), Optional.of(mask.dimensions()));
             return objects.size() == 1;
         } catch (OperationFailedException e) {
             throw new ProvisionFailedException(e);

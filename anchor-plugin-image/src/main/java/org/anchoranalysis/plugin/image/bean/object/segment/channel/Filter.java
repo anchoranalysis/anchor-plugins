@@ -65,7 +65,7 @@ public class Filter extends SegmentChannelIntoObjectsUnary {
     private ObjectCollection filterObjects(ObjectCollection objects, Dimensions dim)
             throws SegmentationFailedException {
         try {
-            return filter.filter(objects, Optional.of(dim), Optional.empty());
+            return filter.filter(objects, Optional.of(dim));
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }

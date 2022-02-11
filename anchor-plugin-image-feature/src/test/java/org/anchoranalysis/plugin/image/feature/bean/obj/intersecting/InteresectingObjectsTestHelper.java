@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -141,9 +142,14 @@ class InteresectingObjectsTestHelper {
 
     /** Removes an object from the collection immutably */
     private static ObjectCollection removeImmutable(ObjectCollection objects, int index) {
-        ObjectCollection out = objects.duplicateShallow();
-        out.remove(index);
-        return out;
+        ArrayList<ObjectMask> removed = new ArrayList<>(objects.size() - 1);
+        for (int i = 0; i < index; i++) {
+            removed.add(objects.get(i));
+        }
+        for (int i = index + 1; i < objects.size(); i++) {
+            removed.add(objects.get(i));
+        }
+        return new ObjectCollection(removed);
     }
 
     private static ImageInitialization createInitialization(ObjectCollection others)

@@ -78,11 +78,12 @@ public class BranchExtension extends StackReader {
 
     private boolean doesPathHaveExtension(Path path) {
         createLowercaseExtensionsIfNecessary();
-        Optional<String> extension = ExtensionUtilities.extractExtension(path.toString().toLowerCase());
+        Optional<String> extension =
+                ExtensionUtilities.extractExtension(path.toString().toLowerCase());
         if (extension.isPresent()) {
-        	return extensionsLowercase.contains(extension.get());
+            return extensionsLowercase.contains(extension.get());
         } else {
-        	return false;
+            return false;
         }
     }
 }
