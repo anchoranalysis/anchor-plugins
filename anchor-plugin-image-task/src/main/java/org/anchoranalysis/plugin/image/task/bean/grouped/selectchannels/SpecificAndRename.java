@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +46,7 @@ import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 public class SpecificAndRename extends FromStacks {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<NamedBean<FromStack>> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<NamedBean<FromStack>> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     @Override

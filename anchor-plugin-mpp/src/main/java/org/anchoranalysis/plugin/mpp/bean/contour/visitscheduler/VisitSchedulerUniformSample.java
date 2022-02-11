@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.bean.contour.visitscheduler;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -43,7 +43,7 @@ import org.anchoranalysis.spatial.point.Tuple3i;
 public class VisitSchedulerUniformSample extends VisitScheduler {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<VisitScheduler> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<VisitScheduler> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     private VisitScheduler selected;

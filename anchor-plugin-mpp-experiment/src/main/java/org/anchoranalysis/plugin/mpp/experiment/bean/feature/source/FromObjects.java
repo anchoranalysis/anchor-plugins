@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -114,7 +114,7 @@ public class FromObjects<T extends FeatureInput>
     private DefineOutputterWithEnergy define = new DefineOutputterWithEnergy();
 
     @BeanField @Getter @Setter
-    private List<NamedBean<ObjectCollectionProvider>> objects = new ArrayList<>();
+    private List<NamedBean<ObjectCollectionProvider>> objects = Arrays.asList();
 
     @BeanField @Getter @Setter private CombineObjectsForFeatures<T> combine;
 

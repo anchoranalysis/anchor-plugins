@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.score;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -69,9 +69,9 @@ public class ScoreVoxels extends ChannelProvider {
 
     @BeanField @Getter @Setter private VoxelScore score;
 
-    @BeanField @Getter @Setter private List<ChannelProvider> channelsExtra = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ChannelProvider> channelsExtra = Arrays.asList();
 
-    @BeanField @Getter @Setter private List<HistogramProvider> histogramsExtra = new ArrayList<>();
+    @BeanField @Getter @Setter private List<HistogramProvider> histogramsExtra = Arrays.asList();
 
     @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +41,7 @@ import org.anchoranalysis.mpp.proposer.ProposerContext;
 public abstract class MarkProposerFromList extends MarkProposer {
 
     // START BEAN PROPERTIES
-    @BeanField @NonEmpty @Getter @Setter private List<MarkProposer> list = new ArrayList<>();
+    @BeanField @NonEmpty @Getter @Setter private List<MarkProposer> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     @Override

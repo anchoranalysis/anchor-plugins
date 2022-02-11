@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.Getter;
@@ -87,11 +87,11 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
 
     /** The channels we extract the object-masks from - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<StackProvider>> listStackProvider = new ArrayList<>();
+    private List<NamedBean<StackProvider>> listStackProvider = Arrays.asList();
 
     /** The channels we extract the object-masks from - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<StackProvider>> listStackProviderMIP = new ArrayList<>();
+    private List<NamedBean<StackProvider>> listStackProviderMIP = Arrays.asList();
 
     @BeanField @Getter @Setter private StringSet outputRGBOutline = new StringSet();
 

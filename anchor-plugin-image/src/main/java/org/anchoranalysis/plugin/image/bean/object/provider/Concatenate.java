@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 public class Concatenate extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<ObjectCollectionProvider> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ObjectCollectionProvider> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     @Override

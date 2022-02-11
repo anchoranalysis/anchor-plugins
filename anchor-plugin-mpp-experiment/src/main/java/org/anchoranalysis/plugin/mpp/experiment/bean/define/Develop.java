@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -77,7 +77,7 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
     @BeanField @Getter @Setter private DefineOutputter define;
 
     /** Specifies a feature-table that can also be outputted. */
-    @BeanField @Getter @Setter private List<OutputFeatureTable> featureTables = new ArrayList<>();
+    @BeanField @Getter @Setter private List<OutputFeatureTable> featureTables = Arrays.asList();
 
     /**
      * If non-empty, the identifier for a dictionary that is treated as part of the energy-stack.

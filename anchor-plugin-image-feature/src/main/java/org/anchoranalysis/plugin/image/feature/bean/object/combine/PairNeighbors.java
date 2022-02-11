@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -99,16 +99,14 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
      * Additional features that are processed on the pair of images (i.e. First+Second as a pair)
      */
     @BeanField @Getter @Setter
-    private List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> featuresPair =
-            new ArrayList<>();
+    private List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> featuresPair = Arrays.asList();
 
     /**
      * Additional features that only depend on the image, so do not need to be replicated for every
      * object.
      */
     @BeanField @Getter @Setter
-    private List<NamedBean<FeatureListProvider<FeatureInputStack>>> featuresImage =
-            new ArrayList<>();
+    private List<NamedBean<FeatureListProvider<FeatureInputStack>>> featuresImage = Arrays.asList();
 
     /** Include features for the First-object of the pair */
     @BeanField @Getter @Setter private boolean includeFirst = true;

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.color.provider;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +47,7 @@ public class Concatenate extends ColorProvider {
 
     // START BEAN PROPERTIES
     /** A list of {@link ColorProvider} to be concatenated. */
-    @BeanField @Getter @Setter private List<ColorProvider> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ColorProvider> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     @Override
