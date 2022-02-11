@@ -80,6 +80,7 @@ class OutlinePreserveRelativeSizeTest {
 
     static {
         BeanInstanceMapFixture.ensureStackWriter(true);
+        BeanInstanceMapFixture.ensureStackDisplayer();
     }
 
     @BeforeEach
@@ -175,6 +176,7 @@ class OutlinePreserveRelativeSizeTest {
         outline.setSize(SIZE);
         outline.setOverlappingObjects(overlappingObjects);
         outline.setInterpolator(new ImgLib2Lanczos());
+        BeanInstanceMapFixture.check(outline);
         return outline;
     }
 
