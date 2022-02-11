@@ -146,7 +146,7 @@ final class FindEqualVoxels {
         stack.push(point);
         processStack(stack, slidingBuffer, plateau, valueToFind(point));
 
-        Preconditions.checkArgument(!plateau.hasNullItems());
+        assert(!plateau.hasNullItems());
 
         return plateau;
     }
