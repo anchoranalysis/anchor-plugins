@@ -76,6 +76,7 @@ public abstract class ExportFeaturesTestBase<
 
     static {
         BeanInstanceMapFixture.ensureStackWriter(true);
+        BeanInstanceMapFixture.ensureStackDisplayer();
     }
 
     @TempDir Path directory;
