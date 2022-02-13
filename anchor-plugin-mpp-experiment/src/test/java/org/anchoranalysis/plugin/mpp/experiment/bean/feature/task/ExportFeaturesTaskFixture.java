@@ -103,6 +103,7 @@ public abstract class ExportFeaturesTaskFixture<
         task.setGroup(createGrouperMock());
 
         BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
+        BeanInstanceMapFixture.ensureStackDisplayer();
         BeanInstanceMapFixture.check(task);
 
         return task;
