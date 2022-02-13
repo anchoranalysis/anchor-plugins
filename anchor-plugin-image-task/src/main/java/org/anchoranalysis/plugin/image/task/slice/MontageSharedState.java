@@ -105,7 +105,7 @@ public class MontageSharedState {
      *     successfully read, or copying otherwise fails.
      */
     public void copyStackInto(
-            CheckedSupplier<Stack, InputReadFailedException> source,
+            CheckedSupplier<RGBStack, InputReadFailedException> source,
             String identifier,
             Path path,
             Optional<String> label)
@@ -121,14 +121,15 @@ public class MontageSharedState {
         }
 
         try {
-            Stack sourceResized =
+            RGBStack sourceResized =
                     source.get()
                             .mapChannel(
                                     channel -> channel.resizeXY(box.getBox().extent(), resizer));
 
             // Prevent two threads updating the stack at the same time
-            synchronized(this) {
-            	StackCopierAtBox.copyImageInto(sourceResized, stack.asStack(), box.getBox());
+            synchronized (this) {
+                StackCopierAtBox.copyImageInto(
+                        sourceResized.asStack(), stack.asStack(), box.getBox());
             }
 
             if (label.isPresent()) {

@@ -116,7 +116,7 @@ class ThumbnailBatchOutline implements ThumbnailBatch<ObjectCollection> {
                     recorder.recordExecutionTime(
                             "Transforming thumbnail objects",
                             () -> generator.transform(objectsToDisplay));
-            return DisplayStack.create(transformed);
+            return new DisplayStack(transformed);
 
         } catch (OutputWriteFailedException | OperationFailedException e) {
             throw new CreateException(e);

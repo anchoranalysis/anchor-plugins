@@ -29,12 +29,14 @@ package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
@@ -78,6 +80,9 @@ public abstract class ColoredBase extends StackProvider {
 
     /** The background. Either {@code stackBackground} or this should be defined but not both. */
     @BeanField @Getter @Setter private ProviderAsStack background;
+
+    /** How to convert an image to be displayed to the user. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     @Override
@@ -114,7 +119,7 @@ public abstract class ColoredBase extends StackProvider {
 
     private DisplayStack createUnflattenedBackground() throws CreateException {
         try {
-            return DisplayStack.create(background.getAsStack());
+            return displayer.deriveFrom(background.getAsStack());
         } catch (ProvisionFailedException e) {
             throw new CreateException(e);
         }

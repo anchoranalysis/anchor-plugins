@@ -26,13 +26,14 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -46,6 +47,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -85,11 +87,11 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
 
     /** The channels we extract the object-masks from - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<StackProvider>> listStackProvider = new ArrayList<>();
+    private List<NamedBean<StackProvider>> listStackProvider = Arrays.asList();
 
     /** The channels we extract the object-masks from - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<StackProvider>> listStackProviderMIP = new ArrayList<>();
+    private List<NamedBean<StackProvider>> listStackProviderMIP = Arrays.asList();
 
     @BeanField @Getter @Setter private StringSet outputRGBOutline = new StringSet();
 
@@ -108,6 +110,9 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
      * written
      */
     @BeanField @Getter @Setter private boolean keepEntireImage = false;
+
+    /** How to convert an image to be displayed to the user. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     @Override
@@ -236,7 +241,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
             throws CreateException {
 
         Generator<BoundedList<ObjectMask>> generator =
-                new BuildGeneratorHelper(outlineWidth)
+                new BuildGeneratorHelper(outlineWidth, displayer)
                         .forStacks(
                                 dimensions,
                                 stacks.subset(outputRGBOutline),

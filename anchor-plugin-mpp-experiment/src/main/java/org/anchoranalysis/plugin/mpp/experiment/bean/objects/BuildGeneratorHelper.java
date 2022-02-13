@@ -32,6 +32,7 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.identifier.name.SimpleNameValue;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
@@ -75,6 +76,9 @@ class BuildGeneratorHelper {
 
     /** The width of the outline of the object (e.g. 1 pixel) */
     private final int outlineWidth;
+
+    /** How to convert an image to be displayed. */
+    private final StackDisplayer displayer;
 
     public Generator<BoundedList<ObjectMask>> forStacks(
             Dimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
@@ -125,7 +129,7 @@ class BuildGeneratorHelper {
     private DisplayStack extractBackground(NamedStacks stacks, String key)
             throws NamedProviderGetException {
         try {
-            return DisplayStack.create(stacks.getException(key));
+            return displayer.deriveFrom(stacks.getException(key));
         } catch (CreateException e) {
             throw new NamedProviderGetException(key, e);
         }

@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.ye
 
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.core.functional.FunctionalList;
@@ -35,8 +36,9 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 class EqualVoxelsPlateau {
 
-    @Getter private List<PointWithNeighbor> pointsEdge = new ArrayList<>();
+    @Getter private List<PointWithNeighbor> pointsEdge = new LinkedList<>();
 
+    // TODO this runs really slowly if this is switched to a LinkedList. Find out why.
     @Getter private List<Point3i> pointsInner = new ArrayList<>();
 
     public void addEdge(Point3i point, int neighborIndex) {

@@ -32,10 +32,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -84,6 +86,9 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
 
+    /** The default-instances saved for instantiating beans dynamically within class. */
+    private BeanInstanceMap defaultInstances;
+
     /**
      * Create with a specific interpolator.
      *
@@ -91,6 +96,13 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      */
     protected CombineObjectsForFeatures(Interpolator interpolator) {
         this.interpolator = interpolator;
+    }
+
+    @Override
+    public void checkMisconfigured(BeanInstanceMap defaultInstances)
+            throws BeanMisconfiguredException {
+        super.checkMisconfigured(defaultInstances);
+        this.defaultInstances = defaultInstances;
     }
 
     /**
@@ -143,6 +155,11 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
             if (thumbnail == null) {
                 thumbnail =
                         OutlinePreserveRelativeSize.createToColorUnselectedObjects(interpolator);
+                try {
+                    thumbnail.checkMisconfigured(defaultInstances);
+                } catch (BeanMisconfiguredException e) {
+                    throw new CreateException("An error occurred creating thumbnail outlining", e);
+                }
             }
 
             try {

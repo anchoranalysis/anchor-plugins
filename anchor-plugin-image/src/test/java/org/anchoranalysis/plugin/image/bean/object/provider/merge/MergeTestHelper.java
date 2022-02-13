@@ -43,13 +43,14 @@ import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjects
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MergeTestHelper {
 
-    private static final int NUM_INTERSECTING = 8;
-    private static final int NUM_NOT_INTERSECTING = 3;
+    private static final int NUMBER_INTERSECTING = 8;
+    private static final int NUMBER_NOT_INTERSECTING = 3;
 
     /** Everything that intersects merged */
-    public static final int EXPECTED_RESULT_ALL_INTERSECTING_MERGED = NUM_NOT_INTERSECTING + 1;
+    public static final int EXPECTED_RESULT_ALL_INTERSECTING_MERGED = NUMBER_NOT_INTERSECTING + 1;
 
-    public static final int EXPECTED_RESULT_FIRST_THREE_NOT_MERGING = NUM_NOT_INTERSECTING + 3 + 1;
+    public static final int EXPECTED_RESULT_FIRST_THREE_NOT_MERGING =
+            NUMBER_NOT_INTERSECTING + 3 + 1;
 
     /** Linear intersection (intersects with left and right neighbor) among the first 8 objects, and then 3 more than don't intersect
      *
@@ -59,7 +60,7 @@ class MergeTestHelper {
      */
     public static final ObjectCollection OBJECTS_LINEAR_INTERSECTING =
             IntersectingCircleObjectsFixture.generateIntersectingObjects(
-                    NUM_INTERSECTING, NUM_NOT_INTERSECTING, false);
+                    NUMBER_INTERSECTING, NUMBER_NOT_INTERSECTING, false);
 
     /**
      * Tests the initialization and execution of a provider of object-masks that results in a number

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.quick.bean.input;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,7 +57,7 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
 
     /*** Additional entities that are appended to the multi-input */
     @BeanField @Getter @Setter
-    private List<FilePathBaseAppendToManager> listAppend = new ArrayList<>();
+    private List<FilePathBaseAppendToManager> listAppend = Arrays.asList();
 
     /**
      * Additional channels other than the main one, which are located in the main raster file
@@ -65,7 +65,7 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
      * <p>If this list has at least one, then we treat the main raster file not as a stack, but
      * break it into separate channels that are each presented as a separate stack to the MultiInput
      */
-    @BeanField @Getter @Setter private List<IndexedChannel> additionalChannels = new ArrayList<>();
+    @BeanField @Getter @Setter private List<IndexedChannel> additionalChannels = Arrays.asList();
 
     /**
      * If true, a raster-stack is treated as a single-channel, even if multiple exist (and no

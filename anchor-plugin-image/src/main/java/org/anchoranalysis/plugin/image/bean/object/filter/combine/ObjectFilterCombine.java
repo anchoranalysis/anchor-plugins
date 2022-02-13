@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.filter.combine;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +42,6 @@ public abstract class ObjectFilterCombine extends ObjectFilter {
 
     // START BEAN PROPERTIES
     /** A list of other filters from which the sub-classes implement filtering behaviour. */
-    @BeanField @Getter @Setter private List<ObjectFilter> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ObjectFilter> list = Arrays.asList();
     // END BEAN PROPERTIES
 }

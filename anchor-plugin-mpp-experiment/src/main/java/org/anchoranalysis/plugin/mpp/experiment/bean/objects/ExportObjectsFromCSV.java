@@ -33,6 +33,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
@@ -47,6 +48,7 @@ import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -105,6 +107,9 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
 
     /** Column definition for the CSV files */
     @BeanField @Getter @Setter private ColumnDefinition columnDefinition;
+
+    /** How to convert an image to be displayed to the user. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     @Override
@@ -249,7 +254,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
         StackProvider providerCopy = stack.duplicateBean();
         try {
             providerCopy.initializeRecursive(initialization, logger);
-            return DisplayStack.create(providerCopy.get());
+            return displayer.deriveFrom(providerCopy.get());
         } catch (CreateException | InitializeException | ProvisionFailedException e) {
             throw new OutputWriteFailedException(e);
         }

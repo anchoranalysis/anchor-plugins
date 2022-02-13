@@ -38,13 +38,16 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.io.stack.output.box.ScaleableBackground;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Create a thumbnail by drawing an outline of an object at a particular-scale, and placing it
@@ -108,6 +111,9 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
      * borders between neighbouring objects.
      */
     @BeanField @OptionalBean @Getter @Setter private boolean overlappingObjects = true;
+
+    /** How to convert an image so that it can be displayed. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     /**
@@ -146,8 +152,9 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
                             overlappingObjects,
                             resizerBackground,
                             size.asExtent(),
-                            backgroundSource,
-                            backgroundChannelIndex);
+                            scaleFactor ->
+                                    determineBackgroundMaybeOutlined(
+                                            scaleFactor, backgroundSource, resizerBackground));
 
             return new ThumbnailBatchOutline(
                     scaler,
@@ -165,5 +172,13 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
 
     private Optional<Color> colorForUnselectedObjects() {
         return Optional.ofNullable(colorUnselectedObjects).map(RGBColorBean::toAWTColor);
+    }
+
+    private Optional<ScaleableBackground> determineBackgroundMaybeOutlined(
+            ScaleFactor scaleFactor, Optional<Stack> backgroundSource, VoxelsResizer resizer)
+            throws OperationFailedException {
+        BackgroundSelector backgroundHelper =
+                new BackgroundSelector(backgroundChannelIndex, scaleFactor, resizer, displayer);
+        return backgroundHelper.determineBackground(backgroundSource);
     }
 }

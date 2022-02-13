@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.Color;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
@@ -79,6 +80,7 @@ class OutlinePreserveRelativeSizeTest {
 
     static {
         BeanInstanceMapFixture.ensureStackWriter(true);
+        BeanInstanceMapFixture.ensureStackDisplayer();
     }
 
     @BeforeEach
@@ -108,9 +110,7 @@ class OutlinePreserveRelativeSizeTest {
      */
     @Test
     void testOccludedObject() throws OperationFailedException {
-        ObjectCollection objectsPlusExtra = OBJECTS.duplicate();
-        objectsPlusExtra.add(OBJECTS.get(0).duplicate());
-
+        ObjectCollection objectsPlusExtra = appendObject(OBJECTS, OBJECTS.get(0));
         doTestAndAssert(objectsPlusExtra, NUMBER_TOTAL + 1, true);
     }
 
@@ -176,6 +176,17 @@ class OutlinePreserveRelativeSizeTest {
         outline.setSize(SIZE);
         outline.setOverlappingObjects(overlappingObjects);
         outline.setInterpolator(new ImgLib2Lanczos());
+        BeanInstanceMapFixture.check(outline);
         return outline;
+    }
+
+    /** Appends an {@link ObjectMask} to the collection. */
+    private static ObjectCollection appendObject(ObjectCollection existing, ObjectMask toAppend) {
+        ArrayList<ObjectMask> list = new ArrayList<>(existing.size() + 1);
+        for(ObjectMask existingObject : existing) {
+        	list.add(existingObject);
+        }
+        list.add(toAppend);
+        return new ObjectCollection(list);
     }
 }

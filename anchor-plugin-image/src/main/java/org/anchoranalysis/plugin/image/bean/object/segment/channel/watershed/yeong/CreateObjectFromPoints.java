@@ -44,12 +44,10 @@ class CreateObjectFromPoints {
         try {
             ObjectMask object = new ObjectMask(BoundingBoxFromPoints.fromStream(points.stream()));
 
-            for (int i = 0; i < points.size(); i++) {
+            for (Point3i point : points) {
 
                 object.binaryVoxels()
-                        .setOn(
-                                Point3i.immutableSubtract(
-                                        points.get(i), object.boundingBox().cornerMin()));
+                        .setOn(Point3i.immutableSubtract(point, object.boundingBox().cornerMin()));
             }
 
             return object;

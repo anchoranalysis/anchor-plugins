@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -38,6 +38,6 @@ import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 public abstract class CalculateLevelListBase extends CalculateLevel {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<CalculateLevel> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<CalculateLevel> list = Arrays.asList();
     // END BEAN PROPERTIES
 }

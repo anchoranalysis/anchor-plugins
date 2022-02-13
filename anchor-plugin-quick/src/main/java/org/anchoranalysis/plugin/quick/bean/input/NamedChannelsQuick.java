@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.quick.bean.input;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -76,15 +77,15 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
     @BeanField @Getter @Setter private int mainChannelIndex = 0;
 
     /** Additional channels other than the main one, which are located in the main raster file */
-    @BeanField @Getter @Setter private List<IndexedChannel> additionalChannels = new ArrayList<>();
+    @BeanField @Getter @Setter private List<IndexedChannel> additionalChannels = Arrays.asList();
 
     /** Channels that are located in a separate raster file adjacent to the main raster file */
-    @BeanField @Getter @Setter private List<AdjacentFile> adjacentChannels = new ArrayList<>();
+    @BeanField @Getter @Setter private List<AdjacentFile> adjacentChannels = Arrays.asList();
 
     /**
      * Channels that are located in a separate raster file somewhere else in the project's structure
      */
-    @BeanField @Getter @Setter private List<AppendStack> appendChannels = new ArrayList<>();
+    @BeanField @Getter @Setter private List<AppendStack> appendChannels = Arrays.asList();
 
     /** The raster-reader to use for opening any adjacent-channels */
     @BeanField @DefaultInstance @Getter @Setter private StackReader stackReaderAdjacent;
@@ -176,7 +177,7 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
 
     private List<NamedBean<DerivePath>> pathsAppend() throws BeanMisconfiguredException {
 
-        List<NamedBean<DerivePath>> out = new ArrayList<>();
+        List<NamedBean<DerivePath>> out = new ArrayList<>(appendChannels.size());
 
         for (AppendStack stack : appendChannels) {
             try {

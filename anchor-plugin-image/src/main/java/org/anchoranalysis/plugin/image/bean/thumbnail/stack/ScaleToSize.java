@@ -31,6 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -52,6 +53,9 @@ public class ScaleToSize extends ThumbnailFromStack {
     @BeanField @Getter @Setter private SizeXY size = new SizeXY(200, 200);
 
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
+
+    /** How to convert an image to be displayed to the user. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     private VoxelsResizer resizerCreated;
@@ -75,7 +79,7 @@ public class ScaleToSize extends ThumbnailFromStack {
                                                             size.getHeight(),
                                                             resizerCreated));
 
-            return DisplayStack.create(resized);
+            return displayer.deriveFrom(resized);
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);

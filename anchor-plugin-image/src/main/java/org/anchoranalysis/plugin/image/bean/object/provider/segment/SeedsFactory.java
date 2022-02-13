@@ -39,13 +39,8 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 class SeedsFactory {
 
     public static ObjectCollection createSeedsWithoutMask(ObjectCollection seeds) {
-        // We create a collection of seeds localised appropriately
-        // NB: we simply change the object seeds, as it seemingly won't be used again!!!
-        ObjectCollection out = new ObjectCollection();
-        for (ObjectMask object : seeds) {
-            out.add(createSeed(object));
-        }
-        return out;
+        // We create a collection of seeds localized appropriately
+        return seeds.stream().map(SeedsFactory::createSeed);
     }
 
     public static ObjectCollection createSeedsWithMask(
@@ -54,15 +49,15 @@ class SeedsFactory {
             ReadableTuple3i subtractFromCornerMin,
             Dimensions dim)
             throws CreateException {
-        // We create a collection of seeds localised appropriately
-        // NB: we simply change the object seeds, as it seemingly won't be used again!!!
-        ObjectCollection out = new ObjectCollection();
-        for (ObjectMask object : seeds) {
-            out.add(
-                    createSeedWithinMask(
-                            object, containingMask.boundingBox(), subtractFromCornerMin, dim));
-        }
-        return out;
+        // We create a collection of seeds localized appropriately
+        return seeds.stream()
+                .map(
+                        object ->
+                                createSeedWithinMask(
+                                        object,
+                                        containingMask.boundingBox(),
+                                        subtractFromCornerMin,
+                                        dim));
     }
 
     private static ObjectMask createSeed(ObjectMask object) {

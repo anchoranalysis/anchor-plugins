@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
@@ -78,7 +77,7 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
      * A list of permutations to apply. Either this must be non-empty or {@code permutation} must be
      * present, but not both.
      */
-    @BeanField @Getter @Setter private List<PermuteProperty<S>> permutations = new ArrayList<>();
+    @BeanField @Getter @Setter private List<PermuteProperty<S>> permutations = Arrays.asList();
     // END BEAN PROPERTIES
 
     @Override

@@ -60,6 +60,6 @@ public class FilterByGroup extends ObjectCollectionProviderFilterBase {
         return ObjectCollectionFactory.flatMapFromCollection(
                 matchList.stream().map(MatchedObject::getMatches),
                 CreateException.class,
-                matches -> filter(matches, dim, objectsRejected).asList());
+                matches -> filter(matches, dim, objectsRejected).streamStandardJava());
     }
 }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.channel.map;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 public class FromEntries extends ChannelMapCreator {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<IndexedChannel> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<IndexedChannel> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     @Override

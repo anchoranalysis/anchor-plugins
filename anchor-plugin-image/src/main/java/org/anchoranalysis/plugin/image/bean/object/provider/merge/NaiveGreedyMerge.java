@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
@@ -111,7 +112,7 @@ class NaiveGreedyMerge {
         for (int i = range.getStart(); i < objects.size(); i++) {
             for (int j = range.getEnd(); j < objects.size(); j++) {
 
-                if (i != j && tryMergeOnIndices(objects, i, j, consumer)) {
+                if (i != j && tryMergeOnIndices(objects.asList(), i, j, consumer)) {
                     // After a successful merge, we don't try to merge again
                     break;
                 }
@@ -120,7 +121,7 @@ class NaiveGreedyMerge {
     }
 
     private boolean tryMergeOnIndices(
-            ObjectCollection objects, int i, int j, Consumer<MergeRange> consumer)
+            List<ObjectMask> objects, int i, int j, Consumer<MergeRange> consumer)
             throws OperationFailedException {
         Optional<ObjectMask> merged = tryMerge(objects.get(i), objects.get(j));
         if (merged.isPresent()) {
@@ -172,7 +173,7 @@ class NaiveGreedyMerge {
         return new ObjectMask(BoundingBox.createReuse(point, extent), voxels);
     }
 
-    private static void removeTwoIndices(ObjectCollection objects, int i, int j) {
+    private static void removeTwoIndices(List<ObjectMask> objects, int i, int j) {
         if (i < j) {
             objects.remove(j);
             objects.remove(i);

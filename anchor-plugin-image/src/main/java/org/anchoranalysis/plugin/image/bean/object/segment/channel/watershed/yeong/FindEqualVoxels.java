@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
-import com.google.common.base.Preconditions;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -146,7 +145,7 @@ final class FindEqualVoxels {
         stack.push(point);
         processStack(stack, slidingBuffer, plateau, valueToFind(point));
 
-        Preconditions.checkArgument(!plateau.hasNullItems());
+        assert (!plateau.hasNullItems());
 
         return plateau;
     }

@@ -43,6 +43,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
@@ -50,11 +51,12 @@ import org.anchoranalysis.image.bean.spatial.arrange.align.Align;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.image.bean.spatial.arrange.align.Grow;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
-import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
+import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.stack.metadata.reader.ImageMetadataReader;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.stack.ConvertStackToRGB;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
@@ -217,17 +219,23 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
      * <p>The eventual width will be the maximum of this and {@code varyingSizeWidth}.
      */
     @BeanField @Getter @Setter private double varyingSizeWidthRatio = 0.1;
-    
+
     /**
      * An ideal approximate ratio of the number of rows to the number of columns.
-     * 
-     * <p>When {@code == 1.0}, then the algorithm tries to have approximately <i>the same number of rows as columns</i>.
-     * 
-     * <p>When {@code > 1.0}, then the algorithm tries to have <i>more rows than columns</i>, to match the ratio {@code number_rows / number_columns}.
-     * 
-     * <p>When {@code < 1.0}, then the algorithm tries to have <i>more columns than rows</i>, to match the ratio {@code number_rows / number_columns}.
+     *
+     * <p>When {@code == 1.0}, then the algorithm tries to have approximately <i>the same number of
+     * rows as columns</i>.
+     *
+     * <p>When {@code > 1.0}, then the algorithm tries to have <i>more rows than columns</i>, to
+     * match the ratio {@code number_rows / number_columns}.
+     *
+     * <p>When {@code < 1.0}, then the algorithm tries to have <i>more columns than rows</i>, to
+     * match the ratio {@code number_rows / number_columns}.
      */
     @BeanField @Getter @Setter private double ratioRowsToColumns = 1.0;
+
+    /** How to convert an image to be displayed to the user. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     @Override
@@ -353,19 +361,21 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
                     .create(numberRows, suggestedSize, imageSizes);
         }
     }
-    
-    /** 
+
+    /**
      * Determine the number of rows.
-     * 
-     * <p>This occurs so that {@code number_rows / number_columns}, approximately matches {@code ratioRowsToColumns}.
-     * 
-     * See the javadoc documentation for {@code ratioRowsToColumns} to understand its influence.
      *
-     * @param numberImagesToArrange the total number of images to arrange in a table, with rows and columns.
+     * <p>This occurs so that {@code number_rows / number_columns}, approximately matches {@code
+     * ratioRowsToColumns}.
+     *
+     * <p>See the javadoc documentation for {@code ratioRowsToColumns} to understand its influence.
+     *
+     * @param numberImagesToArrange the total number of images to arrange in a table, with rows and
+     *     columns.
      * @return the number of rows to use.
      */
     private int calculateNumberRows(int numberImagesToArrange) {
-    	return (int) Math.ceil(Math.sqrt(numberImagesToArrange) * ratioRowsToColumns);
+        return (int) Math.ceil(Math.sqrt(numberImagesToArrange) * ratioRowsToColumns);
     }
 
     /** Is labelling enabled as an output? */
@@ -374,11 +384,11 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
     }
 
     /** Reads a {@link Stack} to montage from the input. */
-    private Stack readStackFromInput(InputBound<StackSequenceInput, MontageSharedState> input)
+    private RGBStack readStackFromInput(InputBound<StackSequenceInput, MontageSharedState> input)
             throws InputReadFailedException {
         try {
             Stack stack = input.getInput().asStack(input.getLogger()).projectMax();
-            return DisplayStack.create(stack.extractUpToThreeChannels()).deriveStack(false);
+            return ConvertStackToRGB.convert(stack, displayer, false);
         } catch (OperationFailedException | CreateException e) {
             throw new InputReadFailedException(
                     "Cannot extract a stack representation from the input", e);

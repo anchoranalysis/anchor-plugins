@@ -59,6 +59,7 @@ final class BoundingBoxMap {
         return ObjectCollectionFactory.filterAndMapWithIndexFrom(
                 list,
                 Objects::nonNull,
+                OperationFailedException.class,
                 (pointRange, index) ->
                         matS.extract()
                                 .voxelsEqualTo(index + 1)

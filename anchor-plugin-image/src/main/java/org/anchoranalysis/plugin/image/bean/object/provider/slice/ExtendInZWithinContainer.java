@@ -27,8 +27,10 @@
 package org.anchoranalysis.plugin.image.bean.object.provider.slice;
 
 import java.util.List;
+import java.util.stream.Stream;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.image.core.object.MatchedObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -60,22 +62,25 @@ public class ExtendInZWithinContainer extends WithContainerBase {
                         containerRequired(),
                         objectsSource.duplicate() // Duplicated so as to avoid changing the original
                         );
-
-        // For each obj we extend it into its container
-        ObjectCollection out = new ObjectCollection();
-
-        for (MatchedObject matched : matchList) {
-            for (ObjectMask other : matched.getMatches()) {
-
-                try {
-                    out.add(createExtendedObject(other, matched.getSource()));
-                } catch (CreateException e) {
-                    throw new ProvisionFailedException(e);
-                }
-            }
+        try {
+            Stream<ObjectMask> stream =
+                    CheckedStream.flatMap(
+                            matchList.stream(),
+                            CreateException.class,
+                            ExtendInZWithinContainer::extendedMatchedObjects);
+            return new ObjectCollection(stream);
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
         }
+    }
 
-        return out;
+    private static Stream<ObjectMask> extendedMatchedObjects(MatchedObject matched)
+            throws CreateException {
+        ObjectMask source = matched.getSource();
+        return CheckedStream.map(
+                matched.getMatches().streamStandardJava(),
+                CreateException.class,
+                other -> createExtendedObject(other, source));
     }
 
     private static ObjectMask createExtendedObject(ObjectMask object, ObjectMask container)

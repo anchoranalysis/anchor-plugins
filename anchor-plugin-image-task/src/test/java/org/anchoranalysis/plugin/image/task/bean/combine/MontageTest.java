@@ -47,6 +47,10 @@ class MontageTest extends StackIOTestBase {
     private static List<String> FILENAMES_TO_COMPARE =
             Arrays.asList(Montage.OUTPUT_UNLABELLED + ".png");
 
+    static {
+        BeanInstanceMapFixture.ensureStackDisplayer();
+    }
+
     /** Varying the image location and image size. */
     @Test
     void testVaryBoth() throws OperationFailedException, ImageIOException {
