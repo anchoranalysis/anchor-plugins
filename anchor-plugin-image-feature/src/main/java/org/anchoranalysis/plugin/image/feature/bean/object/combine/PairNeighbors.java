@@ -99,7 +99,8 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
      * Additional features that are processed on the pair of images (i.e. First+Second as a pair)
      */
     @BeanField @Getter @Setter
-    private List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> featuresPair = Arrays.asList();
+    private List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> featuresPair =
+            Arrays.asList();
 
     /**
      * Additional features that only depend on the image, so do not need to be replicated for every

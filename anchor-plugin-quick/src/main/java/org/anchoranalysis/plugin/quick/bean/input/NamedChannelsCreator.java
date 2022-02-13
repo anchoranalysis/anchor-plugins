@@ -69,7 +69,7 @@ class NamedChannelsCreator {
     private static List<IndexedChannel> listEntries(
             String mainChannelName, int mainChannelIndex, List<IndexedChannel> additionalChannels)
             throws BeanMisconfiguredException {
-        List<IndexedChannel> out = new ArrayList<>(additionalChannels.size()+1);
+        List<IndexedChannel> out = new ArrayList<>(additionalChannels.size() + 1);
         out.add(new IndexedChannel(mainChannelName, mainChannelIndex));
 
         for (IndexedChannel entry : additionalChannels) {

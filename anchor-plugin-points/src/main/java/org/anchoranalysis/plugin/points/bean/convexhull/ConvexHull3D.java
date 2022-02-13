@@ -90,7 +90,10 @@ public class ConvexHull3D extends ConvexHullBase {
     private static List<Point3d> pointsFromMask(Mask mask) {
         List<Point3d> listOut = new ArrayList<>();
         BinaryValuesByte binaryValues = mask.binaryValuesByte();
-        IterateVoxelsEqualTo.equalToPrimitive(mask.voxels(), binaryValues.getOn(), (x,y,z) -> listOut.add( new Point3d(x,y,z)) );
+        IterateVoxelsEqualTo.equalToPrimitive(
+                mask.voxels(),
+                binaryValues.getOn(),
+                (x, y, z) -> listOut.add(new Point3d(x, y, z)));
         return listOut;
     }
 }

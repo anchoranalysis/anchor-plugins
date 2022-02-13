@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-plugin-image-task
+ * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2022 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,8 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.task.bean.combine;
-
-import java.nio.file.Path;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.anchoranalysis.spatial.box.Extent;
-
 /**
- * Maps a {@link Path} to a particular image-size and orientation-change.
- *
- * @author Owen Feehan
+ * Implementations of {@link org.anchoranalysis.image.bean.provider.ObjectCollectionProvider}
+ * involving merging objects together.
  */
-@AllArgsConstructor
-class SizeMapping {
-
-    /** The path. */
-    @Getter private Path path;
-
-    /** The size. */
-    @Getter private Extent extent;
-
-    /**
-     * Replace the existing {@link Extent} with a new value.
-     *
-     * @param extent the extent to assign.
-     */
-    public void assignExtent(Extent extent) {
-        this.extent = extent;
-    }
-}
+package org.anchoranalysis.plugin.image.bean.object.provider.merge;

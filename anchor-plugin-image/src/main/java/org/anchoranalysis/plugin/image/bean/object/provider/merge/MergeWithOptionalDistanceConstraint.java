@@ -24,36 +24,34 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
+package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.points.BoundingBoxFromPoints;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.point.Point3i;
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
+import org.anchoranalysis.plugin.image.object.merge.condition.BeforeCondition;
+import org.anchoranalysis.plugin.image.object.merge.condition.DistanceCondition;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class CreateObjectFromPoints {
+/**
+ * Expands {@link MergeBase} by optionally imposing a maximum-distance requirement between objects
+ * that are possibly merged.
+ *
+ * @author Owen Feehan
+ */
+public abstract class MergeWithOptionalDistanceConstraint extends MergeBase {
 
-    // TODO Optimize by requiring sorted list of points and moving through the z-stacks sequentially
-    public static ObjectMask create(List<Point3i> points) throws CreateException {
+    // START BEAN FIELDS
+    @BeanField @Getter @Setter private boolean suppressZ = false;
 
-        try {
-            ObjectMask object = new ObjectMask(BoundingBoxFromPoints.fromStream(points.stream()));
+    /** An optional maximum distance */
+    @BeanField @OptionalBean @Getter @Setter private UnitValueDistance maxDistance;
+    // END BEAN FIELDS
 
-            for (Point3i point : points) {
-
-                object.binaryVoxels()
-                        .setOn(Point3i.immutableSubtract(point, object.boundingBox().cornerMin()));
-            }
-
-            return object;
-
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
-        }
+    protected BeforeCondition maybeDistanceCondition() {
+        return new DistanceCondition(
+                Optional.ofNullable(maxDistance), suppressZ, getLogger().messageLogger());
     }
 }

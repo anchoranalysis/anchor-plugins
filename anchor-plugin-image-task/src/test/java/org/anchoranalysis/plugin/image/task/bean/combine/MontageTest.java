@@ -46,9 +46,9 @@ class MontageTest extends StackIOTestBase {
     /** We don't test the labelled output as fonts vary on windows and linux. */
     private static List<String> FILENAMES_TO_COMPARE =
             Arrays.asList(Montage.OUTPUT_UNLABELLED + ".png");
-    
+
     static {
-    	BeanInstanceMapFixture.ensureStackDisplayer();
+        BeanInstanceMapFixture.ensureStackDisplayer();
     }
 
     /** Varying the image location and image size. */
