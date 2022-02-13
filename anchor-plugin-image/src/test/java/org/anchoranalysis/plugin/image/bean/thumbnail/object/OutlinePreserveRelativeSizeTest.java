@@ -183,7 +183,9 @@ class OutlinePreserveRelativeSizeTest {
     /** Appends an {@link ObjectMask} to the collection. */
     private static ObjectCollection appendObject(ObjectCollection existing, ObjectMask toAppend) {
         ArrayList<ObjectMask> list = new ArrayList<>(existing.size() + 1);
-        list.addAll(existing.asList());
+        for(ObjectMask existingObject : existing) {
+        	list.add(existingObject);
+        }
         list.add(toAppend);
         return new ObjectCollection(list);
     }

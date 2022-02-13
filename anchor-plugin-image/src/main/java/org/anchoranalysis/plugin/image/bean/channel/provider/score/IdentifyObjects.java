@@ -52,7 +52,7 @@ public class IdentifyObjects extends UnaryWithObjectsBase {
     protected Channel createFromChannel(Channel channel, ObjectCollection objects)
             throws ProvisionFailedException {
         try {
-            LABELLER.labelElements(channel, objects.asList(), Optional.empty());
+            LABELLER.labelElements(channel, objects, Optional.empty());
         } catch (CreateException e) {
             throw new ProvisionFailedException(e);
         }

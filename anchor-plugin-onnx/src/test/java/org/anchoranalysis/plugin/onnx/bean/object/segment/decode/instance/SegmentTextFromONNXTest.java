@@ -65,6 +65,7 @@ class SegmentTextFromONNXTest extends InstanceSegmentationTestBase {
         segment.setReadFromResources(true);
 
         BeanInstanceMapFixture.ensureInterpolator(new ImageJ());
+        BeanInstanceMapFixture.ensureStackDisplayer();
         BeanInstanceMapFixture.check(segment);
 
         return new SuppressNonMaximum<>(segment, new ThresholdConfidence(), false);
