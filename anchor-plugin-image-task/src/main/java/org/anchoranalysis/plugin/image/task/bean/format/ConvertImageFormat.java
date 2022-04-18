@@ -61,7 +61,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.RasterTask;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
-import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.RGB;
+import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.RGBIfNamesMatch;
 import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
 
 /**
@@ -96,7 +96,8 @@ public class ConvertImageFormat
 
     // START BEAN PROPERTIES
     /** To convert as RGB or independently or in another way. */
-    @BeanField @Getter @Setter private ChannelConvertStyle channelConversionStyle = new RGB();
+    @BeanField @Getter @Setter
+    private ChannelConvertStyle channelConversionStyle = new RGBIfNamesMatch();
 
     /**
      * If true, the series index is not included in the outputted file-names.

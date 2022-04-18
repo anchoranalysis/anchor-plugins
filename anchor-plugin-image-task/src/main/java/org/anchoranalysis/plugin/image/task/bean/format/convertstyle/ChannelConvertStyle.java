@@ -50,10 +50,10 @@ public abstract class ChannelConvertStyle extends AnchorBean<ChannelConvertStyle
      * Converts a particular set of channels.
      *
      * @param channelNames a set of names of the channels to convert.
-     * @param channelGetter gets a particular channel at a particualr time-point
-     * @param logger the logger
-     * @return the results of the conversion
-     * @throws OperationFailedException
+     * @param channelGetter gets a particular channel at a particular time-point.
+     * @param logger the logger.
+     * @return the results of the conversion.
+     * @throws OperationFailedException if the conversion fails to successfully complete.
      */
     public abstract NamedStacks convert(
             Set<String> channelNames, ChannelGetterForTimepoint channelGetter, Logger logger)

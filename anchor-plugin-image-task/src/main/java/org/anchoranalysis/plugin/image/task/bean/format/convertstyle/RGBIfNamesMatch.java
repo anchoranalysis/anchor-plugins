@@ -42,7 +42,8 @@ import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
 
 /**
- * Converts a set of channels to a single RGB-stack.
+ * Converts a set of channels to a single RGB-stack if the channel-names match, otherwise uses
+ * {@code fallback}.
  *
  * <p>Exactly three channels must be passed to {@link #convert} with names <i>red</i>, <i>green</i>
  * and <i>blue</i> (in any order).
@@ -54,7 +55,7 @@ import org.anchoranalysis.plugin.image.task.stack.ChannelGetterForTimepoint;
  *
  * @author Owen Feehan
  */
-public class RGB extends ChannelConvertStyle {
+public class RGBIfNamesMatch extends ChannelConvertStyle {
 
     // START BEAN PROPERTIES
     /**

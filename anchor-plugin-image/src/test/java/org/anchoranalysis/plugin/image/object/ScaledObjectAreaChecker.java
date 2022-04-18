@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.stream.Stream;
-
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.object.scale.ScaledElements;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -64,7 +63,8 @@ class ScaledObjectAreaChecker {
 
     public void assertExpectedArea(ObjectCollection unscaled, ScaledElements<ObjectMask> scaled) {
         assertExpectedArea(
-                totalArea(unscaled.streamStandardJava()), totalArea(scaled.asCollectionOrderNotPreserved().stream()));
+                totalArea(unscaled.streamStandardJava()),
+                totalArea(scaled.asCollectionOrderNotPreserved().stream()));
     }
 
     public void assertExpectedArea(int sizeUnscaled, int sizeScaled) {
