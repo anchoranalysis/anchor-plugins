@@ -73,7 +73,7 @@ public class FromImageMetadata
         extends SingleRowPerInput<ImageMetadataInput, FeatureInputImageMetadata> {
 
     private static final String[] NON_GROUP_HEADERS = {
-        "image", "extension", "creationTime", "lastModifiedTime", "acqusitionTime"
+        "image", "extension", "creationTime", "lastModifiedTime", "acquisitionTime"
     };
 
     public FromImageMetadata() {
@@ -100,7 +100,7 @@ public class FromImageMetadata
                         attributes.extension().orElse(""),
                         convertDate(attributes.getCreationTime()),
                         convertDate(attributes.getModificationTime()),
-                        input.metadata().getAcqusitionTime().map(this::convertDate).orElse("")
+                        input.metadata().getAcquisitionTime().map(this::convertDate).orElse("")
                     });
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);
