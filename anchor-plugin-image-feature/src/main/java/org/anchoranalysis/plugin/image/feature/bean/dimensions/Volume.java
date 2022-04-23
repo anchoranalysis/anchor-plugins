@@ -39,6 +39,6 @@ public class Volume<T extends FeatureInputEnergy> extends FromDimensionsBase<T> 
 
     @Override
     protected double calculateFromDimensions(Dimensions dim) {
-        return dim.calculateVolume();
+        return dim.extent().calculateVolume();
     }
 }
