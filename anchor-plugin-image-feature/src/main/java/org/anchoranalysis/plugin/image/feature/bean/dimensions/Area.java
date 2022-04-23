@@ -39,6 +39,6 @@ public class Area<T extends FeatureInputEnergy> extends FromDimensionsBase<T> {
 
     @Override
     protected double calculateFromDimensions(Dimensions dim) {
-        return dim.areaXY();
+        return dim.extent().calculateAreaXYAsDouble();
     }
 }
