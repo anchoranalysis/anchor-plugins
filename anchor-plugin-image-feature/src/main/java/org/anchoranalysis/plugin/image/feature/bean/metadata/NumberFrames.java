@@ -32,7 +32,7 @@ import org.anchoranalysis.image.feature.bean.FeatureImageMetadata;
 /**
  * The number of frames in an image.
  *
- * <p>Each frame is an images across the time-dimension.
+ * <p>Each frame is a particular image along a time-axis.
  *
  * @author Owen Feehan
  */

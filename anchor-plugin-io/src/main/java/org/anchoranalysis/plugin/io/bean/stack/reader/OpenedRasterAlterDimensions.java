@@ -32,6 +32,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
@@ -122,6 +123,11 @@ class OpenedRasterAlterDimensions implements OpenedImageFile {
     @Override
     public ImageTimestampsAttributes timestamps() throws ImageIOException {
         return delegate.timestamps();
+    }
+
+    @Override
+    public Optional<ImagePyramidMetadata> pyramid() throws ImageIOException {
+        return delegate.pyramid();
     }
 
     @Override

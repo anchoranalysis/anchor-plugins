@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-plugin-image-feature
  * %%
  * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,34 +23,29 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.io.bean.metadata.header;
+package org.anchoranalysis.plugin.image.feature.bean.metadata;
 
-import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.stack.ImageFileAttributes;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
-import org.anchoranalysis.spatial.box.Extent;
+import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
+import org.anchoranalysis.image.feature.bean.FeatureImageMetadata;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class MetadataFactory {
+/**
+ * The number of resolution-levels in an image in a file.
+ *
+ * <p>This is typically 1 (the resolution of the image), but if the image is stored in a pyramidal
+ * format, this may be more than 1, offering several different resolutions to capture the same
+ * underlying image.
+ *
+ * <p>See <a href="https://en.wikipedia.org/wiki/Pyramid_(image_processing)">Pyramid (image
+ * processing)</a>.
+ *
+ * @author Owen Feehan
+ */
+public class NumberResolutionLevels extends FeatureImageMetadata {
 
-    /** Creates the {@link ImageMetadata} given the necessary ingredients. */
-    public static ImageMetadata createMetadata(
-            Extent extent, int numberChannels, int bitDepth, ImageFileAttributes timestamps) {
-        // Image resolution is ignored.
-        Dimensions dimensions = new Dimensions(extent);
-        boolean rgb = numberChannels == 3 || numberChannels == 4;
-        return new ImageMetadata(
-                dimensions,
-                numberChannels,
-                1,
-                1,
-                rgb,
-                bitDepth,
-                timestamps,
-                Optional.empty(),
-                Optional.empty());
+    @Override
+    public double calculate(ImageMetadata metadata) throws FeatureCalculationException {
+        return metadata.getPyramid().map(ImagePyramidMetadata::getResolutionCount).orElse(1);
     }
 }

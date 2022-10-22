@@ -135,10 +135,12 @@ class AppendPart extends NamedChannelsInputPart {
                 existing.getDimensions(),
                 existing.getNumberChannels() + 1,
                 existing.getNumberFrames(),
+                existing.getNumberSeries(),
                 false,
                 existing.getBitDepthPerChannel(),
                 existing.getFileAttributes(),
-                existing.getAcquisitionTime());
+                existing.getAcquisitionTime(),
+                existing.getPyramid());
     }
 
     @Override
