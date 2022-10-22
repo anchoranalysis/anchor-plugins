@@ -96,10 +96,12 @@ public class JPEG extends HeaderFormat {
                         dimensions,
                         numberChannels.get(),
                         1,
+                        1,
                         rgb,
                         bitDepth.get(),
                         timestamps,
-                        acqusitionDate)); // NOSONAR
+                        acqusitionDate,
+                        Optional.empty())); // NOSONAR
     }
 
     /**

@@ -36,6 +36,7 @@ import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -146,6 +147,11 @@ class OpenedRasterOpenCV implements OpenedImageFile {
             timestamps = ImageTimestampsAttributesFactory.fromPath(path);
         }
         return timestamps;
+    }
+
+    @Override
+    public Optional<ImagePyramidMetadata> pyramid() throws ImageIOException {
+        return Optional.empty();
     }
 
     /** Opens the stack if has not already been opened. */

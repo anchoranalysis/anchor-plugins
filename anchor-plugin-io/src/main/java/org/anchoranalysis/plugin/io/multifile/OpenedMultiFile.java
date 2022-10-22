@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
@@ -121,6 +122,11 @@ public class OpenedMultiFile implements OpenedImageFile {
     @Override
     public Dimensions dimensionsForSeries(int seriesIndex, Logger logger) throws ImageIOException {
         throw new ImageIOException("MultiFileReader doesn't support this operation");
+    }
+
+    @Override
+    public Optional<ImagePyramidMetadata> pyramid() throws ImageIOException {
+        return Optional.empty();
     }
 
     private void addDetailsFromBag(MultiFile multiFile, int seriesIndex, Logger logger)

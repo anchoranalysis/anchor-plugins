@@ -96,9 +96,11 @@ class NamedChannelsInputFixture extends NamedChannelsInput {
                 channels.dimensions(logger),
                 numberChannels(logger),
                 numberFrames(),
+                1,
                 channels.isRGB(logger),
                 bitDepth(logger),
                 new ImageFileAttributes(Paths.get("fakePath.png"), now, now),
+                Optional.empty(),
                 Optional.empty());
     }
 }
