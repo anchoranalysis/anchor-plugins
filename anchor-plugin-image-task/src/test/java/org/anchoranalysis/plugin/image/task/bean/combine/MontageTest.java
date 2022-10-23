@@ -30,6 +30,8 @@ import java.util.List;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
+import org.anchoranalysis.plugin.image.task.bean.ColoredStacksInputFixture;
+import org.anchoranalysis.plugin.image.task.bean.StackIOTestBase;
 import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.Test;
@@ -84,7 +86,8 @@ class MontageTest extends StackIOTestBase {
         BeanInstanceMapFixture.check(task);
 
         ExecuteTaskHelper.runTaskAndCompareOutputs(
-                (List<StackSequenceInput>) ColoredStacksInputFixture.createInputs(STACK_READER),
+                (List<StackSequenceInput>)
+                        ColoredStacksInputFixture.createInputs(STACK_READER, true),
                 task,
                 directory,
                 "montage/expectedOutput/" + expectedOutputSubdirectory,

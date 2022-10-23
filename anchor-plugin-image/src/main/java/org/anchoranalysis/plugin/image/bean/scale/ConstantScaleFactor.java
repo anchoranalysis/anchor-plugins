@@ -27,7 +27,9 @@
 package org.anchoranalysis.plugin.image.bean.scale;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
@@ -37,9 +39,22 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
+/**
+ * Scale X and Y dimension by a constant floating-point number.
+ *
+ * <p>e.g. Applying 0.5 to an image of size (width=50, height=10) would produce a scaled image with
+ * (width=25, height=5).
+ *
+ * <p>The constant floating-point number is equal across both dimensions.
+ *
+ * @author Owen Feehan
+ */
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConstantScaleFactor extends ScaleCalculator {
 
     // START BEAN PROPERTIES
+    /** The constant floating-point value to scale each dimension by. */
     @Positive @BeanField @Getter @Setter private double value = 1.0;
     // END BEAN PROPERTIES
 

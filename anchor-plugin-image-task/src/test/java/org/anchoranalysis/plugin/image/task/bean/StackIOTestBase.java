@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.task.bean.combine;
+package org.anchoranalysis.plugin.image.task.bean;
 
 import java.nio.file.Path;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @author Owen Feehan
  */
-abstract class StackIOTestBase {
+public abstract class StackIOTestBase {
 
     // START: Ensure needed instances exist in the default BeanInstanceMap
     protected static final StackReader STACK_READER = BeanInstanceMapFixture.ensureStackReader();

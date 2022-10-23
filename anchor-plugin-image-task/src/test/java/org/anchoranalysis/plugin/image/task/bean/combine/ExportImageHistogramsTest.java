@@ -25,12 +25,12 @@
  */
 package org.anchoranalysis.plugin.image.task.bean.combine;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.plugin.image.task.bean.ColoredStacksInputFixture;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.anchoranalysis.plugin.image.task.bean.grouped.histogram.ExportImageHistograms;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,8 @@ import org.junit.jupiter.api.Test;
  */
 class ExportImageHistogramsTest extends GroupedStackTestBase {
 
-    private static List<String> FILENAMES_TO_COMPARE =
+    /** The non-aggregated histograms produced for each input file in the test. */
+    private static List<String> NON_AGGREGATED_FILES_PRODUCED_PER_INPUT =
             Arrays.asList("stack00.csv", "stack01.csv", "stack02.csv");
 
     /** Grouped inputs are placed inside this directory. */
@@ -65,19 +66,21 @@ class ExportImageHistogramsTest extends GroupedStackTestBase {
 
     @Override
     protected List<String> filenamesToCompare(boolean groups) {
+        // The non-aggregated histograms are always produced
+        List<String> out =
+                ColoredStacksInputFixture.expectedOutputPathsWithGroups(
+                        NON_AGGREGATED_FILES_PRODUCED_PER_INPUT);
         if (groups) {
-            List<String> combined = new ArrayList<>(FILENAMES_TO_COMPARE.size() * 3);
-            combined.addAll(FILENAMES_TO_COMPARE);
-            combined.addAll(
+            out.addAll(
                     prependStrings(
-                            SUM_PREFIX + ColoredStacksInputFixture.GROUP1, FILENAMES_TO_COMPARE));
-            combined.addAll(
+                            SUM_PREFIX + ColoredStacksInputFixture.GROUP1,
+                            NON_AGGREGATED_FILES_PRODUCED_PER_INPUT));
+            out.addAll(
                     prependStrings(
-                            SUM_PREFIX + ColoredStacksInputFixture.GROUP2, FILENAMES_TO_COMPARE));
-            return combined;
-        } else {
-            return FILENAMES_TO_COMPARE;
+                            SUM_PREFIX + ColoredStacksInputFixture.GROUP2,
+                            NON_AGGREGATED_FILES_PRODUCED_PER_INPUT));
         }
+        return out;
     }
 
     @Override

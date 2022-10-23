@@ -34,6 +34,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.image.bean.channel.aggregator.MeanProjection;
+import org.anchoranalysis.plugin.image.task.bean.ColoredStacksInputFixture;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.junit.jupiter.api.Test;
 
