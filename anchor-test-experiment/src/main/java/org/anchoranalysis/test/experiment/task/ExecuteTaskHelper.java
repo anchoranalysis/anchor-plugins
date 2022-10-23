@@ -37,8 +37,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -70,9 +69,29 @@ import org.anchoranalysis.test.io.output.OutputManagerFixture;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class ExecuteTaskHelper {
 
+	/** 
+	 * When defined, only this output occur. 
+	 * 
+	 * <p>Otherwise, all outputs occur as per defaults in the task.
+	 */
+	private final Optional<String> specificOutput;
+	
+	/**
+	 * The arguments to use when executing the task.
+	 */
+	private final TaskArguments taskArguments;
+	
+	/**
+	 * Create so that all outputs occur, and with default {@link TaskArguments}.
+	 */
+	public ExecuteTaskHelper() {
+		this.specificOutput = Optional.empty();
+		this.taskArguments = new TaskArguments();
+	}
+	
     /**
      * Executes a task on a single-input.
      *
@@ -89,7 +108,7 @@ public class ExecuteTaskHelper {
      *     are identical.
      * @throws OperationFailedException if anything goes wrong.
      */
-    public static <T extends InputFromManager, S, V extends Task<T, S>>
+    public <T extends InputFromManager, S, V extends Task<T, S>>
             void runTaskAndCompareOutputs(
                     T input,
                     V task,
@@ -106,54 +125,13 @@ public class ExecuteTaskHelper {
     }
 
     /**
-     * Executes a task on a multiple inputs.
-     *
-     * @param <T> input type
-     * @param <S> shared-state type
-     * @param <V> task type
-     * @param inputs the inputs for the task.
-     * @param task the task to run.
-     * @param pathDirectoryOutput an absolute path to a directory where outputs of the task will be
-     *     placed.
-     * @param pathDirectorySaved a path (relative to the {@code src/test/resources}) to a directory
-     *     of saved-results to compare with.
-     * @param pathsFileToCompare paths (relative to the {@code src/test/resources}) to check that
-     *     are identical.
-     * @throws OperationFailedException if anything goes wrong.
-     */
-    public static <T extends InputFromManager, S, V extends Task<T, S>>
-            void runTaskAndCompareOutputs(
-                    List<T> inputs,
-                    V task,
-                    Path pathDirectoryOutput,
-                    String pathDirectorySaved,
-                    Iterable<String> pathsFileToCompare)
-                    throws OperationFailedException {
-        runTaskAndCompareOutputs(
-                inputs,
-                true,
-                task,
-                new TaskArguments(),
-                pathDirectoryOutput,
-                Optional.empty(),
-                pathDirectorySaved,
-                pathsFileToCompare);
-    }
-
-    /**
      * Executes a task on a multiple inputs - with task arguments.
      *
      * @param <T> input type
      * @param <S> shared-state type
      * @param <V> task type
      * @param inputs the inputs for the task.
-     * @param prefixEachInput when true, a prefix is assigned representing each input into the
-     *     output path to them unique. When false, this doesn't occur, and output path is constant
-     *     for all inputs. The latter should only be used when there is a single input, or if we are
-     *     only interested in outputs that are are singularly outputted from the task as a whole
-     *     (but not per individual input).
      * @param task the task to run.
-     * @param taskArguments arguments for the task.
      * @param pathDirectoryOutput an absolute path to a directory where outputs of the task will be
      *     placed.
      * @param pathDirectorySaved a path (relative to the {@code src/test/resources}) to a directory
@@ -162,14 +140,11 @@ public class ExecuteTaskHelper {
      *     are identical.
      * @throws OperationFailedException if anything goes wrong.
      */
-    public static <T extends InputFromManager, S, V extends Task<T, S>>
+    public <T extends InputFromManager, S, V extends Task<T, S>>
             void runTaskAndCompareOutputs(
                     List<T> inputs,
-                    boolean prefixEachInput,
                     V task,
-                    TaskArguments taskArguments,
                     Path pathDirectoryOutput,
-                    Optional<String> specificOutput,
                     String pathDirectorySaved,
                     Iterable<String> pathsFileToCompare)
                     throws OperationFailedException {
@@ -177,7 +152,6 @@ public class ExecuteTaskHelper {
         boolean successful =
                 runTaskOnInputs(
                         inputs,
-                        prefixEachInput,
                         task,
                         taskArguments,
                         pathDirectoryOutput,
@@ -196,9 +170,6 @@ public class ExecuteTaskHelper {
      * @param <S> shared-state type
      * @param <V> task type
      * @param inputs the input for the task.
-     * @param prefixEachInput when true, a prefix is assigned representing each input into the
-     *     output path to them unique. When false, this doesn't occur, and output path is constant
-     *     for all inputs. The latter should only be used when there is a single input.
      * @param task the task to run.
      * @param taskArguments arguments to use for the task.
      * @param pathForOutputs a directory where outputs of the task will be placed.
@@ -209,7 +180,6 @@ public class ExecuteTaskHelper {
      */
     private static <T extends InputFromManager, S, V extends Task<T, S>> boolean runTaskOnInputs(
             List<T> inputs,
-            boolean prefixEachInput,
             V task,
             TaskArguments taskArguments,
             Path pathForOutputs,
@@ -224,7 +194,6 @@ public class ExecuteTaskHelper {
             OutputManager outputManager =
                     OutputManagerFixture.createOutputManager(
                             Optional.of(pathForOutputs),
-                            prefixEachInput,
                             Optional.of(outputEnabled));
 
             Outputter outputter = OutputterFixture.outputter(outputManager, outputEnabled);

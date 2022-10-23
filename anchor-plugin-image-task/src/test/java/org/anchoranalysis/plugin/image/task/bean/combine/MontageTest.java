@@ -85,7 +85,7 @@ class MontageTest extends StackIOTestBase {
 
         BeanInstanceMapFixture.check(task);
 
-        ExecuteTaskHelper.runTaskAndCompareOutputs(
+        new ExecuteTaskHelper().runTaskAndCompareOutputs(
                 (List<StackSequenceInput>)
                         ColoredStacksInputFixture.createInputs(STACK_READER, true),
                 task,

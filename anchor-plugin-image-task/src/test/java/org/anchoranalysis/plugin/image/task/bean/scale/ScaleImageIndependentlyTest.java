@@ -63,14 +63,12 @@ class ScaleImageIndependentlyTest extends StackIOTestBase {
 
         BeanInstanceMapFixture.check(task);
 
-        ExecuteTaskHelper.runTaskAndCompareOutputs(
+        ExecuteTaskHelper helper = new ExecuteTaskHelper(Optional.of(ScaleImage.OUTPUT_SCALED), new TaskArguments(Optional.of(suggestion)));
+        helper.runTaskAndCompareOutputs(
                 (List<StackSequenceInput>)
                         ColoredStacksInputFixture.createInputs(STACK_READER, false),
-                true,
                 task,
-                new TaskArguments(Optional.of(suggestion)),
                 directory,
-                Optional.of(ScaleImage.OUTPUT_SCALED),
                 "scaleImageIndependently/expectedOutput/nonBinary/" + expectedOutputSubdirectory,
                 ColoredStacksInputFixture.FILENAMES_WITH_EXTENSION);
     }

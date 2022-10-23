@@ -136,7 +136,7 @@ public abstract class ExportFeaturesTestBase<
             // we switch back to the old settings for comparison.
             task.setStyle(new ExportFeaturesStyle(false, false, false));
 
-            ExecuteTaskHelper.runTaskAndCompareOutputs(
+            new ExecuteTaskHelper().runTaskAndCompareOutputs(
                     input,
                     task,
                     directory,

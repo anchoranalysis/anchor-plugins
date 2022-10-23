@@ -166,7 +166,7 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
 
         BeanInstanceMapFixture.check(task);
 
-        ExecuteTaskHelper.runTaskAndCompareOutputs(
+        new ExecuteTaskHelper().runTaskAndCompareOutputs(
                 inputs,
                 task,
                 directory,
