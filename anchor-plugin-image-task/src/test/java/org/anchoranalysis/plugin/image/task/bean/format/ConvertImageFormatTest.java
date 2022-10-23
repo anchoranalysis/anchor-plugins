@@ -34,6 +34,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.anchoranalysis.test.image.stackwriter.ChannelSpecification;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -52,13 +53,17 @@ class ConvertImageFormatTest {
 
     @TempDir Path directory;
 
-    static {
-        BeanInstanceMapFixture.ensureStackWriter(true);
-    }
-
     @BeforeAll
     static void setup() {
+    	BeanInstanceMapFixture.ensureStackWriter(true);
         RegisterBeanFactories.registerAllPackageBeanFactories();
+    }
+    
+    @AfterAll
+    static void teardown() {
+    	// Remove the static writer, as we want the global state to stay neutral
+    	// for future tests (especially as this test uses TIFFs).
+    	BeanInstanceMapFixture.removeStackWriter();
     }
 
     @Test
@@ -95,7 +100,7 @@ class ConvertImageFormatTest {
 
         NamedChannelsInputFixture input = new NamedChannelsInputFixture(channelSpecification);
 
-        ExecuteTaskHelper.runTaskAndCompareOutputs(
+        new ExecuteTaskHelper().runTaskAndCompareOutputs(
                 input, task, directory, "convert/" + resourceDirectorySuffix, filenamesToCompare);
     }
 }

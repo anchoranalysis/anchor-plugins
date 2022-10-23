@@ -2,7 +2,7 @@
  * #%L
  * anchor-plugin-image-task
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2022 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,17 +23,14 @@
  * THE SOFTWARE.
  * #L%
  */
-
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.MessageLogger;
@@ -42,8 +39,6 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
-import org.anchoranalysis.experiment.task.NoSharedState;
-import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
@@ -53,15 +48,13 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
-import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * Creates a scaled copy of images.
+ * Base class for tasks whose primary aim is to scale (resize) an image.
  *
  * <p>An RGB image is treated as a single-stack, otherwise each channel is scaled and outputted
  * separately.
@@ -79,18 +72,19 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value ScaleImage#OUTPUT_SCALED}</td><td>yes</td><td>A scaled copy of the input image.</td></tr>
- * <tr><td>{@value ScaleImage#OUTPUT_SCALED_FLATTENED}</td><td>no</td><td>A scaled copy of the maximum-intensity-projection of the input image.</td></tr>
+ * <tr><td>{@value ScaleImageIndependently#OUTPUT_SCALED}</td><td>yes</td><td>A scaled copy of the input image.</td></tr>
+ * <tr><td>{@value ScaleImageIndependently#OUTPUT_SCALED_FLATTENED}</td><td>no</td><td>A scaled copy of the maximum-intensity-projection of the input image.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
  *
  * @author Owen Feehan
+ * @param <S> shared-state for task.
  */
-public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
+public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
 
     /** Output-name for a scaled copy of the input image. */
-    private static final String OUTPUT_SCALED = "scaled";
+    static final String OUTPUT_SCALED = "scaled";
 
     /** Output-name for a scaled copy the maximum-intensity-projection of the input image. */
     private static final String OUTPUT_SCALED_FLATTENED = "scaledFlattened";
@@ -115,18 +109,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     }
 
     @Override
-    public NoSharedState beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            List<StackSequenceInput> inputs,
-            ParametersExperiment parameters)
-            throws ExperimentExecutionException {
-        return NoSharedState.INSTANCE;
-    }
-
-    @Override
-    public void doJobOnInput(InputBound<StackSequenceInput, NoSharedState> input)
-            throws JobExecutionException {
+    public void doJobOnInput(InputBound<StackSequenceInput, S> input) throws JobExecutionException {
         try {
             NamedStacks stacks = input.getInput().asSet(input.getLogger());
 
@@ -143,7 +126,7 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     }
 
     @Override
-    public void afterAllJobsAreExecuted(NoSharedState sharedState, InputOutputContext context)
+    public void afterAllJobsAreExecuted(S sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         // NOTHING TO DO
     }
@@ -228,28 +211,19 @@ public class ScaleImage extends Task<StackSequenceInput, NoSharedState> {
     private Channel scaleChannel(
             Channel channel, Optional<ImageSizeSuggestion> suggestedSize, MessageLogger logger)
             throws OperationFailedException {
-        try {
-            if (binary) {
-                return scaleChannelAsMask(channel, suggestedSize);
-            } else {
-                return ScaleXY.scale(
-                        channel,
-                        scaleCalculator,
-                        interpolator.voxelsResizer(),
-                        suggestedSize,
-                        logger);
-            }
-        } catch (ProvisionFailedException e) {
-            throw new OperationFailedException(e);
-        }
-    }
+        ScaleFactor scaleFactor =
+                scaleCalculator.calculate(Optional.of(channel.dimensions()), suggestedSize);
 
-    private Channel scaleChannelAsMask(Channel channel, Optional<ImageSizeSuggestion> suggestedSize)
-            throws ProvisionFailedException {
-        Mask mask = new Mask(channel);
-        Mask maskScaled =
-                org.anchoranalysis.plugin.image.bean.mask.provider.ScaleXY.scale(
-                        mask, scaleCalculator, suggestedSize);
-        return maskScaled.channel();
+        if (scaleFactor.isNoScale()) {
+            // Nothing to do
+            return channel;
+        }
+
+        if (binary) {
+            Mask mask = new Mask(channel);
+            return mask.scaleXY(scaleFactor).channel();
+        } else {
+            return channel.scaleXY(scaleFactor, interpolator.voxelsResizer());
+        }
     }
 }

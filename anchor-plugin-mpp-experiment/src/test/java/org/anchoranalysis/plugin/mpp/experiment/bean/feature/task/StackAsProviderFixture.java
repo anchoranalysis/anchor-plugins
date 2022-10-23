@@ -38,14 +38,17 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 @AllArgsConstructor
-class StackAsProviderFixture implements ProvidesStackInput {
+public class StackAsProviderFixture implements ProvidesStackInput {
 
+	/** The constant string used as an identifier for the stack. */
+	public static final String IDENTIFIER = "arbitraryIdentifier";
+	
     private Stack stack;
     private String name;
 
     @Override
     public String identifier() {
-        return "arbitraryName";
+        return IDENTIFIER;
     }
 
     @Override

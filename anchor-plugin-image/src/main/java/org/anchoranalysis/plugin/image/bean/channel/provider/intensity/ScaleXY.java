@@ -72,7 +72,7 @@ public class ScaleXY extends ChannelProviderUnary {
         }
     }
 
-    public static Channel scale(
+    private static Channel scale(
             Channel channel,
             ScaleCalculator scaleCalculator,
             VoxelsResizer resizer,

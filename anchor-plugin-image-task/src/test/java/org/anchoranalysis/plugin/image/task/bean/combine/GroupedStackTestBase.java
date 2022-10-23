@@ -38,6 +38,8 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.input.bean.grouper.WithoutGrouping;
+import org.anchoranalysis.plugin.image.task.bean.ColoredStacksInputFixture;
+import org.anchoranalysis.plugin.image.task.bean.StackIOTestBase;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.anchoranalysis.plugin.io.bean.grouper.RemoveLastElement;
 import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
@@ -135,7 +137,8 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
             throws OperationFailedException, ImageIOException {
         @SuppressWarnings("unchecked")
         List<ProvidesStackInput> inputs =
-                (List<ProvidesStackInput>) ColoredStacksInputFixture.createInputs(STACK_READER);
+                (List<ProvidesStackInput>)
+                        ColoredStacksInputFixture.createInputs(STACK_READER, true);
 
         if (additionalStack.isPresent()) {
             inputs.add(
@@ -163,7 +166,7 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
 
         BeanInstanceMapFixture.check(task);
 
-        ExecuteTaskHelper.runTaskAndCompareOutputs(
+        new ExecuteTaskHelper().runTaskAndCompareOutputs(
                 inputs,
                 task,
                 directory,

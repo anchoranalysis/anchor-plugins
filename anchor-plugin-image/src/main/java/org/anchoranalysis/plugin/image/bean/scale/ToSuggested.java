@@ -51,7 +51,7 @@ public class ToSuggested extends ScaleCalculator {
      * Used as a delegate to calculate the scale if {@code suggestedSize} is empty when passed to
      * {@link #calculate}.
      */
-    @BeanField @Getter @Setter private ScaleCalculator fallback;
+    @BeanField @Getter @Setter private ScaleCalculator fallback = new ConstantScaleFactor(0.5);
     // END BEAN PROPERTIES
 
     @Override

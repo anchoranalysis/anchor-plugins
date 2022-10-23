@@ -47,7 +47,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 public class ScaleXY extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
-    /** Determines how much to scale by */
+    /** Determines how much to scale by. */
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
     // END BEAN PROPERTIES
 
@@ -60,7 +60,7 @@ public class ScaleXY extends MaskProviderUnary {
         }
     }
 
-    public static Mask scale(
+    private static Mask scale(
             Mask mask, ScaleCalculator scaleCalculator, Optional<ImageSizeSuggestion> suggestedSize)
             throws ProvisionFailedException {
 

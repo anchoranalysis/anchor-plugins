@@ -37,13 +37,13 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
+import org.anchoranalysis.experiment.arguments.TaskArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
@@ -54,6 +54,9 @@ import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
+import org.anchoranalysis.io.output.bean.rules.NoneExcept;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -66,9 +69,29 @@ import org.anchoranalysis.test.io.output.OutputManagerFixture;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class ExecuteTaskHelper {
 
+	/** 
+	 * When defined, only this output occur. 
+	 * 
+	 * <p>Otherwise, all outputs occur as per defaults in the task.
+	 */
+	private final Optional<String> specificOutput;
+	
+	/**
+	 * The arguments to use when executing the task.
+	 */
+	private final TaskArguments taskArguments;
+	
+	/**
+	 * Create so that all outputs occur, and with default {@link TaskArguments}.
+	 */
+	public ExecuteTaskHelper() {
+		this.specificOutput = Optional.empty();
+		this.taskArguments = new TaskArguments();
+	}
+	
     /**
      * Executes a task on a single-input.
      *
@@ -85,7 +108,7 @@ public class ExecuteTaskHelper {
      *     are identical.
      * @throws OperationFailedException if anything goes wrong.
      */
-    public static <T extends InputFromManager, S, V extends Task<T, S>>
+    public <T extends InputFromManager, S, V extends Task<T, S>>
             void runTaskAndCompareOutputs(
                     T input,
                     V task,
@@ -102,7 +125,7 @@ public class ExecuteTaskHelper {
     }
 
     /**
-     * Executes a task on a multiple inputs.
+     * Executes a task on a multiple inputs - with task arguments.
      *
      * @param <T> input type
      * @param <S> shared-state type
@@ -117,7 +140,7 @@ public class ExecuteTaskHelper {
      *     are identical.
      * @throws OperationFailedException if anything goes wrong.
      */
-    public static <T extends InputFromManager, S, V extends Task<T, S>>
+    public <T extends InputFromManager, S, V extends Task<T, S>>
             void runTaskAndCompareOutputs(
                     List<T> inputs,
                     V task,
@@ -126,7 +149,13 @@ public class ExecuteTaskHelper {
                     Iterable<String> pathsFileToCompare)
                     throws OperationFailedException {
 
-        boolean successful = runTaskOnInputs(inputs, task, pathDirectoryOutput);
+        boolean successful =
+                runTaskOnInputs(
+                        inputs,
+                        task,
+                        taskArguments,
+                        pathDirectoryOutput,
+                        specificOutput);
         // Successful outcome
         assertTrue(successful, "Sucessful execution of task");
 
@@ -142,26 +171,41 @@ public class ExecuteTaskHelper {
      * @param <V> task type
      * @param inputs the input for the task.
      * @param task the task to run.
+     * @param taskArguments arguments to use for the task.
      * @param pathForOutputs a directory where outputs of the task will be placed.
+     * @param specificOutputEnabled if defined, only this output occur. otherwise, all outputs occur
+     *     as per defaults in the task.
      * @return true if successful, false otherwise.
      * @throws OperationFailedException if anything goes wrong.
      */
     private static <T extends InputFromManager, S, V extends Task<T, S>> boolean runTaskOnInputs(
-            List<T> inputs, V task, Path pathForOutputs) throws OperationFailedException {
+            List<T> inputs,
+            V task,
+            TaskArguments taskArguments,
+            Path pathForOutputs,
+            Optional<String> specificOutputEnabled)
+            throws OperationFailedException {
 
         try {
             BeanInstanceMapFixture.check(task);
 
-            OutputManager outputManager =
-                    OutputManagerFixture.createOutputManager(Optional.of(pathForOutputs));
+            OutputEnabledRules outputEnabled = createOutputRules(specificOutputEnabled);
 
-            Outputter outputter = OutputterFixture.outputter(outputManager);
+            OutputManager outputManager =
+                    OutputManagerFixture.createOutputManager(
+                            Optional.of(pathForOutputs),
+                            Optional.of(outputEnabled));
+
+            Outputter outputter = OutputterFixture.outputter(outputManager, outputEnabled);
 
             StatefulMessageLogger logger = createStatefulLogReporter();
 
             ParametersExperiment parametersExperiment =
                     createParametersExperiment(
-                            outputter.getChecked(), outputManager.getPrefixer(), logger);
+                            outputter.getChecked(),
+                            outputManager.getPrefixer(),
+                            taskArguments,
+                            logger);
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleCPUProcessor(0);
             S sharedState =
@@ -191,14 +235,25 @@ public class ExecuteTaskHelper {
         }
     }
 
+    private static OutputEnabledRules createOutputRules(Optional<String> specificOutputEnabled) {
+        if (specificOutputEnabled.isPresent()) {
+            return specificOutputEnabled.map(NoneExcept::new).get();
+        } else {
+            return new Permissive();
+        }
+    }
+
     private static ParametersExperiment createParametersExperiment(
-            OutputterChecked outputter, PathPrefixer prefixer, StatefulMessageLogger logger) {
+            OutputterChecked outputter,
+            PathPrefixer prefixer,
+            TaskArguments taskArguments,
+            StatefulMessageLogger logger) {
         ExperimentFeedbackContext context =
                 new ExperimentFeedbackContext(
                         logger, false, ExecutionTimeRecorderIgnore.instance());
         ParametersExperiment parameters =
                 new ParametersExperiment(
-                        new ExecutionArguments(Paths.get(".")),
+                        new ExecutionArguments(Paths.get("."), taskArguments),
                         "arbitraryExperimentName",
                         outputter,
                         prefixer,

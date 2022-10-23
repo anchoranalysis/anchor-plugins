@@ -119,7 +119,7 @@ class CompareHelper {
                 throw new OperationFailedRuntimeException("Extension not supported");
             }
         } catch (IOException | CSVReaderException e) {
-            throw new OperationFailedException(e);
+            throw new OperationFailedException(String.format("Failed to compare relativePath=%s", relativePath), e);
         }
     }
 }
