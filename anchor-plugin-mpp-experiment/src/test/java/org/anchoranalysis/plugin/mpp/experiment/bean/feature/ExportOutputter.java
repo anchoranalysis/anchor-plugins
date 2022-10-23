@@ -64,25 +64,30 @@ public class ExportOutputter {
      * @return
      */
     public static Iterable<String> outputsToCompare(
-            boolean inputStack, boolean energyStack, boolean objects) {
+            boolean inputStack, String prefix, boolean energyStack, boolean objects) {
         List<String> list = new ArrayList<>();
 
         Arrays.stream(OUTPUTS_TO_COMPARE_ALWAYS).forEach(list::add);
 
         if (inputStack) {
-            list.add("stacks/input.tif");
+            list.add(prefix + "stacks/input.tif");
         }
 
         if (energyStack) {
-            list.add("energyStack/energyStack_00.tif");
-            list.add("energyStack/energyStack_01.tif");
-            list.add("energyStack/energyStack_02.tif");
+        	addEnergyStacks(list, prefix);
         }
 
         if (objects) {
-            list.add(NonImageFileFormat.HDF5.buildPath("objects", MultiInputFixture.OBJECTS_NAME));
+            list.add(NonImageFileFormat.HDF5.buildPath(prefix + "objects", MultiInputFixture.OBJECTS_NAME));
         }
 
         return list;
+    }
+    
+    /** Adds the output relative-paths to the energy stacks to {@code list}. */
+    private static void addEnergyStacks(List<String> list, String prefix) {
+    	for(int index=0; index < 3; index++) {
+    		list.add(String.format("%senergyStack/energyStack_0%d.tif", prefix, index));
+    	}    	
     }
 }

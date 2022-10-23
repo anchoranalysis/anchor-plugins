@@ -42,7 +42,7 @@ import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.Test;
 
 class ScaleImageIndependentlyTest extends StackIOTestBase {
-
+    
     /** Fixed width. */
     @Test
     void testFixedWidth()

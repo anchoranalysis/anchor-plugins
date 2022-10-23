@@ -38,6 +38,7 @@ import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesStyle;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.ExportFeaturesTaskFixture;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.MultiInputFixture;
+import org.anchoranalysis.plugin.mpp.experiment.bean.feature.task.StackAsProviderFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
@@ -141,7 +142,7 @@ public abstract class ExportFeaturesTestBase<
                     directory,
                     relativePathSavedResults + suffixPathDirectorySaved,
                     ExportOutputter.outputsToCompare(
-                            additionalOutputs, additionalOutputs, additionalOutputs));
+                            additionalOutputs, StackAsProviderFixture.IDENTIFIER + "_", additionalOutputs, additionalOutputs));
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
