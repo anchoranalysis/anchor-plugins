@@ -136,13 +136,17 @@ public abstract class ExportFeaturesTestBase<
             // we switch back to the old settings for comparison.
             task.setStyle(new ExportFeaturesStyle(false, false, false));
 
-            new ExecuteTaskHelper().runTaskAndCompareOutputs(
-                    input,
-                    task,
-                    directory,
-                    relativePathSavedResults + suffixPathDirectorySaved,
-                    ExportOutputter.outputsToCompare(
-                            additionalOutputs, StackAsProviderFixture.IDENTIFIER + "_", additionalOutputs, additionalOutputs));
+            new ExecuteTaskHelper()
+                    .runTaskAndCompareOutputs(
+                            input,
+                            task,
+                            directory,
+                            relativePathSavedResults + suffixPathDirectorySaved,
+                            ExportOutputter.outputsToCompare(
+                                    additionalOutputs,
+                                    StackAsProviderFixture.IDENTIFIER + "_",
+                                    additionalOutputs,
+                                    additionalOutputs));
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

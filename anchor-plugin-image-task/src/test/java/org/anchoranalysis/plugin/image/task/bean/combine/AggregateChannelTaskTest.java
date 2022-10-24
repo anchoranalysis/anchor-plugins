@@ -34,7 +34,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.image.bean.channel.aggregator.MeanProjection;
-import org.anchoranalysis.plugin.image.task.bean.ColoredStacksInputFixture;
+import org.anchoranalysis.plugin.image.task.bean.InputFixture;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.junit.jupiter.api.Test;
 
@@ -72,8 +72,8 @@ class AggregateChannelTaskTest extends GroupedStackTestBase {
     protected List<String> filenamesToCompare(boolean groups) {
         if (groups) {
             List<String> combined = new ArrayList<>(FILENAMES_TO_COMPARE.size() * 2);
-            combined.addAll(prependStrings(ColoredStacksInputFixture.GROUP1, FILENAMES_TO_COMPARE));
-            combined.addAll(prependStrings(ColoredStacksInputFixture.GROUP2, FILENAMES_TO_COMPARE));
+            combined.addAll(prependStrings(InputFixture.GROUP1, FILENAMES_TO_COMPARE));
+            combined.addAll(prependStrings(InputFixture.GROUP2, FILENAMES_TO_COMPARE));
             return combined;
         } else {
             return FILENAMES_TO_COMPARE;

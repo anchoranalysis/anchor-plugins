@@ -74,20 +74,22 @@ public class ExportOutputter {
         }
 
         if (energyStack) {
-        	addEnergyStacks(list, prefix);
+            addEnergyStacks(list, prefix);
         }
 
         if (objects) {
-            list.add(NonImageFileFormat.HDF5.buildPath(prefix + "objects", MultiInputFixture.OBJECTS_NAME));
+            list.add(
+                    NonImageFileFormat.HDF5.buildPath(
+                            prefix + "objects", MultiInputFixture.OBJECTS_NAME));
         }
 
         return list;
     }
-    
+
     /** Adds the output relative-paths to the energy stacks to {@code list}. */
     private static void addEnergyStacks(List<String> list, String prefix) {
-    	for(int index=0; index < 3; index++) {
-    		list.add(String.format("%senergyStack/energyStack_0%d.tif", prefix, index));
-    	}    	
+        for (int index = 0; index < 3; index++) {
+            list.add(String.format("%senergyStack/energyStack_0%d.tif", prefix, index));
+        }
     }
 }

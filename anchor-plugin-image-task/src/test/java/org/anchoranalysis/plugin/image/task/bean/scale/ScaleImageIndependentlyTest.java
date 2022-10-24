@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,20 +35,56 @@ import org.anchoranalysis.image.core.dimensions.size.suggestion.SuggestionFormat
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.plugin.image.bean.scale.ToSuggested;
-import org.anchoranalysis.plugin.image.task.bean.ColoredStacksInputFixture;
+import org.anchoranalysis.plugin.image.task.bean.InputFixture;
+import org.anchoranalysis.plugin.image.task.bean.InputFixtureFactory;
 import org.anchoranalysis.plugin.image.task.bean.StackIOTestBase;
 import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.Test;
 
 class ScaleImageIndependentlyTest extends StackIOTestBase {
-    
-    /** Fixed width. */
+
     @Test
     void testFixedWidth()
             throws OperationFailedException, ImageIOException, SuggestionFormatException {
-        ImageSizeSuggestion suggestion = ImageSizeSuggestionFactory.create("800x");
-        doTest(false, "fixedWidth", suggestion);
+        doTest(false, "fixedWidth", ImageSizeSuggestionFactory.create("800x"));
+    }
+
+    @Test
+    void testFixedHeight()
+            throws OperationFailedException, ImageIOException, SuggestionFormatException {
+        doTestBoth("fixedHeight", ImageSizeSuggestionFactory.create("x200"));
+    }
+
+    @Test
+    void testFixedWidthAndHeight()
+            throws OperationFailedException, ImageIOException, SuggestionFormatException {
+        doTestBoth("fixedWidthAndHeight", ImageSizeSuggestionFactory.create("100x200"));
+    }
+
+    @Test
+    void testPreserveAspectRatio()
+            throws OperationFailedException, ImageIOException, SuggestionFormatException {
+        doTestBoth("preserveAspectRatio", ImageSizeSuggestionFactory.create("100x200+"));
+    }
+
+    @Test
+    void testDownscale()
+            throws OperationFailedException, ImageIOException, SuggestionFormatException {
+        doTestBoth("downscale", ImageSizeSuggestionFactory.create("0.5"));
+    }
+
+    @Test
+    void testUpscale()
+            throws OperationFailedException, ImageIOException, SuggestionFormatException {
+        doTestBoth("upscale", ImageSizeSuggestionFactory.create("1.5"));
+    }
+
+    /** Do the test on both binary (binary mask) and non-binary images (RGB). */
+    private void doTestBoth(String expectedOutputSubdirectory, ImageSizeSuggestion suggestion)
+            throws ImageIOException, OperationFailedException, SuggestionFormatException {
+        doTest(false, expectedOutputSubdirectory, suggestion);
+        doTest(true, expectedOutputSubdirectory, suggestion);
     }
 
     @SuppressWarnings("unchecked")
@@ -63,13 +99,25 @@ class ScaleImageIndependentlyTest extends StackIOTestBase {
 
         BeanInstanceMapFixture.check(task);
 
-        ExecuteTaskHelper helper = new ExecuteTaskHelper(Optional.of(ScaleImage.OUTPUT_SCALED), new TaskArguments(Optional.of(suggestion)));
+        InputFixture fixture =
+                binary
+                        ? InputFixtureFactory.createSixBinaryMasks()
+                        : InputFixtureFactory.createSixColors();
+
+        String binarySubdirectory = binary ? "binary" : "nonBinary";
+
+        ExecuteTaskHelper helper =
+                new ExecuteTaskHelper(
+                        Optional.of(ScaleImage.OUTPUT_SCALED),
+                        new TaskArguments(Optional.of(suggestion)));
         helper.runTaskAndCompareOutputs(
-                (List<StackSequenceInput>)
-                        ColoredStacksInputFixture.createInputs(STACK_READER, false),
+                (List<StackSequenceInput>) fixture.createInputs(STACK_READER, false),
                 task,
                 directory,
-                "scaleImageIndependently/expectedOutput/nonBinary/" + expectedOutputSubdirectory,
-                ColoredStacksInputFixture.FILENAMES_WITH_EXTENSION);
+                "scaleImageIndependently/expectedOutput/"
+                        + binarySubdirectory
+                        + "/"
+                        + expectedOutputSubdirectory,
+                fixture.getFilesNamesWithExtension());
     }
 }

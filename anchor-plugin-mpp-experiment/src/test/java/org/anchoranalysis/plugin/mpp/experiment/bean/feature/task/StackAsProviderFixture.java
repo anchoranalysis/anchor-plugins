@@ -40,9 +40,9 @@ import org.anchoranalysis.image.io.stack.time.TimeSeries;
 @AllArgsConstructor
 public class StackAsProviderFixture implements ProvidesStackInput {
 
-	/** The constant string used as an identifier for the stack. */
-	public static final String IDENTIFIER = "arbitraryIdentifier";
-	
+    /** The constant string used as an identifier for the stack. */
+    public static final String IDENTIFIER = "arbitraryIdentifier";
+
     private Stack stack;
     private String name;
 
