@@ -208,8 +208,6 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
      * itself.
      *
      * @param stack the stack before scaling.
-     * @param binary true iff the channel has binary-contents (only two possible values are
-     *     allowed), and must be interpolated differently.
      * @param suggestedSize the suggested-size that has been passed into the task.
      * @param voxelsResizer how to resize the voxels in a channel.
      * @param sharedState the shared-state of the task.
