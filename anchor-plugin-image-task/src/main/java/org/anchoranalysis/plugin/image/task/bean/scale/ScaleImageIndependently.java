@@ -27,12 +27,19 @@
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
 import java.util.List;
+import java.util.Optional;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Creates a scaled copy of images, treating each image independently, and without any padding or
@@ -55,5 +62,24 @@ public class ScaleImageIndependently extends ScaleImage<NoSharedState> {
             ParametersExperiment parameters)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
+    }
+
+    @Override
+    protected Stack scaleStack(
+            Stack stack,
+            Optional<ImageSizeSuggestion> suggestedSize,
+            VoxelsResizer voxelsResizer,
+            NoSharedState sharedState)
+            throws OperationFailedException {
+        ScaleFactor scaleFactor =
+                scaleCalculator.calculate(Optional.of(stack.dimensions()), suggestedSize);
+        return stack.mapChannel(
+                channel -> scaleChannel(channel, binary, scaleFactor, voxelsResizer));
+    }
+
+    private Channel scaleChannel(
+            Channel channel, boolean binary, ScaleFactor scaleFactor, VoxelsResizer voxelsResizer)
+            throws OperationFailedException {
+        return ScaleChannelHelper.scaleChannel(channel, binary, scaleFactor, voxelsResizer);
     }
 }

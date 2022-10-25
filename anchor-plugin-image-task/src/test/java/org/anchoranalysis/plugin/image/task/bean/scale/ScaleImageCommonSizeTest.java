@@ -30,15 +30,15 @@ package org.anchoranalysis.plugin.image.task.bean.scale;
  *
  * @author Owen Feehan
  */
-class ScaleImageIndependentlyTest extends ScaleImageTestBase {
+class ScaleImageCommonSizeTest extends ScaleImageTestBase {
 
     @Override
     protected ScaleImage<?> createTask() {
-        return new ScaleImageIndependently();
+        return new ScaleImageCommonSize();
     }
 
     @Override
     protected String resourcesDirectory() {
-        return "scaleImageIndependently";
+        return "scaleImageCommonSize";
     }
 }

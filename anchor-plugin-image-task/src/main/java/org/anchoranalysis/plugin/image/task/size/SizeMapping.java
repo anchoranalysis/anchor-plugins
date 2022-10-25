@@ -23,22 +23,46 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.task.bean.scale;
+package org.anchoranalysis.plugin.image.task.size;
+
+import java.nio.file.Path;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.anchoranalysis.spatial.box.Extent;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * Tests {@link ScaleImageIndependently}.
+ * Maps a {@link Path} to a particular image-size and orientation-change.
  *
  * @author Owen Feehan
  */
-class ScaleImageIndependentlyTest extends ScaleImageTestBase {
+@AllArgsConstructor
+public class SizeMapping {
 
-    @Override
-    protected ScaleImage<?> createTask() {
-        return new ScaleImageIndependently();
+    /** The path. */
+    @Getter private Path path;
+
+    /** The size. */
+    @Getter private Extent extent;
+
+    /**
+     * Replace the existing {@link Extent} with a new value.
+     *
+     * @param extent the extent to assign.
+     */
+    public void assignExtent(Extent extent) {
+        this.extent = extent;
     }
 
-    @Override
-    protected String resourcesDirectory() {
-        return "scaleImageIndependently";
+    /**
+     * Scales the XY dimensions the factor.
+     *
+     * <p>This is an immutable method.
+     *
+     * @param scaleFactor the factor to scale by.
+     * @return a new {@link SizeMapping} with the scale-factor applied.
+     */
+    public SizeMapping scaleXYBy(ScaleFactor scaleFactor) {
+        return new SizeMapping(path, extent.scaleXYBy(scaleFactor, true));
     }
 }

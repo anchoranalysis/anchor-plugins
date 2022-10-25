@@ -29,6 +29,7 @@ package org.anchoranalysis.test.experiment.task;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,7 @@ import org.anchoranalysis.core.exception.OperationFailedRuntimeException;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
+import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
 import org.anchoranalysis.test.image.csv.CSVComparer;
@@ -64,6 +66,16 @@ class CompareHelper {
     public static void compareOutputWithSaved(
             Path pathAbsoluteOutput, String pathRelativeSaved, Iterable<String> relativePaths)
             throws OperationFailedException {
+
+        if (COPY_NOT_IDENTICAL) {
+            // Ensure the directories exist for test comparison
+            Path path = TestLoader.pathMavenWorkingDirectory(pathRelativeSaved);
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                throw new OperationFailedException(e);
+            }
+        }
 
         DualComparer comparer =
                 DualComparerFactory.compareExplicitDirectoryToTest(
