@@ -72,26 +72,22 @@ import org.anchoranalysis.test.io.output.OutputManagerFixture;
 @AllArgsConstructor
 public class ExecuteTaskHelper {
 
-	/** 
-	 * When defined, only this output occur. 
-	 * 
-	 * <p>Otherwise, all outputs occur as per defaults in the task.
-	 */
-	private final Optional<String> specificOutput;
-	
-	/**
-	 * The arguments to use when executing the task.
-	 */
-	private final TaskArguments taskArguments;
-	
-	/**
-	 * Create so that all outputs occur, and with default {@link TaskArguments}.
-	 */
-	public ExecuteTaskHelper() {
-		this.specificOutput = Optional.empty();
-		this.taskArguments = new TaskArguments();
-	}
-	
+    /**
+     * When defined, only this output occur.
+     *
+     * <p>Otherwise, all outputs occur as per defaults in the task.
+     */
+    private final Optional<String> specificOutput;
+
+    /** The arguments to use when executing the task. */
+    private final TaskArguments taskArguments;
+
+    /** Create so that all outputs occur, and with default {@link TaskArguments}. */
+    public ExecuteTaskHelper() {
+        this.specificOutput = Optional.empty();
+        this.taskArguments = new TaskArguments();
+    }
+
     /**
      * Executes a task on a single-input.
      *
@@ -108,14 +104,13 @@ public class ExecuteTaskHelper {
      *     are identical.
      * @throws OperationFailedException if anything goes wrong.
      */
-    public <T extends InputFromManager, S, V extends Task<T, S>>
-            void runTaskAndCompareOutputs(
-                    T input,
-                    V task,
-                    Path pathDirectoryOutput,
-                    String pathDirectorySaved,
-                    Iterable<String> pathsFileToCompare)
-                    throws OperationFailedException {
+    public <T extends InputFromManager, S, V extends Task<T, S>> void runTaskAndCompareOutputs(
+            T input,
+            V task,
+            Path pathDirectoryOutput,
+            String pathDirectorySaved,
+            Iterable<String> pathsFileToCompare)
+            throws OperationFailedException {
         runTaskAndCompareOutputs(
                 Arrays.asList(input),
                 task,
@@ -140,22 +135,16 @@ public class ExecuteTaskHelper {
      *     are identical.
      * @throws OperationFailedException if anything goes wrong.
      */
-    public <T extends InputFromManager, S, V extends Task<T, S>>
-            void runTaskAndCompareOutputs(
-                    List<T> inputs,
-                    V task,
-                    Path pathDirectoryOutput,
-                    String pathDirectorySaved,
-                    Iterable<String> pathsFileToCompare)
-                    throws OperationFailedException {
+    public <T extends InputFromManager, S, V extends Task<T, S>> void runTaskAndCompareOutputs(
+            List<T> inputs,
+            V task,
+            Path pathDirectoryOutput,
+            String pathDirectorySaved,
+            Iterable<String> pathsFileToCompare)
+            throws OperationFailedException {
 
         boolean successful =
-                runTaskOnInputs(
-                        inputs,
-                        task,
-                        taskArguments,
-                        pathDirectoryOutput,
-                        specificOutput);
+                runTaskOnInputs(inputs, task, taskArguments, pathDirectoryOutput, specificOutput);
         // Successful outcome
         assertTrue(successful, "Sucessful execution of task");
 
@@ -193,8 +182,7 @@ public class ExecuteTaskHelper {
 
             OutputManager outputManager =
                     OutputManagerFixture.createOutputManager(
-                            Optional.of(pathForOutputs),
-                            Optional.of(outputEnabled));
+                            Optional.of(pathForOutputs), Optional.of(outputEnabled));
 
             Outputter outputter = OutputterFixture.outputter(outputManager, outputEnabled);
 

@@ -66,7 +66,9 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.scale.ToDimensions;
+import org.anchoranalysis.plugin.image.task.size.SizeMapping;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
+import org.anchoranalysis.plugin.image.task.stack.ImageSizePrereader;
 
 /**
  * Creates a montage of images, by tiling them side-by-side.

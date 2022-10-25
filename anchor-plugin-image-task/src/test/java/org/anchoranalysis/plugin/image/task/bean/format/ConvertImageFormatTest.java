@@ -55,15 +55,15 @@ class ConvertImageFormatTest {
 
     @BeforeAll
     static void setup() {
-    	BeanInstanceMapFixture.ensureStackWriter(true);
+        BeanInstanceMapFixture.ensureStackWriter(true);
         RegisterBeanFactories.registerAllPackageBeanFactories();
     }
-    
+
     @AfterAll
     static void teardown() {
-    	// Remove the static writer, as we want the global state to stay neutral
-    	// for future tests (especially as this test uses TIFFs).
-    	BeanInstanceMapFixture.removeStackWriter();
+        // Remove the static writer, as we want the global state to stay neutral
+        // for future tests (especially as this test uses TIFFs).
+        BeanInstanceMapFixture.removeStackWriter();
     }
 
     @Test
@@ -100,7 +100,12 @@ class ConvertImageFormatTest {
 
         NamedChannelsInputFixture input = new NamedChannelsInputFixture(channelSpecification);
 
-        new ExecuteTaskHelper().runTaskAndCompareOutputs(
-                input, task, directory, "convert/" + resourceDirectorySuffix, filenamesToCompare);
+        new ExecuteTaskHelper()
+                .runTaskAndCompareOutputs(
+                        input,
+                        task,
+                        directory,
+                        "convert/" + resourceDirectorySuffix,
+                        filenamesToCompare);
     }
 }

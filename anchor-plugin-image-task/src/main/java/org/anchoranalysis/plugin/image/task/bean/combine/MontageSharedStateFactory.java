@@ -38,6 +38,7 @@ import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
+import org.anchoranalysis.plugin.image.task.size.SizeMapping;
 import org.anchoranalysis.plugin.image.task.slice.MontageSharedState;
 
 /**

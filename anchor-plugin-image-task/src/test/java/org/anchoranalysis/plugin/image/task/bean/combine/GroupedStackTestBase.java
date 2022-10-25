@@ -38,7 +38,8 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.input.bean.grouper.WithoutGrouping;
-import org.anchoranalysis.plugin.image.task.bean.ColoredStacksInputFixture;
+import org.anchoranalysis.plugin.image.task.bean.InputFixture;
+import org.anchoranalysis.plugin.image.task.bean.InputFixtureFactory;
 import org.anchoranalysis.plugin.image.task.bean.StackIOTestBase;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.anchoranalysis.plugin.io.bean.grouper.RemoveLastElement;
@@ -53,6 +54,8 @@ import org.junit.jupiter.api.Test;
  */
 abstract class GroupedStackTestBase extends StackIOTestBase {
 
+    /** The input-fixture used in the tests. */
+    protected static InputFixture INPUT_FIXTURE = InputFixtureFactory.createSixColors();
     /**
      * Resizes the input images to a common size.
      *
@@ -131,14 +134,14 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
      * @throws OperationFailedException when thrown by {@link
      *     ExecuteTaskHelper#runTaskAndCompareOutputs(List,
      *     org.anchoranalysis.experiment.bean.task.Task, java.nio.file.Path, String, Iterable)}.
-     * @throws ImageIOException when thrown by {@link ColoredStacksInputFixture#createInputs}.
+     * @throws ImageIOException when thrown by {@link InputFixture#createInputs}.
      */
     protected void doTest(boolean resizeTo, boolean groups, Optional<Stack> additionalStack)
             throws OperationFailedException, ImageIOException {
+
         @SuppressWarnings("unchecked")
         List<ProvidesStackInput> inputs =
-                (List<ProvidesStackInput>)
-                        ColoredStacksInputFixture.createInputs(STACK_READER, true);
+                (List<ProvidesStackInput>) INPUT_FIXTURE.createInputs(STACK_READER, true);
 
         if (additionalStack.isPresent()) {
             inputs.add(
@@ -166,12 +169,13 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
 
         BeanInstanceMapFixture.check(task);
 
-        new ExecuteTaskHelper().runTaskAndCompareOutputs(
-                inputs,
-                task,
-                directory,
-                resizeTo ? subdirectoryResized() : subdirectoryNotResized(),
-                filenamesToCompare(groups));
+        new ExecuteTaskHelper()
+                .runTaskAndCompareOutputs(
+                        inputs,
+                        task,
+                        directory,
+                        resizeTo ? subdirectoryResized() : subdirectoryNotResized(),
+                        filenamesToCompare(groups));
     }
 
     /**

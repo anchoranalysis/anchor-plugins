@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,51 +25,20 @@
  */
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
-import java.util.List;
-import java.util.Optional;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.experiment.arguments.TaskArguments;
-import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
-import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestionFactory;
-import org.anchoranalysis.image.core.dimensions.size.suggestion.SuggestionFormatException;
-import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
-import org.anchoranalysis.plugin.image.bean.scale.ToSuggested;
-import org.anchoranalysis.plugin.image.task.bean.ColoredStacksInputFixture;
-import org.anchoranalysis.plugin.image.task.bean.StackIOTestBase;
-import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
-import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
-import org.junit.jupiter.api.Test;
+/**
+ * Tests {@link ScaleImageIndependently}.
+ *
+ * @author Owen Feehan
+ */
+class ScaleImageIndependentlyTest extends ScaleImageTestBase {
 
-class ScaleImageIndependentlyTest extends StackIOTestBase {
-    
-    /** Fixed width. */
-    @Test
-    void testFixedWidth()
-            throws OperationFailedException, ImageIOException, SuggestionFormatException {
-        ImageSizeSuggestion suggestion = ImageSizeSuggestionFactory.create("800x");
-        doTest(false, "fixedWidth", suggestion);
+    @Override
+    protected ScaleImage<?> createTask() {
+        return new ScaleImageIndependently();
     }
 
-    @SuppressWarnings("unchecked")
-    private void doTest(
-            boolean binary, String expectedOutputSubdirectory, ImageSizeSuggestion suggestion)
-            throws ImageIOException, OperationFailedException, SuggestionFormatException {
-
-        ScaleImageIndependently task = new ScaleImageIndependently();
-        task.setBinary(binary);
-
-        task.setScaleCalculator(new ToSuggested());
-
-        BeanInstanceMapFixture.check(task);
-
-        ExecuteTaskHelper helper = new ExecuteTaskHelper(Optional.of(ScaleImage.OUTPUT_SCALED), new TaskArguments(Optional.of(suggestion)));
-        helper.runTaskAndCompareOutputs(
-                (List<StackSequenceInput>)
-                        ColoredStacksInputFixture.createInputs(STACK_READER, false),
-                task,
-                directory,
-                "scaleImageIndependently/expectedOutput/nonBinary/" + expectedOutputSubdirectory,
-                ColoredStacksInputFixture.FILENAMES_WITH_EXTENSION);
+    @Override
+    protected String resourcesDirectory() {
+        return "scaleImageIndependently";
     }
 }

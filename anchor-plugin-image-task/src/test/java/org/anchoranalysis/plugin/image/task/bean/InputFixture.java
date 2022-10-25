@@ -27,11 +27,9 @@ package org.anchoranalysis.plugin.image.task.bean;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.core.time.OperationContext;
@@ -42,8 +40,12 @@ import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ColoredStacksInputFixture {
+/**
+ * Loads images from a directory as inputs for testing.
+ *
+ * @author Owen Feehan
+ */
+public class InputFixture {
 
     /** The string to prepend for the <b>first</b> group, including a trailing separator. */
     public static String GROUP1 = "group1/";
@@ -51,13 +53,29 @@ public class ColoredStacksInputFixture {
     /** The string to prepend for the <b>second</b> group, including a trailing separator. */
     public static String GROUP2 = "group2/";
 
-    /** The respective colors of the six images. */
-    private static List<String> FILENAMES_WITHOUT_EXTENSION =
-            Arrays.asList("blue", "red", "yellow", "green", "gray", "orange");
+    /** The relative-path in the test resources to the directory containing the input files. */
+    private final String testPath;
 
-    /** The respective colors of the six images. */
-    public static List<String> FILENAMES_WITH_EXTENSION =
-            FunctionalList.mapToList(FILENAMES_WITHOUT_EXTENSION, filename -> filename + ".png");
+    /** The filenames <b>without</b> an extension. */
+    private final List<String> filesNamesWithoutExtension;
+
+    /** The filenames <b>with</b> an extension appended. */
+    @Getter private final List<String> filesNamesWithExtension;
+
+    /**
+     * Create for a list of filenames.
+     *
+     * @param testPath the relative-path in the test resources to the directory containing the input
+     *     files.
+     * @param filesNamesWithoutExtension the filenames, without any extension, or period before the
+     *     extension.
+     */
+    public InputFixture(String testPath, List<String> filesNamesWithoutExtension) {
+        this.testPath = testPath;
+        this.filesNamesWithoutExtension = filesNamesWithoutExtension;
+        this.filesNamesWithExtension =
+                FunctionalList.mapToList(filesNamesWithoutExtension, filename -> filename + ".png");
+    }
 
     /**
      * Create an input corresponding to each of the colored stacks, with an identifier inferred from
@@ -68,15 +86,15 @@ public class ColoredStacksInputFixture {
      *     identifier. when false, it is omitted entirely.
      * @return a list of inputs, with identifiers determined as above.
      */
-    public static List<? super StackSequenceInputFixture> createInputs(
+    public List<? super StackSequenceInputFixture> createInputs(
             StackReader stackReader, boolean includeGroupInIdentifier) throws ImageIOException {
 
         TestLoaderImage loader = new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
 
-        Path directory = loader.resolveTestPath("montage/input/six");
+        Path directory = loader.resolveTestPath(testPath);
         OperationContext context = LoggerFixture.suppressedOperationContext();
         return FunctionalList.mapToListWithIndex(
-                FILENAMES_WITH_EXTENSION,
+                filesNamesWithExtension,
                 ImageIOException.class,
                 (filename, index) ->
                         new StackSequenceInputFixture(
@@ -98,21 +116,19 @@ public class ColoredStacksInputFixture {
      * @param expectedOutputFilenames a list of filenames that are produced for every output.
      * @return a newly created list of the output-paths.
      */
-    public static final List<String> expectedOutputPathsWithGroups(
-            List<String> expectedOutputFilenames) {
+    public List<String> expectedOutputPathsWithGroups(List<String> expectedOutputFilenames) {
         List<String> paths =
-                new ArrayList<>(
-                        FILENAMES_WITHOUT_EXTENSION.size() * expectedOutputFilenames.size());
+                new ArrayList<>(filesNamesWithoutExtension.size() * expectedOutputFilenames.size());
 
         // Loop through each input filename and determine its group
-        for (int index = 0; index < FILENAMES_WITHOUT_EXTENSION.size(); index++) {
+        for (int index = 0; index < filesNamesWithoutExtension.size(); index++) {
             for (String expectedOutputFilename : expectedOutputFilenames) {
                 String group = groupIdentifier(index);
                 paths.add(
                         String.format(
                                 "%s/%s_%s",
                                 group,
-                                FILENAMES_WITHOUT_EXTENSION.get(index),
+                                filesNamesWithoutExtension.get(index),
                                 expectedOutputFilename));
             }
         }

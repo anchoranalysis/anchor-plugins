@@ -41,19 +41,19 @@ public abstract class StackIOTestBase {
 
     // START: Ensure needed instances exist in the default BeanInstanceMap
     protected static final StackReader STACK_READER = BeanInstanceMapFixture.ensureStackReader();
-    
+
     @BeforeAll
     static void setupWriter() {
-    	BeanInstanceMapFixture.ensureStackWriter(false);
+        BeanInstanceMapFixture.ensureStackWriter(false);
         BeanInstanceMapFixture.ensureImageMetadataReader();
         BeanInstanceMapFixture.ensureInterpolator();
     }
-    
+
     @AfterAll
     static void teardown() {
-    	// Remove the static writer, as we want the global state to stay neutral
-    	// for future tests (especially as this test uses TIFFs).
-    	BeanInstanceMapFixture.removeStackWriter();
+        // Remove the static writer, as we want the global state to stay neutral
+        // for future tests (especially as this test uses TIFFs).
+        BeanInstanceMapFixture.removeStackWriter();
     }
     // END: Ensure needed instances exist in the default BeanInstanceMap
 

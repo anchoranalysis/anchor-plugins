@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -42,16 +41,14 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
-import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
-import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Base class for tasks whose primary aim is to scale (resize) an image.
@@ -91,13 +88,13 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
 
     // START BEAN PROPERTIES
     /** Calculates what scale-factor to apply on the image. */
-    @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
+    @BeanField @Getter @Setter protected ScaleCalculator scaleCalculator;
 
     /**
      * Iff true the image to be scaled is treated as a binary-mask, and interpolation during scaling
-     * ensures only two binary-values are ouputted.
+     * ensures only two binary-values are outputted.
      */
-    @BeanField @Getter @Setter private boolean binary = false;
+    @BeanField @Getter @Setter protected boolean binary = false;
 
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
@@ -119,7 +116,7 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
             // referenced by the scale calculator
             initialization.addStacksFrom(stacks);
 
-            populateAndOutput(initialization, input.getContextJob());
+            populateAndOutput(input.getSharedState(), initialization, input.getContextJob());
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
         }
@@ -141,7 +138,8 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_SCALED);
     }
 
-    private void populateAndOutput(ImageInitialization initialization, InputOutputContext context)
+    private void populateAndOutput(
+            S sharedState, ImageInitialization initialization, InputOutputContext context)
             throws JobExecutionException {
 
         // Output collections
@@ -153,7 +151,8 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
                         OutputterHelper.isFirstLevelOutputEnabled(
                                 OUTPUT_SCALED_FLATTENED, context));
         if (dualEnabled.isEitherEnabled()) {
-            populateStacksFromSharedObjects(initialization, stacks, dualEnabled, context);
+            populateStacksFromSharedObjects(
+                    sharedState, initialization, stacks, dualEnabled, context);
             OutputterHelper.outputStacks(
                     stacks,
                     dualEnabled,
@@ -164,6 +163,7 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
     }
 
     private void populateStacksFromSharedObjects(
+            S sharedState,
             ImageInitialization initialization,
             DualNamedStacks stacksToAddTo,
             DualEnabled dualEnabled,
@@ -189,7 +189,8 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
                             scaleStack(
                                     stackIn,
                                     initialization.suggestedSize(),
-                                    context.getLogger().messageLogger());
+                                    interpolator.voxelsResizer(),
+                                    sharedState);
 
                     stacksToAddTo.addStack(key, stackOut, enabledForKey);
 
@@ -202,28 +203,23 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
         }
     }
 
-    private Stack scaleStack(
-            Stack stack, Optional<ImageSizeSuggestion> suggestedSize, MessageLogger logger)
-            throws OperationFailedException {
-        return stack.mapChannel(channel -> scaleChannel(channel, suggestedSize, logger));
-    }
-
-    private Channel scaleChannel(
-            Channel channel, Optional<ImageSizeSuggestion> suggestedSize, MessageLogger logger)
-            throws OperationFailedException {
-        ScaleFactor scaleFactor =
-                scaleCalculator.calculate(Optional.of(channel.dimensions()), suggestedSize);
-
-        if (scaleFactor.isNoScale()) {
-            // Nothing to do
-            return channel;
-        }
-
-        if (binary) {
-            Mask mask = new Mask(channel);
-            return mask.scaleXY(scaleFactor).channel();
-        } else {
-            return channel.scaleXY(scaleFactor, interpolator.voxelsResizer());
-        }
-    }
+    /**
+     * Produce a scaled version of a {@link Stack}, mapping each channel to a scaled version of
+     * itself.
+     *
+     * @param stack the stack before scaling.
+     * @param binary true iff the channel has binary-contents (only two possible values are
+     *     allowed), and must be interpolated differently.
+     * @param suggestedSize the suggested-size that has been passed into the task.
+     * @param voxelsResizer how to resize the voxels in a channel.
+     * @param sharedState the shared-state of the task.
+     * @return the scaled version of the stack.
+     * @throws OperationFailedException
+     */
+    protected abstract Stack scaleStack(
+            Stack stack,
+            Optional<ImageSizeSuggestion> suggestedSize,
+            VoxelsResizer voxelsResizer,
+            S sharedState)
+            throws OperationFailedException;
 }

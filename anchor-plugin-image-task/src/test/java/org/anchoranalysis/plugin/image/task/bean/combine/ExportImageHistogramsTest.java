@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.plugin.image.task.bean.ColoredStacksInputFixture;
+import org.anchoranalysis.plugin.image.task.bean.InputFixture;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.anchoranalysis.plugin.image.task.bean.grouped.histogram.ExportImageHistograms;
 import org.junit.jupiter.api.Test;
@@ -68,16 +68,16 @@ class ExportImageHistogramsTest extends GroupedStackTestBase {
     protected List<String> filenamesToCompare(boolean groups) {
         // The non-aggregated histograms are always produced
         List<String> out =
-                ColoredStacksInputFixture.expectedOutputPathsWithGroups(
+                INPUT_FIXTURE.expectedOutputPathsWithGroups(
                         NON_AGGREGATED_FILES_PRODUCED_PER_INPUT);
         if (groups) {
             out.addAll(
                     prependStrings(
-                            SUM_PREFIX + ColoredStacksInputFixture.GROUP1,
+                            SUM_PREFIX + InputFixture.GROUP1,
                             NON_AGGREGATED_FILES_PRODUCED_PER_INPUT));
             out.addAll(
                     prependStrings(
-                            SUM_PREFIX + ColoredStacksInputFixture.GROUP2,
+                            SUM_PREFIX + InputFixture.GROUP2,
                             NON_AGGREGATED_FILES_PRODUCED_PER_INPUT));
         }
         return out;

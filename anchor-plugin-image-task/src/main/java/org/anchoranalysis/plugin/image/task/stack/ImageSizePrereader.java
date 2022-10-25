@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.task.bean.combine;
+package org.anchoranalysis.plugin.image.task.stack;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -38,6 +38,8 @@ import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.math.arithmetic.Counter;
+import org.anchoranalysis.plugin.image.task.bean.combine.Montage;
+import org.anchoranalysis.plugin.image.task.size.SizeMapping;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
@@ -49,7 +51,7 @@ import org.anchoranalysis.spatial.box.Extent;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-class ImageSizePrereader {
+public class ImageSizePrereader {
 
     // START REQUIRED ARGUMENTS
     /** How to read the {@link ImageMetadata} from the file-system. */
