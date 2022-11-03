@@ -137,7 +137,7 @@ public abstract class ExportFeaturesTestBase<
             task.setStyle(new ExportFeaturesStyle(false, false, false));
 
             new ExecuteTaskHelper()
-                    .runTaskAndCompareOutputs(
+                    .assertExpectedTaskOutputs(
                             input,
                             task,
                             directory,

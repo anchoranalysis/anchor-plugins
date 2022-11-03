@@ -132,7 +132,7 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
      * @param groups when true, grouping is enabled.
      * @param additionalStack when set, adds an additional input based on {@link Stack}.
      * @throws OperationFailedException when thrown by {@link
-     *     ExecuteTaskHelper#runTaskAndCompareOutputs(List,
+     *     ExecuteTaskHelper#assertExpectedTaskOutputs(List,
      *     org.anchoranalysis.experiment.bean.task.Task, java.nio.file.Path, String, Iterable)}.
      * @throws ImageIOException when thrown by {@link InputFixture#createInputs}.
      */
@@ -159,7 +159,7 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
      * @param groups when true, grouping is enabled.
      * @param inputs the inputs for the task in the test.
      * @throws OperationFailedException when thrown by {@link
-     *     ExecuteTaskHelper#runTaskAndCompareOutputs(List,
+     *     ExecuteTaskHelper#assertExpectedTaskOutputs(List,
      *     org.anchoranalysis.experiment.bean.task.Task, java.nio.file.Path, String, Iterable)}.
      */
     protected void doTest(boolean resizeTo, boolean groups, List<ProvidesStackInput> inputs)
@@ -170,7 +170,7 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
         BeanInstanceMapFixture.check(task);
 
         new ExecuteTaskHelper()
-                .runTaskAndCompareOutputs(
+                .assertExpectedTaskOutputs(
                         inputs,
                         task,
                         directory,

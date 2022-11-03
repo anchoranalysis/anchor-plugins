@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 import org.anchoranalysis.test.TestDataInitializeException;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
@@ -47,7 +46,6 @@ import org.apache.commons.lang.SystemUtils;
  * <p>This is particularly useful for unit-tests that call experiments, but want to do it with all
  * the libraries and plugins instantiated, as they would be from the shell.
  */
-@AllArgsConstructor
 public class ExperimentLauncherFromShell {
 
     /** Command for calling anchor */
@@ -57,6 +55,15 @@ public class ExperimentLauncherFromShell {
     private static final String PATH_PROPERTY_IDENTIFIER = "anchor.distribution.path.test";
 
     private final TestLoader loader;
+
+    /**
+     * Create with a specific loader.
+     *
+     * @param loader the loader, that loads resources for tests.
+     */
+    public ExperimentLauncherFromShell(TestLoader loader) {
+        this.loader = loader;
+    }
 
     /**
      * The path we use for calling the anchor-executable
