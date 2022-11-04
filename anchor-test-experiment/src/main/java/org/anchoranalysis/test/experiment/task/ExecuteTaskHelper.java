@@ -127,8 +127,8 @@ public class ExecuteTaskHelper {
             Optional<String> specificOutput,
             TaskArguments taskArguments,
             boolean copyNonIdentical) {
-        this.specificOutput = Optional.empty();
-        this.taskArguments = new TaskArguments();
+        this.specificOutput = specificOutput;
+        this.taskArguments = taskArguments;
         this.copyNonIdentical = copyNonIdentical;
     }
 
