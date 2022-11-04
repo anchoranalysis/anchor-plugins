@@ -101,7 +101,7 @@ class ConvertImageFormatTest {
         NamedChannelsInputFixture input = new NamedChannelsInputFixture(channelSpecification);
 
         new ExecuteTaskHelper()
-                .runTaskAndCompareOutputs(
+                .assertExpectedTaskOutputs(
                         input,
                         task,
                         directory,

@@ -43,33 +43,66 @@ import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
 import org.anchoranalysis.test.image.csv.CSVComparer;
 
+/**
+ * Asserts files in the output directory and resources directory are identical.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CompareHelper {
 
-    /**
-     * Toggles a behavior that replaces reference files with newly created ones in certain
-     * circumstances.
-     *
-     * <p>If true, and an {@link #assertIdentical} fails, the first path in the comparer (the newly
-     * created file) will be copied on top of the second path in the comparer (the reference file).
-     *
-     * <p>If false, no copying occurs.
-     *
-     * <p>This is a powerful tool to update resources when they are out of sync with the tests, but
-     * should be used very <b>carefully</b> as it overrides existing files in the source-code
-     * directory.
-     */
-    private static final boolean COPY_NOT_IDENTICAL = false;
-
     private static final CSVComparer CSV_COMPARER = new CSVComparer(",", true, 0, true, false);
 
-    public static void compareOutputWithSaved(
-            Path pathAbsoluteOutput, String pathRelativeSaved, Iterable<String> relativePaths)
+    /**
+     * Asserts that particular files in an <i>output directory</i> are identical to those in a
+     * <i>resources directory</i>.
+     *
+     * @param absoluteOutput an absolute path to the output directory.
+     * @param pathRelativeToResources a path, relative to the maven working directory, where the
+     *     resource directory is located.
+     * @param relativePaths paths, relative to both directories above, of the specific files to
+     *     compare.
+     * @throws OperationFailedException if a particular file extension cannot be compared.
+     */
+    public static void assertDirectoriesIdentical(
+            Path absoluteOutput, String pathRelativeToResources, Iterable<String> relativePaths)
+            throws OperationFailedException {
+        assertDirectoriesIdentical(absoluteOutput, pathRelativeToResources, relativePaths, false);
+    }
+
+    /**
+     * Like {@link #assertDirectoriesIdentical(Path, String, Iterable)} but additionally exposes the
+     * {@code copyNonIdentical} flag.
+     *
+     * <p>When this flag is true, and an {@link #assertDirectoriesIdentical} fails on a particular
+     * file, the first path in the comparer (the newly created file) will be copied on top of the
+     * second path in the comparer (the reference file). No assertion will be thrown. If false, no
+     * copying occurs.
+     *
+     * <p>This is a powerful tool to update resources when they are out of sync with the tests.
+     * However, it should be used very <b>carefully</b> as it overrides existing files in the
+     * source-code directory.
+     *
+     * @param absoluteOutput an absolute path to the output directory.
+     * @param pathRelativeToResources a path, relative to the maven working directory, where the
+     *     resource directory is located.
+     * @param relativePaths paths, relative to both directories above, of the specific files to
+     *     compare.
+     * @param copyNonIdentical when true, and two files are not identical, the version in the output
+     *     directory is copied into the resources directory.
+     * @throws OperationFailedException if a particular file extension cannot be compared, or a
+     *     copyNonIdentical operation fails.
+     */
+    public static void assertDirectoriesIdentical(
+            Path absoluteOutput,
+            String pathRelativeToResources,
+            Iterable<String> relativePaths,
+            boolean copyNonIdentical)
             throws OperationFailedException {
 
-        if (COPY_NOT_IDENTICAL) {
+        if (copyNonIdentical) {
             // Ensure the directories exist for test comparison
-            Path path = TestLoader.pathMavenWorkingDirectory(pathRelativeSaved);
+            Path path = TestLoader.pathMavenWorkingDirectory(pathRelativeToResources);
             try {
                 Files.createDirectories(path);
             } catch (IOException e) {
@@ -79,31 +112,33 @@ class CompareHelper {
 
         DualComparer comparer =
                 DualComparerFactory.compareExplicitDirectoryToTest(
-                        pathAbsoluteOutput, pathRelativeSaved);
+                        absoluteOutput, pathRelativeToResources);
 
         for (String path : relativePaths) {
-            assertIdentical(comparer, path);
+            assertIdenticalFiles(comparer, path, copyNonIdentical);
         }
     }
 
-    @SuppressWarnings("unused")
-    private static void assertIdentical(DualComparer comparer, String relativePath)
+    /** Asserts two files, identified by a specific relative path, are identical. */
+    private static void assertIdenticalFiles(
+            DualComparer comparer, String relativePath, boolean copyNonIdentical)
             throws OperationFailedException {
 
-        if (COPY_NOT_IDENTICAL && !comparer.getLoader2().doesPathExist(relativePath)) {
+        if (copyNonIdentical && !comparer.getLoader2().doesPathExist(relativePath)) {
             copyFromTemporaryToResources(comparer, relativePath);
             return; // Exit early
         }
 
-        boolean identical = compareForExtra(comparer, relativePath);
+        boolean identical = areFilesIdentical(comparer, relativePath);
 
-        if (COPY_NOT_IDENTICAL && !identical) {
+        if (copyNonIdentical && !identical) {
             copyFromTemporaryToResources(comparer, relativePath);
         } else {
             assertTrue(identical, () -> relativePath + " is not identical");
         }
     }
 
+    /** Copies a specific file from the output directory to the resources directory. */
     private static void copyFromTemporaryToResources(DualComparer comparer, String relativePath)
             throws OperationFailedException {
         try {
@@ -113,7 +148,8 @@ class CompareHelper {
         }
     }
 
-    private static boolean compareForExtra(DualComparer comparer, String relativePath)
+    /** Performs the comparison to determine if two files are identical. */
+    private static boolean areFilesIdentical(DualComparer comparer, String relativePath)
             throws OperationFailedException {
         try {
             if (ImageFileFormat.TIFF.matches(relativePath)) {

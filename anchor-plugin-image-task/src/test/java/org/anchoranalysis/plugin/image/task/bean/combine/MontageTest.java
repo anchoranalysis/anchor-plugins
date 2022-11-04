@@ -89,7 +89,7 @@ class MontageTest extends StackIOTestBase {
         InputFixture fixture = InputFixtureFactory.createSixColors();
 
         new ExecuteTaskHelper()
-                .runTaskAndCompareOutputs(
+                .assertExpectedTaskOutputs(
                         (List<StackSequenceInput>) fixture.createInputs(STACK_READER, true),
                         task,
                         directory,

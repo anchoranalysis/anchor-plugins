@@ -37,7 +37,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -69,11 +68,10 @@ import org.anchoranalysis.test.io.output.OutputManagerFixture;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
 public class ExecuteTaskHelper {
 
     /**
-     * When defined, only this output occur.
+     * When defined, only this outputs are permitted to occur.
      *
      * <p>Otherwise, all outputs occur as per defaults in the task.
      */
@@ -82,14 +80,63 @@ public class ExecuteTaskHelper {
     /** The arguments to use when executing the task. */
     private final TaskArguments taskArguments;
 
+    /**
+     * When true, and two files are not identical, the version in the output directory is copied
+     * into the resources directory.
+     *
+     * <p>Specifically, when the {@code copyNonIdentical} flag is true, and two particular files are
+     * deemed to be non-identical, the outputted file in {@code pathDirectoryOutput} will be copied
+     * in to replace the existing file in the {@code pathDirectorySaved}. No assertion will be
+     * thrown.
+     *
+     * <p>When false, no copying occurs.
+     *
+     * <p>This is a powerful tool to update resources when they are out of sync with the tests.
+     * However, it should be used very <b>carefully</b> as it overrides existing files in the
+     * source-code directory.
+     */
+    private final boolean copyNonIdentical;
+
     /** Create so that all outputs occur, and with default {@link TaskArguments}. */
     public ExecuteTaskHelper() {
+        this(false);
+    }
+
+    /**
+     * Create so that all outputs occur, and with default {@link TaskArguments}.
+     *
+     * @param copyNonIdentical when true, and two files are not identical, the version in the output
+     *     directory is copied into the resources directory.
+     */
+    public ExecuteTaskHelper(boolean copyNonIdentical) {
         this.specificOutput = Optional.empty();
         this.taskArguments = new TaskArguments();
+        this.copyNonIdentical = copyNonIdentical;
+    }
+
+    /**
+     * Create with specific arguments, not necessarily the defaults.
+     *
+     * @param specificOutput when defined, only this outputs are permitted to occur. Otherwise, all
+     *     outputs occur as per defaults in the task.
+     * @param taskArguments the arguments to use when executing the task.
+     * @param copyNonIdentical when true, and two files are not identical, the version in the output
+     *     directory is copied into the resources directory.
+     */
+    public ExecuteTaskHelper(
+            Optional<String> specificOutput,
+            TaskArguments taskArguments,
+            boolean copyNonIdentical) {
+        this.specificOutput = Optional.empty();
+        this.taskArguments = new TaskArguments();
+        this.copyNonIdentical = copyNonIdentical;
     }
 
     /**
      * Executes a task on a single-input.
+     *
+     * <p>Expected outputs exist in a resources directory, and the produced outputs are compared
+     * against them, to check that they are identical.
      *
      * @param <T> input type
      * @param <S> shared-state type
@@ -104,14 +151,14 @@ public class ExecuteTaskHelper {
      *     are identical.
      * @throws OperationFailedException if anything goes wrong.
      */
-    public <T extends InputFromManager, S, V extends Task<T, S>> void runTaskAndCompareOutputs(
+    public <T extends InputFromManager, S, V extends Task<T, S>> void assertExpectedTaskOutputs(
             T input,
             V task,
             Path pathDirectoryOutput,
             String pathDirectorySaved,
             Iterable<String> pathsFileToCompare)
             throws OperationFailedException {
-        runTaskAndCompareOutputs(
+        assertExpectedTaskOutputs(
                 Arrays.asList(input),
                 task,
                 pathDirectoryOutput,
@@ -120,7 +167,10 @@ public class ExecuteTaskHelper {
     }
 
     /**
-     * Executes a task on a multiple inputs - with task arguments.
+     * Executes a task on a multiple inputs and asserts expected outputs - with task arguments.
+     *
+     * <p>Expected outputs exist in a resources directory, and the produced outputs are compared
+     * against them, to check that they are identical.
      *
      * @param <T> input type
      * @param <S> shared-state type
@@ -135,7 +185,7 @@ public class ExecuteTaskHelper {
      *     are identical.
      * @throws OperationFailedException if anything goes wrong.
      */
-    public <T extends InputFromManager, S, V extends Task<T, S>> void runTaskAndCompareOutputs(
+    public <T extends InputFromManager, S, V extends Task<T, S>> void assertExpectedTaskOutputs(
             List<T> inputs,
             V task,
             Path pathDirectoryOutput,
@@ -144,12 +194,13 @@ public class ExecuteTaskHelper {
             throws OperationFailedException {
 
         boolean successful =
-                runTaskOnInputs(inputs, task, taskArguments, pathDirectoryOutput, specificOutput);
+                executeTaskOnInputs(
+                        inputs, task, taskArguments, pathDirectoryOutput, specificOutput);
         // Successful outcome
         assertTrue(successful, "Sucessful execution of task");
 
-        CompareHelper.compareOutputWithSaved(
-                pathDirectoryOutput, pathDirectorySaved, pathsFileToCompare);
+        CompareHelper.assertDirectoriesIdentical(
+                pathDirectoryOutput, pathDirectorySaved, pathsFileToCompare, copyNonIdentical);
     }
 
     /**
@@ -167,13 +218,14 @@ public class ExecuteTaskHelper {
      * @return true if successful, false otherwise.
      * @throws OperationFailedException if anything goes wrong.
      */
-    private static <T extends InputFromManager, S, V extends Task<T, S>> boolean runTaskOnInputs(
-            List<T> inputs,
-            V task,
-            TaskArguments taskArguments,
-            Path pathForOutputs,
-            Optional<String> specificOutputEnabled)
-            throws OperationFailedException {
+    private static <T extends InputFromManager, S, V extends Task<T, S>>
+            boolean executeTaskOnInputs(
+                    List<T> inputs,
+                    V task,
+                    TaskArguments taskArguments,
+                    Path pathForOutputs,
+                    Optional<String> specificOutputEnabled)
+                    throws OperationFailedException {
 
         try {
             BeanInstanceMapFixture.check(task);

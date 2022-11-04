@@ -92,8 +92,9 @@ public abstract class ScaleImageTestBase extends StackIOTestBase {
         ExecuteTaskHelper helper =
                 new ExecuteTaskHelper(
                         Optional.of(ScaleImage.OUTPUT_SCALED),
-                        new TaskArguments(Optional.of(suggestion)));
-        helper.runTaskAndCompareOutputs(
+                        new TaskArguments(Optional.of(suggestion)),
+                        false);
+        helper.assertExpectedTaskOutputs(
                 (List<StackSequenceInput>) fixture.createInputs(STACK_READER, false),
                 task,
                 directory,
