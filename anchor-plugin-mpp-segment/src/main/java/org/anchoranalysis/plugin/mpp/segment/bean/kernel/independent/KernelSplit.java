@@ -42,7 +42,7 @@ import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.mpp.pair.PairPxlMarkMemo;
+import org.anchoranalysis.mpp.pair.PairVoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelPosNeg;
@@ -58,7 +58,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy, Updatabl
     // END BEAN
 
     private Optional<Mark> markExst;
-    private Optional<PairPxlMarkMemo> pairNew;
+    private Optional<PairVoxelizedMarkMemo> pairNew;
 
     @Override
     public Optional<VoxelizedMarksWithEnergy> makeProposal(
@@ -119,7 +119,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy, Updatabl
     private static VoxelizedMarksWithEnergy createMarks(
             VoxelizedMarksWithEnergy existing,
             EnergyStackWithoutParameters energyStack,
-            PairPxlMarkMemo pair,
+            PairVoxelizedMarkMemo pair,
             int markExistingIndex)
             throws KernelCalculateEnergyException {
 

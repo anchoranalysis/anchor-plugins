@@ -45,7 +45,7 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.mpp.pair.MarkPair;
 import org.anchoranalysis.mpp.pair.RandomCollection;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
@@ -61,10 +61,10 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy, Updatabl
     @BeanField @Getter @Setter private String simplePairCollectionID;
     // END BEAN PROPERTIES
 
-    private IdentifiablePair<Mark> pair;
+    private MarkPair<Mark> pair;
     private Optional<Mark> markAdded;
 
-    @Getter @Setter private RandomCollection<IdentifiablePair<Mark>> pairCollection;
+    @Getter @Setter private RandomCollection<MarkPair<Mark>> pairCollection;
 
     @Override
     public void onInitialization(MarksInitialization pso) throws InitializeException {
