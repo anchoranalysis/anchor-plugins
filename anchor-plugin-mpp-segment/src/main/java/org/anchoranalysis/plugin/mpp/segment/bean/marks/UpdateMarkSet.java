@@ -37,7 +37,7 @@ import org.anchoranalysis.mpp.feature.mark.MemoList;
 import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.mpp.pair.MarkPair;
 import org.anchoranalysis.mpp.pair.RandomCollection;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -51,7 +51,7 @@ class UpdateMarkSet {
             throws OperationFailedException {
         try {
             for (String key : initialization.markPairs().keys()) {
-                RandomCollection<IdentifiablePair<Mark>> pair =
+                RandomCollection<MarkPair<Mark>> pair =
                         initialization.markPairs().getException(key);
                 pair.initUpdatableMarks(
                         new MemoList(),

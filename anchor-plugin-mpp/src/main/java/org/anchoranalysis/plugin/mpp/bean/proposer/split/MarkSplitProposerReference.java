@@ -37,7 +37,7 @@ import org.anchoranalysis.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.mpp.pair.PairPxlMarkMemo;
+import org.anchoranalysis.mpp.pair.PairVoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 
@@ -65,7 +65,7 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
     }
 
     @Override
-    public Optional<PairPxlMarkMemo> propose(
+    public Optional<PairVoxelizedMarkMemo> propose(
             VoxelizedMarkMemo mark, ProposerContext context, MarkWithIdentifierFactory markFactory)
             throws ProposalAbnormalFailureException {
         return delegate.propose(mark, context, markFactory);
