@@ -189,7 +189,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
             ParametersExperiment parameters)
             throws ExperimentExecutionException {
         try {
-            initializeBeans(parameters.createInitializationContext());
+            initializeBeans(parameters.deriveInitializationContext());
 
             ConcurrentModelPool<T> modelPool =
                     segment.createModelPool(plan, parameters.getContext().getLogger()); // NOSONAR

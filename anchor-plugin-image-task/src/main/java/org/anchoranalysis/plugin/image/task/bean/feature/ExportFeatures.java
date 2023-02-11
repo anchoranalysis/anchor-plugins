@@ -147,7 +147,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
             Optional<InputGrouper> grouper =
                     group.createInputGrouper(
-                            parameters.getExperimentArguments().task().getGroupIndexRange());
+                            parameters.getExecutionArguments().task().getGroupIndexRange());
             LabelHeaders headers = source.headers(grouper.isPresent());
             FeatureExporter<S> exporter =
                     source.createExporter(headers, features, OUTPUT_RESULTS, grouper, context);

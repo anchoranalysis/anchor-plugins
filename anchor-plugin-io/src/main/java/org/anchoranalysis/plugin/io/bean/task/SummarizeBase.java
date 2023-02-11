@@ -62,7 +62,7 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
 
         if (parameters.isDetailedLogging()) {
             summarizeExperimentArguments(
-                    parameters.getLoggerExperiment(), parameters.getExperimentArguments());
+                    parameters.getLoggerExperiment(), parameters.getExecutionArguments());
         }
 
         return summarizer;

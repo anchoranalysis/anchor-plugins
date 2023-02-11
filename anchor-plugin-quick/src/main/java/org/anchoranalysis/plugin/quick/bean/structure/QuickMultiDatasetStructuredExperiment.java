@@ -121,9 +121,9 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
     }
 
     @Override
-    public void replaceOutputManager(OutputManager outputter) throws OperationFailedException {
+    public void replaceOutputManager(OutputManager output) throws OperationFailedException {
         populateDelegateIfNeeded();
-        delegate.replaceOutputManager(outputter);
+        delegate.replaceOutputManager(output);
     }
 
     @Override

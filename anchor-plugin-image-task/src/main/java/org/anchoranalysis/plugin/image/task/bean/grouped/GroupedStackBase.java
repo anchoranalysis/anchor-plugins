@@ -147,7 +147,7 @@ public abstract class GroupedStackBase<S, T>
 
         Optional<InputGrouper> grouper =
                 group.createInputGrouper(
-                        parameters.getExperimentArguments().task().getGroupIndexRange());
+                        parameters.getExecutionArguments().task().getGroupIndexRange());
         Optional<List<String>> groupIdentifiers =
                 OptionalUtilities.map(
                         grouper, grouperInternal -> allGroupIdentifiers(inputs, grouperInternal));
