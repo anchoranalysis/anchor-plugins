@@ -142,8 +142,8 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     }
 
     @Override
-    public void replaceOutputManager(OutputManager outputter) throws OperationFailedException {
-        delegate.setOutput(outputter);
+    public void replaceOutputManager(OutputManager output) throws OperationFailedException {
+        delegate.setOutput(output);
     }
 
     @Override

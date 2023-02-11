@@ -261,8 +261,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
 
         try {
             StackArranger arranger =
-                    createArranger(
-                            imageSizes, parameters.getExperimentArguments().task().getSize());
+                    createArranger(imageSizes, parameters.getExecutionArguments().task().getSize());
             return MontageSharedStateFactory.create(
                     imageSizes, arranger, interpolator.voxelsResizer(), context);
         } catch (OperationFailedException e) {

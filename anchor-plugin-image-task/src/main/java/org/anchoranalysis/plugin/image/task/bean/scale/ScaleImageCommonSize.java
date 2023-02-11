@@ -118,7 +118,7 @@ public class ScaleImageCommonSize extends ScaleImage<CommonSize> {
                                     scaleMapping(
                                             mapping,
                                             parameters
-                                                    .createInitializationContext()
+                                                    .deriveInitializationContext()
                                                     .getSuggestedSize()));
             return new CommonSize(maxSize);
         } catch (OperationFailedException e) {
