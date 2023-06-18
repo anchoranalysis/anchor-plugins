@@ -81,7 +81,8 @@ public class Rooted extends DerivePath {
         Path pathOut = item.deriveFrom(pathInWithoutRoot.getRemainder(), debugMode);
 
         if (suppressRootOut) {
-            pathOut = ResolvePathAbsolute.resolve(getLocalPath(), pathOut);
+        	Path path = getLocalPath().orElseThrow( () -> new DerivePathException("No local path is associated with the bean."));
+            pathOut = ResolvePathAbsolute.resolve(path, pathOut);
         } else {
             pathOut = pathInWithoutRoot.getRoot().resolve(pathOut);
         }

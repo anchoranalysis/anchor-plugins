@@ -113,7 +113,7 @@
 			<artifactId>onnxruntime</artifactId>
 			<!-- There seems to be problems on MacOS with the onnx runtime so we 
 			deliberately run an older version. -->
-			<version>1.12.1}</version>
+			<version>1.12.1</version>
 		</dependency>
 	  </dependencies>
 	</profile>
