@@ -45,7 +45,6 @@
         <module>anchor-plugin-image-feature</module>
         <module>anchor-plugin-imagej</module>
         <module>anchor-plugin-mpp</module>
-        <module>anchor-plugin-mpp-experiment</module>
         <module>anchor-plugin-mpp-feature</module>
         <module>anchor-plugin-points</module>
         <module>anchor-plugin-io</module>
