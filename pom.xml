@@ -84,11 +84,6 @@
 		   <url>https://maven.pkg.github.com/anchoranalysis/anchor-plugins</url>
 		  <layout>default</layout>
 		</repository>
-	  		<repository>
-			<id>path-pattern-finder</id>
-			<name>Path Pattern Finder</name>
-			<url>https://maven.pkg.github.com/path-pattern-finder/path-pattern-find/</url>
-		</repository>
    	</repositories>
 	
     <build>

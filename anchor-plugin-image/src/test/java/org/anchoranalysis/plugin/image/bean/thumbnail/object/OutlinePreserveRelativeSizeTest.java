@@ -61,8 +61,8 @@ import org.junit.jupiter.api.io.TempDir;
  */
 class OutlinePreserveRelativeSizeTest {
 
-    private static final SizeXY SIZE = new SizeXY(300, 200);
-
+	private static final SizeXY SIZE = new SizeXY(300, 200);
+	
     private static final int NUMBER_INTERSECTING = 4;
     private static final int NUMBER_NOT_INTERSECTING = 2;
 
@@ -71,8 +71,6 @@ class OutlinePreserveRelativeSizeTest {
     private static final ObjectCollection OBJECTS =
             IntersectingCircleObjectsFixture.generateIntersectingObjects(
                     NUMBER_INTERSECTING, NUMBER_NOT_INTERSECTING, false);
-
-    private static final Stack BACKGROUND = EnergyStackFixture.create(true, false).asStack();
 
     @TempDir Path temporaryDirectory;
 
@@ -117,32 +115,8 @@ class OutlinePreserveRelativeSizeTest {
     private void doTestAndAssert(
             ObjectCollection objects, int expectedNumber, boolean overlappingObjects)
             throws OperationFailedException {
-        List<DisplayStack> thumbnails = createAndWriteThumbnails(objects, overlappingObjects);
+        List<DisplayStack> thumbnails = CreateAndWriteThumbnails.apply(writer, objects, SIZE, overlappingObjects);
         assertThumbnailsEqual(thumbnails, expectedNumber, SIZE.asExtent());
-    }
-
-    /**
-     * Creates thumbnails and writes them to the temporary folder.
-     *
-     * @throws OperationFailedException
-     */
-    public List<DisplayStack> createAndWriteThumbnails(
-            ObjectCollection objects, boolean overlappingObjects) throws OperationFailedException {
-        OutlinePreserveRelativeSize outline = createOutline(overlappingObjects);
-        ThumbnailBatch<ObjectCollection> batch =
-                outline.start(
-                        objects,
-                        boundingBoxes(objects),
-                        Optional.of(BACKGROUND),
-                        ExecutionTimeRecorderIgnore.instance());
-
-        try {
-            List<DisplayStack> thumbnails = thumbnailsFor(batch, objects);
-            writer.writeThumbnails(thumbnails);
-            return thumbnails;
-        } catch (CreateException e) {
-            throw new OperationFailedException(e);
-        }
     }
 
     /** Asserts that a certain number of thumbnails exist, and all have the expected-size. */
@@ -152,32 +126,6 @@ class OutlinePreserveRelativeSizeTest {
         for (DisplayStack thumbnail : thumbnails) {
             assertEquals(expectedSize, thumbnail.extent(), "size of a thumbnail");
         }
-    }
-
-    /** Calculates the thumbnails for a particular batch. */
-    private static List<DisplayStack> thumbnailsFor(
-            ThumbnailBatch<ObjectCollection> batch, ObjectCollection objects)
-            throws CreateException {
-        return objects.stream()
-                .mapToList(object -> batch.thumbnailFor(ObjectCollectionFactory.of(object)));
-    }
-
-    /** Derives the bounding-boxes from a corresponding {@link ObjectCollection}. */
-    private static StreamableCollection<BoundingBox> boundingBoxes(ObjectCollection objects) {
-        return new StreamableCollection<>(
-                () -> objects.streamStandardJava().map(ObjectMask::boundingBox));
-    }
-
-    /** Creates the bean. */
-    private static OutlinePreserveRelativeSize createOutline(boolean overlappingObjects) {
-        OutlinePreserveRelativeSize outline = new OutlinePreserveRelativeSize();
-        outline.setColorUnselectedObjects(new RGBColorBean(Color.BLUE));
-        outline.setOutlineWidth(1);
-        outline.setSize(SIZE);
-        outline.setOverlappingObjects(overlappingObjects);
-        outline.setInterpolator(new ImgLib2Lanczos());
-        BeanInstanceMapFixture.check(outline);
-        return outline;
     }
 
     /** Appends an {@link ObjectMask} to the collection. */
