@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 import java.awt.Color;
 import java.util.List;
 import java.util.Optional;
-
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -46,26 +46,27 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 
-import lombok.NoArgsConstructor;
-
 /**
  * Creates thumbnails from a collection of objects, and writes into a directory.
- * 
- * @author owen
  *
+ * @author owen
  */
 @NoArgsConstructor
 class CreateAndWriteThumbnails {
-	
+
     private static final Stack BACKGROUND = EnergyStackFixture.create(true, false).asStack();
-    
+
     /**
      * Creates thumbnails from a collection of objects, and writes each thumbnail into a directory.
      *
      * @throws OperationFailedException
      */
     public static List<DisplayStack> apply(
-    		WriteThumbnailsIntoDirectory writer, ObjectCollection objects, SizeXY size, boolean overlappingObjects) throws OperationFailedException {
+            WriteThumbnailsIntoDirectory writer,
+            ObjectCollection objects,
+            SizeXY size,
+            boolean overlappingObjects)
+            throws OperationFailedException {
         OutlinePreserveRelativeSize outline = createOutline(size, overlappingObjects);
         ThumbnailBatch<ObjectCollection> batch =
                 outline.start(
@@ -82,7 +83,6 @@ class CreateAndWriteThumbnails {
             throw new OperationFailedException(e);
         }
     }
-    
 
     /** Calculates the thumbnails for a particular batch. */
     private static List<DisplayStack> thumbnailsFor(
@@ -99,7 +99,8 @@ class CreateAndWriteThumbnails {
     }
 
     /** Creates the bean. */
-    private static OutlinePreserveRelativeSize createOutline(SizeXY size, boolean overlappingObjects) {
+    private static OutlinePreserveRelativeSize createOutline(
+            SizeXY size, boolean overlappingObjects) {
         OutlinePreserveRelativeSize outline = new OutlinePreserveRelativeSize();
         outline.setColorUnselectedObjects(new RGBColorBean(Color.BLUE));
         outline.setOutlineWidth(1);

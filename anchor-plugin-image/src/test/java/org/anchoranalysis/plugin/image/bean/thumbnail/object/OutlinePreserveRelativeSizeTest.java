@@ -27,28 +27,17 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.awt.Color;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.StreamableCollection;
-import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
-import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.DisplayStack;
-import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
-import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
-import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,8 +50,8 @@ import org.junit.jupiter.api.io.TempDir;
  */
 class OutlinePreserveRelativeSizeTest {
 
-	private static final SizeXY SIZE = new SizeXY(300, 200);
-	
+    private static final SizeXY SIZE = new SizeXY(300, 200);
+
     private static final int NUMBER_INTERSECTING = 4;
     private static final int NUMBER_NOT_INTERSECTING = 2;
 
@@ -115,7 +104,8 @@ class OutlinePreserveRelativeSizeTest {
     private void doTestAndAssert(
             ObjectCollection objects, int expectedNumber, boolean overlappingObjects)
             throws OperationFailedException {
-        List<DisplayStack> thumbnails = CreateAndWriteThumbnails.apply(writer, objects, SIZE, overlappingObjects);
+        List<DisplayStack> thumbnails =
+                CreateAndWriteThumbnails.apply(writer, objects, SIZE, overlappingObjects);
         assertThumbnailsEqual(thumbnails, expectedNumber, SIZE.asExtent());
     }
 
