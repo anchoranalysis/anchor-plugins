@@ -38,6 +38,12 @@
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-inference</artifactId>
 	  <version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-spatial</artifactId>
+	  <version>0.0.1-SNAPSHOT</version>
 	</dependency>	
 
 	<dependency>
@@ -86,6 +92,8 @@
 	  <version>1.1.0</version>
 	  <scope>test</scope>
 	</dependency>
+
+	
      <!--  END: Test dependencies -->
     	
 </dependencies>
