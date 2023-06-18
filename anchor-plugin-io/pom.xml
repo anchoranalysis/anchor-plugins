@@ -147,6 +147,13 @@
           <version>${mockito.version}</version>
           <scope>test</scope>
         </dependency>
+        
+       	 <dependency>
+	      <groupId>xml-apis</groupId>
+	      <artifactId>xml-apis</artifactId>
+	      <version>${xml-apis.version}</version>
+	      <scope>test</scope>
+	 	</dependency>
         <!--  END: Test dependencies -->
 	</dependencies>
 
