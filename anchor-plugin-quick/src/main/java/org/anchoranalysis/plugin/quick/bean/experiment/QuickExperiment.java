@@ -111,7 +111,9 @@ public class QuickExperiment<S> extends Experiment {
             throws ExperimentExecutionException {
         delegate.associateXML(getXMLConfiguration());
 
-        Path combinedFileFilter = BeanPathCalculator.pathFromBean(this, fileInput);
+        Path combinedFileFilter = BeanPathCalculator.pathFromBean(this, fileInput).orElseThrow( () ->
+        		new ExperimentExecutionException("No path is associated with the experiment's bean"));
+                
 
         if (NonImageFileFormat.XML.matches(combinedFileFilter)) {
             createFromXMLBean(combinedFileFilter);
@@ -185,7 +187,7 @@ public class QuickExperiment<S> extends Experiment {
         manager.setOutputsEnabled(new IgnoreUnderscorePrefixUnless());
 
         try {
-            manager.localise(getLocalPath());
+            manager.localise(getLocalPath().get());
         } catch (BeanMisconfiguredException e) {
             // Should never arise, as getLocalPath() should always be absolute
             throw new AnchorFriendlyRuntimeException(e);
@@ -198,13 +200,13 @@ public class QuickExperiment<S> extends Experiment {
 
     private DirectoryStructure createFilePathResolver(Path baseDirectory) {
 
-        Path pathDirectoryOut = BeanPathCalculator.pathFromBean(this, directoryOutput);
+        Path pathDirectoryOut = BeanPathCalculator.pathFromBean(this, directoryOutput).get();
 
         DirectoryStructure resolver = new DirectoryStructure();
         resolver.setPrefixToRemove(baseDirectory.toString());
         resolver.setPrefix(pathDirectoryOut.toString());
         try {
-            resolver.localise(getLocalPath());
+            resolver.localise(getLocalPath().get());
         } catch (BeanMisconfiguredException e) {
             // Should never arise, as getLocalPath() should always be absolute
             throw new AnchorFriendlyRuntimeException(e);

@@ -23,6 +23,12 @@
 	</dependency>
 	
 	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-voxel</artifactId>
+	  <version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>anchor-inference</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
@@ -32,6 +38,12 @@
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-voxel</artifactId>
+	  <version>0.0.1-SNAPSHOT</version>
 	</dependency>
 
     <dependency>

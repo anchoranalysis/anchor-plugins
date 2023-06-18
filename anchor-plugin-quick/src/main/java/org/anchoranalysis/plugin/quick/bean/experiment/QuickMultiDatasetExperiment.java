@@ -133,7 +133,12 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     @Override
     public void localise(Path path) throws BeanMisconfiguredException {
         super.localise(path);
-        delegate.firstLocalise(getLocalPath(), logExperimentPath, logTaskPath, output);
+        Optional<Path> localPath = getLocalPath();
+        if (localPath.isPresent()) {
+        	delegate.firstLocalise(localPath.get(), logExperimentPath, logTaskPath, output);
+        } else {
+        	throw new BeanMisconfiguredException("No local path is associated with the bean");
+        }
     }
 
     @Override

@@ -81,6 +81,14 @@
 	  <artifactId>commons-lang</artifactId>
 	  <version>${commons-lang.version}</version>
 	</dependency>
+	
+	<!-- START TEST DEPENDENCIES -->
+	 <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <version>${xml-apis.version}</version>
+      <scope>test</scope>
+ 	</dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -116,6 +124,7 @@
 	    <version>3.7.7</version>
 	    <scope>test</scope>
 	</dependency>
+	<!-- END TEST DEPENDENCIES -->
 
     </dependencies>
     	
