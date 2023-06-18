@@ -39,12 +39,6 @@
 	  <artifactId>anchor-image-core</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-image-voxel</artifactId>
-	  <version>0.0.1-SNAPSHOT</version>
-	</dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -101,7 +95,7 @@
 	<dependency>
 		    <groupId>org.openpnp</groupId>
 		    <artifactId>opencv</artifactId>
-		    <version>4.5.5-1</version>
+		    <version>[4.7.0-0,)</version>
 	</dependency>
 	        
     <!--  END: OpenCV dependencies -->
