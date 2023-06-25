@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * 1. Finds all objects from an object-collection whose bounding-boxes intersect with a particular
@@ -40,7 +41,7 @@ public class MaxFeatureIntersectingObjects extends FeatureIntersectingObjectsSin
     @Override
     protected double aggregateResults(List<Double> results) {
         return results.stream()
-                .max(Comparator.comparing(Double::valueOf))
+                .max(Comparator.comparing(Function.identity()))
                 .orElse(getValueNoObjects());
     }
 }
