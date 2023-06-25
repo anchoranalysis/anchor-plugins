@@ -61,7 +61,7 @@ public class ParsedFilePathBag implements Iterable<FileDetails> {
     }
 
     private Optional<IntegerRange> range(Function<FileDetails, Optional<Integer>> func) {
-        return OptionalUtilities.mapBoth(getMin(func), getMax(func), IntegerRange::new);
+        return OptionalUtilities.mapBoth(getMin(func), getMax(func), (min, max) -> new IntegerRange(min,max));
     }
 
     private Optional<Integer> getMax(Function<FileDetails, Optional<Integer>> func) {
