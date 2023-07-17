@@ -34,6 +34,7 @@ import java.util.List;
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.filefilter.IOFileFilter;
 
+@SuppressWarnings("deprecation")
 class WalkToDepth extends DirectoryWalker<File> {
 
     private static class RejectAllFiles implements IOFileFilter {

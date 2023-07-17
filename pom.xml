@@ -45,7 +45,6 @@
         <module>anchor-plugin-image-feature</module>
         <module>anchor-plugin-imagej</module>
         <module>anchor-plugin-mpp</module>
-        <module>anchor-plugin-mpp-feature</module>
         <module>anchor-plugin-points</module>
         <module>anchor-plugin-io</module>
         <module>anchor-plugin-image-task</module>
@@ -59,7 +58,6 @@
 		   with the plugins as they depend on them. Perhaps
 		  we move these in the future, or smartly refactor -->
 		<module>anchor-test-experiment</module>
-		<module>anchor-test-mpp</module>
 		<module>anchor-test-feature-plugins</module>
     </modules>
 

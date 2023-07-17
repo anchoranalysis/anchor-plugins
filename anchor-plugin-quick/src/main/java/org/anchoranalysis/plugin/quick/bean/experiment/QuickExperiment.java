@@ -111,9 +111,12 @@ public class QuickExperiment<S> extends Experiment {
             throws ExperimentExecutionException {
         delegate.associateXML(getXMLConfiguration());
 
-        Path combinedFileFilter = BeanPathCalculator.pathFromBean(this, fileInput).orElseThrow( () ->
-        		new ExperimentExecutionException("No path is associated with the experiment's bean"));
-                
+        Path combinedFileFilter =
+                BeanPathCalculator.pathFromBean(this, fileInput)
+                        .orElseThrow(
+                                () ->
+                                        new ExperimentExecutionException(
+                                                "No path is associated with the experiment's bean"));
 
         if (NonImageFileFormat.XML.matches(combinedFileFilter)) {
             createFromXMLBean(combinedFileFilter);
