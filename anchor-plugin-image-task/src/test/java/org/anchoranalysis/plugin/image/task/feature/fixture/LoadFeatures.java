@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.bean.list.DefineSingle;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
+import org.anchoranalysis.test.feature.plugins.FeaturesFromXMLFixture;
 
 /**
  * Loads a feature-list to be used in tests.
@@ -103,7 +103,7 @@ class LoadFeatures<T extends FeatureInput> {
             TestLoader loader, String filenameWithoutExtension) {
         String path = String.format("features/%s.xml", filenameWithoutExtension);
         try {
-            return FeaturesFromXmlFixture.createNamedFeatureProviders(path, loader);
+            return FeaturesFromXMLFixture.createNamedFeatureProviders(path, loader);
         } catch (CreateException e) {
             // Prefer run-time exceptions to avoid chaining in the tests
             throw new AnchorFriendlyRuntimeException(e);

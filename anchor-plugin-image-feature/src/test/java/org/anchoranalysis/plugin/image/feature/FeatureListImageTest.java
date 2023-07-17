@@ -46,7 +46,7 @@ import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
-import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
+import org.anchoranalysis.test.feature.plugins.FeaturesFromXMLFixture;
 import org.anchoranalysis.test.feature.plugins.HistogramFixture;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.object.CutOffCornersObjectFixture;
@@ -167,7 +167,7 @@ class FeatureListImageTest {
      */
     private static FeatureList<FeatureInputHistogram> histogramFeatures(TestLoader loader)
             throws CreateException {
-        return FeaturesFromXmlFixture.createFeatureList("histogramFeatureList.xml", loader);
+        return FeaturesFromXMLFixture.createFeatureList("histogramFeatureList.xml", loader);
     }
 
     /**
@@ -177,7 +177,7 @@ class FeatureListImageTest {
      */
     private static FeatureList<FeatureInputSingleObject> objectFeatures(TestLoader loader)
             throws CreateException {
-        return FeaturesFromXmlFixture.createFeatureList("objectFeatureList.xml", loader);
+        return FeaturesFromXMLFixture.createFeatureList("objectFeatureList.xml", loader);
     }
 
     private static FeatureInputHistogram createParameters(Histogram histogram)

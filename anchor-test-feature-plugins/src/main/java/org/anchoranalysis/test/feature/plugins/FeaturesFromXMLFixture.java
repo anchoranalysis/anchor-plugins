@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.test.TestLoader;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class FeaturesFromXmlFixture {
+public class FeaturesFromXMLFixture {
 
     public static <T extends FeatureInput> FeatureList<T> createFeatureList(
             String xmlPath, TestLoader loader) throws CreateException {
