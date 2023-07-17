@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
+import org.anchoranalysis.plugin.io.xml.ResolutionAsXML;
 
 /**
  * Reads {@link Resolution} from an XML file associated an image.
@@ -48,7 +48,7 @@ import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
  * <p>The XML file is expected at the file path of the image, with {@code .xml} appended. e.g.
  * {@code someImage.tif would have metadata at someImage.tif.xml }
  *
- * <p>The format of the XML is described in {@link ResolutionAsXml}.
+ * <p>The format of the XML is described in {@link ResolutionAsXML}.
  *
  * @author Owen Feehan
  */
@@ -83,7 +83,7 @@ public class ReadVoxelExtentXml extends StackReader {
         File fileMetadata = NonImageFileFormat.XML.buildPath(filePath).toFile();
 
         if (fileMetadata.exists()) {
-            return Optional.of(ResolutionAsXml.readResolutionXml(fileMetadata));
+            return Optional.of(ResolutionAsXML.readResolutionXml(fileMetadata));
         } else {
             if (!acceptNoResolution) {
                 throw new ImageIOException(
