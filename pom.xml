@@ -48,7 +48,6 @@
         <module>anchor-plugin-points</module>
         <module>anchor-plugin-io</module>
         <module>anchor-plugin-image-task</module>
-	   <module>anchor-plugin-quick</module>
 	   <module>anchor-plugin-annotation</module>
 	   <module>anchor-plugin-opencv</module>
 	   <module>anchor-plugin-operator-feature</module>
