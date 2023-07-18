@@ -48,7 +48,7 @@ import org.opencv.objdetect.HOGDescriptor;
  *
  * <p>This class should implement a meaningful {@link Object#equals(Object)} and {@link #hashCode()}
  * on its properties as it may be used a {@link CalculationPart}. The {@code interpolator}) is
- * disconsidered.
+ * not considered.
  *
  * @author Owen Feehan
  */
