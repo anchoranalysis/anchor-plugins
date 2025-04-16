@@ -30,6 +30,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * A fixture for creating predefined histograms for testing purposes.
+ *
+ * <p>This class provides methods to create histograms with specific patterns
+ * of bin counts, useful for testing histogram-related functionality.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFixture {
 
@@ -40,11 +46,14 @@ public class HistogramFixture {
     }
 
     /**
-     * a histogram from 0 to 255 (inclusive) where each bin is equal to its index (value 5 has count
-     * 5, value 100 has count 100 etc.)
+     * Creates an ascending histogram from 0 to 255 (inclusive).
+     *
+     * <p>In this histogram, each bin count is equal to its index.
+     * For example, the bin for value 5 has a count of 5, the bin for value 100 has a count of 100, etc.</p>
+     *
+     * @return a Histogram with ascending bin counts
      */
     public static Histogram createAscending() {
-
         Histogram histogram = createEmpty();
         for (int i = 0; i <= MAX_VAL; i++) {
             histogram.incrementValueBy(i, i);
@@ -52,8 +61,15 @@ public class HistogramFixture {
         return histogram;
     }
 
+    /**
+     * Creates a descending histogram from 0 to 255 (inclusive).
+     *
+     * <p>In this histogram, each bin count is equal to (255 - index).
+     * For example, the bin for value 0 has a count of 255, the bin for value 1 has a count of 254, etc.</p>
+     *
+     * @return a Histogram with descending bin counts
+     */
     public static Histogram createDescending() {
-
         Histogram histogram = createEmpty();
         for (int i = 0; i <= MAX_VAL; i++) {
             histogram.incrementValueBy(i, MAX_VAL - i);

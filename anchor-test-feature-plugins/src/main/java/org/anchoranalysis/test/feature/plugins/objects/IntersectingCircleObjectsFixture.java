@@ -33,6 +33,12 @@ import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point2i;
 
+/**
+ * A fixture for generating collections of intersecting and non-intersecting circular objects.
+ *
+ * <p>This class provides utility methods to create object collections with specific
+ * configurations of intersecting and non-intersecting circles for testing purposes.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntersectingCircleObjectsFixture {
 
@@ -43,13 +49,13 @@ public class IntersectingCircleObjectsFixture {
     private static final int RADIUS_INCR = 2;
 
     /**
-     * Generates a number of circles that intersect and don't intersect
+     * Generates a collection of circular objects, some intersecting and some not intersecting.
      *
-     * @param numberIntersecting the number of circles that intersect that should be produced
-     * @param numberNotIntersecting the number of circles that do not intersect that should be
-     *     produced
-     * @param sameSize iff true all circles have the same radius ({@code INITIAL_RAIDUS}), otherwise
-     *     the radius gradually increments
+     * @param numberIntersecting the number of intersecting circles to produce
+     * @param numberNotIntersecting the number of non-intersecting circles to produce
+     * @param sameSize if true, all circles have the same radius ({@code INITIAL_RADIUS}); 
+     *                 if false, the radius gradually increments
+     * @return an ObjectCollection containing the generated circular objects
      */
     public static ObjectCollection generateIntersectingObjects(
             int numberIntersecting, int numberNotIntersecting, boolean sameSize) {
@@ -71,7 +77,9 @@ public class IntersectingCircleObjectsFixture {
         return ObjectCollectionFactory.of(first, second);
     }
 
-    /** Increments the center-point (and maybe the radius) as new circles are generated */
+    /** 
+     * Increments the center-point (and maybe the radius) as new circles are generated.
+     */
     private static class RunningCircleCreator {
 
         private boolean sameSize;

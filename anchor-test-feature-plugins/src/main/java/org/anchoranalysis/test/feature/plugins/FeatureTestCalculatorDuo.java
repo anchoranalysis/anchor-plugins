@@ -32,10 +32,27 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-/** Tests that consider two possibilities: positive and negative */
+/**
+ * Utility class for testing features with both positive and negative cases.
+ *
+ * <p>This class provides methods to assert the results of feature calculations
+ * for both positive and negative inputs, supporting both double and integer results.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureTestCalculatorDuo {
 
+    /**
+     * Asserts that a feature calculation results in expected double values for both positive and negative inputs.
+     *
+     * @param <T> the type of feature input
+     * @param message the base assertion message
+     * @param feature the feature to calculate
+     * @param inputPositive the positive input for the feature calculation
+     * @param inputNegative the negative input for the feature calculation
+     * @param expectedResultPositive the expected result for the positive input
+     * @param expectedResultNegative the expected result for the negative input
+     * @throws FeatureCalculationException if the feature calculation fails
+     */
     public static <T extends FeatureInput> void assertDoubleResult(
             String message,
             Feature<T> feature,
@@ -50,6 +67,18 @@ public class FeatureTestCalculatorDuo {
                 negativeMessage(message), feature, inputNegative, expectedResultNegative);
     }
 
+    /**
+     * Asserts that a feature calculation results in expected integer values for both positive and negative inputs.
+     *
+     * @param <T> the type of feature input
+     * @param message the base assertion message
+     * @param feature the feature to calculate
+     * @param inputPositive the positive input for the feature calculation
+     * @param inputNegative the negative input for the feature calculation
+     * @param expectedResultPositive the expected result for the positive input
+     * @param expectedResultNegative the expected result for the negative input
+     * @throws FeatureCalculationException if the feature calculation fails
+     */
     public static <T extends FeatureInput> void assertIntResult(
             String message,
             Feature<T> feature,
