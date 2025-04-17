@@ -36,19 +36,19 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-bean</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>	
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-io</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 
 	<dependency>
@@ -65,7 +65,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-input</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
@@ -75,7 +75,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-imagej</artifactId>
-  	  <version>0.0.1-SNAPSHOT</version>
+  	  <version>[0.2.1,1.0.0)</version>
   	</dependency>
 	
 	<dependency>
