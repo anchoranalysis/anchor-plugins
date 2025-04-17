@@ -10,40 +10,40 @@
   <description>Helper routines for testing features.</description>
     <dependencies>
    
-   		<dependency>
+	    <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-test</artifactId>
-		  <version>0.1.2-SNAPSHOT</version>
+		  <version>[0.3.1,1.0.0)</version>
 		</dependency>
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-math</artifactId>
-		  <version>0.0.8-SNAPSHOT</version>
+		  <version>[0.2.1,1.0.0)</version>
 		</dependency>
 		
 		<dependency>
           <groupId>${project.groupId}</groupId>
           <artifactId>anchor-test-feature</artifactId>
-          <version>0.0.4-SNAPSHOT</version>
+          <version>[0.2.1,1.0.0)</version>
         </dependency>
 		
 	  <dependency>
           <groupId>${project.groupId}</groupId>
           <artifactId>anchor-spatial</artifactId>
-          <version>0.0.1-SNAPSHOT</version>
+          <version>[0.2.1,1.0.0)</version>
         </dependency>
         
         <dependency>
           <groupId>${project.groupId}</groupId>
           <artifactId>anchor-image-feature</artifactId>
-          <version>0.0.8-SNAPSHOT</version>
+          <version>[0.2.1,1.0.0)</version>
         </dependency>
 		
 	   <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-feature</artifactId>
-		  <version>0.0.8-SNAPSHOT</version>
+		  <version>[0.2.1,1.0.0)</version>
 		</dependency>
 		        
         <dependency>
