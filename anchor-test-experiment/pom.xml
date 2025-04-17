@@ -13,43 +13,43 @@
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test</artifactId>
-	  <version>0.1.2-SNAPSHOT</version>
+	  <version>[0.3.1,1.0.0)</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test-image</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	
    	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>0.1.4-SNAPSHOT</version>
+	  <version>[0.3.1,1.0.0)</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-output</artifactId>
-	  <version>0.0.1-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 
    	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp-io</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-experiment</artifactId>
-  	  <version>0.0.8-SNAPSHOT</version>
+  	  <version>[0.2.1,1.0.0)</version>
   	</dependency>
 
     <dependency>
