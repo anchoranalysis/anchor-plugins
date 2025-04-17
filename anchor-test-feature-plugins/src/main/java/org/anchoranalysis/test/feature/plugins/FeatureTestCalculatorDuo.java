@@ -35,14 +35,15 @@ import org.anchoranalysis.feature.input.FeatureInput;
 /**
  * Utility class for testing features with both positive and negative cases.
  *
- * <p>This class provides methods to assert the results of feature calculations
- * for both positive and negative inputs, supporting both double and integer results.</p>
+ * <p>This class provides methods to assert the results of feature calculations for both positive
+ * and negative inputs, supporting both double and integer results.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureTestCalculatorDuo {
 
     /**
-     * Asserts that a feature calculation results in expected double values for both positive and negative inputs.
+     * Asserts that a feature calculation results in expected double values for both positive and
+     * negative inputs.
      *
      * @param <T> the type of feature input
      * @param message the base assertion message
@@ -68,7 +69,8 @@ public class FeatureTestCalculatorDuo {
     }
 
     /**
-     * Asserts that a feature calculation results in expected integer values for both positive and negative inputs.
+     * Asserts that a feature calculation results in expected integer values for both positive and
+     * negative inputs.
      *
      * @param <T> the type of feature input
      * @param message the base assertion message

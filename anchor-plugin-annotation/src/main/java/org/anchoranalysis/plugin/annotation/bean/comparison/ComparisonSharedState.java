@@ -47,7 +47,7 @@ public class ComparisonSharedState<T extends Assignment<ObjectMask>> {
 
     /** The CSV assignment for the comparison. */
     @Getter private CSVAssignment assignmentCSV;
-    
+
     private ImageCounterWithStatistics<T> groupAll;
     private HashMap<String, ImageCounterWithStatistics<T>>[] groupsMap;
     private int numberLevelsGrouping;
@@ -58,7 +58,8 @@ public class ComparisonSharedState<T extends Assignment<ObjectMask>> {
      *
      * @param assignmentCSV the CSV assignment for the comparison.
      * @param numberLevelsGrouping the number of levels for grouping.
-     * @param funcCreateGroup a function to create a new {@link ImageCounterWithStatistics} for a given group key.
+     * @param funcCreateGroup a function to create a new {@link ImageCounterWithStatistics} for a
+     *     given group key.
      */
     @SuppressWarnings("unchecked")
     public ComparisonSharedState(

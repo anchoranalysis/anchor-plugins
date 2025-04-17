@@ -45,8 +45,8 @@ import org.anchoranalysis.test.LoggerFixture;
 /**
  * Utility class for testing feature calculations in a controlled environment.
  *
- * <p>This class provides methods to assert the results of feature calculations
- * against expected values, supporting both double and integer results.</p>
+ * <p>This class provides methods to assert the results of feature calculations against expected
+ * values, supporting both double and integer results.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureTestCalculator {

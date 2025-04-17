@@ -41,8 +41,8 @@ import org.anchoranalysis.spatial.point.PointConverter;
 /**
  * A fixture for creating circular objects and related utilities for testing purposes.
  *
- * <p>This class provides methods to create circular object masks, energy stacks,
- * and to check if points are within the scene dimensions.</p>
+ * <p>This class provides methods to create circular object masks, energy stacks, and to check if
+ * points are within the scene dimensions.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CircleObjectFixture {

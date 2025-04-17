@@ -37,14 +37,13 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 /**
  * Generates a CSV file containing aggregated annotation data.
  *
- * <p>This class extends {@link FeatureTableCSVGenerator} to create a CSV file with columns for image ID and label.
+ * <p>This class extends {@link FeatureTableCSVGenerator} to create a CSV file with columns for
+ * image ID and label.
  */
 public class AnnotationAggregateCSVGenerator
         extends FeatureTableCSVGenerator<List<ImageAnnotation>> {
 
-    /**
-     * Constructs an {@link AnnotationAggregateCSVGenerator} with predefined column headers.
-     */
+    /** Constructs an {@link AnnotationAggregateCSVGenerator} with predefined column headers. */
     public AnnotationAggregateCSVGenerator() {
         super(Arrays.asList("id", "label"));
     }

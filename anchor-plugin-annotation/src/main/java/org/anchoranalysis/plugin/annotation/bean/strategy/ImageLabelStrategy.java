@@ -68,8 +68,8 @@ public class ImageLabelStrategy extends SinglePathStrategy {
     /**
      * Creates a {@link GroupedAnnotationLabels} from the current labels.
      *
-     * <p>This is actually called twice during a typical opening of an annotation.
-     * But overhead is minor (assuming not very many labels).
+     * <p>This is actually called twice during a typical opening of an annotation. But overhead is
+     * minor (assuming not very many labels).
      *
      * @return a new {@link GroupedAnnotationLabels} instance.
      */

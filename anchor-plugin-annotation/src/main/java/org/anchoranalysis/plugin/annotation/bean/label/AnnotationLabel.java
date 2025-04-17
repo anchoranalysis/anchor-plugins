@@ -34,9 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 
-/**
- * Represents a label used for annotation, with associated metadata.
- */
+/** Represents a label used for annotation, with associated metadata. */
 public class AnnotationLabel extends AnchorBean<AnnotationLabel> {
 
     // START BEAN PROPERTIES

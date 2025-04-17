@@ -32,9 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 
-/**
- * Utility class for deriving paths from a generator.
- */
+/** Utility class for deriving paths from a generator. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PathFromGenerator {
 

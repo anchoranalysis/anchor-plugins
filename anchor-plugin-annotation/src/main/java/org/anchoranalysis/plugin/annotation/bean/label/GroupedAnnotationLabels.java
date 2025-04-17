@@ -31,9 +31,7 @@ import java.util.Set;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
-/** 
- * A set of {@link AnnotationLabel}s partitioned into their unique groups.
- */
+/** A set of {@link AnnotationLabel}s partitioned into their unique groups. */
 public class GroupedAnnotationLabels {
 
     // Key, Value types are <String,AnnotationLabel>

@@ -55,11 +55,10 @@ public class MockFeatureWithCalculationFixture {
 
     /**
      * A default function for counting the number of pixels (voxels) in a single object.
-     * 
-     * <p>This function takes a {@link FeatureInputSingleObject} as input and returns
-     * the number of "on" voxels in the object as a double value. It is used as the
-     * default calculation function when creating a mock feature without specifying
-     * a custom function.</p>
+     *
+     * <p>This function takes a {@link FeatureInputSingleObject} as input and returns the number of
+     * "on" voxels in the object as a double value. It is used as the default calculation function
+     * when creating a mock feature without specifying a custom function.
      */
     public static final ToDoubleFunction<FeatureInputSingleObject> DEFAULT_FUNC_NUM_PIXELS =
             input -> (double) input.getObject().numberVoxelsOn();
@@ -67,12 +66,13 @@ public class MockFeatureWithCalculationFixture {
     /**
      * Executes an operation and asserts the expected number of calls to internal methods.
      *
-     * <p>This method runs the given operation and then checks if the number of calls to
-     * {@link Feature#calculate} and the mock calculation's {@code execute()} method match
-     * the expected counts.</p>
+     * <p>This method runs the given operation and then checks if the number of calls to {@link
+     * Feature#calculate} and the mock calculation's {@code execute()} method match the expected
+     * counts.
      *
      * @param expectedCountCalc the expected number of calls to {@link Feature#calculate}
-     * @param expectedCountExecute the expected number of calls to {@code execute()} on the mock calculation
+     * @param expectedCountExecute the expected number of calls to {@code execute()} on the mock
+     *     calculation
      * @param operation the operation to execute, typically involving the mock calculation
      * @throws OperationFailedException if the operation fails
      */
@@ -103,8 +103,9 @@ public class MockFeatureWithCalculationFixture {
     /**
      * Creates a mock feature that counts the number of pixels in an object.
      *
-     * <p>This mock feature uses a mock {@link org.anchoranalysis.feature.calculate.part.CalculationPart}
-     * under the hood to perform the pixel counting.</p>
+     * <p>This mock feature uses a mock {@link
+     * org.anchoranalysis.feature.calculate.part.CalculationPart} under the hood to perform the
+     * pixel counting.
      *
      * @return a new {@link Feature} that counts pixels in a {@link FeatureInputSingleObject}
      */
@@ -115,8 +116,9 @@ public class MockFeatureWithCalculationFixture {
     /**
      * Creates a mock feature with a custom calculation function.
      *
-     * <p>This method creates a mock feature that uses the provided function to calculate its result.
-     * It uses a mock {@link org.anchoranalysis.feature.calculate.part.CalculationPart} under the hood.</p>
+     * <p>This method creates a mock feature that uses the provided function to calculate its
+     * result. It uses a mock {@link org.anchoranalysis.feature.calculate.part.CalculationPart}
+     * under the hood.
      *
      * @param <T> the type of {@link FeatureInput} for the feature
      * @param funcCalculation a function that calculates the result for the mock feature

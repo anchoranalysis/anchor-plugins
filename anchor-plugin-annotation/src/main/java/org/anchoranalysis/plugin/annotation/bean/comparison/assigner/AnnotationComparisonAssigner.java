@@ -38,7 +38,7 @@ import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
 
 /**
  * Compares similar object-sets produced from two different sources.
- * 
+ *
  * <p>An assignment is created indicating the differences and similarities between the object-sets.
  *
  * @author Owen Feehan

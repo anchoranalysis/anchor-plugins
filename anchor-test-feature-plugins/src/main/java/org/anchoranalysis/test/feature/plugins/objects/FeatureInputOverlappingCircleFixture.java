@@ -35,8 +35,8 @@ import org.anchoranalysis.spatial.point.Point2i;
 /**
  * A fixture for creating FeatureInputPairObjects with circular object masks.
  *
- * <p>This class provides utility methods to create pairs of circular object masks
- * with different configurations of overlap and size for testing purposes.</p>
+ * <p>This class provides utility methods to create pairs of circular object masks with different
+ * configurations of overlap and size for testing purposes.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureInputOverlappingCircleFixture {
@@ -60,7 +60,8 @@ public class FeatureInputOverlappingCircleFixture {
      * Creates two object-masks of circles in different locations WITHOUT any overlap.
      *
      * @param sameSize if true, the object-masks are the same size; otherwise, they differ in size
-     * @return a FeatureInputPairObjects populated with the two non-overlapping circular object-masks
+     * @return a FeatureInputPairObjects populated with the two non-overlapping circular
+     *     object-masks
      */
     public static FeatureInputPairObjects twoNonOverlappingCircles(boolean sameSize) {
         return twoCircles(0, (DEFAULT_CIRCLE_RADIUS * 3), sameSize, -3);

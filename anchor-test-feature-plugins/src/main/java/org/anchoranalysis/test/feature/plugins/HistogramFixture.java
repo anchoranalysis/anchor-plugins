@@ -33,8 +33,8 @@ import org.anchoranalysis.math.histogram.Histogram;
 /**
  * A fixture for creating predefined histograms for testing purposes.
  *
- * <p>This class provides methods to create histograms with specific patterns
- * of bin counts, useful for testing histogram-related functionality.</p>
+ * <p>This class provides methods to create histograms with specific patterns of bin counts, useful
+ * for testing histogram-related functionality.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFixture {
@@ -48,8 +48,8 @@ public class HistogramFixture {
     /**
      * Creates an ascending histogram from 0 to 255 (inclusive).
      *
-     * <p>In this histogram, each bin count is equal to its index.
-     * For example, the bin for value 5 has a count of 5, the bin for value 100 has a count of 100, etc.</p>
+     * <p>In this histogram, each bin count is equal to its index. For example, the bin for value 5
+     * has a count of 5, the bin for value 100 has a count of 100, etc.
      *
      * @return a Histogram with ascending bin counts
      */
@@ -64,8 +64,8 @@ public class HistogramFixture {
     /**
      * Creates a descending histogram from 0 to 255 (inclusive).
      *
-     * <p>In this histogram, each bin count is equal to (255 - index).
-     * For example, the bin for value 0 has a count of 255, the bin for value 1 has a count of 254, etc.</p>
+     * <p>In this histogram, each bin count is equal to (255 - index). For example, the bin for
+     * value 0 has a count of 255, the bin for value 1 has a count of 254, etc.
      *
      * @return a Histogram with descending bin counts
      */
