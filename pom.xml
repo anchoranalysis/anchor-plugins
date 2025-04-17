@@ -11,6 +11,26 @@
     <packaging>pom</packaging>
 	<name>anchor-parent-plugins</name>
 	
+	<url>http://www.anchoranalysis.org/</url>
+	
+	<description>Plugins for the Anchor Image Analysis software that are normally (MIT) licensed.</description>
+
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>https://github.com/anchoranalysis/anchor-plugins/blob/master/LICENSE.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+	
+	<developers>
+        <developer>
+            <id>owenfeehan</id>
+            <name>Owen Feehan</name>
+		  <organizationUrl>http://www.owenfeehan.com</organizationUrl>
+        </developer>
+    </developers>
+	
 	<!-- For tagging releases. -->
   	<scm>
 		<connection>scm:git:git@github.com:anchoranalysis/anchor-plugins.git</connection>
