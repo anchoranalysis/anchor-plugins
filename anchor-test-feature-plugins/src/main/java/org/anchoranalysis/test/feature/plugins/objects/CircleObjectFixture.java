@@ -38,11 +38,24 @@ import org.anchoranalysis.mpp.mark.conic.Circle;
 import org.anchoranalysis.spatial.point.Point2i;
 import org.anchoranalysis.spatial.point.PointConverter;
 
+/**
+ * A fixture for creating circular objects and related utilities for testing purposes.
+ *
+ * <p>This class provides methods to create circular object masks, energy stacks,
+ * and to check if points are within the scene dimensions.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CircleObjectFixture {
 
     private static final Dimensions DIMS = new Dimensions(800, 600, 1);
 
+    /**
+     * Creates a circular object mask at a specified center point with a given radius.
+     *
+     * @param center the center point of the circle in 2D coordinates
+     * @param radius the radius of the circle
+     * @return an ObjectMask representing the circular object
+     */
     public static ObjectMask circleAt(Point2i center, double radius) {
         Circle mark = new Circle();
         mark.setPosition(PointConverter.doubleFromInt(center));
@@ -54,10 +67,21 @@ public class CircleObjectFixture {
                 BinaryValuesByte.getDefault());
     }
 
+    /**
+     * Creates an EnergyStack with the fixture's dimensions.
+     *
+     * @return a new EnergyStack instance
+     */
     public static EnergyStack energyStack() {
         return new EnergyStack(DIMS);
     }
 
+    /**
+     * Checks if a given 2D point is within the scene dimensions.
+     *
+     * @param point the 2D point to check
+     * @return true if the point is within the scene dimensions, false otherwise
+     */
     public static boolean sceneContains(Point2i point) {
         return DIMS.contains(PointConverter.convertTo3i(point));
     }

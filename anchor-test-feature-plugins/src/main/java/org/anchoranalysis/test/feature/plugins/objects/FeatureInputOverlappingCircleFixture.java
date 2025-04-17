@@ -32,6 +32,12 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.spatial.point.Point2i;
 
+/**
+ * A fixture for creating FeatureInputPairObjects with circular object masks.
+ *
+ * <p>This class provides utility methods to create pairs of circular object masks
+ * with different configurations of overlap and size for testing purposes.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureInputOverlappingCircleFixture {
 
@@ -41,20 +47,20 @@ public class FeatureInputOverlappingCircleFixture {
     private static final int DEFAULT_POS_Y = 50;
 
     /**
-     * Two object-masks of circles in different locations WITH some overlap.
+     * Creates two object-masks of circles in different locations WITH some overlap.
      *
-     * @param sameSize iff true the object-masks are the same size, otherwise not
-     * @return the input, populated with the two object-masks.
+     * @param sameSize if true, the object-masks are the same size; otherwise, they differ in size
+     * @return a FeatureInputPairObjects populated with the two overlapping circular object-masks
      */
     public static FeatureInputPairObjects twoOverlappingCircles(boolean sameSize) {
         return twoCircles(10, 0, sameSize, 3);
     }
 
     /**
-     * Two object-masks of circles in different locations WITHOUT any overlap.
+     * Creates two object-masks of circles in different locations WITHOUT any overlap.
      *
-     * @param sameSize iff true the object-masks are the same size, otherwise not
-     * @return the input, populated with the two object-masks.
+     * @param sameSize if true, the object-masks are the same size; otherwise, they differ in size
+     * @return a FeatureInputPairObjects populated with the two non-overlapping circular object-masks
      */
     public static FeatureInputPairObjects twoNonOverlappingCircles(boolean sameSize) {
         return twoCircles(0, (DEFAULT_CIRCLE_RADIUS * 3), sameSize, -3);

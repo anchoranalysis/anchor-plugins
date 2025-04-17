@@ -12,32 +12,32 @@
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>0.1.4-SNAPSHOT</version>
+	  <version>[0.3.1,1.0.0)</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-input</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-beans-shared</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-experiment</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-overlay</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	
 	
@@ -45,47 +45,48 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-bean</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>	
+	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-feature</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>	
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-io</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>	
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-inference</artifactId>
-	  <version>0.0.1-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>		
 		
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-imagej</artifactId>
-  	  <version>0.0.1-SNAPSHOT</version>
+  	  <version>[0.2.1,1.0.0)</version>
   	</dependency>
 	  
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature-session</artifactId>
-	  <version>0.0.4-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>	
 		
 	
@@ -134,7 +135,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>    
       <artifactId>anchor-test-image</artifactId>
-  	  <version>0.0.8-SNAPSHOT</version>
+  	  <version>[0.2.1,1.0.0)</version>
   	  <scope>test</scope>
   	</dependency>
   	

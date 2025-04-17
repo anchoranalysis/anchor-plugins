@@ -42,21 +42,58 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.test.LoggerFixture;
 
+/**
+ * Utility class for testing feature calculations in a controlled environment.
+ *
+ * <p>This class provides methods to assert the results of feature calculations
+ * against expected values, supporting both double and integer results.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureTestCalculator {
 
+    /**
+     * Asserts that a feature calculation results in an expected double value.
+     *
+     * @param <T> the type of feature input
+     * @param message the assertion message
+     * @param feature the feature to calculate
+     * @param input the input for the feature calculation
+     * @param expectedResult the expected result of the calculation
+     * @throws FeatureCalculationException if the feature calculation fails
+     */
     public static <T extends FeatureInput> void assertDoubleResult(
             String message, Feature<T> feature, T input, double expectedResult)
             throws FeatureCalculationException {
         assertDoubleResult(message, feature, input, Optional.empty(), expectedResult);
     }
 
+    /**
+     * Asserts that a feature calculation results in an expected integer value.
+     *
+     * @param <T> the type of feature input
+     * @param message the assertion message
+     * @param feature the feature to calculate
+     * @param input the input for the feature calculation
+     * @param expectedResult the expected result of the calculation
+     * @throws FeatureCalculationException if the feature calculation fails
+     */
     public static <T extends FeatureInput> void assertIntResult(
             String message, Feature<T> feature, T input, int expectedResult)
             throws FeatureCalculationException {
         assertIntResult(message, feature, input, Optional.empty(), expectedResult);
     }
 
+    /**
+     * Asserts that a feature calculation results in an expected double value, with shared objects.
+     *
+     * @param <T> the type of feature input
+     * @param message the assertion message
+     * @param feature the feature to calculate
+     * @param input the input for the feature calculation
+     * @param sharedObjects optional shared objects for the calculation
+     * @param expectedResult the expected result of the calculation
+     * @throws FeatureCalculationException if the feature calculation fails
+     */
     public static <T extends FeatureInput> void assertDoubleResult(
             String message,
             Feature<T> feature,
@@ -68,6 +105,17 @@ public class FeatureTestCalculator {
                 message, feature, input, createInitialization(sharedObjects), expectedResult, 1e-4);
     }
 
+    /**
+     * Asserts that a feature calculation results in an expected integer value, with shared objects.
+     *
+     * @param <T> the type of feature input
+     * @param message the assertion message
+     * @param feature the feature to calculate
+     * @param input the input for the feature calculation
+     * @param sharedObjects optional shared objects for the calculation
+     * @param expectedResult the expected result of the calculation
+     * @throws FeatureCalculationException if the feature calculation fails
+     */
     public static <T extends FeatureInput> void assertIntResult(
             String message,
             Feature<T> feature,

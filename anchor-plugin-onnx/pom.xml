@@ -13,43 +13,43 @@
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>0.1.4-SNAPSHOT</version>
+	  <version>[0.3.1,1.0.0)</version>
 	</dependency>
 	
 	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>anchor-inference</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
+  		<version>[0.2.1,1.0.0)</version>
   	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-inference</artifactId>
-	  <version>0.0.1-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-spatial</artifactId>
-	  <version>0.0.1-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>	
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-mpp</artifactId>
-  	  <version>0.0.8-SNAPSHOT</version>
+  	  <version>[0.2.1,1.0.0)</version>
   	</dependency>
 
 	<!--  START: ONNX Runtime dependencies -->
@@ -67,7 +67,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>anchor-test-image</artifactId>
-      <version>0.0.8-SNAPSHOT</version>
+      <version>[0.2.1,1.0.0)</version>
       <scope>test</scope>
     </dependency>
     
@@ -89,7 +89,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-models-cnn</artifactId>
-	  <version>1.1.0</version>
+	  <version>1.2.0</version>
 	  <scope>test</scope>
 	</dependency>
 
