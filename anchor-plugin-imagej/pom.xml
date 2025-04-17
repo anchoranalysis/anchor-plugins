@@ -54,7 +54,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
@@ -70,7 +70,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-overlay</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>[0.2.1,1.0.0)</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
