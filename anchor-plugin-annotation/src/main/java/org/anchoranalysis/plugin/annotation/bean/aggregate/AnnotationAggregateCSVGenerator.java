@@ -34,9 +34,17 @@ import org.anchoranalysis.feature.io.csv.table.FeatureTableCSVGenerator;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * Generates a CSV file containing aggregated annotation data.
+ *
+ * <p>This class extends {@link FeatureTableCSVGenerator} to create a CSV file with columns for image ID and label.
+ */
 public class AnnotationAggregateCSVGenerator
         extends FeatureTableCSVGenerator<List<ImageAnnotation>> {
 
+    /**
+     * Constructs an {@link AnnotationAggregateCSVGenerator} with predefined column headers.
+     */
     public AnnotationAggregateCSVGenerator() {
         super(Arrays.asList("id", "label"));
     }
@@ -48,15 +56,21 @@ public class AnnotationAggregateCSVGenerator
         // We add a header line
         writer.writeHeaders(headerNames);
 
-        for (ImageAnnotation ann : allFeatureResults) {
+        for (ImageAnnotation annotation : allFeatureResults) {
 
             List<TypedValue> csvRow = new ArrayList<>();
-            addString(csvRow, ann.getIdentifier());
-            addString(csvRow, ann.getLabel());
+            addString(csvRow, annotation.getIdentifier());
+            addString(csvRow, annotation.getLabel());
             writer.writeRow(csvRow);
         }
     }
 
+    /**
+     * Adds a string value to the CSV row.
+     *
+     * @param csvRow the list representing a CSV row
+     * @param text the string to be added to the row
+     */
     private static void addString(List<TypedValue> csvRow, String text) {
         csvRow.add(new TypedValue(text, false));
     }

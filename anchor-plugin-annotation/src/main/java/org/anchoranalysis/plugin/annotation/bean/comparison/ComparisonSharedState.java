@@ -38,14 +38,28 @@ import org.anchoranalysis.plugin.annotation.counter.ImageCounter;
 import org.anchoranalysis.plugin.annotation.counter.ImageCounterList;
 import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
 
+/**
+ * Shared state for comparison operations, including grouping and statistics.
+ *
+ * @param <T> the type of {@link Assignment} for {@link ObjectMask}.
+ */
 public class ComparisonSharedState<T extends Assignment<ObjectMask>> {
 
+    /** The CSV assignment for the comparison. */
     @Getter private CSVAssignment assignmentCSV;
+    
     private ImageCounterWithStatistics<T> groupAll;
     private HashMap<String, ImageCounterWithStatistics<T>>[] groupsMap;
     private int numberLevelsGrouping;
     private Function<String, ImageCounterWithStatistics<T>> funcCreateGroup;
 
+    /**
+     * Creates a new {@link ComparisonSharedState}.
+     *
+     * @param assignmentCSV the CSV assignment for the comparison.
+     * @param numberLevelsGrouping the number of levels for grouping.
+     * @param funcCreateGroup a function to create a new {@link ImageCounterWithStatistics} for a given group key.
+     */
     @SuppressWarnings("unchecked")
     public ComparisonSharedState(
             CSVAssignment assignmentCSV,
@@ -63,6 +77,11 @@ public class ComparisonSharedState<T extends Assignment<ObjectMask>> {
         groupAll = funcCreateGroup.apply("all");
     }
 
+    /**
+     * Retrieves statistics for all groups.
+     *
+     * @return a list of {@link StatisticsToExport} for all groups.
+     */
     public List<StatisticsToExport> statisticsForAllGroups() {
         List<StatisticsToExport> list = new ArrayList<>();
         list.add(groupAll.comparison());
@@ -85,7 +104,12 @@ public class ComparisonSharedState<T extends Assignment<ObjectMask>> {
         return item;
     }
 
-    // descriptiveSplit can be null
+    /**
+     * Retrieves the groups for a given image based on its descriptive split.
+     *
+     * @param descriptiveSplit the descriptive split for the image, can be null.
+     * @return an {@link ImageCounter} containing all relevant groups for the image.
+     */
     public ImageCounter<T> groupsForImage(SplitString descriptiveSplit) {
         ImageCounterList<T> list = new ImageCounterList<>();
         list.add(groupAll);
@@ -94,8 +118,7 @@ public class ComparisonSharedState<T extends Assignment<ObjectMask>> {
 
             for (int i = 0; i < numberLevelsGrouping; i++) {
                 // We extract a String describing each level, and retrieve it from the list, adding
-                // it
-                //   if it doesn't already exist
+                // it if it doesn't already exist
                 if (i < descriptiveSplit.getNumParts()) {
                     String groupName = descriptiveSplit.combineFirstElements(i + 1, "/");
                     list.add(getOrCreate(i, groupName));

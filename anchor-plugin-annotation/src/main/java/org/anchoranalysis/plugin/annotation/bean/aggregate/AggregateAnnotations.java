@@ -55,16 +55,18 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value AggregateAnnotations#OUTPUT_AGGREGATED}</td><td>yes</td><td>a CSV file with each image and corresponding image-label.</td></tr>
+ * <tr><td>{@value #OUTPUT_AGGREGATED}</td><td>yes</td><td>a CSV file with each image and corresponding image-label.</td></tr>
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
  *
  * @author Owen Feehan
+ * @param <S> the type of {@link AnnotatorStrategy} used for annotation
  */
 public class AggregateAnnotations<S extends AnnotatorStrategy>
         extends Task<AnnotationWithStrategy<S>, AggregateSharedState> {
 
+    /** The name of the output for the aggregated CSV file. */
     private static final String OUTPUT_AGGREGATED = "aggregated";
 
     @Override

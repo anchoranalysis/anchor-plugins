@@ -40,6 +40,10 @@ public interface ImageCounter<T> {
     /** Add an image that did not have an associated annotation. */
     void addUnannotatedImage();
 
-    /** Add an image that had an associated annotation. */
+    /**
+     * Add an image that had an associated annotation.
+     *
+     * @param payload the payload associated with the annotated image.
+     */
     void addAnnotatedImage(T payload);
 }

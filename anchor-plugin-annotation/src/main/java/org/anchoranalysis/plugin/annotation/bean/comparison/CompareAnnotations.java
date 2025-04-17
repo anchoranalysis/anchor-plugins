@@ -76,9 +76,9 @@ import org.anchoranalysis.plugin.annotation.counter.ImageCounter;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value CompareAnnotations#OUTPUT_BY_IMAGE}</td><td>yes</td><td>a single CSV file showing summary statistics of matching <i>for all images</i>.</td></tr>
- * <tr><td>{@value CompareAnnotations#OUTPUT_BY_GROUP}</td><td>yes</td><td>a single CSV file showing summary statistics of matching <i>for all groups group of images</i>.</td></tr>
- * <tr><td>{@value CompareAnnotations#OUTPUT_OUTLINE}</td><td>yes</td><td>a file per image showing a colored representation of which annotations matched (or didn't) <i>for each image</i>.</td></tr>
+ * <tr><td>{@value #OUTPUT_BY_IMAGE}</td><td>yes</td><td>a single CSV file showing summary statistics of matching <i>for all images</i>.</td></tr>
+ * <tr><td>{@value #OUTPUT_BY_GROUP}</td><td>yes</td><td>a single CSV file showing summary statistics of matching <i>for all groups group of images</i>.</td></tr>
+ * <tr><td>{@value #OUTPUT_OUTLINE}</td><td>yes</td><td>a file per image showing a colored representation of which annotations matched (or didn't) <i>for each image</i>.</td></tr>
  * <tr><td rowspan="3"><i>outputs from the {@link AnnotationComparisonAssigner} in {@code assign}</i></td></tr>
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
@@ -92,6 +92,7 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
 
     private static final String OUTPUT_BY_IMAGE = "byImage";
 
+    /** Output name for the CSV file containing summary statistics for all groups of images. */
     public static final String OUTPUT_BY_GROUP = "byGroup";
 
     private static final String OUTPUT_OUTLINE = "outline";
@@ -106,8 +107,10 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
      */
     @BeanField @Getter @Setter private String splitIdentifierRegex = "";
 
+    /** The maximum number of groups to split the identifier into. */
     @BeanField @Getter @Setter private int maxSplitGroups = 5;
 
+    /** The number of levels for grouping. */
     @BeanField @Getter @Setter private int numberLevelsGrouping = 0;
 
     /**
@@ -119,10 +122,13 @@ public class CompareAnnotations<T extends Assignment<ObjectMask>>
     /** How many pixels should the outline be around objects. */
     @BeanField @Getter @Setter private int outlineWidth = 1;
 
+    /** The assigner used for annotation comparison. */
     @BeanField @Getter @Setter private AnnotationComparisonAssigner<T> assigner;
 
+    /** If true, matched objects are replaced with solid colors. */
     @BeanField @Getter @Setter private boolean replaceMatchesWithSolids = true;
 
+    /** The color scheme for unpaired objects. */
     @BeanField @Getter @Setter private ColorScheme colorsUnpaired = new VeryBright();
 
     /** How to convert an image to be displayed to the user. */

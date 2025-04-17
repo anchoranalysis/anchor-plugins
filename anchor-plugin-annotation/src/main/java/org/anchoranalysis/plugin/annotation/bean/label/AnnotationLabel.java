@@ -34,19 +34,22 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 
+/**
+ * Represents a label used for annotation, with associated metadata.
+ */
 public class AnnotationLabel extends AnchorBean<AnnotationLabel> {
 
     // START BEAN PROPERTIES
-    /** Label that uniquely identifies the ID (for machine purposes) */
+    /** Label that uniquely identifies the ID (for machine purposes). */
     @BeanField @Getter @Setter private String uniqueLabel;
 
-    /** Descriptive user-friendly label displayed via GUI */
+    /** Descriptive user-friendly label displayed via GUI. */
     @BeanField @Getter @Setter private String userFriendlyLabel;
 
-    /** An optional color associated with the label when displayed via GUI */
+    /** An optional color associated with the label when displayed via GUI. */
     @BeanField @OptionalBean @Getter @Setter private RGBColorBean color;
 
-    /** Specifies a group for the label (similar labels that are displayed together) */
+    /** Specifies a group for the label (similar labels that are displayed together). */
     @BeanField @AllowEmpty @Getter @Setter private String group;
     // END BEAN PROPERTIES
 }

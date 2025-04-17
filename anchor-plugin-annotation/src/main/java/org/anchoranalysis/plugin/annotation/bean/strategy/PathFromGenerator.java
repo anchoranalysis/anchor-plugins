@@ -32,12 +32,23 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.io.input.path.DerivePathException;
 
+/**
+ * Utility class for deriving paths from a generator.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PathFromGenerator {
 
     /** The debug-mode for everything that isn't the main input */
     private static final boolean DEBUG_MODE_NON_INPUT = false;
 
+    /**
+     * Derives a path using a {@link DerivePath} generator and a binding path.
+     *
+     * @param generator the {@link DerivePath} generator to use for deriving the path.
+     * @param pathForBinding the {@link Path} to use for binding in the derivation process.
+     * @return the derived {@link Path}.
+     * @throws DerivePathException if an error occurs during path derivation.
+     */
     public static Path derivePath(DerivePath generator, Path pathForBinding)
             throws DerivePathException {
         return generator.deriveFrom(pathForBinding, DEBUG_MODE_NON_INPUT);

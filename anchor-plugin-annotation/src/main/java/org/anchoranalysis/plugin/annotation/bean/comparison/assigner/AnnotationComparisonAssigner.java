@@ -37,14 +37,26 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 import org.anchoranalysis.plugin.annotation.counter.ImageCounterWithStatistics;
 
 /**
- * Compares elements in an annotation to elements from an experiment.
+ * Compares similar object-sets produced from two different sources.
+ * 
+ * <p>An assignment is created indicating the differences and similarities between the object-sets.
  *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> the type of {@link Assignment} used for object masks.
  */
 public abstract class AnnotationComparisonAssigner<T extends Assignment<ObjectMask>>
         extends AnchorBean<AnnotationComparisonAssigner<T>> {
 
+    /**
+     * Creates an assignment based on the objects to compare.
+     *
+     * @param objectsToCompare the objects to compare.
+     * @param dimensions the dimensions of the image.
+     * @param useMIP whether to use Maximum Intensity Projection.
+     * @param context the input-output context.
+     * @return the created assignment.
+     * @throws CreateException if the assignment cannot be created.
+     */
     public abstract T createAssignment(
             ObjectsToCompare objectsToCompare,
             Dimensions dimensions,
@@ -52,15 +64,25 @@ public abstract class AnnotationComparisonAssigner<T extends Assignment<ObjectMa
             InputOutputContext context)
             throws CreateException;
 
+    /**
+     * Gets the {@link ImageCounterWithStatistics} for a specific key.
+     *
+     * @param key the key to get the group for.
+     * @return the {@link ImageCounterWithStatistics} for the given key.
+     */
     public abstract ImageCounterWithStatistics<T> groupForKey(String key);
 
-    /** Can more than one object exist? */
+    /**
+     * Checks if more than one object can exist in the assignment.
+     *
+     * @return true if more than one object can exist, false otherwise.
+     */
     public abstract boolean moreThanOneObject();
 
     /**
      * Adds any default outputs that should occur from the assigner.
      *
-     * @param outputs
+     * @param outputs the {@link OutputEnabledMutable} to add the default outputs to.
      */
     public abstract void addDefaultOutputs(OutputEnabledMutable outputs);
 }

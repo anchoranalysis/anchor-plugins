@@ -42,7 +42,9 @@ import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.bean.mark.MarkEvaluator;
 
-/** Annotates each image with a mark */
+/**
+ * Annotates each image with a mark using a mark proposer and points fitter.
+ */
 public class MarkProposerStrategy extends SinglePathStrategy {
 
     // START BEAN PROPERTIES
@@ -52,8 +54,14 @@ public class MarkProposerStrategy extends SinglePathStrategy {
     /** Name of the {@link PointsFitter} to use. */
     @BeanField @Getter @Setter private String pointsFitter;
 
+    /**
+     * Path to derive default marks from.
+     */
     @BeanField @OptionalBean @Getter @Setter private DerivePath pathDefaultMarks;
 
+    /**
+     * Path to derive dictionary from.
+     */
     @BeanField @OptionalBean @Getter @Setter private DerivePath pathDictionary;
 
     /**
@@ -64,16 +72,29 @@ public class MarkProposerStrategy extends SinglePathStrategy {
     @BeanField @OptionalBean @Getter @Setter
     private List<DerivePath> additionalBackgrounds = new ArrayList<>();
 
+    /**
+     * Multiple comparer for comparing annotations.
+     */
     @BeanField @OptionalBean @Getter @Setter private MultipleComparer multipleComparer;
 
     /** A mark-evaluator that is added to the GUI to support this annotation */
     @BeanField @Getter @Setter private NamedBean<MarkEvaluator> markEvaluator;
     // END BEAN PROPERTIES
 
+    /**
+     * Gets the dictionary deriver path if set.
+     *
+     * @return an {@link Optional} containing the {@link DerivePath} for the dictionary, or empty if not set.
+     */
     public Optional<DerivePath> dictionaryDeriver() {
         return Optional.ofNullable(pathDictionary);
     }
 
+    /**
+     * Gets the marks deriver path if set.
+     *
+     * @return an {@link Optional} containing the {@link DerivePath} for the marks, or empty if not set.
+     */
     public Optional<DerivePath> marksDeriver() {
         return Optional.ofNullable(pathDefaultMarks);
     }
