@@ -38,15 +38,21 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.mask.UnaryWithMaskB
 import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
 
 /**
- * Copies the pixels from {@code channelAssignFrom} to {@code channel} (possibly masking)
+ * Copies the pixels from {@code channelAssignFrom} to {@code channel} (possibly masking).
  *
- * <p>channel is changed (mutable). channelAssignFrom is unchanged (immutable).
+ * <p>The input channel is changed (mutable). The {@code channelAssignFrom} is unchanged (immutable).</p>
+ *
+ * <p>This class extends {@link UnaryWithMaskBase} to perform pixel assignment from one channel to another,
+ * optionally restricted by a mask.</p>
  *
  * @author Owen Feehan
  */
 public class AssignFromChannel extends UnaryWithMaskBase {
 
     // START BEAN PROPERTIES
+    /**
+     * The channel provider from which pixels will be assigned.
+     */
     @BeanField @Getter @Setter private ChannelProvider channelAssignFrom;
     // END BEAN PROPERTIES
 
@@ -62,6 +68,13 @@ public class AssignFromChannel extends UnaryWithMaskBase {
         return channel;
     }
 
+    /**
+     * Assigns pixels from one channel to another, restricted by a mask.
+     *
+     * @param assignTo the {@link Channel} to which pixels will be assigned
+     * @param assignFrom the {@link Channel} from which pixels will be assigned
+     * @param mask the {@link Mask} restricting the assignment area
+     */
     private void assign(Channel assignTo, Channel assignFrom, Mask mask) {
 
         ObjectMask object = new ObjectMask(mask.binaryVoxels());

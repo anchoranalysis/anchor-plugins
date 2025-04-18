@@ -35,13 +35,23 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 
+/**
+ * Assigns a value from a dictionary to all voxels in a channel.
+ *
+ * <p>This class extends {@link ChannelProviderUnary} to create a new channel by assigning
+ * a single value, retrieved from a dictionary, to all voxels in the input channel.</p>
+ */
 public class AssignFromDictionary extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
-    /** The dictionary from which an assignment will occur. */
+    /** 
+     * The dictionary from which an assignment will occur.
+     */
     @BeanField @Getter @Setter private DictionaryProvider dictionary;
 
-    /** The key of the value in the dictionary that will be assigned. */
+    /** 
+     * The key of the value in the dictionary that will be assigned.
+     */
     @BeanField @Getter @Setter private String key;
     // END BEAN PROPERTIES
 

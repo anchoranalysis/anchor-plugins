@@ -35,7 +35,10 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
- * Creates a new channel that is the mean of three input channels
+ * Creates a new channel that is the mean of three input channels.
+ *
+ * <p>This class extends {@link ChannelProviderTernary} to compute the pixel-wise mean
+ * of three input channels, producing a new channel with unsigned byte voxel type.</p>
  *
  * @author Owen Feehan
  */
@@ -60,6 +63,14 @@ public class MeanThreeChannels extends ChannelProviderTernary {
         return channelOut;
     }
 
+    /**
+     * Processes voxels from three input channels to produce the mean in the output channel.
+     *
+     * @param voxelsOut the output {@link Voxels} to store the mean values
+     * @param voxelsIn1 the first input {@link Voxels}
+     * @param voxelsIn2 the second input {@link Voxels}
+     * @param voxelsIn3 the third input {@link Voxels}
+     */
     private void processVoxels(
             Voxels<UnsignedByteBuffer> voxelsOut,
             Voxels<UnsignedByteBuffer> voxelsIn1,
@@ -86,6 +97,14 @@ public class MeanThreeChannels extends ChannelProviderTernary {
         }
     }
 
+    /**
+     * Checks if the dimensions of all three input channels match.
+     *
+     * @param channel1 the first {@link Channel}
+     * @param channel2 the second {@link Channel}
+     * @param channel3 the third {@link Channel}
+     * @throws ProvisionFailedException if the dimensions of the channels do not match
+     */
     private void checkDimensions(Channel channel1, Channel channel2, Channel channel3)
             throws ProvisionFailedException {
 

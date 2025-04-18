@@ -26,6 +26,12 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
+/**
+ * Adds a constant value to each voxel in a channel.
+ *
+ * <p>This class extends {@link ArithmeticWithConstantBase} to perform addition of a constant
+ * value to each voxel in the input channel.</p>
+ */
 public final class AddConstant extends ArithmeticWithConstantBase {
 
     @Override

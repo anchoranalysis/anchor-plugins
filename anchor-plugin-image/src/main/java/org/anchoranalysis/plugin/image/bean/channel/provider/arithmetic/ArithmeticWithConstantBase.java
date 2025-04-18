@@ -65,9 +65,21 @@ public abstract class ArithmeticWithConstantBase extends UnaryWithValueBase {
         return channelOut;
     }
 
-    /** The binary arithmetic operation that combines the voxel-value and the constant-value */
+    /**
+     * The binary arithmetic operation that combines the voxel-value and the constant-value.
+     *
+     * @param voxel the value of the current voxel
+     * @param constant the constant value to be used in the operation
+     * @return the result of the binary operation
+     */
     protected abstract int performBinaryOperation(int voxel, int constant);
 
+    /**
+     * Crops a value to the valid range for a byte (0-255).
+     *
+     * @param result the value to be cropped
+     * @return the cropped value, constrained to the range 0-255
+     */
     private static int cropValueToByteRange(int result) {
 
         if (result < 0) {

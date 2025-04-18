@@ -31,11 +31,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Implements a priority queue based upon a range of values from 0 to maxValue,
+ * Implements a priority queue based upon a range of values from 0 to maxValue.
  *
  * <p>The maximum index value is always taken first and otherwise a FIFO rule applies.
  *
- * @author Owen Feehan
  * @param <T> item-type in priority queue
  */
 public class PriorityQueueIndexRangeDownhill<T> {
@@ -45,7 +44,12 @@ public class PriorityQueueIndexRangeDownhill<T> {
     private int nextIndexValue = -1;
     private List<T> nextList;
 
-    // The maximum possible grayscale value,
+    /**
+     * Creates a new priority queue with a specified maximum value.
+     *
+     * @param maxPossibleValue the maximum possible index value (inclusive)
+     * @throws IllegalArgumentException if maxPossibleValue is negative
+     */
     @SuppressWarnings("unchecked")
     public PriorityQueueIndexRangeDownhill(int maxPossibleValue) {
         Preconditions.checkArgument(maxPossibleValue >= 0);
@@ -56,6 +60,12 @@ public class PriorityQueueIndexRangeDownhill<T> {
         }
     }
 
+    /**
+     * Adds an item to the priority queue with a specified index value.
+     *
+     * @param item the item to add
+     * @param indexValue the priority index value for the item
+     */
     public void put(T item, int indexValue) {
         List<T> list = lists[indexValue];
 
@@ -66,16 +76,29 @@ public class PriorityQueueIndexRangeDownhill<T> {
         }
     }
 
+    /**
+     * Checks if there are any items left in the queue.
+     *
+     * @return true if there are items in the queue, false otherwise
+     */
     public boolean hasNext() {
         return nextList != null;
     }
 
-    // Returns -1 if there is no next value
+    /**
+     * Returns the index value of the next item to be retrieved.
+     *
+     * @return the index value of the next item, or -1 if there is no next value
+     */
     public int nextValue() {
         return nextIndexValue;
     }
 
-    // Returns null if there are no items left
+    /**
+     * Retrieves and removes the next item from the queue.
+     *
+     * @return the next item in the queue, or null if the queue is empty
+     */
     public T get() {
 
         T ret = nextList.remove(0);
@@ -87,7 +110,11 @@ public class PriorityQueueIndexRangeDownhill<T> {
         return ret;
     }
 
-    public void calculateNewMaxCurrentValue() {
+    /**
+     * Recalculates the maximum current value in the queue.
+     * This method is called internally when the current maximum value list becomes empty.
+     */
+    private void calculateNewMaxCurrentValue() {
 
         for (int i = (nextIndexValue - 1); i >= 0; i--) {
 

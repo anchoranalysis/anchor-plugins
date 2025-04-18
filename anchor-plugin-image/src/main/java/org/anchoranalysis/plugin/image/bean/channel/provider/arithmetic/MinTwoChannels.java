@@ -28,8 +28,19 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
 import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase;
 
+/**
+ * Creates a new channel by taking the minimum value of corresponding voxels from two input channels.
+ *
+ * <p>This class extends {@link TwoVoxelMappingBase} to perform a pixel-wise minimum operation
+ * between two input channels.</p>
+ */
 public class MinTwoChannels extends TwoVoxelMappingBase {
 
+    /**
+     * Constructs a new MinTwoChannels instance.
+     *
+     * <p>Initializes the superclass with a function that computes the minimum of two integers.</p>
+     */
     public MinTwoChannels() {
         super(Math::min);
     }

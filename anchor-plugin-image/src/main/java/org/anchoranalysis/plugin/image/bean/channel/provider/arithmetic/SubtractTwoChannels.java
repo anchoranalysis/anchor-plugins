@@ -28,8 +28,19 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
 import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase;
 
+/**
+ * Creates a new channel by subtracting corresponding voxels of the second channel from the first channel.
+ *
+ * <p>This class extends {@link TwoVoxelMappingBase} to perform a pixel-wise subtraction
+ * between two input channels.</p>
+ */
 public class SubtractTwoChannels extends TwoVoxelMappingBase {
 
+    /**
+     * Constructs a new SubtractTwoChannels instance.
+     *
+     * <p>Initializes the superclass with a function that subtracts the second integer from the first.</p>
+     */
     public SubtractTwoChannels() {
         super((a, b) -> a - b);
     }

@@ -26,10 +26,16 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
+/**
+ * Replaces voxel values with a constant value if the constant is less than the original voxel value.
+ *
+ * <p>This class extends {@link ArithmeticWithConstantConditionallyWriteBase} to perform a pixel-wise
+ * minimum operation between the input channel and a constant value.</p>
+ */
 public class MinWithConstant extends ArithmeticWithConstantConditionallyWriteBase {
 
     @Override
-    public boolean shouldOverwriteVoxelWithConstant(int voxel, int constant) {
+    protected boolean shouldOverwriteVoxelWithConstant(int voxel, int constant) {
         return voxel > constant;
     }
 }

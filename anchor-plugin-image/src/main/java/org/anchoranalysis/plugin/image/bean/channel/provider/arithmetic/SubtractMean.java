@@ -38,13 +38,21 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.plugin.image.bean.channel.provider.mask.UnaryWithMaskBase;
 
 /**
- * Subtract the mean (of the entire channel or a masked portion thereof) from every voxel
+ * Subtracts the mean intensity (of the entire channel or a masked portion thereof) from every voxel.
+ *
+ * <p>This class extends {@link UnaryWithMaskBase} to perform mean subtraction on a channel,
+ * optionally restricted to a masked region.</p>
  *
  * @author Owen Feehan
  */
 public class SubtractMean extends UnaryWithMaskBase {
 
     // START BEAN PROPERTIES
+    /** 
+     * Whether to subtract the mean only from voxels within the mask.
+     *
+     * <p>If true, only voxels within the mask are modified. If false, all voxels in the channel are modified.</p>
+     */
     @BeanField @Getter @Setter private boolean subtractFromMaskOnly = true;
     // END BEAN PROPERTIES
 
@@ -66,10 +74,24 @@ public class SubtractMean extends UnaryWithMaskBase {
         return channel;
     }
 
+    /**
+     * Calculates the mean intensity of voxels within the mask.
+     *
+     * @param voxelsIntensity the {@link Voxels} containing intensity values
+     * @param mask the {@link Mask} defining the region of interest
+     * @return the mean intensity of voxels within the mask
+     */
     private double calculateMean(Voxels<UnsignedByteBuffer> voxelsIntensity, Mask mask) {
         return IterateVoxelsMask.calculateRunningSum(mask, voxelsIntensity).mean(0);
     }
 
+    /**
+     * Subtracts the mean intensity from voxels within the mask.
+     *
+     * @param voxelsIntensity the {@link Voxels} to modify
+     * @param mask the {@link Mask} defining the region to modify
+     * @param mean the mean intensity to subtract
+     */
     private void subtractMeanMask(Voxels<UnsignedByteBuffer> voxelsIntensity, Mask mask, int mean) {
         IterateVoxelsMask.withBuffer(
                 mask,
@@ -77,11 +99,24 @@ public class SubtractMean extends UnaryWithMaskBase {
                 (point, buffer, offset) -> processPoint(buffer, offset, mean));
     }
 
+    /**
+     * Subtracts the mean intensity from all voxels in the channel.
+     *
+     * @param voxelsIntensity the {@link Voxels} to modify
+     * @param mean the mean intensity to subtract
+     */
     private void subtractMeanAll(Voxels<UnsignedByteBuffer> voxelsIntensity, int mean) {
         IterateVoxelsAll.withBuffer(
                 voxelsIntensity, (point, buffer, offset) -> processPoint(buffer, offset, mean));
     }
 
+    /**
+     * Processes a single voxel by subtracting the mean and clamping the result to non-negative values.
+     *
+     * @param buffer the {@link UnsignedByteBuffer} containing voxel intensities
+     * @param offset the offset of the current voxel in the buffer
+     * @param mean the mean intensity to subtract
+     */
     private static void processPoint(UnsignedByteBuffer buffer, int offset, int mean) {
         int intensity = buffer.getUnsigned(offset);
 

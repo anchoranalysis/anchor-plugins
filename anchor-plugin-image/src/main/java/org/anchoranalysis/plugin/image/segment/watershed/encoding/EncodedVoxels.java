@@ -38,31 +38,59 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Represents voxels encoded with watershed-related information.
+ * 
+ * <p>See {@link EncodedVoxels#ENCODING} for the type of information stored
+ * in each voxel.
+ */
 @AllArgsConstructor
 @Accessors(fluent = true)
 public final class EncodedVoxels {
 
+    /** The encoding used for the direction-vectors. */
     public static final WatershedEncoding ENCODING = new WatershedEncoding();
 
+    /** The voxels containing encoded information. */
     @Getter private final Voxels<UnsignedIntBuffer> voxels;
 
+    /**
+     * Sets the encoded value for a specific point.
+     *
+     * @param point the 3D point to set
+     * @param code the encoded value to set
+     */
     public void setPoint(Point3i point, int code) {
         int offset = voxels.extent().offset(point.x(), point.y());
         voxels.sliceBuffer(point.z()).putRaw(offset, code);
     }
 
+    /**
+     * Sets the connected component ID for a specific point.
+     *
+     * @param point the 3D point to set
+     * @param connectedComponentID the ID of the connected component
+     */
     public void setPointConnectedComponentID(Point3i point, int connectedComponentID) {
         setPoint(point, ENCODING.encodeConnectedComponentID(connectedComponentID));
     }
 
+    /**
+     * Sets the direction for a specific point.
+     *
+     * @param point the 3D point to set
+     * @param xChange change in x direction
+     * @param yChange change in y direction
+     * @param zChange change in z direction
+     */
     public void setPointDirection(Point3i point, int xChange, int yChange, int zChange) {
         setPoint(point, ENCODING.encodeDirection(xChange, yChange, zChange));
     }
 
     /**
-     * Sets all points in a list, to point at the first point (the root point) in the list
+     * Sets all points in a list to point at the first point (the root point) in the list.
      *
-     * @param points the list
+     * @param points the list of points to set
      */
     public void pointListAtFirstPoint(List<Point3i> points) {
 
@@ -76,10 +104,21 @@ public final class EncodedVoxels {
         }
     }
 
+    /**
+     * Gets the encoded int buffer for a specific plane.
+     *
+     * @param z the z-coordinate of the plane
+     * @return the {@link EncodedIntBuffer} for the specified plane
+     */
     public EncodedIntBuffer getPixelsForPlane(int z) {
         return new EncodedIntBuffer(voxels.sliceBuffer(z), ENCODING);
     }
 
+    /**
+     * Checks if there are any temporary encoded values in the voxels.
+     *
+     * @return true if temporary values exist, false otherwise
+     */
     public boolean hasTemporary() {
         int volumeXY = extent().areaXY();
 
@@ -95,6 +134,11 @@ public final class EncodedVoxels {
         return false;
     }
 
+    /**
+     * Gets a list of points with temporary encoded values.
+     *
+     * @return a list of {@link Point3i} with temporary values
+     */
     public List<Point3i> getTemporary() {
 
         ArrayList<Point3i> listOut = new ArrayList<>();
@@ -115,7 +159,11 @@ public final class EncodedVoxels {
         return listOut;
     }
 
-    // This is a debug method
+    /**
+     * Gets a set of all connected component IDs in the voxels.
+     *
+     * @return a set of integer IDs representing connected components
+     */
     public Set<Integer> setOfConnectedComponentIDs() {
 
         Set<Integer> setOut = new HashSet<>();
@@ -137,7 +185,13 @@ public final class EncodedVoxels {
         return setOut;
     }
 
-    // Returns the CODED final index (global)
+    /**
+     * Calculates the connected component ID for a given point and initial chain code.
+     *
+     * @param point the starting point
+     * @param firstChainCode the initial chain code
+     * @return the encoded connected component ID
+     */
     public int calculateConnectedComponentID(Point3i point, int firstChainCode) {
 
         Extent extent = voxels.extent();
@@ -182,30 +236,71 @@ public final class EncodedVoxels {
         return out;
     }
 
+    /**
+     * Checks if the given code represents a plateau.
+     *
+     * @param code the encoded value to check
+     * @return true if the code represents a plateau, false otherwise
+     */
     public boolean isPlateau(int code) {
         return code == WatershedEncoding.CODE_PLATEAU;
     }
 
+    /**
+     * Checks if the given code represents a minima.
+     *
+     * @param code the encoded value to check
+     * @return true if the code represents a minima, false otherwise
+     */
     public boolean isMinima(int code) {
         return code == WatershedEncoding.CODE_MINIMA;
     }
 
+    /**
+     * Checks if the given code represents a temporary value.
+     *
+     * @param code the encoded value to check
+     * @return true if the code represents a temporary value, false otherwise
+     */
     public boolean isTemporary(int code) {
         return code == WatershedEncoding.CODE_TEMPORARY;
     }
 
+    /**
+     * Checks if the given code represents an unvisited value.
+     *
+     * @param code the encoded value to check
+     * @return true if the code represents an unvisited value, false otherwise
+     */
     public boolean isUnvisited(int code) {
         return code == WatershedEncoding.CODE_UNVISITED;
     }
 
+    /**
+     * Checks if the given code represents a direction chain code.
+     *
+     * @param code the encoded value to check
+     * @return true if the code represents a direction chain code, false otherwise
+     */
     public boolean isDirectionChainCode(int code) {
         return ENCODING.isDirectionChainCode(code);
     }
 
+    /**
+     * Checks if the given code represents a connected component ID.
+     *
+     * @param code the encoded value to check
+     * @return true if the code represents a connected component ID, false otherwise
+     */
     public boolean isConnectedComponentIDCode(int code) {
         return ENCODING.isConnectedComponentIDCode(code);
     }
 
+    /**
+     * Gets the extent of the voxels.
+     *
+     * @return the {@link Extent} of the voxels
+     */
     public Extent extent() {
         return voxels.extent();
     }

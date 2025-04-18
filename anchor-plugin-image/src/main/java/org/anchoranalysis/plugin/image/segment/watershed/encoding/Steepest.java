@@ -37,6 +37,9 @@ import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Calculates the steepest descent direction for voxels in a watershed segmentation.
+ */
 public final class Steepest {
 
     private static class PointEvaluator
@@ -86,14 +89,14 @@ public final class Steepest {
     private final Neighborhood neighborhood;
 
     /**
-     * Create for a specific buffer.
+     * Creates a Steepest instance for a specific buffer.
      *
-     * @param buffer the buffer.
-     * @param encoder
-     * @param do3D
+     * @param buffer the {@link SlidingBuffer} to process
+     * @param encoder the {@link WatershedEncoding} to use for encoding directions
+     * @param do3D whether to perform 3D processing
      * @param bigNeighborhood if true, use 8-Connectivity instead of 4 in 2D, and 26-connectivity
-     *     instead of 6 in 3D, as per {@link NeighborhoodFactory}.
-     * @param objectMask
+     *     instead of 6 in 3D, as per {@link NeighborhoodFactory}
+     * @param objectMask an optional {@link ObjectMask} to restrict processing
      */
     public Steepest(
             SlidingBuffer<?> buffer,
@@ -108,7 +111,14 @@ public final class Steepest {
         this.neighborhood = NeighborhoodFactory.of(bigNeighborhood);
     }
 
-    // Calculates the steepest descent
+    /**
+     * Calculates the steepest descent direction for a given point.
+     *
+     * @param point the {@link Point3i} to calculate the steepest descent for
+     * @param val the value at the given point
+     * @param indxBuffer the buffer index for the given point
+     * @return the encoded direction of steepest descent
+     */
     public int steepestDescent(Point3i point, int val, int indxBuffer) {
         return IterateVoxelsNeighbors.callEachPointInNeighborhood(
                 point, neighborhood, do3D, process, val, indxBuffer);

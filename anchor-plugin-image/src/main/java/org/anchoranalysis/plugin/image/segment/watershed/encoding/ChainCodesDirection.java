@@ -31,24 +31,22 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Maps directions to chain codes
- *
- * @author Owen Feehan
+ * Maps directions to chain codes and vice versa.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChainCodesDirection {
 
-    // Corresponds to code 0
+    /** The maximum value for a chain code, corresponding to code 0. */
     public static final int MAX_VALUE = 27;
 
     /**
-     * Decodes a chain-code into a point
+     * Decodes a chain-code into a point.
      *
      * <p>TODO is it a good idea to cache the creation of chain codes, to avoid work on the heap?
      * There is a finite number.
      *
-     * @param chainCode the chain-code
-     * @return a new point (always newly created) for the given chain-code.
+     * @param chainCode the chain-code to decode
+     * @return a new {@link Point3i} (always newly created) for the given chain-code
      */
     public static Point3i decode(int chainCode) {
         return new Point3i(
@@ -57,19 +55,44 @@ public class ChainCodesDirection {
                 ChainCodesDirection.zFromChainCode(chainCode));
     }
 
-    // x, y, z  are -1, 0 or 1, for 3^3 combinations
+    /**
+     * Encodes a direction into a chain code.
+     *
+     * @param x the x-component of the direction (-1, 0, or 1)
+     * @param y the y-component of the direction (-1, 0, or 1)
+     * @param z the z-component of the direction (-1, 0, or 1)
+     * @return the encoded chain code
+     */
     public static int chainCode(int x, int y, int z) {
         return ((z + 1) * 9) + ((y + 1) * 3) + (x + 1);
     }
 
+    /**
+     * Extracts the x-component from a chain code.
+     *
+     * @param chainCode the chain code to decode
+     * @return the x-component of the direction (-1, 0, or 1)
+     */
     public static int xFromChainCode(int chainCode) {
         return (chainCode % 3) - 1;
     }
 
+    /**
+     * Extracts the y-component from a chain code.
+     *
+     * @param chainCode the chain code to decode
+     * @return the y-component of the direction (-1, 0, or 1)
+     */
     public static int yFromChainCode(int chainCode) {
         return ((chainCode % 9) / 3) - 1;
     }
 
+    /**
+     * Extracts the z-component from a chain code.
+     *
+     * @param chainCode the chain code to decode
+     * @return the z-component of the direction (-1, 0, or 1)
+     */
     public static int zFromChainCode(int chainCode) {
         return (chainCode / 9) - 1;
     }
