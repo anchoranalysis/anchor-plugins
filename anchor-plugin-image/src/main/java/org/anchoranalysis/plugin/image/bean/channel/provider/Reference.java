@@ -36,21 +36,37 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 
+/**
+ * Provides a channel by referencing it from a a set of named-channels.
+ *
+ * <p>This class extends {@link ChannelProvider} to retrieve a channel by its ID from a named provider.
+ * It also offers an option to duplicate the retrieved channel.</p>
+ */
 @NoArgsConstructor
 public class Reference extends ChannelProvider {
 
     // START BEAN PROPERTIES
+    /**
+     * The ID of the channel to retrieve from the named-provider.
+     */
     @BeanField @Getter @Setter private String id = "";
 
     /**
-     * If true the channel is duplicated after it is retrieved, to prevent overwriting existing data
-     * This is a shortcut to avoid embedding beans in a ChannelProviderDuplicate
+     * If true, the channel is duplicated after it is retrieved, to prevent overwriting existing data.
+     * 
+     * <p>This is a shortcut to avoid embedding beans in a ChannelProviderDuplicate.</p>
      */
     @BeanField @Getter @Setter private boolean duplicate = false;
     // END BEAN PROPERTIES
 
+    /** The cached channel retrieved from the named provider. */
     private Channel channel;
 
+    /**
+     * Creates a new instance with a specified channel ID.
+     *
+     * @param id the ID of the channel to retrieve
+     */
     public Reference(String id) {
         super();
         this.id = id;
@@ -64,6 +80,12 @@ public class Reference extends ChannelProvider {
         return channel;
     }
 
+    /**
+     * Retrieves the channel from the named provider and optionally duplicates it.
+     *
+     * @return the retrieved {@link Channel}, possibly duplicated
+     * @throws ProvisionFailedException if the channel cannot be retrieved or duplicated
+     */
     private Channel getMaybeDuplicate() throws ProvisionFailedException {
         try {
             Channel existing = getInitialization().channels().getException(id);

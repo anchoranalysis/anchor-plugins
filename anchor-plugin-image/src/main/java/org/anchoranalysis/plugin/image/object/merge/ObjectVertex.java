@@ -31,25 +31,27 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * A vertex in a merge graph representing an object (and and an associated payload)
- *
- * @author Owen Feehan
+ * A vertex in a merge graph representing an object (and an associated payload).
  */
 @RequiredArgsConstructor
 public class ObjectVertex {
 
-    // START REQUIRED ARGUMENTS
+    /** The {@link ObjectMask} represented by this vertex. */
     @Getter private final ObjectMask object;
-    private final double payload;
-    // END REQUIRED ARGUMENTS
 
-    /** Number of voxels in the object, calculated lazily */
+    /** The payload associated with this vertex. */
+    @Getter private final double payload;
+
+    /** Number of voxels in the object, calculated lazily. */
     private int numberVoxels = -1;
 
-    public double getPayload() {
-        return payload;
-    }
-
+    /**
+     * Gets the number of voxels in the object.
+     *
+     * <p>This value is calculated lazily on the first call to this method.
+     *
+     * @return the number of voxels in the {@link ObjectMask}
+     */
     public int numberVoxels() {
         if (numberVoxels == -1) {
             numberVoxels = object.numberVoxelsOn();

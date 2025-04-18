@@ -34,13 +34,17 @@ import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 
 /**
- * A {@link ChannelProviderUnary} which has a scalar value field
+ * A {@link ChannelProviderUnary} which has a scalar value field.
  *
- * @author Owen Feehan
+ * <p>This abstract class extends {@link ChannelProviderUnary} to provide a framework for creating channels
+ * based on an input channel and a scalar value. Subclasses must implement the {@code createFromChannelWithConstant} method.</p>
  */
 public abstract class UnaryWithValueBase extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
+    /**
+     * The scalar value to be used in channel creation.
+     */
     @BeanField @Getter @Setter private double value;
     // END BEAN PROPERTIES
 
@@ -49,6 +53,14 @@ public abstract class UnaryWithValueBase extends ChannelProviderUnary {
         return createFromChannelWithConstant(channel, value);
     }
 
+    /**
+     * Creates a new channel from an existing channel and a scalar value.
+     *
+     * @param channel the input {@link Channel}
+     * @param value the scalar value to be used in channel creation
+     * @return a new {@link Channel} created from the input channel and scalar value
+     * @throws ProvisionFailedException if the channel creation fails
+     */
     protected abstract Channel createFromChannelWithConstant(Channel channel, double value)
             throws ProvisionFailedException;
 }

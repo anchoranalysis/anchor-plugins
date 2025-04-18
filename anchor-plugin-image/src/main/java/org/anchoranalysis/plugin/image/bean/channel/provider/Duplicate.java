@@ -29,6 +29,11 @@ package org.anchoranalysis.plugin.image.bean.channel.provider;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 
+/**
+ * Creates a duplicate of the input channel.
+ *
+ * <p>This class extends {@link ChannelProviderUnary} to create an exact copy of the input channel.</p>
+ */
 public class Duplicate extends ChannelProviderUnary {
 
     @Override
