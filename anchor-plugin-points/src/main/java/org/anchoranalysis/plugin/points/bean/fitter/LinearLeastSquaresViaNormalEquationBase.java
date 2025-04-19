@@ -34,6 +34,7 @@ import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.point.Point3f;
 
+/** Base class for linear least squares fitting using the normal equation method. */
 public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitterBase {
 
     @Override
@@ -49,11 +50,30 @@ public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitte
         applyCoefficientsToMark(coefficients, mark, dimensions);
     }
 
+    /**
+     * Returns the minimum number of points required for fitting.
+     *
+     * @return the minimum number of points
+     */
     protected abstract int minNumPoints();
 
+    /**
+     * Applies the calculated coefficients to the mark.
+     *
+     * @param matrixV the matrix of coefficients
+     * @param mark the {@link Mark} to update
+     * @param dimensions the {@link Dimensions} of the image
+     * @throws PointsFitterException if there's an error applying the coefficients
+     */
     protected abstract void applyCoefficientsToMark(
             DoubleMatrix2D matrixV, Mark mark, Dimensions dimensions) throws PointsFitterException;
 
+    /**
+     * Creates the design matrix from the input points.
+     *
+     * @param points the list of {@link Point3f} to use for creating the design matrix
+     * @return the design matrix as a {@link DoubleMatrix2D}
+     */
     protected abstract DoubleMatrix2D createDesignMatrix(List<Point3f> points);
 
     /**
@@ -61,9 +81,9 @@ public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitte
      *
      * <p>All our dependent variables are treated as 1 (solution to the ellipsoid matrix equation).
      *
-     * @param matrixD
+     * @param matrixD the design matrix
      * @return a matrix of optimal coefficients
-     * @throws PointsFitterException
+     * @throws PointsFitterException if there's an error solving the normal equation
      */
     private static DoubleMatrix2D solveNormalEquation(DoubleMatrix2D matrixD)
             throws PointsFitterException {

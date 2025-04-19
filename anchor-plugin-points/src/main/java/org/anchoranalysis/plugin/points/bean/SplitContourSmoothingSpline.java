@@ -39,18 +39,23 @@ import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.Point3i;
 import umontreal.ssj.functionfit.SmoothingCubicSpline;
 
+/** Applies smoothing splines to contours and splits them at critical points. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class SplitContourSmoothingSpline {
 
     /**
-     * 1. Fits a smoothed-spline to the contour 2. Splits this at each optima (critical points i.e.
-     * zero-crossing of first-derivative)
+     * Applies smoothing splines to contours and splits them at critical points.
+     *
+     * <p>1. Fits a smoothed-spline to the contour
+     *
+     * <p>2. Splits this at each optima (critical points i.e. zero-crossing of first-derivative)
      *
      * @param object object-mask representing a closed contour
      * @param rho smoothing factor [0,1] as per SSJ documentation
+     * @param numberLoopPoints number of points to loop back to the start of the contour
      * @param minimumNumberPoints if less than this number of points, object is returned unchanged
-     * @return
-     * @throws OperationFailedException
+     * @return a {@link List} of {@link Contour}s after smoothing and splitting
+     * @throws OperationFailedException if the operation fails
      */
     public static List<Contour> apply(
             ObjectMask object, double rho, int numberLoopPoints, int minimumNumberPoints)
@@ -62,6 +67,15 @@ class SplitContourSmoothingSpline {
                 (pts, out) -> fitSplinesAndExtract(pts, rho, pts, numberLoopPoints, out));
     }
 
+    /**
+     * Traverses points in the object and calls the fitter function.
+     *
+     * @param object the {@link ObjectMask} to traverse
+     * @param minimumNumberPoints minimum number of points required
+     * @param fitter the {@link FitSplinesExtract} function to apply
+     * @return a {@link List} of {@link Contour}s after fitting
+     * @throws OperationFailedException if the operation fails
+     */
     private static List<Contour> traversePointsAndCallFitter(
             ObjectMask object, int minimumNumberPoints, FitSplinesExtract fitter)
             throws OperationFailedException {
@@ -77,6 +91,14 @@ class SplitContourSmoothingSpline {
         return out;
     }
 
+    /**
+     * Adds splines for a contour if it meets the minimum number of points requirement.
+     *
+     * @param contourIn the input {@link Contour}
+     * @param contoursOut the output {@link List} of {@link Contour}s
+     * @param fitter the {@link FitSplinesExtract} function to apply
+     * @param minNumPoints minimum number of points required
+     */
     private static void addSplinesFor(
             Contour contourIn,
             List<Contour> contoursOut,
@@ -89,24 +111,26 @@ class SplitContourSmoothingSpline {
         }
     }
 
+    /** Functional interface for fitting splines and extracting contours. */
     @FunctionalInterface
     private static interface FitSplinesExtract {
+        /**
+         * Applies the spline fitting and extraction.
+         *
+         * @param pointsTraversed the input points
+         * @param out the output {@link List} of {@link Contour}s
+         */
         public void apply(List<Point3i> pointsTraversed, List<Contour> out);
     }
 
     /**
-     * Fits splines to the points (and maybe some points from ptsExtra)
+     * Fits splines to the points and extracts contours.
      *
-     * <p>As it can be useful to have some overlap with another contour, or to the beginning of the
-     * same contour (to handle cyclical contours) ptsExtra provides a means to append some
-     * additional points to be fit against.
-     *
-     * @param pointsToFit the points to fit the splines to
-     * @param rho a smoothing factor [0, 1] see SSJ documentation
-     * @param pointsExtra additional points, of which the first numExtraPoints will be appended to
-     *     ptsToFit
-     * @param numExtraPoints how many additional points to include
-     * @param out created contours are appended to the list
+     * @param pointsToFit the {@link List} of {@link Point3i} to fit splines to
+     * @param rho the smoothing factor for the spline
+     * @param pointsExtra additional points to include in the fit
+     * @param numExtraPoints number of extra points to include
+     * @param out the {@link List} of {@link Contour}s to add the extracted contours to
      */
     private static void fitSplinesAndExtract(
             List<Point3i> pointsToFit,
@@ -131,7 +155,15 @@ class SplitContourSmoothingSpline {
                 out);
     }
 
-    /** Extracts and splits contours from the splines */
+    /**
+     * Extracts and splits contours from the splines.
+     *
+     * @param splineX the {@link SmoothingCubicSpline} for X coordinates
+     * @param splineY the {@link SmoothingCubicSpline} for Y coordinates
+     * @param maxEvalPoint the maximum evaluation point
+     * @param out the {@link List} of {@link Contour}s to add the extracted contours to
+     * @return the updated {@link List} of {@link Contour}s
+     */
     private static List<Contour> extractSplitContour(
             SmoothingCubicSpline splineX,
             SmoothingCubicSpline splineY,
@@ -171,11 +203,13 @@ class SplitContourSmoothingSpline {
     }
 
     /**
-     * @param points
-     * @param extracter
-     * @param numberExtraPoints repeats the first numLoopedPoints points again at end of curve (to
-     *     help deal with closed curves)
-     * @return
+     * Extracts coordinate values from points.
+     *
+     * @param points the {@link List} of {@link Point3i} to extract from
+     * @param extracter the {@link ToIntFunction} to extract the coordinate
+     * @param pointsExtra additional points to extract from
+     * @param numberExtraPoints number of extra points to include
+     * @return an array of extracted coordinate values
      */
     private static double[] extractFromPoint(
             List<Point3i> points,
@@ -196,7 +230,12 @@ class SplitContourSmoothingSpline {
         return out;
     }
 
-    // Integer sequence starting at 0
+    /**
+     * Creates an integer sequence as an array of doubles.
+     *
+     * @param size the size of the sequence
+     * @return an array of doubles representing the integer sequence
+     */
     private static double[] integerSequence(int size) {
         double[] out = new double[size];
 

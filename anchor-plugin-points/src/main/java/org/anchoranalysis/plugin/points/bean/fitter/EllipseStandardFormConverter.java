@@ -32,26 +32,29 @@ import cern.colt.matrix.linalg.Algebra;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.spatial.point.Point2d;
 
-//
-// Extracts forms for 'standard form' representation of an ellipse
-//   from the coefficients for a 2nd order polynomial describing the ellipse
-//
-// SEE 'Information About Ellipses' by Eberly (URL below)
-// http://www.geometrictools.com/Documentation/InformationAboutEllipses.pdf
-//
-// See Matlab Prototype (ls_ellipse/convert_to_standard_form.m)
-//
-//  The matrix coefficients are as follows (in a vector)
-//    0 = x^2
-//    1 = xy/2
-//    2 = y^2
-//    3 = x
-//    4 = y
-//    5 = c
-//
-//
+/**
+ * Extracts forms for 'standard form' representation of an ellipse from the coefficients for a 2nd
+ * order polynomial describing the ellipse.
+ *
+ * <p>SEE 'Information About Ellipses' by Eberly (URL below)
+ * http://www.geometrictools.com/Documentation/InformationAboutEllipses.pdf
+ *
+ * <p>See Matlab Prototype (ls_ellipse/convert_to_standard_form.m)
+ *
+ * <p>The matrix coefficients are as follows (in a vector):
+ *
+ * <ul>
+ *   <li>0 = x^2
+ *   <li>1 = xy/2
+ *   <li>2 = y^2
+ *   <li>3 = x
+ *   <li>4 = y
+ *   <li>5 = c
+ * </ul>
+ */
 public class EllipseStandardFormConverter {
 
+    /** The matrix of coefficients describing the ellipse. */
     private DoubleMatrix1D matrix;
 
     /** Center-Point x */
@@ -72,6 +75,12 @@ public class EllipseStandardFormConverter {
     /** Vector of direction of major axis */
     private DoubleMatrix1D directionMajor;
 
+    /**
+     * Creates a new {@link EllipseStandardFormConverter} and performs the conversion.
+     *
+     * @param matrix the matrix of coefficients describing the ellipse
+     * @throws CreateException if the matrix does not describe an ellipse
+     */
     public EllipseStandardFormConverter(DoubleMatrix1D matrix) throws CreateException {
         this.matrix = matrix;
         convert();
@@ -138,34 +147,75 @@ public class EllipseStandardFormConverter {
         directionMajor.set(1, directionMinor.get(0));
     }
 
+    /**
+     * Gets the x-coordinate of the ellipse's center point.
+     *
+     * @return the x-coordinate of the center point
+     */
     public double getCenterPointX() {
         return k1;
     }
 
+    /**
+     * Gets the y-coordinate of the ellipse's center point.
+     *
+     * @return the y-coordinate of the center point
+     */
     public double getCenterPointY() {
         return k2;
     }
 
+    /**
+     * Gets the center point of the ellipse.
+     *
+     * @return a {@link Point2d} representing the center point
+     */
     public Point2d centerPoint() {
         return new Point2d(k1, k2);
     }
 
+    /**
+     * Gets the length of the semi-major axis.
+     *
+     * @return the length of the semi-major axis
+     */
     public double getSemiMajorAxis() {
         return axisMajor;
     }
 
+    /**
+     * Gets the length of the semi-minor axis.
+     *
+     * @return the length of the semi-minor axis
+     */
     public double getSemiMinorAxis() {
         return axisMinor;
     }
 
+    /**
+     * Gets the angle of the major axis in radians.
+     *
+     * @return the angle of the major axis
+     */
     public double getMajorAxisAngle() {
         return atanHandlingNan(getMajorAxisSlope());
     }
 
+    /**
+     * Gets the angle of the minor axis in radians.
+     *
+     * @return the angle of the minor axis
+     */
     public double getMinorAxisAngle() {
         return atanHandlingNan(getMajorAxisSlope());
     }
 
+    /**
+     * Calculates the arctangent, handling NaN values.
+     *
+     * @param val the value to calculate arctangent for
+     * @return the arctangent in radians, or PI/2 if the input is NaN
+     */
     public static double atanHandlingNan(double val) {
         // If val is NAN then we return PI/2
         if (Double.isNaN(val)) {
@@ -175,10 +225,20 @@ public class EllipseStandardFormConverter {
         }
     }
 
+    /**
+     * Gets the slope of the major axis.
+     *
+     * @return the slope of the major axis
+     */
     public double getMajorAxisSlope() {
         return directionMajor.get(1) / directionMajor.get(0);
     }
 
+    /**
+     * Gets the slope of the minor axis.
+     *
+     * @return the slope of the minor axis
+     */
     public double getMinorAxisSlope() {
         return directionMinor.get(1) / directionMinor.get(0);
     }

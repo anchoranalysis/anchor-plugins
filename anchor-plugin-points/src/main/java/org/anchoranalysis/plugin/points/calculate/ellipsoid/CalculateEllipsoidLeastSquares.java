@@ -39,14 +39,26 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/** Calculates the best-fit {@link Ellipsoid} for an object using linear least squares. */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false)
 public class CalculateEllipsoidLeastSquares
         extends CalculationPart<Ellipsoid, FeatureInputSingleObject> {
 
+    /** Whether to suppress covariance in the Z direction. */
     private final boolean suppressZCovariance;
-    private final ResolvedPart<List<Point3i>, FeatureInputSingleObject> ccPoints;
 
+    /** Resolved part for calculating points from the object's outline. */
+    private final ResolvedPart<List<Point3i>, FeatureInputSingleObject> resolved;
+
+    /**
+     * Calculates an {@link Ellipsoid} for the given input.
+     *
+     * @param input the feature calculation input
+     * @param suppressZCovariance whether to suppress covariance in the Z direction
+     * @return the calculated {@link Ellipsoid}
+     * @throws FeatureCalculationException if the calculation fails
+     */
     public static Ellipsoid of(
             FeatureCalculationInput<FeatureInputSingleObject> input, boolean suppressZCovariance)
             throws FeatureCalculationException {
@@ -68,7 +80,7 @@ public class CalculateEllipsoidLeastSquares
             return EllipsoidFactory.createMarkEllipsoidLeastSquares(
                     () -> {
                         try {
-                            return ccPoints.getOrCalculate(input);
+                            return resolved.getOrCalculate(input);
                         } catch (FeatureCalculationException e) {
                             throw new CreateException(e);
                         }

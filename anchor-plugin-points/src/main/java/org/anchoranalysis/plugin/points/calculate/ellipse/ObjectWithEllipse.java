@@ -30,9 +30,13 @@ import lombok.Value;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.mark.conic.Ellipse;
 
+/** A pair containing an {@link ObjectMask} and its corresponding best-fit {@link Ellipse}. */
 @Value
 public class ObjectWithEllipse {
 
+    /** The object mask. */
     private final ObjectMask object;
+
+    /** The best-fit ellipse for the object. */
     private final Ellipse mark;
 }

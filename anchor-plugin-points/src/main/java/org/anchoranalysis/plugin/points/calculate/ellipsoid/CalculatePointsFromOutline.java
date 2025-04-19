@@ -34,6 +34,12 @@ import org.anchoranalysis.image.core.points.PointsFromObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Calculates a list of {@link Point3i} representing the outline of an object.
+ *
+ * <p>This class extends {@link CalculationPart} to provide caching capabilities for the calculated
+ * points.
+ */
 @EqualsAndHashCode(callSuper = false)
 class CalculatePointsFromOutline extends CalculationPart<List<Point3i>, FeatureInputSingleObject> {
 

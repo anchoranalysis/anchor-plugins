@@ -30,13 +30,19 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 
+/**
+ * Calculates the ellipsoidicity of an object by fitting an {@link Ellipsoid} to it.
+ *
+ * <p>Ellipsoidicity is a measure of how closely the object resembles an ellipsoid. A value of 1.0
+ * indicates a perfect ellipsoid, while lower values indicate deviations from an ellipsoidal shape.
+ */
 public class Ellipsoidicity extends EllipsoidBase {
 
     @Override
-    protected double calc(FeatureInputSingleObject input, Ellipsoid me)
+    protected double calculateWithEllipsoid(FeatureInputSingleObject input, Ellipsoid ellipsoid)
             throws FeatureCalculationException {
 
         return EllipticityCalculatorHelper.calculate(
-                input.getObject(), me, input.dimensionsRequired());
+                input.getObject(), ellipsoid, input.dimensionsRequired());
     }
 }

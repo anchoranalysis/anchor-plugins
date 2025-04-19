@@ -32,15 +32,20 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 
+/** Base class for conic fitters, providing common properties and methods. */
 public abstract class ConicFitterBase extends PointsFitter {
 
     // START BEAN
+    /** The shell thickness of the conic. */
     @BeanField @Positive @Getter @Setter private double shell;
 
+    /** The value to subtract from the radii of the conic. */
     @BeanField @Getter @Setter private double subtractRadii = 0.0;
 
+    /** The scale factor to apply to the radii of the conic. */
     @BeanField @Getter @Setter private double scaleRadii = 1.0;
 
+    /** The shift to apply to input points before fitting. */
     @BeanField @Getter @Setter private float inputPointShift = 0.0f;
     // END BEAN
 

@@ -42,20 +42,21 @@ import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 
+/** Factory for creating {@link Ellipsoid} objects using least-squares fitting. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidFactory {
 
     /**
-     * Creates a MarkEllipsoid using least-squares fitting to the points on the outline of an
-     * object-mask
+     * Creates a {@link Ellipsoid} using least-squares fitting to the points on the outline of an
+     * {@link ObjectMask}.
      *
      * @param object object-mask
-     * @param dimensions the dimensions of the scene the object is contaiend in
+     * @param dimensions the dimensions of the scene the object is contained in
      * @param suppressZCovariance whether to suppress the covariance in the z-dimension when doing
-     *     least squares fiting
+     *     least squares fitting
      * @param shell shell for the mark that is created
-     * @return
-     * @throws CreateException
+     * @return the created {@link Ellipsoid}
+     * @throws CreateException if the ellipsoid creation fails
      */
     public static Ellipsoid createMarkEllipsoidLeastSquares(
             ObjectMask object, Dimensions dimensions, boolean suppressZCovariance, double shell)
@@ -67,6 +68,17 @@ public class EllipsoidFactory {
                 shell);
     }
 
+    /**
+     * Creates a {@link Ellipsoid} using least-squares fitting to a supplied list of points.
+     *
+     * @param opPoints supplier for the list of points to fit
+     * @param dimensions the dimensions of the scene the object is contained in
+     * @param suppressZCovariance whether to suppress the covariance in the z-dimension when doing
+     *     least squares fitting
+     * @param shell shell for the mark that is created
+     * @return the created {@link Ellipsoid}
+     * @throws CreateException if the ellipsoid creation fails
+     */
     public static Ellipsoid createMarkEllipsoidLeastSquares(
             CheckedSupplier<List<Point3i>, CreateException> opPoints,
             Dimensions dimensions,

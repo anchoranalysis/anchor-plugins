@@ -39,6 +39,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 
+/** Calculates a 3D convex hull from a binary mask. */
 public class ConvexHull3D extends ConvexHullBase {
 
     @Override
@@ -86,7 +87,12 @@ public class ConvexHull3D extends ConvexHullBase {
         return outline;
     }
 
-    // We use it here as it uses the quickHull3D Point3d primitive
+    /**
+     * Extracts points from a binary mask.
+     *
+     * @param mask the {@link Mask} to extract points from
+     * @return a {@link List} of {@link Point3d} representing the points in the mask
+     */
     private static List<Point3d> pointsFromMask(Mask mask) {
         List<Point3d> listOut = new ArrayList<>();
         BinaryValuesByte binaryValues = mask.binaryValuesByte();
