@@ -49,11 +49,12 @@ class FindLargestMultipleWithin {
      *
      * <p>The X dimension and Y dimension are treated in unison i.e. both are scaled together
      *
-     * @param small the extent to scale.
+     * @param small the {@link Extent} to scale.
      * @param stayWithin a maximum size not to scale beyond.
+     * @param maxScaleFactor the maximum allowed scale factor.
      * @return the scale-factor to use scale {@code small} (in both dimensions) to be the largest
      *     size possible, without exceeding {@code stayWithin}.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the small extent is already larger than stayWithin in either dimension.
      */
     public static int apply(Extent small, Extent stayWithin, int maxScaleFactor)
             throws OperationFailedException {
@@ -75,13 +76,23 @@ class FindLargestMultipleWithin {
     }
 
     /**
-     * The minimum scale factor from X and Y resolution, clamped at the a maximum of maxScaleFactor
+     * The minimum scale factor from X and Y resolution, clamped at the a maximum of maxScaleFactor.
+     *
+     * @param sf the {@link ScaleFactor} to calculate from.
+     * @param maxScaleFactor the maximum allowed scale factor.
+     * @return the minimum scale factor, clamped to maxScaleFactor.
      */
     private static int minScaleFactorUnder(ScaleFactor sf, int maxScaleFactor) {
         int min = minScaleFactor(sf);
         return Math.min(min, maxScaleFactor);
     }
 
+    /**
+     * Calculates the minimum scale factor from X and Y components of a {@link ScaleFactor}.
+     *
+     * @param sf the {@link ScaleFactor} to calculate from.
+     * @return the minimum scale factor as an integer.
+     */
     private static int minScaleFactor(ScaleFactor sf) {
         return (int) Math.floor(Math.min(sf.x(), sf.y()));
     }

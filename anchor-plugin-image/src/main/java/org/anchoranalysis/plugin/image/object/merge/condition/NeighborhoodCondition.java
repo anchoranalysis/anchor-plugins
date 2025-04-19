@@ -35,35 +35,36 @@ import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * A condition placed to determine if two objects could be potential neighbors are not (i.e.
- * potential candidates for merging)
+ * A condition to determine if two objects are potential neighbors and candidates for merging.
  *
- * @author Owen Feehan
+ * <p>This condition implements {@link UpdatableBeforeCondition} to allow efficient updates when the source object changes.
  */
 public class NeighborhoodCondition implements UpdatableBeforeCondition {
 
+    /** Whether to require bounding boxes to be neighbors. */
     private boolean requireBBoxNeighbors;
+
+    /** Whether to require objects to be touching. */
     private boolean requireTouching;
 
-    // START TEMPORARY objects, updated after every call to updateSrcObj
-    // The bounding box of omSrcWithFeature grown by 1 in all directions (used for testing box
-    // intersection)
+    /** The bounding box of the source object grown by 1 in all directions. */
     private BoundingBox boxSrcGrown;
 
-    // The object-mask of omSrcWithFeature dilated by 1 in all directions (used for testing if
-    // objects touch)
+    /** The object-mask of the source object dilated by 1 in all directions. */
     private ObjectMask objectGrown;
-    // END TEMPORARY objects
 
+    /**
+     * Creates a new {@link NeighborhoodCondition}.
+     *
+     * @param requireBBoxNeighbors whether to require bounding boxes to be neighbors
+     * @param requireTouching whether to require objects to be touching
+     */
     public NeighborhoodCondition(boolean requireBBoxNeighbors, boolean requireTouching) {
-        super();
-
         this.requireBBoxNeighbors = requireBBoxNeighbors;
         this.requireTouching = requireTouching;
 
         if (requireTouching) {
-            this.requireBBoxNeighbors =
-                    false; // We don't need this check, if we're testing actual object intersection
+            this.requireBBoxNeighbors = false; // We don't need this check if we're testing actual object intersection
         }
     }
 
@@ -97,6 +98,12 @@ public class NeighborhoodCondition implements UpdatableBeforeCondition {
         return !requireTouching || objectGrown.hasIntersectingVoxels(destination);
     }
 
+    /**
+     * Grows the bounding box of an {@link ObjectMask} by 1 in all directions.
+     *
+     * @param object the {@link ObjectMask} whose bounding box to grow
+     * @return the grown {@link BoundingBox}
+     */
     private static BoundingBox boundingBoxGrown(ObjectMask object) {
         return GrowUtilities.grow(object.boundingBox());
     }

@@ -36,15 +36,25 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * A provider that references an existing {@link Histogram} by its identifier.
+ */
 @NoArgsConstructor
 public class Reference extends HistogramProvider {
 
     // START BEAN PROPERTIES
+    /** The identifier of the histogram to reference. */
     @BeanField @Getter @Setter private String id = "";
     // END BEAN PROPERTIES
 
+    /** The referenced histogram. */
     private Histogram histogram;
 
+    /**
+     * Creates a new {@code Reference} with the specified identifier.
+     *
+     * @param id the identifier of the histogram to reference
+     */
     public Reference(String id) {
         this.id = id;
     }

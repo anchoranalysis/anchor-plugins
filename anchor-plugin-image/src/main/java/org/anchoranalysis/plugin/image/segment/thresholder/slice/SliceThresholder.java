@@ -41,15 +41,37 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 @AllArgsConstructor
 public abstract class SliceThresholder {
 
+    /** The binary values to use for the output. */
     private final BinaryValuesByte binaryValuesByte;
 
+    /**
+     * Segments all slices in the input voxels.
+     *
+     * @param voxelsIn the input {@link Voxels}
+     * @param voxelsThreshold the threshold {@link Voxels}
+     * @param voxelsOut the output {@link Voxels}
+     */
     public abstract void segmentAll(
             Voxels<?> voxelsIn, Voxels<?> voxelsThreshold, Voxels<UnsignedByteBuffer> voxelsOut);
 
+    /**
+     * Writes the 'off' binary value to the output buffer at the specified offset.
+     *
+     * @param offset the offset in the buffer
+     * @param bufferOut the output {@link UnsignedByteBuffer}
+     */
     protected final void writeOffByte(int offset, UnsignedByteBuffer bufferOut) {
         bufferOut.putRaw(offset, binaryValuesByte.getOff());
     }
 
+    /**
+     * Writes a thresholded value to the output buffer based on the input and threshold buffers.
+     *
+     * @param offset the offset in the buffers
+     * @param bufferOut the output {@link UnsignedByteBuffer}
+     * @param bufferIn the input {@link VoxelBuffer}
+     * @param bufferThreshold the threshold {@link VoxelBuffer}
+     */
     protected final void writeThresholdedByte(
             int offset,
             UnsignedByteBuffer bufferOut,

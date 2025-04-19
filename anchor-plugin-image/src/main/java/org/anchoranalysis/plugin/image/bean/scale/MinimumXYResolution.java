@@ -37,9 +37,13 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
+/**
+ * Calculates a scale factor to ensure a minimum XY resolution is achieved.
+ */
 public class MinimumXYResolution extends ScaleCalculator {
 
     // START BEAN PROPERTIES
+    /** The minimum resolution to achieve in meters. */
     @BeanField @Getter @Setter private double minResolution = 10e-9;
     // STOP BEAN PROPERTIES
 
@@ -89,10 +93,16 @@ public class MinimumXYResolution extends ScaleCalculator {
         return new ScaleFactor(xScaleDownRatio, yScaleDownRatio);
     }
 
-    // Returns x i.e. how much to downside where the factor is 2^x
-    private static int ratio(double cnrtRes, double minRes) {
+    /**
+     * Calculates the ratio between the current resolution and the minimum resolution.
+     *
+     * @param currentResolution the current resolution
+     * @param minimumResolution the minimum resolution
+     * @return the power of 2 to down-scale by
+     */
+    private static int ratio(double currentResolution, double minimumResolution) {
 
-        double ratio = minRes / cnrtRes;
+        double ratio = minimumResolution / currentResolution;
 
         double ratioLog2 = Math.log10(ratio) / Math.log10(2);
 
@@ -103,6 +113,12 @@ public class MinimumXYResolution extends ScaleCalculator {
         }
     }
 
+    /**
+     * Calculates 2 to the negative power.
+     *
+     * @param power the power to raise 2 to
+     * @return 2^(-power)
+     */
     private static double twoToMinusPower(int power) {
         return Math.pow(2.0, -1.0 * power);
     }

@@ -50,33 +50,44 @@ import org.anchoranalysis.test.image.object.CutOffCornersObjectFixture;
  */
 public class SegmentedObjectsFixture {
 
+    /** Class label for circle objects. */
     public static final String CLASS_LABEL_CIRCLE = "circle";
 
+    /** Class label for cut-off corners objects. */
     public static final String CLASS_LABEL_CUT_OFF_CORNERS = "cut_off_corners";
 
+    /** Number of circle objects to create. */
     private static final int NUMBER_CIRCLES = 7;
 
+    /** Starting center point for circle objects. */
     private static final Point2d CIRCLE_START_CENTER = new Point2d(15, 15);
 
+    /** Radius of circle objects. */
     private static final int CIRCLE_RADIUS = 5;
 
+    /** Shift in center point between successive circle objects. */
     private static final Point2d CIRCLE_CENTER_SHIFT = new Point2d(3, 3);
 
+    /** Shift in radius between successive circle objects. */
     private static final int CIRCLE_RADIUS_SHIFT = 1;
 
+    /** Starting confidence value for objects. */
     private static final double CONFIDENCE_START = 0.2;
 
+    /** Increment in confidence between successive objects. */
     private static final double CONFIDENCE_INCREMENT = 0.1;
 
+    /** Background stack for segmented objects. */
     private static final Stack BACKGROUND = new Stack(new Extent(100, 200, 5));
 
+    /** Stack displayer for segmented objects. */
     private static final StackDisplayer DISPLAYER = new IntensityQuantiles();
 
     /**
      * Creates a {@link SegmentedObjects} containing two possible class-labels and corresponding
      * objects.
      *
-     * <p>The possible labels are {@link #CLASS_LABEL_CIRCLE} and.
+     * <p>The possible labels are {@link #CLASS_LABEL_CIRCLE} and {@link #CLASS_LABEL_CUT_OFF_CORNERS}.
      *
      * @param circles whether to include objects of type {@link #CLASS_LABEL_CIRCLE}.
      * @param cutOffCorners whether to include objects of type {@link #CLASS_LABEL_CUT_OFF_CORNERS}.
@@ -108,6 +119,13 @@ public class SegmentedObjectsFixture {
         return new SegmentedObjects(list, background, ExecutionTimeRecorderIgnore.instance());
     }
 
+    /**
+     * Adds objects to the list of {@link LabelledWithConfidence} objects.
+     *
+     * @param classLabel the class label for the objects
+     * @param objects the {@link ObjectCollection} to add
+     * @param list the list to add the objects to
+     */
     private static void addObjects(
             String classLabel,
             ObjectCollection objects,

@@ -33,16 +33,19 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.GraphLogger;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
 
+/**
+ * Abstract class for assigning priorities to potential object merges.
+ */
 public abstract class AssignPriority {
 
     /**
-     * Assigns a priority to a potential merge
+     * Assigns a priority to a potential merge between two objects.
      *
-     * @param source source (first) object in the pair of objects that could be merged
-     * @param destination destination (second) object in the pair of objects that could be merged
-     * @param logger logger
-     * @return the object with a priority afforded
-     * @throws OperationFailedException
+     * @param source the source (first) {@link ObjectVertex} in the pair of objects that could be merged
+     * @param destination the destination (second) {@link ObjectVertex} in the pair of objects that could be merged
+     * @param logger the {@link GraphLogger} for logging merge operations
+     * @return a {@link PrioritisedVertex} with an assigned priority
+     * @throws OperationFailedException if the priority assignment fails
      */
     public PrioritisedVertex assignPriority(
             ObjectVertex source, ObjectVertex destination, GraphLogger logger)
@@ -64,6 +67,16 @@ public abstract class AssignPriority {
         return withPriority;
     }
 
+    /**
+     * Assigns a priority to an edge between two objects.
+     *
+     * @param source the source {@link ObjectVertex}
+     * @param destination the destination {@link ObjectVertex}
+     * @param merge the merged {@link ObjectMask}
+     * @param errorReporter the {@link ErrorReporter} for reporting errors
+     * @return a {@link PrioritisedVertex} with an assigned priority
+     * @throws OperationFailedException if the priority assignment fails
+     */
     protected abstract PrioritisedVertex assignPriorityToEdge(
             ObjectVertex source,
             ObjectVertex destination,

@@ -47,13 +47,22 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithChannelBase;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Segments a channel into objects using a specified segmentation algorithm.
+ *
+ * <p>This class extends {@link WithChannelBase} to provide functionality for segmenting
+ * a channel into objects, optionally using a mask and seed objects.</p>
+ */
 public class SegmentChannel extends WithChannelBase {
 
     // START BEAN PROPERTIES
+    /** Optional mask to restrict the segmentation area. */
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
 
+    /** The segmentation algorithm to use. */
     @BeanField @Getter @Setter private SegmentChannelIntoObjects segment;
 
+    /** Optional provider for seed objects to guide the segmentation. */
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsSeeds;
     // END BEAN PROPERTIES
 
@@ -73,10 +82,24 @@ public class SegmentChannel extends WithChannelBase {
         }
     }
 
+    /**
+     * Creates an {@link ObjectMask} from the optional mask provider.
+     *
+     * @return An {@link Optional} containing the created {@link ObjectMask}, or empty if no mask is provided.
+     * @throws ProvisionFailedException if the mask creation fails.
+     */
     private Optional<ObjectMask> createObjectMask() throws ProvisionFailedException {
         return OptionalProviderFactory.create(mask).map(Mask::binaryVoxels).map(ObjectMask::new);
     }
 
+    /**
+     * Creates seed objects for the segmentation.
+     *
+     * @param dimensions The dimensions of the channel being segmented.
+     * @param maskAsObject An optional mask to restrict the seed objects.
+     * @return An {@link Optional} containing the created seed {@link ObjectCollection}, or empty if no seeds are provided.
+     * @throws ProvisionFailedException if the seed creation fails.
+     */
     private Optional<ObjectCollection> createSeeds(
             Dimensions dimensions, Optional<ObjectMask> maskAsObject)
             throws ProvisionFailedException {
@@ -85,15 +108,24 @@ public class SegmentChannel extends WithChannelBase {
                 objects -> createSeeds(objects, maskAsObject, dimensions));
     }
 
+    /**
+     * Creates seed objects, optionally restricted by a mask.
+     *
+     * @param seeds The initial seed objects.
+     * @param maskAsObject An optional mask to restrict the seed objects.
+     * @param dimensions The dimensions of the channel being segmented.
+     * @return The created seed {@link ObjectCollection}.
+     * @throws ProvisionFailedException if the seed creation fails.
+     */
     private static ObjectCollection createSeeds(
-            ObjectCollection seeds, Optional<ObjectMask> maskAsObject, Dimensions dim)
+            ObjectCollection seeds, Optional<ObjectMask> maskAsObject, Dimensions dimensions)
             throws ProvisionFailedException {
         try {
             return OptionalUtilities.map(
                             maskAsObject,
                             object ->
                                     SeedsFactory.createSeedsWithMask(
-                                            seeds, object, new Point3i(0, 0, 0), dim))
+                                            seeds, object, new Point3i(0, 0, 0), dimensions))
                     .orElseGet(() -> SeedsFactory.createSeedsWithoutMask(seeds));
         } catch (CreateException e) {
             throw new ProvisionFailedException(e);

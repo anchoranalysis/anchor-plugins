@@ -31,10 +31,28 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * A condition to be checked after merging two {@link ObjectMask}s.
+ */
 public interface AfterCondition {
 
+    /**
+     * Initializes the condition with a logger.
+     *
+     * @param logger the {@link Logger} to be used for logging
+     * @throws InitializeException if initialization fails
+     */
     void initialize(Logger logger) throws InitializeException;
 
+    /**
+     * Checks if the merged object satisfies the condition.
+     *
+     * @param source the source {@link ObjectMask} that was merged
+     * @param destination the destination {@link ObjectMask} that was merged into
+     * @param merged the resulting merged {@link ObjectMask}
+     * @return true if the merged object satisfies the condition, false otherwise
+     * @throws OperationFailedException if the condition check fails
+     */
     boolean accept(ObjectMask source, ObjectMask destination, ObjectMask merged)
             throws OperationFailedException;
 }

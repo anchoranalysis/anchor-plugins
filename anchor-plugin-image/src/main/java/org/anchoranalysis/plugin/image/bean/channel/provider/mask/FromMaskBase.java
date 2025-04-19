@@ -40,13 +40,14 @@ import org.anchoranalysis.image.core.mask.Mask;
  * any other {@link ChannelProvider} as an input.
  *
  * <p>Note for classes that use both a binary-mask AND another {@link ChannelProvider}, see {@link
- * UnaryWithMaskBase}.
+ * UnaryWithMaskBase}.</p>
  *
  * @author Owen Feehan
  */
 public abstract class FromMaskBase extends ChannelProvider {
 
     // START BEAN PROPERTIES
+    /** The {@link MaskProvider} used to create the binary mask. */
     @BeanField @Getter @Setter private MaskProvider mask;
     // END BEAN PROPERTIES
 
@@ -56,5 +57,12 @@ public abstract class FromMaskBase extends ChannelProvider {
         return createFromMask(maskChannel);
     }
 
+    /**
+     * Creates a {@link Channel} from the provided {@link Mask}.
+     *
+     * @param mask the {@link Mask} to create the channel from
+     * @return the created {@link Channel}
+     * @throws ProvisionFailedException if the channel creation fails
+     */
     protected abstract Channel createFromMask(Mask mask) throws ProvisionFailedException;
 }

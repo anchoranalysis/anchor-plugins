@@ -40,16 +40,21 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Repeats a binary segmentation operation for a specified number of iterations.
+ */
 public class Repeat extends BinarySegmentationUnary {
 
     // START BEAN PROPERTIES
     /**
-     * The maximum number of iterations. If the mask no longer has <i>on</i> voxels after fewer
-     * iterations, it will terminate earlier
+     * The maximum number of iterations.
+     * 
+     * <p>If the mask no longer has <i>on</i> voxels after fewer iterations, it will terminate earlier.
      */
     @BeanField @Positive @Getter @Setter private int iterations = 10;
     // END BEAN PROPERTIES
 
+    // The segmentFromExistingSegmentation method is overridden, so we don't add a doc-string here
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segmentFromExistingSegmentation(
             VoxelsUntyped voxels,
@@ -71,7 +76,7 @@ public class Repeat extends BinarySegmentationUnary {
 
             outOld = outNew;
 
-            // Increasingly tightens the obj-mask used for the segmentation
+            // Increasingly tightens the object-mask used for the segmentation
             objectMask =
                     Optional.of(
                             objectMask.isPresent()

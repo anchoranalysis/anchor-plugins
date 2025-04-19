@@ -34,9 +34,14 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 
+
+/**
+ * Base class for combining two masks.
+ */
 public abstract class CombineBase extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
+	 /** The {@link MaskProvider} for the second mask to be combined. */
     @BeanField @Getter @Setter private MaskProvider receive;
     // END BEAN PROPERTIES
 
@@ -46,12 +51,12 @@ public abstract class CombineBase extends MaskProviderUnary {
     }
 
     /**
-     * Creates masks from some combination of two masks
+     * Creates a mask from some combination of two masks.
      *
-     * @param maskToModify first-mask (which is also the mask modified with the result)
-     * @param maskOther second-mask (which is not modified)
+     * @param maskToModify first mask (which is also the mask modified with the result)
+     * @param maskOther second mask (which is not modified)
      * @return either {@code maskToModify} or {@code maskOther} depending on implementation
-     * @throws ProvisionFailedException
+     * @throws ProvisionFailedException if the mask creation fails
      */
     protected abstract Mask createFromTwoMasks(Mask maskToModify, Mask maskOther)
             throws ProvisionFailedException;

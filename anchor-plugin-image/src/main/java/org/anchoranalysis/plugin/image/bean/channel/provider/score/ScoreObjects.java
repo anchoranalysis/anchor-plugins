@@ -53,17 +53,26 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithObjectsBase;
 
+/**
+ * Creates a channel by scoring objects based on a feature calculation.
+ *
+ * <p>This class assigns intensity values to voxels in a new channel based on feature calculations
+ * performed on objects in the input channel.</p>
+ */
 public class ScoreObjects extends UnaryWithObjectsBase {
 
     // START BEAN PROPERTIES
+    /** The value assigned to voxels that do not belong to any object. */
     @BeanField @Getter @Setter private int valueNoObject = 0;
 
     /** Feature that calculates the score for an object. */
     @BeanField @Getter @Setter @SkipInit private Feature<FeatureInputSingleObject> feature;
 
+    /** Additional channels to be included in the {@link EnergyStack} for feature calculation. */
     @BeanField @Getter @Setter
     private List<ChannelProvider> listAdditionalChannelProviders = new ArrayList<>();
 
+    /** Factor to multiply the feature value by before assigning it to the output channel. */
     @BeanField @Getter @Setter private double factor = 1.0;
     // END BEAN PROPERTIES
 
@@ -86,6 +95,13 @@ public class ScoreObjects extends UnaryWithObjectsBase {
         }
     }
 
+    /**
+     * Creates an {@link EnergyStackWithoutParameters} from the input channel and additional channels.
+     *
+     * @param channel the input channel
+     * @return the created {@link EnergyStackWithoutParameters}
+     * @throws ProvisionFailedException if there's an error creating the energy stack
+     */
     private EnergyStackWithoutParameters createEnergyStack(Channel channel)
             throws ProvisionFailedException {
         EnergyStackWithoutParameters energyStack = new EnergyStackWithoutParameters(channel);
@@ -109,6 +125,13 @@ public class ScoreObjects extends UnaryWithObjectsBase {
         return energyStack;
     }
 
+    /**
+     * Creates a {@link FeatureCalculatorSingle} for the given feature.
+     *
+     * @param feature the feature to create a calculator for
+     * @return the created {@link FeatureCalculatorSingle}
+     * @throws InitializeException if there's an error initializing the feature calculator
+     */
     private FeatureCalculatorSingle<FeatureInputSingleObject> createSession(
             Feature<FeatureInputSingleObject> feature) throws InitializeException {
         return FeatureSession.with(
@@ -118,6 +141,15 @@ public class ScoreObjects extends UnaryWithObjectsBase {
                 getLogger());
     }
 
+    /**
+     * Creates an output channel by assigning values to objects based on the provided function.
+     *
+     * @param dimensions the dimensions of the output channel
+     * @param objectsSource the collection of objects to score
+     * @param valueToAssign the function that determines the value to assign to each object
+     * @return the created output {@link Channel}
+     * @throws FeatureCalculationException if there's an error during feature calculation
+     */
     private Channel createOutputChannel(
             Dimensions dimensions,
             ObjectCollection objectsSource,
@@ -132,6 +164,15 @@ public class ScoreObjects extends UnaryWithObjectsBase {
         return out;
     }
 
+    /**
+     * Calculates the value to assign to an object based on feature calculation.
+     *
+     * @param object the object to calculate the value for
+     * @param calculator the feature calculator
+     * @param energyStack the energy stack for feature calculation
+     * @return the calculated value to assign to the object
+     * @throws FeatureCalculationException if there's an error during feature calculation
+     */
     private int valueToAssignForObject(
             ObjectMask object,
             FeatureCalculatorSingle<FeatureInputSingleObject> calculator,

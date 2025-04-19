@@ -29,6 +29,9 @@ package org.anchoranalysis.plugin.image.bean.mask.provider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 
+/**
+ * A provider that creates a duplicate of a given {@link Mask}.
+ */
 public class Duplicate extends MaskProviderUnary {
 
     @Override

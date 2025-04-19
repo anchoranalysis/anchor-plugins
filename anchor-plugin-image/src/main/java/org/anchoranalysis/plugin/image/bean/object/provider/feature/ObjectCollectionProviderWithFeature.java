@@ -36,12 +36,25 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
+/**
+ * An abstract base class for object collection providers that use a feature evaluator.
+ *
+ * <p>This class extends {@link ObjectCollectionProviderUnary} and provides functionality
+ * for creating object collections based on feature evaluation of single objects.</p>
+ */
 public abstract class ObjectCollectionProviderWithFeature extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
+    /** The feature evaluator used to calculate features for single objects. */
     @BeanField @Getter @Setter private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
     // END BEAN PROPERTIES
 
+    /**
+     * Creates a feature calculation session for single objects.
+     *
+     * @return a {@link FeatureCalculatorSingle} for {@link FeatureInputSingleObject}
+     * @throws ProvisionFailedException if the feature session creation fails
+     */
     protected FeatureCalculatorSingle<FeatureInputSingleObject> createSession()
             throws ProvisionFailedException {
         try {

@@ -32,16 +32,28 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Represents the result of a level operation, containing the level value, object mask, and histogram.
+ */
 @AllArgsConstructor
 public class LevelResult {
 
+    /** The level value. */
     @Getter private final int level;
 
+    /** The {@link ObjectMask} associated with this level. */
     @Getter private final ObjectMask object;
 
+    /** The {@link Histogram} of intensity values for this level. */
     @Getter private final Histogram histogram;
 
-    public double distanceSquaredTo(Point3i srcPoint) {
-        return object.boundingBox().midpoint().distanceSquared(srcPoint);
+    /**
+     * Calculates the squared distance from the midpoint of this level's object to a given point.
+     *
+     * @param sourcePoint the {@link Point3i} to calculate the distance to
+     * @return the squared distance between the midpoint of this level's object and the given point
+     */
+    public double distanceSquaredTo(Point3i sourcePoint) {
+        return object.boundingBox().midpoint().distanceSquared(sourcePoint);
     }
 }

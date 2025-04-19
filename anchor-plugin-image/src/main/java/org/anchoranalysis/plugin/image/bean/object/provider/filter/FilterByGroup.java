@@ -41,12 +41,22 @@ import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 
+/**
+ * Filters an {@link ObjectCollection} by grouping objects and then applying a filter to each group.
+ *
+ * <p>Objects are grouped based on their intersection with objects from another collection,
+ * and then the filter is applied to each group independently.</p>
+ */
 public class FilterByGroup extends ObjectCollectionProviderFilterBase {
 
     // START BEAN PROPERTIES
+    /**
+     * Provides the {@link ObjectCollection} used for grouping the objects to be filtered.
+     */
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsGrouped;
     // END BEAN PROPERTIES
 
+    // The createFromObjects method is intentionally left without a doc-string as it's an override.
     @Override
     protected ObjectCollection createFromObjects(
             ObjectCollection objects,

@@ -36,7 +36,7 @@ import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * Creates a thumbnail of one or more objects on a stack by drawing the outline of the objects
+ * Creates a thumbnail of one or more objects on a stack by drawing the outline of the objects.
  *
  * @author Owen Feehan
  */
@@ -54,8 +54,9 @@ public abstract class ThumbnailFromObjects extends AnchorBean<ThumbnailFromObjec
      *     supplier is used as the stream may be desired multiple times.
      * @param background a stack that will be used to form the background (or some part of may be
      *     used)
-     * @param executionTimeRecorder TODO
-     * @return a batch interface to create thumbnails for individual objects
+     * @param executionTimeRecorder records execution time for various operations
+     * @return a {@link ThumbnailBatch} interface to create thumbnails for individual objects
+     * @throws OperationFailedException if the batch initialization fails
      */
     public abstract ThumbnailBatch<ObjectCollection> start(
             ObjectCollection objects,

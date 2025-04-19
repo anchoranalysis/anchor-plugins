@@ -48,8 +48,12 @@ import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueI
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Implements grayscale reconstruction using Robinson's algorithm.
+ */
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
 
+    /** The binary value representing an "on" state in the output. */
     private static final byte OUT_ON = BinaryValuesByte.getDefault().getOn();
 
     @Override
@@ -107,6 +111,15 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         return marker;
     }
 
+    /**
+     * Processes the priority queue until it's empty, updating the marker voxels.
+     *
+     * @param queue the {@link PriorityQueueIndexRangeDownhill} containing points to process
+     * @param voxelsMarker the {@link Voxels} representing the marker
+     * @param voxelsMask the {@link Voxels} representing the mask
+     * @param voxelsFinalized the {@link Voxels} tracking finalized voxels
+     * @param containingMask an optional {@link ObjectMask} to limit the processing area
+     */
     private void readFromQueueUntilEmpty(
             PriorityQueueIndexRangeDownhill<Point3i> queue,
             Voxels<?> voxelsMarker,
@@ -152,12 +165,19 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         }
     }
 
+    /**
+     * Processes voxels and adds them to the priority queue if they meet certain conditions.
+     *
+     * @param <T> the voxel data type
+     */
     @AllArgsConstructor
     private static class VoxelProcessor<T>
             implements ProcessVoxelBufferBinaryMixed<T, UnsignedByteBuffer> {
 
+        /** The priority queue to add points to. */
         private final PriorityQueueIndexRangeDownhill<Point3i> queue;
 
+        /** The binary value representing an "on" state in the mask. */
         private final byte maskOn;
 
         @Override

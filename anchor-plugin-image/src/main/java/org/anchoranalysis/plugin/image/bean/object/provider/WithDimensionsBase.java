@@ -40,14 +40,20 @@ import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
  * specified.
  *
  * @see WithOptionalDimensionsBase for a similar class with optional dimension specification.
- * @author Owen Feehan
  */
 public abstract class WithDimensionsBase extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
+    /** Provider for the dimensions to be used. Defaults to {@link GuessDimensions}. */
     @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
     // END BEAN PROPERTIES
 
+    /**
+     * Creates the dimensions using the specified {@link DimensionsProvider}.
+     *
+     * @return the created dimensions
+     * @throws ProvisionFailedException if creating the dimensions fails
+     */
     protected Dimensions createDimensions() throws ProvisionFailedException {
         return dimensions.get();
     }

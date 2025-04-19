@@ -37,12 +37,22 @@ import org.anchoranalysis.image.core.object.MatchedObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 
+/**
+ * Provides an {@link ObjectCollection} by matching objects using a specified {@link ObjectMatcher}.
+ *
+ * <p>This class applies the matching operation to the input object collection and returns
+ * a new collection containing only the matched objects.</p>
+ */
 public class Match extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
+    /**
+     * The {@link ObjectMatcher} used to find matches in the input object collection.
+     */
     @BeanField @Getter @Setter private ObjectMatcher matcher;
     // END BEAN PROPERTIES
 
+    // The createFromObjects method is intentionally left without a doc-string as it's an override.
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects)
             throws ProvisionFailedException {

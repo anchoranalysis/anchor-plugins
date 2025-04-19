@@ -60,12 +60,24 @@ import org.anchoranalysis.spatial.point.PointConverter;
 @AllArgsConstructor
 class NaiveGreedyMerge {
 
+    /** If true, replaces merged objects with their midpoint. */
     private final boolean replaceWithMidpoint;
+
+    /** Condition to check before merging objects. */
     private final BeforeCondition beforeCondition;
+
+    /** Condition to check after merging objects. */
     private final AfterCondition afterCondition;
+
+    /** Optional unit converter for distance calculations. */
     private final Optional<UnitConverter> unitConverter;
+
+    /** Logger for outputting messages. */
     private final Logger logger;
 
+    /**
+     * Represents a range of indices for merging.
+     */
     @Value
     private static class MergeRange {
         private int start; // NOSONAR
@@ -73,10 +85,11 @@ class NaiveGreedyMerge {
     }
 
     /**
-     * Tries to merge objects (the collection is changed in-place)
+     * Tries to merge objects (the collection is changed in-place).
      *
-     * @param objects the objects to merge
-     * @throws OperationFailedException
+     * @param objects the {@link ObjectCollection} to merge
+     * @return the merged {@link ObjectCollection}
+     * @throws OperationFailedException if the merge operation fails
      */
     public ObjectCollection tryMerge(ObjectCollection objects) throws OperationFailedException {
 
@@ -93,11 +106,12 @@ class NaiveGreedyMerge {
     }
 
     /**
-     * Tries to merge a particular subset of objects in objects based upon the current range
+     * Tries to merge a particular subset of objects in objects based upon the current range.
      *
      * @param objects the entire set of objects
      * @param range parameters that determine which objects are considered for merge
-     * @throws OperationFailedException
+     * @param consumer consumer for new merge ranges
+     * @throws OperationFailedException if the merge operation fails
      */
     private void tryMergeWithinRange(
             ObjectCollection objects, MergeRange range, Consumer<MergeRange> consumer)
@@ -120,6 +134,16 @@ class NaiveGreedyMerge {
         }
     }
 
+    /**
+     * Tries to merge two objects at specific indices.
+     *
+     * @param objects the list of {@link ObjectMask}s
+     * @param i index of the first object
+     * @param j index of the second object
+     * @param consumer consumer for new merge ranges
+     * @return true if a merge occurred, false otherwise
+     * @throws OperationFailedException if the merge operation fails
+     */
     private boolean tryMergeOnIndices(
             List<ObjectMask> objects, int i, int j, Consumer<MergeRange> consumer)
             throws OperationFailedException {
@@ -137,6 +161,14 @@ class NaiveGreedyMerge {
         }
     }
 
+    /**
+     * Attempts to merge two {@link ObjectMask}s.
+     *
+     * @param source the source {@link ObjectMask}
+     * @param destination the destination {@link ObjectMask}
+     * @return an {@link Optional} containing the merged {@link ObjectMask} if successful, empty otherwise
+     * @throws OperationFailedException if the merge operation fails
+     */
     private Optional<ObjectMask> tryMerge(ObjectMask source, ObjectMask destination)
             throws OperationFailedException {
 
@@ -154,6 +186,13 @@ class NaiveGreedyMerge {
         return Optional.of(merged);
     }
 
+    /**
+     * Merges two {@link ObjectMask}s.
+     *
+     * @param source the source {@link ObjectMask}
+     * @param destination the destination {@link ObjectMask}
+     * @return the merged {@link ObjectMask}
+     */
     private ObjectMask merge(ObjectMask source, ObjectMask destination) {
         if (replaceWithMidpoint) {
             Point3i pointNew =
@@ -167,12 +206,25 @@ class NaiveGreedyMerge {
         }
     }
 
+    /**
+     * Creates a single-pixel {@link ObjectMask} at the specified point.
+     *
+     * @param point the {@link Point3i} where the single-pixel object should be created
+     * @return a new {@link ObjectMask} representing a single pixel
+     */
     private static ObjectMask createSinglePixelObject(Point3i point) {
         Extent extent = new Extent(1, 1, 1);
         BinaryVoxels<UnsignedByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOn(extent);
         return new ObjectMask(BoundingBox.createReuse(point, extent), voxels);
     }
 
+    /**
+     * Removes two objects from the list at the specified indices.
+     *
+     * @param objects the list of {@link ObjectMask}s
+     * @param i index of the first object to remove
+     * @param j index of the second object to remove
+     */
     private static void removeTwoIndices(List<ObjectMask> objects, int i, int j) {
         if (i < j) {
             objects.remove(j);
@@ -183,6 +235,13 @@ class NaiveGreedyMerge {
         }
     }
 
+    /**
+     * Calculates the midpoint between two 3D points.
+     *
+     * @param point1 the first {@link Point3d}
+     * @param point2 the second {@link Point3d}
+     * @return a new {@link Point3d} representing the midpoint between point1 and point2
+     */
     private static Point3d midPointBetween(Point3d point1, Point3d point2) {
         // We create a new object of 1x1x1 between the two merged seeds
         Point3d pointNew = new Point3d(point1);

@@ -32,10 +32,23 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Abstract base class for performing grayscale reconstruction by erosion.
+ */
 public abstract class GrayscaleReconstructionByErosion
         extends AnchorBean<GrayscaleReconstructionByErosion> {
 
-    // Reconstruction of maskImg from markerImg    mask<=markerImg  (but only inside containingMask)
+    /**
+     * Performs grayscale reconstruction of a mask image from a marker image.
+     *
+     * <p>The reconstruction is performed such that {@code mask <= markerImg}, but only inside the containingMask (if provided).
+     *
+     * @param mask the {@link VoxelsUntyped} representing the mask image
+     * @param marker the {@link VoxelsUntyped} representing the marker image
+     * @param containingMask an optional {@link ObjectMask} that limits the reconstruction to a specific region
+     * @return the reconstructed {@link VoxelsUntyped}
+     * @throws OperationFailedException if the reconstruction operation fails
+     */
     public abstract VoxelsUntyped reconstruction(
             VoxelsUntyped mask, VoxelsUntyped marker, Optional<ObjectMask> containingMask)
             throws OperationFailedException;

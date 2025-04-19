@@ -36,9 +36,15 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 
+/**
+ * An {@link ObjectCollectionProvider} that concatenates multiple {@link ObjectCollection}s from a list of providers.
+ */
 public class Concatenate extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
+    /**
+     * List of {@link ObjectCollectionProvider}s whose {@link ObjectCollection}s will be concatenated.
+     */
     @BeanField @Getter @Setter private List<ObjectCollectionProvider> list = Arrays.asList();
     // END BEAN PROPERTIES
 

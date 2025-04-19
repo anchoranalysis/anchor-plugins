@@ -37,17 +37,21 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
- * Base class for {@link ObjectCollectionProvider} that take an optional {@code objectsContainer}
- * bean-field.
- *
- * @author Owen Feehan
+ * Base class for {@link ObjectCollectionProviderUnary} that take an optional {@code objectsContainer} bean-field.
  */
 public abstract class WithContainerBase extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
+    /** Optional provider for a container of objects. */
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsContainer;
     // END BEAN PROPERTIES
 
+    /**
+     * Retrieves the optional container of objects.
+     *
+     * @return an optional containing the object collection if present, or empty if not
+     * @throws ProvisionFailedException if retrieving the container fails
+     */
     protected Optional<ObjectCollection> containerOptional() throws ProvisionFailedException {
         if (objectsContainer != null) {
             return Optional.of(objectsContainer.get());
@@ -56,6 +60,12 @@ public abstract class WithContainerBase extends ObjectCollectionProviderUnary {
         }
     }
 
+    /**
+     * Retrieves the required container of objects.
+     *
+     * @return the object collection
+     * @throws ProvisionFailedException if the container is not defined or retrieving it fails
+     */
     protected ObjectCollection containerRequired() throws ProvisionFailedException {
         return containerOptional()
                 .orElseThrow(

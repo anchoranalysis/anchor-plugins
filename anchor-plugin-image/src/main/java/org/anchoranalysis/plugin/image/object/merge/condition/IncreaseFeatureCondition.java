@@ -36,11 +36,16 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * An {@link AfterCondition} that checks if merging two {@link ObjectMask}s increases a specific feature value.
+ */
 @RequiredArgsConstructor
 public class IncreaseFeatureCondition implements AfterCondition {
 
+    /** The {@link FeatureEvaluator} used to calculate the feature value. */
     private final FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 
+    /** The feature calculation session. */
     private FeatureCalculatorSingle<FeatureInputSingleObject> session;
 
     @Override
@@ -68,6 +73,15 @@ public class IncreaseFeatureCondition implements AfterCondition {
         }
     }
 
+    /**
+     * Checks if merging two objects increases the feature value for both.
+     *
+     * @param source the source {@link ObjectMask}
+     * @param destination the destination {@link ObjectMask}
+     * @param merged the merged {@link ObjectMask}
+     * @return true if the feature value increases for both objects after merging, false otherwise
+     * @throws OperationFailedException if the feature calculation fails
+     */
     private boolean doesIncreaseFeatureValueForBoth(
             ObjectMask source, ObjectMask destination, ObjectMask merged)
             throws OperationFailedException {
@@ -86,6 +100,13 @@ public class IncreaseFeatureCondition implements AfterCondition {
         }
     }
 
+    /**
+     * Calculates the feature value for a given {@link ObjectMask}.
+     *
+     * @param object the {@link ObjectMask} to calculate the feature value for
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the feature calculation fails
+     */
     private double calculate(ObjectMask object) throws FeatureCalculationException {
         return session.calculate(new FeatureInputSingleObject(object));
     }

@@ -43,27 +43,32 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
+/**
+ * Provides a {@link Stack} by combining up to three channels (red, green, blue) into an RGB image.
+ */
 public class ThreeChannels extends StackProvider {
 
     // START BEAN PROPERTIES
+    /** Provider for the red channel. */
     @BeanField @OptionalBean @Getter @Setter private ChannelProvider red;
 
+    /** Provider for the green channel. */
     @BeanField @OptionalBean @Getter @Setter private ChannelProvider green;
 
+    /** Provider for the blue channel. */
     @BeanField @OptionalBean @Getter @Setter private ChannelProvider blue;
     // END BEAN PROPERTIES
 
-    @Override
-    public void checkMisconfigured(BeanInstanceMap defaultInstances)
-            throws BeanMisconfiguredException {
-        super.checkMisconfigured(defaultInstances);
+    // The checkMisconfigured and get methods are overridden, so we don't add doc-strings for them
 
-        if (red == null && green == null && blue == null) {
-            throw new BeanMisconfiguredException(
-                    "At least one of the channelProviderRed, channelProviderGreen or channelProviderBlue must be set");
-        }
-    }
-
+    /**
+     * Combines the dimensions of an existing channel with a new channel to combine.
+     *
+     * @param existing the existing dimensions, or null if not yet set.
+     * @param toCombine the channel to combine, which may be null.
+     * @return the combined dimensions.
+     * @throws IncorrectImageSizeException if the dimensions don't match.
+     */
     private static Dimensions combineWithExisting(Dimensions existing, Channel toCombine)
             throws IncorrectImageSizeException {
 
@@ -82,6 +87,15 @@ public class ThreeChannels extends StackProvider {
         return existing;
     }
 
+    /**
+     * Creates dimensions from up to three channels.
+     *
+     * @param channelRed the red channel, which may be null.
+     * @param channelGreen the green channel, which may be null.
+     * @param channelBlue the blue channel, which may be null.
+     * @return the combined dimensions.
+     * @throws IncorrectImageSizeException if the dimensions don't match.
+     */
     private static Dimensions createDimensions(
             Channel channelRed, Channel channelGreen, Channel channelBlue)
             throws IncorrectImageSizeException {
@@ -97,6 +111,16 @@ public class ThreeChannels extends StackProvider {
         return dimensions;
     }
 
+    /**
+     * Adds a channel to a stack, creating an empty channel if necessary.
+     *
+     * @param stack the {@link Stack} to add the channel to.
+     * @param channel the {@link Channel} to add, which may be null.
+     * @param dimensions the dimensions for the channel.
+     * @param outputChannelType the expected voxel data type for the channel.
+     * @throws IncorrectImageSizeException if the dimensions don't match.
+     * @throws ProvisionFailedException if the channel has an unexpected voxel data type.
+     */
     private static void addToStack(
             Stack stack, Channel channel, Dimensions dimensions, VoxelDataType outputChannelType)
             throws IncorrectImageSizeException, ProvisionFailedException {
@@ -115,6 +139,12 @@ public class ThreeChannels extends StackProvider {
         stack.addChannel(channel);
     }
 
+    /**
+     * Gets a string representation of a channel's voxel data type.
+     *
+     * @param channel the {@link Channel} to get the voxel data type from, which may be null.
+     * @return a string representation of the voxel data type, or "empty" if the channel is null.
+     */
     private static String voxelDataTypeString(Channel channel) {
         if (channel != null) {
             return channel.getVoxelDataType().toString();
@@ -123,7 +153,15 @@ public class ThreeChannels extends StackProvider {
         }
     }
 
-    // Chooses the output type of the data
+    /**
+     * Chooses the output voxel data type based on the input channels.
+     *
+     * @param channelRed the red channel, which may be null.
+     * @param channelGreen the green channel, which may be null.
+     * @param channelBlue the blue channel, which may be null.
+     * @return the chosen {@link VoxelDataType} for output.
+     * @throws ProvisionFailedException if the input channels have different voxel data types.
+     */
     private static VoxelDataType chooseOutputDataType(
             Channel channelRed, Channel channelGreen, Channel channelBlue)
             throws ProvisionFailedException {
@@ -161,6 +199,17 @@ public class ThreeChannels extends StackProvider {
     }
 
     @Override
+    public void checkMisconfigured(BeanInstanceMap defaultInstances)
+            throws BeanMisconfiguredException {
+        super.checkMisconfigured(defaultInstances);
+
+        if (red == null && green == null && blue == null) {
+            throw new BeanMisconfiguredException(
+                    "At least one of the channelProviderRed, channelProviderGreen or channelProviderBlue must be set");
+        }
+    }
+
+    @Override
     public Stack get() throws ProvisionFailedException {
 
         Channel channelRed = red != null ? red.get() : null;
@@ -172,6 +221,16 @@ public class ThreeChannels extends StackProvider {
         return createRGBStack(channelRed, channelGreen, channelBlue, outputType);
     }
 
+    /**
+     * Creates an RGB stack from up to three channels.
+     *
+     * @param channelRed the red channel, which may be null.
+     * @param channelGreen the green channel, which may be null.
+     * @param channelBlue the blue channel, which may be null.
+     * @param outputType the {@link VoxelDataType} for the output channels.
+     * @return a new {@link Stack} containing the RGB channels.
+     * @throws ProvisionFailedException if the stack cannot be created.
+     */
     public static Stack createRGBStack(
             Channel channelRed, Channel channelGreen, Channel channelBlue, VoxelDataType outputType)
             throws ProvisionFailedException {

@@ -43,9 +43,16 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Imposes minima on a channel using grayscale reconstruction by erosion.
+ *
+ * <p>This class implements the {@link MinimaImposition} abstract class to provide
+ * a specific strategy for imposing minima using grayscale reconstruction.</p>
+ */
 public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 
     // START BEAN PROPERTIES
+    /** The grayscale reconstruction algorithm to be used. */
     @BeanField @Getter @Setter private GrayscaleReconstructionByErosion grayscaleReconstruction;
     // END BEAN PROPERTIES
 
@@ -94,6 +101,13 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
         return ChannelFactory.instance().create(reconBuffer.any(), channel.resolution());
     }
 
+    /**
+     * Creates a marker image for grayscale reconstruction from a gradient image and a mask.
+     *
+     * @param marker the {@link Mask} representing the marker
+     * @param gradientImage the {@link VoxelsUntyped} representing the gradient image
+     * @return a new {@link VoxelsUntyped} representing the marker image for reconstruction
+     */
     private VoxelsUntyped createMarkerImageFromGradient(Mask marker, VoxelsUntyped gradientImage) {
 
         VoxelsUntyped out =
@@ -107,6 +121,13 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
         return out;
     }
 
+    /**
+     * Verifies that all seeds are inside the given extent.
+     *
+     * @param seeds the {@link ObjectCollection} representing the seeds
+     * @param extent the {@link Extent} in which the seeds should be contained
+     * @return true if all seeds are inside the extent, false otherwise
+     */
     private static boolean verifySeedsAreInside(ObjectCollection seeds, Extent extent) {
         for (ObjectMask object : seeds) {
 

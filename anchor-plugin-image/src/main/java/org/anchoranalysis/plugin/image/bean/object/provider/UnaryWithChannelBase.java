@@ -35,9 +35,13 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
+/**
+ * Base class for {@link ObjectCollectionProviderUnary} that also requires a {@link Channel}.
+ */
 public abstract class UnaryWithChannelBase extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
+    /** Provider for the channel to be used in object creation. */
     @BeanField @Getter @Setter private ChannelProvider channel;
     // END BEAN PROPERTIES
 
@@ -48,6 +52,14 @@ public abstract class UnaryWithChannelBase extends ObjectCollectionProviderUnary
         return createFromObjects(objectsSource, channel.get());
     }
 
+    /**
+     * Creates objects from a source collection and a channel.
+     *
+     * @param objectsSource the source object collection
+     * @param channelSource the source channel
+     * @return the newly created object collection
+     * @throws ProvisionFailedException if object creation fails
+     */
     protected abstract ObjectCollection createFromObjects(
             ObjectCollection objectsSource, Channel channelSource) throws ProvisionFailedException;
 }

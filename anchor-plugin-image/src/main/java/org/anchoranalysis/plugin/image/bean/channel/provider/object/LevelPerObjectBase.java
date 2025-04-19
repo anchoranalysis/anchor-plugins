@@ -38,19 +38,23 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
- * Creates a channel with a level calculated for each object variously
+ * Creates a channel with a level calculated for each object using various methods.
+ *
+ * <p>This abstract class provides a base for creating channels where each object is assigned
+ * a specific intensity level based on calculations performed on the input channel.</p>
  *
  * @author Owen Feehan
  */
 public abstract class LevelPerObjectBase extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
-    /** The objects for whom a level is calculated */
+    /** The objects for whom a level is calculated. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 
     /**
-     * Method to calculate the level for a particular object. It is passed a histogram (calculated
-     * in different ways) for each object
+     * Method to calculate the level for a particular object.
+     *
+     * <p>It is passed a histogram (calculated in different ways) for each object.
      */
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
     // END BEAN PROPERTIES
@@ -65,13 +69,13 @@ public abstract class LevelPerObjectBase extends ChannelProviderUnary {
     }
 
     /**
-     * Creates a channel with the levels for a set of objects
+     * Creates a channel with the levels for a set of objects.
      *
      * @param input the channel whose intensity is passed to {@code calculateLevel} as a histogram
      *     variously for particular objects
-     * @param objects the objects
+     * @param objects the {@link ObjectCollection} for which levels are calculated
      * @param output the channel where the calculated-levels are written (for each object)
-     * @throws ProvisionFailedException
+     * @throws ProvisionFailedException if there's an error during the level calculation or writing process
      */
     protected abstract void writeLevelsForObjects(
             Channel input, ObjectCollection objects, Channel output)

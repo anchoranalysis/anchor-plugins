@@ -31,15 +31,25 @@ import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**
- * Creates a thumbnail from a stack
+ * Creates a thumbnail from a stack.
  *
  * @author Owen Feehan
  */
 public abstract class ThumbnailFromStack extends AnchorBean<ThumbnailFromStack> {
 
-    /** Should always be called once before any calls to {@link #thumbnailFor} */
+    /**
+     * Initializes the thumbnail creation process.
+     * 
+     * <p>Should always be called once before any calls to {@link #thumbnailFor}.
+     */
     public abstract void start();
 
-    /** Creates a thumbnail for a stack */
+    /**
+     * Creates a thumbnail for a stack.
+     *
+     * @param stack the {@link Stack} to create a thumbnail from
+     * @return a {@link DisplayStack} representing the thumbnail
+     * @throws CreateException if the thumbnail creation fails
+     */
     public abstract DisplayStack thumbnailFor(Stack stack) throws CreateException;
 }

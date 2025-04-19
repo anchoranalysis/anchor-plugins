@@ -40,14 +40,20 @@ import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Creates a {@link Histogram} from a {@link Channel}, optionally using a mask.
+ */
 public class FromChannel extends HistogramProvider {
 
     // START BEAN PROPERTIES
+    /** The provider for the channel from which to create the histogram. */
     @BeanField @Getter @Setter private ChannelProvider channel;
 
+    /** An optional mask provider to restrict the histogram creation to specific areas. */
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
     // END BEAN PROPERTIES
 
+    // The get method is intentionally left without a doc-string as it's an override.
     @Override
     public Histogram get() throws ProvisionFailedException {
 

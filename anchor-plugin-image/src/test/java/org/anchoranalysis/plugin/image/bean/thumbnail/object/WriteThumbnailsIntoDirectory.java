@@ -40,17 +40,16 @@ import org.anchoranalysis.test.image.WriteIntoDirectory;
 /**
  * Helper to write thumbnails into a temporary directory, and compare against saved images in {@code
  * src/test/resources}.
- *
- * @author Owen Feehan
  */
 class WriteThumbnailsIntoDirectory {
 
+    /** Writer for outputting files into a directory. */
     private WriteIntoDirectory writer;
 
     /**
      * Create with a particular temporary-directory.
      *
-     * @param temporaryDirectory the path to the temporary-directory.
+     * @param temporaryDirectory the {@link Path} to the temporary-directory
      */
     public WriteThumbnailsIntoDirectory(Path temporaryDirectory) {
         writer = new WriteIntoDirectory(temporaryDirectory, false);
@@ -59,7 +58,9 @@ class WriteThumbnailsIntoDirectory {
     /**
      * Writes the thumbnails into the temporary folder.
      *
-     * @throws OperationFailedException
+     * @param thumbnails a {@link List} of {@link DisplayStack} to write as thumbnails
+     * @return the input {@link List} of {@link DisplayStack}
+     * @throws OperationFailedException if writing the thumbnails fails
      */
     public List<DisplayStack> writeThumbnails(List<DisplayStack> thumbnails)
             throws OperationFailedException {
@@ -74,6 +75,8 @@ class WriteThumbnailsIntoDirectory {
     /**
      * Assert that the thumbnails written into the temporary-directory are identical to those stored
      * in the test resources.
+     *
+     * @param relativeResourcesRoot the relative path to the root of the test resources
      */
     public void assertWrittenThumbnailsIdenticalToResources(String relativeResourcesRoot) {
         DualComparer comparer =

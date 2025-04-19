@@ -56,11 +56,18 @@ import org.anchoranalysis.image.core.stack.Stack;
 public class Reference extends StackProvider {
 
     // START BEAN PROPERTIES
+    /** The identifier of the stack to retrieve. */
     @BeanField @Getter @Setter private String id = "";
     // END BEAN PROPERTIES
 
+    /** The cached stack after it has been retrieved. */
     private Stack stack;
 
+    /**
+     * Creates a new {@link Reference} with a specified identifier.
+     *
+     * @param id the identifier of the stack to retrieve
+     */
     public Reference(String id) {
         this.id = id;
     }
@@ -78,6 +85,12 @@ public class Reference extends StackProvider {
         return stack;
     }
 
+    /**
+     * Searches for a matching stack using the specified identifier.
+     *
+     * @return an {@link Optional} containing the matching {@link Stack} if found, or empty if not found
+     * @throws ProvisionFailedException if an error occurs while searching for the stack
+     */
     private Optional<Stack> findMatchingStack() throws ProvisionFailedException {
         try {
             return OptionalUtilities.orElseGetFlat(
@@ -88,14 +101,35 @@ public class Reference extends StackProvider {
         }
     }
 
+    /**
+     * Attempts to retrieve the stack from the stacks provider.
+     *
+     * @return an {@link Optional} containing the {@link Stack} if found, or empty if not found
+     * @throws NamedProviderGetException if an error occurs while retrieving the stack
+     * @throws InitializeException if an error occurs during initialization
+     */
     private Optional<Stack> fromStacks() throws NamedProviderGetException, InitializeException {
         return getInitialization().stacks().getOptional(id);
     }
 
+    /**
+     * Attempts to retrieve the stack from the channels provider.
+     *
+     * @return an {@link Optional} containing the {@link Stack} if found, or empty if not found
+     * @throws NamedProviderGetException if an error occurs while retrieving the channel
+     * @throws InitializeException if an error occurs during initialization
+     */
     private Optional<Stack> fromChannels() throws NamedProviderGetException, InitializeException {
         return getInitialization().channels().getOptional(id).map(Stack::new);
     }
 
+    /**
+     * Attempts to retrieve the stack from the masks provider.
+     *
+     * @return an {@link Optional} containing the {@link Stack} if found, or empty if not found
+     * @throws NamedProviderGetException if an error occurs while retrieving the mask
+     * @throws InitializeException if an error occurs during initialization
+     */
     private Optional<Stack> fromMasks() throws NamedProviderGetException, InitializeException {
         return getInitialization().masks().getOptional(id).map(mask -> new Stack(mask.channel()));
     }

@@ -50,13 +50,28 @@ import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.image.InputOutputContextFixture;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 
+/**
+ * Utility class for creating mock providers for testing purposes.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProviderFixture {
 
+    /**
+     * Creates a mock {@link ObjectCollectionProvider} for a single {@link ObjectMask}.
+     *
+     * @param obj the {@link ObjectMask} to provide
+     * @return a mock {@link ObjectCollectionProvider}
+     */
     public static ObjectCollectionProvider providerFor(ObjectMask obj) {
         return providerFor(ObjectCollectionFactory.of(obj));
     }
 
+    /**
+     * Creates a mock {@link ObjectCollectionProvider} for an {@link ObjectCollection}.
+     *
+     * @param objects the {@link ObjectCollection} to provide
+     * @return a mock {@link ObjectCollectionProvider}
+     */
     public static ObjectCollectionProvider providerFor(ObjectCollection objects) {
         ObjectCollectionProvider provider = mock(ObjectCollectionProvider.class);
         try {
@@ -67,9 +82,15 @@ public class ProviderFixture {
         return provider;
     }
 
+    /**
+     * Creates a mock {@link FeatureProvider} for a {@link Feature}.
+     *
+     * @param <T> the type of {@link FeatureInput}
+     * @param feature the {@link Feature} to provide
+     * @return a mock {@link FeatureProvider}
+     */
     @SuppressWarnings("unchecked")
     public static <T extends FeatureInput> FeatureProvider<T> providerFor(Feature<T> feature) {
-
         FeatureProvider<T> provider = mock(FeatureProvider.class);
         try {
             when(provider.get()).thenReturn(feature);
@@ -79,6 +100,12 @@ public class ProviderFixture {
         return provider;
     }
 
+    /**
+     * Creates a mock {@link MaskProvider} for a {@link Mask}.
+     *
+     * @param mask the {@link Mask} to provide
+     * @return a mock {@link MaskProvider}
+     */
     public static MaskProvider providerFor(Mask mask) {
         MaskProvider provider = mock(MaskProvider.class);
         try {
@@ -89,31 +116,54 @@ public class ProviderFixture {
         return provider;
     }
 
+    /**
+     * Functional interface for creating a provider.
+     *
+     * @param <T> the type of provider to create
+     */
     @FunctionalInterface
     public interface CreateProvider<T> {
-
+        /**
+         * Creates a provider.
+         *
+         * @param logger the {@link Logger} to use
+         * @return the created provider
+         * @throws CreateException if the provider cannot be created
+         */
         public T create(Logger logger) throws CreateException;
     }
 
+    /**
+     * Creates and initializes a provider.
+     *
+     * @param <T> the type of {@link ImageBean} to create
+     * @param funcCreate the function to create the provider
+     * @return the created and initialized provider
+     * @throws CreateException if the provider cannot be created or initialized
+     */
     public static <T extends ImageBean<T>> T createInitMergePair(CreateProvider<T> funcCreate)
             throws CreateException {
-
         Logger logger = LoggerFixture.suppressedLogger();
-
         T provider = funcCreate.create(logger);
         ProviderFixture.initProvider(provider, logger);
         return provider;
     }
 
+    /**
+     * Initializes an {@link ImageBean}.
+     *
+     * @param <T> the type of {@link ImageBean} to initialize
+     * @param provider the provider to initialize
+     * @param logger the {@link Logger} to use
+     * @throws CreateException if the provider cannot be initialized
+     */
     public static <T extends ImageBean<T>> void initProvider(ImageBean<T> provider, Logger logger)
             throws CreateException {
         try {
             BeanInstanceMapFixture.check(provider);
-
             provider.initialize(
                     ImageInitializationFactory.create(InputOutputContextFixture.withLogger(logger)),
                     logger);
-
         } catch (InitializeException e) {
             throw new CreateException(e);
         }

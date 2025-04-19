@@ -29,6 +29,12 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.slice;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 
+/**
+ * Creates a maximum intensity projection of a 3D {@link Channel}.
+ *
+ * <p>This projects the maximum intensity value along the z-axis for each (x,y) coordinate,
+ * resulting in a 2D image that represents the highest intensity values throughout the 3D volume.</p>
+ */
 public class MaximumIntensityProjection extends ChannelProviderUnary {
 
     @Override

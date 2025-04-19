@@ -62,17 +62,41 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
         return filtered;
     }
 
-    /** A precondition, which if evaluates to false, cancels the filter i.e. nothing is removed */
+    /**
+     * A precondition, which if evaluates to false, cancels the filter i.e. nothing is removed.
+     *
+     * @param objectsToFilter the {@link ObjectCollection} to be filtered
+     * @return true if the filter should be applied, false otherwise
+     */
     protected abstract boolean precondition(ObjectCollection objectsToFilter);
 
+    /**
+     * Performs any necessary initialization before filtering begins.
+     *
+     * @param dimensions optional {@link Dimensions} of the objects
+     * @param objectsToFilter the {@link ObjectCollection} to be filtered
+     * @throws OperationFailedException if the initialization fails
+     */
     protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         // Default implementation, nothing to do
     }
 
-    /** A predicate condition for an object to be kept in the collection */
+    /**
+     * A predicate condition for an object to be kept in the collection.
+     *
+     * @param object the {@link ObjectMask} to be evaluated
+     * @param dimensions optional {@link Dimensions} of the object
+     * @return true if the object should be kept, false otherwise
+     * @throws OperationFailedException if the matching operation fails
+     */
     protected abstract boolean match(ObjectMask object, Optional<Dimensions> dimensions)
             throws OperationFailedException;
 
+    /**
+     * Performs any necessary cleanup after filtering is complete.
+     *
+     * @throws OperationFailedException if the cleanup operation fails
+     */
     protected abstract void end() throws OperationFailedException;
 }

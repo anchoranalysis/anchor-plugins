@@ -33,8 +33,14 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Filters an {@link ObjectCollection} using the specified {@link org.anchoranalysis.image.bean.object.ObjectFilter}.
+ *
+ * <p>This class directly applies the filter defined in its superclass to the input object collection.</p>
+ */
 public class Filter extends ObjectCollectionProviderFilterBase {
 
+    // The createFromObjects method is intentionally left without a doc-string as it's an override.
     @Override
     protected ObjectCollection createFromObjects(
             ObjectCollection objects,

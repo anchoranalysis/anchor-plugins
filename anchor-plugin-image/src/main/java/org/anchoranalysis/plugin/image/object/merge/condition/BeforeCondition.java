@@ -31,8 +31,21 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * A condition to be checked before merging two {@link ObjectMask}s.
+ */
 @FunctionalInterface
 public interface BeforeCondition {
+
+    /**
+     * Checks if the source and destination objects satisfy the condition for merging.
+     *
+     * @param source the source {@link ObjectMask} to be merged
+     * @param destination the destination {@link ObjectMask} to be merged into
+     * @param unitConverter an optional {@link UnitConverter} for unit conversions
+     * @return true if the objects satisfy the condition for merging, false otherwise
+     * @throws OperationFailedException if the condition check fails
+     */
     boolean accept(ObjectMask source, ObjectMask destination, Optional<UnitConverter> unitConverter)
             throws OperationFailedException;
 }

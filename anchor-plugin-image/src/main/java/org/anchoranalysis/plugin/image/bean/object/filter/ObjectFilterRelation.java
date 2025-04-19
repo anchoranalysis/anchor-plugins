@@ -46,9 +46,11 @@ import org.anchoranalysis.math.relation.DoubleBiPredicate;
 public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
 
     // START BEAN PROPERTIES
+    /** The relation to be used in the filter predicate. */
     @BeanField @Getter @Setter private RelationBean relation = new GreaterThanEqualToBean();
     // END BEAN PROPERTIES
 
+    /** The resolved relation as a {@link DoubleBiPredicate}. */
     private DoubleBiPredicate relationResolved;
 
     @Override
@@ -68,6 +70,15 @@ public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
         return match(object, dimensions, relationResolved);
     }
 
+    /**
+     * Performs the matching operation using the resolved relation.
+     *
+     * @param object the {@link ObjectMask} to be evaluated
+     * @param dim optional {@link Dimensions} of the object
+     * @param relation the resolved {@link DoubleBiPredicate} relation
+     * @return true if the object matches the criteria, false otherwise
+     * @throws OperationFailedException if the matching operation fails
+     */
     protected abstract boolean match(
             ObjectMask object, Optional<Dimensions> dim, DoubleBiPredicate relation)
             throws OperationFailedException;

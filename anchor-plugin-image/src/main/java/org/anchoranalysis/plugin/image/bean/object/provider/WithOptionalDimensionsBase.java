@@ -46,10 +46,16 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 public abstract class WithOptionalDimensionsBase extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
+    /** Optional provider for dimensions. */
     @BeanField @OptionalBean @Getter @Setter private DimensionsProvider dimensions;
     // END BEAN PROPERTIES
 
-    /** Returns the dimensions or null if none are provided */
+    /**
+     * Creates the dimensions if a {@link DimensionsProvider} is specified.
+     *
+     * @return an optional containing the dimensions if provided, or empty if not
+     * @throws ProvisionFailedException if creating the dimensions fails
+     */
     protected Optional<Dimensions> createDims() throws ProvisionFailedException {
         if (dimensions != null) {
             return Optional.of(dimensions.get());

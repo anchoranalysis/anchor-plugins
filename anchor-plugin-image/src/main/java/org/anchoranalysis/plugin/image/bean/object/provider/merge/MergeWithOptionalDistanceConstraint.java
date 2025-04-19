@@ -44,12 +44,23 @@ import org.anchoranalysis.plugin.image.object.merge.condition.DistanceCondition;
 public abstract class MergeWithOptionalDistanceConstraint extends MergeBase {
 
     // START BEAN FIELDS
+    /**
+     * If true, suppresses the Z-dimension when calculating distances between objects.
+     */
     @BeanField @Getter @Setter private boolean suppressZ = false;
 
-    /** An optional maximum distance */
+    /**
+     * An optional maximum distance between objects that can be merged.
+     */
     @BeanField @OptionalBean @Getter @Setter private UnitValueDistance maxDistance;
     // END BEAN FIELDS
 
+    /**
+     * Creates a {@link BeforeCondition} that checks the distance between objects before merging.
+     *
+     * @return a {@link BeforeCondition} that enforces the distance constraint if {@code maxDistance} is set,
+     *         otherwise a condition that always returns true
+     */
     protected BeforeCondition maybeDistanceCondition() {
         return new DistanceCondition(
                 Optional.ofNullable(maxDistance), suppressZ, getLogger().messageLogger());

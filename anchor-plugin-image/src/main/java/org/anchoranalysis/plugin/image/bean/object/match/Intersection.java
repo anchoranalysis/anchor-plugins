@@ -37,9 +37,13 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.object.MatchedObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
+/**
+ * An {@link ObjectMatcher} that matches objects based on their intersection with a provided set of objects.
+ */
 public class Intersection extends ObjectMatcher {
 
     // START BEAN PROPERTIES
+    /** Provider for the objects to intersect with the source objects. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
     // END BEAN PROPERTIES
 

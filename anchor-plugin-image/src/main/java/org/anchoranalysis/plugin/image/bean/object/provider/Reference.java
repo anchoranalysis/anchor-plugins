@@ -36,15 +36,25 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
+/**
+ * An {@link ObjectCollectionProvider} that references an existing {@link ObjectCollection} by its identifier.
+ */
 @NoArgsConstructor
 public class Reference extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
+    /** The identifier of the object collection to reference. */
     @BeanField @Getter @Setter private String id = "";
     // END BEAN PROPERTIES
 
+    /** The referenced object collection. */
     private ObjectCollection objects;
 
+    /**
+     * Creates a new {@code Reference} with the specified identifier.
+     *
+     * @param id the identifier of the object collection to reference
+     */
     public Reference(String id) {
         this.id = id;
     }

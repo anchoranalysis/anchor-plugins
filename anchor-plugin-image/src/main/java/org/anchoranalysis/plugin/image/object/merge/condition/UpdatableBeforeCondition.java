@@ -32,19 +32,34 @@ import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Rather than checking if obj1 vs obj2 is accepted instead there's a two stage process
+ * A two-stage process for checking if two {@link ObjectMask}s should be merged.
  *
- * <p>1. Set Obj1 2. Check Obj2 vs Step 1
+ * <p>This interface allows for a more efficient checking process:
+ * <ol>
+ *   <li>Set the source object (which may involve costly pre-computations)</li>
+ *   <li>Check multiple destination objects against the pre-computed source</li>
+ * </ol>
  *
- * <p>This allows additional (costly) operations to occur after Step 1, that can be repeatedly used
- * in Step 2 e.g. growing object-masks to check for neighboring objects
- *
- * @author Owen Feehan
+ * <p>This approach is particularly useful for operations like growing object-masks to check for neighboring objects.
  */
 public interface UpdatableBeforeCondition {
 
+    /**
+     * Updates the source object and performs any necessary pre-computations.
+     *
+     * @param source the source {@link ObjectMask}
+     * @param unitConverter an optional {@link UnitConverter} for unit conversions
+     * @throws OperationFailedException if the update operation fails
+     */
     void updateSourceObject(ObjectMask source, Optional<UnitConverter> unitConverter)
             throws OperationFailedException;
 
+    /**
+     * Checks if the destination object should be merged with the previously set source object.
+     *
+     * @param destination the destination {@link ObjectMask} to check against the source
+     * @return true if the objects should be merged, false otherwise
+     * @throws OperationFailedException if the check operation fails
+     */
     boolean accept(ObjectMask destination) throws OperationFailedException;
 }

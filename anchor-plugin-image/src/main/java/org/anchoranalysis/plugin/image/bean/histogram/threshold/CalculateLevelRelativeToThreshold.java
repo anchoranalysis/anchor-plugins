@@ -35,12 +35,17 @@ import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.bean.threshold.CalculateLevelUnary;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * A {@link CalculateLevelUnary} that calculates a level relative to a threshold, with an alternative calculation method.
+ */
 @EqualsAndHashCode(callSuper = true)
 public abstract class CalculateLevelRelativeToThreshold extends CalculateLevelUnary {
 
     // START BEAN PROPERTIES
+    /** Alternative {@link CalculateLevel} to use when the condition in {@link #useElseInstead(int, int)} is met. */
     @BeanField @Getter @Setter private CalculateLevel calculateLevelElse;
 
+    /** Threshold value to compare against when deciding whether to use the alternative calculation. */
     @BeanField @Getter @Setter private int threshold;
     // END BEAN PROPERTIES
 
@@ -55,6 +60,12 @@ public abstract class CalculateLevelRelativeToThreshold extends CalculateLevelUn
         }
     }
 
-    /** Uses {@code calculateLevelElse} instead of the standard calculation-level approach */
+    /**
+     * Determines whether to use the alternative calculation method.
+     *
+     * @param level the level calculated by the delegate {@link CalculateLevel}
+     * @param threshold the threshold value to compare against
+     * @return true if the alternative calculation method should be used, false otherwise
+     */
     protected abstract boolean useElseInstead(int level, int threshold);
 }
