@@ -53,9 +53,7 @@ public abstract class MergeBase extends WithContainerBase {
     @BeanField @OptionalBean @Getter @Setter private DimensionsProvider dimensions;
     // END BEAN PROPERTIES
 
-    /**
-     * Functional interface for merging objects.
-     */
+    /** Functional interface for merging objects. */
     @FunctionalInterface
     protected static interface MergeObjects {
         /**
@@ -71,7 +69,8 @@ public abstract class MergeBase extends WithContainerBase {
     /**
      * Gets an optional {@link UnitConverter} based on the image resolution.
      *
-     * @return an {@link Optional} containing a {@link UnitConverter} if resolution is available, empty otherwise
+     * @return an {@link Optional} containing a {@link UnitConverter} if resolution is available,
+     *     empty otherwise
      * @throws OperationFailedException if retrieving the resolution fails
      */
     protected Optional<UnitConverter> unitConvertOptional() throws OperationFailedException {
@@ -96,7 +95,8 @@ public abstract class MergeBase extends WithContainerBase {
      * Merges objects either in a container or altogether.
      *
      * @param objects the {@link ObjectCollection} to merge
-     * @param mergeFunc a function that merges a collection of objects together (changes the collection in place)
+     * @param mergeFunc a function that merges a collection of objects together (changes the
+     *     collection in place)
      * @return the merged {@link ObjectCollection}
      * @throws OperationFailedException if the merge operation fails
      */

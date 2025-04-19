@@ -30,9 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/**
- * Maps directions to chain codes and vice versa.
- */
+/** Maps directions to chain codes and vice versa. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChainCodesDirection {
 

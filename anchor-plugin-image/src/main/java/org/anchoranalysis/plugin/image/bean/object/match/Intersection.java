@@ -38,7 +38,8 @@ import org.anchoranalysis.image.core.object.MatchedObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
- * An {@link ObjectMatcher} that matches objects based on their intersection with a provided set of objects.
+ * An {@link ObjectMatcher} that matches objects based on their intersection with a provided set of
+ * objects.
  */
 public class Intersection extends ObjectMatcher {
 

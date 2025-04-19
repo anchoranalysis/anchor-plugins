@@ -32,9 +32,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
-/**
- * A slice thresholder that applies thresholding to the entire image without using a mask.
- */
+/** A slice thresholder that applies thresholding to the entire image without using a mask. */
 public class SliceThresholderWithoutMask extends SliceThresholder {
 
     /**

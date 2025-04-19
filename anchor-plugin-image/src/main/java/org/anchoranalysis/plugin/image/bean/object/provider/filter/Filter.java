@@ -34,9 +34,11 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Filters an {@link ObjectCollection} using the specified {@link org.anchoranalysis.image.bean.object.ObjectFilter}.
+ * Filters an {@link ObjectCollection} using the specified {@link
+ * org.anchoranalysis.image.bean.object.ObjectFilter}.
  *
- * <p>This class directly applies the filter defined in its superclass to the input object collection.</p>
+ * <p>This class directly applies the filter defined in its superclass to the input object
+ * collection.
  */
 public class Filter extends ObjectCollectionProviderFilterBase {
 

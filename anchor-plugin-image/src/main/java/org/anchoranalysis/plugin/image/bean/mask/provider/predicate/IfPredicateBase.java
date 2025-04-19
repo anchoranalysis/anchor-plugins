@@ -35,9 +35,11 @@ import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 
 /**
- * Base class which multiplexes between the current mask and an alternative depending if a condition is met.
+ * Base class which multiplexes between the current mask and an alternative depending if a condition
+ * is met.
  *
- * <p>This class extends {@link MaskProviderUnary} to provide a mechanism for conditional mask selection.
+ * <p>This class extends {@link MaskProviderUnary} to provide a mechanism for conditional mask
+ * selection.
  */
 public abstract class IfPredicateBase extends MaskProviderUnary {
 
@@ -45,7 +47,8 @@ public abstract class IfPredicateBase extends MaskProviderUnary {
     /**
      * Returned instead of {@code mask} if the predicate is not satisfied.
      *
-     * <p>This {@link MaskProvider} is used to generate an alternative mask when the predicate condition is not met.
+     * <p>This {@link MaskProvider} is used to generate an alternative mask when the predicate
+     * condition is not met.
      */
     @BeanField @Getter @Setter private MaskProvider maskElse;
     // END BEAN PROPERTIES

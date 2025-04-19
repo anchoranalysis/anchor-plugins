@@ -41,9 +41,7 @@ import org.anchoranalysis.plugin.image.object.merge.condition.UpdatableBeforeCon
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
 
-/** 
- * A graph of objects that neighbor each other, according to conditions.
- */
+/** A graph of objects that neighbor each other, according to conditions. */
 @RequiredArgsConstructor
 class NeighborGraph {
 

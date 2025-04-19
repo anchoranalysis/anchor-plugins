@@ -48,9 +48,7 @@ import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueI
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/**
- * Implements grayscale reconstruction using Robinson's algorithm.
- */
+/** Implements grayscale reconstruction using Robinson's algorithm. */
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
 
     /** The binary value representing an "on" state in the output. */

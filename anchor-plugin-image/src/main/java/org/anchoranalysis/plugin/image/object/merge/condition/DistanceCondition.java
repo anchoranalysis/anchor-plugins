@@ -37,7 +37,8 @@ import org.anchoranalysis.spatial.box.BoundingBoxDistance;
 import org.anchoranalysis.spatial.point.Point3d;
 
 /**
- * A {@link BeforeCondition} that checks if two {@link ObjectMask}s are within a specified maximum distance.
+ * A {@link BeforeCondition} that checks if two {@link ObjectMask}s are within a specified maximum
+ * distance.
  */
 @AllArgsConstructor
 public class DistanceCondition implements BeforeCondition {

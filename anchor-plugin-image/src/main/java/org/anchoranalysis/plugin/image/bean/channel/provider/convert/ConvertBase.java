@@ -31,14 +31,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 
-/**
- * Base class for channel providers that perform conversions on a single input channel.
- */
+/** Base class for channel providers that perform conversions on a single input channel. */
 public abstract class ConvertBase extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     /**
-     * If true, the existing channel can be changed. If false, a new channel must be created for any change.
+     * If true, the existing channel can be changed. If false, a new channel must be created for any
+     * change.
      */
     @BeanField @Getter @Setter private boolean changeExisting = false;
     // END BEAN PROPERTIES
@@ -46,7 +45,8 @@ public abstract class ConvertBase extends ChannelProviderUnary {
     /**
      * Creates a {@link ConversionPolicy} based on the {@code changeExisting} property.
      *
-     * @return a {@link ConversionPolicy} that determines whether to change the existing channel or create a new one.
+     * @return a {@link ConversionPolicy} that determines whether to change the existing channel or
+     *     create a new one.
      */
     protected ConversionPolicy createPolicy() {
         return changeExisting

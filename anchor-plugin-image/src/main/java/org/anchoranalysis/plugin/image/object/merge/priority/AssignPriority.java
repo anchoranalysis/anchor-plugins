@@ -33,16 +33,16 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.GraphLogger;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
 
-/**
- * Abstract class for assigning priorities to potential object merges.
- */
+/** Abstract class for assigning priorities to potential object merges. */
 public abstract class AssignPriority {
 
     /**
      * Assigns a priority to a potential merge between two objects.
      *
-     * @param source the source (first) {@link ObjectVertex} in the pair of objects that could be merged
-     * @param destination the destination (second) {@link ObjectVertex} in the pair of objects that could be merged
+     * @param source the source (first) {@link ObjectVertex} in the pair of objects that could be
+     *     merged
+     * @param destination the destination (second) {@link ObjectVertex} in the pair of objects that
+     *     could be merged
      * @param logger the {@link GraphLogger} for logging merge operations
      * @return a {@link PrioritisedVertex} with an assigned priority
      * @throws OperationFailedException if the priority assignment fails

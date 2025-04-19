@@ -111,8 +111,8 @@ public class PriorityQueueIndexRangeDownhill<T> {
     }
 
     /**
-     * Recalculates the maximum current value in the queue.
-     * This method is called internally when the current maximum value list becomes empty.
+     * Recalculates the maximum current value in the queue. This method is called internally when
+     * the current maximum value list becomes empty.
      */
     private void calculateNewMaxCurrentValue() {
 

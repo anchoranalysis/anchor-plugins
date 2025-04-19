@@ -35,9 +35,7 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
-/**
- * Base class for {@link ObjectCollectionProvider}s that create objects from a {@link Channel}.
- */
+/** Base class for {@link ObjectCollectionProvider}s that create objects from a {@link Channel}. */
 public abstract class WithChannelBase extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES

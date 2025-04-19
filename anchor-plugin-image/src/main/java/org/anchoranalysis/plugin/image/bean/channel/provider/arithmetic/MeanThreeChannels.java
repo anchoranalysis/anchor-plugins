@@ -37,8 +37,8 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 /**
  * Creates a new channel that is the mean of three input channels.
  *
- * <p>This class extends {@link ChannelProviderTernary} to compute the pixel-wise mean
- * of three input channels, producing a new channel with unsigned byte voxel type.</p>
+ * <p>This class extends {@link ChannelProviderTernary} to compute the pixel-wise mean of three
+ * input channels, producing a new channel with unsigned byte voxel type.
  *
  * @author Owen Feehan
  */

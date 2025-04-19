@@ -30,9 +30,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
 
-/**
- * Creates a priority between two vertices for object merging.
- */
+/** Creates a priority between two vertices for object merging. */
 @FunctionalInterface
 public interface Prioritizer {
 
@@ -42,7 +40,8 @@ public interface Prioritizer {
      * @param source the source {@link ObjectVertex}
      * @param destination the destination {@link ObjectVertex}
      * @param logger the {@link Logger} for logging any messages during priority creation
-     * @return a {@link PrioritisedVertex} representing the priority between the source and destination
+     * @return a {@link PrioritisedVertex} representing the priority between the source and
+     *     destination
      * @throws OperationFailedException if the priority creation fails
      */
     PrioritisedVertex createPriority(ObjectVertex source, ObjectVertex destination, Logger logger)

@@ -33,7 +33,8 @@ import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Represents the result of a level operation, containing the level value, object mask, and histogram.
+ * Represents the result of a level operation, containing the level value, object mask, and
+ * histogram.
  */
 @AllArgsConstructor
 public class LevelResult {

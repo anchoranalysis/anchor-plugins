@@ -36,8 +36,8 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 /**
  * Extracts a specific slice from a collection of 3D objects.
  *
- * <p>This class extends {@link ObjectCollectionProviderUnary} to provide functionality
- * for extracting a 2D slice at a specified z-index from a collection of 3D objects.</p>
+ * <p>This class extends {@link ObjectCollectionProviderUnary} to provide functionality for
+ * extracting a 2D slice at a specified z-index from a collection of 3D objects.
  */
 public class SliceAt extends ObjectCollectionProviderUnary {
 

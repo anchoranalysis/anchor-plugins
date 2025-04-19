@@ -75,9 +75,7 @@ class NaiveGreedyMerge {
     /** Logger for outputting messages. */
     private final Logger logger;
 
-    /**
-     * Represents a range of indices for merging.
-     */
+    /** Represents a range of indices for merging. */
     @Value
     private static class MergeRange {
         private int start; // NOSONAR
@@ -166,7 +164,8 @@ class NaiveGreedyMerge {
      *
      * @param source the source {@link ObjectMask}
      * @param destination the destination {@link ObjectMask}
-     * @return an {@link Optional} containing the merged {@link ObjectMask} if successful, empty otherwise
+     * @return an {@link Optional} containing the merged {@link ObjectMask} if successful, empty
+     *     otherwise
      * @throws OperationFailedException if the merge operation fails
      */
     private Optional<ObjectMask> tryMerge(ObjectMask source, ObjectMask destination)

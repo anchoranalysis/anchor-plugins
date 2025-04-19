@@ -32,7 +32,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 /**
  * Creates a duplicate of the input channel.
  *
- * <p>This class extends {@link ChannelProviderUnary} to create an exact copy of the input channel.</p>
+ * <p>This class extends {@link ChannelProviderUnary} to create an exact copy of the input channel.
  */
 public class Duplicate extends ChannelProviderUnary {
 

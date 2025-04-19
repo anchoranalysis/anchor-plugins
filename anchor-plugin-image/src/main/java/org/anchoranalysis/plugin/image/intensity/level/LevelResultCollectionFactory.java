@@ -40,9 +40,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
 import org.anchoranalysis.math.histogram.Histogram;
 
-/**
- * Factory for creating {@link LevelResultCollection} objects.
- */
+/** Factory for creating {@link LevelResultCollection} objects. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LevelResultCollectionFactory {
 

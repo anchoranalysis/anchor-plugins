@@ -35,9 +35,7 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
-/**
- * Base class for {@link ObjectCollectionProviderUnary} that also requires a {@link Channel}.
- */
+/** Base class for {@link ObjectCollectionProviderUnary} that also requires a {@link Channel}. */
 public abstract class UnaryWithChannelBase extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES

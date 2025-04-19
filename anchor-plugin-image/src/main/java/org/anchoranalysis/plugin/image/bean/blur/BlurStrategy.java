@@ -47,12 +47,11 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
     /** The sigma value for the blur operation. */
     @BeanField @Positive @Getter @Setter private double sigma = 3;
 
-    /** 
-     * If true, treats sigma as if it's in meters (physical units). 
-     * If false, treats sigma as if it's in pixels.
+    /**
+     * If true, treats sigma as if it's in meters (physical units). If false, treats sigma as if
+     * it's in pixels.
      */
-    @BeanField @Getter @Setter
-    private boolean sigmaInMeters = false;
+    @BeanField @Getter @Setter private boolean sigmaInMeters = false;
     // END BEAN PROPERTIES
 
     /**
@@ -67,7 +66,8 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
             throws OperationFailedException;
 
     /**
-     * Calculates the sigma value to use for blurring, considering the dimensions and whether sigma is in meters.
+     * Calculates the sigma value to use for blurring, considering the dimensions and whether sigma
+     * is in meters.
      *
      * @param dimensions the {@link Dimensions} of the image
      * @param logger the {@link MessageLogger} for logging messages

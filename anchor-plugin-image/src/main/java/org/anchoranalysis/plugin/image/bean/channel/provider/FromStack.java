@@ -42,19 +42,17 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.ProviderAsStack;
 import org.anchoranalysis.image.core.stack.Stack;
 
-/** 
+/**
  * Extracts a channel from a provider of a stack.
  *
- * <p>This class extends {@link ChannelProvider} to provide a single channel from a stack,
- * which can be specified either by a provider ID or directly as a {@link ProviderAsStack}.</p>
+ * <p>This class extends {@link ChannelProvider} to provide a single channel from a stack, which can
+ * be specified either by a provider ID or directly as a {@link ProviderAsStack}.
  */
 @NoArgsConstructor
 public class FromStack extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    /** 
-     * The index of the channel to extract from the stack.
-     */
+    /** The index of the channel to extract from the stack. */
     @BeanField @Getter @Setter private int channelIndex = 0;
 
     /**

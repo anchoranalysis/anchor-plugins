@@ -38,20 +38,16 @@ import org.anchoranalysis.plugin.image.bean.dictionary.DictionaryCondition;
 /**
  * Provides a channel based on a condition from a dictionary.
  *
- * <p>This class extends {@link ChannelProviderUnary} to return either the input channel
- * or an alternative channel based on a condition specified in a dictionary.
+ * <p>This class extends {@link ChannelProviderUnary} to return either the input channel or an
+ * alternative channel based on a condition specified in a dictionary.
  */
 public class IfParamEquals extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
-    /**
-     * The condition to evaluate from the dictionary.
-     */
+    /** The condition to evaluate from the dictionary. */
     @BeanField @Getter @Setter private DictionaryCondition condition;
 
-    /**
-     * The channel provider to use if the condition is false.
-     */
+    /** The channel provider to use if the condition is false. */
     @BeanField @Getter @Setter private ChannelProvider channelElse;
     // END BEAN PROPERTIES
 

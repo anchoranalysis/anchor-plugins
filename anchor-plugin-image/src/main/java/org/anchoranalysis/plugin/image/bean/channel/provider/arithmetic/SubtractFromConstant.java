@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 /**
  * Subtracts each voxel value in a channel from a constant value.
  *
- * <p>This class extends {@link ArithmeticWithConstantBase} to perform a pixel-wise
- * subtraction operation where a constant value is subtracted by each voxel value in the input channel.</p>
+ * <p>This class extends {@link ArithmeticWithConstantBase} to perform a pixel-wise subtraction
+ * operation where a constant value is subtracted by each voxel value in the input channel.
  */
 public class SubtractFromConstant extends ArithmeticWithConstantBase {
 

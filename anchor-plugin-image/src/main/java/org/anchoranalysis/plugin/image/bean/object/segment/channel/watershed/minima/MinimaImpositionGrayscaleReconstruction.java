@@ -46,8 +46,8 @@ import org.anchoranalysis.spatial.box.Extent;
 /**
  * Imposes minima on a channel using grayscale reconstruction by erosion.
  *
- * <p>This class implements the {@link MinimaImposition} abstract class to provide
- * a specific strategy for imposing minima using grayscale reconstruction.</p>
+ * <p>This class implements the {@link MinimaImposition} abstract class to provide a specific
+ * strategy for imposing minima using grayscale reconstruction.
  */
 public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 

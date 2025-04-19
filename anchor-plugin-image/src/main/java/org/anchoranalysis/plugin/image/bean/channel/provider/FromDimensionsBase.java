@@ -39,8 +39,8 @@ import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
 /**
  * An abstract base class for creating a channel from specified dimensions.
  *
- * <p>This class extends {@link ChannelProvider} to provide a framework for creating channels
- * based on given dimensions. Subclasses must implement the {@code createFromDimensions} method.</p>
+ * <p>This class extends {@link ChannelProvider} to provide a framework for creating channels based
+ * on given dimensions. Subclasses must implement the {@code createFromDimensions} method.
  */
 public abstract class FromDimensionsBase extends ChannelProvider {
 
@@ -48,7 +48,7 @@ public abstract class FromDimensionsBase extends ChannelProvider {
     /**
      * The provider for the dimensions of the channel to be created.
      *
-     * <p>Defaults to {@link GuessDimensions} if not explicitly set.</p>
+     * <p>Defaults to {@link GuessDimensions} if not explicitly set.
      */
     @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
     // END BEAN PROPERTIES

@@ -31,9 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-/**
- * Utility class for checking the volume of {@link ObjectMask}s before and after operations.
- */
+/** Utility class for checking the volume of {@link ObjectMask}s before and after operations. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CheckVolumeBeforeAfter {
 
@@ -44,7 +42,8 @@ public class CheckVolumeBeforeAfter {
     private static final double RATIO_TOLERANCE_FOR_VOXELIZATION = 0.05;
 
     /**
-     * Asserts that the area of a circular {@link ObjectMask} is within tolerance of the expected area.
+     * Asserts that the area of a circular {@link ObjectMask} is within tolerance of the expected
+     * area.
      *
      * @param objectIdentifier a string identifier for the object being checked
      * @param expectedRadius the expected radius of the circular object
@@ -61,7 +60,8 @@ public class CheckVolumeBeforeAfter {
     }
 
     /**
-     * Asserts that the volume of an {@link ObjectMask} exactly matches the expected number of voxels.
+     * Asserts that the volume of an {@link ObjectMask} exactly matches the expected number of
+     * voxels.
      *
      * @param objectIdentifier a string identifier for the object being checked
      * @param expectedNumberVoxels the expected number of voxels in the object

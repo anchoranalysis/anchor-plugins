@@ -40,19 +40,18 @@ import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
 /**
  * Copies the pixels from {@code channelAssignFrom} to {@code channel} (possibly masking).
  *
- * <p>The input channel is changed (mutable). The {@code channelAssignFrom} is unchanged (immutable).</p>
+ * <p>The input channel is changed (mutable). The {@code channelAssignFrom} is unchanged
+ * (immutable).
  *
- * <p>This class extends {@link UnaryWithMaskBase} to perform pixel assignment from one channel to another,
- * optionally restricted by a mask.</p>
+ * <p>This class extends {@link UnaryWithMaskBase} to perform pixel assignment from one channel to
+ * another, optionally restricted by a mask.
  *
  * @author Owen Feehan
  */
 public class AssignFromChannel extends UnaryWithMaskBase {
 
     // START BEAN PROPERTIES
-    /**
-     * The channel provider from which pixels will be assigned.
-     */
+    /** The channel provider from which pixels will be assigned. */
     @BeanField @Getter @Setter private ChannelProvider channelAssignFrom;
     // END BEAN PROPERTIES
 

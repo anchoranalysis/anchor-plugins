@@ -33,9 +33,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/**
- * Stores and manages a collection of minima points for watershed segmentation.
- */
+/** Stores and manages a collection of minima points for watershed segmentation. */
 class MinimaStore {
 
     /** List of {@link Minima} objects representing the stored minima points. */

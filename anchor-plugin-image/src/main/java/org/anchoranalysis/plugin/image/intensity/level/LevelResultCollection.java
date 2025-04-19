@@ -31,9 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/**
- * A collection of {@link LevelResult} objects that can be iterated over and searched.
- */
+/** A collection of {@link LevelResult} objects that can be iterated over and searched. */
 public class LevelResultCollection implements Iterable<LevelResult> {
 
     /** The list of {@link LevelResult} objects. */
@@ -53,7 +51,8 @@ public class LevelResultCollection implements Iterable<LevelResult> {
      * Finds the {@link LevelResult} closest to a given point.
      *
      * @param point the {@link Point3i} to find the closest result to
-     * @return the {@link LevelResult} closest to the given point, or null if the collection is empty
+     * @return the {@link LevelResult} closest to the given point, or null if the collection is
+     *     empty
      */
     public LevelResult findClosestResult(Point3i point) {
 

@@ -160,7 +160,8 @@ public class MergeGraph {
             } else if (DoubleUtilities.areEqual(
                     edge.getPriority(), max.getPayload().getPriority())) {
 
-                // We can safely assume a point exists on the object-mask and call .get(), as none of the
+                // We can safely assume a point exists on the object-mask and call .get(), as none
+                // of the
                 // object-masks are empty
 
                 // If we have equal values, we impose an arbitrary ordering
@@ -188,9 +189,7 @@ public class MergeGraph {
         return max;
     }
 
-    /**
-     * Logs a description of the current graph state.
-     */
+    /** Logs a description of the current graph state. */
     public void logGraphDescription() {
         logger.logDescription();
     }

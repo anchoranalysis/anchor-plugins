@@ -32,9 +32,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.math.histogram.Histogram;
 
-/**
- * Utility class for thresholding histograms.
- */
+/** Utility class for thresholding histograms. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramThresholder {
 

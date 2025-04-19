@@ -31,9 +31,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-/**
- * A condition to be checked before merging two {@link ObjectMask}s.
- */
+/** A condition to be checked before merging two {@link ObjectMask}s. */
 @FunctionalInterface
 public interface BeforeCondition {
 

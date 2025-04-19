@@ -35,9 +35,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 
-/**
- * Utility class for checking and ensuring consistency of dimensions across channels and masks.
- */
+/** Utility class for checking and ensuring consistency of dimensions across channels and masks. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DimensionsChecker {
 
@@ -61,8 +59,10 @@ public class DimensionsChecker {
      * Checks a channel to make sure it's the same size as an existing channel.
      *
      * @param channelToCheck the {@link Channel} whose size will be compared
-     * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error messages
-     * @param dimFromChannel the {@link Dimensions} it must equal from channel (identified as channel in error messages)
+     * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error
+     *     messages
+     * @param dimFromChannel the {@link Dimensions} it must equal from channel (identified as
+     *     channel in error messages)
      * @throws ProvisionFailedException if the dimensions do not match
      */
     public static void check(
@@ -75,8 +75,10 @@ public class DimensionsChecker {
      * Checks a mask to make sure it's the same size as an existing channel.
      *
      * @param maskToCheck the {@link Mask} whose size will be compared
-     * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error messages
-     * @param dimensionsFromChannel the {@link Dimensions} it must equal from channel (identified as channel in error messages)
+     * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error
+     *     messages
+     * @param dimensionsFromChannel the {@link Dimensions} it must equal from channel (identified as
+     *     channel in error messages)
      * @throws ProvisionFailedException if the dimensions do not match
      */
     public static void check(
@@ -90,7 +92,8 @@ public class DimensionsChecker {
      *
      * @param provider the {@link ChannelProvider} to create the channel
      * @param providerName a user-meaningful string to identify the provider in error messages
-     * @param channelSameSize the {@link Channel} which it must be the same size as (referred to in error messages as "channel")
+     * @param channelSameSize the {@link Channel} which it must be the same size as (referred to in
+     *     error messages as "channel")
      * @return the newly created {@link Channel}
      * @throws ProvisionFailedException if the dimensions do not match or channel creation fails
      */
@@ -108,7 +111,8 @@ public class DimensionsChecker {
      *
      * @param provider the {@link MaskProvider} to create the mask
      * @param providerName a user-meaningful string to identify the provider in error messages
-     * @param channelSameSize the {@link Channel} which it must be the same size as (referred to in error messages as "channel")
+     * @param channelSameSize the {@link Channel} which it must be the same size as (referred to in
+     *     error messages as "channel")
      * @return the newly created {@link Mask}
      * @throws ProvisionFailedException if the dimensions do not match or mask creation fails
      */

@@ -40,9 +40,8 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Represents voxels encoded with watershed-related information.
- * 
- * <p>See {@link EncodedVoxels#ENCODING} for the type of information stored
- * in each voxel.
+ *
+ * <p>See {@link EncodedVoxels#ENCODING} for the type of information stored in each voxel.
  */
 @AllArgsConstructor
 @Accessors(fluent = true)

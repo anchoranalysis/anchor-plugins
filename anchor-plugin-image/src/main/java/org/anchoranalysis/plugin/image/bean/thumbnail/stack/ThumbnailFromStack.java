@@ -39,7 +39,7 @@ public abstract class ThumbnailFromStack extends AnchorBean<ThumbnailFromStack> 
 
     /**
      * Initializes the thumbnail creation process.
-     * 
+     *
      * <p>Should always be called once before any calls to {@link #thumbnailFor}.
      */
     public abstract void start();

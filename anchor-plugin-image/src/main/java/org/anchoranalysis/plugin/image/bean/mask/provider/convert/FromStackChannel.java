@@ -36,9 +36,7 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 
-/**
- * Creates a {@link Mask} from a specific channel in a stack.
- */
+/** Creates a {@link Mask} from a specific channel in a stack. */
 public class FromStackChannel extends MaskProvider {
 
     // START BEAN PROPERTIES

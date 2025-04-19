@@ -31,8 +31,8 @@ import lombok.NoArgsConstructor;
 /**
  * Creates reference (i.e. Providers that reference an existing object) of different types.
  *
- * <p>This is particularly useful to avoid referring to multiple identically named {@code
- * Reference} classes in the same file, necessitating the use of the fully qualified class name.
+ * <p>This is particularly useful to avoid referring to multiple identically named {@code Reference}
+ * classes in the same file, necessitating the use of the fully qualified class name.
  *
  * @author Owen Feehan
  */

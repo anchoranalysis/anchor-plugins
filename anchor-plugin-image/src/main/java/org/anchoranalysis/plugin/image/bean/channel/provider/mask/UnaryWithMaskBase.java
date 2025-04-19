@@ -39,8 +39,8 @@ import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
 /**
  * A base class for a {@link ChannelProviderUnary} which also uses a binary mask.
  *
- * <p>This class extends {@link ChannelProviderUnary} to provide functionality for creating
- * channels based on both an input channel and a binary mask.</p>
+ * <p>This class extends {@link ChannelProviderUnary} to provide functionality for creating channels
+ * based on both an input channel and a binary mask.
  */
 public abstract class UnaryWithMaskBase extends ChannelProviderUnary {
 

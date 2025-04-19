@@ -36,8 +36,8 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 /**
  * Abstract base class for imposing minima on a channel for watershed segmentation.
  *
- * <p>This class provides a framework for different strategies of imposing minima
- * on a channel, which is a crucial step in watershed-based segmentation algorithms.
+ * <p>This class provides a framework for different strategies of imposing minima on a channel,
+ * which is a crucial step in watershed-based segmentation algorithms.
  */
 public abstract class MinimaImposition extends AnchorBean<MinimaImposition> {
 
@@ -46,7 +46,8 @@ public abstract class MinimaImposition extends AnchorBean<MinimaImposition> {
      *
      * @param channel the {@link Channel} on which to impose minima
      * @param seeds the {@link ObjectCollection} representing seed objects for minima
-     * @param containingMask an optional {@link ObjectMask} that constrains the area where minima can be imposed
+     * @param containingMask an optional {@link ObjectMask} that constrains the area where minima
+     *     can be imposed
      * @return a new {@link Channel} with imposed minima
      * @throws OperationFailedException if the minima imposition operation fails
      */

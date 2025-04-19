@@ -38,17 +38,17 @@ import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
  * gradient.
  *
  * <p>An out-of-bounds strategy of <i>mirror</i> is used for calculating the gradient for voxels
- * lying at the boundary.</p>
+ * lying at the boundary.
  *
  * @author Owen Feehan
  */
 public abstract class GradientBaseAddSum extends GradientBase {
 
     // START BEAN FIELDS
-    /** 
+    /**
      * Added to all gradients (so we can store negative gradients).
-     * 
-     * <p>Default value is 0.</p>
+     *
+     * <p>Default value is 0.
      */
     @BeanField @Getter @Setter private int addSum = 0;
     // END BEAN FIELDS

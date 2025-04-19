@@ -35,15 +35,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 
 /**
- * Base class for {@link CalculateLevel} implementations that operate on a list of other {@link CalculateLevel} objects.
+ * Base class for {@link CalculateLevel} implementations that operate on a list of other {@link
+ * CalculateLevel} objects.
  */
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateLevelListBase extends CalculateLevel {
 
     // START BEAN PROPERTIES
-    /**
-     * List of {@link CalculateLevel} objects to be used in the calculation.
-     */
+    /** List of {@link CalculateLevel} objects to be used in the calculation. */
     @BeanField @Getter @Setter private List<CalculateLevel> list = Arrays.asList();
     // END BEAN PROPERTIES
 }

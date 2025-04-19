@@ -31,9 +31,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-/**
- * A condition to be checked after merging two {@link ObjectMask}s.
- */
+/** A condition to be checked after merging two {@link ObjectMask}s. */
 public interface AfterCondition {
 
     /**

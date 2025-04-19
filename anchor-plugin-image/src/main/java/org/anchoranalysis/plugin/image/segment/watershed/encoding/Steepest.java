@@ -37,9 +37,7 @@ import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/**
- * Calculates the steepest descent direction for voxels in a watershed segmentation.
- */
+/** Calculates the steepest descent direction for voxels in a watershed segmentation. */
 public final class Steepest {
 
     private static class PointEvaluator

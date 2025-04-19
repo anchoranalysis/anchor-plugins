@@ -56,12 +56,14 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 
     // START BEAN PROPERTIES
     /**
-     * Requires for any potential merge that the bounding-boxes of the two objects must intersect or touch.
+     * Requires for any potential merge that the bounding-boxes of the two objects must intersect or
+     * touch.
      */
     @BeanField @Getter @Setter private boolean requireBBoxNeighbors = true;
 
     /**
-     * Requires the object-masks to touch. More expensive to calculate than the {@code requireBBoxNeighbors} condition.
+     * Requires the object-masks to touch. More expensive to calculate than the {@code
+     * requireBBoxNeighbors} condition.
      */
     @BeanField @Getter @Setter private boolean requireTouching = true;
 
@@ -194,7 +196,8 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
     /**
      * Creates the before conditions for merging.
      *
-     * @return an {@link UpdatableBeforeCondition} representing the conditions that must be met before merging
+     * @return an {@link UpdatableBeforeCondition} representing the conditions that must be met
+     *     before merging
      */
     private UpdatableBeforeCondition beforeConditions() {
         return new AndCondition(

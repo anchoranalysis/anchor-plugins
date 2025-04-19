@@ -34,9 +34,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
-/**
- * Utility class for removing intersecting voxels between objects in a collection.
- */
+/** Utility class for removing intersecting voxels between objects in a collection. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectIntersectionRemover {
 
@@ -45,9 +43,11 @@ public class ObjectIntersectionRemover {
      *
      * @param objects the {@link ObjectCollection} to process
      * @param dimensions the {@link Dimensions} of the space containing the objects
-     * @param errorDisconnectedObjects if true, throws an exception if an object becomes disconnected
+     * @param errorDisconnectedObjects if true, throws an exception if an object becomes
+     *     disconnected
      * @return a new {@link ObjectCollection} with intersecting voxels removed
-     * @throws OperationFailedException if an object becomes disconnected and errorDisconnectedObjects is true
+     * @throws OperationFailedException if an object becomes disconnected and
+     *     errorDisconnectedObjects is true
      */
     public static ObjectCollection removeIntersectingVoxels(
             ObjectCollection objects, Dimensions dimensions, boolean errorDisconnectedObjects)

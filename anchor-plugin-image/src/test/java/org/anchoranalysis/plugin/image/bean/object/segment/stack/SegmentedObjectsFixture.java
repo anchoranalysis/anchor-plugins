@@ -87,7 +87,8 @@ public class SegmentedObjectsFixture {
      * Creates a {@link SegmentedObjects} containing two possible class-labels and corresponding
      * objects.
      *
-     * <p>The possible labels are {@link #CLASS_LABEL_CIRCLE} and {@link #CLASS_LABEL_CUT_OFF_CORNERS}.
+     * <p>The possible labels are {@link #CLASS_LABEL_CIRCLE} and {@link
+     * #CLASS_LABEL_CUT_OFF_CORNERS}.
      *
      * @param circles whether to include objects of type {@link #CLASS_LABEL_CIRCLE}.
      * @param cutOffCorners whether to include objects of type {@link #CLASS_LABEL_CUT_OFF_CORNERS}.

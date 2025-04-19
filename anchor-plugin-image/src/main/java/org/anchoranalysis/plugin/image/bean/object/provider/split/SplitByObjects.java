@@ -50,8 +50,8 @@ import org.anchoranalysis.spatial.box.Extent;
 /**
  * Splits objects in a collection based on intersections with another set of objects.
  *
- * <p>This class extends {@link WithDimensionsBase} to provide functionality for splitting
- * objects in one collection based on their intersections with objects in another collection.</p>
+ * <p>This class extends {@link WithDimensionsBase} to provide functionality for splitting objects
+ * in one collection based on their intersections with objects in another collection.
  */
 public class SplitByObjects extends WithDimensionsBase {
 

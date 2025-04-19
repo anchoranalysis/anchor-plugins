@@ -37,7 +37,8 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
- * Base class for {@link ObjectCollectionProviderUnary} that take an optional {@code objectsContainer} bean-field.
+ * Base class for {@link ObjectCollectionProviderUnary} that take an optional {@code
+ * objectsContainer} bean-field.
  */
 public abstract class WithContainerBase extends ObjectCollectionProviderUnary {
 

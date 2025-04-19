@@ -37,9 +37,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithOptionalDimensionsBase;
 import org.anchoranalysis.spatial.box.Extent;
 
-/**
- * Base class for providers that apply morphological operations to an {@link ObjectCollection}.
- */
+/** Base class for providers that apply morphological operations to an {@link ObjectCollection}. */
 public abstract class ObjectCollectionProviderMorphological extends WithOptionalDimensionsBase {
 
     // START BEAN PROPERTIES

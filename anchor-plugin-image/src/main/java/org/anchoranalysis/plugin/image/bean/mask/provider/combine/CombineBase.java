@@ -34,14 +34,11 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 
-
-/**
- * Base class for combining two masks.
- */
+/** Base class for combining two masks. */
 public abstract class CombineBase extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
-	 /** The {@link MaskProvider} for the second mask to be combined. */
+    /** The {@link MaskProvider} for the second mask to be combined. */
     @BeanField @Getter @Setter private MaskProvider receive;
     // END BEAN PROPERTIES
 

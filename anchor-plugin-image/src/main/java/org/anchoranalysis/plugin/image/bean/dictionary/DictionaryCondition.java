@@ -55,10 +55,12 @@ public class DictionaryCondition extends ImageBean<DictionaryCondition> {
     // END BEAN PROPERTIES
 
     /**
-     * Checks if the condition is true by comparing the value in the dictionary with the expected value.
+     * Checks if the condition is true by comparing the value in the dictionary with the expected
+     * value.
      *
      * @return true if the value in the dictionary matches the expected value, false otherwise.
-     * @throws ProvisionFailedException if the dictionary cannot be created or the key doesn't exist in the dictionary.
+     * @throws ProvisionFailedException if the dictionary cannot be created or the key doesn't exist
+     *     in the dictionary.
      */
     public boolean isConditionTrue() throws ProvisionFailedException {
         Dictionary dictionaryCreated = dictionary.get();

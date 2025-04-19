@@ -50,9 +50,7 @@ import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.image.InputOutputContextFixture;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 
-/**
- * Utility class for creating mock providers for testing purposes.
- */
+/** Utility class for creating mock providers for testing purposes. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProviderFixture {
 

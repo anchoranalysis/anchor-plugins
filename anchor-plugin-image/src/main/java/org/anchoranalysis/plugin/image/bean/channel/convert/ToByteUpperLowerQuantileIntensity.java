@@ -36,10 +36,11 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
- * Converts a channel to unsigned byte format using upper and lower quantile intensities from a histogram.
+ * Converts a channel to unsigned byte format using upper and lower quantile intensities from a
+ * histogram.
  *
  * <p>This class extends {@link ConvertChannelToWithHistogram} to provide a specific implementation
- * for converting channels to unsigned byte format based on quantile intensities.</p>
+ * for converting channels to unsigned byte format based on quantile intensities.
  */
 public class ToByteUpperLowerQuantileIntensity
         extends ConvertChannelToWithHistogram<UnsignedByteBuffer> {

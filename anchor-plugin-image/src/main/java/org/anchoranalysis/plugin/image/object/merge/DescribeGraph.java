@@ -26,25 +26,23 @@
 
 package org.anchoranalysis.plugin.image.object.merge;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
-
-import lombok.AllArgsConstructor;
 
 /**
  * Builds string-descriptions of a {@link NeighborGraph}.
  *
- * <p>This class provides methods to generate string descriptions of a {@link NeighborGraph},
- * its vertices, edges, and potential merges.</p>
+ * <p>This class provides methods to generate string descriptions of a {@link NeighborGraph}, its
+ * vertices, edges, and potential merges.
  */
 @AllArgsConstructor
 public class DescribeGraph {
 
     /** Graph the {@link NeighborGraph} to describe. */
-	private NeighborGraph graph;
-	
-	
-	/** Whether to include payload values in the log messages. */
+    private NeighborGraph graph;
+
+    /** Whether to include payload values in the log messages. */
     private boolean includePayload;
 
     /**

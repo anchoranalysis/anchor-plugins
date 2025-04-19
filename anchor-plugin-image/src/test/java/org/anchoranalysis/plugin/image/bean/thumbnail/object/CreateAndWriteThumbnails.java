@@ -46,9 +46,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 
-/**
- * Creates thumbnails from a collection of objects, and writes into a directory.
- */
+/** Creates thumbnails from a collection of objects, and writes into a directory. */
 @NoArgsConstructor
 class CreateAndWriteThumbnails {
 

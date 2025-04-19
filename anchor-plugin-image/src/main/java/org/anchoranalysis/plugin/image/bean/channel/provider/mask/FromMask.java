@@ -32,8 +32,8 @@ import org.anchoranalysis.image.core.mask.Mask;
 /**
  * Creates a {@link Channel} directly from a {@link Mask} without any modification.
  *
- * <p>This class extends {@link FromMaskBase} to provide a simple implementation
- * that returns the channel associated with the mask.</p>
+ * <p>This class extends {@link FromMaskBase} to provide a simple implementation that returns the
+ * channel associated with the mask.
  */
 public class FromMask extends FromMaskBase {
 

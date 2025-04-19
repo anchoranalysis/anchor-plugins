@@ -26,16 +26,13 @@
 
 package org.anchoranalysis.plugin.image.object.merge;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
 
-import lombok.AllArgsConstructor;
-
-/**
- * A logger for graph operations, using a {@link DescribeGraph} to generate descriptions.
- */
+/** A logger for graph operations, using a {@link DescribeGraph} to generate descriptions. */
 @AllArgsConstructor
 public class GraphLogger {
 
@@ -74,9 +71,7 @@ public class GraphLogger {
         log(describeGraph.describeMerge(omMerged, bestImprovement));
     }
 
-    /**
-     * Logs a description of the entire graph.
-     */
+    /** Logs a description of the entire graph. */
     public void logDescription() {
         log(describeGraph.describe());
     }
@@ -89,7 +84,7 @@ public class GraphLogger {
     public ErrorReporter getErrorReporter() {
         return logger.errorReporter();
     }
-    
+
     /**
      * Logs a message using the internal logger.
      *

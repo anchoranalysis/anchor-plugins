@@ -37,7 +37,8 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
- * An {@link ObjectCollectionProvider} that references an existing {@link ObjectCollection} by its identifier.
+ * An {@link ObjectCollectionProvider} that references an existing {@link ObjectCollection} by its
+ * identifier.
  */
 @NoArgsConstructor
 public class Reference extends ObjectCollectionProvider {

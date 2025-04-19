@@ -39,8 +39,8 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 /**
  * An abstract base class for object collection providers that use a feature evaluator.
  *
- * <p>This class extends {@link ObjectCollectionProviderUnary} and provides functionality
- * for creating object collections based on feature evaluation of single objects.</p>
+ * <p>This class extends {@link ObjectCollectionProviderUnary} and provides functionality for
+ * creating object collections based on feature evaluation of single objects.
  */
 public abstract class ObjectCollectionProviderWithFeature extends ObjectCollectionProviderUnary {
 

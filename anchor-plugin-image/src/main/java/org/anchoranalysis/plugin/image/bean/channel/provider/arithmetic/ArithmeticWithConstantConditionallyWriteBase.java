@@ -35,8 +35,8 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithValueBase;
 /**
  * Base class for arithmetic operations that conditionally overwrite voxel values with a constant.
  *
- * <p>This class extends {@link UnaryWithValueBase} to provide a framework for operations
- * that selectively replace voxel values with a constant based on a condition.</p>
+ * <p>This class extends {@link UnaryWithValueBase} to provide a framework for operations that
+ * selectively replace voxel values with a constant based on a condition.
  */
 public abstract class ArithmeticWithConstantConditionallyWriteBase extends UnaryWithValueBase {
 

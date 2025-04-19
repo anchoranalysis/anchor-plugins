@@ -35,12 +35,14 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  * A two-stage process for checking if two {@link ObjectMask}s should be merged.
  *
  * <p>This interface allows for a more efficient checking process:
+ *
  * <ol>
- *   <li>Set the source object (which may involve costly pre-computations)</li>
- *   <li>Check multiple destination objects against the pre-computed source</li>
+ *   <li>Set the source object (which may involve costly pre-computations)
+ *   <li>Check multiple destination objects against the pre-computed source
  * </ol>
  *
- * <p>This approach is particularly useful for operations like growing object-masks to check for neighboring objects.
+ * <p>This approach is particularly useful for operations like growing object-masks to check for
+ * neighboring objects.
  */
 public interface UpdatableBeforeCondition {
 

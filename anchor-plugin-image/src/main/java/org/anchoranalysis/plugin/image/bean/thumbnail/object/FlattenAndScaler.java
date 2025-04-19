@@ -49,9 +49,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-/**
- * Handles flattening and scaling of objects and stacks for thumbnail generation.
- */
+/** Handles flattening and scaling of objects and stacks for thumbnail generation. */
 @RequiredArgsConstructor
 class FlattenAndScaler {
 
@@ -89,7 +87,8 @@ class FlattenAndScaler {
      *     between objects), or individually.
      * @param resizer interpolator for scaling stack.
      * @param targetSize the target size which objects will be scaled-down to fit inside.
-     * @param backgroundCreator function to create a {@link ScaleableBackground} given a {@link ScaleFactor}.
+     * @param backgroundCreator function to create a {@link ScaleableBackground} given a {@link
+     *     ScaleFactor}.
      * @throws OperationFailedException if there are too many objects.
      */
     public FlattenAndScaler(
@@ -185,8 +184,8 @@ class FlattenAndScaler {
      *     scaled).
      * @param excludeFromAdding these objects are excluded from the search (specifically, any object
      *     found that has the same bounding-box and number of pixels).
-     * @return the {@link ObjectCollection} that intersect with the bounding-box except any in {@code
-     *     excludeFromAdding}.
+     * @return the {@link ObjectCollection} that intersect with the bounding-box except any in
+     *     {@code excludeFromAdding}.
      */
     public ObjectCollection objectsThatIntersectWith(
             BoundingBox box, ObjectCollection excludeFromAdding) {

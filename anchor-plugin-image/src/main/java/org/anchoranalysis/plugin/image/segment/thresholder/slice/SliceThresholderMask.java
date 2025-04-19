@@ -34,9 +34,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
-/**
- * A slice thresholder that applies thresholding within a mask region.
- */
+/** A slice thresholder that applies thresholding within a mask region. */
 public class SliceThresholderMask extends SliceThresholder {
 
     /** Whether to clear voxels outside the mask. */

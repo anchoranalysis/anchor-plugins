@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 /**
  * Multiplies each voxel value in a channel by a constant value.
  *
- * <p>This class extends {@link ArithmeticWithConstantBase} to perform a pixel-wise
- * multiplication operation between the input channel and a constant value.</p>
+ * <p>This class extends {@link ArithmeticWithConstantBase} to perform a pixel-wise multiplication
+ * operation between the input channel and a constant value.
  */
 public class MultiplyConstant extends ArithmeticWithConstantBase {
 

@@ -38,20 +38,22 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.plugin.image.bean.channel.provider.mask.UnaryWithMaskBase;
 
 /**
- * Subtracts the mean intensity (of the entire channel or a masked portion thereof) from every voxel.
+ * Subtracts the mean intensity (of the entire channel or a masked portion thereof) from every
+ * voxel.
  *
  * <p>This class extends {@link UnaryWithMaskBase} to perform mean subtraction on a channel,
- * optionally restricted to a masked region.</p>
+ * optionally restricted to a masked region.
  *
  * @author Owen Feehan
  */
 public class SubtractMean extends UnaryWithMaskBase {
 
     // START BEAN PROPERTIES
-    /** 
+    /**
      * Whether to subtract the mean only from voxels within the mask.
      *
-     * <p>If true, only voxels within the mask are modified. If false, all voxels in the channel are modified.</p>
+     * <p>If true, only voxels within the mask are modified. If false, all voxels in the channel are
+     * modified.
      */
     @BeanField @Getter @Setter private boolean subtractFromMaskOnly = true;
     // END BEAN PROPERTIES
@@ -111,7 +113,8 @@ public class SubtractMean extends UnaryWithMaskBase {
     }
 
     /**
-     * Processes a single voxel by subtracting the mean and clamping the result to non-negative values.
+     * Processes a single voxel by subtracting the mean and clamping the result to non-negative
+     * values.
      *
      * @param buffer the {@link UnsignedByteBuffer} containing voxel intensities
      * @param offset the offset of the current voxel in the buffer

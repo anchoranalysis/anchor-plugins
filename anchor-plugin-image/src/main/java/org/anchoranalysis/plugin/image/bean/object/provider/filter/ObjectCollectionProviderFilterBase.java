@@ -39,9 +39,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithOptionalDimensionsBase;
 
-/**
- * Base class for object collection providers that apply a filter to the objects.
- */
+/** Base class for object collection providers that apply a filter to the objects. */
 public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDimensionsBase {
 
     // START BEAN PROPERTIES
@@ -77,7 +75,8 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
     }
 
     /**
-     * Creates an {@link ObjectCollection} from the given objects, potentially applying a filter and considering dimensions.
+     * Creates an {@link ObjectCollection} from the given objects, potentially applying a filter and
+     * considering dimensions.
      *
      * @param objects the input {@link ObjectCollection}
      * @param objectsRejected optional list to store rejected {@link ObjectMask}s

@@ -36,9 +36,7 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;
 
-/**
- * A provider that references an existing {@link Mask} by its identifier.
- */
+/** A provider that references an existing {@link Mask} by its identifier. */
 @NoArgsConstructor
 public class Reference extends MaskProvider {
 

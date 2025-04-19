@@ -54,7 +54,8 @@ class FindLargestMultipleWithin {
      * @param maxScaleFactor the maximum allowed scale factor.
      * @return the scale-factor to use scale {@code small} (in both dimensions) to be the largest
      *     size possible, without exceeding {@code stayWithin}.
-     * @throws OperationFailedException if the small extent is already larger than stayWithin in either dimension.
+     * @throws OperationFailedException if the small extent is already larger than stayWithin in
+     *     either dimension.
      */
     public static int apply(Extent small, Extent stayWithin, int maxScaleFactor)
             throws OperationFailedException {

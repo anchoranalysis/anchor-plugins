@@ -45,7 +45,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
  * Derives individual objects (with confidence) from a mask and associated channel of confidence
  * values.
  *
- * <p>The confidence value is the mean of the confidence of each individual voxel in the mask.</p>
+ * <p>The confidence value is the mean of the confidence of each individual voxel in the mask.
  *
  * @author Owen Feehan
  */
@@ -56,15 +56,15 @@ class DeriveObjectsFromMask {
      * Splits a mask into connected-components and associates a confidence.
      *
      * @param mask {@link Mask} to split into connected-components
-     * @param channel a {@link Channel}, the same size as {@code mask} with a confidence-value for each
-     *     voxel in a {@code mask}.
+     * @param channel a {@link Channel}, the same size as {@code mask} with a confidence-value for
+     *     each voxel in a {@code mask}.
      * @param transformToConfidence transforms from the unsigned-integer found in {@code channel} to
      *     a confidence value {@code 0 <= confidence <= 1}.
      * @param shift a shift to add to the object-masks after extracting the confidence-level.
      * @param minNumberVoxels the minimum number of voxels that must exist to form a separate
      *     object, otherwise the voxels are ignored.
-     * @return a list of {@link ObjectMask}s created from the connected-components of the mask with associated
-     *     confidence-values
+     * @return a list of {@link ObjectMask}s created from the connected-components of the mask with
+     *     associated confidence-values
      * @throws OperationFailedException if the operation fails
      */
     public static List<WithConfidence<ObjectMask>> splitIntoObjects(

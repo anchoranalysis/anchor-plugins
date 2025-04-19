@@ -37,9 +37,7 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-/**
- * Calculates a scale factor to ensure a minimum XY resolution is achieved.
- */
+/** Calculates a scale factor to ensure a minimum XY resolution is achieved. */
 public class MinimumXYResolution extends ScaleCalculator {
 
     // START BEAN PROPERTIES

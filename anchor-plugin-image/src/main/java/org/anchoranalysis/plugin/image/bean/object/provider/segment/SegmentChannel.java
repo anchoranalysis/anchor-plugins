@@ -50,8 +50,8 @@ import org.anchoranalysis.spatial.point.Point3i;
 /**
  * Segments a channel into objects using a specified segmentation algorithm.
  *
- * <p>This class extends {@link WithChannelBase} to provide functionality for segmenting
- * a channel into objects, optionally using a mask and seed objects.</p>
+ * <p>This class extends {@link WithChannelBase} to provide functionality for segmenting a channel
+ * into objects, optionally using a mask and seed objects.
  */
 public class SegmentChannel extends WithChannelBase {
 
@@ -85,7 +85,8 @@ public class SegmentChannel extends WithChannelBase {
     /**
      * Creates an {@link ObjectMask} from the optional mask provider.
      *
-     * @return An {@link Optional} containing the created {@link ObjectMask}, or empty if no mask is provided.
+     * @return An {@link Optional} containing the created {@link ObjectMask}, or empty if no mask is
+     *     provided.
      * @throws ProvisionFailedException if the mask creation fails.
      */
     private Optional<ObjectMask> createObjectMask() throws ProvisionFailedException {
@@ -97,7 +98,8 @@ public class SegmentChannel extends WithChannelBase {
      *
      * @param dimensions The dimensions of the channel being segmented.
      * @param maskAsObject An optional mask to restrict the seed objects.
-     * @return An {@link Optional} containing the created seed {@link ObjectCollection}, or empty if no seeds are provided.
+     * @return An {@link Optional} containing the created seed {@link ObjectCollection}, or empty if
+     *     no seeds are provided.
      * @throws ProvisionFailedException if the seed creation fails.
      */
     private Optional<ObjectCollection> createSeeds(

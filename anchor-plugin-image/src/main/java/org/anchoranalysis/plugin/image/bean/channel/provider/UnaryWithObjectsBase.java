@@ -36,17 +36,17 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
- * An abstract base class for creating a channel from an existing channel and a collection of objects.
+ * An abstract base class for creating a channel from an existing channel and a collection of
+ * objects.
  *
  * <p>This class extends {@link ChannelProviderUnary} to provide a framework for creating channels
- * based on an input channel and a collection of objects. Subclasses must implement the {@code createFromChannel} method.</p>
+ * based on an input channel and a collection of objects. Subclasses must implement the {@code
+ * createFromChannel} method.
  */
 public abstract class UnaryWithObjectsBase extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
-    /**
-     * The provider for the collection of objects to be used in channel creation.
-     */
+    /** The provider for the collection of objects to be used in channel creation. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
     // END BEAN PROPERTIES
 

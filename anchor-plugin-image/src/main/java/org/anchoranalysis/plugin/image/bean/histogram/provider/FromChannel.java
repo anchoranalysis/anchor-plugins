@@ -40,9 +40,7 @@ import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 
-/**
- * Creates a {@link Histogram} from a {@link Channel}, optionally using a mask.
- */
+/** Creates a {@link Histogram} from a {@link Channel}, optionally using a mask. */
 public class FromChannel extends HistogramProvider {
 
     // START BEAN PROPERTIES

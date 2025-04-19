@@ -36,9 +36,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.math.histogram.Histogram;
 
-/**
- * A provider that references an existing {@link Histogram} by its identifier.
- */
+/** A provider that references an existing {@link Histogram} by its identifier. */
 @NoArgsConstructor
 public class Reference extends HistogramProvider {
 

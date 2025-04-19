@@ -30,9 +30,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-/**
- * A vertex in a merge graph representing an object (and an associated payload).
- */
+/** A vertex in a merge graph representing an object (and an associated payload). */
 @RequiredArgsConstructor
 public class ObjectVertex {
 

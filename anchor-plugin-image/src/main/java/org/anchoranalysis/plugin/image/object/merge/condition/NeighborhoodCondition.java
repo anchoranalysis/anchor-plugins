@@ -37,7 +37,8 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 /**
  * A condition to determine if two objects are potential neighbors and candidates for merging.
  *
- * <p>This condition implements {@link UpdatableBeforeCondition} to allow efficient updates when the source object changes.
+ * <p>This condition implements {@link UpdatableBeforeCondition} to allow efficient updates when the
+ * source object changes.
  */
 public class NeighborhoodCondition implements UpdatableBeforeCondition {
 
@@ -64,7 +65,8 @@ public class NeighborhoodCondition implements UpdatableBeforeCondition {
         this.requireTouching = requireTouching;
 
         if (requireTouching) {
-            this.requireBBoxNeighbors = false; // We don't need this check if we're testing actual object intersection
+            this.requireBBoxNeighbors =
+                    false; // We don't need this check if we're testing actual object intersection
         }
     }
 

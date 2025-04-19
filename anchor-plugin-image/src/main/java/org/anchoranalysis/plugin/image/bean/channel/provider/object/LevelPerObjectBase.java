@@ -40,8 +40,8 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 /**
  * Creates a channel with a level calculated for each object using various methods.
  *
- * <p>This abstract class provides a base for creating channels where each object is assigned
- * a specific intensity level based on calculations performed on the input channel.</p>
+ * <p>This abstract class provides a base for creating channels where each object is assigned a
+ * specific intensity level based on calculations performed on the input channel.
  *
  * @author Owen Feehan
  */
@@ -75,7 +75,8 @@ public abstract class LevelPerObjectBase extends ChannelProviderUnary {
      *     variously for particular objects
      * @param objects the {@link ObjectCollection} for which levels are calculated
      * @param output the channel where the calculated-levels are written (for each object)
-     * @throws ProvisionFailedException if there's an error during the level calculation or writing process
+     * @throws ProvisionFailedException if there's an error during the level calculation or writing
+     *     process
      */
     protected abstract void writeLevelsForObjects(
             Channel input, ObjectCollection objects, Channel output)

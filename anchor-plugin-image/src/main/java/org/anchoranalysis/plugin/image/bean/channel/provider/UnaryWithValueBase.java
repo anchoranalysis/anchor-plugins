@@ -36,15 +36,14 @@ import org.anchoranalysis.image.core.channel.Channel;
 /**
  * A {@link ChannelProviderUnary} which has a scalar value field.
  *
- * <p>This abstract class extends {@link ChannelProviderUnary} to provide a framework for creating channels
- * based on an input channel and a scalar value. Subclasses must implement the {@code createFromChannelWithConstant} method.</p>
+ * <p>This abstract class extends {@link ChannelProviderUnary} to provide a framework for creating
+ * channels based on an input channel and a scalar value. Subclasses must implement the {@code
+ * createFromChannelWithConstant} method.
  */
 public abstract class UnaryWithValueBase extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
-    /**
-     * The scalar value to be used in channel creation.
-     */
+    /** The scalar value to be used in channel creation. */
     @BeanField @Getter @Setter private double value;
     // END BEAN PROPERTIES
 

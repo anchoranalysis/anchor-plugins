@@ -59,7 +59,9 @@ public class FromChannelOrMask extends StackProvider {
     /** A mask that is provided to the stack. Either this or {@code channel} must be set. */
     @BeanField @OptionalBean @Getter @Setter private Provider<Mask> mask;
 
-    /** If true, the output contains three channels (the input and two duplicates) instead of one. */
+    /**
+     * If true, the output contains three channels (the input and two duplicates) instead of one.
+     */
     @BeanField @Getter @Setter private boolean rgb = false;
     // END BEAN PROPERTIES
 

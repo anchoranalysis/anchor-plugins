@@ -39,22 +39,21 @@ import org.anchoranalysis.image.core.channel.Channel;
 /**
  * Provides a channel by referencing it from a a set of named-channels.
  *
- * <p>This class extends {@link ChannelProvider} to retrieve a channel by its ID from a named provider.
- * It also offers an option to duplicate the retrieved channel.</p>
+ * <p>This class extends {@link ChannelProvider} to retrieve a channel by its ID from a named
+ * provider. It also offers an option to duplicate the retrieved channel.
  */
 @NoArgsConstructor
 public class Reference extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    /**
-     * The ID of the channel to retrieve from the named-provider.
-     */
+    /** The ID of the channel to retrieve from the named-provider. */
     @BeanField @Getter @Setter private String id = "";
 
     /**
-     * If true, the channel is duplicated after it is retrieved, to prevent overwriting existing data.
-     * 
-     * <p>This is a shortcut to avoid embedding beans in a ChannelProviderDuplicate.</p>
+     * If true, the channel is duplicated after it is retrieved, to prevent overwriting existing
+     * data.
+     *
+     * <p>This is a shortcut to avoid embedding beans in a ChannelProviderDuplicate.
      */
     @BeanField @Getter @Setter private boolean duplicate = false;
     // END BEAN PROPERTIES

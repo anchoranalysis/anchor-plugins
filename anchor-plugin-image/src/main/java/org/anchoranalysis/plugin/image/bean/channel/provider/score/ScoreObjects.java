@@ -57,7 +57,7 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithObjectsBas
  * Creates a channel by scoring objects based on a feature calculation.
  *
  * <p>This class assigns intensity values to voxels in a new channel based on feature calculations
- * performed on objects in the input channel.</p>
+ * performed on objects in the input channel.
  */
 public class ScoreObjects extends UnaryWithObjectsBase {
 
@@ -96,7 +96,8 @@ public class ScoreObjects extends UnaryWithObjectsBase {
     }
 
     /**
-     * Creates an {@link EnergyStackWithoutParameters} from the input channel and additional channels.
+     * Creates an {@link EnergyStackWithoutParameters} from the input channel and additional
+     * channels.
      *
      * @param channel the input channel
      * @return the created {@link EnergyStackWithoutParameters}

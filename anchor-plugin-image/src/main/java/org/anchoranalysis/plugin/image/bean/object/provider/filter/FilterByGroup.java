@@ -44,15 +44,13 @@ import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelp
 /**
  * Filters an {@link ObjectCollection} by grouping objects and then applying a filter to each group.
  *
- * <p>Objects are grouped based on their intersection with objects from another collection,
- * and then the filter is applied to each group independently.</p>
+ * <p>Objects are grouped based on their intersection with objects from another collection, and then
+ * the filter is applied to each group independently.
  */
 public class FilterByGroup extends ObjectCollectionProviderFilterBase {
 
     // START BEAN PROPERTIES
-    /**
-     * Provides the {@link ObjectCollection} used for grouping the objects to be filtered.
-     */
+    /** Provides the {@link ObjectCollection} used for grouping the objects to be filtered. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsGrouped;
     // END BEAN PROPERTIES
 

@@ -40,24 +40,24 @@ import org.anchoranalysis.image.core.channel.convert.ToUnsignedShort;
  * Base class to calculate the gradient of the voxels in a {@link Channel}.
  *
  * <p>If the existing channel has appropriate voxel data-type, its voxels are replaced, otherwise
- * new voxels are assigned.</p>
+ * new voxels are assigned.
  *
  * @author Owen Feehan
  */
 public abstract class GradientBase extends ChannelProviderUnary {
 
     // START BEAN
-    /** 
+    /**
      * Scale factor applied to the gradient values.
-     * 
-     * <p>Default value is 1.0.</p>
+     *
+     * <p>Default value is 1.0.
      */
     @BeanField @Getter @Setter private double scaleFactor = 1.0;
 
-    /** 
+    /**
      * If true, outputs a short channel, otherwise byte channel.
-     * 
-     * <p>Default value is false.</p>
+     *
+     * <p>Default value is false.
      */
     @BeanField @Getter @Setter private boolean outputShort = false;
     // END BEAN

@@ -32,10 +32,11 @@ import org.anchoranalysis.spatial.point.Point3i;
  * Encodes watershed-related information in an integer range.
  *
  * <p>This class encodes three types of information:
+ *
  * <ul>
- *   <li>A number of state-machine-type constants</li>
- *   <li>27 Directions representing [-1,0,-1]X[-1,0,-1]X[-1,0,-1]</li>
- *   <li>A sequence of connected components IDs starting at 0</li>
+ *   <li>A number of state-machine-type constants
+ *   <li>27 Directions representing [-1,0,-1]X[-1,0,-1]X[-1,0,-1]
+ *   <li>A sequence of connected components IDs starting at 0
  * </ul>
  */
 public class WatershedEncoding implements EncodeDirection {
@@ -59,9 +60,7 @@ public class WatershedEncoding implements EncodeDirection {
     private static final int END_CHAIN_CODE_RANGE =
             START_CHAIN_CODE_RANGE + ChainCodesDirection.MAX_VALUE;
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int encodeDirection(int x, int y, int z) {
         return ChainCodesDirection.chainCode(x, y, z) + START_CHAIN_CODE_RANGE;

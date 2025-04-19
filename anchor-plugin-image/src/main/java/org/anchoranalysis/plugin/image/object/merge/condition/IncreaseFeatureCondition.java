@@ -37,7 +37,8 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * An {@link AfterCondition} that checks if merging two {@link ObjectMask}s increases a specific feature value.
+ * An {@link AfterCondition} that checks if merging two {@link ObjectMask}s increases a specific
+ * feature value.
  */
 @RequiredArgsConstructor
 public class IncreaseFeatureCondition implements AfterCondition {

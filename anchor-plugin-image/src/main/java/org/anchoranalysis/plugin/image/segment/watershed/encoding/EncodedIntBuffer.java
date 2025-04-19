@@ -31,7 +31,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * A wrapper around {@link UnsignedIntBuffer} that provides methods for encoding and decoding watershed-related information.
+ * A wrapper around {@link UnsignedIntBuffer} that provides methods for encoding and decoding
+ * watershed-related information.
  */
 @AllArgsConstructor
 public final class EncodedIntBuffer {

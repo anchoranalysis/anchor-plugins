@@ -34,8 +34,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 /**
  * Converts a channel to unsigned byte format, scaling the values based on the original voxel type.
  *
- * <p>This class extends {@link ConvertChannelTo} to provide a specific implementation
- * for converting channels to unsigned byte format with type-based scaling.</p>
+ * <p>This class extends {@link ConvertChannelTo} to provide a specific implementation for
+ * converting channels to unsigned byte format with type-based scaling.
  */
 public class ScaleByTypeToByte extends ConvertChannelTo<UnsignedByteBuffer> {
 

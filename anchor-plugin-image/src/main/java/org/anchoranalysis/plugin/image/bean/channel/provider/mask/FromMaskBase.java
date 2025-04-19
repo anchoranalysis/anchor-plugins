@@ -40,7 +40,7 @@ import org.anchoranalysis.image.core.mask.Mask;
  * any other {@link ChannelProvider} as an input.
  *
  * <p>Note for classes that use both a binary-mask AND another {@link ChannelProvider}, see {@link
- * UnaryWithMaskBase}.</p>
+ * UnaryWithMaskBase}.
  *
  * @author Owen Feehan
  */

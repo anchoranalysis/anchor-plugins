@@ -88,7 +88,8 @@ public class Reference extends StackProvider {
     /**
      * Searches for a matching stack using the specified identifier.
      *
-     * @return an {@link Optional} containing the matching {@link Stack} if found, or empty if not found
+     * @return an {@link Optional} containing the matching {@link Stack} if found, or empty if not
+     *     found
      * @throws ProvisionFailedException if an error occurs while searching for the stack
      */
     private Optional<Stack> findMatchingStack() throws ProvisionFailedException {
