@@ -70,7 +70,7 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
                     input.forChild()
                             .calculate(
                                     item,
-                                    new CalculateDeriveObjFromCollection(ccObjects, i),
+                                    new CalculateDeriveObjectFromCollection(ccObjects, i),
                                     cacheName(i));
             featureVals.add(val);
         }

@@ -28,6 +28,11 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.overlap;
 
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
+/**
+ * Calculates the overlap ratio between two objects relative to the size of the first object.
+ *
+ * <p>The denominator used in the ratio calculation is the number of voxels in the first object.
+ */
 public class OverlapRelativeToFirst extends OverlapRelative {
 
     @Override

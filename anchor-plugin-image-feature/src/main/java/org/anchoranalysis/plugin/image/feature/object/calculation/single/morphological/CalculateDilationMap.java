@@ -35,13 +35,29 @@ import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateIncrementalOperationMap;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Calculates a map of dilated {@link ObjectMask}s for different iteration counts.
+ *
+ * <p>This class extends {@link CalculateIncrementalOperationMap} to perform dilation operations on
+ * object masks and cache the results for different iteration counts.
+ */
 @EqualsAndHashCode(callSuper = true)
 public class CalculateDilationMap extends CalculateIncrementalOperationMap {
 
+    /**
+     * Creates a new {@link CalculateDilationMap}.
+     *
+     * @param do3D whether to perform 3D dilation (true) or 2D dilation (false)
+     */
     public CalculateDilationMap(boolean do3D) {
         super(do3D);
     }
 
+    /**
+     * Copy constructor for {@link CalculateDilationMap}.
+     *
+     * @param other the {@link CalculateIncrementalOperationMap} to copy from
+     */
     protected CalculateDilationMap(CalculateIncrementalOperationMap other) {
         super(other);
     }

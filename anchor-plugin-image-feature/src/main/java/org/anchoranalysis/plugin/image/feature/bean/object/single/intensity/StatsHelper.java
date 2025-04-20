@@ -36,18 +36,20 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
+/** Helper class for calculating various statistical measures on image objects. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class StatsHelper {
 
     /**
      * Calculates the mean-intensity of a masked-part of each slice, and returns the maximum value
-     * across all sices
+     * across all slices.
      *
-     * @param channel
-     * @param object
-     * @param excludeZero
-     * @return
-     * @throws FeatureCalculationException
+     * @param channel the {@link Channel} to calculate intensity from
+     * @param object the {@link ObjectMask} defining the region of interest
+     * @param excludeZero if true, zero-valued voxels are excluded from the calculation
+     * @return a {@link ValueAndIndex} containing the maximum mean intensity and its corresponding
+     *     slice index
+     * @throws FeatureCalculationException if the calculation fails
      */
     public static ValueAndIndex calculateMaxSliceMean(
             Channel channel, ObjectMask object, boolean excludeZero)
@@ -79,19 +81,20 @@ class StatsHelper {
     }
 
     /**
-     * Calculates the mean-intensity of a certain number of (highest or lowest-intesntiy) pixels
-     * from the masked part of a chanel
+     * Calculates the mean-intensity of a certain number of (highest or lowest-intensity) pixels
+     * from the masked part of a channel.
      *
-     * <p>This number of pixels can either taken from the highest or lowest part of the histogram
+     * <p>This number of pixels can either be taken from the highest or lowest part of the
+     * histogram.
      *
-     * @param channel
-     * @param object
+     * @param channel the {@link Channel} to calculate intensity from
+     * @param object the {@link ObjectMask} defining the region of interest
      * @param numberVoxels the number of voxels to be considered (either the highest-intensity
-     *     pixels, or lowest-intensity pixel)
-     * @param highest iff true the highest-intensity voxels are used in the mask, otherwise the
-     *     lowest-intensity pixels are used
-     * @return
-     * @throws OperationFailedException
+     *     pixels, or lowest-intensity pixels)
+     * @param highest if true, the highest-intensity voxels are used in the calculation; otherwise,
+     *     the lowest-intensity pixels are used
+     * @return the mean intensity of the selected voxels
+     * @throws OperationFailedException if the calculation fails
      */
     public static double calculateMeanNumberVoxels(
             Channel channel, ObjectMask object, int numberVoxels, boolean highest)

@@ -30,6 +30,11 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.collection.FeatureObjectCollection;
 import org.anchoranalysis.image.feature.input.FeatureInputObjectCollection;
 
+/**
+ * Calculates the number of objects in a {@link FeatureInputObjectCollection}.
+ *
+ * <p>This feature simply returns the size of the object collection.
+ */
 public class NumberObjects extends FeatureObjectCollection {
 
     @Override

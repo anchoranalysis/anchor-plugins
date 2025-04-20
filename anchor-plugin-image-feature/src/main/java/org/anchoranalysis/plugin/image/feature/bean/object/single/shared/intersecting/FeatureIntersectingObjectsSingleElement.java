@@ -40,9 +40,14 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
+/**
+ * A feature that calculates a value based on intersecting objects, considering each intersecting
+ * object individually.
+ */
 public abstract class FeatureIntersectingObjectsSingleElement extends FeatureIntersectingObjects {
 
     // START BEAN PROPERTIES
+    /** The feature to calculate for each intersecting object pair. */
     @BeanField @Getter @Setter private Feature<FeatureInputPairObjects> item;
     // END BEAN PROPERTIES
 
@@ -55,8 +60,22 @@ public abstract class FeatureIntersectingObjectsSingleElement extends FeatureInt
         return aggregateResults(calculateResults(input, intersecting));
     }
 
+    /**
+     * Aggregates the results from individual intersecting object calculations.
+     *
+     * @param results the list of results from individual calculations
+     * @return the aggregated result
+     */
     protected abstract double aggregateResults(List<Double> results);
 
+    /**
+     * Calculates results for each intersecting object.
+     *
+     * @param inputExisting the existing input for feature calculation
+     * @param ccIntersecting the resolved part containing intersecting objects
+     * @return a list of calculated results
+     * @throws FeatureCalculationException if an error occurs during calculation
+     */
     private List<Double> calculateResults(
             FeatureCalculationInput<FeatureInputSingleObject> inputExisting,
             ResolvedPart<ObjectCollection, FeatureInputSingleObject> ccIntersecting)

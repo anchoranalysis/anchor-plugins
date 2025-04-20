@@ -33,16 +33,27 @@ import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegate;
 
+/**
+ * Calculates a {@link FeatureInputSingleObject} from a {@link FeatureInputStack} by deriving an
+ * object from a collection.
+ */
 @EqualsAndHashCode(callSuper = true)
-class CalculateDeriveObjFromCollection
+class CalculateDeriveObjectFromCollection
         extends CalculateInputFromDelegate<
                 FeatureInputSingleObject, FeatureInputStack, ObjectCollection> {
 
+    /** The index of the object to extract from the collection. */
     private final int index;
 
-    public CalculateDeriveObjFromCollection(
-            ResolvedPart<ObjectCollection, FeatureInputStack> ccDelegate, int index) {
-        super(ccDelegate);
+    /**
+     * Creates a new instance of {@link CalculateDeriveObjectFromCollection}.
+     *
+     * @param partDelegate the resolved part containing the object collection
+     * @param index the index of the object to extract from the collection
+     */
+    public CalculateDeriveObjectFromCollection(
+            ResolvedPart<ObjectCollection, FeatureInputStack> partDelegate, int index) {
+        super(partDelegate);
         this.index = index;
     }
 

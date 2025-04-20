@@ -39,30 +39,38 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.VoxelScore;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/** A voxel score that imposes a value relation to a histogram. */
 public class IdentityImposeValueRelationToHistogram extends VoxelScore {
 
     // START BEAN PROPERTIES
+    /** The index of the energy channel to check. */
     @BeanField @Getter @Setter private int energyChannelIndexCheck = 0;
 
+    /** The index of the energy channel to use if the relation check fails. */
     @BeanField @Getter @Setter private int energyChannelIndexFail = 0;
 
+    /** The index of the histogram to use for comparison. */
     @BeanField @Getter @Setter private int histogramIndex = 0;
 
+    /** The relation to test between the voxel value and the histogram value. */
     @BeanField @Getter @Setter private RelationBean relation;
 
+    /** The value to return if the relation test passes. */
     @BeanField @Getter @Setter private double value = 0;
 
-    @BeanField @Getter @Setter private boolean max = true; // We use the max, otherwise the min
+    /** Whether to use the maximum (true) or minimum (false) value from the histogram. */
+    @BeanField @Getter @Setter private boolean max = true;
     // END BEAN PROPERTIES
 
+    /** The maximum or minimum value from the histogram, depending on the {@code max} property. */
     private int histogramMax;
 
     @Override
     public double calculate(int[] voxelIntensities) throws FeatureCalculationException {
 
-        double pxlValue = voxelIntensities[energyChannelIndexCheck];
+        double pixelValue = voxelIntensities[energyChannelIndexCheck];
 
-        if (relation.create().test(pxlValue, histogramMax)) {
+        if (relation.create().test(pixelValue, histogramMax)) {
             return value;
         } else {
             return voxelIntensities[energyChannelIndexFail];

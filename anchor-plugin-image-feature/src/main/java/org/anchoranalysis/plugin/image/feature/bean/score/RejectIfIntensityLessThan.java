@@ -32,13 +32,25 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.VoxelScore;
 
+/**
+ * Rejects voxels with intensity less than a specified minimum, otherwise calculates a score using
+ * another {@link VoxelScore}.
+ *
+ * <p>This class extends {@link VoxelScore} to provide a specific scoring mechanism for voxels.
+ */
 public class RejectIfIntensityLessThan extends VoxelScore {
 
     // START BEAN PROPERTIES
+    /** The {@link VoxelScore} to use for calculating the score if the intensity is not rejected. */
     @BeanField @Getter @Setter private VoxelScore item;
 
+    /** The index of the energy channel to check for intensity. */
     @BeanField @Getter @Setter private int energyChannelIndex = 0;
 
+    /**
+     * The minimum intensity threshold. Voxels with intensity less than this are rejected (scored as
+     * 0).
+     */
     @BeanField @Getter @Setter private int minIntensity = 0;
     // END BEAN PROPERTIES
 

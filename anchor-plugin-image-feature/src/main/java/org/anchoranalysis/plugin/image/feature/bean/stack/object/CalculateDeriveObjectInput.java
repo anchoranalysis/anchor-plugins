@@ -35,11 +35,19 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Derives a {@link FeatureInputSingleObject} from a {@link FeatureInputStack} by extracting an
+ * object mask from a specific energy channel.
+ *
+ * <p>This class extends {@link CalculationPart} to provide functionality for deriving a single
+ * object input from a stack input.
+ */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class CalculateDeriveObjectInput
         extends CalculationPart<FeatureInputSingleObject, FeatureInputStack> {
 
+    /** The index of the energy channel to extract the object mask from. */
     private final int energyIndex;
 
     @Override
@@ -49,6 +57,13 @@ public class CalculateDeriveObjectInput
                 extractObjectMask(input), input.getEnergyStackOptional());
     }
 
+    /**
+     * Extracts an {@link ObjectMask} from the input stack's energy channel.
+     *
+     * @param input the {@link FeatureInputStack} to extract the object mask from
+     * @return the extracted {@link ObjectMask}
+     * @throws FeatureCalculationException if there's an error during extraction
+     */
     private ObjectMask extractObjectMask(FeatureInputStack input)
             throws FeatureCalculationException {
 

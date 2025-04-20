@@ -33,12 +33,19 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
-//
-// Ratio of number of non-mode pixels to number of pixels
-//
+/**
+ * Calculates the ratio of non-mode pixels to total pixels in a {@link Histogram}.
+ *
+ * <p>The mode is the most frequent value in the histogram.
+ */
 public class RatioNonMode extends FeatureHistogramStatistic {
 
     // START BEAN PROPERTIES
+    /**
+     * Whether to ignore the zero value when calculating the ratio.
+     *
+     * <p>If true, pixels with value 0 are not considered in the calculation.
+     */
     @BeanField @Getter @Setter private boolean ignoreZero = false;
     // END BEAN PROPERTIES
 
@@ -75,15 +82,18 @@ public class RatioNonMode extends FeatureHistogramStatistic {
         }
     }
 
-    private int findMode(Histogram histogram, int startV) {
-
-        // Find mode
+    /**
+     * Finds the mode (most frequent value) in the histogram.
+     *
+     * @param histogram the {@link Histogram} to analyze
+     * @param startValue the starting value to consider (usually 0 or 1)
+     * @return the mode value
+     */
+    private int findMode(Histogram histogram, int startValue) {
         int maxIndex = -1;
         long maxValue = -1;
-        for (int value = startV; value < 255; value++) {
-
+        for (int value = startValue; value < 255; value++) {
             long count = histogram.getCount(value);
-
             if (count > maxValue) {
                 maxValue = count;
                 maxIndex = value;

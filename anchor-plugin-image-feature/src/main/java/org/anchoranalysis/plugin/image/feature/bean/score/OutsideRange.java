@@ -32,26 +32,34 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.VoxelScore;
 
+/**
+ * Calculates a voxel score based on whether the voxel intensity is outside a specified range.
+ *
+ * <p>This class extends {@link VoxelScore} to provide a specific scoring mechanism for voxels.
+ */
 public class OutsideRange extends VoxelScore {
 
     // START BEAN PROPERTIES
+    /** The minimum value of the range (inclusive). */
     @BeanField @Getter @Setter private int min = 0;
 
+    /** The maximum value of the range (exclusive). */
     @BeanField @Getter @Setter private int max = 256;
 
+    /** The index of the energy channel to use for intensity values. */
     @BeanField @Getter @Setter private int energyIndex = 0;
     // END BEAN PROPERTIES
 
     @Override
     public double calculate(int[] voxelIntensities) throws FeatureCalculationException {
 
-        double val = voxelIntensities[energyIndex];
-        if (val < min) {
+        double value = voxelIntensities[energyIndex];
+        if (value < min) {
             return 0;
         }
-        if (val > max) {
+        if (value > max) {
             return 255;
         }
-        return val;
+        return value;
     }
 }

@@ -73,7 +73,7 @@ class MinFeatureIntersectingObjectsAboveThresholdTest {
                 FEATURE,
                 false,
                 FeatureHelper.VALUE_NO_OBJECTS,
-                FeatureHelper.EXPECTED_NUM_PIXELS_SECOND_CIRCLE,
+                FeatureHelper.EXPECTED_NUMBER_PIXELS_SECOND_CIRCLE,
                 FeatureHelper.VALUE_NO_OBJECTS,
                 FeatureHelper.VALUE_NO_OBJECTS);
     }

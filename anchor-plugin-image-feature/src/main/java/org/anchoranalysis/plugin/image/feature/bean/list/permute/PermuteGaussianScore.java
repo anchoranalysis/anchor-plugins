@@ -30,13 +30,22 @@ import org.anchoranalysis.feature.input.FeatureInputDictionary;
 import org.anchoranalysis.plugin.operator.feature.bean.statistics.GaussianCumulative;
 
 /**
- * Similar to FeatureListProviderPermute but embeds the feature in a GaussianScore
+ * Permutes a feature by embedding it in a {@link GaussianCumulative} score.
  *
+ * <p>This class is similar to FeatureListProviderPermute but embeds the feature in a GaussianScore.
+ *
+ * @param <T> the type of feature input, extending {@link FeatureInputDictionary}
  * @author Owen Feehan
  */
 public class PermuteGaussianScore<T extends FeatureInputDictionary>
         extends PermuteFirstSecondOrder<T> {
 
+    /**
+     * Creates a new instance of {@link PermuteGaussianScore}.
+     *
+     * <p>The constructor initializes the superclass with a {@link GaussianCumulative} factory and
+     * sets the range to [0, 1].
+     */
     public PermuteGaussianScore() {
         super(GaussianCumulative::new, 0, 1);
     }

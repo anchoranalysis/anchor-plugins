@@ -33,13 +33,24 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegate;
 
+/**
+ * Calculates a {@link FeatureInputPairObjects} from a {@link FeatureInputSingleObject} and an
+ * intersecting {@link ObjectCollection}.
+ */
 @EqualsAndHashCode(callSuper = true)
 public class CalculateIntersecting
         extends CalculateInputFromDelegate<
                 FeatureInputPairObjects, FeatureInputSingleObject, ObjectCollection> {
 
+    /** The index of the object in the intersecting collection to use. */
     private int index;
 
+    /**
+     * Creates a new {@link CalculateIntersecting} instance.
+     *
+     * @param intersecting the resolved part containing the intersecting objects
+     * @param index the index of the object in the intersecting collection to use
+     */
     public CalculateIntersecting(
             ResolvedPart<ObjectCollection, FeatureInputSingleObject> intersecting, int index) {
         super(intersecting);

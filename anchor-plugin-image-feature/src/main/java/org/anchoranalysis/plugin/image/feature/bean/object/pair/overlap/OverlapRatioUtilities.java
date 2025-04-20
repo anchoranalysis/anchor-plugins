@@ -32,19 +32,31 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
 /**
- * Calculates overlap-ratios or the denominator used for that ratio
+ * Utility class for calculating overlap-ratios or the denominator used for that ratio.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OverlapRatioUtilities {
 
-    /** Calculates the overlap of two objects relative to the maximum-volume denominator */
+    /**
+     * Calculates the overlap ratio of two objects relative to the maximum-volume denominator.
+     *
+     * @param input the {@link FeatureInputPairObjects} containing the two objects
+     * @return the overlap ratio
+     */
     public static double overlapRatioToMaxVolume(FeatureInputPairObjects input) {
         return overlapRatioTo(input, () -> OverlapRatioUtilities.denominatorMaxVolume(input));
     }
 
-    /** Calculates the overlap of two objects relative to a denominator expressed as a function */
+    /**
+     * Calculates the overlap ratio of two objects relative to a denominator expressed as a
+     * function.
+     *
+     * @param input the {@link FeatureInputPairObjects} containing the two objects
+     * @param denominatorFunc a function that supplies the denominator value
+     * @return the overlap ratio
+     */
     public static double overlapRatioTo(
             FeatureInputPairObjects input, IntSupplier denominatorFunc) {
         int intersectingVoxels = input.getFirst().countIntersectingVoxels(input.getSecond());
@@ -56,7 +68,12 @@ class OverlapRatioUtilities {
         return ((double) intersectingVoxels) / denominatorFunc.getAsInt();
     }
 
-    /** A denominator that is the maximum-volume of the two objects */
+    /**
+     * Calculates a denominator that is the maximum-volume of the two objects.
+     *
+     * @param input the {@link FeatureInputPairObjects} containing the two objects
+     * @return the maximum volume of the two objects
+     */
     public static int denominatorMaxVolume(FeatureInputPairObjects input) {
         return Math.max(input.getFirst().numberVoxelsOn(), input.getSecond().numberVoxelsOn());
     }

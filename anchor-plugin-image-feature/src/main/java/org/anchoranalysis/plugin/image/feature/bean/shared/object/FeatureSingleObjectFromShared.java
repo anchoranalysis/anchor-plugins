@@ -42,16 +42,20 @@ import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
- * Calculates as object-masks from entities in shared, using the feature-input only for a
+ * Calculates object-masks from entities in shared, using the feature-input only for an
  * energy-stack.
  *
+ * <p>This abstract class extends {@link FeatureEnergy} to provide a base for features that operate
+ * on single objects from shared data.
+ *
  * @author Owen Feehan
- * @param <T> feature-input
+ * @param <T> feature-input type that extends {@link FeatureInputEnergy}
  */
 public abstract class FeatureSingleObjectFromShared<T extends FeatureInputEnergy>
         extends FeatureEnergy<T> {
 
     // START BEAN PROPERTIES
+    /** The feature to be calculated on a single object. */
     @BeanField @Getter @Setter private Feature<FeatureInputSingleObject> item;
     // END BEAN PROPERTIES
 
@@ -62,6 +66,12 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputEnergy
                 new ImageInitialization(initialization.sharedObjectsRequired()));
     }
 
+    /**
+     * Performs initialization before calculation with image-specific initialization.
+     *
+     * @param initialization the image-specific initialization
+     * @throws InitializeException if initialization fails
+     */
     protected abstract void beforeCalcWithInitialization(ImageInitialization initialization)
             throws InitializeException;
 
@@ -70,6 +80,14 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputEnergy
         return calc(input.forChild(), item);
     }
 
+    /**
+     * Calculates the feature value for a single object.
+     *
+     * @param calculateForChild the calculation context for child features
+     * @param featureForSingleObject the feature to calculate on a single object
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double calc(
             CalculateForChild<T> calculateForChild,
             Feature<FeatureInputSingleObject> featureForSingleObject)

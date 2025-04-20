@@ -34,14 +34,25 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
+/** Calculates the maximum mean intensity across all slices of an object in a channel. */
 public class IntensityMeanMaxSlice extends FeatureEnergyChannel {
 
-    // START BEAN PROPERTIES
+    /** If true, zero-valued voxels are excluded from the mean intensity calculation. */
     @BeanField @Getter @Setter private boolean excludeZero = false;
 
+    /** The value to return when the object has no voxels in any slice. */
     @BeanField @Getter @Setter private int emptyValue = 0;
-    // END BEAN PROPERTIES
 
+    /**
+     * Calculates the maximum mean intensity across all slices of the object in the given channel.
+     *
+     * @param input the {@link FeatureCalculationInput} containing the {@link
+     *     FeatureInputSingleObject}
+     * @param channel the {@link Channel} to calculate the intensity from
+     * @return the maximum mean intensity across all slices, or {@link #emptyValue} if the object
+     *     has no voxels
+     * @throws FeatureCalculationException if the calculation fails
+     */
     @Override
     protected double calculateForChannel(
             FeatureCalculationInput<FeatureInputSingleObject> input, Channel channel)

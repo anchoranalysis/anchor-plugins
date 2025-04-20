@@ -47,7 +47,9 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Simply selects features directly from the list, and objects directly from the list passed.
+ * Selects features and objects directly from the input list, treating each object independently.
+ *
+ * <p>This class does not combine objects, but rather processes each object individually.
  *
  * @author Owen Feehan
  */
@@ -76,6 +78,12 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
         }
     }
 
+    /**
+     * Creates a {@link FeatureTableCalculator} from a {@link NamedFeatureStore}.
+     *
+     * @param features the named feature store containing the features to be calculated
+     * @return a new {@link FeatureTableCalculator} for the given features
+     */
     public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(
             NamedFeatureStore<FeatureInputSingleObject> features) {
         return new SingleTableCalculator(features);
@@ -109,6 +117,14 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
         return input.getObject().boundingBox();
     }
 
+    /**
+     * Checks if an object is fully contained within the scene extent.
+     *
+     * @param object the {@link ObjectMask} to check
+     * @param extent the {@link Extent} of the scene
+     * @return the input object if it's within the scene extent
+     * @throws CreateException if the object is not fully contained within the scene extent
+     */
     private ObjectMask checkObjectInsideScene(ObjectMask object, Extent extent)
             throws CreateException {
         if (!extent.contains(object.boundingBox())) {

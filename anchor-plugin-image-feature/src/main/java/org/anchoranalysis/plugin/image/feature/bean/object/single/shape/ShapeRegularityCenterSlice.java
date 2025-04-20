@@ -32,6 +32,12 @@ import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Calculates the shape regularity of the center slice of an {@link ObjectMask}.
+ *
+ * <p>This feature extracts the center slice of the 3D object based on its center of gravity, and
+ * then calculates the shape regularity of this 2D slice.
+ */
 public class ShapeRegularityCenterSlice extends FeatureSingleObject {
 
     @Override
@@ -41,6 +47,12 @@ public class ShapeRegularityCenterSlice extends FeatureSingleObject {
                 centerSlice(input.get().getObject()));
     }
 
+    /**
+     * Extracts the center slice of a 3D object mask.
+     *
+     * @param object the 3D {@link ObjectMask} to extract the center slice from
+     * @return a new {@link ObjectMask} representing the center slice of the input object
+     */
     private ObjectMask centerSlice(ObjectMask object) {
         int zSliceCenter = (int) object.centerOfGravity().z();
         return object.extractSlice(zSliceCenter, false);

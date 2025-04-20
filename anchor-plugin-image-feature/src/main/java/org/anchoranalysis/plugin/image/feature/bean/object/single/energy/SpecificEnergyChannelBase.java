@@ -36,12 +36,14 @@ import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/** A base class for features that operate on a specific channel from the energy stack. */
 public abstract class SpecificEnergyChannelBase extends FeatureSingleObject {
 
-    // START BEAN PROPERTIES
-    /** Index of which channel in the energy-stack to select */
+    /**
+     * Index of which channel in the energy-stack to select. 0 represents the first channel, 1 the
+     * second, and so on.
+     */
     @BeanField @Getter @Setter private int energyIndex = 0;
-    // END BEAN PROPERTIES
 
     @Override
     public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
@@ -51,6 +53,14 @@ public abstract class SpecificEnergyChannelBase extends FeatureSingleObject {
                 input.get().getEnergyStackRequired().getChannel(energyIndex));
     }
 
+    /**
+     * Calculates the feature value for a specific object and channel.
+     *
+     * @param object the {@link ObjectMask} representing the object of interest
+     * @param channel the {@link Channel} from the energy stack to calculate the feature on
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double calculateWithChannel(ObjectMask object, Channel channel)
             throws FeatureCalculationException;
 }

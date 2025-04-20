@@ -29,6 +29,13 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
+/**
+ * Calculates the maximum coordinate of an object's bounding box along a specified axis.
+ *
+ * <p>This feature returns the maximum coordinate of the bounding box along the axis specified in
+ * the parent class. The maximum coordinate is inclusive, meaning it represents the highest voxel
+ * position that is part of the object.
+ */
 public class BoundingBoxMaximumAlongAxis extends BoundingBoxAlongAxisBase {
 
     @Override

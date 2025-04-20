@@ -45,27 +45,34 @@ import org.anchoranalysis.test.feature.plugins.objects.CircleObjectFixture;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 import org.mockito.Mockito;
 
+/** Utility operations for unning tests that involve intersecting objects. */
 class InteresectingObjectsTestHelper {
 
+    /** Identifier for the shared object collection. */
     private static final String ID = "someObjects";
 
+    /** Number of intersecting objects to generate. */
     private static final int NUMBER_INTERSECTING = 4;
+
+    /** Number of non-intersecting objects to generate. */
     private static final int NUMBER_NOT_INTERSECTING = 2;
 
     /**
      * Runs several tests on a feature and object-mask collection by removing objects at particular
-     * indexes
+     * indexes.
      *
-     * <p>Specifically the test that is called is the same as {#link assertFeatureIndexInt}
+     * <p>Specifically the test that is called is the same as {@link #assertFeatureIndexInt}.
      *
+     * @param messagePrefix prefix for the test message
      * @param feature feature to use for test
-     * @param expectedFirst expected-result for object in first-position
-     * @param expectedSecond expected-result for object in second-position
-     * @param expectedSecondLast expected-result for object in second-last position
-     * @param expectedLast expected-result for object in last position
-     * @throws OperationFailedException
-     * @throws FeatureCalculationException
-     * @throws InitializeException
+     * @param sameSize whether the objects should be the same size
+     * @param expectedFirst expected result for object in first position
+     * @param expectedSecond expected result for object in second position
+     * @param expectedSecondLast expected result for object in second-last position
+     * @param expectedLast expected result for object in last position
+     * @throws OperationFailedException if the operation fails
+     * @throws FeatureCalculationException if feature calculation fails
+     * @throws InitializeException if initialization fails
      */
     public static void testPositions(
             String messagePrefix,
@@ -108,15 +115,15 @@ class InteresectingObjectsTestHelper {
      * Asserts a result after extracting object at index {@code i} from a collection, and using the
      * remainder as the {@link ObjectCollection}.
      *
-     * @param message descriptive-message for test.
-     * @param feature feature to calculate on inputs to form value.
+     * @param message descriptive message for test
+     * @param feature feature to calculate on inputs to form value
      * @param objects object-collection used to determine parameter for feature (single object
-     *     removed at index) and the remainder that form a set of objects to intersect with.
-     * @param index index of object in collection to remove and use as parameter.
-     * @param expectedResult expected result from test.
-     * @throws InitializeException
-     * @throws FeatureCalculationException
-     * @throws OperationFailedException
+     *     removed at index) and the remainder that form a set of objects to intersect with
+     * @param index index of object in collection to remove and use as parameter
+     * @param expectedResult expected result from test
+     * @throws InitializeException if initialization fails
+     * @throws FeatureCalculationException if feature calculation fails
+     * @throws OperationFailedException if the operation fails
      */
     private static void assertFeatureIndexInt(
             String message,
@@ -140,7 +147,13 @@ class InteresectingObjectsTestHelper {
                 expectedResult);
     }
 
-    /** Removes an object from the collection immutably */
+    /**
+     * Removes an object from the collection immutably.
+     *
+     * @param objects the original object collection
+     * @param index the index of the object to remove
+     * @return a new {@link ObjectCollection} with the object at the specified index removed
+     */
     private static ObjectCollection removeImmutable(ObjectCollection objects, int index) {
         ArrayList<ObjectMask> removed = new ArrayList<>(objects.size() - 1);
         for (int i = 0; i < index; i++) {
@@ -152,6 +165,13 @@ class InteresectingObjectsTestHelper {
         return new ObjectCollection(removed);
     }
 
+    /**
+     * Creates an {@link ImageInitialization} with the given object collection.
+     *
+     * @param others the object collection to include in the initialization
+     * @return a new {@link ImageInitialization} instance
+     * @throws OperationFailedException if the operation fails
+     */
     private static ImageInitialization createInitialization(ObjectCollection others)
             throws OperationFailedException {
 
@@ -165,11 +185,24 @@ class InteresectingObjectsTestHelper {
         return new ImageInitialization(sharedObjects);
     }
 
+    /**
+     * Adds an ID to the given feature.
+     *
+     * @param feature the feature to add the ID to
+     * @return the feature with the ID added
+     */
     private static FeatureIntersectingObjects addId(FeatureIntersectingObjects feature) {
         feature.setId(ID);
         return feature;
     }
 
+    /**
+     * Combines two strings with a hyphen.
+     *
+     * @param first the first string
+     * @param second the second string
+     * @return the combined string
+     */
     private static String combine(String first, String second) {
         return first + "-" + second;
     }

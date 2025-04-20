@@ -90,14 +90,11 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     private BeanInstanceMap defaultInstances;
 
     /**
-     * Create with a specific interpolator.
+     * Checks if the bean is misconfigured and saves the default instances for later use.
      *
-     * @param interpolator interpolator used to resize images in thumbnail generation.
+     * @param defaultInstances the {@link BeanInstanceMap} containing default instances
+     * @throws BeanMisconfiguredException if the bean is misconfigured
      */
-    protected CombineObjectsForFeatures(Interpolator interpolator) {
-        this.interpolator = interpolator;
-    }
-
     @Override
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
@@ -106,16 +103,26 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     }
 
     /**
+     * Create with a specific interpolator.
+     *
+     * @param interpolator interpolator used to resize images in thumbnail generation.
+     */
+    protected CombineObjectsForFeatures(Interpolator interpolator) {
+        this.interpolator = interpolator;
+    }
+
+    /**
      * Creates features that will be applied on the objects. Features should always be duplicated
      * from the input list.
      *
      * @param featuresSingleObject beans defining features to be applied to single-objects.
-     * @param storeFactory creates as new {@link NamedFeatureStore} as needed.
+     * @param storeFactory creates a new {@link NamedFeatureStore} as needed.
      * @param suppressErrors when true, exceptions aren't thrown when feature-calculations fail, but
      *     rather a log error message is written.
-     * @return a calculator for feature tables that may apply various features derived from {@code
-     *     featuresSingleObject}.
-     * @throws CreateException
+     * @return a {@link FeatureTableCalculator} for feature tables that may apply various features
+     *     derived from {@code featuresSingleObject}.
+     * @throws CreateException if there's an error creating the features.
+     * @throws InitializeException if there's an error initializing the features.
      */
     public abstract FeatureTableCalculator<T> createFeatures(
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> featuresSingleObject,
@@ -123,7 +130,12 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
             boolean suppressErrors)
             throws CreateException, InitializeException;
 
-    /** Generates a unique identifier for a particular input */
+    /**
+     * Generates a unique identifier for a particular input.
+     *
+     * @param input the input to generate a unique identifier for
+     * @return a unique identifier string
+     */
     public abstract String uniqueIdentifierFor(T input);
 
     /**
@@ -135,7 +147,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * @param thumbnailsEnabled whether thumbnail-generation is enabled.
      * @param context context in which the operation occurs.
      * @return the list of inputs.
-     * @throws CreateException
+     * @throws CreateException if an error occurs deriving or creating the thumbnails.
      */
     public ListWithThumbnails<T, ObjectCollection> deriveInputsStartBatch(
             ObjectCollection objects,
@@ -181,19 +193,20 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     /**
      * Selects objects from an input that will be used for thumbnail generation.
      *
-     * @param input the input.
-     * @return the thumbnail.
+     * @param input the input
+     * @return the {@link ObjectCollection} for thumbnail generation
+     * @throws CreateException if there's an error creating the object collection
      */
     public abstract ObjectCollection objectsForThumbnail(T input) throws CreateException;
 
     /**
      * Derives a list of inputs from an object-collection.
      *
-     * @param objects the object-collection.
-     * @param energyStack energy-stack used during feature calculation.
-     * @param logger the logger.
-     * @return the list of inputs.
-     * @throws CreateException
+     * @param objects the object-collection
+     * @param energyStack energy-stack used during feature calculation
+     * @param logger the logger
+     * @return the list of inputs
+     * @throws CreateException if there's an error deriving the inputs
      */
     protected abstract List<T> startBatchDeriveInputs(
             ObjectCollection objects, EnergyStack energyStack, Logger logger)
@@ -201,13 +214,19 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
 
     /**
      * Creates a bounding-box that tightly fits the input to a particular table row (could be for
-     * one or more objects)
+     * one or more objects).
      *
      * @param input the input
-     * @return a bounding-box that fully fits around all objects used in input
+     * @return a {@link BoundingBox} that fully fits around all objects used in input
      */
     protected abstract BoundingBox boundingBoxThatSpansInput(T input);
 
+    /**
+     * Creates a collection of scaled bounding boxes for the given inputs.
+     *
+     * @param inputs the list of inputs
+     * @return a {@link StreamableCollection} of scaled {@link BoundingBox}es
+     */
     private StreamableCollection<BoundingBox> scaledBoundingBoxes(List<T> inputs) {
         return new StreamableCollection<>(
                 () -> inputs.stream().map(this::boundingBoxThatSpansInput));

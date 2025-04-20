@@ -38,10 +38,16 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
 
+/**
+ * Creates a shell around an {@link ObjectMask} by applying morphological operations.
+ *
+ * <p>The shell is created by performing a series of dilations and erosions on the input object, as
+ * specified by the {@link MorphologicalIterations} parameter.
+ */
 public class Shell extends DerivedObject {
 
     // START BEAN PROPERTIES
-    /** The number of dilations and erosions to apply and whether to do in the Z dimension */
+    /** The number of dilations and erosions to apply and whether to do so in the Z dimension. */
     @BeanField @Getter @Setter
     private MorphologicalIterations iterations = new MorphologicalIterations();
     // END BEAN PROPERTIES

@@ -30,12 +30,21 @@ import org.anchoranalysis.feature.input.FeatureInputDictionary;
 import org.anchoranalysis.plugin.operator.feature.bean.statistics.ZScore;
 
 /**
- * Similar to FeatureListProviderPermute but embeds the feature in a GaussianScore
+ * Permutes a feature by embedding it in a {@link ZScore}.
  *
+ * <p>This class is similar to FeatureListProviderPermute but embeds the feature in a ZScore.
+ *
+ * @param <T> the type of feature input, extending {@link FeatureInputDictionary}
  * @author Owen Feehan
  */
 public class PermuteZScore<T extends FeatureInputDictionary> extends PermuteFirstSecondOrder<T> {
 
+    /**
+     * Creates a new instance of {@link PermuteZScore}.
+     *
+     * <p>The constructor initializes the superclass with a {@link ZScore} factory and sets the
+     * range to the maximum possible double values in both negative and positive directions.
+     */
     public PermuteZScore() {
         super(ZScore::new, -1 * Double.MAX_VALUE, Double.MAX_VALUE);
     }

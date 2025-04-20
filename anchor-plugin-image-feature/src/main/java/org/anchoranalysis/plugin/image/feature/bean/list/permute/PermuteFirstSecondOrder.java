@@ -40,25 +40,39 @@ import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByCons
 import org.anchoranalysis.plugin.operator.feature.bean.range.IfOutsideRange;
 import org.anchoranalysis.plugin.operator.feature.bean.statistics.StatisticalBase;
 
+/**
+ * Permutes a feature by applying first and second order statistical operations.
+ *
+ * @param <T> the type of feature input
+ */
 @RequiredArgsConstructor
 public abstract class PermuteFirstSecondOrder<T extends FeatureInputDictionary>
         extends PermuteFeatureSequenceInteger<T> {
 
-    // START BEAN PROPERTIES
-    /** If true the constant is appended to the param prefix (a dot and a number) */
+    /** If true, the constant is appended to the param prefix (a dot and a number). */
     @BeanField @Getter @Setter private boolean paramPrefixAppendNumber = true;
-    // END BEAN PROPERTIES
 
-    // START REQUIRED ARGUMENTS
+    /** Factory for creating first and second order statistical operations. */
     private final CreateFirstSecondOrder<T> factory;
 
+    /** Minimum value for the range. */
     private final double minRange;
 
+    /** Maximum value for the range. */
     private final double maxRange;
-    // END REQUIRED ARGUMENTS
 
+    /**
+     * Functional interface for creating first and second order statistical operations.
+     *
+     * @param <T> the type of feature input
+     */
     @FunctionalInterface
     public static interface CreateFirstSecondOrder<T extends FeatureInput> {
+        /**
+         * Creates a new {@link StatisticalBase} instance.
+         *
+         * @return a new {@link StatisticalBase} instance
+         */
         StatisticalBase<T> create();
     }
 
@@ -78,6 +92,12 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputDictionary>
         return delegate;
     }
 
+    /**
+     * Wraps the feature with a multiply by constant operation.
+     *
+     * @param feature the feature to wrap
+     * @return the wrapped feature
+     */
     private Feature<T> wrapWithMultiplyByConstant(Feature<T> feature) {
         MultiplyByConstant<T> out = new MultiplyByConstant<>();
         out.setItem(feature);
@@ -85,6 +105,12 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputDictionary>
         return out;
     }
 
+    /**
+     * Wraps the feature with a min-max range operation.
+     *
+     * @param feature the feature to wrap
+     * @return the wrapped feature
+     */
     private Feature<T> wrapWithMinMaxRange(Feature<T> feature) {
         IfOutsideRange<T> out = new IfOutsideRange<>();
         out.setItem(feature);
@@ -95,6 +121,12 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputDictionary>
         return out;
     }
 
+    /**
+     * Wraps the feature with a statistical score operation.
+     *
+     * @param feature the feature to wrap
+     * @return the wrapped feature
+     */
     private Feature<T> wrapInScore(Feature<T> feature) {
         StatisticalBase<T> featureScore = factory.create();
         featureScore.setItem(feature);

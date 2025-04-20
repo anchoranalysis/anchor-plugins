@@ -29,6 +29,12 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Calculates the sum of all values in a {@link Histogram}.
+ *
+ * <p>This sum represents the total of all pixel values multiplied by their respective frequencies
+ * in the histogram.
+ */
 public class Sum extends FeatureHistogramStatistic {
 
     @Override

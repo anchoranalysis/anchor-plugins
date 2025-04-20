@@ -33,6 +33,11 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Base class for features that check if an object is at the border of an image.
+ *
+ * <p>Returns 1.0 if the object is at the border, and 0.0 otherwise.
+ */
 public abstract class AtBorderBase extends FeatureSingleObject {
 
     @Override
@@ -46,11 +51,25 @@ public abstract class AtBorderBase extends FeatureSingleObject {
         }
     }
 
+    /**
+     * Checks if the bounding box of an object is at the border of the image.
+     *
+     * @param boundingBox the {@link BoundingBox} of the object
+     * @param extent the {@link Extent} of the image
+     * @return true if the bounding box is at the border, false otherwise
+     */
+    protected abstract boolean isBoundingBoxAtBorder(BoundingBox boundingBox, Extent extent);
+
+    /**
+     * Checks if the input object is at the border of the image.
+     *
+     * @param input the {@link FeatureInputSingleObject} containing the object to check
+     * @return true if the object is at the border, false otherwise
+     * @throws FeatureCalculationException if there's an error during the calculation
+     */
     private boolean isInputAtBorder(FeatureInputSingleObject input)
             throws FeatureCalculationException {
         return isBoundingBoxAtBorder(
                 input.getObject().boundingBox(), input.dimensionsRequired().extent());
     }
-
-    protected abstract boolean isBoundingBoxAtBorder(BoundingBox boundingBox, Extent extent);
 }

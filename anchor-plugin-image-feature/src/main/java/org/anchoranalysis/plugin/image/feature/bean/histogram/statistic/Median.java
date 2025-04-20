@@ -31,6 +31,11 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Calculates the median value in a {@link Histogram}.
+ *
+ * <p>The median is calculated as the 0.5 quantile of the histogram.
+ */
 public class Median extends FeatureHistogramStatistic {
 
     @Override

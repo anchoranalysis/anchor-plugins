@@ -41,13 +41,19 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
-// Standard deviation of distance from surface voxels to centroid
+/**
+ * Calculates the standard deviation of distances from surface voxels to the centroid of an {@link
+ * ObjectMask}.
+ *
+ * <p>Optionally, it can calculate the coefficient of variation instead of the standard deviation.
+ */
 public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter
-    private boolean cov =
-            false; // Returns the coefficient of variation (stdDev/mean) instead of stdDev
+    /**
+     * If true, returns the coefficient of variation (stdDev/mean) instead of standard deviation.
+     */
+    @BeanField @Getter @Setter private boolean cov = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -65,6 +71,13 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         return calculateStatistic(distances);
     }
 
+    /**
+     * Calculates distances from a point to a list of points.
+     *
+     * @param pointFrom the reference point to calculate distances from
+     * @param pointsTo the list of points to calculate distances to
+     * @return a {@link DoubleArrayList} containing the calculated distances
+     */
     private static DoubleArrayList distancesToPoints(Point3d pointFrom, List<Point3i> pointsTo) {
         DoubleArrayList distances = new DoubleArrayList(pointsTo.size());
         for (Point3i point : pointsTo) {
@@ -76,6 +89,12 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         return distances;
     }
 
+    /**
+     * Calculates either the standard deviation or coefficient of variation of distances.
+     *
+     * @param distances the list of distances to analyze
+     * @return the calculated statistic (standard deviation or coefficient of variation)
+     */
     private double calculateStatistic(DoubleArrayList distances) {
         // Calculate Std Deviation
         int size = distances.size();

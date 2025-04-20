@@ -36,8 +36,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 /**
  * Base class for features that are calculated from {@link Dimensions}.
  *
- * @author Owen Feehan
- * @param <T> feature-input-type
+ * @param <T> feature-input-type that extends {@link FeatureInputDimensions}
  */
 public abstract class FromDimensionsBase<T extends FeatureInputDimensions> extends Feature<T> {
 
@@ -51,6 +50,13 @@ public abstract class FromDimensionsBase<T extends FeatureInputDimensions> exten
         return FeatureInputDimensions.class;
     }
 
+    /**
+     * Calculates a feature value from the given dimensions.
+     *
+     * @param dimensions the {@link Dimensions} to calculate from
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double calculateFromDimensions(Dimensions dimensions)
             throws FeatureCalculationException;
 }

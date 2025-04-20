@@ -40,15 +40,18 @@ import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
+/** An abstract base class for features that calculate values based on intersecting objects. */
 public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
 
     // START BEAN PROPERTIES
     /** ID for the particular object-collection */
     @BeanField @Getter @Setter private String id = "";
 
+    /** The value to return when there are no objects in the search collection. */
     @BeanField @Getter @Setter private double valueNoObjects = Double.NaN;
     // END BEAN PROPERTIES
 
+    /** The collection of objects to search for intersections. */
     private ObjectCollection searchObjects;
 
     @Override
@@ -76,11 +79,24 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
                 input.resolver().search(new CalculateIntersectingObjects(id, searchObjects)));
     }
 
+    /**
+     * Calculates a value based on the input and the intersecting objects.
+     *
+     * @param input the input for feature calculation
+     * @param intersecting the resolved part containing intersecting objects
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if an error occurs during calculation
+     */
     protected abstract double valueFor(
             FeatureCalculationInput<FeatureInputSingleObject> input,
             ResolvedPart<ObjectCollection, FeatureInputSingleObject> intersecting)
             throws FeatureCalculationException;
 
+    /**
+     * Gets the collection of objects to search for intersections.
+     *
+     * @return the {@link ObjectCollection} used for searching intersections
+     */
     protected ObjectCollection getSearchObjects() {
         return searchObjects;
     }

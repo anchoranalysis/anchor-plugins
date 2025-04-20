@@ -39,43 +39,55 @@ import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 
 /**
- * Duplicates and sets a custom-name on a list of features.
+ * Helper class for duplicating and setting custom names on a list of features.
  *
  * @author Owen Feehan
  */
 class FeatureListCustomNameHelper {
 
+    /** Factory for creating named feature stores. */
     private final NamedFeatureStoreFactory storeFactory;
 
+    /**
+     * Creates a new instance of {@link FeatureListCustomNameHelper}.
+     *
+     * @param storeFactory the factory for creating named feature stores
+     */
     public FeatureListCustomNameHelper(NamedFeatureStoreFactory storeFactory) {
         this.storeFactory = storeFactory;
     }
 
     /**
-     * Duplicates features and sets a custom-name based upon the named-bean
+     * Duplicates features and sets a custom name based upon the named bean.
      *
-     * @param <T> feature input-type
-     * @param features the list of named-beans providing features
-     * @return a simple feature-list of duplicated beans with derived custom-names set
-     * @throws OperationFailedException
+     * @param <T> feature input type
+     * @param features the list of named beans providing features
+     * @return a {@link FeatureList} of duplicated beans with derived custom names set
+     * @throws OperationFailedException if the operation fails
      */
     public <T extends FeatureInput> FeatureList<T> copyFeaturesCreateCustomName(
             List<NamedBean<FeatureListProvider<T>>> features) throws OperationFailedException {
         try {
             NamedFeatureStore<T> featuresNamed = storeFactory.createNamedFeatureList(features);
             return copyFeaturesCreateCustomName(featuresNamed);
-
         } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }
 
+    /**
+     * Copies features from a {@link NamedFeatureStore} and creates custom names.
+     *
+     * @param <T> feature input type
+     * @param features the named feature store containing the features to be copied
+     * @return a {@link FeatureList} of duplicated beans with derived custom names set
+     * @throws OperationFailedException if the operation fails
+     */
     private static <T extends FeatureInput> FeatureList<T> copyFeaturesCreateCustomName(
             NamedFeatureStore<T> features) throws OperationFailedException {
         try {
             return FeatureListFactory.mapFrom(
-                    features, ni -> ni.getValue().duplicateChangeName(ni.getName()));
-
+                    features, item -> item.getValue().duplicateChangeName(item.getName()));
         } catch (BeanDuplicateException e) {
             throw new OperationFailedException(e);
         }

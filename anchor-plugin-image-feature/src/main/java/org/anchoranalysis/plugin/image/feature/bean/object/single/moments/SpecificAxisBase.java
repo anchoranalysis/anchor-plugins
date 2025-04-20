@@ -34,10 +34,10 @@ import org.anchoranalysis.math.statistics.moment.EigenvalueAndVector;
 import org.anchoranalysis.math.statistics.moment.ImageMoments;
 
 /**
- * A feature based one one-specific principal-axis as identified by image moments.
+ * A feature based on one specific principal-axis as identified by image moments.
  *
  * <p>Principal axes are ordered by eigen-value, with 0 being the largest, 1 being the
- * second-largest etc..
+ * second-largest etc.
  *
  * @author Owen Feehan
  */
@@ -57,7 +57,13 @@ public abstract class SpecificAxisBase extends ImageMomentsBase {
         return calculateFromSpecificMoment(moments.get(index));
     }
 
-    /** Calculates the result for the specific moment identified by index */
+    /**
+     * Calculates the result for the specific moment identified by index.
+     *
+     * @param moment the {@link EigenvalueAndVector} for the specific moment
+     * @return the calculated result as a {@link Double}
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double calculateFromSpecificMoment(EigenvalueAndVector moment)
             throws FeatureCalculationException;
 }

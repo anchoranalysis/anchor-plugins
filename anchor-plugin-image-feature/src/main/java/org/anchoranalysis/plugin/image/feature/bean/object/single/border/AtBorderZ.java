@@ -29,6 +29,15 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.border;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Checks if an object's bounding box is at the border of the image in the Z dimension.
+ *
+ * <p>This feature returns 1.0 if the object's bounding box touches either the top or bottom Z-plane
+ * of the image, and 0.0 otherwise.
+ *
+ * <p>Note: This feature is only meaningful for 3D images. For 2D images, it will always return 1.0
+ * as the object will always touch both Z borders in a single-slice image.
+ */
 public class AtBorderZ extends AtBorderBase {
 
     @Override

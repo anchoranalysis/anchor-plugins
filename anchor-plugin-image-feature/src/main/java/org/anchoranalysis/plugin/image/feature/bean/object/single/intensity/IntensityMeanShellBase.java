@@ -44,7 +44,7 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.Calcula
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * Constructs a shell around an object-mask using a standard dilation and erosion process
+ * Constructs a shell around an object-mask using a standard dilation and erosion process.
  *
  * @author Owen Feehan
  */
@@ -56,7 +56,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
     private MorphologicalIterations iterations = new MorphologicalIterations();
 
     /**
-     * Iff true, calculates instead on the inverse of the object-mask (what's left when the shell is
+     * If true, calculates instead on the inverse of the object-mask (what's left when the shell is
      * removed).
      */
     @BeanField @Getter @Setter private boolean inverse = false;
@@ -70,6 +70,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
     /** If true, uses the inverse of the passed mask. */
     @BeanField @Getter @Setter private boolean inverseMask = false;
 
+    /** The value to return when the resulting object is empty. */
     @BeanField @Getter @Setter private double emptyValue = 255;
     // END BEAN PROPERTIES
 
@@ -115,20 +116,49 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
         return calculateForShell(objectShell, channel);
     }
 
+    /**
+     * Calculates the feature value for the given shell and channel.
+     *
+     * @param shell the {@link ObjectMask} representing the shell
+     * @param channel the {@link Channel} to calculate the feature on
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double calculateForShell(ObjectMask shell, Channel channel)
             throws FeatureCalculationException;
 
+    /**
+     * Creates a shell object mask based on the input and configuration.
+     *
+     * @param input the feature calculation input
+     * @return the created {@link ObjectMask} representing the shell
+     * @throws FeatureCalculationException if the shell creation fails
+     */
     private ObjectMask createShell(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         return input.calculate(
                 CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
     }
 
+    /**
+     * Intersects the given object mask with the energy mask.
+     *
+     * @param object the {@link ObjectMask} to intersect
+     * @param energyStack the {@link EnergyStackWithoutParameters} containing the energy mask
+     * @return an {@link Optional} containing the intersected {@link ObjectMask}, or empty if the
+     *     intersection is empty
+     */
     private Optional<ObjectMask> intersectWithEnergyMask(
             ObjectMask object, EnergyStackWithoutParameters energyStack) {
         return object.intersect(createEnergyMask(energyStack), energyStack.extent());
     }
 
+    /**
+     * Creates an energy mask from the energy stack.
+     *
+     * @param energyStack the {@link EnergyStackWithoutParameters} to create the mask from
+     * @return the created {@link ObjectMask} representing the energy mask
+     */
     private ObjectMask createEnergyMask(EnergyStackWithoutParameters energyStack) {
         return new ObjectMask(
                 new BoundingBox(energyStack.extent()),

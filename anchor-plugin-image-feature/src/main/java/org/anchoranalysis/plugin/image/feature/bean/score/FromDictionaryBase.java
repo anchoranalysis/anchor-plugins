@@ -32,8 +32,16 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/** An abstract base class for features that require a {@link Dictionary} for initialization. */
 public abstract class FromDictionaryBase extends SingleChannel {
 
+    /**
+     * Initializes the feature with histograms and a dictionary.
+     *
+     * @param histograms a list of {@link Histogram}s
+     * @param dictionary an optional {@link Dictionary}
+     * @throws InitializeException if the dictionary is not present or initialization fails
+     */
     @Override
     public void initialize(List<Histogram> histograms, Optional<Dictionary> dictionary)
             throws InitializeException {
@@ -46,8 +54,22 @@ public abstract class FromDictionaryBase extends SingleChannel {
         setupDictionary(dictionary.get());
     }
 
+    /**
+     * Sets up the feature using the provided dictionary.
+     *
+     * @param dictionary the {@link Dictionary} to use for setup
+     * @throws InitializeException if setup fails
+     */
     protected abstract void setupDictionary(Dictionary dictionary) throws InitializeException;
 
+    /**
+     * Extracts a double value from the dictionary for a given key.
+     *
+     * @param dictionary the {@link Dictionary} to extract from
+     * @param key the key to look up in the dictionary
+     * @return the double value associated with the key
+     * @throws InitializeException if the key does not exist in the dictionary
+     */
     protected static double extractAsDouble(Dictionary dictionary, String key)
             throws InitializeException {
         if (!dictionary.containsKey(key)) {

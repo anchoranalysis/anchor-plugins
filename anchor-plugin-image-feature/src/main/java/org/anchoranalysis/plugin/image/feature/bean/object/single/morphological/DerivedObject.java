@@ -40,13 +40,16 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 
+/**
+ * A base class for features that operate on a derived object mask and calculate a feature on it.
+ */
 public abstract class DerivedObject extends FeatureSingleObject {
 
-    // START BEAN PROPERTIES
+    /** The value to return when the derived object is empty. */
     @BeanField @Getter @Setter private double emptyValue = 255;
 
+    /** The feature to calculate on the derived object. */
     @BeanField @Getter @Setter private Feature<FeatureInputSingleObject> item;
-    // END BEAN PROPERTIES
 
     @Override
     public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
@@ -63,10 +66,22 @@ public abstract class DerivedObject extends FeatureSingleObject {
                 emptyValue);
     }
 
+    /**
+     * Creates a {@link CalculationPart} for deriving the object mask.
+     *
+     * @param session the {@link CalculationPartResolver} for resolving calculation parts
+     * @return a {@link CalculationPart} that derives an {@link ObjectMask}
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract CalculationPart<ObjectMask, FeatureInputSingleObject>
             createCachedCalculationForDerived(
                     CalculationPartResolver<FeatureInputSingleObject> session)
                     throws FeatureCalculationException;
 
+    /**
+     * Provides a unique name for caching the derived object.
+     *
+     * @return a {@link ChildCacheName} for caching the derived object
+     */
     protected abstract ChildCacheName cacheName();
 }

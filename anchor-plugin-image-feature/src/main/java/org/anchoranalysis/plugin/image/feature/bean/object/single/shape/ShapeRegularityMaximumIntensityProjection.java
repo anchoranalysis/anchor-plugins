@@ -31,7 +31,15 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
-public class ShapeRegularityMIP extends FeatureSingleObject {
+/**
+ * Calculates the shape regularity of the maximum intensity projection of an {@link
+ * org.anchoranalysis.image.voxel.object.ObjectMask}.
+ *
+ * <p>This feature first creates a 2D projection of the 3D object by flattening it along the Z-axis,
+ * effectively creating a maximum intensity projection. It then calculates the shape regularity of
+ * this 2D projection using the {@link ShapeRegularityCalculator}.
+ */
+public class ShapeRegularityMaximumIntensityProjection extends FeatureSingleObject {
 
     @Override
     public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)

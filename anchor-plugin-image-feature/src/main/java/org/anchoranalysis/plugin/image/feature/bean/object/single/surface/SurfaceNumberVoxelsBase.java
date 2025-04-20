@@ -35,13 +35,16 @@ import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
+/** A base class for features that calculate the number of voxels on the surface of an object. */
 public abstract class SurfaceNumberVoxelsBase extends FeatureSingleObject {
 
-    // START BEAN PROPERTIES
+    /**
+     * If true, calculates the surface on a maximum intensity projection rather than the 3D object.
+     */
     @BeanField @Getter @Setter private boolean mip = false;
 
+    /** If true, suppresses 3D calculations and treats the object as 2D. */
     @BeanField @Getter @Setter private boolean suppress3D = false;
-    /// END BEAN PROPERTIES
 
     @Override
     public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
@@ -49,6 +52,13 @@ public abstract class SurfaceNumberVoxelsBase extends FeatureSingleObject {
         return input.calculate(createParameters(mip, suppress3D));
     }
 
+    /**
+     * Creates the calculation parameters for the surface voxel count.
+     *
+     * @param mip whether to use maximum intensity projection
+     * @param suppress3d whether to suppress 3D calculations
+     * @return a {@link CalculationPart} for calculating the number of surface voxels
+     */
     protected abstract CalculationPart<Integer, FeatureInputSingleObject> createParameters(
             boolean mip, boolean suppress3d);
 }

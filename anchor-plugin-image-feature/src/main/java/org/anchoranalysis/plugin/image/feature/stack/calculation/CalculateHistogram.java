@@ -34,10 +34,17 @@ import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Calculates a {@link Histogram} from a specific channel in a {@link FeatureInputStack}.
+ *
+ * <p>This class extends {@link CalculationPart} to compute a histogram for a given energy channel
+ * in the input stack.
+ */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class CalculateHistogram extends CalculationPart<Histogram, FeatureInputStack> {
 
+    /** The index of the energy channel to calculate the histogram from. */
     private final int energyIndex;
 
     @Override

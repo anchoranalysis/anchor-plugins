@@ -44,19 +44,23 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
- * Calculates a feature for a set of objects using this stack as a energy-stack, and aggregates.
+ * Calculates a feature for a set of objects using this stack as an energy-stack, and aggregates.
+ *
+ * <p>This abstract class extends {@link FeatureSingleObjectFromShared} to provide functionality for
+ * calculating features on a collection of objects and aggregating the results.
  *
  * @author Owen Feehan
- * @param <T> feature-input
+ * @param <T> feature-input type that extends {@link FeatureInputEnergy}
  */
 public abstract class ObjectAggregationBase<T extends FeatureInputEnergy>
         extends FeatureSingleObjectFromShared<T> {
 
     // START BEAN PROPERTIES
+    /** The provider for the collection of objects to calculate features on. */
     @BeanField @SkipInit @Getter @Setter private ObjectCollectionProvider objects;
     // END BEAN PROPERTIES
 
-    // We cache the objectCollection as it's not dependent on individual parameters
+    /** The created object collection after initialization. */
     private ObjectCollection createdObjects;
 
     @Override
@@ -79,8 +83,20 @@ public abstract class ObjectAggregationBase<T extends FeatureInputEnergy>
                 featureValsForObjects(featureForSingleObject, calculateForChild, createdObjects));
     }
 
+    /**
+     * Derives a statistic from the calculated feature values for all objects.
+     *
+     * @param featureVals the list of feature values for all objects
+     * @return the derived statistic
+     */
     protected abstract double deriveStatistic(DoubleArrayList featureVals);
 
+    /**
+     * Creates the object collection.
+     *
+     * @return the created {@link ObjectCollection}
+     * @throws FeatureCalculationException if the object collection creation fails
+     */
     private ObjectCollection createObjects() throws FeatureCalculationException {
         try {
             return objects.get();
@@ -89,6 +105,15 @@ public abstract class ObjectAggregationBase<T extends FeatureInputEnergy>
         }
     }
 
+    /**
+     * Calculates feature values for all objects in the collection.
+     *
+     * @param feature the feature to calculate for each object
+     * @param calculateForChild the calculation context for child features
+     * @param objects the collection of objects to calculate features on
+     * @return a list of feature values for all objects
+     * @throws FeatureCalculationException if the feature calculation fails
+     */
     private DoubleArrayList featureValsForObjects(
             Feature<FeatureInputSingleObject> feature,
             CalculateForChild<T> calculateForChild,
@@ -107,6 +132,12 @@ public abstract class ObjectAggregationBase<T extends FeatureInputEnergy>
         return featureVals;
     }
 
+    /**
+     * Creates a cache name for a specific object index.
+     *
+     * @param index the index of the object
+     * @return the {@link ChildCacheName} for the object
+     */
     private ChildCacheName cacheName(int index) {
         return new ChildCacheName(
                 ObjectAggregationBase.class, index + "_" + createdObjects.hashCode());

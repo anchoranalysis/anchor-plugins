@@ -30,11 +30,18 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
+/**
+ * An abstract feature that calculates a value based on intersecting objects, considering each
+ * intersecting object individually and applying a threshold.
+ */
 public abstract class FeatureIntersectingObjectsThreshold
         extends FeatureIntersectingObjectsSingleElement {
 
     // START BEAN PROPERTIES
-    /** Only considers values greater or equal to the threshold */
+    /**
+     * The threshold value for considering intersecting objects. Only considers values greater than
+     * or equal to this threshold.
+     */
     @BeanField @Getter @Setter private double threshold = 0.0;
     // END BEAN PROPERTIES
 }
