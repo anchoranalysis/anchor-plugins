@@ -44,6 +44,12 @@ import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.imagej.mask.ApplyImageJMorphologicalOperation;
 
+/**
+ * A thresholder that applies a simple intensity threshold and then fills holes in 2D.
+ *
+ * <p>This thresholder first applies an intensity threshold to create a binary image, and then uses
+ * ImageJ's "fill" morphological operation to fill holes in each 2D slice.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class ThresholderSimpleFillHoles2D extends Thresholder {
@@ -52,15 +58,19 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
         Prefs.blackBackground = true;
     }
 
-    // START BEAN PROPERTIES
-    /** Intensity for thresholding */
+    /**
+     * The minimum intensity value for thresholding.
+     *
+     * <p>Voxels with intensity greater than or equal to this value are considered foreground.
+     */
     @BeanField @Getter @Setter private int minIntensity = -1;
-    // END BEAN PROPERTIES
+
+    // No additional doc-strings needed as the only method is overridden
 
     @Override
     public BinaryVoxels<UnsignedByteBuffer> threshold(
             VoxelsUntyped inputBuffer,
-            BinaryValuesByte bvOut,
+            BinaryValuesByte binaryValues,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask)
             throws OperationFailedException {
@@ -70,7 +80,8 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
         }
 
         BinaryVoxels<UnsignedByteBuffer> thresholded =
-                VoxelsThresholder.threshold(inputBuffer, minIntensity, bvOut, objectMask, false);
+                VoxelsThresholder.threshold(
+                        inputBuffer, minIntensity, binaryValues, objectMask, false);
 
         ApplyImageJMorphologicalOperation.applyOperation(thresholded, "fill", 1);
 

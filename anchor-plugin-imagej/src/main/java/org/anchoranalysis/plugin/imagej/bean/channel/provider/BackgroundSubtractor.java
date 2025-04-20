@@ -35,6 +35,7 @@ import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 import org.anchoranalysis.spatial.box.Extent;
 
+/** Subtracts background from a channel using ImageJ's {@link BackgroundSubtracter}. */
 public class BackgroundSubtractor extends WithRadiusBase {
 
     @Override
@@ -49,6 +50,13 @@ public class BackgroundSubtractor extends WithRadiusBase {
         }
     }
 
+    /**
+     * Subtracts the background from an {@link ImagePlus} using a rolling ball algorithm.
+     *
+     * @param image the {@link ImagePlus} to process
+     * @param extent the {@link Extent} of the image
+     * @param radius the radius of the rolling ball
+     */
     private void subtractBackground(ImagePlus image, Extent extent, int radius) {
 
         BackgroundSubtracter plugin = new BackgroundSubtracter();

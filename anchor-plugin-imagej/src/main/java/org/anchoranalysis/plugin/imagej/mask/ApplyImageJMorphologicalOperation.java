@@ -44,11 +44,27 @@ import org.anchoranalysis.spatial.box.Extent;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplyImageJMorphologicalOperation {
 
+    /**
+     * Applies the fill operation to the given binary voxels.
+     *
+     * @param voxels the {@link BinaryVoxels} to fill
+     * @throws OperationFailedException if the operation fails
+     */
     public static void fill(BinaryVoxels<UnsignedByteBuffer> voxels)
             throws OperationFailedException {
         applyOperation(voxels, "fill", 1);
     }
 
+    /**
+     * Applies a specified morphological operation to the given binary voxels.
+     *
+     * @param voxels the {@link BinaryVoxels} to apply the operation to
+     * @param command the name of the morphological operation to apply
+     * @param iterations the number of times to apply the operation
+     * @return the modified {@link BinaryVoxels}
+     * @throws OperationFailedException if the operation fails or if the binary values are not the
+     *     default (255 for on, 0 for off)
+     */
     public static BinaryVoxels<UnsignedByteBuffer> applyOperation(
             BinaryVoxels<UnsignedByteBuffer> voxels, String command, int iterations)
             throws OperationFailedException {
@@ -68,6 +84,13 @@ public class ApplyImageJMorphologicalOperation {
         return voxels;
     }
 
+    /**
+     * Creates an ImageJ Binary plugin with the specified command and extent.
+     *
+     * @param command the name of the morphological operation to apply
+     * @param extent the {@link Extent} of the voxels
+     * @return a configured {@link Binary} plugin
+     */
     private static Binary createPlugin(String command, Extent extent) {
         Binary plugin = new Binary();
         plugin.setup(command, null);

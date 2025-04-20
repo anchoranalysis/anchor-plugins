@@ -37,14 +37,15 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
-/** A {@link ChannelProviderUnary} with a 'radius' parameter */
+/** A {@link ChannelProviderUnary} with a 'radius' parameter. */
 public abstract class WithRadiusBase extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
+    /** The radius of the operation. */
     @BeanField @Positive @Getter @Setter private double radius = 2;
 
-    @BeanField @Getter @Setter
-    private boolean radiusInMeters = false; // Treats radius if it's microns
+    /** If true, treats the radius as being in meters. Otherwise, it's in voxels. */
+    @BeanField @Getter @Setter private boolean radiusInMeters = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -53,9 +54,24 @@ public abstract class WithRadiusBase extends ChannelProviderUnary {
                 channel, radiusInVoxels(channel.resolution().map(Resolution::unitConvert)));
     }
 
+    /**
+     * Creates a new channel from an existing channel and a radius.
+     *
+     * @param channel the input {@link Channel}
+     * @param radius the radius in voxels
+     * @return the newly created {@link Channel}
+     * @throws ProvisionFailedException if the channel creation fails
+     */
     protected abstract Channel createFromChannel(Channel channel, int radius)
             throws ProvisionFailedException;
 
+    /**
+     * Converts the radius to voxels.
+     *
+     * @param converter an optional {@link UnitConverter} for unit conversion
+     * @return the radius in voxels
+     * @throws ProvisionFailedException if the conversion fails
+     */
     private int radiusInVoxels(Optional<UnitConverter> converter) throws ProvisionFailedException {
         if (radiusInMeters) {
             if (converter.isPresent()) {

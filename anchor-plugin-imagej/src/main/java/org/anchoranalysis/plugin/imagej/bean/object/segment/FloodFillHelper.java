@@ -31,24 +31,34 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 
+/**
+ * Helper class for performing flood fill operations on an {@link ImageProcessor}.
+ *
+ * <p>This class uses ImageJ's flood fill implementation to segment objects in a 2D image.
+ */
 @AllArgsConstructor
 class FloodFillHelper {
 
+    /** Minimum number of pixels in a flood-fill region to be considered valid. */
     private final int minNumberPixels;
 
+    /** The integer value representing the pixels to be flood filled. */
     private final int equalValueAsInt;
 
+    /** The {@link ImageProcessor} on which flood fill operations are performed. */
     private final ImageProcessor processor;
 
+    /** The {@link IJFloodFiller} used for flood fill operations. */
     private final IJFloodFiller floodFiller;
 
     /**
-     * Constructor
+     * Constructs a new FloodFillHelper.
      *
      * @param minNumberPixels Minimum number of pixels in a flood-fill otherwise the color is
      *     ignored (set to 0)
      * @param equalValueAsByte all pixels who are flood filled must be equal to this value, and it
-     *     is not used as a valid color.
+     *     is not used as a valid color
+     * @param processor the {@link ImageProcessor} to perform flood fill on
      */
     public FloodFillHelper(int minNumberPixels, byte equalValueAsByte, ImageProcessor processor) {
         this.minNumberPixels = minNumberPixels;
@@ -57,8 +67,13 @@ class FloodFillHelper {
         this.floodFiller = new IJFloodFiller(processor);
     }
 
-    // works on a single plane, returns highest color value assigned
-    // posVal is a value defining 'positive' indicating what will get filled
+    /**
+     * Performs flood fill on a single 2D plane.
+     *
+     * @param startingColor the initial color value to use for flood filling
+     * @return the highest color value assigned during flood fill
+     * @throws OperationFailedException if more than 254 objects are detected
+     */
     public int floodFill2D(int startingColor) throws OperationFailedException {
 
         // Color, we use colors other than our posval at a posVal
@@ -74,13 +89,13 @@ class FloodFillHelper {
     }
 
     /**
-     * Flood fills from a particular point
+     * Flood fills from a particular point.
      *
-     * @param x x-value of point
-     * @param y y-value of point
-     * @param color color to use
+     * @param x x-coordinate of the starting point
+     * @param y y-coordinate of the starting point
+     * @param color color to use for flood fill
      * @return the last color used for filling
-     * @throws OperationFailedException
+     * @throws OperationFailedException if more than 254 objects are detected
      */
     private int floodFillFromPoint(int x, int y, int color) throws OperationFailedException {
 

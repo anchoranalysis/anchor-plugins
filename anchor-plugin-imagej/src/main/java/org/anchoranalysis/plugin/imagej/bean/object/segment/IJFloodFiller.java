@@ -31,28 +31,47 @@ import ij.process.ImageProcessor;
 import java.awt.Rectangle;
 
 /**
- * This class, which does flood filling, is used by the floodFill() macro function and by the
- * particle analyzer The Wikipedia at "http://en.wikipedia.org/wiki/Flood_fill" has a good
- * description of the algorithm used here as well as examples in C and Java.
+ * A flood fill implementation used by ImageJ's particle analyzer and floodFill() macro function.
+ *
+ * <p>This class implements both 4-connected and 8-connected flood fill algorithms, as well as a
+ * specialized fill method for particle analysis.
  */
 class IJFloodFiller {
 
-    int maxStackSize = 500; // will be increased as needed
-    int[] xstack = new int[maxStackSize];
-    int[] ystack = new int[maxStackSize];
-    int stackSize;
-    ImageProcessor ip;
-    int max;
-    boolean isFloat;
+    /** Maximum size of the stack used for flood fill. Will be increased as needed. */
+    private int maxStackSize = 500;
 
+    /** Stack for storing x-coordinates during flood fill. */
+    private int[] xstack = new int[maxStackSize];
+
+    /** Stack for storing y-coordinates during flood fill. */
+    private int[] ystack = new int[maxStackSize];
+
+    /** Current size of the stack. */
+    private int stackSize;
+
+    /** The image processor being operated on. */
+    private ImageProcessor ip;
+
+    /** Flag indicating whether the image processor is a {@link FloatProcessor}. */
+    private boolean isFloat;
+
+    /**
+     * Constructs a new IJFloodFiller for the given ImageProcessor.
+     *
+     * @param ip the {@link ImageProcessor} to perform flood fill on
+     */
     public IJFloodFiller(ImageProcessor ip) {
         this.ip = ip;
         isFloat = ip instanceof FloatProcessor;
     }
 
     /**
-     * Does a 4-connected flood fill using the current fill/draw value, which is defined by
-     * ImageProcessor.setValue().
+     * Performs a 4-connected flood fill starting from the given coordinates.
+     *
+     * @param x the x-coordinate of the starting point
+     * @param y the y-coordinate of the starting point
+     * @return the number of pixels filled
      */
     public int fill(int x, int y) {
 
@@ -104,8 +123,11 @@ class IJFloodFiller {
     }
 
     /**
-     * Does a 8-connected flood fill using the current fill/draw value, which is defined by
-     * ImageProcessor.setValue().
+     * Performs an 8-connected flood fill starting from the given coordinates.
+     *
+     * @param x the x-coordinate of the starting point
+     * @param y the y-coordinate of the starting point
+     * @return true if the fill operation was successful, false otherwise
      */
     public boolean fill8(int x, int y) {
         int width = ip.getWidth();
@@ -167,12 +189,18 @@ class IJFloodFiller {
         }
     }
 
-    int count = 0;
-
     /**
-     * This method is used by the particle analyzer to remove interior holes from particle masks.
+     * Specialized flood fill method used by the particle analyzer to remove interior holes from
+     * particle masks.
+     *
+     * @param x the x-coordinate of the starting point
+     * @param y the y-coordinate of the starting point
+     * @param level1 the lower threshold level
+     * @param level2 the upper threshold level
+     * @param mask the {@link ImageProcessor} representing the mask
+     * @param bounds the {@link Rectangle} representing the bounds of the particle
      */
-    public void particleAnalyzerFill( // NOSONAR
+    public void particleAnalyzerFill(
             int x, int y, double level1, double level2, ImageProcessor mask, Rectangle bounds) {
         int width = ip.getWidth();
         int height = ip.getHeight();
@@ -219,7 +247,16 @@ class IJFloodFiller {
         }
     }
 
-    final boolean inParticle(int x, int y, double level1, double level2) {
+    /**
+     * Checks if a pixel is part of the particle based on its intensity value.
+     *
+     * @param x the x-coordinate of the pixel
+     * @param y the y-coordinate of the pixel
+     * @param level1 the lower threshold level
+     * @param level2 the upper threshold level
+     * @return true if the pixel is part of the particle, false otherwise
+     */
+    private boolean inParticle(int x, int y, double level1, double level2) {
         if (isFloat) return ip.getPixelValue(x, y) >= level1 && ip.getPixelValue(x, y) <= level2;
         else {
             int v = ip.getPixel(x, y);
@@ -227,7 +264,13 @@ class IJFloodFiller {
         }
     }
 
-    final void push(int x, int y) {
+    /**
+     * Pushes coordinates onto the stack.
+     *
+     * @param x the x-coordinate to push
+     * @param y the y-coordinate to push
+     */
+    private void push(int x, int y) {
         stackSize++;
         if (stackSize == maxStackSize) {
             int[] newXStack = new int[maxStackSize * 2];
@@ -242,19 +285,37 @@ class IJFloodFiller {
         ystack[stackSize - 1] = y;
     }
 
-    final int popx() {
+    /**
+     * Pops an x-coordinate from the stack.
+     *
+     * @return the popped x-coordinate, or -1 if the stack is empty
+     */
+    private int popx() {
         if (stackSize == 0) return -1;
         else return xstack[stackSize - 1];
     }
 
-    final int popy() {
+    /**
+     * Pops a y-coordinate from the stack.
+     *
+     * @return the popped y-coordinate
+     */
+    private int popy() {
         int value = ystack[stackSize - 1];
         stackSize--;
         return value;
     }
 
-    // Returns how many pixels were filled in
-    final int fillLine(ImageProcessor ip, int x1, int x2, int y) {
+    /**
+     * Fills a horizontal line in the image.
+     *
+     * @param ip the {@link ImageProcessor} to fill the line in
+     * @param x1 the starting x-coordinate of the line
+     * @param x2 the ending x-coordinate of the line
+     * @param y the y-coordinate of the line
+     * @return the number of pixels filled
+     */
+    private int fillLine(ImageProcessor ip, int x1, int x2, int y) {
         // Swap if necessary
         if (x1 > x2) {
             int t = x1;

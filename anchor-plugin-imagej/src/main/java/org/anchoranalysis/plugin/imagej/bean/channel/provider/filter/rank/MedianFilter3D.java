@@ -34,6 +34,7 @@ import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 
+/** Applies a 3D median filter to a channel using a hybrid 3D median filter ImageJ plugin. */
 public class MedianFilter3D extends ChannelProviderUnary {
 
     @Override
@@ -49,6 +50,12 @@ public class MedianFilter3D extends ChannelProviderUnary {
         }
     }
 
+    /**
+     * Applies the 3D median filter to the given ImagePlus.
+     *
+     * @param image the {@link ImagePlus} to filter
+     * @return the filtered {@link ImagePlus}
+     */
     private ImagePlus applyFilter(ImagePlus image) {
         Hybrid_3D_Median_Filter plugin = new Hybrid_3D_Median_Filter();
         plugin.setup("", image);

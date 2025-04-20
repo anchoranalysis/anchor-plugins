@@ -37,9 +37,11 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 
+/** Applies a 2D Gaussian blur filter to each slice of a {@link Channel} independently. */
 public class GaussianBlur2D extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
+    /** The standard deviation of the Gaussian distribution used for blurring. */
     @BeanField @Positive @Getter @Setter private double sigma = 3;
     // END BEAN PROPERTIES
 
@@ -52,10 +54,17 @@ public class GaussianBlur2D extends ChannelProviderUnary {
         }
     }
 
+    /**
+     * Applies the Gaussian blur to each slice of the channel.
+     *
+     * @param channel the {@link Channel} to blur
+     * @return the blurred channel
+     * @throws ImageJConversionException if there's an error converting the channel to ImageJ format
+     */
     @SuppressWarnings("deprecation")
     private Channel blur(Channel channel) throws ImageJConversionException {
-        GaussianBlur gb = new GaussianBlur();
-        FilterHelper.processEachSlice(channel, processor -> gb.blur(processor, sigma)); // NOSONAR
+        GaussianBlur blur = new GaussianBlur();
+        FilterHelper.processEachSlice(channel, processor -> blur.blur(processor, sigma)); // NOSONAR
         return channel;
     }
 }
