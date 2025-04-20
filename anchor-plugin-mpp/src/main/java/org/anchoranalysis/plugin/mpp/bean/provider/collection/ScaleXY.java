@@ -39,17 +39,22 @@ import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
+/**
+ * Scales the X and Y coordinates of marks in a {@link MarkCollection} using a {@link
+ * ScaleCalculator}.
+ */
 public class ScaleXY extends MarkCollectionProvider {
 
     // START BEAN PROPERTIES
+    /** The provider for the {@link MarkCollection} to be scaled. */
     @BeanField @Getter @Setter private MarkCollectionProvider marks;
 
+    /** The {@link ScaleCalculator} used to determine the scaling factor. */
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
     // END BEAN PROPERTIES
 
     @Override
     public MarkCollection get() throws ProvisionFailedException {
-
         ScaleFactor scaleFactor;
         try {
             scaleFactor =

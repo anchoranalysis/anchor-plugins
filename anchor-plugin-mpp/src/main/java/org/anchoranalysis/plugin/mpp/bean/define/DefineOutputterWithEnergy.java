@@ -66,30 +66,44 @@ import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
  * <tr><td rowspan="3"><i>outputs from {@link EnergyStackWriter}</i></td></tr>
  * </tbody>
  * </table>
- *
- * @author Owen Feehan
  */
 public class DefineOutputterWithEnergy extends DefineOutputter {
 
-    // START BEAN PROPERTIES
+    /** The stack provider for the energy stack. */
     @BeanField @Getter @Setter
     private StackProvider stackEnergy = ReferenceFactory.stack(StackIdentifiers.ENERGY_STACK);
 
+    /** An optional dictionary provider. */
     @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
-    // END BEAN PROPERTIES
 
     /**
-     * Processes the energy-stack.
+     * Functional interface for processing with an energy stack.
      *
-     * @author Owen Feehan
      * @param <T> initialization-type
      * @param <S> return-type
      */
     @FunctionalInterface
     public interface ProcessWithEnergyStack<T, S> {
+        /**
+         * Processes the initialization with an energy stack.
+         *
+         * @param initialization the initialization to process
+         * @param energyStack the energy stack
+         * @return the result of the processing
+         * @throws OperationFailedException if the operation fails
+         */
         S process(T initialization, EnergyStack energyStack) throws OperationFailedException;
     }
 
+    /**
+     * Processes the input with an energy stack.
+     *
+     * @param <S> return-type
+     * @param input the input to process
+     * @param context the initialization context
+     * @param operation the operation to perform
+     * @throws OperationFailedException if the operation fails
+     */
     public <S> void processInput(
             ExportSharedObjects input,
             InitializationContext context,
@@ -104,6 +118,17 @@ public class DefineOutputterWithEnergy extends DefineOutputter {
         }
     }
 
+    /**
+     * Processes the input with an energy stack and shared objects.
+     *
+     * @param <S> return-type
+     * @param context the initialization context
+     * @param sharedObjects the shared objects
+     * @param dictionary an optional dictionary
+     * @param operation the operation to perform
+     * @return the result of the processing
+     * @throws OperationFailedException if the operation fails
+     */
     public <S> S processInput(
             InitializationContext context,
             SharedObjects sharedObjects,
@@ -120,6 +145,7 @@ public class DefineOutputterWithEnergy extends DefineOutputter {
         }
     }
 
+    /** Processes the initialization with an energy stack. */
     private <S> S processWithEnergyStack(
             ImageInitialization initialization,
             ProcessWithEnergyStack<ImageInitialization, S> operation,
@@ -142,6 +168,7 @@ public class DefineOutputterWithEnergy extends DefineOutputter {
         }
     }
 
+    /** Creates an energy stack from the initialization. */
     private EnergyStack createEnergyStack(ImageInitialization initialization, Logger logger)
             throws InitializeException, ProvisionFailedException {
 

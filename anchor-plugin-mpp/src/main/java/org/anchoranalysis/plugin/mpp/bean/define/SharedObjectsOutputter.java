@@ -44,7 +44,7 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
- * This class will output entities associated with {@link SharedObjects} in particular directories.
+ * Outputs entities associated with {@link SharedObjects} in particular directories.
  *
  * <p>These outputs are:
  *
@@ -57,14 +57,17 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
  *
  * <p>Second-level output rules determine whether particular elements in each directory are written
  * or not.
- *
- * @author Owen Feehan
  */
 @AllArgsConstructor
 class SharedObjectsOutputter {
 
+    /** The shared objects to output. */
     private SharedObjects sharedObjects;
+
+    /** Whether to suppress the creation of subfolders. */
     private boolean suppressSubfolders;
+
+    /** The outputter to use for writing. */
     private OutputterChecked outputter;
 
     /**
@@ -83,7 +86,7 @@ class SharedObjectsOutputter {
     /**
      * Writes (a selection of) entities from to the filesystem in particular directories.
      *
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if the output operation fails
      */
     public void output() throws OutputWriteFailedException {
 
@@ -101,6 +104,12 @@ class SharedObjectsOutputter {
         marks(new MarksInitialization(initializationImage));
     }
 
+    /**
+     * Outputs stacks.
+     *
+     * @param initialization the image initialization
+     * @throws OutputWriteFailedException if the output operation fails
+     */
     private void stacks(ImageInitialization initialization) throws OutputWriteFailedException {
         NamedStacksOutputter.output(
                 initialization.combinedStacks(),
@@ -109,6 +118,12 @@ class SharedObjectsOutputter {
                 outputter);
     }
 
+    /**
+     * Outputs marks.
+     *
+     * @param initialization the marks initialization
+     * @throws OutputWriteFailedException if the output operation fails
+     */
     private void marks(MarksInitialization initialization) throws OutputWriteFailedException {
         output(
                 initialization.marks(),
@@ -116,6 +131,12 @@ class SharedObjectsOutputter {
                 OutputterDirectories.MARKS);
     }
 
+    /**
+     * Outputs histograms.
+     *
+     * @param initialization the image initialization
+     * @throws OutputWriteFailedException if the output operation fails
+     */
     private void histograms(ImageInitialization initialization) throws OutputWriteFailedException {
         output(
                 initialization.histograms(),
@@ -123,6 +144,12 @@ class SharedObjectsOutputter {
                 OutputterDirectories.HISTOGRAMS);
     }
 
+    /**
+     * Outputs objects.
+     *
+     * @param initialization the image initialization
+     * @throws OutputWriteFailedException if the output operation fails
+     */
     private void objects(ImageInitialization initialization) throws OutputWriteFailedException {
         output(
                 initialization.objects(),
@@ -130,6 +157,15 @@ class SharedObjectsOutputter {
                 OutputterDirectories.OBJECTS);
     }
 
+    /**
+     * Outputs a named provider store using a specific generator.
+     *
+     * @param <T> the type of objects in the store
+     * @param store the named provider store
+     * @param generator the generator to use for output
+     * @param directoryName the name of the directory to output to
+     * @throws OutputWriteFailedException if the output operation fails
+     */
     private <T> void output(
             NamedProviderStore<T> store, Generator<T> generator, String directoryName)
             throws OutputWriteFailedException {

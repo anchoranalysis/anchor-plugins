@@ -37,13 +37,15 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
+/**
+ * Provides a {@link MarkCollection} by referencing it from the initialization context using an ID.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reference extends MarkCollectionProvider {
 
-    // START BEAN PROPERTIES
+    /** The ID of the {@link MarkCollection} to retrieve from the initialization context. */
     @BeanField @Getter @Setter private String id = "";
-    // END BEAN PROPERTIES
 
     @Override
     public MarkCollection get() throws ProvisionFailedException {
