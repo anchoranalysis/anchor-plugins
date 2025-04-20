@@ -29,6 +29,11 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.WithValueBase;
 
+/**
+ * A feature that divides the result of another feature by a constant value.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class DivideByConstant<T extends FeatureInput> extends WithValueBase<T> {
 
     @Override

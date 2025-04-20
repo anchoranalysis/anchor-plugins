@@ -35,6 +35,12 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * A base class for features that compare a value against a range and return different results based
+ * on the comparison.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
     // START BEAN PROPERTIES
@@ -47,49 +53,70 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureUn
 
     @Override
     public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
-        return calculateForValue(input.calculate(featureToCalcInputVal()), input);
+        return calculateForValue(input.calculate(featureToCalcInputValue()), input);
     }
 
-    /** Boundary to define the minimum accepted value in the range */
+    /**
+     * Defines the minimum accepted value in the range.
+     *
+     * @param input the {@link FeatureCalculationInput} to use for calculation
+     * @return the minimum boundary value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double boundaryMin(FeatureCalculationInput<T> input)
             throws FeatureCalculationException;
 
-    /** Boundary to define the maximum accepted value in the range */
+    /**
+     * Defines the maximum accepted value in the range.
+     *
+     * @param input the {@link FeatureCalculationInput} to use for calculation
+     * @return the maximum boundary value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double boundaryMax(FeatureCalculationInput<T> input)
             throws FeatureCalculationException;
 
     /**
-     * Which feature to calculate the input-value? The result is then passed to {@link
-     * #calculateForValue}
+     * Specifies which feature to calculate the input value.
+     *
+     * @return the {@link Feature} used to calculate the input value
      */
-    protected abstract Feature<T> featureToCalcInputVal();
+    protected abstract Feature<T> featureToCalcInputValue();
 
-    /** What value to return if the value is inside the range */
+    /**
+     * Calculates the value to return if the input is within the range.
+     *
+     * @param valWithinRange the input value that is within the range
+     * @param input the {@link FeatureCalculationInput} to use for calculation
+     * @return the calculated value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double withinRangeValue(
             double valWithinRange, FeatureCalculationInput<T> input)
             throws FeatureCalculationException;
 
     /**
-     * Calculates for an input-value, return constant values if its outside the range, or otherwise
-     * calling a function
+     * Calculates the result based on an input value, returning constant values if it's outside the
+     * range.
      *
-     * @param val input-value
-     * @return either a constant-value if outside the range, or else the result of the
-     *     withinRangeValue function
-     * @throws FeatureCalculationException
+     * @param value input value
+     * @param input the {@link FeatureCalculationInput} to use for calculation
+     * @return either a constant value if outside the range, or the result of the withinRangeValue
+     *     function
+     * @throws FeatureCalculationException if the calculation fails
      */
-    private double calculateForValue(double val, FeatureCalculationInput<T> input)
+    private double calculateForValue(double value, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
 
-        if (val < boundaryMin(input)) {
+        if (value < boundaryMin(input)) {
             return belowMinValue;
         }
 
-        if (val > boundaryMax(input)) {
+        if (value > boundaryMax(input)) {
             return aboveMaxValue;
         }
 
-        return withinRangeValue(val, input);
+        return withinRangeValue(value, input);
     }
 
     @Override

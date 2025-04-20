@@ -37,18 +37,17 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.statistics.FeatureResultSupplier;
 
 /**
- * Calculates a score based upon the statistical mean and std-deviation.
+ * Calculates a score based upon the statistical mean and standard deviation.
  *
- * @author Owen Feehan
- * @param <T> feature input-type
+ * @param <T> the type of {@link FeatureInput} this feature operates on
  */
 public abstract class StatisticalBase<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
-    // START BEAN PROPERTIES
+    /** The {@link Feature} used to calculate the mean. */
     @BeanField @Getter @Setter private Feature<T> itemMean;
 
+    /** The {@link Feature} used to calculate the standard deviation. */
     @BeanField @Getter @Setter private Feature<T> itemStdDev;
-    // END BEAN PROPERTIES
 
     @Override
     public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
@@ -69,13 +68,13 @@ public abstract class StatisticalBase<T extends FeatureInput> extends FeatureUna
     }
 
     /**
-     * Derive scores given the value, mean and standard-deviation
+     * Derive scores given the value, mean and standard deviation.
      *
-     * @param featureValue the feature-value calculated from getItem()
+     * @param featureValue the feature-value calculated from {@link #getItem()}
      * @param mean the mean
-     * @param stdDev a means to get the std-deviation (if needed)
-     * @return
-     * @throws FeatureCalculationException
+     * @param stdDev a supplier for the standard deviation (if needed)
+     * @return the derived score
+     * @throws FeatureCalculationException if the score calculation fails
      */
     protected abstract double deriveScore(
             double featureValue, double mean, FeatureResultSupplier stdDev)

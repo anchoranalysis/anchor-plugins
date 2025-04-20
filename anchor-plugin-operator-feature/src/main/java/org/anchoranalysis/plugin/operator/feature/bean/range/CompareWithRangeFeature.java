@@ -54,7 +54,7 @@ public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompar
     // END BEAN PROPERTIES
 
     @Override
-    protected Feature<T> featureToCalcInputVal() {
+    protected Feature<T> featureToCalcInputValue() {
         return getItem();
     }
 

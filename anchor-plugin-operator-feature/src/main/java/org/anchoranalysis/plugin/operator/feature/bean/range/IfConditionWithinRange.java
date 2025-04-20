@@ -48,7 +48,7 @@ public class IfConditionWithinRange<T extends FeatureInput> extends RangeCompare
     // END BEAN PROPERTIES
 
     @Override
-    protected Feature<T> featureToCalcInputVal() {
+    protected Feature<T> featureToCalcInputValue() {
         return featureCondition;
     }
 

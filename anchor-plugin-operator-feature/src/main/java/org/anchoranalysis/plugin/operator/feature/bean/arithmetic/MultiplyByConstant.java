@@ -31,9 +31,20 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.WithValueBase;
 
+/**
+ * A feature that multiplies the result of another feature by a constant value.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 @NoArgsConstructor
 public class MultiplyByConstant<T extends FeatureInput> extends WithValueBase<T> {
 
+    /**
+     * Creates a new {@link MultiplyByConstant} with a specified feature and constant value.
+     *
+     * @param feature the {@link Feature} to be multiplied
+     * @param value the constant value to multiply by
+     */
     public MultiplyByConstant(Feature<T> feature, double value) {
         setItem(feature);
         setValue(value);

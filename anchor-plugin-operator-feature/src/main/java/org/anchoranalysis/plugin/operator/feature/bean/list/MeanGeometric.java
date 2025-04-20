@@ -33,9 +33,14 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
-// Geometric mean
+/**
+ * A feature that calculates the geometric mean of a list of features.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class MeanGeometric<T extends FeatureInput> extends FeatureFromList<T> {
 
+    /** Calculator for geometric mean from Apache Commons Math. */
     private GeometricMean meanCalculator = new GeometricMean();
 
     @Override

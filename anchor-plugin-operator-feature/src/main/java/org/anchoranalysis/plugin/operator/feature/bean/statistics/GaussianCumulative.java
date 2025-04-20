@@ -34,23 +34,27 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.statistics.FeatureResultSupplier;
 
-// A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score
-// approaches 1.0
+/**
+ * Calculates a score between 0 and 1 based on the Cumulative Distribution Function (CDF) of a
+ * Gaussian distribution. As the value approaches the mean, the score approaches 1.0.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class GaussianCumulative<T extends FeatureInput> extends StatisticalBase<T> {
 
-    // START BEAN PROPERTIES
+    /** If true, always returns 1.0 for values higher than the mean. */
     @BeanField @Getter @Setter
     private boolean ignoreHigherSide = false; // Always returns 1.0 for the higher side
 
+    /** If true, always returns 1.0 for values lower than the mean. */
     @BeanField @Getter @Setter
     private boolean ignoreLowerSide = false; // Always returns 1.0 for the lower side
 
-    /** Treat the higher side as if it's the the fill cdf */
+    /** If true, treats the higher side as if it's the full CDF. */
     @BeanField @Getter @Setter private boolean rewardHigherSide = false;
 
-    /* Treat the lower side as if it's 1 - the fill cdf */
+    /** If true, treats the lower side as if it's 1 minus the full CDF. */
     @BeanField @Getter @Setter private boolean rewardLowerSide = false;
-    // END BEAN PROPERTIES
 
     @Override
     protected double deriveScore(double featureValue, double mean, FeatureResultSupplier stdDev)
@@ -67,6 +71,16 @@ public class GaussianCumulative<T extends FeatureInput> extends StatisticalBase<
         return calc(mean, stdDev.get(), featureValue, rewardHigherSide, rewardLowerSide);
     }
 
+    /**
+     * Calculates the score based on the Gaussian CDF.
+     *
+     * @param mean the mean of the Gaussian distribution
+     * @param stdDev the standard deviation of the Gaussian distribution
+     * @param val the value to calculate the score for
+     * @param rewardHigherSide if true, reward higher values
+     * @param rewardLowerSide if true, reward lower values
+     * @return the calculated score
+     */
     private static double calc(
             double mean,
             double stdDev,

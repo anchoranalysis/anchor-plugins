@@ -28,6 +28,14 @@ package org.anchoranalysis.plugin.operator.feature.bean.replace;
 
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * Replaces infinite values in a feature's result with a specified replacement value.
+ *
+ * <p>This class extends {@link ReplaceUnusualValue} to specifically handle infinite values
+ * (positive or negative infinity) in the feature calculation results.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class ReplaceInfinity<T extends FeatureInput> extends ReplaceUnusualValue<T> {
 
     @Override

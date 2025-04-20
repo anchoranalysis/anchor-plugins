@@ -32,16 +32,17 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Clamps a value if it lies outside the range - instead returning particular constants if below or
- * above an acceptable range
+ * Clamps a feature value if it lies outside a specified range.
  *
- * @author Owen Feehan
- * @param <T>
+ * <p>This class extends {@link RangeCompareFromScalars} to return particular constants if the
+ * calculated feature value is below or above an acceptable range.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
  */
 public class IfOutsideRange<T extends FeatureInput> extends RangeCompareFromScalars<T> {
 
     @Override
-    protected Feature<T> featureToCalcInputVal() {
+    protected Feature<T> featureToCalcInputValue() {
         return getItem();
     }
 

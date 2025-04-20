@@ -34,11 +34,21 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * A feature that divides the results of multiple features sequentially.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class Divide<T extends FeatureInput> extends FeatureFromList<T> {
 
     // START BEAN PROPERTIES
+    /**
+     * If true, returns a predefined value when division by zero occurs instead of throwing an
+     * exception.
+     */
     @BeanField @Getter @Setter private boolean avoidDivideByZero = false;
 
+    /** The value to return when division by zero occurs and {@link #avoidDivideByZero} is true. */
     @BeanField @Getter @Setter private double divideByZeroValue = 1e+15;
     // END BEAN PROPERTIES
 
