@@ -3,11 +3,11 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-pom</artifactId>
-		<version>[0.2.6,1.0.0)</version>
+		<version>1.0.0-SNAPSHOT</version>
     </parent> 
 
     <artifactId>anchor-parent-plugins</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 	<name>anchor-parent-plugins</name>
 	
@@ -38,12 +38,14 @@
 		<url>https://github.com/anchoranalysis/anchor-plugins</url>
 		<tag>HEAD</tag>
 	</scm>
-	
-	<!-- For connecting to SonarCloud. -->
-	<properties>
-	  <sonar.projectKey>anchoranalysis_anchor-plugins</sonar.projectKey>
-	</properties>
   
+  	<!-- For connecting to SonarCloud. -->
+	<properties>
+		<sonar.organization>anchoranalysis</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>anchoranalysis_anchor-plugins</sonar.projectKey>
+	</properties>
+	
     <modules>
 
         <module>anchor-plugin-image</module>
@@ -98,18 +100,7 @@
 		  
 		</resources>	
 		
-		
 		<plugins>
-					
-			<plugin>
-				  <groupId>org.sonatype.central</groupId>
-				  <artifactId>central-publishing-maven-plugin</artifactId>
-				  <version>0.7.0</version>
-				  <extensions>true</extensions>
-				  <configuration>
-					<publishingServerId>central</publishingServerId>
-				  </configuration>
-			</plugin>			
 		
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -122,28 +113,6 @@
 					</configuration>
 					<inherited>false</inherited>
 			  </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.2.0</version>
-					<configuration>
-						<source>1.8</source>
-						<detectJavaApiLink>true</detectJavaApiLink>
-						<noqualifier>java.lang:java.io</noqualifier>
-						<links>
-							<link>https://commons.apache.org/proper/commons-io/javadocs/api-2.5/</link>
-						</links>
-					</configuration>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    </plugin>			  
 					
 		</plugins>
     </build>
