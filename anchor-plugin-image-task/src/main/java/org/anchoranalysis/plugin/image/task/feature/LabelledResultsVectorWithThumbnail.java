@@ -41,17 +41,17 @@ import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 @AllArgsConstructor
 public class LabelledResultsVectorWithThumbnail {
 
-    /** The labels. */
+    /** The labels describing the results. */
     private final RowLabels labels;
 
-    /** The results. */
+    /** The results vector with an optional thumbnail. */
     private final ResultsVectorWithThumbnail results;
 
     /**
      * Exposes as a {@link LabelledResultsVector} without a thumbnail.
      *
      * @return a newly created {@link LabelledResultsVector} derived from the current object.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the results vector cannot be retrieved.
      */
     public LabelledResultsVector withoutThumbnail() throws OperationFailedException {
         return new LabelledResultsVector(labels, results.getResultsVector().get());

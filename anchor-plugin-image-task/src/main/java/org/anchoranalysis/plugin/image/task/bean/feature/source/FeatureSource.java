@@ -74,35 +74,39 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
             throws CreateException;
 
     /**
-     * Iff true, group columns are added to the CSV exports, and other group exports may occur in
-     * sub-directories.
+     * Determines if group columns should be added to the CSV exports and other group exports may
+     * occur in sub-directories.
      *
      * @param groupGeneratorDefined has a group-generator been defined for this experiment?
-     * @return true iff a group-generator has been defined
+     * @return true if a group-generator has been defined, false otherwise
      */
     public abstract boolean includeGroupInExperiment(boolean groupGeneratorDefined);
 
     /**
-     * Generate label-headers for the non-feature-result columns in the CSV.
+     * Generates label-headers for the non-feature-result columns in the CSV.
      *
-     * @return a label-header generator.
+     * @param groupsEnabled whether groups are enabled
+     * @return a {@link LabelHeaders} object for the non-feature-result columns
      */
     public abstract LabelHeaders headers(boolean groupsEnabled);
 
     /**
      * Processes one input to calculate feature-results and output them to the file-system.
      *
-     * @param input one particular input that will creates one or more "rows" in a feature-table
-     * @param context io-context
-     * @throws OperationFailedException
+     * @param input one particular input that will create one or more "rows" in a feature-table
+     * @param context the {@link FeatureCalculationContext} for calculation
+     * @throws OperationFailedException if the operation fails
      */
     public abstract void calculateAndOutput(T input, FeatureCalculationContext<S> context)
             throws OperationFailedException;
 
     /**
-     * Highest class(es) that will function as a valid input.
+     * Specifies the highest class(es) that will function as a valid input.
      *
-     * <p>This is usually the class of T (or sometimes the absolute base class InputFromManager)
+     * <p>This is usually the class of T (or sometimes the absolute base class {@link
+     * InputFromManager})
+     *
+     * @return an {@link InputTypesExpected} object specifying the expected input types
      */
     public abstract InputTypesExpected inputTypesExpected();
 }

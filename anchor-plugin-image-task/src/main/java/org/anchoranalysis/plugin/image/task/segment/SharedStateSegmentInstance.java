@@ -43,19 +43,32 @@ import org.anchoranalysis.plugin.image.task.feature.FeatureExporter;
 import org.anchoranalysis.plugin.image.task.feature.FeatureExporterContext;
 
 /**
- * Shared-state for instance segmentation
+ * Shared-state for instance segmentation.
  *
  * @author Owen Feehan
  * @param <T> model-type in pool
  */
 public class SharedStateSegmentInstance<T extends InferenceModel> {
 
+    /** The feature exporter for the instance segmentation. */
     private final FeatureExporter<FeatureTableCalculator<FeatureInputSingleObject>> features;
 
+    /** The concurrent model pool for inference. */
     @Getter private final ConcurrentModelPool<T> modelPool;
 
+    /** The context for feature exporting. */
     private final FeatureExporterContext context;
 
+    /**
+     * Creates a new instance of SharedStateSegmentInstance.
+     *
+     * @param modelPool the concurrent model pool
+     * @param featureTable the feature table calculator
+     * @param identifierHeaders the label headers for identifiers
+     * @param outputNameFeatures the output name for features
+     * @param context the feature exporter context
+     * @throws CreateException if there's an error creating the feature exporter
+     */
     public SharedStateSegmentInstance(
             ConcurrentModelPool<T> modelPool,
             FeatureTableCalculator<FeatureInputSingleObject> featureTable,
@@ -92,6 +105,7 @@ public class SharedStateSegmentInstance<T extends InferenceModel> {
      * Writes all the results that have been collected as a CSV file, and closes open I/O handles
      * and memory structures.
      *
+     * @param style the style for exporting features
      * @throws OutputWriteFailedException if any output cannot be written, or there is an error
      *     closing open I/O.
      */

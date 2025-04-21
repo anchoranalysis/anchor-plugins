@@ -73,6 +73,7 @@ public class FeatureExporter<S> {
     /** The names of the features to be exported. */
     @Getter private final FeatureNameList featureNames;
 
+    /** Supplier for the feature source. */
     private final Supplier<S> featureSource;
 
     /** Saved store feature calculation results, and writes associated thumbnails. */
@@ -92,7 +93,7 @@ public class FeatureExporter<S> {
      *     thread).
      * @param grouper when defined, assigns each input to a group.
      * @param context context for exporting features.
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if there's an error during output writing
      */
     public FeatureExporter(
             FeatureOutputMetadata outputMetadata,
@@ -145,6 +146,7 @@ public class FeatureExporter<S> {
      * @param <T> feature input-type in store
      * @param featureStore a list of beans to create the features.
      * @param metadataHeaders headers to describe any metadata.
+     * @param outputNames customizable output names used by {@link LabelledResultsCollector}.
      * @param grouper when defined, assigns each input to a group.
      * @param context context.
      * @return a newly created {@link FeatureExporter}.

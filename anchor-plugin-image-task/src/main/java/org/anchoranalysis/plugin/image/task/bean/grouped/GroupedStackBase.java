@@ -195,14 +195,19 @@ public abstract class GroupedStackBase<S, T>
     /**
      * The first-level output-name used for determining if groups are written.
      *
-     * <p>Second-level matches against this, will determine which specific groups may or may not be
-     * written.
+     * <p>Second-level matches against this, and will determine which specific groups may or may not
+     * be written.
      *
-     * @return
+     * @return the output-name.
      */
     protected abstract String outputNameForGroups();
 
-    /** An optional subdirectory where the group outputs are placed. */
+    /**
+     * An optional subdirectory where the group outputs are placed.
+     *
+     * @return an {@link Optional} containing the subdirectory name as a {@link String}, or {@link
+     *     Optional#empty()} if no subdirectory is specified.
+     */
     protected abstract Optional<String> subdirectoryForGroupOutputs();
 
     /**
@@ -227,6 +232,7 @@ public abstract class GroupedStackBase<S, T>
      * @param source how to retrieve a {@link Channel}, appropriately-sized.
      * @return a function, that given a {@link Channel} will return an individual element of type
      *     {@code T}.
+     * @throws OperationFailedException if the channel-deriver cannot be successfully created.
      */
     protected abstract CheckedFunction<Channel, S, CreateException> createChannelDeriver(
             ChannelSource source) throws OperationFailedException;

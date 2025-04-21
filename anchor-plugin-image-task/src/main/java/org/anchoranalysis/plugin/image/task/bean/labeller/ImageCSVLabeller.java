@@ -41,11 +41,12 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.labeller.FileLabelMap;
 import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitialization;
 
+/** Labels images based on a CSV file containing image identifiers and corresponding labels. */
 public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitialization> {
 
     // START BEAN PROPERTIES
     /**
-     * Path to a CSV label file (comma-separated, with header, no quotes)
+     * Path to a CSV label file (comma-separated, with header, no quotes).
      *
      * <p>The CSV file should have two columns: first column = image id (to match the input-name of
      * an image) second column = a label string

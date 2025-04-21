@@ -37,28 +37,42 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 /**
  * Associates a label with an image.
  *
- * <p>e.g. this can be used to associate labels with images for training or evaluation in a
+ * <p>This can be used to associate labels with images for training or evaluation in a
  * machine-learning problem.
  *
- * @author Owen Feehan
- * @param <T> shared-state
+ * @param <T> the type of shared-state used by the labeller
  */
 public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
 
     /**
-     * Should be called once before calling any other methods
+     * Initializes the labeller. Should be called once before calling any other methods.
      *
-     * @param pathForBinding a path that can be used by the labeller to make filePath decisions
+     * @param pathForBinding a {@link Path} that can be used by the labeller to make file path
+     *     decisions
+     * @return the initialized shared-state of type {@code T}
+     * @throws InitializeException if initialization fails
      */
     public abstract T initialize(Path pathForBinding) throws InitializeException;
 
     /**
-     * A set of identifiers for all groups that can be outputted by the labeller. Should be callable
-     * always.
+     * Returns a set of identifiers for all groups that can be outputted by the labeller.
+     *
+     * <p>This method should be callable at any time.
+     *
+     * @param initialization the initialized shared-state returned by {@link #initialize(Path)}
+     * @return a {@link Set} of {@link String} labels
      */
     public abstract Set<String> allLabels(T initialization);
 
-    /** Determines a particular group-identifier for an input */
+    /**
+     * Determines a particular group-identifier (label) for an input.
+     *
+     * @param sharedState the shared-state returned by {@link #initialize(Path)}
+     * @param input the {@link ProvidesStackInput} to be labelled
+     * @param context the {@link InputOutputContext} for the operation
+     * @return the label as a {@link String}
+     * @throws OperationFailedException if the labelling operation fails
+     */
     public abstract String labelFor(
             T sharedState, ProvidesStackInput input, InputOutputContext context)
             throws OperationFailedException;

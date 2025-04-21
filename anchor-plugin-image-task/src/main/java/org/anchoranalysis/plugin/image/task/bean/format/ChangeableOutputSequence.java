@@ -29,10 +29,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 
-/** @author Owen Feehan */
+/**
+ * A wrapper class that allows changing the output sequence for a given type.
+ *
+ * @param <T> the type of elements in the output sequence
+ * @param <S> the type of shared-state used by the output sequence
+ * @author Owen Feehan
+ */
 @Data
 @NoArgsConstructor
 public class ChangeableOutputSequence<T, S> {
 
+    /** The current output sequence. */
     private OutputSequenceIndexed<T, S> sequence;
 }

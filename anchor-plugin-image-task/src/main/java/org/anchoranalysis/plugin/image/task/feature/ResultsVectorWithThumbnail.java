@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 
 /**
- * A results-vector with an optional thumbnails associated with it.
+ * A results-vector with an optional thumbnail associated with it.
  *
  * @author Owen Feehan
  */
@@ -42,9 +42,17 @@ import org.anchoranalysis.image.core.stack.DisplayStack;
 @Value
 public class ResultsVectorWithThumbnail {
 
+    /** Supplier for the {@link ResultsVector}. */
     private CheckedSupplier<ResultsVector, OperationFailedException> resultsVector;
+
+    /** Supplier for the optional thumbnail {@link DisplayStack}. */
     private CheckedSupplier<Optional<DisplayStack>, OperationFailedException> thumbnail;
 
+    /**
+     * Creates a new instance with a results vector and no thumbnail.
+     *
+     * @param resultsVector supplier for the {@link ResultsVector}.
+     */
     public ResultsVectorWithThumbnail(
             CheckedSupplier<ResultsVector, OperationFailedException> resultsVector) {
         this.resultsVector = resultsVector;

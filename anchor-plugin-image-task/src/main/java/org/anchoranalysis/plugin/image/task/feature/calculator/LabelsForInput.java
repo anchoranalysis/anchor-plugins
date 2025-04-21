@@ -40,8 +40,9 @@ public interface LabelsForInput {
      *
      * @param objectIdentifier a unique identifier for the object (within the context of whatever
      *     image it resides).
+     * @param groupGeneratorName an optional name for the group generator.
      * @param index the index in the input-collection for the particular input.
-     * @return row-labels for the input.
+     * @return {@link RowLabels} for the input.
      */
     RowLabels deriveLabels(String objectIdentifier, Optional<String> groupGeneratorName, int index);
 }

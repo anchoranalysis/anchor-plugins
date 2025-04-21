@@ -65,6 +65,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  */
 public class FeatureResultsAndThumbnails {
 
+    /** The output name for thumbnails. */
     private static final String OUTPUT_THUMBNAILS = FeatureExporter.OUTPUT_THUMBNAILS;
 
     /** Where the results of feature-calculation are stored/outputted. */
@@ -73,21 +74,28 @@ public class FeatureResultsAndThumbnails {
     /** Outputs thumbnails. */
     private ThumbnailsWriter thumbnails = new ThumbnailsWriter();
 
+    /** The checked outputter for writing results. */
     private final OutputterChecked outputter;
 
-    /**
-     * Whether the calculation of the feature-results is needed. If only thumbnails are being
-     * written, the calculation of results can be skipped.
-     */
+    /** Whether the calculation of the feature-results is needed. */
     private final boolean calculationResultsNeeded;
 
     /** Whether thumbnails are being calculated or not. */
     private final boolean thumbnailsEnabled;
 
+    /** The context for feature exporting operations. */
     private final FeatureExporterContext context;
 
+    /** Metadata for feature output. */
     private final FeatureOutputMetadata outputMetadata;
 
+    /**
+     * Creates a new {@link FeatureResultsAndThumbnails}.
+     *
+     * @param outputMetadata metadata for feature output.
+     * @param context the context for feature exporting operations.
+     * @throws OutputWriteFailedException if there's an error setting up the output.
+     */
     public FeatureResultsAndThumbnails(
             FeatureOutputMetadata outputMetadata, FeatureExporterContext context)
             throws OutputWriteFailedException {
@@ -182,11 +190,12 @@ public class FeatureResultsAndThumbnails {
      *
      * @param featuresAggregate features that can be used for generating additional "aggregated"
      *     exports.
-     * @param includeGroups iff true a group-column is included in the CSV file and the group
-     *     exports occur, otherwise not.
-     * @param csvWriterCreator creates a CSV writer for a particular IO-context.
-     * @param context IO-context.
-     * @throws OutputWriteFailedException
+     * @param includeGroups if true a group-column is included in the CSV file and the group exports
+     *     occur, otherwise not.
+     * @param csvWriterCreator creates a {@link FeatureCSVWriterFactory} for a particular {@link
+     *     InputOutputContext}.
+     * @param context the {@link InputOutputContext} for input/output operations.
+     * @throws OutputWriteFailedException if there's an error writing the output.
      */
     public void writeGroupedResults(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,

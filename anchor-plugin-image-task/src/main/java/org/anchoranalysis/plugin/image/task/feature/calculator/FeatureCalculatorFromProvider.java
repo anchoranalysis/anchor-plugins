@@ -62,17 +62,27 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  *
  * <p>Optionally, an energy-stack is added from either provider or the input-stack.
  *
- * @author Owen Feehan
- * @param <T> feature-input-type
+ * @param <T> feature-input-type extending {@link FeatureInputEnergy}
  */
 public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
 
+    /** The initialization for image-related operations. */
     private final ImageInitialization initialization;
 
+    /** The energy stack used for feature calculations. */
     @Getter private final EnergyStack energyStack;
 
+    /** The logger for recording messages. */
     private final Logger logger;
 
+    /**
+     * Creates a new {@link FeatureCalculatorFromProvider}.
+     *
+     * @param stackInput provides the input stack
+     * @param stackEnergy optional provider for the energy stack
+     * @param context the input-output context
+     * @throws OperationFailedException if the initialization or energy stack creation fails
+     */
     public FeatureCalculatorFromProvider(
             ProvidesStackInput stackInput,
             Optional<StackProvider> stackEnergy,
@@ -106,9 +116,12 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
 
     /**
      * Calculates a single-feature that comes from a provider (but can reference the other features
-     * from the store)
+     * from the store).
      *
-     * @throws OperationFailedException
+     * @param provider the feature list provider
+     * @param providerName the name of the provider
+     * @return a {@link FeatureCalculatorSingle} for the specified feature
+     * @throws OperationFailedException if the feature calculation fails
      */
     public FeatureCalculatorSingle<T> calculatorSingleFromProvider(
             FeatureListProvider<T> provider, String providerName) throws OperationFailedException {
@@ -128,7 +141,13 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
         }
     }
 
-    /** Calculates all image-features in the feature-store */
+    /**
+     * Calculates all image-features in the feature-store.
+     *
+     * @param features the list of features to calculate
+     * @return a {@link FeatureCalculatorMulti} for the specified features
+     * @throws InitializeException if the calculator initialization fails
+     */
     public FeatureCalculatorMulti<T> calculatorForAll(FeatureList<T> features)
             throws InitializeException {
         return createMultiCalculator(
@@ -136,7 +155,13 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
     }
 
     /**
-     * Calculates a energy-stack from a provider if it's available, or otherwise uses a fallback.
+     * Calculates an energy-stack from a provider if it's available, or otherwise uses a fallback.
+     *
+     * @param stackEnergy optional provider for the energy stack
+     * @param fallback fallback supplier for the stack
+     * @param logger the logger for recording messages
+     * @return the {@link EnergyStack} created from the provider or fallback
+     * @throws OperationFailedException if the energy stack creation fails
      */
     private EnergyStack energyStackFromProviderOrElse(
             Optional<StackProvider> stackEnergy,
@@ -150,6 +175,14 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
         }
     }
 
+    /**
+     * Creates a multi-feature calculator.
+     *
+     * @param features the list of features to calculate
+     * @param sharedFeatures shared features for the calculation
+     * @return a {@link FeatureCalculatorMulti} for the specified features
+     * @throws InitializeException if the calculator initialization fails
+     */
     private FeatureCalculatorMulti<T> createMultiCalculator(
             FeatureList<T> features, SharedFeatures sharedFeatures) throws InitializeException {
         return new FeatureCalculatorMultiChangeInput<>(
@@ -157,6 +190,14 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
                 input -> input.setEnergyStack(energyStack));
     }
 
+    /**
+     * Creates a single-feature calculator.
+     *
+     * @param feature the feature to calculate
+     * @param sharedFeatures shared features for the calculation
+     * @return a {@link FeatureCalculatorSingle} for the specified feature
+     * @throws InitializeException if the calculator initialization fails
+     */
     private FeatureCalculatorSingle<T> createSingleCalculator(
             Feature<T> feature, SharedFeatures sharedFeatures) throws InitializeException {
         return new FeatureCalculatorSingleChangeInput<>(
@@ -165,7 +206,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
     }
 
     /**
-     * Combines all stacks in the store into one stack
+     * Combines all stacks in the store into one stack.
      *
      * <p>There is no guarantee about the ordering of the stacks, if there are multiple stacks in
      * the store.
@@ -173,7 +214,8 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
      * <p>All stacks must have the same dimensions.
      *
      * @param store a named-store of stacks
-     * @return a stack with channels from all stacks in the store
+     * @param executionTimeRecorder records execution time of operations
+     * @return a {@link Stack} with channels from all stacks in the store
      * @throws OperationFailedException if the stacks have different dimensions, or if anything else
      *     goes wrong
      */

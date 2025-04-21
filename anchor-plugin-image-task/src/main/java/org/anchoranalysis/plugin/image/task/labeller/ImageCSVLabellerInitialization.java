@@ -29,9 +29,15 @@ package org.anchoranalysis.plugin.image.task.labeller;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
+/**
+ * Initialization data for an image CSV labeller.
+ *
+ * <p>This class holds the label map used for associating images with labels.
+ */
 @AllArgsConstructor
 @Value
 public class ImageCSVLabellerInitialization {
 
+    /** The map associating file identifiers with labels. */
     private FileLabelMap<String> labelMap;
 }

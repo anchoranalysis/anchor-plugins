@@ -36,10 +36,18 @@ import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadata;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
+/** Shared state for writing selected slice information to a CSV file. */
 public class SharedStateSelectedSlice {
 
+    /** The CSV writer for outputting selected slice information. */
     private final Optional<FeatureCSVWriter> csvWriter;
 
+    /**
+     * Creates a new instance of SharedStateSelectedSlice.
+     *
+     * @param baseOutputter the base outputter for creating the CSV writer
+     * @throws CreateException if there's an error creating the CSV writer
+     */
     public SharedStateSelectedSlice(Outputter baseOutputter) throws CreateException {
         try {
             this.csvWriter =
@@ -54,6 +62,13 @@ public class SharedStateSelectedSlice {
         }
     }
 
+    /**
+     * Writes a row of selected slice information to the CSV file.
+     *
+     * @param name the name of the image or stack
+     * @param selectedSliceIndex the index of the selected slice
+     * @param featureOptima the feature optima value
+     */
     public synchronized void writeRow(String name, int selectedSliceIndex, double featureOptima) {
         List<TypedValue> row =
                 Arrays.asList(
@@ -63,6 +78,7 @@ public class SharedStateSelectedSlice {
         this.csvWriter.ifPresent(writer -> writer.addRow(row));
     }
 
+    /** Closes the CSV writer if it exists. */
     public void close() {
         csvWriter.ifPresent(FeatureCSVWriter::close);
     }

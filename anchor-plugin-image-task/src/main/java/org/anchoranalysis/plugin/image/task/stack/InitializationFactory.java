@@ -34,9 +34,18 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.io.ImageInitializationFactory;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 
+/** Factory for creating {@link ImageInitialization} instances. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InitializationFactory {
 
+    /**
+     * Creates an {@link ImageInitialization} with stacks added from the input.
+     *
+     * @param input the input that provides stacks
+     * @param context the initialization context
+     * @return a new {@link ImageInitialization} instance with stacks added
+     * @throws OperationFailedException if the operation fails
+     */
     public static ImageInitialization createWithStacks(
             ProvidesStackInput input, InitializationContext context)
             throws OperationFailedException {
@@ -45,6 +54,12 @@ public class InitializationFactory {
         return initialization;
     }
 
+    /**
+     * Creates an {@link ImageInitialization} without adding any stacks.
+     *
+     * @param context the initialization context
+     * @return a new {@link ImageInitialization} instance without stacks
+     */
     public static ImageInitialization createWithoutStacks(InitializationContext context) {
         return ImageInitializationFactory.create(
                 context.getInputOutput(), context.getSuggestedSize());

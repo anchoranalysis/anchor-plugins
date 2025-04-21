@@ -32,16 +32,34 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 
+/** A wrapper around {@link ChannelGetter} that retrieves channels for a specific timepoint. */
 @AllArgsConstructor
 public class ChannelGetterForTimepoint {
 
+    /** The underlying {@link ChannelGetter} to retrieve channels. */
     private ChannelGetter getter;
+
+    /** The timepoint for which to retrieve channels. */
     private int t;
 
+    /**
+     * Checks if a channel with the given name exists.
+     *
+     * @param channelName the name of the channel to check
+     * @return true if the channel exists, false otherwise
+     */
     public boolean hasChannel(String channelName) {
         return getter.hasChannel(channelName);
     }
 
+    /**
+     * Retrieves a channel with the given name for the specified timepoint.
+     *
+     * @param channelName the name of the channel to retrieve
+     * @param logger the logger to use for any logging operations
+     * @return the {@link Channel} for the specified name and timepoint
+     * @throws GetOperationFailedException if the channel retrieval operation fails
+     */
     public Channel getChannel(String channelName, Logger logger)
             throws GetOperationFailedException {
         return getter.getChannel(channelName, t, logger);

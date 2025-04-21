@@ -71,13 +71,13 @@ public abstract class RasterTask<S, U> extends Task<NamedChannelsInput, S> {
     }
 
     /**
-     * Creates a shared-state for the duration of a particular input-job
+     * Creates a shared-state for the duration of a particular input-job.
      *
      * <p>This will exist across all stacks from the same series.
      *
-     * @param context the input-output cotnext associated with a particular job
+     * @param context the input-output context associated with a particular job
      * @return a newly created shared-state
-     * @throws JobExecutionException
+     * @throws JobExecutionException if an error occurs during job execution
      */
     protected abstract U createSharedStateJob(InputOutputContext context)
             throws JobExecutionException;
@@ -91,9 +91,9 @@ public abstract class RasterTask<S, U> extends Task<NamedChannelsInput, S> {
      * <p>This should be called always <i>once</i> <b>before</b> all calls to {@link #doStack}.
      *
      * @param sharedStateTask shared-state across all jobs in task
-     * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series.)
+     * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series)
      * @param context input-output context
-     * @throws JobExecutionException
+     * @throws JobExecutionException if an error occurs during job execution
      */
     public abstract void startSeries(
             S sharedStateTask, U sharedStateJob, InputOutputContext context)
@@ -107,11 +107,11 @@ public abstract class RasterTask<S, U> extends Task<NamedChannelsInput, S> {
      * <p>It is assumed each job may have only one series.
      *
      * @param input the input-object corresponding to this stack (a set of named-channels)
-     * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series.)
-     * @param seriesIndex the index of the input that is being currently processed from the series.
+     * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series)
+     * @param seriesIndex the index of the input that is being currently processed from the series
      * @param numberSeries the total number of images in the series (constant for a given task)
      * @param context IO context
-     * @throws JobExecutionException
+     * @throws JobExecutionException if an error occurs during job execution
      */
     public abstract void doStack(
             InputBound<NamedChannelsInput, S> input,
@@ -130,9 +130,9 @@ public abstract class RasterTask<S, U> extends Task<NamedChannelsInput, S> {
      * <p>This should be called always <i>once</i> <b>after</b> all calls to {@link #doStack}.
      *
      * @param sharedStateTask shared-state across all jobs in task
-     * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series.)
+     * @param sharedStateJob shared-state across all stacks in a job (i.e. in all series)
      * @param context input-output context
-     * @throws JobExecutionException
+     * @throws JobExecutionException if an error occurs during job execution
      */
     public abstract void endSeries(S sharedStateTask, U sharedStateJob, InputOutputContext context)
             throws JobExecutionException;

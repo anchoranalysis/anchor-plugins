@@ -29,14 +29,21 @@ package org.anchoranalysis.plugin.image.task.grouped;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * Adds an individual-item to an aggregate-item
+ * Adds an individual-item to an aggregate-item.
  *
  * @author Owen Feehan
  * @param <S> individual-item type
- * @param <T> aggregate-item type (comines many individual types)
+ * @param <T> aggregate-item type (combines many individual types)
  */
 @FunctionalInterface
 public interface AddToAggregateItem<S, T> {
 
+    /**
+     * Adds an individual item to an aggregate item.
+     *
+     * @param individual the individual item to be added
+     * @param aggregate the aggregate item to which the individual item is added
+     * @throws OperationFailedException if the addition operation fails
+     */
     void add(S individual, T aggregate) throws OperationFailedException;
 }

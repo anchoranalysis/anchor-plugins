@@ -30,10 +30,14 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.image.core.channel.Channel;
 
+/** Associates a name with a {@link Channel}. */
 @Value
 @AllArgsConstructor
 public class NamedChannel {
 
+    /** The name associated with the channel. */
     private String name;
+
+    /** The {@link Channel} instance. */
     private Channel channel;
 }

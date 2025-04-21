@@ -33,19 +33,23 @@ import lombok.Value;
 @Value
 @AllArgsConstructor
 class DualEnabled {
-    /** Whether the non-flattened output is enabled? */
-    boolean nonFlattened;
+    /** Whether the non-flattened output is enabled. */
+    private boolean nonFlattened;
 
-    /** Whether the flattened output is enabled? */
-    boolean flattened;
+    /** Whether the flattened output is enabled. */
+    private boolean flattened;
 
-    /** Whether either of the two outputs are enabled? */
+    /**
+     * Checks if either of the two outputs are enabled.
+     *
+     * @return true if either non-flattened or flattened output is enabled, false otherwise.
+     */
     public boolean isEitherEnabled() {
         return nonFlattened || flattened;
     }
 
     /**
-     * Performs a <i>logical and<i> operation with two booleans for {@code nonFlattened} and {@code
+     * Performs a <i>logical and</i> operation with two booleans for {@code nonFlattened} and {@code
      * flattened}.
      *
      * <p>They are passed as suppliers to only be calculated if needed.

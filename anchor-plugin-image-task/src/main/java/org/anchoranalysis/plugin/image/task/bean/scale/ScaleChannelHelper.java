@@ -46,10 +46,11 @@ class ScaleChannelHelper {
      * @param scaleFactor the factor used for scaling.
      * @param voxelsResizer how to resize the voxels in a channel.
      * @return the scaled version of a channel.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the scaling operation fails.
      */
     public static Channel scaleChannel(
-            Channel channel, boolean binary, ScaleFactor scaleFactor, VoxelsResizer voxelsResizer) {
+            Channel channel, boolean binary, ScaleFactor scaleFactor, VoxelsResizer voxelsResizer)
+            throws OperationFailedException {
 
         if (scaleFactor.isNoScale()) {
             // Nothing to do
