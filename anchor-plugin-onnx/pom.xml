@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
-		<version>[0.1.0,1.0.0)</version>
+		<version>1.0.0-SNAPSHOT</version>
     </parent> 
     <artifactId>anchor-plugin-onnx</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 	<description>Plugins that call the ONNX runtime.</description>
 	
    <dependencies>
