@@ -64,6 +64,7 @@ public class FitPointsFromObjects extends MarkCollectionProvider {
      * fitting failure.
      */
     @BeanField @Getter @Setter private boolean ignoreFittingFailure = true;
+
     // END BEAN PROPERTIES
 
     @Override

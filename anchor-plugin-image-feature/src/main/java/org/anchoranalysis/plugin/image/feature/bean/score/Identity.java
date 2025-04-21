@@ -50,6 +50,7 @@ public class Identity extends VoxelScore {
 
     /** Whether to keep extreme values (0 and 1) unchanged when normalizing. */
     @BeanField @Getter @Setter private boolean keepExtremes = false;
+
     // END BEAN PROPERTIES
 
     @Override

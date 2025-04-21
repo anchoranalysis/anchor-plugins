@@ -81,6 +81,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
      * <p>In this way, {@code histogram} can approximate a function of the original histogram.
      */
     @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogram;
+
     // END BEAN PROPERTIES
 
     /** Creates a new {@link FromHistogram} instance. */

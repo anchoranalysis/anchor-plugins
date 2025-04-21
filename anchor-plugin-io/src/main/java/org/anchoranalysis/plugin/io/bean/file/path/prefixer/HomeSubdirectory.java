@@ -49,6 +49,7 @@ public class HomeSubdirectory extends PathPrefixer {
     // START PROPERTIES
     /** A relative-path (to the user home directory) which is used as an output directory */
     @BeanField @Getter @Setter private String directory = "anchorData";
+
     // END PROPERTIES
 
     // If delegate is null, it means it hasn't been initialized yet.

@@ -51,6 +51,7 @@ public abstract class FromDimensionsBase extends ChannelProvider {
      * <p>Defaults to {@link GuessDimensions} if not explicitly set.
      */
     @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
+
     // END BEAN PROPERTIES
 
     @Override

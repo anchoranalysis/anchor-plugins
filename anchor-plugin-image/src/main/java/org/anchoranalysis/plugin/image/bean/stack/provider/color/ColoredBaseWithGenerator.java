@@ -46,6 +46,7 @@ public abstract class ColoredBaseWithGenerator extends ColoredBase {
     // START BEAN PROPERTIES
     /** Colors to use for drawing objects. */
     @BeanField @Getter @Setter private ColorScheme colors = DEFAULT_COLOR_SET_GENERATOR;
+
     // END BEAN PROPERTIES
 
     @Override

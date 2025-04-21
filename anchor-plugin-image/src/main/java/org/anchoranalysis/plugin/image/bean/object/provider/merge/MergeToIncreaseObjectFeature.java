@@ -55,6 +55,7 @@ public class MergeToIncreaseObjectFeature extends MergeWithFeature {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
+
     // END BEAN PROPERTIES
 
     @Override

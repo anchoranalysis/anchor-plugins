@@ -60,6 +60,7 @@ public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
 
     // START BEAN
     @BeanField @Getter @Setter private double minRadius = 0.55;
+
     // END BEAN
 
     @Override

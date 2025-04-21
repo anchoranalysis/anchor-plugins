@@ -43,6 +43,7 @@ public class SubstituteRegularExpression extends RegularExpressionBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String replacement;
+
     // END BEAN PROPERTIES
 
     @Override

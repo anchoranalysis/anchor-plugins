@@ -55,6 +55,7 @@ public class FromMarks extends ObjectCollectionProvider {
     @BeanField @Getter @Setter private RegionMap regionMap = RegionMapSingleton.instance();
 
     @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
+
     // END BEAN PROPERTIES
 
     @Override

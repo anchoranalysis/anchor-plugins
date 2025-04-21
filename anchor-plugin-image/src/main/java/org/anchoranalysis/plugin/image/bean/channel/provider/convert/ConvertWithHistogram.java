@@ -60,6 +60,7 @@ public class ConvertWithHistogram<T> extends ConvertBase {
      * images). If unset, such a histogram is calculated from the current image.
      */
     @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogram;
+
     // END BEAN PROPERTIES
 
     @Override

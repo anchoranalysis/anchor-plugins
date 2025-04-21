@@ -65,6 +65,7 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
     @BeanField @Getter @Setter private boolean includeDirectories = true;
 
     @BeanField @AllowEmpty @Getter @Setter private String prefixToRemove = "";
+
     // END BEAN PROPERTIES
 
     @Override

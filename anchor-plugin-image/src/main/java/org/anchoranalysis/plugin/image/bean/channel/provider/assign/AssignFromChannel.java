@@ -53,6 +53,7 @@ public class AssignFromChannel extends UnaryWithMaskBase {
     // START BEAN PROPERTIES
     /** The channel provider from which pixels will be assigned. */
     @BeanField @Getter @Setter private ChannelProvider channelAssignFrom;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -81,6 +81,7 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
      * separation. See class javadoc.
      */
     @BeanField @Getter @Setter private int thresholdNumberObjectsGlobal = 20;
+
     // END BEAN PROPERTIES
 
     /**

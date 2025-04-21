@@ -57,6 +57,7 @@ public class MaskAsSingleObject<T extends FeatureInputEnergy>
     // START BEAN PROPERTIES
     /** The provider for the mask to be treated as a single object. */
     @BeanField @SkipInit @Getter @Setter private MaskProvider mask;
+
     // END BEAN PROPERTIES
 
     /** The created mask after initialization. */

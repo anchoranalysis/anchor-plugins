@@ -41,6 +41,7 @@ public abstract class WithChannelBase extends ObjectCollectionProvider {
     // START BEAN PROPERTIES
     /** Provider for the channel from which objects will be created. */
     @BeanField @Getter @Setter private ChannelProvider channel;
+
     // END BEAN PROPERTIES
 
     @Override

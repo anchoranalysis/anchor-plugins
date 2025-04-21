@@ -64,6 +64,7 @@ public class SegmentChannel extends WithChannelBase {
 
     /** Optional provider for seed objects to guide the segmentation. */
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsSeeds;
+
     // END BEAN PROPERTIES
 
     @Override

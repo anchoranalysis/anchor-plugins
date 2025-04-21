@@ -52,6 +52,7 @@ public class Median extends ChannelProviderUnary {
      * Kernel will be a square kernel of size {@code (2*kernelHalfWidth+1)x(2*kernelHalfWidth+1)}
      */
     @BeanField @Getter @Setter private int kernelHalfWidth;
+
     // END BEAN PROPERTIES
 
     @RequiredArgsConstructor

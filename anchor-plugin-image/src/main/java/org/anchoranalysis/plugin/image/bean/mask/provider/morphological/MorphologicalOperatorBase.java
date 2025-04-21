@@ -57,6 +57,7 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
 
     /** Whether to suppress 3D operations and only perform 2D operations. */
     @BeanField @Getter @Setter private boolean suppress3D = false;
+
     // END PROPERTIES
 
     /**

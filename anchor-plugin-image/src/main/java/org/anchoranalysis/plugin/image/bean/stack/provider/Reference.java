@@ -58,6 +58,7 @@ public class Reference extends StackProvider {
     // START BEAN PROPERTIES
     /** The identifier of the stack to retrieve. */
     @BeanField @Getter @Setter private String id = "";
+
     // END BEAN PROPERTIES
 
     /** The cached stack after it has been retrieved. */

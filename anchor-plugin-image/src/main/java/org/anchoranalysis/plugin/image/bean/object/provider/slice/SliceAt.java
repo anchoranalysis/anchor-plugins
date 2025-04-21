@@ -44,6 +44,7 @@ public class SliceAt extends ObjectCollectionProviderUnary {
     // START BEAN PROPERTIES
     /** Index in z-dimension of slice to extract. */
     @BeanField @Getter @Setter private int index = 0;
+
     // END BEAN PROPERTIES
 
     // The createFromObjects method is overridden, so we don't add a doc-string for it

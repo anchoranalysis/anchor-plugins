@@ -41,6 +41,7 @@ public abstract class RegularExpressionBase extends CopyFilesNamingOne {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String regex;
+
     // END BEAN PROPERTIES
 
     @Override

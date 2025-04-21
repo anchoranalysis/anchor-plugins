@@ -40,6 +40,7 @@ public abstract class ConvexHullBase extends MaskProviderUnary {
     // START BEAN PROPERTIES
     /** Whether to erode the mask at the boundary before finding the contour. */
     @BeanField @Getter @Setter private boolean erodeAtBoundary = false;
+
     // END BEAN PROPERTIES
 
     @Override

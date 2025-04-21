@@ -65,6 +65,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 
     /** If true, the Gaussian filter is included. */
     @BeanField @Getter @Setter private boolean gaussian = true;
+
     // END BEAN PROPERTIES
 
     @Override

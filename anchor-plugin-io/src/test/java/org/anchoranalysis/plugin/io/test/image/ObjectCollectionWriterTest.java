@@ -60,7 +60,8 @@ class ObjectCollectionWriterTest {
 
     @Test
     void testHdf5()
-            throws SetOperationFailedException, DeserializationFailedException,
+            throws SetOperationFailedException,
+                    DeserializationFailedException,
                     BindFailedException {
         ObjectCollection objects = fixture.createMockObjects(2, 7);
         writeObjects(objects, directory, generator(true, false));

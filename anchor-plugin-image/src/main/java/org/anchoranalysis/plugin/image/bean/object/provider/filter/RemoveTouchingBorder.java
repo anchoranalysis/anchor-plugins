@@ -45,6 +45,7 @@ public class RemoveTouchingBorder extends WithDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean useZ = true;
+
     // END BEAN PROPERTIES
 
     @Override

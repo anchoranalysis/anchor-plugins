@@ -49,6 +49,7 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
 
     /** The value to return when there are no objects in the search collection. */
     @BeanField @Getter @Setter private double valueNoObjects = Double.NaN;
+
     // END BEAN PROPERTIES
 
     /** The collection of objects to search for intersections. */

@@ -37,6 +37,7 @@ public class CalculateLevel extends CalculateLevelBase {
     // START BEAN PROPERTIES
     /** The maximum distance from the threshold level to consider. */
     @BeanField @Getter @Setter private double distanceMax = 20;
+
     // END BEAN PROPERTIES
 
     /** A divisor used in the calculation, derived from {@link #distanceMax}. */

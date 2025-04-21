@@ -51,6 +51,7 @@ public class Repeat extends BinarySegmentationUnary {
      * earlier.
      */
     @BeanField @Positive @Getter @Setter private int iterations = 10;
+
     // END BEAN PROPERTIES
 
     // The segmentFromExistingSegmentation method is overridden, so we don't add a doc-string here

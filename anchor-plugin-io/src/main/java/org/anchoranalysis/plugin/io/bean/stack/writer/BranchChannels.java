@@ -78,6 +78,7 @@ public class BranchChannels extends StackWriterDelegateBase {
 
     /** Writer employed if a stack is a <b>single-channeled binary</b> image. */
     @BeanField @OptionalBean @Getter @Setter private StackWriter whenBinaryChannel;
+
     // END BEAN PROPERTIES
 
     @Override

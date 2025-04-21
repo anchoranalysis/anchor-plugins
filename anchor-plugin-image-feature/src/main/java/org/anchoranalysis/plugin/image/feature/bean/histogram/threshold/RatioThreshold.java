@@ -48,6 +48,7 @@ public class RatioThreshold extends FeatureHistogramStatistic {
      */
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private RelationToThreshold threshold;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -47,6 +47,7 @@ class ScaledObjectAreaChecker {
     // START REQUIRED ARGUMENTS
     /** How much to scale both the X and Y dimensions by */
     private final int scaleFactor;
+
     // END REQUIRED ARGUMENTS
 
     public ScaleFactor factor() {

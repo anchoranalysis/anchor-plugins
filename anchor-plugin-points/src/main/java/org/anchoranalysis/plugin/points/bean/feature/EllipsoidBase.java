@@ -48,6 +48,7 @@ public abstract class EllipsoidBase extends FeatureSingleObject {
     // START BEAN PROPERTIES
     /** If true, suppresses covariance in the z-direction. */
     @BeanField @Getter @Setter private boolean suppressZ = false;
+
     // END BEAN PROPERTIES
 
     @Override

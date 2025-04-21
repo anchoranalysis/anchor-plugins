@@ -97,6 +97,7 @@ public class ImageAssignLabel<T>
      * groupIdentifier.
      */
     @BeanField @OptionalBean @SkipInit @Getter @Setter private StackProvider outputStackProvider;
+
     // END BEAN PROPERTIES
 
     @Override

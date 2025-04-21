@@ -68,6 +68,7 @@ public class HOGFeature extends FeatureStack {
 
     /** Which index to return from the HOG descriptor. */
     @BeanField @NonNegative @Getter @Setter private int index = 0;
+
     // END BEAN PROPRERTIES
 
     /**

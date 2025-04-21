@@ -43,6 +43,7 @@ public class GaussianBlur2D extends ChannelProviderUnary {
     // START BEAN PROPERTIES
     /** The standard deviation of the Gaussian distribution used for blurring. */
     @BeanField @Positive @Getter @Setter private double sigma = 3;
+
     // END BEAN PROPERTIES
 
     @Override

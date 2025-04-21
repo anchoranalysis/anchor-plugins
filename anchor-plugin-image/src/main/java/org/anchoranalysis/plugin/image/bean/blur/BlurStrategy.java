@@ -52,6 +52,7 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
      * it's in pixels.
      */
     @BeanField @Getter @Setter private boolean sigmaInMeters = false;
+
     // END BEAN PROPERTIES
 
     /**

@@ -56,6 +56,7 @@ public class Reference extends ChannelProvider {
      * <p>This is a shortcut to avoid embedding beans in a ChannelProviderDuplicate.
      */
     @BeanField @Getter @Setter private boolean duplicate = false;
+
     // END BEAN PROPERTIES
 
     /** The cached channel retrieved from the named provider. */

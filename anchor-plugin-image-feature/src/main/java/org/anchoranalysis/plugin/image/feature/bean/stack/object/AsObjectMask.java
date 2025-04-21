@@ -53,6 +53,7 @@ public class AsObjectMask extends FeatureStack {
      * dimensions
      */
     @BeanField @Getter @Setter private int energyIndex = 0;
+
     // END BEAN PROPERTIES
 
     @Override

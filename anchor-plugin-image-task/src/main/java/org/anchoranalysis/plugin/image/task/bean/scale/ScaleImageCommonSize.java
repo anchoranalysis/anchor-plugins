@@ -94,6 +94,7 @@ public class ScaleImageCommonSize extends ScaleImage<CommonSize> {
      * <p>0 would create black, 255 would create white.
      */
     @BeanField @Getter @Setter private int backgroundIntensity = 0;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -82,6 +82,7 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
      * If non-empty, the identifier for a dictionary that is treated as part of the energy-stack.
      */
     @BeanField @AllowEmpty @Getter @Setter private String dictionary = "";
+
     // END BEAN PROPERTIES
 
     @Override

@@ -66,6 +66,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
     /** Method to generate a thumbnail for images. */
     @BeanField @Getter @Setter private ThumbnailFromStack thumbnail = new ScaleToSize();
+
     // END BEAN PROPERTIES
 
     /** Creates a new {@link FromImage} instance. */

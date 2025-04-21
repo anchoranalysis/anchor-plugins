@@ -46,6 +46,7 @@ public abstract class CalculateLevelBase extends SingleChannel {
 
     /** The index of the histogram channel to use for calculations. */
     @BeanField @Getter @Setter private int histogramChannelIndex = 0;
+
     // END BEAN PROPERTIES
 
     /** The calculated threshold level. */

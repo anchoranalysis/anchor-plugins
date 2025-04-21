@@ -52,6 +52,7 @@ public class ToSuggested extends ScaleCalculator {
      * {@link #calculate}.
      */
     @BeanField @Getter @Setter private ScaleCalculator fallback = new ConstantScaleFactor(0.5);
+
     // END BEAN PROPERTIES
 
     @Override

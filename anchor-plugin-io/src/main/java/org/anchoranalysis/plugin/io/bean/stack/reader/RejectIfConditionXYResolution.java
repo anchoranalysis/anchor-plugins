@@ -62,6 +62,7 @@ public class RejectIfConditionXYResolution extends StackReader {
 
     /** A predicate defined by the relationship of the XY-resolution to a constant threshold. */
     @BeanField @Getter @Setter private RelationToThreshold relation;
+
     // END BEAN PROPERTIES
 
     @AllArgsConstructor

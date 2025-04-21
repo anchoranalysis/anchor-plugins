@@ -62,6 +62,7 @@ public class SplitByObjects extends WithDimensionsBase {
     // START BEAN PROPERTIES
     /** Provider for the collection of objects used to split the input objects. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsSplitBy;
+
     // END BEAN PROPERTIES
 
     @Override

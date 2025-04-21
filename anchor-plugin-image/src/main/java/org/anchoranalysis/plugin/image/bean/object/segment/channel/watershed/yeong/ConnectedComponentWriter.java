@@ -42,12 +42,15 @@ final class ConnectedComponentWriter {
     // START REQUIRED ARGUMENTS
     private final EncodedVoxels matS;
     private final Optional<MinimaStore> minimaStore;
+
     // END REQUIRED ARGUMENTS
 
     /** Keeps track of the IDs used */
     private int id = -1;
 
-    /** @param point a point that is treated immutably */
+    /**
+     * @param point a point that is treated immutably
+     */
     public void writePoint(Point3i point) {
         // We write a connected component id based upon the first voxel encountered
         if (id == -1) {

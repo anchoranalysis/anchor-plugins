@@ -57,6 +57,7 @@ public class NumberNeighboringVoxels extends OutlineKernelBase {
     // START BEAN PROPERTIES
     /** Index of which channel in the energy-stack to select */
     @BeanField @Getter @Setter private int energyIndex = 0;
+
     // END BEAN PROPERTIES
 
     @Override

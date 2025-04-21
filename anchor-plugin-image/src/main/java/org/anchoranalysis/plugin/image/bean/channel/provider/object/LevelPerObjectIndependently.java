@@ -48,6 +48,7 @@ public class LevelPerObjectIndependently extends LevelPerObjectBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int numberDilations = 0;
+
     // END BEAN PROPERTIES
 
     @Override

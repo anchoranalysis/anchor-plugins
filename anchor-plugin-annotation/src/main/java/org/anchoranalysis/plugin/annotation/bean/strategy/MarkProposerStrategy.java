@@ -71,6 +71,7 @@ public class MarkProposerStrategy extends SinglePathStrategy {
 
     /** A mark-evaluator that is added to the GUI to support this annotation */
     @BeanField @Getter @Setter private NamedBean<MarkEvaluator> markEvaluator;
+
     // END BEAN PROPERTIES
 
     /**

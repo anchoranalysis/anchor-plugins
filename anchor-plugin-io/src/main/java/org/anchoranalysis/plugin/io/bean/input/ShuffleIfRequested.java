@@ -53,6 +53,7 @@ public class ShuffleIfRequested<T extends InputFromManager> extends InputManager
     // START BEAN PROPERTIES
     /** When true, the inputs are sorted alphabetically, if a shuffle is <b>not</b> requested. */
     @BeanField @Getter @Setter private boolean sortIfNotRequested = false;
+
     // END BEAN PROPERTIES
 
     @Override

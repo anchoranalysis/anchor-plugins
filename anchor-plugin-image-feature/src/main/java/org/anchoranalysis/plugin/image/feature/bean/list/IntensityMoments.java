@@ -75,6 +75,7 @@ public class IntensityMoments extends FeatureListProvider<FeatureInputStack> {
      * An upper limit on the number of channels in the energy-stack for which we create features.
      */
     @BeanField @Getter @Setter private int maximumNumberChannels = 3;
+
     // END BEAN PROPERTIES
 
     @Override

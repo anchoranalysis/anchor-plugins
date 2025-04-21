@@ -108,6 +108,7 @@ public class ConvertImageFormat
 
     /** Optionally, how to convert from one bit-depth to another (scaling, clamping etc.) */
     @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo<?> channelConverter = null;
+
     // END BEAN PROPERTIES
 
     @Override

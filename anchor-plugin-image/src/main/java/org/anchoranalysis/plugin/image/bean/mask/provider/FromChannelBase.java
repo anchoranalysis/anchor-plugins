@@ -46,6 +46,7 @@ public abstract class FromChannelBase extends MaskProvider {
     // START BEAN PROPERTIES
     /** The provider for the channel from which to create the mask. */
     @BeanField @Getter @Setter private ChannelProvider channel;
+
     // END BEAN PROPERTIES
 
     @Override

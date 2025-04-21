@@ -43,6 +43,7 @@ public class Reference extends HistogramProvider {
     // START BEAN PROPERTIES
     /** The identifier of the histogram to reference. */
     @BeanField @Getter @Setter private String id = "";
+
     // END BEAN PROPERTIES
 
     /** The referenced histogram. */

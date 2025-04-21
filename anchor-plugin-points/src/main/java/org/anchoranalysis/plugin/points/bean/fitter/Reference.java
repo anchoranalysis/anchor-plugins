@@ -46,6 +46,7 @@ public class Reference extends PointsFitter {
     // START BEAN
     /** The ID of the referenced {@link PointsFitter}. */
     @BeanField @Getter @Setter private String id;
+
     // END BEAN
 
     /** The actual {@link PointsFitter} instance referenced by the ID. */

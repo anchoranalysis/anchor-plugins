@@ -50,6 +50,7 @@ public class NamedFiles extends NamedFilesBase<FileInput> {
     // START BEAN PROPERTIES
     /** The files to use as inputs. */
     @BeanField @Getter @Setter private FilesProvider files;
+
     // END BEAN PROPERTIES
 
     public NamedFiles(FilesProvider files) {

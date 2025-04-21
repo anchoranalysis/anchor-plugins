@@ -47,6 +47,7 @@ public class FilterWithRegularExpression extends RegularExpressionBase {
      * <p>This is the <b>opposite</b> to normal behaviour.
      */
     @BeanField @Getter @Setter private boolean invert = false;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -42,6 +42,7 @@ public class Constant extends DerivePath {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String value;
+
     // END BEAN PROPERTIES
 
     @Override

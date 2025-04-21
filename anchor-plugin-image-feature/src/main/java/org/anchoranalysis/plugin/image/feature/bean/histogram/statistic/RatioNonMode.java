@@ -47,6 +47,7 @@ public class RatioNonMode extends FeatureHistogramStatistic {
      * <p>If true, pixels with value 0 are not considered in the calculation.
      */
     @BeanField @Getter @Setter private boolean ignoreZero = false;
+
     // END BEAN PROPERTIES
 
     @Override

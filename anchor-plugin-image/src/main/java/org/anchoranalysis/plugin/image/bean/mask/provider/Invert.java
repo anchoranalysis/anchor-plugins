@@ -64,6 +64,7 @@ public class Invert extends MaskProviderUnary {
      * to reflect the existing binary-values.
      */
     @BeanField @Getter @Setter private boolean forceChangeBytes = false;
+
     // END BEAN FIELDS
 
     @Override

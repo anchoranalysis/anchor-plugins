@@ -49,6 +49,7 @@ public class FromChannel extends HistogramProvider {
 
     /** An optional mask provider to restrict the histogram creation to specific areas. */
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
+
     // END BEAN PROPERTIES
 
     // The get method is intentionally left without a doc-string as it's an override.

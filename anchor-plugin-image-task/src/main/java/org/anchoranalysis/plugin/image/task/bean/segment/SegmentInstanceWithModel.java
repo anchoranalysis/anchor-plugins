@@ -165,6 +165,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
 
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
+
     // END BEAN FIELDS
 
     /**

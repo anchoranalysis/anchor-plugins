@@ -74,6 +74,7 @@ public class DecodeEAST extends DecodeInstanceSegmentation<OnnxTensor> {
     // START BEAN PROPERTIES
     /** Proposed bounding boxes below this confidence interval are removed from consideration. */
     @BeanField @Getter @Setter private double minConfidence = 0.5;
+
     // END BEAN PROPERTIES
 
     @Override

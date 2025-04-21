@@ -55,6 +55,7 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
     @BeanField @Getter @Setter private BinarySegmentation segment;
 
     @BeanField @Getter @Setter private int minNumberVoxels = 1;
+
     // END BEAN PROPERTIES
 
     @Override

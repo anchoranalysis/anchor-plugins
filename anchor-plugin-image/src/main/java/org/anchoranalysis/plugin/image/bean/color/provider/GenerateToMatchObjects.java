@@ -47,6 +47,7 @@ public class GenerateToMatchObjects extends ColorProvider {
     @BeanField @Getter @Setter private ColorScheme colorScheme;
 
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
     @Override

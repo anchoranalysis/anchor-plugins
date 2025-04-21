@@ -48,6 +48,7 @@ public class Always extends ObjectMatcher {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
     @Override

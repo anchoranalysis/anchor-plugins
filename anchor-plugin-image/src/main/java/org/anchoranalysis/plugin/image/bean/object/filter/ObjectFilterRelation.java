@@ -48,6 +48,7 @@ public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
     // START BEAN PROPERTIES
     /** The relation to be used in the filter predicate. */
     @BeanField @Getter @Setter private RelationBean relation = new GreaterThanEqualToBean();
+
     // END BEAN PROPERTIES
 
     /** The resolved relation as a {@link DoubleBiPredicate}. */

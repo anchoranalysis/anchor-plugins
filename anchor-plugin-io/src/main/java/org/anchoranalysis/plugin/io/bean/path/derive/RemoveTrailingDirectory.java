@@ -44,6 +44,7 @@ public class RemoveTrailingDirectory extends DerivePath {
 
     // Do not apply the trim operation to the first n dirs
     @BeanField @Getter @Setter private int skipFirstTrim = 0;
+
     // END BEAN PROPERTIES
 
     @Override

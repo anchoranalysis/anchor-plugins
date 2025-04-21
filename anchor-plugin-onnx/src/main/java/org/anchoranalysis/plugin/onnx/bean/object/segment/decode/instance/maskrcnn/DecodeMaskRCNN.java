@@ -89,6 +89,7 @@ public class DecodeMaskRCNN extends DecodeInstanceSegmentation<OnnxTensor> {
 
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
+
     // END BEAN PROPERTIES
 
     @Override

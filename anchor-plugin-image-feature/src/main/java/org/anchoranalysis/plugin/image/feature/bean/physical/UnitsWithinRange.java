@@ -68,6 +68,7 @@ public class UnitsWithinRange<T extends FeatureInputWithResolution> extends With
      * infinity-value.
      */
     @BeanField @Getter @Setter private UnitValueExtent max = new VolumeVoxels(Double.MAX_VALUE);
+
     // END BEAN PROPERTIES
 
     @Override

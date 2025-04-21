@@ -48,6 +48,7 @@ public class Concatenate extends ObjectCollectionProvider {
      * concatenated.
      */
     @BeanField @Getter @Setter private List<ObjectCollectionProvider> list = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     @Override

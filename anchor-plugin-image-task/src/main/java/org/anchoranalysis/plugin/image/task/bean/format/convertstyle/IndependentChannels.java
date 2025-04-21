@@ -51,6 +51,7 @@ public class IndependentChannels extends ChannelConvertStyle {
     // START BEAN PROPERTIES
     /** Iff true and we cannot find a channel in the file, we ignore it and carry on */
     @BeanField @Getter @Setter private boolean ignoreMissingChannel = true;
+
     // END BEAN PROPERTIES
 
     @Override

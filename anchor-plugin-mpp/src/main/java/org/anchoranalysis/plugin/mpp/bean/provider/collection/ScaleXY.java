@@ -51,6 +51,7 @@ public class ScaleXY extends MarkCollectionProvider {
 
     /** The {@link ScaleCalculator} used to determine the scaling factor. */
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
+
     // END BEAN PROPERTIES
 
     @Override

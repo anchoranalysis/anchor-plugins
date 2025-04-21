@@ -43,6 +43,7 @@ public class QuantileAcrossObjects<T extends FeatureInputEnergy> extends ObjectA
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private double quantile = 0.5;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -45,6 +45,7 @@ public abstract class WithContainerBase extends ObjectCollectionProviderUnary {
     // START BEAN PROPERTIES
     /** Optional provider for a container of objects. */
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsContainer;
+
     // END BEAN PROPERTIES
 
     /**

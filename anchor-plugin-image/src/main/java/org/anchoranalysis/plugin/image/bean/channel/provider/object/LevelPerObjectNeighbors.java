@@ -63,6 +63,7 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
      * neighbors, distance==2 implies those touching the directly touching etc.)
      */
     @BeanField @Positive @Getter @Setter private int distance; // Determines the neighbor distance
+
     // END BEAN
 
     @Override

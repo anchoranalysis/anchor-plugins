@@ -63,6 +63,7 @@ public class FromChannelOrMask extends StackProvider {
      * If true, the output contains three channels (the input and two duplicates) instead of one.
      */
     @BeanField @Getter @Setter private boolean rgb = false;
+
     // END BEAN PROPERTIES
 
     /**

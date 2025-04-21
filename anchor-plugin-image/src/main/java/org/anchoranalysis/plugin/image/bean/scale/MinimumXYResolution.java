@@ -43,6 +43,7 @@ public class MinimumXYResolution extends ScaleCalculator {
     // START BEAN PROPERTIES
     /** The minimum resolution to achieve in meters. */
     @BeanField @Getter @Setter private double minResolution = 10e-9;
+
     // STOP BEAN PROPERTIES
 
     @Override

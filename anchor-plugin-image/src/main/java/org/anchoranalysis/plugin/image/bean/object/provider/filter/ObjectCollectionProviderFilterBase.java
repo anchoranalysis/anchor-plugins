@@ -45,6 +45,7 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
     // START BEAN PROPERTIES
     /** The filter to apply to the object collection. */
     @BeanField @Getter @Setter private ObjectFilter filter;
+
     // END BEAN PROPERTIES
 
     @Override

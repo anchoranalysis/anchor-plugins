@@ -98,6 +98,7 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Inp
 
     /** Supplies to the {@code imageMetadataReader} to use, if no other reader is specified. */
     @DefaultInstance @BeanField @Getter @Setter private StackReader defaultStackReaderForMetadata;
+
     // END BEAN PROPERTIES
 
     @Override

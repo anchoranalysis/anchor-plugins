@@ -39,6 +39,7 @@ public class AssignValue extends UnaryWithMaskBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private double value;
+
     // END BEAN PROPERTIES
 
     @Override

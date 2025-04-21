@@ -59,6 +59,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private BinarySegmentation segmentStack;
+
     // END BEAN PROPERTIES
 
     @Override

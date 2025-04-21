@@ -39,6 +39,7 @@ public class FromOutputName extends FileNamerIndependent {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private IndexableOutputNameStyle outputNameStyle;
+
     // END BEAN PROPERTIES
 
     @Override

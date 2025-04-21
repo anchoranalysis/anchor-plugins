@@ -102,6 +102,7 @@ public class CopyFiles<T> extends Task<FileWithDirectoryInput, RecordingCounter<
 
     /** How an output name (and path) is selected for an input file. */
     @BeanField @Getter @Setter private CopyFilesNaming<T> naming;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -44,6 +44,7 @@ public class ReferenceOrEmpty extends MarkCollectionProvider {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String id = "";
+
     // END BEAN PROPERTIES
 
     @Override

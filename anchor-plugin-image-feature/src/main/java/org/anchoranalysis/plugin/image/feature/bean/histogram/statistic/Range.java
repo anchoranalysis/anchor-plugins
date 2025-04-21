@@ -45,6 +45,7 @@ public class Range extends FeatureHistogramStatistic {
     @BeanField @Getter @Setter private double quantileLow = 0;
 
     @BeanField @Getter @Setter private double quantileHigh = 1.0;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -42,6 +42,7 @@ public class FileSetFromStringSet extends FilesProviderWithDirectoryString {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private StringSet paths;
+
     // END BEAN PROPERTIES
 
     public List<File> matchingFilesForDirectory(Path directory, InputManagerParameters parameters) {

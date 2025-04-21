@@ -60,6 +60,7 @@ public class ExtractSliceRange extends ChannelProviderUnary {
 
     /** If true, an extracted slice is duplicated before being assigned to the output channel. */
     @BeanField private boolean duplicate = true;
+
     // END BEANS
 
     @Override

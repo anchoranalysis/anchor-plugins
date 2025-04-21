@@ -84,6 +84,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
 
     /** Interpolator used to resize images in thumbnail generation. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
+
     // END BEAN PROPERTIES
 
     /** The default-instances saved for instantiating beans dynamically within class. */

@@ -60,6 +60,7 @@ public class Permute extends ObjectCollectionProvider {
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 
     @BeanField @Getter @Setter private PermuteProperty<?> permuteProperty;
+
     // END BEAN PROPERTIES
 
     @Override

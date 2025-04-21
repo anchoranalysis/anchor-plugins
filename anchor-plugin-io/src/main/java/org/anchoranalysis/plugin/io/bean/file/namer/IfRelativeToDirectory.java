@@ -48,6 +48,7 @@ public class IfRelativeToDirectory extends FileNamer {
 
     /** The namer to use if the <i>relative-to-directory</i> option <b>is not selected</b>. */
     @BeanField @Getter @Setter private FileNamer otherwise;
+
     // END BEAN PROPERTIES
 
     @Override

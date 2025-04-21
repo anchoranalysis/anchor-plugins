@@ -60,6 +60,7 @@ public class IdentityImposeValueRelationToHistogram extends VoxelScore {
 
     /** Whether to use the maximum (true) or minimum (false) value from the histogram. */
     @BeanField @Getter @Setter private boolean max = true;
+
     // END BEAN PROPERTIES
 
     /** The maximum or minimum value from the histogram, depending on the {@code max} property. */

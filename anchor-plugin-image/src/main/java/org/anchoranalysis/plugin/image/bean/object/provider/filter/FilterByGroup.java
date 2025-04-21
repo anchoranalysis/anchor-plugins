@@ -52,6 +52,7 @@ public class FilterByGroup extends ObjectCollectionProviderFilterBase {
     // START BEAN PROPERTIES
     /** Provides the {@link ObjectCollection} used for grouping the objects to be filtered. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsGrouped;
+
     // END BEAN PROPERTIES
 
     // The createFromObjects method is intentionally left without a doc-string as it's an override.

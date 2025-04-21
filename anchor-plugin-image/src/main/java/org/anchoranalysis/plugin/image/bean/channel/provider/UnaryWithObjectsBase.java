@@ -48,6 +48,7 @@ public abstract class UnaryWithObjectsBase extends ChannelProviderUnary {
     // START BEAN PROPERTIES
     /** The provider for the collection of objects to be used in channel creation. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
     @Override

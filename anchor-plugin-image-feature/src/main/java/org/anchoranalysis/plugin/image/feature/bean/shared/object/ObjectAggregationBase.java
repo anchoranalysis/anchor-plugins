@@ -58,6 +58,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputEnergy>
     // START BEAN PROPERTIES
     /** The provider for the collection of objects to calculate features on. */
     @BeanField @SkipInit @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
     /** The created object collection after initialization. */

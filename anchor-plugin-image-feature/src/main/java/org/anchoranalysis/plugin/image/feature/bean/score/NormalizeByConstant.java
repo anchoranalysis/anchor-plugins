@@ -44,6 +44,7 @@ public class NormalizeByConstant extends SingleChannel {
      * <p>Default value is 255, which is typical for 8-bit image normalization.
      */
     @BeanField @Getter @Setter private double value = 255;
+
     // END BEAN PROPERTIES
 
     @Override

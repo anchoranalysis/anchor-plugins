@@ -49,6 +49,7 @@ public abstract class MergeWithOptionalDistanceConstraint extends MergeBase {
 
     /** An optional maximum distance between objects that can be merged. */
     @BeanField @OptionalBean @Getter @Setter private UnitValueDistance maxDistance;
+
     // END BEAN FIELDS
 
     /**

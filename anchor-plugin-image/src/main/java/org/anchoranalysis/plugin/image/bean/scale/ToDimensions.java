@@ -73,6 +73,7 @@ public class ToDimensions extends ScaleCalculator {
      * dimensionsTarget}.
      */
     @BeanField @Getter @Setter private boolean preserveAspectRatio = false;
+
     // END BEAN PROPERTIES
 
     /**

@@ -57,6 +57,7 @@ public class ToByteUpperLowerQuantileIntensity
 
     /** Sets the max by multiplying the quantileUpper by this constant. */
     @BeanField @Getter @Setter private double scaleUpper = 1.0;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -45,6 +45,7 @@ public class ClampHistogramMax extends CalculateLevelUnary {
 
     // START BEAN
     @BeanField @Getter @Setter private int max;
+
     // END BEAN
 
     @Override

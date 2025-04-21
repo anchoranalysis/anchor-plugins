@@ -42,6 +42,7 @@ public class DirectoryDepth extends FilesProviderWithDirectoryString {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int exactDepth = 0;
+
     // END BEAN PROPERTIES
 
     @Override

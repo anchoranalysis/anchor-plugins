@@ -48,6 +48,7 @@ public class Concatenate extends StackProvider {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private List<ProviderAsStack> list = new ArrayList<>();
+
     // END BEAN PROPERTIES
 
     @Override

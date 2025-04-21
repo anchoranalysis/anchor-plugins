@@ -47,6 +47,7 @@ public abstract class ConicFitterBase extends PointsFitter {
 
     /** The shift to apply to input points before fitting. */
     @BeanField @Getter @Setter private float inputPointShift = 0.0f;
+
     // END BEAN
 
     /**

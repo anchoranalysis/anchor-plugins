@@ -57,6 +57,7 @@ public class BranchSuggestedFormat extends StackWriterDelegateBase {
 
     /** The writer to use if there is no suggested file-format. */
     @BeanField @Getter @Setter private StackWriter writerIfNoSuggestion;
+
     // END BEAN PROPERTIES
 
     @Override

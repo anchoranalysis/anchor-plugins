@@ -47,6 +47,7 @@ public class SpecificAndRename extends FromStacks {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private List<NamedBean<FromStack>> list = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     @Override

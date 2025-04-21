@@ -85,7 +85,9 @@ class FeatureListImageTest {
 
     @Test
     void testHistogram()
-            throws InitializeException, FeatureCalculationException, CreateException,
+            throws InitializeException,
+                    FeatureCalculationException,
+                    CreateException,
                     NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputHistogram> session =
@@ -112,7 +114,9 @@ class FeatureListImageTest {
 
     @Test
     void testImage()
-            throws InitializeException, NamedFeatureCalculateException, CreateException,
+            throws InitializeException,
+                    NamedFeatureCalculateException,
+                    CreateException,
                     FeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInputSingleObject> session =

@@ -104,6 +104,7 @@ public abstract class GroupedStackBase<S, T>
      * different sized images).
      */
     @BeanField @OptionalBean @Getter @Setter private SizeXY resizeTo;
+
     // END BEAN PROPERTIES
 
     @Override

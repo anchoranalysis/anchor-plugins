@@ -52,6 +52,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitializati
      * an image) second column = a label string
      */
     @BeanField @Getter @Setter private DerivePath pathLabel;
+
     // END BEAN PROPERTIES
 
     @Override

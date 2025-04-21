@@ -52,6 +52,7 @@ public class RejectIfIntensityLessThan extends VoxelScore {
      * 0).
      */
     @BeanField @Getter @Setter private int minIntensity = 0;
+
     // END BEAN PROPERTIES
 
     @Override

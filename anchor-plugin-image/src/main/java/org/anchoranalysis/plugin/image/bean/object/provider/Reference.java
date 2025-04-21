@@ -46,6 +46,7 @@ public class Reference extends ObjectCollectionProvider {
     // START BEAN PROPERTIES
     /** The identifier of the object collection to reference. */
     @BeanField @Getter @Setter private String id = "";
+
     // END BEAN PROPERTIES
 
     /** The referenced object collection. */

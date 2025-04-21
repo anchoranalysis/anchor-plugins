@@ -51,6 +51,7 @@ public class IfIncrementingNumberRequested extends PathPrefixerAvoidResolve {
 
     /** Called if the requested condition <b>is not</b> true. */
     @Getter @Setter @BeanField PathPrefixerAvoidResolve prefixerElse;
+
     // END BEAN PROPERTIES
 
     @Override

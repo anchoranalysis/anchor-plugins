@@ -46,6 +46,7 @@ public class CompareWithRange<T extends FeatureInput> extends RangeCompareFromSc
     // START BEAN PROPERTIES
     /** Constant to return if value lies within the range */
     @BeanField @Getter @Setter private double withinValue = 0;
+
     // END BEAN PROPERTIES
 
     @Override

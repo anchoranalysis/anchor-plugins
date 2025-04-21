@@ -49,6 +49,7 @@ public class MorphologicalIterations extends AnchorBean<MorphologicalIterations>
 
     /** Whether to perform the morphological dimensions in 3D or 2D. */
     @BeanField @Getter @Setter private boolean do3D = true;
+
     // END BEAN PROPERTIES
 
     /**

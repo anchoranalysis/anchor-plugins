@@ -54,6 +54,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
     // START BEAN PROPERTIES
     /** The grayscale reconstruction algorithm to be used. */
     @BeanField @Getter @Setter private GrayscaleReconstructionByErosion grayscaleReconstruction;
+
     // END BEAN PROPERTIES
 
     @Override

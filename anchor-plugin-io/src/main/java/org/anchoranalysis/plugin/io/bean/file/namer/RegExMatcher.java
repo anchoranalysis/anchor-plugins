@@ -39,6 +39,7 @@ public class RegExMatcher extends FileNamerIndependent {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private RegEx regEx;
+
     // END BEAN PROPERTIES
 
     @Override

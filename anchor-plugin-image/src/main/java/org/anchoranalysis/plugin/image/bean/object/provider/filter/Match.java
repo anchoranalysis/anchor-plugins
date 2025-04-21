@@ -48,6 +48,7 @@ public class Match extends ObjectCollectionProviderUnary {
     // START BEAN PROPERTIES
     /** The {@link ObjectMatcher} used to find matches in the input object collection. */
     @BeanField @Getter @Setter private ObjectMatcher matcher;
+
     // END BEAN PROPERTIES
 
     // The createFromObjects method is intentionally left without a doc-string as it's an override.

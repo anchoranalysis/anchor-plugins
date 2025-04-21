@@ -45,6 +45,7 @@ public class FromObjects extends FromDimensionsBase {
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 
     @BeanField @Getter @Setter private boolean invert = false;
+
     // END BEAN
 
     @Override

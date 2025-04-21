@@ -66,6 +66,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
 
     /** The comparable source for the right side of the comparison. */
     @BeanField @Getter @Setter private ComparableSource comparerRight;
+
     // END BEAN PROPERTIES
 
     @Override

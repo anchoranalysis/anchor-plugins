@@ -49,6 +49,7 @@ public class AssignFromDictionary extends ChannelProviderUnary {
 
     /** The key of the value in the dictionary that will be assigned. */
     @BeanField @Getter @Setter private String key;
+
     // END BEAN PROPERTIES
 
     @Override

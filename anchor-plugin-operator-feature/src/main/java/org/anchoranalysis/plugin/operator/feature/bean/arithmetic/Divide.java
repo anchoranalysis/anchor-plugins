@@ -50,6 +50,7 @@ public class Divide<T extends FeatureInput> extends FeatureFromList<T> {
 
     /** The value to return when division by zero occurs and {@link #avoidDivideByZero} is true. */
     @BeanField @Getter @Setter private double divideByZeroValue = 1e+15;
+
     // END BEAN PROPERTIES
 
     @Override

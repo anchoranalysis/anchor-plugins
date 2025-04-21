@@ -30,7 +30,6 @@ import static org.anchoranalysis.plugin.image.bean.object.provider.merge.MergeTe
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
@@ -61,7 +60,9 @@ class MergePairsTest {
      */
     @Test
     void testAllMerge()
-            throws BeanMisconfiguredException, CreateException, InitializeException,
+            throws BeanMisconfiguredException,
+                    CreateException,
+                    InitializeException,
                     OperationFailedException {
         testLinear(EXPECTED_RESULT_ALL_INTERSECTING_MERGED, 26, 14, 1);
     }
@@ -73,7 +74,9 @@ class MergePairsTest {
      */
     @Test
     void testSomeMerge()
-            throws BeanMisconfiguredException, CreateException, InitializeException,
+            throws BeanMisconfiguredException,
+                    CreateException,
+                    InitializeException,
                     OperationFailedException {
         testLinear(EXPECTED_RESULT_FIRST_THREE_NOT_MERGING, 22, 12, 300);
     }
@@ -97,7 +100,7 @@ class MergePairsTest {
         Logger logger = LoggerFixture.suppressedLogger();
 
         MergePairs provider = new MergePairs();
-        
+
         // An arbitrary path
         Path path = Paths.get(".");
 
@@ -106,8 +109,7 @@ class MergePairsTest {
 
         provider.setObjects(ProviderFixture.providerFor(objects));
         provider.setFeatureEvaluatorThreshold(
-                FeatureEvaluatorFixture.createEnergy(
-                        new Constant<>(threshold), logger, path));
+                FeatureEvaluatorFixture.createEnergy(new Constant<>(threshold), logger, path));
         provider.setFeatureEvaluatorMerge(
                 FeatureEvaluatorFixture.createEnergy(feature, logger, path));
         provider.setRelation(new GreaterThanBean());

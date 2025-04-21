@@ -59,6 +59,7 @@ class FlattenAndScaler {
 
     /** The resizer used for scaling voxels. */
     private final VoxelsResizer resizer;
+
     // END REQUIRED ARGUMENTS
 
     /** A scaled version of each object. */

@@ -78,6 +78,7 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
      * present, but not both.
      */
     @BeanField @Getter @Setter private List<PermuteProperty<S>> permutations = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     @Override

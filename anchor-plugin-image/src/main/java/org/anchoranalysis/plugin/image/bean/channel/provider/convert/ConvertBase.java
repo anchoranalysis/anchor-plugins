@@ -40,6 +40,7 @@ public abstract class ConvertBase extends ChannelProviderUnary {
      * change.
      */
     @BeanField @Getter @Setter private boolean changeExisting = false;
+
     // END BEAN PROPERTIES
 
     /**

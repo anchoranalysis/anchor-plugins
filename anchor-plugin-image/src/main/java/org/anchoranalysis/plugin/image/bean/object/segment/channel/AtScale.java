@@ -64,6 +64,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
     /** The interpolator to use. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -43,6 +43,7 @@ public class IfStackExists extends IfPredicateBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String stackID = "";
+
     // END BEAN PROPERTIES
 
     @Override

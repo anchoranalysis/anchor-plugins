@@ -47,6 +47,7 @@ public abstract class ObjectCollectionProviderWithFeature extends ObjectCollecti
     // START BEAN PROPERTIES
     /** The feature evaluator used to calculate features for single objects. */
     @BeanField @Getter @Setter private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
+
     // END BEAN PROPERTIES
 
     /**

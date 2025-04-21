@@ -48,6 +48,7 @@ public abstract class WithOptionalDimensionsBase extends ObjectCollectionProvide
     // START BEAN PROPERTIES
     /** Optional provider for dimensions. */
     @BeanField @OptionalBean @Getter @Setter private DimensionsProvider dimensions;
+
     // END BEAN PROPERTIES
 
     /**

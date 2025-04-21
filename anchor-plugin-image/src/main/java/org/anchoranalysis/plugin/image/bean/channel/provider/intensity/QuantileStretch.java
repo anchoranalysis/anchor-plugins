@@ -49,6 +49,7 @@ public class QuantileStretch extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private double quantile = 1.0;
+
     // END BEAN PROPERTIES
 
     @Override

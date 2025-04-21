@@ -49,6 +49,7 @@ public abstract class SpecificAxisBase extends ImageMomentsBase {
      * 1=second-largest eigenvalue etc.)
      */
     @BeanField @Getter @Setter private int index = 0;
+
     // END BEAN PROPERTIES
 
     @Override

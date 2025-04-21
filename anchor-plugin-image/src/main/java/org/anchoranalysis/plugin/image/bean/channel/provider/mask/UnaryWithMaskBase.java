@@ -47,6 +47,7 @@ public abstract class UnaryWithMaskBase extends ChannelProviderUnary {
     // START BEAN PROPERTIES
     /** The {@link MaskProvider} used to create the binary mask. */
     @BeanField @Getter @Setter private MaskProvider mask;
+
     // END BEAN PROPERTIES
 
     @Override

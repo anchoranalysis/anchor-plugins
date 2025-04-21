@@ -51,6 +51,7 @@ public abstract class SinglePathStrategy extends AnnotatorStrategy {
      * annotated.
      */
     @BeanField @Getter @Setter private DerivePath pathAnnotation;
+
     // END BEAN PROPERTIES
 
     @Override

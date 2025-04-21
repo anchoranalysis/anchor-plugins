@@ -97,6 +97,7 @@ public class SegmentObjectsFromONNXModel
      * interleaved.
      */
     @BeanField @Getter @Setter private boolean interleaveChannels = false;
+
     // END BEAN PROPERTIES
 
     /** The model read from the file-system as bytes. */

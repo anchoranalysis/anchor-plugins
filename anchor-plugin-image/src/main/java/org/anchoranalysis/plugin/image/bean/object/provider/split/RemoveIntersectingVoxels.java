@@ -45,6 +45,7 @@ public class RemoveIntersectingVoxels extends WithDimensionsBase {
     // START BEAN PROPERTIES
     /** If true, throws an error if there is a disconnected object after the erosion */
     @BeanField @Getter @Setter private boolean errorDisconnectedObjects = false;
+
     // END BEAN PROPERTIES
 
     @Override

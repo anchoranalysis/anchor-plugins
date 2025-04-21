@@ -69,6 +69,7 @@ public class ExportFeaturesStyle extends AnchorBean<ExportFeaturesStyle> {
      * error-log.
      */
     @BeanField @Getter @Setter private boolean suppressErrors = false;
+
     // END BEAN PROPERTIES
 
     /**

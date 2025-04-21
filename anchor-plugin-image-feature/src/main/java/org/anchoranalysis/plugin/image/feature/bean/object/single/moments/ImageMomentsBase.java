@@ -59,6 +59,7 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
      * <p>A warning message is also written to the log.
      */
     @BeanField @Getter @Setter private double valueIfTooFewVoxels = Double.NaN;
+
     // END BEAN PROPERTIES
 
     @Override

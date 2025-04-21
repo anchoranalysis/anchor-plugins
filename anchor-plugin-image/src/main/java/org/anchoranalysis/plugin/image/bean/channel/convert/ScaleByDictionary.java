@@ -55,6 +55,7 @@ public class ScaleByDictionary extends ConvertChannelTo<UnsignedByteBuffer> {
     @BeanField @Getter @Setter private double scaleLower;
 
     @BeanField @Getter @Setter private double scaleUpper;
+
     // END BEAN PROPERTIES
 
     @Override

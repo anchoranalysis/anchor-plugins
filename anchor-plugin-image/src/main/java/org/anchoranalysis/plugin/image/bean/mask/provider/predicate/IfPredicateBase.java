@@ -51,6 +51,7 @@ public abstract class IfPredicateBase extends MaskProviderUnary {
      * condition is not met.
      */
     @BeanField @Getter @Setter private MaskProvider maskElse;
+
     // END BEAN PROPERTIES
 
     @Override

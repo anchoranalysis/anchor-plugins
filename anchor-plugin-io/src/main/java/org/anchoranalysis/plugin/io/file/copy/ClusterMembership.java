@@ -48,6 +48,7 @@ public class ClusterMembership {
      * <p>This can be convenient to describe outliers that have not been placed in any cluster.
      */
     private final ClusterIdentifier clusterIdentifierIfAbsent;
+
     // END REQUIRED ARGUMENTS
 
     /** Maps each file to an identifier for a cluster. */

@@ -50,6 +50,7 @@ public abstract class OutlineKernelBase extends FeatureSingleObject {
 
     /** If true, applies the kernel in 3D; otherwise, applies it in 2D. */
     @BeanField @Getter @Setter private boolean do3D = false;
+
     // END BEAN PROPERTIES
 
     @Override

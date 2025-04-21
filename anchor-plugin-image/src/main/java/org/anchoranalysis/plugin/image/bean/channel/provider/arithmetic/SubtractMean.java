@@ -56,6 +56,7 @@ public class SubtractMean extends UnaryWithMaskBase {
      * modified.
      */
     @BeanField @Getter @Setter private boolean subtractFromMaskOnly = true;
+
     // END BEAN PROPERTIES
 
     @Override

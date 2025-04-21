@@ -59,6 +59,7 @@ public class ObjectWithMaximumFeatureFromEachMatchedCollection
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectMatcher matcher;
+
     // END BEAN PROPERTIES
 
     @Override

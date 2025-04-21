@@ -46,6 +46,7 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
     // START BEAN PARAMETERS
     /** The axis along which to calculate the feature value ("x", "y", or "z"). */
     @BeanField @Getter @Setter private String axis = "x";
+
     // END BEAN PARAMETERS
 
     @Override

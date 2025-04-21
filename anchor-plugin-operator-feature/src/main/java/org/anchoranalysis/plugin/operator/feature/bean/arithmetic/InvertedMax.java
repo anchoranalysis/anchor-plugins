@@ -44,6 +44,7 @@ public class InvertedMax<T extends FeatureInput> extends FeatureUnaryGeneric<T> 
 
     // START BEAN PARAMETERS
     @BeanField @Getter @Setter private double max = 100;
+
     // END BEAN PARAMETERS
 
     @Override

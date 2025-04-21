@@ -49,6 +49,7 @@ public class IfParamEquals extends ChannelProviderUnary {
 
     /** The channel provider to use if the condition is false. */
     @BeanField @Getter @Setter private ChannelProvider channelElse;
+
     // END BEAN PROPERTIES
 
     @Override

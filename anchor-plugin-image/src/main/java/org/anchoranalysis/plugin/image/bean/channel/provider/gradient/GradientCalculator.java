@@ -65,6 +65,7 @@ class GradientCalculator {
      * into a positive range)
      */
     private final int addSum;
+
     // END REQUIRED ARGUMENTS
 
     /** calculate central-difference instead of backward-difference (finite differences) */

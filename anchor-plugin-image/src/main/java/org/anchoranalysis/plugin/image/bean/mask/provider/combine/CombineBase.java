@@ -40,6 +40,7 @@ public abstract class CombineBase extends MaskProviderUnary {
     // START BEAN PROPERTIES
     /** The {@link MaskProvider} for the second mask to be combined. */
     @BeanField @Getter @Setter private MaskProvider receive;
+
     // END BEAN PROPERTIES
 
     @Override

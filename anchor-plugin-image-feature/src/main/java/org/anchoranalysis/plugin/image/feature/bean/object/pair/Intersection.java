@@ -55,6 +55,7 @@ public class Intersection extends FeatureDeriveFromPair {
     private MorphologicalIterations iterations = new MorphologicalIterations();
 
     @BeanField @Getter @Setter private double emptyValue = 255;
+
     // END BEAN PROPERTIES
 
     @Override

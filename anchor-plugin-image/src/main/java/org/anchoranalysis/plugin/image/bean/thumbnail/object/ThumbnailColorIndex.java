@@ -64,6 +64,7 @@ class ThumbnailColorIndex implements ColorIndex {
      * outlined as context)
      */
     private final Color colorContextObject;
+
     // END REQUIRED ARGUMENTS
 
     @Override

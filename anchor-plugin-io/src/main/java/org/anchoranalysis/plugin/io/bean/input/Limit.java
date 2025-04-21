@@ -47,6 +47,7 @@ public class Limit<T extends InputFromManager> extends InputManagerUnary<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int maxNumberItems = 0;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -71,6 +71,7 @@ public class LastDirectories extends FileNamerIndependent {
 
     /** Iff true the filename is not considered, only the subdirectories. */
     @BeanField @Getter @Setter private boolean skipFileName = false;
+
     // END BEAN PROPERTIES
 
     /**

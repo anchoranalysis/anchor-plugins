@@ -61,6 +61,7 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
 
     /** If a contour has less than this number of points, we don't split it, and return it as-is */
     @BeanField @Getter @Setter private int minNumberPoints = 10;
+
     // END BEAN PROPERTIES
 
     @Override

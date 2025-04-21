@@ -61,6 +61,7 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
 
     /** Only includes squares that have at least this number of voxels. */
     @BeanField @Getter @Setter private int minNumberVoxels = 1;
+
     // END BEAN PROPERTIES
 
     @Override

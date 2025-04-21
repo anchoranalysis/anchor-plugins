@@ -39,6 +39,7 @@ public class SampleWithDirectory extends FilesProviderWithDirectoryUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int sampleEvery;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -56,6 +56,7 @@ public class AssignFromIntersectingObjects extends ChannelProviderUnary {
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsSource;
 
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsTarget;
+
     // END BEAN PROPERTIES
 
     @Override

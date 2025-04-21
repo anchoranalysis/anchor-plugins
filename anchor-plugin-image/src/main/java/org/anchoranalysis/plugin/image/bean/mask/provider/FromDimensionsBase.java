@@ -42,6 +42,7 @@ public abstract class FromDimensionsBase extends MaskProvider {
     // START BEAN PROPERTIES
     /** Provider for the dimensions used to create the mask. Defaults to {@link GuessDimensions}. */
     @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
+
     // END BEAN PROPERTIES
 
     @Override

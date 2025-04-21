@@ -50,6 +50,7 @@ public class ColoredMarks extends ColoredBaseWithGenerator {
     @BeanField @Getter @Setter private MarkCollectionProvider marks;
 
     @BeanField @Getter @Setter private int regionID = 0;
+
     // END BEAN PROPERTIES
 
     @Override

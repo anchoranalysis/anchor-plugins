@@ -59,6 +59,7 @@ public class OtsuWeighted extends CalculateLevel {
     @BeanField @Getter @Setter private double weightForeground = 1.0;
 
     @BeanField @Getter @Setter private double weightBackground = 1.0;
+
     // END BEAN PROPERTIES
 
     @Override

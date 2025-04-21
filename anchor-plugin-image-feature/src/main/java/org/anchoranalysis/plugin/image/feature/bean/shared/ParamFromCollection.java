@@ -58,6 +58,7 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureGeneric<
 
     /** The name of the key in the dictionary, whose corresponding value will be returned. */
     @BeanField @Getter @Setter private String key = "";
+
     // END BEAN PROPERTIES
 
     private double value;

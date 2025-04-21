@@ -54,6 +54,7 @@ public abstract class RangeCompareFromScalars<T extends FeatureInput> extends Ra
      * Double#POSITIVE_INFINITY}.
      */
     @BeanField @Getter @Setter private double max = Double.POSITIVE_INFINITY;
+
     // END BEAN PROPERTIES
 
     @Override

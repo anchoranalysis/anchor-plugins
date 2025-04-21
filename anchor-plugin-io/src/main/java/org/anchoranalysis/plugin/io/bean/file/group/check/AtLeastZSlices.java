@@ -37,6 +37,7 @@ public class AtLeastZSlices extends CheckParsedFilePathBag {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int minNumZSlices = 1;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -46,6 +46,7 @@ public abstract class ObjectCollectionProviderMorphological extends WithOptional
 
     /** The number of iterations to apply the morphological operation. */
     @BeanField @Getter @Setter private int iterations = 1;
+
     // END BEAN PROPERTIES
 
     @Override

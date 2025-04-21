@@ -49,6 +49,7 @@ public class Filter extends SegmentChannelIntoObjectsUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectFilter filter; // NOSONAR
+
     // END BEAN PROPERTIES
 
     @Override

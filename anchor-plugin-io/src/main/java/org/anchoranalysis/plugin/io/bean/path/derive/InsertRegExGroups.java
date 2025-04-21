@@ -57,6 +57,7 @@ public class InsertRegExGroups extends DerivePath {
      * matched regular-expression.
      */
     @BeanField @Getter @Setter private String outPath = "";
+
     // END BEAN PROPERTIES
 
     @Override

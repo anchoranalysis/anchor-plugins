@@ -62,6 +62,7 @@ public class ImposeResolution extends StackReader {
 
     /** Keep the z-resolution if it is already defined */
     @BeanField @Getter @Setter private boolean keepZ = false;
+
     // END BEAN PROPERTIES
 
     @Override

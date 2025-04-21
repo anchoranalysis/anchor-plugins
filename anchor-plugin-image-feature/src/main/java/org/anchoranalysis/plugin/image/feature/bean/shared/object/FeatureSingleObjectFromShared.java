@@ -57,6 +57,7 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputEnergy
     // START BEAN PROPERTIES
     /** The feature to be calculated on a single object. */
     @BeanField @Getter @Setter private Feature<FeatureInputSingleObject> item;
+
     // END BEAN PROPERTIES
 
     @Override

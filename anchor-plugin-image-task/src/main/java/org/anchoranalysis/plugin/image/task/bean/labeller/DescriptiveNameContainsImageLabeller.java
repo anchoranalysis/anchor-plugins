@@ -40,6 +40,7 @@ public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabe
     // START BEAN PROPERTIES
     /** The string to search for in the image's descriptive name. */
     @BeanField @Getter @Setter private String contains;
+
     // END BEAN PROPERTIES
 
     @Override

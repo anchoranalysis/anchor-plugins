@@ -54,6 +54,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
      * If true, returns the coefficient of variation (stdDev/mean) instead of standard deviation.
      */
     @BeanField @Getter @Setter private boolean cov = false;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -62,6 +62,7 @@ public class ReadVoxelExtentXml extends StackReader {
      * If false, an exception is thrown if the resolution file is missing for a particular image.
      */
     @BeanField @Getter @Setter private boolean acceptNoResolution = true;
+
     // END BEAN PROPERTIES
 
     /**

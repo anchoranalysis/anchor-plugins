@@ -51,6 +51,7 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
     // START BEAN PROPERTIES
     /** Whether to perform calculations in 3D (true) or 2D (false). */
     @BeanField @Getter @Setter private boolean do3D = true;
+
     // END BEAN PROPERTIES
 
     @Override

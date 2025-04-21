@@ -46,6 +46,7 @@ public abstract class WithRadiusBase extends ChannelProviderUnary {
 
     /** If true, treats the radius as being in meters. Otherwise, it's in voxels. */
     @BeanField @Getter @Setter private boolean radiusInMeters = false;
+
     // END BEAN PROPERTIES
 
     @Override

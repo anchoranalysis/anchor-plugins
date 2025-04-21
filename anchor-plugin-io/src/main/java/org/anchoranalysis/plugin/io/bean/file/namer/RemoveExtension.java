@@ -66,6 +66,7 @@ public class RemoveExtension extends FileNamer {
      * Keeps the extension if the file-name (without the extension) becomes duplicated with another.
      */
     @BeanField @Getter @Setter private boolean preserveExtensionIfDuplicate = true;
+
     // END BEAN PROPERTIES
 
     public RemoveExtension(FileNamer namer) {

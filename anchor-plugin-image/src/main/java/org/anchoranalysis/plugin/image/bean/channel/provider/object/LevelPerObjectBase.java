@@ -57,6 +57,7 @@ public abstract class LevelPerObjectBase extends ChannelProviderUnary {
      * <p>It is passed a histogram (calculated in different ways) for each object.
      */
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
+
     // END BEAN PROPERTIES
 
     @Override

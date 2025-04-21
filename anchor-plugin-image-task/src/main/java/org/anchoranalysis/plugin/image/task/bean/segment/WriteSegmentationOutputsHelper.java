@@ -79,6 +79,7 @@ class WriteSegmentationOutputsHelper {
 
     /** The color of the outline. */
     private final RGBColorBean outlineColor;
+
     // END REQUIRED ARGUMENTS
 
     public void writeOutputsForImage(

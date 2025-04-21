@@ -48,6 +48,7 @@ public class Concatenate extends ColorProvider {
     // START BEAN PROPERTIES
     /** A list of {@link ColorProvider} to be concatenated. */
     @BeanField @Getter @Setter private List<ColorProvider> list = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     @Override

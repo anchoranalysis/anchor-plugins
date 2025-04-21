@@ -73,6 +73,7 @@ public class MergePairs extends MergeWithFeature {
 
     @BeanField @Getter @Setter
     private FeatureEvaluator<FeatureInputPairObjects> featureEvaluatorMerge;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -58,7 +58,9 @@ class MergeToIncreaseObjectFeatureTest {
      */
     @Test
     void testMaximalNumPixels()
-            throws BeanMisconfiguredException, InitializeException, OperationFailedException,
+            throws BeanMisconfiguredException,
+                    InitializeException,
+                    OperationFailedException,
                     CreateException {
         testLinear(
                 MergeTestHelper.EXPECTED_RESULT_ALL_INTERSECTING_MERGED,
@@ -77,7 +79,9 @@ class MergeToIncreaseObjectFeatureTest {
      */
     @Test
     void testConvergeNumPixels()
-            throws BeanMisconfiguredException, InitializeException, OperationFailedException,
+            throws BeanMisconfiguredException,
+                    InitializeException,
+                    OperationFailedException,
                     CreateException {
         testLinear(8, 23, MergeToIncreaseObjectFeatureTest::convergeTo900);
     }

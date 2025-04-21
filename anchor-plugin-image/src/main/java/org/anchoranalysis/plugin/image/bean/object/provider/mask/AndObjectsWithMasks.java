@@ -52,6 +52,7 @@ public class AndObjectsWithMasks extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MaskProvider mask;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -51,6 +51,7 @@ public class One extends FromStacks {
 
     /** The index of the channel to retrieve from {@code stackName}. */
     @BeanField @Getter @Setter private int channelIndex = 0;
+
     // END BEAN FIELDS
 
     @Override

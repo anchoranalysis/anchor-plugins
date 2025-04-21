@@ -60,6 +60,7 @@ public abstract class GradientBase extends ChannelProviderUnary {
      * <p>Default value is false.
      */
     @BeanField @Getter @Setter private boolean outputShort = false;
+
     // END BEAN
 
     /**

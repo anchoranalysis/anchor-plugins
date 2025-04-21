@@ -60,6 +60,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
 
     /** Provider for the energy stack. */
     @BeanField @Getter @Setter private StackProvider stackEnergy;
+
     // END BEAN PROPERTIES
 
     /**

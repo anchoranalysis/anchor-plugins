@@ -58,6 +58,7 @@ public class ArbitraryInsidePoint extends FeatureSingleObject {
 
     /** The value to return if no point is found inside the object-mask. */
     @BeanField @Getter @Setter private double emptyValue = 0;
+
     // END BEAN PROPERTIES
 
     /**

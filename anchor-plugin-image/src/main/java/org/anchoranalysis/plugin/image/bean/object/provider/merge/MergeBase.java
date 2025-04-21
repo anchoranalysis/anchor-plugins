@@ -51,6 +51,7 @@ public abstract class MergeBase extends WithContainerBase {
     // START BEAN PROPERTIES
     /** Provider for image dimensions. */
     @BeanField @OptionalBean @Getter @Setter private DimensionsProvider dimensions;
+
     // END BEAN PROPERTIES
 
     /** Functional interface for merging objects. */

@@ -52,6 +52,7 @@ public class ImageLabelStrategy extends SinglePathStrategy {
 
     /** The weight to use for the width of the description. */
     @BeanField @Getter @Setter private int weightWidthDescription;
+
     // END BEAN PROPERTIES
 
     @Override

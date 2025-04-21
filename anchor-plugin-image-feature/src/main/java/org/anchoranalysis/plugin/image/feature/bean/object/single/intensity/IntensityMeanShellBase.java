@@ -72,6 +72,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     /** The value to return when the resulting object is empty. */
     @BeanField @Getter @Setter private double emptyValue = 255;
+
     // END BEAN PROPERTIES
 
     @Override

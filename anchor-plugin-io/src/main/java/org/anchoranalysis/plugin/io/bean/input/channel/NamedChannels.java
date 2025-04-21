@@ -51,6 +51,7 @@ public class NamedChannels extends NamedChannelsBase {
     @BeanField @Getter @Setter private ChannelMapCreator channelMap = new Autoname();
 
     @BeanField @Getter @Setter private boolean useLastSeriesIndexOnly = false;
+
     // END BEAN PROPERTIES
 
     @Override

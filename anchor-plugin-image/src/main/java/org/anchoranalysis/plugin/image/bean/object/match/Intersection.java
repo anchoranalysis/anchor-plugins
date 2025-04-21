@@ -46,6 +46,7 @@ public class Intersection extends ObjectMatcher {
     // START BEAN PROPERTIES
     /** Provider for the objects to intersect with the source objects. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
     @Override

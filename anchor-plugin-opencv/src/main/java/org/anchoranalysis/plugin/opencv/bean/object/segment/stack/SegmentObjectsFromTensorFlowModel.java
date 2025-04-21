@@ -80,6 +80,7 @@ public class SegmentObjectsFromTensorFlowModel
      * <p>If empty, then no such file is specified.
      */
     @BeanField @Getter @Setter @AllowEmpty private String modelTextGraphPath = "";
+
     // END BEAN PROPERTIES
 
     @Override

@@ -61,6 +61,7 @@ public class SegmentWithSeeds extends WithChannelBase {
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsSeeds;
 
     @BeanField @Getter @Setter private SegmentChannelIntoObjects segment;
+
     // END BEAN PROPERTIES
 
     @Override

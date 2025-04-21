@@ -38,6 +38,7 @@ public class LimitWithDirectory extends FilesProviderWithDirectoryUnary {
 
     // START BEAN PROPERTIESS
     @BeanField @Getter @Setter private int maxNumItems = 0;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -55,6 +55,7 @@ public class BranchExtension extends StackReader {
 
     /** The reader to use if the extension does not match. */
     @BeanField @Getter @Setter private StackReader readerNotMatching;
+
     // END BEAN PROPERTIES
 
     /** Lazily create a lowercase version of extensions, as first needed. */

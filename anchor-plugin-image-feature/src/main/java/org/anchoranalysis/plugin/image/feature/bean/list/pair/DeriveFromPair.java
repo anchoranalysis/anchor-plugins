@@ -57,6 +57,7 @@ public class DeriveFromPair extends FeatureListProvider<FeatureInputPairObjects>
 
     /** Either "merged" or "first" or "second" indicating which feature to delegate from */
     @BeanField @Getter @Setter private String select;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -54,6 +54,7 @@ public class MorphologicalOperation extends MaskProviderUnary {
 
     /** iterations for erode, dilate, open, close */
     @BeanField @Positive @Getter @Setter private int iterations = 1;
+
     // END BEAN PROPERTIES
 
     @Override

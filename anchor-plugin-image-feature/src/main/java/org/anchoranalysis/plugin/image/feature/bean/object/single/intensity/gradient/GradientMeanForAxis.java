@@ -52,6 +52,7 @@ public class GradientMeanForAxis extends IntensityGradientBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String axis = "";
+
     // END BEAN PROPERTIES
 
     @Override

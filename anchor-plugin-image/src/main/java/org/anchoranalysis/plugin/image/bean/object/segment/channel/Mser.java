@@ -65,6 +65,7 @@ public class Mser extends SegmentChannelIntoObjects {
     @BeanField @Getter @Setter private double minDiversity = 0;
 
     @BeanField @Getter @Setter private double delta = 1;
+
     // END BEAN PROPERTIES
 
     @SuppressWarnings("unchecked")

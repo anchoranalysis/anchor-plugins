@@ -48,6 +48,7 @@ public class Constant extends CalculateLevel {
 
     // START BEAN PROPERTIES
     @BeanField @NonNegative @Getter @Setter private int level = 0;
+
     // END BEAN PROPERTIES
 
     @Override

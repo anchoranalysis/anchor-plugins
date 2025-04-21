@@ -56,6 +56,7 @@ public class ThreeColoredObjects extends ColoredBase {
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsBlue;
 
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsGreen;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -44,6 +44,7 @@ public class PointsFromObjects extends MarkCollectionProvider {
     /** Provider for the object collection from which to create point marks. */
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
     @Override

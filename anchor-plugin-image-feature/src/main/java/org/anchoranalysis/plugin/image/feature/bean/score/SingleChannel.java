@@ -45,6 +45,7 @@ public abstract class SingleChannel extends VoxelScore {
     // START BEAN PROPERTIES
     /** The index of the energy channel to use for score calculation. */
     @BeanField @Getter @Setter private int energyChannelIndex = 0;
+
     // END BEAN PROPERTIES
 
     @Override

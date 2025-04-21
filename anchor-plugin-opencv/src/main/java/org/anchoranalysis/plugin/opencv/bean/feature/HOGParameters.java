@@ -83,6 +83,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
     /** The interpolator to use for scaling images. */
     @EqualsAndHashCode.Exclude @BeanField @Getter @Setter @DefaultInstance
     private Interpolator interpolator;
+
     // END BEAN PROPERTIES
 
     /**

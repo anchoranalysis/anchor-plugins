@@ -52,6 +52,7 @@ public class PathRegEx extends PathPrefixerAvoidResolve {
     // START BEAN PROPERTIES
     /** Regular expression to use to match path with at least one group in it. */
     @BeanField @Getter @Setter private RegEx regEx;
+
     // END BEAN PROPERTIES
 
     @Override

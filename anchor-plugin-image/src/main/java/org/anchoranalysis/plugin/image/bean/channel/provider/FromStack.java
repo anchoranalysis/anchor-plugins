@@ -66,6 +66,7 @@ public class FromStack extends ChannelProvider {
      * specified.
      */
     @BeanField @OptionalBean @Getter @Setter private ProviderAsStack stack;
+
     // END BEAN PROPERTIES
 
     /**

@@ -49,6 +49,7 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureUn
 
     /** Constant to return if outside the range (above the maximum allowed) */
     @BeanField @Getter @Setter private double aboveMaxValue = 0;
+
     // END BEAN PROPERTIES
 
     @Override

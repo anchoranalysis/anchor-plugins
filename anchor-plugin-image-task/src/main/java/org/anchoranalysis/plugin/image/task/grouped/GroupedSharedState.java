@@ -63,6 +63,7 @@ public class GroupedSharedState<S, T> {
 
     /** How to create the group-map when needed. */
     private final Function<ConsistentChannelChecker, GroupMapByName<S, T>> createGroupMap;
+
     // END REQUIRED ARGUMENTS
 
     /**

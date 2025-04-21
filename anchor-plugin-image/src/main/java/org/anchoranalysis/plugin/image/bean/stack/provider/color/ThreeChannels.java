@@ -57,6 +57,7 @@ public class ThreeChannels extends StackProvider {
 
     /** Provider for the blue channel. */
     @BeanField @OptionalBean @Getter @Setter private ChannelProvider blue;
+
     // END BEAN PROPERTIES
 
     // The checkMisconfigured and get methods are overridden, so we don't add doc-strings for them

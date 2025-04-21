@@ -59,6 +59,7 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 
     /** Provides the {@link ObjectCollection} to be used in the fitting process. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
     /**

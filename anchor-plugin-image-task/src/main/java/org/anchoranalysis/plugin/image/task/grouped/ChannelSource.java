@@ -58,6 +58,7 @@ public class ChannelSource {
 
     /** How to resize the {@link Channel}s. */
     private final VoxelsResizer resizer;
+
     // END REQUIRED ARGUMENTS
 
     /**

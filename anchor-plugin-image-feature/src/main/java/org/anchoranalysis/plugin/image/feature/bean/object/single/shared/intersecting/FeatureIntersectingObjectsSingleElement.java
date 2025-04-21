@@ -49,6 +49,7 @@ public abstract class FeatureIntersectingObjectsSingleElement extends FeatureInt
     // START BEAN PROPERTIES
     /** The feature to calculate for each intersecting object pair. */
     @BeanField @Getter @Setter private Feature<FeatureInputPairObjects> item;
+
     // END BEAN PROPERTIES
 
     @Override

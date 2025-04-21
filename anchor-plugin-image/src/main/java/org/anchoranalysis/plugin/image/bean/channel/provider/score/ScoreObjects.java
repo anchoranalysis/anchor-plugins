@@ -74,6 +74,7 @@ public class ScoreObjects extends UnaryWithObjectsBase {
 
     /** Factor to multiply the feature value by before assigning it to the output channel. */
     @BeanField @Getter @Setter private double factor = 1.0;
+
     // END BEAN PROPERTIES
 
     @Override

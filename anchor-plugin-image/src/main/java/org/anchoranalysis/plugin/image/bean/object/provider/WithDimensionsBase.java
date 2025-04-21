@@ -46,6 +46,7 @@ public abstract class WithDimensionsBase extends ObjectCollectionProviderUnary {
     // START BEAN PROPERTIES
     /** Provider for the dimensions to be used. Defaults to {@link GuessDimensions}. */
     @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
+
     // END BEAN PROPERTIES
 
     /**

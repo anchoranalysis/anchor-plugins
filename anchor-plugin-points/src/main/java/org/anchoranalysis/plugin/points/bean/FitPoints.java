@@ -62,6 +62,7 @@ public class FitPoints extends MarkProposer {
 
     /** Whether to report fitter errors. */
     @BeanField @Getter @Setter private boolean reportFitterErrors = true;
+
     // END BEAN PROPERTIES
 
     /** The logger for recording errors. */

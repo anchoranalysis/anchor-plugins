@@ -122,6 +122,7 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
     @BeanField @Getter @Setter private boolean avoidOverlappingObjects = false;
 
     @BeanField @Getter @Setter private boolean do3D = true;
+
     // END BEAN PROPERTIES
 
     @Override

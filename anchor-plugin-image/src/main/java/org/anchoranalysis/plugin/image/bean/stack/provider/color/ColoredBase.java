@@ -84,6 +84,7 @@ public abstract class ColoredBase extends StackProvider {
 
     /** How to convert an image to be displayed to the user. */
     @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
+
     // END BEAN PROPERTIES
 
     @Override

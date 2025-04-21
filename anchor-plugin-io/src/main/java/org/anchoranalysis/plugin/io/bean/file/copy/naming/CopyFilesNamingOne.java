@@ -45,6 +45,7 @@ public abstract class CopyFilesNamingOne extends CopyFilesNamingWithoutSharedSta
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private CopyFilesNaming<NoSharedState> copyFilesNaming;
+
     // END BEAN PROPERTIES
 
     @Override

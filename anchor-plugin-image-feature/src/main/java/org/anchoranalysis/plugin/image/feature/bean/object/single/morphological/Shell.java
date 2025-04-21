@@ -50,6 +50,7 @@ public class Shell extends DerivedObject {
     /** The number of dilations and erosions to apply and whether to do so in the Z dimension. */
     @BeanField @Getter @Setter
     private MorphologicalIterations iterations = new MorphologicalIterations();
+
     // END BEAN PROPERTIES
 
     @Override

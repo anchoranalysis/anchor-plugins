@@ -83,6 +83,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
     /** If true, the maxima of the score is searched for. If false, rather the minima. */
     @BeanField @Getter @Setter private boolean findMaxima = true;
+
     // END BEAN PROPERTIES
 
     @Override

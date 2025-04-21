@@ -52,6 +52,7 @@ public class FromDescriptiveName extends PathPrefixerAvoidResolve {
      * <p>If false, this may still occur if it is requested in the {@link PathPrefixerContext}.
      */
     @BeanField @Getter @Setter private boolean suppressDirectories = false;
+
     // END BEAN PROPERTIES
 
     @Override

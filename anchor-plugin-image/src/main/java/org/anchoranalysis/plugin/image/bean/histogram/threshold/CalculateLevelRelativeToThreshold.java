@@ -53,6 +53,7 @@ public abstract class CalculateLevelRelativeToThreshold extends CalculateLevelUn
      * Threshold value to compare against when deciding whether to use the alternative calculation.
      */
     @BeanField @Getter @Setter private int threshold;
+
     // END BEAN PROPERTIES
 
     @Override

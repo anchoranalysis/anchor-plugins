@@ -45,6 +45,7 @@ public abstract class UnaryWithValueBase extends ChannelProviderUnary {
     // START BEAN PROPERTIES
     /** The scalar value to be used in channel creation. */
     @BeanField @Getter @Setter private double value;
+
     // END BEAN PROPERTIES
 
     @Override

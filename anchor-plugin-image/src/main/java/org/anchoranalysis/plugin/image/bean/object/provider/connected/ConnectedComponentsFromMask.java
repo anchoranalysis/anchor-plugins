@@ -63,6 +63,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
     /** If true uses 8 neighborhood rather than 4 neighborhood etc. in 2D, and similar in 3D */
     @BeanField @Getter @Setter private boolean bigNeighborhood = false;
+
     // END BEAN PROPERTIES
 
     @Override

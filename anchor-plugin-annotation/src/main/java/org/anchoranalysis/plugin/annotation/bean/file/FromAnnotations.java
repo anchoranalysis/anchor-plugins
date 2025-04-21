@@ -53,6 +53,7 @@ public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProviderW
     /** The annotation input manager. */
     @BeanField @Getter @Setter
     private AnnotationInputManager<NamedChannelsInputPart, T> annotations;
+
     // END BEAN PROPERTIES
 
     @Override

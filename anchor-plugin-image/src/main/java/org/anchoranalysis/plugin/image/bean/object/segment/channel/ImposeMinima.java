@@ -48,6 +48,7 @@ public class ImposeMinima extends SegmentChannelIntoObjectsUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MinimaImposition minimaImposition;
+
     // END BEAN PROPERTIES
 
     @Override

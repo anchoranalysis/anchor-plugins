@@ -50,6 +50,7 @@ class GroupWithImageCount<T> implements ImageCounterWithStatistics<T> {
     // START REQUIRED ARGUMENTS
     /** The identifier of the group. */
     @Getter @EqualsAndHashCode.Include private final String identifier;
+
     // END REQUIRED ARGUMENTS
 
     /** The number of images <b>with</b> associated annotations. */

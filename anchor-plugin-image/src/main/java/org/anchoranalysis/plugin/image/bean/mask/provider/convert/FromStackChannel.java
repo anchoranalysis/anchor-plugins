@@ -45,6 +45,7 @@ public class FromStackChannel extends MaskProvider {
 
     /** The identifier of the stack provider to retrieve the stack from. */
     @BeanField @Getter @Setter private String stackProviderID;
+
     // END BEAN PROPERTIES
 
     /** The channel extracted from the stack, cached after initialization. */

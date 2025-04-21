@@ -45,6 +45,7 @@ public class EmptyHistogramConstant extends CalculateLevelUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int value = 0;
+
     // END BEAN PROPERTIES
 
     @Override

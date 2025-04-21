@@ -48,6 +48,7 @@ public class OutsideRange extends VoxelScore {
 
     /** The index of the energy channel to use for intensity values. */
     @BeanField @Getter @Setter private int energyIndex = 0;
+
     // END BEAN PROPERTIES
 
     @Override

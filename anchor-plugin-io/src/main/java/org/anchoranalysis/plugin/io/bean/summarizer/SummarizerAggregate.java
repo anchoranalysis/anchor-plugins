@@ -44,6 +44,7 @@ public class SummarizerAggregate<T> extends Summarizer<T> {
 
     /** Iff true no bullet is added for the very first-item in the list */
     @BeanField @Getter @Setter private boolean avoidBulletOnFirst = false;
+
     // END BEAN PROPERTIES
 
     public void add(T element) throws OperationFailedException {

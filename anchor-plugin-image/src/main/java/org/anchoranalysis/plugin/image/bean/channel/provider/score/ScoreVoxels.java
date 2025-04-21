@@ -74,6 +74,7 @@ public class ScoreVoxels extends ChannelProvider {
     @BeanField @Getter @Setter private List<HistogramProvider> histogramsExtra = Arrays.asList();
 
     @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
+
     // END BEAN PROPERTIES
 
     @Override

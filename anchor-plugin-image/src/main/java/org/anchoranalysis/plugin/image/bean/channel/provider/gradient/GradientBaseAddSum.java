@@ -51,6 +51,7 @@ public abstract class GradientBaseAddSum extends GradientBase {
      * <p>Default value is 0.
      */
     @BeanField @Getter @Setter private int addSum = 0;
+
     // END BEAN FIELDS
 
     @Override

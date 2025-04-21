@@ -238,6 +238,7 @@ public class Montage extends Task<StackSequenceInput, MontageSharedState> {
 
     /** How to convert an image to be displayed to the user. */
     @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
+
     // END BEAN PROPERTIES
 
     @Override

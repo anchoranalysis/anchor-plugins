@@ -45,6 +45,7 @@ public class IfConditionWithinRange<T extends FeatureInput> extends RangeCompare
     // START BEAN PROPERTIES
     /** Calculates value for the condition - which is checked if it lies within a certain range */
     @BeanField @Getter @Setter private Feature<T> featureCondition;
+
     // END BEAN PROPERTIES
 
     @Override

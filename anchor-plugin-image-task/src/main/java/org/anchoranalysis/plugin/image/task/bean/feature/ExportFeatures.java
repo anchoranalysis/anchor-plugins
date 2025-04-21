@@ -134,6 +134,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     /** Visual style for how feature export occurs. */
     @BeanField @Getter @Setter ExportFeaturesStyle style = new ExportFeaturesStyle();
+
     // END BEAN PROPERTIES
 
     @Override

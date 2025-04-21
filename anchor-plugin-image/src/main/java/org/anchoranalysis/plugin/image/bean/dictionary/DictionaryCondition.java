@@ -52,6 +52,7 @@ public class DictionaryCondition extends ImageBean<DictionaryCondition> {
      * The value the key should have in the dictionary, in order for the condition to be fulfilled.
      */
     @BeanField @Getter @Setter private String value = "";
+
     // END BEAN PROPERTIES
 
     /**
