@@ -100,7 +100,7 @@ class GradientCalculator {
      */
     private void gradientImgLib2(Img<? extends RealType<?>> input, Img<FloatType> output) {
 
-        Cursor<? extends RealType<?>> in = Views.iterable(input).localizingCursor();
+        Cursor<? extends RealType<?>> in = input.localizingCursor();
         RandomAccess<FloatType> oc = output.randomAccess();
 
         OutOfBounds<? extends RealType<?>> ra = Views.extendMirrorDouble(input).randomAccess();

@@ -89,7 +89,7 @@ public class Sobel extends GradientBase {
     private static <T extends RealType<T>> void process(
             NativeImg<T, ?> input, NativeImg<FloatType, FloatArray> output, float scaleFactor) {
 
-        Cursor<T> in = Views.iterable(input).localizingCursor();
+        Cursor<T> in = input.localizingCursor();
         RandomAccess<FloatType> oc = output.randomAccess();
         OutOfBounds<T> ra = Views.extendMirrorDouble(input).randomAccess();
 

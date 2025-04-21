@@ -63,30 +63,30 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-io</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>	
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-inference</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>		
 		
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-imagej</artifactId>
-  	  <version>[0.2.1,1.0.0)</version>
+  	  <version>1.0.0-SNAPSHOT</version>
   	</dependency>
 	  
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature-session</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>	
 		
 	
@@ -135,16 +135,17 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>    
       <artifactId>anchor-test-image</artifactId>
-  	  <version>[0.2.1,1.0.0)</version>
+  	  <version>1.0.0-SNAPSHOT</version>
   	  <scope>test</scope>
   	</dependency>
   	
   	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test-feature-plugins</artifactId>
-	  <version>[0.1.0,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	  <scope>test</scope>
 	 </dependency>
+	 
 	 <!-- END: Test dependencies -->
 	
   </dependencies>   

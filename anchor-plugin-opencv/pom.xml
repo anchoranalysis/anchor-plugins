@@ -13,67 +13,67 @@
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>[0.3.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-voxel</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>anchor-inference</artifactId>
-  		<version>[0.2.1,1.0.0)</version>
+  		<version>1.0.0-SNAPSHOT</version>
   	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>anchor-mpp</artifactId>
-      <version>[0.2.1,1.0.0)</version>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>	
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-bean</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-io</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-io-bioformats</artifactId>
-  	  <version>[0.2.1,1.0.0)</version>
+  	  <version>1.0.0-SNAPSHOT</version>
   	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-inference</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 		     
 	<dependency>
 	  <groupId>${project.groupId}</groupId>     
       <artifactId>anchor-plugin-io</artifactId>
-  	  <version>[0.1.0,1.0.0)</version>
+  	  <version>1.0.0-SNAPSHOT</version>
   	 </dependency>
         	
 	<dependency>
@@ -104,14 +104,14 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>anchor-test-image</artifactId>
-      <version>[0.2.1,1.0.0)</version>
+      <version>1.0.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
           	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-image</artifactId>
-	  <version>[0.1.0,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	  <scope>test</scope>
 	</dependency>
      <!--  END: Test dependencies -->

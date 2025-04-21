@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 import static org.anchoranalysis.plugin.image.bean.object.provider.merge.MergeTestHelper.*;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
@@ -45,7 +47,6 @@ import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class MergePairsTest {
 
@@ -96,6 +97,9 @@ class MergePairsTest {
         Logger logger = LoggerFixture.suppressedLogger();
 
         MergePairs provider = new MergePairs();
+        
+        // An arbitrary path
+        Path path = Paths.get(".");
 
         Feature<FeatureInputPairObjects> feature =
                 new Minimum(MockFeatureWithCalculationFixture.createMockFeatureWithCalculation());
@@ -103,9 +107,9 @@ class MergePairsTest {
         provider.setObjects(ProviderFixture.providerFor(objects));
         provider.setFeatureEvaluatorThreshold(
                 FeatureEvaluatorFixture.createEnergy(
-                        new Constant<>(threshold), logger, Mockito.mock(Path.class)));
+                        new Constant<>(threshold), logger, path));
         provider.setFeatureEvaluatorMerge(
-                FeatureEvaluatorFixture.createEnergy(feature, logger, Mockito.mock(Path.class)));
+                FeatureEvaluatorFixture.createEnergy(feature, logger, path));
         provider.setRelation(new GreaterThanBean());
         return provider;
     }

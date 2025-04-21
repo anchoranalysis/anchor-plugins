@@ -40,6 +40,7 @@ import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
 import org.mockito.Mockito;
 
 class MergeToIncreaseObjectFeatureTest {
@@ -109,7 +110,7 @@ class MergeToIncreaseObjectFeatureTest {
                         MockFeatureWithCalculationFixture.createMockFeatureWithCalculation(
                                 calculationFunction),
                         logger,
-                        Mockito.mock(Path.class)));
+                        Mockito.mock(Path.class, Answers.CALLS_REAL_METHODS)));
 
         return provider;
     }
