@@ -51,10 +51,7 @@ class AnchorMetadataXmlTest {
 
     @Test
     void test()
-            throws ImageIOException,
-                    ParserConfigurationException,
-                    SAXException,
-                    IOException,
+            throws ImageIOException, ParserConfigurationException, SAXException, IOException,
                     URISyntaxException {
 
         Resolution resolution = createMockResolution();

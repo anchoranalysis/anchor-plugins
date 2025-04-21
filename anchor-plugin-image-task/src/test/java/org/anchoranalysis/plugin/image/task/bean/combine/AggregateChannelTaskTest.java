@@ -47,7 +47,7 @@ class AggregateChannelTaskTest extends GroupedStackTestBase {
 
     private static final String OUTPUT_NAME = "someOutput";
 
-    private static List<String> FILENAMES_TO_COMPARE =
+    private static final List<String> FILENAMES_TO_COMPARE =
             Arrays.asList("stack00.png", "stack01.png", "stack02.png");
 
     /**

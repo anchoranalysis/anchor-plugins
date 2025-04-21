@@ -40,17 +40,17 @@ import lombok.NoArgsConstructor;
 public class InputFixtureFactory {
 
     /** The relative-path to the six colors. */
-    private static String PATH_SIX_COLORS = "montage/input/six";
+    private static final String PATH_SIX_COLORS = "montage/input/six";
 
     /** The relative-path to the six binary-mask files. */
-    private static String PATH_SIX_BINARY_MASKS = "scaleImageIndependently/input/sixBinary";
+    private static final String PATH_SIX_BINARY_MASKS = "scaleImageIndependently/input/sixBinary";
 
     /** The names of the files for the colored dataset (without extension). */
-    private static List<String> FILENAMES_SIX_COLORS =
+    private static final List<String> FILENAMES_SIX_COLORS =
             Arrays.asList("blue", "red", "yellow", "green", "gray", "orange");
 
     /** The names of the files for the colored dataset (without extension). */
-    private static List<String> FILENAMES_BINARY_MASKS =
+    private static final List<String> FILENAMES_BINARY_MASKS =
             Arrays.asList("mask0", "mask1", "mask2", "mask3", "mask4", "mask5");
 
     /**

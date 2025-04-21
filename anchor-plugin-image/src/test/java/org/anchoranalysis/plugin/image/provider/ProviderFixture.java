@@ -34,6 +34,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
@@ -75,6 +76,7 @@ public class ProviderFixture {
         try {
             when(provider.get()).thenReturn(objects);
         } catch (ProvisionFailedException e) {
+        	throw new AnchorImpossibleSituationException();
         }
         when(provider.duplicateBean()).thenReturn(provider);
         return provider;
@@ -93,6 +95,7 @@ public class ProviderFixture {
         try {
             when(provider.get()).thenReturn(feature);
         } catch (ProvisionFailedException e) {
+        	throw new AnchorImpossibleSituationException();
         }
         when(provider.duplicateBean()).thenReturn(provider);
         return provider;
@@ -109,6 +112,7 @@ public class ProviderFixture {
         try {
             when(provider.get()).thenReturn(mask);
         } catch (ProvisionFailedException e) {
+        	throw new AnchorImpossibleSituationException();
         }
         when(provider.duplicateBean()).thenReturn(provider);
         return provider;

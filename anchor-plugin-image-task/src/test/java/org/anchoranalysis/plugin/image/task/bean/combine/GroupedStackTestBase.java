@@ -55,7 +55,7 @@ import org.junit.jupiter.api.Test;
 abstract class GroupedStackTestBase extends StackIOTestBase {
 
     /** The input-fixture used in the tests. */
-    protected static InputFixture INPUT_FIXTURE = InputFixtureFactory.createSixColors();
+    protected static final InputFixture INPUT_FIXTURE = InputFixtureFactory.createSixColors();
 
     /**
      * Resizes the input images to a common size.

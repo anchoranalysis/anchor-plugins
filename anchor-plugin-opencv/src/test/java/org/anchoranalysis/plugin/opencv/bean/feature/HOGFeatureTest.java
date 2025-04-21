@@ -74,7 +74,7 @@ class HOGFeatureTest {
     private void assertFailure(EnergyStackWithoutParameters stack, int index) {
         assertThrows(
                 FeatureCalculationException.class,
-                () -> featureValueForIndex(loader.carRGBAsEnergy(), 60000));
+                () -> featureValueForIndex(loader.carRGBAsEnergy(), index));
     }
 
     private void assertFeatureValueFirst(EnergyStackWithoutParameters stack, double expectedValue)

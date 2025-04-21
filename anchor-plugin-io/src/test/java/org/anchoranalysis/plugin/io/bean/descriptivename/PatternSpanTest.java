@@ -46,32 +46,32 @@ class PatternSpanTest {
     @Test
     void testSimple() throws InputReadFailedException {
 
-        String inputs[] = {"/a/b/c.txt", "/a/d/c.txt", "/a/e/c.txt"};
+        String[] inputs = {"/a/b/c.txt", "/a/d/c.txt", "/a/e/c.txt"};
 
-        String expected[] = {"b", "d", "e"};
+        String[] expected = {"b", "d", "e"};
         applyTest(inputs, expected);
     }
 
     @Test
     void testPaths() throws InputReadFailedException {
-        String inputs[] = {
+        String[] inputs = {
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/Klosters (Feb 2020)/P1210904.JPG"
         };
 
-        String expected[] = {"P1210940", "Klosters (Feb 2020)/P1210904"};
+        String[] expected = {"P1210940", "Klosters (Feb 2020)/P1210904"};
 
         applyTest(inputs, expected);
     }
 
     @Test
     void testEmptyString() throws InputReadFailedException {
-        String inputs[] = {
+        String[] inputs = {
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG.TXT"
         };
 
-        String expected[] = {"P1210940.JPG", "P1210940.JPG.TXT"};
+        String[] expected = {"P1210940.JPG", "P1210940.JPG.TXT"};
 
         applyTest(inputs, expected);
     }
@@ -80,9 +80,9 @@ class PatternSpanTest {
     @Test
     void testWithoutExtension() throws InputReadFailedException {
 
-        String inputs[] = {"/a/b/c", "/a/d/c", "/a/e/c"};
+        String[] inputs = {"/a/b/c", "/a/d/c", "/a/e/c"};
 
-        String expected[] = {"b/c", "d/c", "e/c"};
+        String[] expected = {"b/c", "d/c", "e/c"};
         applyTest(inputs, expected);
     }
 
@@ -90,10 +90,10 @@ class PatternSpanTest {
         List<File> files = filesFromStrs(paths);
 
         PatternSpan span = new PatternSpan();
-        List<NamedFile> ret = span.deriveName(files, new FileNamerContext(LOGGER));
+        List<NamedFile> derived = span.deriveName(files, new FileNamerContext(LOGGER));
 
         for (int i = 0; i < expected.length; i++) {
-            assertIndexEquals(ret, i, expected[i]);
+            assertIndexEquals(derived, i, expected[i]);
         }
     }
 

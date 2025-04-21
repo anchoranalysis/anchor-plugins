@@ -63,7 +63,7 @@ class FeatureListImageTest {
 
     private static TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
-    private static EnergyStack ENERGY_STACK = EnergyStackFixture.create(true, true);
+    private static final EnergyStack ENERGY_STACK = EnergyStackFixture.create(true, true);
 
     @BeforeEach
     void setUp() {

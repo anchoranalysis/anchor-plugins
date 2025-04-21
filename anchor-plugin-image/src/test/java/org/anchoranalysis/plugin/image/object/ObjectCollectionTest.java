@@ -82,7 +82,6 @@ class ObjectCollectionTest {
 
         ScaledElements<ObjectMask> scaled = Scaler.scaleObjects(unscaled, checker.factor());
 
-        // checker.assertExpectedArea(unscaled, scaled);
         assertEquals(unscaled.size(), scaled.size());
     }
 }

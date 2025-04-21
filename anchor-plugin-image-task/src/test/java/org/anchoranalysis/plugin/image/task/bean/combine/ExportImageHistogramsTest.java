@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
 class ExportImageHistogramsTest extends GroupedStackTestBase {
 
     /** The non-aggregated histograms produced for each input file in the test. */
-    private static List<String> NON_AGGREGATED_FILES_PRODUCED_PER_INPUT =
+    private static final List<String> NON_AGGREGATED_FILES_PRODUCED_PER_INPUT =
             Arrays.asList("stack00.csv", "stack01.csv", "stack02.csv");
 
     /** Grouped inputs are placed inside this directory. */

@@ -47,7 +47,7 @@ import org.junit.jupiter.api.Test;
 class MontageTest extends StackIOTestBase {
 
     /** We don't test the labelled output as fonts vary on windows and linux. */
-    private static List<String> FILENAMES_TO_COMPARE =
+    private static final List<String> FILENAMES_TO_COMPARE =
             Arrays.asList(Montage.OUTPUT_UNLABELLED + ".png");
 
     static {
