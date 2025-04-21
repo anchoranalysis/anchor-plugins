@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.1-SNAPSHOT</version>
     </parent> 
   	<artifactId>anchor-plugin-mpp</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1-SNAPSHOT</version>
 	<description>Plugins related to marked-point-processes (particularly proposers and providers).</description>
    <dependencies>
     <dependency>
@@ -95,13 +95,13 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-points</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-image</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>

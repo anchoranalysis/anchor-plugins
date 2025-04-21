@@ -3,10 +3,10 @@
   <parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.1-SNAPSHOT</version>
   </parent> 
   <artifactId>anchor-plugin-points</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1-SNAPSHOT</version>
   <description>Plugins for points-fitting and other geometric operations.</description>
    <dependencies>
     <dependency>
@@ -65,7 +65,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-opencv</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
