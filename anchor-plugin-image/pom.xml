@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
-		<version>0.0.11-SNAPSHOT</version>
+		<version>0.1.0</version>
     </parent>
   <artifactId>anchor-plugin-image</artifactId>
-<version>0.0.8-SNAPSHOT</version>
+<version>0.1.0</version>
 <description>Plugins for image-related operations.</description>
   <dependencies>
     <dependency>
@@ -142,7 +142,7 @@
   	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test-feature-plugins</artifactId>
-	  <version>0.0.4-SNAPSHOT</version>
+	  <version>0.1.0</version>
 	  <scope>test</scope>
 	 </dependency>
 	 <!-- END: Test dependencies -->
