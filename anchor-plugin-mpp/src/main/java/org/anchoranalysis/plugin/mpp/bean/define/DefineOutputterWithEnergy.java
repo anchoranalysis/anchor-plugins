@@ -49,7 +49,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.ExportSharedObjects;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
-import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
 import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
 
 /**

@@ -48,7 +48,6 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
-import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
 
 /**
  * Derives various types of outputs (images, histograms etc.) from {@link MultiInput}s.

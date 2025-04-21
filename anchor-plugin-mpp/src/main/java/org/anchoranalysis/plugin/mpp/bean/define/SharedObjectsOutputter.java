@@ -41,7 +41,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
  * Outputs entities associated with {@link SharedObjects} in particular directories.
