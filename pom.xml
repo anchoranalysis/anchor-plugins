@@ -97,6 +97,55 @@
 		  </resource>
 		  
 		</resources>	
+		
+		
+		<plugins>
+					
+			<plugin>
+				  <groupId>org.sonatype.central</groupId>
+				  <artifactId>central-publishing-maven-plugin</artifactId>
+				  <version>0.7.0</version>
+				  <extensions>true</extensions>
+				  <configuration>
+					<publishingServerId>central</publishingServerId>
+				  </configuration>
+			</plugin>			
+		
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<configuration>
+						<!-- When using a release parent pom, this should be true to prevent parent POM from being automatically deployed, relying instead on manually using the release plugin. 
+						When using a snapshot parent pom, this should be false.
+						-->
+						<skip>false</skip>
+					</configuration>
+					<inherited>false</inherited>
+			  </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+					<version>3.2.0</version>
+					<configuration>
+						<source>1.8</source>
+						<detectJavaApiLink>true</detectJavaApiLink>
+						<noqualifier>java.lang:java.io</noqualifier>
+						<links>
+							<link>https://commons.apache.org/proper/commons-io/javadocs/api-2.5/</link>
+						</links>
+					</configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    </plugin>			  
+					
+		</plugins>
     </build>
 	
 	<dependencies>
