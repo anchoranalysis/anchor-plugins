@@ -76,7 +76,7 @@ public class ProviderFixture {
         try {
             when(provider.get()).thenReturn(objects);
         } catch (ProvisionFailedException e) {
-        	throw new AnchorImpossibleSituationException();
+            throw new AnchorImpossibleSituationException();
         }
         when(provider.duplicateBean()).thenReturn(provider);
         return provider;
@@ -95,7 +95,7 @@ public class ProviderFixture {
         try {
             when(provider.get()).thenReturn(feature);
         } catch (ProvisionFailedException e) {
-        	throw new AnchorImpossibleSituationException();
+            throw new AnchorImpossibleSituationException();
         }
         when(provider.duplicateBean()).thenReturn(provider);
         return provider;
@@ -112,7 +112,7 @@ public class ProviderFixture {
         try {
             when(provider.get()).thenReturn(mask);
         } catch (ProvisionFailedException e) {
-        	throw new AnchorImpossibleSituationException();
+            throw new AnchorImpossibleSituationException();
         }
         when(provider.duplicateBean()).thenReturn(provider);
         return provider;
