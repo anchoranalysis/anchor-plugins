@@ -49,8 +49,7 @@ class ScaleChannelHelper {
      * @throws OperationFailedException if the scaling operation fails.
      */
     public static Channel scaleChannel(
-            Channel channel, boolean binary, ScaleFactor scaleFactor, VoxelsResizer voxelsResizer)
-            throws OperationFailedException {
+            Channel channel, boolean binary, ScaleFactor scaleFactor, VoxelsResizer voxelsResizer) {
 
         if (scaleFactor.isNoScale()) {
             // Nothing to do

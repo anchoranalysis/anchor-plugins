@@ -78,12 +78,10 @@ class ThumbnailColorIndex implements ColorIndex {
     }
 
     private Color colorForIndex(int index) {
-        if (index == 0) {
-            return OUTLINE_FIRST_OBJECT;
-        } else if (index == 1) {
-            return pairs ? OUTLINE_SECOND_OBJECT : colorContextObject;
-        } else {
-            return colorContextObject;
-        }
+        return switch (index) {
+            case 0 -> OUTLINE_FIRST_OBJECT;
+            case 1 -> pairs ? OUTLINE_SECOND_OBJECT : colorContextObject;
+            default -> colorContextObject;
+        };
     }
 }

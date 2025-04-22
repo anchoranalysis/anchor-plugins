@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -86,7 +85,6 @@ class FeatureListImageTest {
     @Test
     void testHistogram()
             throws InitializeException,
-                    FeatureCalculationException,
                     CreateException,
                     NamedFeatureCalculateException {
 
@@ -116,8 +114,7 @@ class FeatureListImageTest {
     void testImage()
             throws InitializeException,
                     NamedFeatureCalculateException,
-                    CreateException,
-                    FeatureCalculationException {
+                    CreateException {
 
         FeatureCalculatorMulti<FeatureInputSingleObject> session =
                 createAndStart(objectFeatures(loader));
@@ -184,8 +181,7 @@ class FeatureListImageTest {
         return FeaturesFromXMLFixture.createFeatureList("objectFeatureList.xml", loader);
     }
 
-    private static FeatureInputHistogram createParameters(Histogram histogram)
-            throws CreateException {
+    private static FeatureInputHistogram createParameters(Histogram histogram) {
         return new FeatureInputHistogram(histogram, ENERGY_STACK.resolution());
     }
 
@@ -193,7 +189,7 @@ class FeatureListImageTest {
             FeatureCalculatorMulti<FeatureInputSingleObject> session,
             ObjectMask objectMaskToCalculate,
             Object... expectedVals)
-            throws NamedFeatureCalculateException, CreateException {
+            throws NamedFeatureCalculateException {
         assertCalc(
                 session.calculate(
                         new FeatureInputSingleObject(objectMaskToCalculate, ENERGY_STACK)),

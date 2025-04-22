@@ -66,7 +66,7 @@ class WatershedYeongTest {
     }
 
     private void segment(String pathObjectsExpected, Optional<String> pathMask)
-            throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
+            throws SegmentationFailedException, TestDataLoadException {
 
         Optional<ObjectMask> objectMask = pathMask.map(this::maskAsObject);
 

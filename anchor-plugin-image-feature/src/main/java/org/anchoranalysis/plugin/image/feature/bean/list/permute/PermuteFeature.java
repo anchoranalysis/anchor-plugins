@@ -104,7 +104,7 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
                 list =
                         new PermutedCopyCreator<Feature<T>>(
                                         Feature::getCustomName,
-                                        (feat, name) -> feat.setCustomName(name))
+                                        Feature::setCustomName)
                                 .createPermutedCopies(list, permute, assigner);
             } catch (AssignPermutationException e) {
                 throw new ProvisionFailedException(

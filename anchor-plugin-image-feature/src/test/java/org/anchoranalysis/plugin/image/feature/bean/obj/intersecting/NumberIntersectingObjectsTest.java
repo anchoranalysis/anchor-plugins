@@ -54,7 +54,7 @@ class NumberIntersectingObjectsTest {
     // As expected-values are the same, we have a helper function
     private void testForSpecificExpectedValues(String messagePrefix, boolean sameSize)
             throws OperationFailedException, FeatureCalculationException, InitializeException {
-        InteresectingObjectsTestHelper.testPositions(
+        IntersectingObjectsTestHelper.testPositions(
                 messagePrefix,
                 new NumberIntersectingObjects(),
                 sameSize,

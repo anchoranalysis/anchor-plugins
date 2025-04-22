@@ -100,7 +100,7 @@ public class FeatureInputPairTester {
      * @throws InitializeException if the feature initialization fails
      */
     public static void testSimpleInt(Feature<FeatureInputPairObjects> feature, int expected)
-            throws FeatureCalculationException, InitializeException {
+            throws FeatureCalculationException {
         FeatureTestCalculator.assertIntResult(
                 "simple",
                 feature,
@@ -118,7 +118,7 @@ public class FeatureInputPairTester {
      * @throws InitializeException if the feature initialization fails
      */
     public static void testSimpleDouble(Feature<FeatureInputPairObjects> feature, double expected)
-            throws FeatureCalculationException, InitializeException {
+            throws FeatureCalculationException {
         FeatureTestCalculator.assertDoubleResult(
                 "simple",
                 feature,
@@ -137,7 +137,7 @@ public class FeatureInputPairTester {
      */
     public static void testOverlappingCirclesIntSize(
             Feature<FeatureInputPairObjects> feature, int expected, boolean sameSize)
-            throws FeatureCalculationException, InitializeException {
+            throws FeatureCalculationException {
         FeatureTestCalculatorDuo.assertIntResult(
                 message(sameSize),
                 feature,
@@ -158,7 +158,7 @@ public class FeatureInputPairTester {
      */
     private static void testOverlappingCirclesDoubleSize(
             Feature<FeatureInputPairObjects> feature, double expected, boolean sameSize)
-            throws FeatureCalculationException, InitializeException {
+            throws FeatureCalculationException {
         FeatureTestCalculatorDuo.assertDoubleResult(
                 message(sameSize),
                 feature,

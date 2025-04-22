@@ -46,7 +46,7 @@ import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjects
 import org.mockito.Mockito;
 
 /** Utility operations for unning tests that involve intersecting objects. */
-class InteresectingObjectsTestHelper {
+class IntersectingObjectsTestHelper {
 
     /** Identifier for the shared object collection. */
     private static final String ID = "someObjects";
@@ -89,16 +89,16 @@ class InteresectingObjectsTestHelper {
                         NUMBER_INTERSECTING, NUMBER_NOT_INTERSECTING, sameSize);
 
         // First object
-        InteresectingObjectsTestHelper.assertFeatureIndexInt(
+        IntersectingObjectsTestHelper.assertFeatureIndexInt(
                 combine(messagePrefix, "first"), feature, objects, 0, expectedFirst);
 
         // Second object
-        InteresectingObjectsTestHelper.assertFeatureIndexInt(
+        IntersectingObjectsTestHelper.assertFeatureIndexInt(
                 combine(messagePrefix, "second"), feature, objects, 1, expectedSecond);
 
         // Second last object
         int secondLastIndex = (NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING) - 2;
-        InteresectingObjectsTestHelper.assertFeatureIndexInt(
+        IntersectingObjectsTestHelper.assertFeatureIndexInt(
                 combine(messagePrefix, "second-last"),
                 feature,
                 objects,
@@ -107,7 +107,7 @@ class InteresectingObjectsTestHelper {
 
         // Last object
         int lastIndex = (NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING) - 1;
-        InteresectingObjectsTestHelper.assertFeatureIndexInt(
+        IntersectingObjectsTestHelper.assertFeatureIndexInt(
                 combine(messagePrefix, "last"), feature, objects, lastIndex, expectedLast);
     }
 
@@ -131,7 +131,7 @@ class InteresectingObjectsTestHelper {
             ObjectCollection objects,
             int index,
             int expectedResult)
-            throws OperationFailedException, FeatureCalculationException, InitializeException {
+            throws OperationFailedException, FeatureCalculationException {
 
         // We take the second object in the collection, as one that should intersect with 2 others
         ObjectMask objectMask = objects.get(index);
