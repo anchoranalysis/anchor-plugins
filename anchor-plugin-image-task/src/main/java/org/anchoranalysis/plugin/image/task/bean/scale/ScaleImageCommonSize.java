@@ -178,8 +178,7 @@ public class ScaleImageCommonSize extends ScaleImage<CommonSize> {
     }
 
     private static Channel scaleChannel(
-            Channel channel, boolean binary, ScaleFactor scaleFactor, VoxelsResizer voxelsResizer)
-            throws OperationFailedException {
+            Channel channel, boolean binary, ScaleFactor scaleFactor, VoxelsResizer voxelsResizer) {
         return ScaleChannelHelper.scaleChannel(channel, binary, scaleFactor, voxelsResizer);
     }
 }

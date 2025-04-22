@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.points.convexhull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -186,7 +185,7 @@ public class ConvexHullUtilities {
     private static List<Point2i> createPointsList(int numPoints, int[] xx, int[] yy) {
         return IntStream.range(0, numPoints)
                 .mapToObj(index -> new Point2i(xx[index], yy[index]))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /** Calculate the starting index for the convex hull algorithm. */

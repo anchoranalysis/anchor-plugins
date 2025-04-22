@@ -103,7 +103,8 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
         // Filter
         List<LabelledWithConfidence<ObjectMask>> elementsFiltered =
                 elements.stream()
-                        .filter(withConfidence -> withConfidence.getConfidence() >= minConfidence).toList();
+                        .filter(withConfidence -> withConfidence.getConfidence() >= minConfidence)
+                        .toList();
 
         if (elementsFiltered.isEmpty()) {
             // An empty input list produces an outcome where no elements are retained (because none

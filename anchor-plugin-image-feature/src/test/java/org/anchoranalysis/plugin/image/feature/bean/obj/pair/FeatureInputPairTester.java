@@ -56,13 +56,12 @@ public class FeatureInputPairTester {
      * @param expectedDifferentSize expected result for different-sized circles
      * @param expectedSameSize expected result for same-sized circles
      * @throws FeatureCalculationException if the feature calculation fails
-     * @throws InitializeException if the feature initialization fails
      */
     public static void testTwoSizesOverlappingDouble(
             Feature<FeatureInputPairObjects> feature,
             double expectedDifferentSize,
             double expectedSameSize)
-            throws FeatureCalculationException, InitializeException {
+            throws FeatureCalculationException {
 
         testOverlappingCirclesDoubleSize(feature, expectedSameSize, true);
         testOverlappingCirclesDoubleSize(feature, expectedDifferentSize, false);
@@ -78,13 +77,12 @@ public class FeatureInputPairTester {
      * @param expectedSameSize expected result for same-sized circles
      * @param expectedDifferentSize expected result for different-sized circles
      * @throws FeatureCalculationException if the feature calculation fails
-     * @throws InitializeException if the feature initialization fails
      */
     public static void testTwoSizesOverlappingInt(
             Feature<FeatureInputPairObjects> feature,
             int expectedSameSize,
             int expectedDifferentSize)
-            throws FeatureCalculationException, InitializeException {
+            throws FeatureCalculationException {
 
         testOverlappingCirclesIntSize(feature, expectedSameSize, true);
         testOverlappingCirclesIntSize(feature, expectedDifferentSize, false);

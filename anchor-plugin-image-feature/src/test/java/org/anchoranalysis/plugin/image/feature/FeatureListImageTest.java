@@ -84,9 +84,7 @@ class FeatureListImageTest {
 
     @Test
     void testHistogram()
-            throws InitializeException,
-                    CreateException,
-                    NamedFeatureCalculateException {
+            throws InitializeException, CreateException, NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputHistogram> session =
                 createAndStart(histogramFeatures(loader));
@@ -111,10 +109,7 @@ class FeatureListImageTest {
     }
 
     @Test
-    void testImage()
-            throws InitializeException,
-                    NamedFeatureCalculateException,
-                    CreateException {
+    void testImage() throws InitializeException, NamedFeatureCalculateException, CreateException {
 
         FeatureCalculatorMulti<FeatureInputSingleObject> session =
                 createAndStart(objectFeatures(loader));

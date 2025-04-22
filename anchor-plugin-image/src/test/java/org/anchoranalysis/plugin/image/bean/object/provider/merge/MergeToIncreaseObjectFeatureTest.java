@@ -55,9 +55,7 @@ class MergeToIncreaseObjectFeatureTest {
      * @throws CreateException
      */
     @Test
-    void testMaximalNumPixels()
-            throws OperationFailedException,
-                   CreateException {
+    void testMaximalNumPixels() throws OperationFailedException, CreateException {
         testLinear(
                 MergeTestHelper.EXPECTED_RESULT_ALL_INTERSECTING_MERGED,
                 24,
@@ -74,9 +72,7 @@ class MergeToIncreaseObjectFeatureTest {
      * @throws CreateException
      */
     @Test
-    void testConvergeNumPixels()
-            throws OperationFailedException,
-                   CreateException {
+    void testConvergeNumPixels() throws OperationFailedException, CreateException {
         testLinear(8, 23, MergeToIncreaseObjectFeatureTest::convergeTo900);
     }
 

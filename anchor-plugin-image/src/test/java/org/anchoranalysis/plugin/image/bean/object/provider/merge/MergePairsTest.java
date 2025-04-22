@@ -57,9 +57,7 @@ class MergePairsTest {
      * @throws OperationFailedException
      */
     @Test
-    void testAllMerge()
-            throws CreateException,
-                   OperationFailedException {
+    void testAllMerge() throws CreateException, OperationFailedException {
         testLinear(EXPECTED_RESULT_ALL_INTERSECTING_MERGED, 26, 14, 1);
     }
 
@@ -69,9 +67,7 @@ class MergePairsTest {
      * @throws OperationFailedException
      */
     @Test
-    void testSomeMerge()
-            throws CreateException,
-                    OperationFailedException {
+    void testSomeMerge() throws CreateException, OperationFailedException {
         testLinear(EXPECTED_RESULT_FIRST_THREE_NOT_MERGING, 22, 12, 300);
     }
 

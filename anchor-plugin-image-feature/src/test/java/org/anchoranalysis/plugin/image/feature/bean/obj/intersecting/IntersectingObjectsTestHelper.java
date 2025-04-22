@@ -72,7 +72,6 @@ class IntersectingObjectsTestHelper {
      * @param expectedLast expected result for object in last position
      * @throws OperationFailedException if the operation fails
      * @throws FeatureCalculationException if feature calculation fails
-     * @throws InitializeException if initialization fails
      */
     public static void testPositions(
             String messagePrefix,
@@ -82,7 +81,7 @@ class IntersectingObjectsTestHelper {
             int expectedSecond,
             int expectedSecondLast,
             int expectedLast)
-            throws OperationFailedException, FeatureCalculationException, InitializeException {
+            throws OperationFailedException, FeatureCalculationException {
 
         ObjectCollection objects =
                 IntersectingCircleObjectsFixture.generateIntersectingObjects(
