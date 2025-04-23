@@ -44,6 +44,7 @@ public class GradientForAxis extends GradientBaseAddSum {
     // START BEAN
     /** Which axis? X=0, Y=1, Z=2 */
     @BeanField @Getter @Setter private String axis = "x";
+
     // END BEAN
 
     @Override

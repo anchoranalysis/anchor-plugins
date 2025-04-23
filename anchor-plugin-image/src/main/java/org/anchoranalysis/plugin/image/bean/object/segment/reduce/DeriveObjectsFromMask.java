@@ -55,16 +55,17 @@ class DeriveObjectsFromMask {
     /**
      * Splits a mask into connected-components and associates a confidence.
      *
-     * @param mask mask to split into connected-components
-     * @param channel a channel, the same size as {@code mask} with a confidence-value for each
-     *     voxel in a {@code mask}.
+     * @param mask {@link Mask} to split into connected-components
+     * @param channel a {@link Channel}, the same size as {@code mask} with a confidence-value for
+     *     each voxel in a {@code mask}.
      * @param transformToConfidence transforms from the unsigned-integer found in {@code channel} to
      *     a confidence value {@code 0 <= confidence <= 1}.
      * @param shift a shift to add to the object-masks after extracting the confidence-level.
      * @param minNumberVoxels the minimum number of voxels that must exist to form a separate
      *     object, otherwise the voxels are ignored.
-     * @return a list of objects created from the connected-components of the mask with associated
-     *     confidence-values
+     * @return a list of {@link ObjectMask}s created from the connected-components of the mask with
+     *     associated confidence-values
+     * @throws OperationFailedException if the operation fails
      */
     public static List<WithConfidence<ObjectMask>> splitIntoObjects(
             Mask mask,
@@ -89,6 +90,16 @@ class DeriveObjectsFromMask {
                                         object, channel, transformToConfidence, shift));
     }
 
+    /**
+     * Derives confidence for an object and shifts it.
+     *
+     * @param object the {@link ObjectMask} to process
+     * @param channel the {@link Channel} containing confidence values
+     * @param transformToConfidence function to transform channel values to confidence
+     * @param shift the shift to apply to the object
+     * @return a {@link WithConfidence} containing the shifted object and its confidence
+     * @throws OperationFailedException if the operation fails
+     */
     private static WithConfidence<ObjectMask> deriveConfidenceAndShift(
             ObjectMask object,
             Channel channel,
@@ -100,7 +111,13 @@ class DeriveObjectsFromMask {
     }
 
     /**
-     * The mean value of all the confidence values for each voxel in the channel, translated-back
+     * Calculates the mean confidence value for an object.
+     *
+     * @param object the {@link ObjectMask} to calculate confidence for
+     * @param channel the {@link Channel} containing confidence values
+     * @param unscale function to unscale the mean histogram value to a confidence value
+     * @return the calculated confidence value
+     * @throws OperationFailedException if the operation fails
      */
     private static double confidenceForObject(
             ObjectMask object, Channel channel, DoubleUnaryOperator unscale)

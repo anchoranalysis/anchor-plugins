@@ -50,6 +50,7 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
     @BeanField @Getter @Setter private int energyChannelIndex = 0;
 
     @BeanField @Getter @Setter private double quantile = 0.5;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -70,7 +71,7 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
                     input.forChild()
                             .calculate(
                                     item,
-                                    new CalculateDeriveObjFromCollection(ccObjects, i),
+                                    new CalculateDeriveObjectFromCollection(ccObjects, i),
                                     cacheName(i));
             featureVals.add(val);
         }

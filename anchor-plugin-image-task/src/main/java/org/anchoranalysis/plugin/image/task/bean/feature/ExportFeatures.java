@@ -106,7 +106,8 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE =
             NamedFeatureStoreFactory.bothNameAndParameters();
 
-    public static final FeatureOutputNames OUTPUT_RESULTS = new FeatureOutputNames();
+    /** Default names for various outputs from the task. */
+    public static final FeatureOutputNames OUTPUT_NAMES = new FeatureOutputNames();
 
     // START BEAN PROPERTIES
     /** Source of feature-values to be exported. */
@@ -133,6 +134,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     /** Visual style for how feature export occurs. */
     @BeanField @Getter @Setter ExportFeaturesStyle style = new ExportFeaturesStyle();
+
     // END BEAN PROPERTIES
 
     @Override
@@ -150,7 +152,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
                             parameters.getExecutionArguments().task().getGroupIndexRange());
             LabelHeaders headers = source.headers(grouper.isPresent());
             FeatureExporter<S> exporter =
-                    source.createExporter(headers, features, OUTPUT_RESULTS, grouper, context);
+                    source.createExporter(headers, features, OUTPUT_NAMES, grouper, context);
 
             if (featuresAggregate == null) {
                 featuresAggregate =
@@ -205,7 +207,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     @Override
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs()
-                .addEnabledOutputFirst(OUTPUT_RESULTS.getCsvFeaturesNonAggregated()); // NOSONAR
+                .addEnabledOutputFirst(OUTPUT_NAMES.getCsvFeaturesNonAggregated()); // NOSONAR
     }
 
     @Override

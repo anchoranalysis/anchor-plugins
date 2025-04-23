@@ -26,35 +26,29 @@
 
 package org.anchoranalysis.plugin.image.object.merge;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
 
 /**
- * Logs descriptions of the graph
+ * Builds string-descriptions of a {@link NeighborGraph}.
  *
- * @author Owen Feehan
+ * <p>This class provides methods to generate string descriptions of a {@link NeighborGraph}, its
+ * vertices, edges, and potential merges.
  */
+@AllArgsConstructor
 public class DescribeGraph {
 
+    /** Graph the {@link NeighborGraph} to describe. */
     private NeighborGraph graph;
+
+    /** Whether to include payload values in the log messages. */
     private boolean includePayload;
 
     /**
-     * Constructor
+     * Generates a string describing the entire graph (vertices and edges).
      *
-     * @param graph the graph to describe
-     * @param includePayload whether to include payload values in the log messages
-     */
-    public DescribeGraph(NeighborGraph graph, boolean includePayload) {
-        super();
-        this.graph = graph;
-        this.includePayload = includePayload;
-    }
-
-    /**
-     * Generates a string describing the entire graph (vertices and edges)
-     *
-     * @return a multi-line string
+     * @return a multi-line string description of the graph
      */
     public String describe() {
         StringBuilder sb = new StringBuilder();
@@ -64,28 +58,28 @@ public class DescribeGraph {
     }
 
     /**
-     * Generates a string to describe a potential merge
+     * Generates a string to describe a potential merge.
      *
-     * @param src
-     * @param dest
-     * @param merged
-     * @param priority
-     * @param doMerge
-     * @return
+     * @param source the source {@link ObjectVertex}
+     * @param destination the destination {@link ObjectVertex}
+     * @param merged the resulting merged {@link ObjectVertex}
+     * @param priority the priority of the merge
+     * @param doMerge whether the merge will be performed
+     * @return a string description of the potential merge
      */
     public String describeEdge(
-            ObjectVertex src,
-            ObjectVertex dest,
+            ObjectVertex source,
+            ObjectVertex destination,
             ObjectVertex merged,
             double priority,
             boolean doMerge) {
         if (includePayload) {
             return String.format(
                     "Merge? %s (%f)\t+%s (%f)\t= %s (%f)\t%e  %s",
-                    src.getObject(),
-                    src.getPayload(),
-                    dest.getObject(),
-                    dest.getPayload(),
+                    source.getObject(),
+                    source.getPayload(),
+                    destination.getObject(),
+                    destination.getPayload(),
                     merged.getObject(),
                     merged.getPayload(),
                     priority,
@@ -93,59 +87,66 @@ public class DescribeGraph {
         } else {
             return String.format(
                     "Merge? %s\t+%s\t= %s\t%e  %s",
-                    src.getObject(),
-                    dest.getObject(),
+                    source.getObject(),
+                    destination.getObject(),
                     merged.getObject(),
                     priority,
                     doMerge ? "Yes!" : "No!");
         }
     }
 
+    /**
+     * Describes a merge operation that has been decided upon.
+     *
+     * @param merged the resulting merged {@link ObjectVertex}
+     * @param bestImprovement the {@link TypedEdge} representing the best improvement for merging
+     * @return a string description of the merge operation
+     */
     public String describeMerge(
-            ObjectVertex omMerged, TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement) {
+            ObjectVertex merged, TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement) {
         if (includePayload) {
             return String.format(
                     "Merging %s and %s to %s (%f,%f->%f). Num vertices=%d.",
                     bestImprovement.getFrom().getObject().centerOfGravity(),
                     bestImprovement.getTo().getObject().centerOfGravity(),
-                    omMerged.getObject().centerOfGravity(),
+                    merged.getObject().centerOfGravity(),
                     bestImprovement.getFrom().getPayload(),
                     bestImprovement.getTo().getPayload(),
-                    omMerged.getPayload(),
+                    merged.getPayload(),
                     graph.numberVertices());
         } else {
             return String.format(
                     "Merging %s and %s to %s. Num vertices=%d.",
                     bestImprovement.getFrom().getObject().centerOfGravity(),
                     bestImprovement.getTo().getObject().centerOfGravity(),
-                    omMerged.getObject().centerOfGravity(),
+                    merged.getObject().centerOfGravity(),
                     graph.numberVertices());
         }
     }
 
-    private void describeAllVertices(StringBuilder sb) {
-        sb.append("START Vertices\n");
+    private void describeAllVertices(StringBuilder builder) {
+        builder.append("START Vertices\n");
         for (ObjectVertex vertex : graph.vertexSet()) {
-            sb.append(
+            builder.append(
                     String.format(
                             "%s (%f)%n",
                             vertex.getObject().centerOfGravity(), vertex.getPayload()));
         }
-        sb.append("END Vertices\n");
+        builder.append("END Vertices\n");
     }
 
-    private void describeAllEdges(StringBuilder sb) {
-        sb.append("START Edges\n");
+    private void describeAllEdges(StringBuilder builder) {
+        builder.append("START Edges\n");
         for (TypedEdge<ObjectVertex, PrioritisedVertex> edge : graph.edgeSetUnique()) {
-            sb.append(
+            builder.append(
                     describeEdge(
                             edge.getFrom(),
                             edge.getTo(),
                             edge.getPayload().getVertex(),
                             edge.getPayload().getPriority(),
                             edge.getPayload().isConsiderForMerge()));
-            sb.append("\n");
+            builder.append("\n");
         }
-        sb.append("END Edges");
+        builder.append("END Edges");
     }
 }

@@ -64,18 +64,18 @@ class CalculateIncrementalOperationMapTest {
     @Test
     void testInsertingAndAppending() throws OperationFailedException, FeatureCalculationException {
 
-        int NUM_FIRST = 8;
-        int NUM_ADDITIONAL = 3;
-        int NUM_LESS_THAN_FIRST = NUM_FIRST - 2;
+        int first = 8;
+        int additional = 3;
+        int less_than_first = first - 2;
 
         // Seek a number of objects, where nothing already exists in the cache
-        callMockAndVerify(input, NUM_FIRST, 1, NUM_FIRST);
+        callMockAndVerify(input, first, 1, first);
 
         // Seek an additional number more, given that NUM_FIRST already exists
-        callMockAndVerify(input, NUM_FIRST + NUM_ADDITIONAL, 2, NUM_FIRST + NUM_ADDITIONAL);
+        callMockAndVerify(input, first + additional, 2, first + additional);
 
         // Seek a number we already know is in the cache
-        callMockAndVerify(input, NUM_LESS_THAN_FIRST, 2, NUM_FIRST + NUM_ADDITIONAL);
+        callMockAndVerify(input, less_than_first, 2, first + additional);
     }
 
     @Test

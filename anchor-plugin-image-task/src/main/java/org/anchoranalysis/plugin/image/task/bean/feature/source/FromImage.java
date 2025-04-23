@@ -59,15 +59,17 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
     // START BEAN PROPERTIES
     /**
-     * Optionally defines a energy-stack for feature calculation (if not set, the energy-stack is
+     * Optionally defines an energy-stack for feature calculation (if not set, the energy-stack is
      * considered to be the input stacks).
      */
     @BeanField @OptionalBean @Getter @Setter private StackProvider stackEnergy;
 
     /** Method to generate a thumbnail for images. */
     @BeanField @Getter @Setter private ThumbnailFromStack thumbnail = new ScaleToSize();
+
     // END BEAN PROPERTIES
 
+    /** Creates a new {@link FromImage} instance. */
     public FromImage() {
         super("image");
     }
@@ -98,6 +100,19 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
                 () -> extractThumbnail(calculator.getEnergyStack(), context.isThumbnailsEnabled()));
     }
 
+    @Override
+    protected Optional<String[]> additionalLabelsFor(ProvidesStackInput input) {
+        return Optional.empty();
+    }
+
+    /**
+     * Calculates the results vector and thumbnail for a given input.
+     *
+     * @param calculator the {@link FeatureCalculatorFromProvider} to use for calculation
+     * @param context the {@link FeatureCalculationContext} for calculation
+     * @return a {@link ResultsVector} containing the calculated features
+     * @throws OperationFailedException if the operation fails
+     */
     private ResultsVector calculateResults(
             FeatureCalculatorFromProvider<FeatureInputStack> factory,
             FeatureCalculationContext<FeatureList<FeatureInputStack>> context)
@@ -126,6 +141,15 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
         }
     }
 
+    /**
+     * Extracts a thumbnail from the energy stack.
+     *
+     * @param energyStack the {@link EnergyStack} to extract the thumbnail from
+     * @param thumbnails whether thumbnails are enabled
+     * @return an {@link Optional} containing the {@link DisplayStack} thumbnail if enabled, empty
+     *     otherwise
+     * @throws OperationFailedException if the thumbnail extraction fails
+     */
     private Optional<DisplayStack> extractThumbnail(EnergyStack energyStack, boolean thumbnails)
             throws OperationFailedException {
         if (thumbnails) {
@@ -140,6 +164,14 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
         }
     }
 
+    /**
+     * Creates a {@link FeatureCalculatorFromProvider} for the given input.
+     *
+     * @param input the {@link ProvidesStackInput} to create the calculator for
+     * @param context the {@link FeatureCalculationContext} for calculation
+     * @return a new {@link FeatureCalculatorFromProvider} instance
+     * @throws NamedFeatureCalculateException if the calculator creation fails
+     */
     private FeatureCalculatorFromProvider<FeatureInputStack> createCalculator(
             ProvidesStackInput input,
             FeatureCalculationContext<FeatureList<FeatureInputStack>> context)
@@ -156,10 +188,5 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
         } catch (OperationFailedException e) {
             throw new NamedFeatureCalculateException(e);
         }
-    }
-
-    @Override
-    protected Optional<String[]> additionalLabelsFor(ProvidesStackInput input) {
-        return Optional.empty();
     }
 }

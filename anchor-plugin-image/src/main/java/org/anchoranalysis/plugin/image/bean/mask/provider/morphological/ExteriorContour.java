@@ -51,6 +51,7 @@ public class ExteriorContour extends MaskProviderUnary {
     @BeanField @Getter @Setter private boolean flatten = false;
 
     @BeanField @Getter @Setter private boolean outlineAtBoundary = true;
+
     // END BEAN PROPERTIES
 
     @Override

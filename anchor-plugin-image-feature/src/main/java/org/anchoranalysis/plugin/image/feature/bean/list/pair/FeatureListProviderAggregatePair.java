@@ -68,6 +68,7 @@ public abstract class FeatureListProviderAggregatePair
     /** Method for reducing all pairs into a single value e.g. Mean, Max, Min etc. */
     @BeanField @Getter @Setter @SkipInit
     private FeatureFromList<FeatureInputPairObjects> reduce = new Mean<>();
+
     // END BEAN PROPERTIES
 
     @Override
@@ -75,11 +76,26 @@ public abstract class FeatureListProviderAggregatePair
         return item.get().map(this::createFeatureFor);
     }
 
+    /**
+     * Creates an aggregate feature from individual features for first, second, and merged objects.
+     *
+     * @param first feature for the first object
+     * @param second feature for the second object
+     * @param merged feature for the merged object
+     * @return an aggregate feature combining the three input features
+     */
     protected abstract Feature<FeatureInputPairObjects> createAggregateFeature(
             Feature<FeatureInputPairObjects> first,
             Feature<FeatureInputPairObjects> second,
             Feature<FeatureInputPairObjects> merged);
 
+    /**
+     * Creates a reduced feature from features for the first and second objects.
+     *
+     * @param first feature for the first object
+     * @param second feature for the second object
+     * @return a {@link FeatureFromList} that reduces the two input features
+     */
     protected FeatureFromList<FeatureInputPairObjects> createReducedFeature(
             Feature<FeatureInputPairObjects> first, Feature<FeatureInputPairObjects> second) {
         FeatureFromList<FeatureInputPairObjects> featureWithList =
@@ -89,6 +105,12 @@ public abstract class FeatureListProviderAggregatePair
         return featureWithList;
     }
 
+    /**
+     * Creates a feature for pair objects based on a single object feature.
+     *
+     * @param existing the feature for single objects to base the new feature on
+     * @return a new feature for pair objects
+     */
     private Feature<FeatureInputPairObjects> createFeatureFor(
             Feature<FeatureInputSingleObject> existing) {
         Feature<FeatureInputPairObjects> out =

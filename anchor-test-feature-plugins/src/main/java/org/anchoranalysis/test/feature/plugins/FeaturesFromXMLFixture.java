@@ -45,8 +45,8 @@ import org.anchoranalysis.test.TestLoader;
 /**
  * A fixture for creating feature lists and feature list providers from XML files.
  *
- * <p>This class provides utility methods to load and create feature-related objects
- * from XML configurations for testing purposes.</p>
+ * <p>This class provides utility methods to load and create feature-related objects from XML
+ * configurations for testing purposes.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeaturesFromXMLFixture {
@@ -77,7 +77,8 @@ public class FeaturesFromXMLFixture {
      * Creates a list of named feature list providers from an XML file.
      *
      * @param <T> the type of feature input
-     * @param xmlPath the path to the XML file containing the named feature list provider configurations
+     * @param xmlPath the path to the XML file containing the named feature list provider
+     *     configurations
      * @param loader the test loader to resolve the XML file path
      * @return a list of named feature list providers created from the XML configuration
      * @throws CreateException if there's an error creating the feature list providers

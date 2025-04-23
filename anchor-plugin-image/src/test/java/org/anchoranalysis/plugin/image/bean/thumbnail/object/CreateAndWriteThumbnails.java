@@ -46,20 +46,22 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 
-/**
- * Creates thumbnails from a collection of objects, and writes into a directory.
- *
- * @author owen
- */
+/** Creates thumbnails from a collection of objects, and writes into a directory. */
 @NoArgsConstructor
 class CreateAndWriteThumbnails {
 
+    /** The background stack used for creating thumbnails. */
     private static final Stack BACKGROUND = EnergyStackFixture.create(true, false).asStack();
 
     /**
      * Creates thumbnails from a collection of objects, and writes each thumbnail into a directory.
      *
-     * @throws OperationFailedException
+     * @param writer the {@link WriteThumbnailsIntoDirectory} to use for writing thumbnails
+     * @param objects the {@link ObjectCollection} to create thumbnails from
+     * @param size the {@link SizeXY} of the thumbnails
+     * @param overlappingObjects whether the objects can overlap
+     * @return a {@link List} of {@link DisplayStack} representing the created thumbnails
+     * @throws OperationFailedException if the operation fails
      */
     public static List<DisplayStack> apply(
             WriteThumbnailsIntoDirectory writer,
@@ -84,7 +86,14 @@ class CreateAndWriteThumbnails {
         }
     }
 
-    /** Calculates the thumbnails for a particular batch. */
+    /**
+     * Calculates the thumbnails for a particular batch.
+     *
+     * @param batch the {@link ThumbnailBatch} to create thumbnails from
+     * @param objects the {@link ObjectCollection} to create thumbnails for
+     * @return a {@link List} of {@link DisplayStack} representing the created thumbnails
+     * @throws CreateException if thumbnail creation fails
+     */
     private static List<DisplayStack> thumbnailsFor(
             ThumbnailBatch<ObjectCollection> batch, ObjectCollection objects)
             throws CreateException {
@@ -92,13 +101,24 @@ class CreateAndWriteThumbnails {
                 .mapToList(object -> batch.thumbnailFor(ObjectCollectionFactory.of(object)));
     }
 
-    /** Derives the bounding-boxes from a corresponding {@link ObjectCollection}. */
+    /**
+     * Derives the bounding-boxes from a corresponding {@link ObjectCollection}.
+     *
+     * @param objects the {@link ObjectCollection} to derive bounding boxes from
+     * @return a {@link StreamableCollection} of {@link BoundingBox}
+     */
     private static StreamableCollection<BoundingBox> boundingBoxes(ObjectCollection objects) {
         return new StreamableCollection<>(
                 () -> objects.streamStandardJava().map(ObjectMask::boundingBox));
     }
 
-    /** Creates the bean. */
+    /**
+     * Creates the {@link OutlinePreserveRelativeSize} bean.
+     *
+     * @param size the {@link SizeXY} of the thumbnails
+     * @param overlappingObjects whether the objects can overlap
+     * @return the configured {@link OutlinePreserveRelativeSize} bean
+     */
     private static OutlinePreserveRelativeSize createOutline(
             SizeXY size, boolean overlappingObjects) {
         OutlinePreserveRelativeSize outline = new OutlinePreserveRelativeSize();

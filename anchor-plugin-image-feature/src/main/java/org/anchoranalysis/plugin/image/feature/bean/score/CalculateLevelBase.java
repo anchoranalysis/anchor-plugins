@@ -37,14 +37,19 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/** Base class for calculating a score based on a threshold level derived from a histogram. */
 public abstract class CalculateLevelBase extends SingleChannel {
 
     // START BEAN PROPERTIES
+    /** The method to calculate the threshold level. */
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
 
+    /** The index of the histogram channel to use for calculations. */
     @BeanField @Getter @Setter private int histogramChannelIndex = 0;
+
     // END BEAN PROPERTIES
 
+    /** The calculated threshold level. */
     private int level;
 
     @Override
@@ -66,8 +71,22 @@ public abstract class CalculateLevelBase extends SingleChannel {
         return calculateForVoxel(voxelIntensity, level);
     }
 
+    /**
+     * Performs setup operations before calculation.
+     *
+     * @param histogram the {@link Histogram} to use for setup
+     * @param level the calculated threshold level
+     * @throws OperationFailedException if the setup operation fails
+     */
     protected abstract void beforeCalcSetup(Histogram histogram, int level)
             throws OperationFailedException;
 
+    /**
+     * Calculates a score for a single voxel based on its intensity and the threshold level.
+     *
+     * @param voxelIntensity the intensity of the voxel
+     * @param level the threshold level
+     * @return a score for the voxel
+     */
     protected abstract double calculateForVoxel(int voxelIntensity, int level);
 }

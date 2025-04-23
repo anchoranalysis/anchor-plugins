@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.image.task.bean.feature.source;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -61,7 +60,7 @@ import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
  * <ol>
  *   <li>an image identifier
  *   <li>file extension (or empty if none exists) according to the procedure in {@link
- *       ExtensionUtilities}.
+ *       ExtensionUtilities#extractExtension(String)}.
  *   <li>file creation date
  *   <li>file modification date
  *   <li><i>the results of each feature.</i>
@@ -72,10 +71,12 @@ import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 public class FromImageMetadata
         extends SingleRowPerInput<ImageMetadataInput, FeatureInputImageMetadata> {
 
+    /** Headers for non-group columns in the output. */
     private static final String[] NON_GROUP_HEADERS = {
         "image", "extension", "creationTime", "lastModifiedTime", "acquisitionTime"
     };
 
+    /** Creates a new {@link FromImageMetadata} instance. */
     public FromImageMetadata() {
         super(NON_GROUP_HEADERS);
     }
@@ -115,6 +116,14 @@ public class FromImageMetadata
         return new ResultsVectorWithThumbnail(() -> calculateResults(input, context));
     }
 
+    /**
+     * Calculates the results vector for a given input.
+     *
+     * @param input the {@link ImageMetadataInput} to process
+     * @param context the {@link FeatureCalculationContext} for calculation
+     * @return a {@link ResultsVector} containing the calculated features
+     * @throws OperationFailedException if the operation fails
+     */
     private ResultsVector calculateResults(
             ImageMetadataInput input,
             FeatureCalculationContext<FeatureList<FeatureInputImageMetadata>> context)
@@ -143,7 +152,12 @@ public class FromImageMetadata
         }
     }
 
-    /** Converts a {@link Date} to an (appropriately-formatted) {@link String}. */
+    /**
+     * Converts a {@link ZonedDateTime} to an (appropriately-formatted) {@link String}.
+     *
+     * @param date the {@link ZonedDateTime} to convert
+     * @return a formatted {@link String} representation of the date
+     */
     private String convertDate(ZonedDateTime date) {
         return date.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }

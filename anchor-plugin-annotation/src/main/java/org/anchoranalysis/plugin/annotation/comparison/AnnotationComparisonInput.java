@@ -33,13 +33,31 @@ import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
 
+/**
+ * Input for annotation comparison, containing sources to compare and associated metadata.
+ *
+ * @param <T> type of input from manager.
+ */
 public class AnnotationComparisonInput<T extends InputFromManager>
         extends InputFromManagerDelegate<T> {
 
+    /** The two {@link ComparableSource}s to compare. */
     @Getter private final Tuple2<ComparableSource, ComparableSource> comparers;
+
+    /** Names associated with the two sources being compared. */
     @Getter private final Tuple2<String, String> names;
+
+    /** The {@link StackReader} to use for reading image stacks. */
     @Getter private final StackReader stackReader;
 
+    /**
+     * Creates an annotation comparison input.
+     *
+     * @param input the input from manager.
+     * @param comparers the two {@link ComparableSource}s to compare.
+     * @param names names associated with the two sources being compared.
+     * @param stackReader the {@link StackReader} to use for reading image stacks.
+     */
     public AnnotationComparisonInput(
             T input,
             Tuple2<ComparableSource, ComparableSource> comparers,
@@ -51,7 +69,12 @@ public class AnnotationComparisonInput<T extends InputFromManager>
         this.stackReader = stackReader;
     }
 
-    // Uses a boolean flag to multiplex between comparerLeft and comparerRight
+    /**
+     * Gets one of the two {@link ComparableSource}s based on a boolean flag.
+     *
+     * @param left if true, returns the left comparer; if false, returns the right comparer.
+     * @return the selected {@link ComparableSource}.
+     */
     public ComparableSource getComparerMultiplex(boolean left) {
         if (left) {
             return comparers._1();
@@ -60,6 +83,11 @@ public class AnnotationComparisonInput<T extends InputFromManager>
         }
     }
 
+    /**
+     * Gets the input from manager.
+     *
+     * @return the input of type T.
+     */
     public T getInput() {
         return getDelegate();
     }

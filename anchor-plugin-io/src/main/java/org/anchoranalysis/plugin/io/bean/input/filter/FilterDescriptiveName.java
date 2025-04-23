@@ -56,6 +56,7 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
 
     /** A descriptive-name must contain (case-sensitive) this string. If empty, disabled. */
     @BeanField @AllowEmpty @Getter @Setter private String contains = "";
+
     // END BEAN PROPERTIES
 
     @Override

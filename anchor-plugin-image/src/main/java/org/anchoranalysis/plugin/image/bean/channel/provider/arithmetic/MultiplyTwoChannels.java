@@ -28,8 +28,19 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
 import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase;
 
+/**
+ * Creates a new channel by multiplying corresponding voxels from two input channels.
+ *
+ * <p>This class extends {@link TwoVoxelMappingBase} to perform a pixel-wise multiplication between
+ * two input channels.
+ */
 public class MultiplyTwoChannels extends TwoVoxelMappingBase {
 
+    /**
+     * Constructs a new MultiplyTwoChannels instance.
+     *
+     * <p>Initializes the superclass with a function that multiplies two integers.
+     */
     public MultiplyTwoChannels() {
         super((a, b) -> a * b);
     }

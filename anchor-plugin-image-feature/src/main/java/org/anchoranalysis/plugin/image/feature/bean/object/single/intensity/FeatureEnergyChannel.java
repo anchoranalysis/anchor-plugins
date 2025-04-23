@@ -36,16 +36,14 @@ import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
- * A feature that uses a channel from the energy-stack as identified by an index
+ * A feature that uses a channel from the energy-stack as identified by an index.
  *
  * @author Owen Feehan
  */
 public abstract class FeatureEnergyChannel extends FeatureSingleObject {
 
-    // START BEAN PROPERTIES
     /** Index of channel to use in the energy-stack (0 is the first channel, 1 is second etc.) */
     @BeanField @Getter @Setter private int energyIndex = 0;
-    // END BEAN PROPERTIES
 
     @Override
     public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
@@ -55,6 +53,15 @@ public abstract class FeatureEnergyChannel extends FeatureSingleObject {
         return calculateForChannel(input, channel);
     }
 
+    /**
+     * Calculates the feature value for a specific channel in the energy stack.
+     *
+     * @param input the {@link FeatureCalculationInput} containing the {@link
+     *     FeatureInputSingleObject}
+     * @param channel the {@link Channel} from the energy stack to calculate the feature on
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double calculateForChannel(
             FeatureCalculationInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException;

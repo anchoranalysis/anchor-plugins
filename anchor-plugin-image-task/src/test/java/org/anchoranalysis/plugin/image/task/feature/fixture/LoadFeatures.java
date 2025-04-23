@@ -52,23 +52,23 @@ import org.anchoranalysis.test.feature.plugins.FeaturesFromXMLFixture;
 @RequiredArgsConstructor
 class LoadFeatures<T extends FeatureInput> {
 
+    /** The name used for a single feature when {@link #useSingleFeature(Feature)} is called. */
     private static final String SINGLE_FEATURE_NAME = "someFeature";
 
-    // START REQUIRED ARGUMENTS
     /** A loader for finding XML files. */
     private final TestLoader loader;
 
     /** The filename of a features XML file that is used if no other option is set. */
     private final String filenameWithoutExtension;
-    // END REQUIRED ARGUMENTS
 
-    /** The to use, if set. If empty, the default is used instead. */
+    /** The features to use, if set. If empty, the default is used instead. */
     private Optional<List<NamedBean<FeatureListProvider<T>>>> features = Optional.empty();
 
     /**
-     * Additionally include a shell feature in the "single" features
+     * Uses an alternative XML file to load the feature list.
      *
-     * @param alternativeFilenameWithoutExtension
+     * @param alternativeFilenameWithoutExtension the filename (without extension) of the
+     *     alternative XML file
      */
     public void useAlternativeXMLList(String alternativeFilenameWithoutExtension) {
         features = Optional.of(loadFeatures(loader, alternativeFilenameWithoutExtension));
@@ -80,16 +80,20 @@ class LoadFeatures<T extends FeatureInput> {
      * <p>Any XML-based features are ignored.
      *
      * <p>It does not initialize the feature.
+     *
+     * @param feature the single feature to use
      */
     public void useSingleFeature(Feature<T> feature) {
-
         NamedBean<FeatureListProvider<T>> bean =
                 new NamedBean<>(SINGLE_FEATURE_NAME, new DefineSingle<>(feature));
-
         this.features = Optional.of(Arrays.asList(bean));
     }
 
-    /** Creates the features as a list of providers in named-beans */
+    /**
+     * Creates the features as a list of providers in named-beans.
+     *
+     * @return a list of {@link NamedBean}s containing {@link FeatureListProvider}s
+     */
     public List<NamedBean<FeatureListProvider<T>>> asNamedBean() {
         if (features.isPresent()) {
             return features.get();
@@ -98,7 +102,15 @@ class LoadFeatures<T extends FeatureInput> {
         }
     }
 
-    /** Creates a feature-list associated with object-mask. */
+    /**
+     * Creates a feature-list associated with object-mask.
+     *
+     * @param <S> the type of feature input
+     * @param loader the test loader to use
+     * @param filenameWithoutExtension the filename (without extension) of the XML file containing
+     *     the features
+     * @return a list of {@link NamedBean}s containing {@link FeatureListProvider}s
+     */
     private static <S extends FeatureInput> List<NamedBean<FeatureListProvider<S>>> loadFeatures(
             TestLoader loader, String filenameWithoutExtension) {
         String path = String.format("features/%s.xml", filenameWithoutExtension);

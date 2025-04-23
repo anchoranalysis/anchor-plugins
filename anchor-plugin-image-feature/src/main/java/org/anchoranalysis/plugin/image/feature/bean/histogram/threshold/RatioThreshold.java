@@ -34,10 +34,21 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Calculates the ratio of values in a {@link Histogram} that satisfy a specified threshold
+ * condition.
+ */
 public class RatioThreshold extends FeatureHistogramStatistic {
 
+    /**
+     * The threshold condition to be applied to the histogram values.
+     *
+     * <p>This {@link RelationToThreshold} defines how each value in the histogram should be
+     * compared to a threshold value.
+     */
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private RelationToThreshold threshold;
+
     // END BEAN PROPERTIES
 
     @Override

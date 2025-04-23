@@ -29,6 +29,11 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.WithValueBase;
 
+/**
+ * A feature that raises a constant value to the power of another feature's result.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class ConstantToThePowerOf<T extends FeatureInput> extends WithValueBase<T> {
 
     @Override

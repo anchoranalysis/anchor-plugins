@@ -46,6 +46,7 @@ public class NamedFilesWithDirectory extends NamedFilesBase<FileWithDirectoryInp
     // START BEAN PROPERTIES
     /** The files to use as inputs. */
     @BeanField @Getter @Setter private FilesProviderWithDirectory files;
+
     // END BEAN PROPERTIES
 
     @Override

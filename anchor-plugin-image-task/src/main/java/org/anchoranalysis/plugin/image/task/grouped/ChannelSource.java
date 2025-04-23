@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 /**
  * Extracts a set of {@link Channel}s from a {@link NamedStacks}, optionally resizing.
  *
- * <p>Checks may be applied to make sure all channels have the same-type
+ * <p>Checks may be applied to make sure all channels have the same voxel data-type.
  */
 @RequiredArgsConstructor
 public class ChannelSource {
@@ -58,6 +58,7 @@ public class ChannelSource {
 
     /** How to resize the {@link Channel}s. */
     private final VoxelsResizer resizer;
+
     // END REQUIRED ARGUMENTS
 
     /**
@@ -66,11 +67,11 @@ public class ChannelSource {
      * <p>This {@link Stack} must be single-channeled.
      *
      * @param stackName the name of the {@link Stack} which contains the channel.
-     * @param checkType if true, a call occurs to {@code channelChecker} to ensure all {@link
-     *     Channel}s have consistent voxel data-type.
+     * @param checkType if true, a call occurs to {@link ConsistentChannelChecker} to ensure all
+     *     {@link Channel}s have consistent voxel data-type.
      * @return the extracted {@link Channel}, reused from {@code stackStore}.
-     * @throws OperationFailedException if the {@link Stack} is not single-channeled, or if non
-     *     consistent voxel data-type occurs.
+     * @throws OperationFailedException if the {@link Stack} is not single-channeled, or if
+     *     non-consistent voxel data-type occurs.
      */
     public Channel extractChannel(String stackName, boolean checkType)
             throws OperationFailedException {
@@ -91,6 +92,17 @@ public class ChannelSource {
         }
     }
 
+    /**
+     * Extracts a {@link Channel} from a particular {@link Stack} in {@code stackStore}.
+     *
+     * @param stackName the name of the {@link Stack} which contains the channel.
+     * @param checkType if true, a call occurs to {@link ConsistentChannelChecker} to ensure all
+     *     {@link Channel}s have consistent voxel data-type.
+     * @param index the index of the channel to extract from the {@link Stack}.
+     * @return the extracted {@link Channel}, reused from {@code stackStore}.
+     * @throws OperationFailedException if the {@link Stack} cannot be retrieved, or if
+     *     non-consistent voxel data-type occurs.
+     */
     public Channel extractChannel(String stackName, boolean checkType, int index)
             throws OperationFailedException {
 
@@ -106,6 +118,16 @@ public class ChannelSource {
         }
     }
 
+    /**
+     * Extracts a {@link Channel} from a given {@link Stack}.
+     *
+     * @param stack the {@link Stack} from which to extract the channel.
+     * @param checkType if true, a call occurs to {@link ConsistentChannelChecker} to ensure all
+     *     {@link Channel}s have consistent voxel data-type.
+     * @param index the index of the channel to extract from the {@link Stack}.
+     * @return the extracted {@link Channel}, possibly resized.
+     * @throws OperationFailedException if non-consistent voxel data-type occurs.
+     */
     public Channel extractChannel(Stack stack, boolean checkType, int index)
             throws OperationFailedException {
         Channel channel = stack.getChannel(index);
@@ -117,6 +139,13 @@ public class ChannelSource {
         return maybeResize(channel);
     }
 
+    /**
+     * Optionally resizes a {@link Channel} based on the {@code resizeTo} field.
+     *
+     * @param channel the {@link Channel} to potentially resize.
+     * @return the resized {@link Channel} if {@code resizeTo} is present, otherwise the original
+     *     channel.
+     */
     private Channel maybeResize(Channel channel) {
         if (resizeTo.isPresent()) {
             return channel.resizeXY(resizeTo.get().getWidth(), resizeTo.get().getHeight(), resizer);

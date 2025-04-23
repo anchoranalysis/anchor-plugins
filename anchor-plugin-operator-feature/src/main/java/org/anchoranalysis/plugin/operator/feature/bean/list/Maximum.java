@@ -32,6 +32,11 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * A feature that calculates the maximum value from a list of features.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class Maximum<T extends FeatureInput> extends FeatureFromList<T> {
 
     @Override
@@ -41,9 +46,9 @@ public class Maximum<T extends FeatureInput> extends FeatureFromList<T> {
 
         double maxValue = Double.NaN;
         for (Feature<T> f : getList()) {
-            double val = input.calculate(f);
-            if (Double.isNaN(maxValue) || val > maxValue) {
-                maxValue = val;
+            double value = input.calculate(f);
+            if (Double.isNaN(maxValue) || value > maxValue) {
+                maxValue = value;
             }
         }
         return maxValue;

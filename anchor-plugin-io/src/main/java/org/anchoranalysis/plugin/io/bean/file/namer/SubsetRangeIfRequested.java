@@ -55,6 +55,7 @@ public class SubsetRangeIfRequested extends FileNamer {
 
     /** Character used to split the name into groups. */
     @BeanField @Getter @Setter private String delimiter = "/";
+
     // END BEAN PROPERTIES
 
     @Override

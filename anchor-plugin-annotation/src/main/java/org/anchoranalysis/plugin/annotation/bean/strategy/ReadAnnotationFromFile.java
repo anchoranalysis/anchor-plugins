@@ -35,9 +35,19 @@ import org.anchoranalysis.annotation.io.image.ImageLabelAnnotationReader;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
+/** Utility class for reading {@link ImageLabelAnnotation} from a file. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReadAnnotationFromFile {
 
+    /**
+     * Reads an {@link ImageLabelAnnotation} from a file if it exists.
+     *
+     * @param path the {@link Path} to the file to read from.
+     * @param context the {@link OperationContext} for the read operation.
+     * @return an {@link Optional} containing the {@link ImageLabelAnnotation} if the file exists
+     *     and can be read, or an empty Optional otherwise.
+     * @throws InputReadFailedException if an error occurs while reading the file.
+     */
     public static Optional<ImageLabelAnnotation> readCheckExists(
             Path path, OperationContext context) throws InputReadFailedException {
 
@@ -48,6 +58,15 @@ public class ReadAnnotationFromFile {
         }
     }
 
+    /**
+     * Reads an {@link ImageLabelAnnotation} from a file, assuming the file exists.
+     *
+     * @param path the {@link Path} to the file to read from.
+     * @param context the {@link OperationContext} for the read operation.
+     * @return an {@link Optional} containing the {@link ImageLabelAnnotation} if it can be read, or
+     *     an empty Optional otherwise.
+     * @throws InputReadFailedException if an error occurs while reading the file.
+     */
     public static Optional<ImageLabelAnnotation> readAssumeExists(
             Path path, OperationContext context) throws InputReadFailedException {
         ImageLabelAnnotationReader reader = new ImageLabelAnnotationReader();

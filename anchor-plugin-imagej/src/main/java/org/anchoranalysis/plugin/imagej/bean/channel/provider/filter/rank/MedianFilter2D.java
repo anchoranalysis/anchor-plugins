@@ -29,8 +29,14 @@ package org.anchoranalysis.plugin.imagej.bean.channel.provider.filter.rank;
 import ij.plugin.filter.RankFilters;
 import org.anchoranalysis.plugin.imagej.bean.channel.provider.WithFilterBase;
 
+/** Applies a 2D median filter to a channel using ImageJ's {@link RankFilters}. */
 public class MedianFilter2D extends WithFilterBase {
 
+    /**
+     * Creates a new {@link MedianFilter2D} instance.
+     *
+     * <p>Initializes the filter with the MEDIAN operation from {@link RankFilters}.
+     */
     public MedianFilter2D() {
         super(RankFilters.MEDIAN);
     }

@@ -55,11 +55,15 @@ import org.junit.jupiter.api.Test;
 abstract class GroupedStackTestBase extends StackIOTestBase {
 
     /** The input-fixture used in the tests. */
-    protected static InputFixture INPUT_FIXTURE = InputFixtureFactory.createSixColors();
+    protected static final InputFixture INPUT_FIXTURE = InputFixtureFactory.createSixColors();
+
     /**
      * Resizes the input images to a common size.
      *
      * <p>This means the input images have identical sizes.
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
      */
     @Test
     void testResize() throws OperationFailedException, ImageIOException {
@@ -69,6 +73,9 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
     /**
      * Adds an additional three-channeled input with <i>unsigned-short</i> voxel-type, so the inputs
      * vary in voxel-type.
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
      */
     @Test
     void testMixedType() throws OperationFailedException, ImageIOException {
@@ -86,6 +93,9 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
     /**
      * Adds an additional single-channeled input, so the inputs do not all have the same number of
      * channels.
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
      */
     @Test
     void testMixedNumberChannels() throws OperationFailedException, ImageIOException {
@@ -104,6 +114,9 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
     /**
      * Adds an additional three-channeled input, but which has {@code rgb==false} unlike the other
      * inputs.
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
      */
     @Test
     void testMixedRGB() throws OperationFailedException, ImageIOException {
@@ -118,7 +131,12 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
                                                 UnsignedByteVoxelType.INSTANCE, false))));
     }
 
-    /** Resizes the input images to a common size, while also using <b>groups</b> */
+    /**
+     * Resizes the input images to a common size, while also using <b>groups</b>
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
+     */
     @Test
     void testGroups() throws OperationFailedException, ImageIOException {
         doTest(true, true, Optional.empty());
@@ -210,7 +228,13 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
      */
     protected abstract String subdirectoryNotResized();
 
-    /** Creates the task to be tested, including setting group / resize options. */
+    /**
+     * Creates the task to be tested, including setting group / resize options.
+     *
+     * @param resizeTo whether to resize the inputs
+     * @param groups whether to use grouping
+     * @return the created task
+     */
     private GroupedStackBase<?, ?> createTaskWithOptions(boolean resizeTo, boolean groups) {
         GroupedStackBase<?, ?> task = createTask();
         task.setGroup(groups ? new RemoveLastElement() : new WithoutGrouping());
@@ -218,7 +242,13 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
         return task;
     }
 
-    /** Creates a new list that adds a prefix to each item in an existing list. */
+    /**
+     * Creates a new list that adds a prefix to each item in an existing list.
+     *
+     * @param prefix the prefix to add to each string
+     * @param list the list of strings to prepend to
+     * @return a new list with the prefix added to each string
+     */
     protected static List<String> prependStrings(String prefix, List<String> list) {
         return FunctionalList.mapToList(list, element -> prefix + element);
     }

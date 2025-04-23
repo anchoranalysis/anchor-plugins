@@ -39,14 +39,12 @@ import org.anchoranalysis.spatial.axis.AxisConverter;
 /**
  * Dimensions-calculation for one specific axis only.
  *
- * @author Owen Feehan
  * @param <T> feature-input-type
  */
 public abstract class ForSpecificAxis<T extends FeatureInputEnergy> extends FromDimensionsBase<T> {
 
-    // START BEAN PARAMETERS
+    /** The axis to perform the calculation on. Valid values are "x", "y", or "z". */
     @BeanField @Getter @Setter private String axis = "x";
-    // END BEAN PARAMETERS
 
     @Override
     protected double calculateFromDimensions(Dimensions dim) throws FeatureCalculationException {
@@ -57,6 +55,14 @@ public abstract class ForSpecificAxis<T extends FeatureInputEnergy> extends From
         }
     }
 
+    /**
+     * Calculates a feature value for a specific axis of the given dimensions.
+     *
+     * @param dimensions the {@link Dimensions} to calculate from
+     * @param axis the {@link Axis} to perform the calculation on
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double calculateForAxis(Dimensions dimensions, Axis axis)
             throws FeatureCalculationException;
 

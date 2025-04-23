@@ -42,11 +42,18 @@ import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithoutDirectory;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 
+/**
+ * Provides files associated with annotations.
+ *
+ * @param <T> the type of {@link AnnotatorStrategy} used.
+ */
 public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProviderWithoutDirectory {
 
     // START BEAN PROPERTIES
+    /** The annotation input manager. */
     @BeanField @Getter @Setter
     private AnnotationInputManager<NamedChannelsInputPart, T> annotations;
+
     // END BEAN PROPERTIES
 
     @Override

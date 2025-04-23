@@ -48,6 +48,7 @@ public class CreateNew extends FromDimensionsBase {
 
     /** If True creates an unsigned short-image */
     @BeanField @Getter @Setter private boolean createShort;
+
     // END BEAN PROPERTIES
 
     @Override

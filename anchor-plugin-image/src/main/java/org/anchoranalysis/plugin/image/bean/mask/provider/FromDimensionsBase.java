@@ -36,10 +36,13 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
 
+/** Base class for {@link MaskProvider}s that create a mask based on given dimensions. */
 public abstract class FromDimensionsBase extends MaskProvider {
 
     // START BEAN PROPERTIES
+    /** Provider for the dimensions used to create the mask. Defaults to {@link GuessDimensions}. */
     @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
+
     // END BEAN PROPERTIES
 
     @Override
@@ -47,6 +50,13 @@ public abstract class FromDimensionsBase extends MaskProvider {
         return createFromDimensions(dimensions.get());
     }
 
+    /**
+     * Creates a {@link Mask} from the given {@link Dimensions}.
+     *
+     * @param dimensions the dimensions to use for creating the mask
+     * @return the created mask
+     * @throws ProvisionFailedException if the mask creation fails
+     */
     protected abstract Mask createFromDimensions(Dimensions dimensions)
             throws ProvisionFailedException;
 }

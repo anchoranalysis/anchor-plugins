@@ -42,60 +42,127 @@ import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.Test;
 
+/** Base class for testing {@link ScaleImage} tasks. */
 public abstract class ScaleImageTestBase extends StackIOTestBase {
 
+    /**
+     * Tests scaling with a fixed width.
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
+     * @throws SuggestionFormatException if there's an issue with the size suggestion format
+     */
     @Test
     void testFixedWidth()
             throws OperationFailedException, ImageIOException, SuggestionFormatException {
         doTest(false, "fixedWidth", ImageSizeSuggestionFactory.create("800x"));
     }
 
+    /**
+     * Tests scaling with a fixed height.
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
+     * @throws SuggestionFormatException if there's an issue with the size suggestion format
+     */
     @Test
     void testFixedHeight()
             throws OperationFailedException, ImageIOException, SuggestionFormatException {
         doTestBoth("fixedHeight", ImageSizeSuggestionFactory.create("x200"));
     }
 
+    /**
+     * Tests scaling with both fixed width and height.
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
+     * @throws SuggestionFormatException if there's an issue with the size suggestion format
+     */
     @Test
     void testFixedWidthAndHeight()
             throws OperationFailedException, ImageIOException, SuggestionFormatException {
         doTestBoth("fixedWidthAndHeight", ImageSizeSuggestionFactory.create("100x200"));
     }
 
+    /**
+     * Tests scaling while preserving aspect ratio.
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
+     * @throws SuggestionFormatException if there's an issue with the size suggestion format
+     */
     @Test
     void testPreserveAspectRatio()
             throws OperationFailedException, ImageIOException, SuggestionFormatException {
         doTestBoth("preserveAspectRatio", ImageSizeSuggestionFactory.create("100x200+"));
     }
 
+    /**
+     * Tests downscaling.
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
+     * @throws SuggestionFormatException if there's an issue with the size suggestion format
+     */
     @Test
     void testDownscale()
             throws OperationFailedException, ImageIOException, SuggestionFormatException {
         doTestBoth("downscale", ImageSizeSuggestionFactory.create("0.5"));
     }
 
+    /**
+     * Tests upscaling.
+     *
+     * @throws OperationFailedException if the operation fails
+     * @throws ImageIOException if there's an issue with image I/O
+     * @throws SuggestionFormatException if there's an issue with the size suggestion format
+     */
     @Test
     void testUpscale()
             throws OperationFailedException, ImageIOException, SuggestionFormatException {
         doTestBoth("upscale", ImageSizeSuggestionFactory.create("1.5"));
     }
 
-    /** Creates the task that will be tested. */
+    /**
+     * Creates the task that will be tested.
+     *
+     * @return the created {@link ScaleImage} task
+     */
     protected abstract ScaleImage<?> createTask();
 
     /**
      * The name of the directory in test-resources where the expected-outputs for this test are
      * placed.
+     *
+     * @return the directory name
      */
     protected abstract String resourcesDirectory();
 
-    /** Do the test on both binary (binary mask) and non-binary images (RGB). */
+    /**
+     * Do the test on both binary (binary mask) and non-binary images (RGB).
+     *
+     * @param expectedOutputSubdirectory the subdirectory for expected output
+     * @param suggestion the {@link ImageSizeSuggestion} to use
+     * @throws ImageIOException if there's an issue with image I/O
+     * @throws OperationFailedException if the operation fails
+     * @throws SuggestionFormatException if there's an issue with the size suggestion format
+     */
     private void doTestBoth(String expectedOutputSubdirectory, ImageSizeSuggestion suggestion)
             throws ImageIOException, OperationFailedException, SuggestionFormatException {
         doTest(false, expectedOutputSubdirectory, suggestion);
         doTest(true, expectedOutputSubdirectory, suggestion);
     }
 
+    /**
+     * Performs the actual test for scaling images.
+     *
+     * @param binary whether to use binary images
+     * @param expectedOutputSubdirectory the subdirectory for expected output
+     * @param suggestion the {@link ImageSizeSuggestion} to use
+     * @throws ImageIOException if there's an issue with image I/O
+     * @throws OperationFailedException if the operation fails
+     * @throws SuggestionFormatException if there's an issue with the size suggestion format
+     */
     @SuppressWarnings("unchecked")
     private void doTest(
             boolean binary, String expectedOutputSubdirectory, ImageSizeSuggestion suggestion)

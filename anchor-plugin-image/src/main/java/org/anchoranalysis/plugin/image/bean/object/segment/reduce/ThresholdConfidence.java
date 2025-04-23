@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -81,6 +80,7 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
      * separation. See class javadoc.
      */
     @BeanField @Getter @Setter private int thresholdNumberObjectsGlobal = 20;
+
     // END BEAN PROPERTIES
 
     /**
@@ -104,7 +104,7 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
         List<LabelledWithConfidence<ObjectMask>> elementsFiltered =
                 elements.stream()
                         .filter(withConfidence -> withConfidence.getConfidence() >= minConfidence)
-                        .collect(Collectors.toList());
+                        .toList();
 
         if (elementsFiltered.isEmpty()) {
             // An empty input list produces an outcome where no elements are retained (because none

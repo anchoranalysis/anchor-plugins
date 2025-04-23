@@ -32,8 +32,9 @@ import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
 /**
- * Expresses the number of intersecting pixels between two objects as a ratio to something else
- * (denominator)
+ * Expresses the number of intersecting pixels between two objects as a ratio to a denominator.
+ *
+ * <p>The denominator is calculated by the abstract method {@link #calculateDenominator}.
  *
  * @author Owen Feehan
  */
@@ -49,5 +50,11 @@ public abstract class OverlapRelative extends FeaturePairObjects {
                 inputSessionless, () -> calculateDenominator(inputSessionless));
     }
 
+    /**
+     * Calculates the denominator for the overlap ratio.
+     *
+     * @param input the {@link FeatureInputPairObjects} containing the two objects
+     * @return the calculated denominator value
+     */
     protected abstract int calculateDenominator(FeatureInputPairObjects input);
 }

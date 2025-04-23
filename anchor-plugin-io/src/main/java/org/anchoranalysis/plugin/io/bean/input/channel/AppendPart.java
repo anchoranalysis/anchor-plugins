@@ -62,6 +62,7 @@ class AppendPart extends NamedChannelsInputPart {
 
     /** Recording the execution-time of each operation. */
     private final ExecutionTimeRecorder executionTimeRecorder;
+
     // END: REQUIRED ARGUMENTS
 
     /**

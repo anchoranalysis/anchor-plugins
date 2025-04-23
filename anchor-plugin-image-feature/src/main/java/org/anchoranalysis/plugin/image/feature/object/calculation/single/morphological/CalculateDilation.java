@@ -34,9 +34,22 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateObjectMask;
 
+/**
+ * Calculates the dilation of an {@link ObjectMask}.
+ *
+ * <p>This class extends {@link CalculateObjectMask} to perform dilation operations on object masks.
+ */
 @EqualsAndHashCode(callSuper = true)
 public class CalculateDilation extends CalculateObjectMask {
 
+    /**
+     * Creates a new {@link ResolvedPart} for calculating dilation.
+     *
+     * @param cache the {@link CalculationPartResolver} to use for caching
+     * @param iterations the number of dilation iterations to perform
+     * @param do3D whether to perform 3D dilation (true) or 2D dilation (false)
+     * @return a {@link ResolvedPart} for the dilation calculation
+     */
     public static ResolvedPart<ObjectMask, FeatureInputSingleObject> of(
             CalculationPartResolver<FeatureInputSingleObject> cache, int iterations, boolean do3D) {
         ResolvedPartMap<ObjectMask, FeatureInputSingleObject, Integer> map =
@@ -45,6 +58,12 @@ public class CalculateDilation extends CalculateObjectMask {
         return cache.search(new CalculateDilation(iterations, map));
     }
 
+    /**
+     * Private constructor for {@link CalculateDilation}.
+     *
+     * @param iterations the number of dilation iterations to perform
+     * @param map the {@link ResolvedPartMap} for caching dilation results
+     */
     private CalculateDilation(
             int iterations, ResolvedPartMap<ObjectMask, FeatureInputSingleObject, Integer> map) {
         super(iterations, map);

@@ -55,6 +55,7 @@ public class RepeatSlice extends MaskProviderUnary {
 
     /** Which slice to use from {@code mask} */
     @BeanField @Getter @Setter private int sliceIndex = 0;
+
     // END BEAN PROPERTIES
 
     @Override

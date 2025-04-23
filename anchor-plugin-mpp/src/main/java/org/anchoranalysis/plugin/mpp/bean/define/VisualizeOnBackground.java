@@ -60,6 +60,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 
     // If true, backgroundID refers to a Stack, otherwise it's a Channel
     @BeanField @Getter @Setter private boolean stackBackground = false;
+
     // END BEAN PROPERTIES
 
     @Override

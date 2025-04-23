@@ -47,6 +47,7 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean includeZ = false;
+
     // END BEAN PROPERTIES
 
     @Override

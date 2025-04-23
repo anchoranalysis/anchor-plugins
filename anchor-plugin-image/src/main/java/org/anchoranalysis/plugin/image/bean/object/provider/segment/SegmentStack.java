@@ -51,6 +51,7 @@ public class SegmentStack<T extends InferenceModel> extends ObjectCollectionProv
 
     /** The segmentation procedure. */
     @Getter @Setter @BeanField private SegmentStackIntoObjectsPooled<T> segment;
+
     // END BEAN PROPERTIES
 
     @Override

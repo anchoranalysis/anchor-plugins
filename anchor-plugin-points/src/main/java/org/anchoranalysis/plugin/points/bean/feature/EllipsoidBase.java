@@ -37,14 +37,18 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.plugin.points.calculate.ellipsoid.CalculateEllipsoidLeastSquares;
 
+/**
+ * Base class for features that calculate properties of an {@link Ellipsoid} fitted to an object.
+ */
 public abstract class EllipsoidBase extends FeatureSingleObject {
 
     /** If fewer voxels exist in an object than this, it is assumed to be perfectly ellipsoidal */
     private static final int MINIMUM_NUMBER_VOXELS = 12;
 
     // START BEAN PROPERTIES
-    /** Iff true, surpresses covariance in the z-direction. */
+    /** If true, suppresses covariance in the z-direction. */
     @BeanField @Getter @Setter private boolean suppressZ = false;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -60,9 +64,17 @@ public abstract class EllipsoidBase extends FeatureSingleObject {
 
         Ellipsoid ellipsoid = CalculateEllipsoidLeastSquares.of(input, suppressZ);
 
-        return calc(input.get(), ellipsoid);
+        return calculateWithEllipsoid(input.get(), ellipsoid);
     }
 
-    protected abstract double calc(FeatureInputSingleObject input, Ellipsoid me)
-            throws FeatureCalculationException;
+    /**
+     * Calculates a feature value based on the fitted {@link Ellipsoid}.
+     *
+     * @param input the input object
+     * @param ellipsoid the fitted ellipsoid
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the calculation fails
+     */
+    protected abstract double calculateWithEllipsoid(
+            FeatureInputSingleObject input, Ellipsoid ellipsoid) throws FeatureCalculationException;
 }

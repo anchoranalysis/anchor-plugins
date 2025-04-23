@@ -48,6 +48,7 @@ public class Quantile extends CalculateLevel {
     @BeanField @Getter @Setter private double quantile = 0.5; // NOSONAR
 
     @BeanField @Getter @Setter private boolean addOne = false;
+
     // END BEAN PROPERTIES
 
     @Override

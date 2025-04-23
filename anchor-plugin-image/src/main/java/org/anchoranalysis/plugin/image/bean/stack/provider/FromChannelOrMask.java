@@ -45,7 +45,7 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**
- * Creates a stack from a channel or mask (reusing the voxel buffers)
+ * Creates a {@link Stack} from a {@link Channel} or {@link Mask} (reusing the voxel buffers).
  *
  * @author Owen Feehan
  */
@@ -59,10 +59,18 @@ public class FromChannelOrMask extends StackProvider {
     /** A mask that is provided to the stack. Either this or {@code channel} must be set. */
     @BeanField @OptionalBean @Getter @Setter private Provider<Mask> mask;
 
-    /** If true, the output contains three channels (the input and two duplicates) instead of one */
+    /**
+     * If true, the output contains three channels (the input and two duplicates) instead of one.
+     */
     @BeanField @Getter @Setter private boolean rgb = false;
+
     // END BEAN PROPERTIES
 
+    /**
+     * Creates a new instance with a specified channel provider.
+     *
+     * @param channel the {@link ChannelProvider} to use.
+     */
     public FromChannelOrMask(ChannelProvider channel) {
         this.channel = channel;
     }
@@ -82,7 +90,12 @@ public class FromChannelOrMask extends StackProvider {
         return createStackFromChannel(channelFromSource());
     }
 
-    /** Creates either a grayscale or RGB stack from the channel */
+    /**
+     * Creates either a grayscale or RGB stack from the channel.
+     *
+     * @param channel the {@link Channel} to create the stack from.
+     * @return a new {@link Stack} containing either one or three channels.
+     */
     private Stack createStackFromChannel(Channel channel) {
         if (rgb) {
             try {
@@ -95,7 +108,12 @@ public class FromChannelOrMask extends StackProvider {
         }
     }
 
-    /** Identifies a channel from one of two sources */
+    /**
+     * Identifies a channel from one of two sources (channel or mask).
+     *
+     * @return the identified {@link Channel}.
+     * @throws ProvisionFailedException if the channel cannot be obtained.
+     */
     private Channel channelFromSource() throws ProvisionFailedException {
         if (channel != null) {
             return channel.get();

@@ -35,7 +35,13 @@ import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.plugin.points.calculate.ellipse.CalculateEllipseLeastSquares;
 import org.anchoranalysis.plugin.points.calculate.ellipse.ObjectWithEllipse;
 
-// Calculates the ellipticity of an object-mask (on the COG slice if it's a zstack)
+/**
+ * Calculates the ellipticity of an {@link ObjectMask} (on the center of gravity slice if it's a
+ * z-stack).
+ *
+ * <p>Ellipticity is a measure of how closely the object resembles an ellipse. A value of 1.0
+ * indicates a perfect ellipse, while lower values indicate deviations from an elliptical shape.
+ */
 public class Ellipticity extends FeatureSingleObject {
 
     /** If fewer voxels exist than this, an object is deemed to be perfectly elliptical */

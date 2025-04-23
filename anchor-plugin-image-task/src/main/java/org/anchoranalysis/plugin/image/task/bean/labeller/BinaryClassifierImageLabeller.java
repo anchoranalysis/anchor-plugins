@@ -45,19 +45,33 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculatorFromProvider;
 
+/** Labels images using a binary classifier. */
 public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
 
     // START BEAN PROPERTIES
+    /** Provider for the classifier feature list. */
     @BeanField @SkipInit @Getter @Setter
     private FeatureListProvider<FeatureInputStack> classifierProvider;
 
+    /** List of named feature list providers for additional features. */
     @BeanField @NonEmpty @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeatures =
             new ArrayList<>(0);
 
+    /** Provider for the energy stack. */
     @BeanField @Getter @Setter private StackProvider stackEnergy;
+
     // END BEAN PROPERTIES
 
+    /**
+     * Determines the label for a given input image.
+     *
+     * @param sharedState shared state (unused in this implementation)
+     * @param input the input image provider
+     * @param context the input/output context
+     * @return the label ("positive" or "negative") based on the classification result
+     * @throws OperationFailedException if the labeling operation fails
+     */
     @Override
     public String labelFor(
             NoSharedState sharedState, ProvidesStackInput input, InputOutputContext context)

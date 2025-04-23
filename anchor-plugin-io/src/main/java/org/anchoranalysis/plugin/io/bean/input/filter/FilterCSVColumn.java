@@ -59,6 +59,7 @@ public class FilterCSVColumn<T extends InputFromManager> extends InputManagerUna
     @BeanField @Getter @Setter private DerivePath csvFilePath;
 
     @BeanField @Getter @Setter private String match;
+
     // END BEAN PROPERTIES
 
     @Override

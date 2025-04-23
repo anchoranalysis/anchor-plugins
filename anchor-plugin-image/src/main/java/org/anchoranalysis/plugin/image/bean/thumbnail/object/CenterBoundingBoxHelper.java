@@ -35,7 +35,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.point.Tuple3i;
 
 /**
- * Derives a new centered bounding-box (of a particular size) from an existing bounding-box
+ * Derives a new centered bounding-box (of a particular size) from an existing bounding-box.
  *
  * @author Owen Feehan
  */
@@ -44,17 +44,17 @@ class CenterBoundingBoxHelper {
 
     /**
      * Derives a new centered bounding-box (of a particular size) from an existing bounding-box
-     * WITHOUT going outside scene boundaries
+     * WITHOUT going outside scene boundaries.
      *
      * <p>The algorithm tries to maximally center the existing bounding-box in each dimension, but
      * will push it left, right, up, down etc. to avoid exceeding the scene boundaries.
      *
-     * @param boxToBeCentered
-     * @param targetSize
+     * @param boxToBeCentered the {@link BoundingBox} to be centered.
+     * @param targetSize the desired size of the new bounding-box.
      * @param sceneExtent defines the boundaries of the scene.
-     * @return a bounding-box of size {@code targetSize} entirely containing {@code
+     * @return a {@link BoundingBox} of size {@code targetSize} entirely containing {@code
      *     boxToBeCentered}, as centered as possible.
-     * @throws OperationFailedException if the box to centered is larger than the target size
+     * @throws OperationFailedException if the box to be centered is larger than the target size.
      */
     public static BoundingBox deriveCenteredBoxWithSize(
             BoundingBox boxToBeCentered, Extent targetSize, Extent sceneExtent)
@@ -65,7 +65,7 @@ class CenterBoundingBoxHelper {
         ReadableTuple3i targetSizeAsTuple = targetSize.asTuple();
 
         // How much does the centered box need to be pushed back ideally, to meet the targetSize,
-        // and becentered?
+        // and be centered?
         Tuple3i idealShiftDown = idealShiftDown(boxToBeCentered, targetSizeAsTuple);
 
         // Check if this goes over the bottom boundary, and push up if necessary
@@ -76,6 +76,13 @@ class CenterBoundingBoxHelper {
         return pushDownIfNecessary(cornerLeft, targetSizeAsTuple, sceneExtent);
     }
 
+    /**
+     * Calculates the ideal shift down for centering the bounding box.
+     *
+     * @param boxToBeCentered the {@link BoundingBox} to be centered.
+     * @param targetSizeAsTuple the target size as a {@link ReadableTuple3i}.
+     * @return a {@link Tuple3i} representing the ideal shift down.
+     */
     private static Tuple3i idealShiftDown(
             BoundingBox boxToBeCentered, ReadableTuple3i targetSizeAsTuple) {
         // How much does the centered box need to grow in each dimension, to meet the targetSize?
@@ -88,16 +95,29 @@ class CenterBoundingBoxHelper {
         return difference;
     }
 
+    /**
+     * Pushes the corner up if it's below zero in any dimension.
+     *
+     * @param cornerLeft the {@link Point3i} representing the left corner.
+     */
     private static void pushUpIfNecessary(Point3i cornerLeft) {
         // If we've gone less than 0 in any dimension, then we correct by pushing the value up
         Point3i toSubtract = keepOnlyNegative(cornerLeft);
         cornerLeft.subtract(toSubtract);
     }
 
+    /**
+     * Pushes the bounding box down if it exceeds the scene extent.
+     *
+     * @param cornerLeft the {@link Point3i} representing the left corner.
+     * @param targetSizeAsTuple the target size as a {@link ReadableTuple3i}.
+     * @param sceneExtent the {@link Extent} of the scene.
+     * @return a new {@link BoundingBox} after pushing down if necessary.
+     */
     private static BoundingBox pushDownIfNecessary(
             Point3i cornerLeft, ReadableTuple3i targetSizeAsTuple, Extent sceneExtent) {
 
-        // The hypothethical right-corner
+        // The hypothetical right-corner
         Point3i cornerRight = Point3i.immutableAdd(cornerLeft, targetSizeAsTuple);
 
         // If we've gone beyond the scene extent in any dimension, then we correct by pushing the
@@ -114,7 +134,12 @@ class CenterBoundingBoxHelper {
         return BoundingBox.createReuse(cornerLeft, cornerRight);
     }
 
-    /** Creates a new point where negative-values are retained, and non-negative values are zero */
+    /**
+     * Creates a new point where negative-values are retained, and non-negative values are zero.
+     *
+     * @param point the {@link Point3i} to process.
+     * @return a new {@link Point3i} with only negative values retained.
+     */
     private static Point3i keepOnlyNegative(Point3i point) {
         return new Point3i(
                 negativeOrZero(point.x()), negativeOrZero(point.y()), negativeOrZero(point.z()));
@@ -122,7 +147,11 @@ class CenterBoundingBoxHelper {
 
     /**
      * Creates a new point where values at the scene-extent's boundary or beyond (the excess) are
-     * kept, and any values below these boundaries are set to 0
+     * kept, and any values below these boundaries are set to 0.
+     *
+     * @param point the {@link Point3i} to process.
+     * @param sceneExtent the {@link Extent} of the scene.
+     * @return a new {@link Point3i} with only excess values retained.
      */
     private static Point3i keepOnlyExcess(Point3i point, Extent sceneExtent) {
         return new Point3i(
@@ -131,6 +160,12 @@ class CenterBoundingBoxHelper {
                 keepOnlyExcess(point.z(), sceneExtent.z()));
     }
 
+    /**
+     * Returns the value if it's negative, otherwise returns zero.
+     *
+     * @param value the value to check.
+     * @return the value if negative, otherwise zero.
+     */
     private static int negativeOrZero(int value) {
         if (value < 0) {
             return value;
@@ -139,6 +174,13 @@ class CenterBoundingBoxHelper {
         }
     }
 
+    /**
+     * Returns the excess of a value beyond a boundary, or zero if not exceeding.
+     *
+     * @param value the value to check.
+     * @param boundary the boundary to compare against.
+     * @return the excess beyond the boundary, or zero.
+     */
     private static int keepOnlyExcess(int value, int boundary) {
         if (value > boundary) {
             return value - boundary;
@@ -147,7 +189,14 @@ class CenterBoundingBoxHelper {
         }
     }
 
-    /** Check that the arguments confirm to expectations/ */
+    /**
+     * Checks that the arguments conform to expectations.
+     *
+     * @param boxToBeCentered the {@link BoundingBox} to be centered.
+     * @param targetSize the desired size of the new bounding-box.
+     * @param sceneExtent defines the boundaries of the scene.
+     * @throws OperationFailedException if the arguments do not meet the expected conditions.
+     */
     private static void checkArguments(
             BoundingBox boxToBeCentered, Extent targetSize, Extent sceneExtent)
             throws OperationFailedException {

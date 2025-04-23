@@ -56,6 +56,7 @@ public class ScaleToSize extends ThumbnailFromStack {
 
     /** How to convert an image to be displayed to the user. */
     @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
+
     // END BEAN PROPERTIES
 
     private VoxelsResizer resizerCreated;

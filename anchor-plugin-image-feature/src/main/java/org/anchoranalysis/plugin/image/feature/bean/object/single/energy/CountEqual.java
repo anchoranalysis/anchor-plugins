@@ -34,12 +34,21 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/** Counts the number of voxels in an object that have a specific intensity value in a channel. */
 public class CountEqual extends SpecificEnergyChannelBase {
 
-    // START BEAN PROPERTIES
+    /** The intensity value to count. Defaults to the 'on' value of {@link BinaryValuesInt}. */
     @BeanField @Getter @Setter private int value = BinaryValuesInt.getDefault().getOn();
-    // END BEAN PROPERTIES
 
+    /**
+     * Calculates the number of voxels in the object that have the specified intensity value in the
+     * channel.
+     *
+     * @param object the {@link ObjectMask} defining the region of interest
+     * @param channel the {@link Channel} to analyze
+     * @return the count of voxels with the specified intensity value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     @Override
     protected double calculateWithChannel(ObjectMask object, Channel channel)
             throws FeatureCalculationException {

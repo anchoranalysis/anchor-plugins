@@ -48,6 +48,7 @@ public class IfObjectFilter extends IfPredicateBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectFilter filter;
+
     // END BEAN PROPERTIES
 
     @Override

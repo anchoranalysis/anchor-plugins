@@ -3,53 +3,53 @@
   <parent>
     <groupId>org.anchoranalysis.anchor</groupId>
     <artifactId>anchor-parent-plugins</artifactId>
-    <version>0.0.11-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>anchor-test-experiment</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <description>Test fixtures and utilities have dependencies on anchor-experiment.</description>
     <dependencies>
    
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test</artifactId>
-	  <version>[0.3.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test-image</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	
    	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>[0.3.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-output</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 
    	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp-io</artifactId>
-	  <version>[0.2.1,1.0.0)</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-experiment</artifactId>
-  	  <version>[0.2.1,1.0.0)</version>
+  	  <version>1.0.0-SNAPSHOT</version>
   	</dependency>
 
     <dependency>

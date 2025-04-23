@@ -32,8 +32,12 @@ import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 /**
- * Subtracts each voxel from the maximum value for the channel's data type (e.g. 255 for unsigned
- * 8-bit)
+ * Inverts the intensity values of a {@link Channel} by subtracting each voxel from the maximum
+ * value for the channel's data type.
+ *
+ * <p>For example, in an unsigned 8-bit channel, each voxel value is subtracted from 255.
+ *
+ * <p>This operation is performed in-place, modifying the input channel.
  *
  * @author Owen Feehan
  */

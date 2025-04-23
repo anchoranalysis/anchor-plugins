@@ -44,6 +44,7 @@ class AxisLengthEstimator {
      * href="http://stackoverflow.com/questions/1711784/computing-object-statistics-from-the-second-central-moments">Stackoverflow
      * post</a>
      *
+     * @param eigenvalue the {@link Double} eigenvalue to be normalized
      * @return an estimate of the axis-length, derived from {@code eigenvalue}.
      */
     public static double fromNormalizedEigenvalue(double eigenvalue) {

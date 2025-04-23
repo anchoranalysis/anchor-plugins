@@ -42,6 +42,7 @@ public class RemoveMatching extends FilesProviderUnary {
     // START BEAN PROPERTIES
     /** If a path matches a regular expression it is removed. */
     @BeanField @Getter @Setter private RegEx regEx;
+
     // END BEAN PROPERTIES
 
     @Override

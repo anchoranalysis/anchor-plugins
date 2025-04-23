@@ -49,6 +49,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
+/** Handles flattening and scaling of objects and stacks for thumbnail generation. */
 @RequiredArgsConstructor
 class FlattenAndScaler {
 
@@ -56,7 +57,9 @@ class FlattenAndScaler {
     /** Scaling-factor to apply to objects and stacks. */
     @Getter private final ScaleFactor scaleFactor;
 
+    /** The resizer used for scaling voxels. */
     private final VoxelsResizer resizer;
+
     // END REQUIRED ARGUMENTS
 
     /** A scaled version of each object. */
@@ -75,7 +78,7 @@ class FlattenAndScaler {
     private Optional<Extent> sizeScaled;
 
     /**
-     * Constructor.
+     * Constructor for FlattenAndScaler.
      *
      * @param boundingBoxes supplies a stream of bounding-boxes that specify each unscaled regions
      *     that we will generate thumbnails for.
@@ -85,10 +88,8 @@ class FlattenAndScaler {
      *     between objects), or individually.
      * @param resizer interpolator for scaling stack.
      * @param targetSize the target size which objects will be scaled-down to fit inside.
-     * @param backgroundSource an unscaled background image, if it exists.
-     * @param backgroundChannelIndex which channel use in the background image, or -1 to use the
-     *     entire stack.
-     * @param displayer How to convert the background to a suitable image to display.
+     * @param backgroundCreator function to create a {@link ScaleableBackground} given a {@link
+     *     ScaleFactor}.
      * @throws OperationFailedException if there are too many objects.
      */
     public FlattenAndScaler(
@@ -118,6 +119,12 @@ class FlattenAndScaler {
                         ObjectCollectionFactory.of(objectsScaled.asCollectionOrderNotPreserved()));
     }
 
+    /**
+     * Clips an {@link ObjectMask} to the scaled size if known.
+     *
+     * @param object the {@link ObjectMask} to clip.
+     * @return the clipped {@link ObjectMask}.
+     */
     private ObjectMask clipToScaledSizeIfKnown(ObjectMask object) {
         if (sizeScaled.isPresent()) {
             return object.clampTo(sizeScaled.get());
@@ -127,7 +134,7 @@ class FlattenAndScaler {
     }
 
     /**
-     * Flattens and scales a stack if it exists
+     * Flattens and scales a stack if it exists.
      *
      * <p>Any resolution information is also removed.
      *
@@ -150,7 +157,7 @@ class FlattenAndScaler {
      * from an object collection.
      *
      * @param objectsUnscaled objects that have yet to be scaled (and flattened).
-     * @return an extent that has been flattened and scaled.
+     * @return an {@link Extent} that has been flattened and scaled.
      */
     public Extent extentFromStackOrObjects(ObjectCollection objectsUnscaled) {
         return sizeScaled.orElseGet(() -> deriveScaledExtentFromObjects(objectsUnscaled));
@@ -160,7 +167,7 @@ class FlattenAndScaler {
      * Flattens and scales objects.
      *
      * @param objects unscaled objects.
-     * @return a scaled object.
+     * @return a scaled {@link ObjectCollection}.
      * @throws OperationFailedException if a scaling cannot successfully complete.
      */
     public ObjectCollection scaleObjects(ObjectCollection objects) throws OperationFailedException {
@@ -172,14 +179,14 @@ class FlattenAndScaler {
     }
 
     /**
-     * Objects (scaled) that intersect with a particular bounding-box
+     * Objects (scaled) that intersect with a particular bounding-box.
      *
      * @param box a search occurs for objects that intersect with this box (which has already been
      *     scaled).
      * @param excludeFromAdding these objects are excluded from the search (specifically, any object
      *     found that has the same bounding-box and number of pixels).
-     * @return the objects that intersect with the bounding-box except any in {@code
-     *     excludeFromAdding}.
+     * @return the {@link ObjectCollection} that intersect with the bounding-box except any in
+     *     {@code excludeFromAdding}.
      */
     public ObjectCollection objectsThatIntersectWith(
             BoundingBox box, ObjectCollection excludeFromAdding) {
@@ -196,6 +203,10 @@ class FlattenAndScaler {
     /**
      * Scales each channel in the stack by the scale-factor and removes any resolution information
      * (which is no longer physically valid).
+     *
+     * @param stack the {@link Stack} to scale and flatten.
+     * @return the scaled and flattened {@link Stack}.
+     * @throws OperationFailedException if the operation fails.
      */
     private Stack flattenScaleAndRemoveResolution(Stack stack) throws OperationFailedException {
         return stack.mapChannel(this::flattenScaleAndRemoveResolutionFromChannel);
@@ -204,6 +215,9 @@ class FlattenAndScaler {
     /**
      * Scales the channel by the scale-factor and removes any resolution information (which is no
      * longer physically valid).
+     *
+     * @param channel the {@link Channel} to scale and flatten.
+     * @return the scaled and flattened {@link Channel}.
      */
     private Channel flattenScaleAndRemoveResolutionFromChannel(Channel channel) {
         Channel scaled = channel.projectMax().scaleXY(scaleFactor, resizer);
@@ -211,7 +225,12 @@ class FlattenAndScaler {
         return scaled;
     }
 
-    /** Derives what a scaled version of an extent would look like that fits all objects. */
+    /**
+     * Derives what a scaled version of an extent would look like that fits all objects.
+     *
+     * @param objects the {@link ObjectCollection} to derive the extent from.
+     * @return the derived {@link Extent}.
+     */
     private Extent deriveScaledExtentFromObjects(ObjectCollection objects) {
         return ExtentToFitBoundingBoxes.derive(
                 objects.streamStandardJava()

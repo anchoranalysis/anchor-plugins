@@ -50,6 +50,7 @@ public class JoinRegExGroups extends DerivePath {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private RegEx regEx;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -35,16 +35,17 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Operations that use a specified constant value
+ * A base class for operations that use a specified constant value in combination with a feature.
  *
- * @author Owen Feehan
- * @param <T>
+ * <p>This abstract class extends {@link FeatureUnaryGeneric} to provide a framework for combining a
+ * constant value with the result of a feature calculation.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
  */
 public abstract class WithValueBase<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
-    // START BEAN PROPERTIES
+    /** The constant value to be used in the operation. Default value is 0. */
     @BeanField @Getter @Setter private double value = 0;
-    // END BEAN PROPERTIES
 
     @Override
     public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
@@ -56,8 +57,22 @@ public abstract class WithValueBase<T extends FeatureInput> extends FeatureUnary
         return combineDescription(String.format("%f", value), getItem().descriptionLong());
     }
 
+    /**
+     * Combines the constant value with the feature result.
+     *
+     * @param value the constant value specified for this operation
+     * @param featureResult the result of the feature calculation
+     * @return the combined result
+     */
     protected abstract double combineValueAndFeature(double value, double featureResult);
 
+    /**
+     * Combines the descriptions of the constant value and the feature.
+     *
+     * @param valueDescription the description of the constant value
+     * @param featureDescription the description of the feature
+     * @return the combined description
+     */
     protected abstract String combineDescription(
             String valueDescription, String featureDescription);
 }

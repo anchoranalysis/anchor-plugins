@@ -31,10 +31,12 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * A feature that calculates the absolute value of another feature's result.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class AbsoluteValue<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
-
-    // START BEAN PROPERTIES
-    // END BEAN PROPERTIES
 
     @Override
     public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {

@@ -36,14 +36,23 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateErosion;
 
+/**
+ * A feature that erodes an object mask and then calculates another feature on the eroded object.
+ */
 public class Erode extends DerivedObject {
 
-    // START BEAN PROPERTIES
+    /** The number of iterations to perform the erosion operation. */
     @BeanField @Getter @Setter private int iterations;
 
+    /** If true, performs 3D erosion; if false, performs 2D erosion on each z-slice separately. */
     @BeanField @Getter @Setter private boolean do3D = true;
-    // END BEAN PROPERTIES
 
+    /**
+     * Creates a {@link CalculationPart} for eroding the object mask.
+     *
+     * @param session the {@link CalculationPartResolver} for resolving calculation parts
+     * @return a {@link CalculationPart} that erodes an {@link ObjectMask}
+     */
     @Override
     protected CalculationPart<ObjectMask, FeatureInputSingleObject>
             createCachedCalculationForDerived(
@@ -51,6 +60,11 @@ public class Erode extends DerivedObject {
         return CalculateErosion.of(session, iterations, do3D);
     }
 
+    /**
+     * Provides a unique name for caching the eroded object.
+     *
+     * @return a {@link ChildCacheName} for caching the eroded object
+     */
     @Override
     public ChildCacheName cacheName() {
         return new ChildCacheName(Erode.class, iterations + "_" + do3D);

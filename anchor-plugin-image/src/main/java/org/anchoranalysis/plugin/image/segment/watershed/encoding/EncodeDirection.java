@@ -26,7 +26,16 @@
 
 package org.anchoranalysis.plugin.image.segment.watershed.encoding;
 
+/** An interface for encoding a 3D direction into an integer representation. */
 public interface EncodeDirection {
 
+    /**
+     * Encodes a 3D direction into an integer representation.
+     *
+     * @param x the x-component of the direction
+     * @param y the y-component of the direction
+     * @param z the z-component of the direction
+     * @return an integer encoding of the direction
+     */
     int encodeDirection(int x, int y, int z);
 }

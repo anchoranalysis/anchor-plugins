@@ -37,9 +37,19 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
 
+/** Utility class for extracting an {@link EnergyStack} from a {@link StackProvider}. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureCalculatorRepeated {
 
+    /**
+     * Extracts an {@link EnergyStack} from the given input and stack provider.
+     *
+     * @param input the input that provides the stack
+     * @param stackEnergy the provider for the energy stack
+     * @param context the input/output context
+     * @return the extracted {@link EnergyStack}
+     * @throws OperationFailedException if the extraction operation fails
+     */
     public static EnergyStack extractStack(
             ProvidesStackInput input, StackProvider stackEnergy, InputOutputContext context)
             throws OperationFailedException {

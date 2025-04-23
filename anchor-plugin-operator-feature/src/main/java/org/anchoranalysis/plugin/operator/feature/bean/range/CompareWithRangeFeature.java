@@ -51,10 +51,11 @@ public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompar
 
     /** Calculates maximally-allowed range boundary */
     @BeanField @Getter @Setter private Feature<T> max;
+
     // END BEAN PROPERTIES
 
     @Override
-    protected Feature<T> featureToCalcInputVal() {
+    protected Feature<T> featureToCalcInputValue() {
         return getItem();
     }
 

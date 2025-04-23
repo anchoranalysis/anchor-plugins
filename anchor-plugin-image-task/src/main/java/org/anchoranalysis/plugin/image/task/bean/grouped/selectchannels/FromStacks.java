@@ -31,12 +31,17 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 
-/** Selects a a subset of channels from a set of stacks */
+/** Selects a subset of channels from a set of stacks. */
 public abstract class FromStacks extends AnchorBean<FromStacks> {
 
     /**
      * Takes a stack-collection and extracts a set of references to particular channels (each with a
-     * name)
+     * name).
+     *
+     * @param source the {@link ChannelSource} containing the stacks to select from
+     * @param checkType whether to check the type of the channels
+     * @return a {@link NamedChannels} object containing the selected channels
+     * @throws OperationFailedException if the channel selection operation fails
      */
     public abstract NamedChannels selectChannels(ChannelSource source, boolean checkType)
             throws OperationFailedException;

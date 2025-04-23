@@ -55,8 +55,15 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U>
         extends CalculationPart<S, T> {
 
+    /** The resolved part for the delegate calculation. */
     private final ResolvedPart<U, T> delegate;
 
+    /**
+     * Creates a new {@link CalculateInputFromDelegate}.
+     *
+     * @param delegate the delegate {@link CalculationPart}
+     * @param cache the {@link CalculationPartResolver} to use for caching
+     */
     protected CalculateInputFromDelegate(
             CalculationPart<U, T> delegate, CalculationPartResolver<T> cache) {
         this(cache.search(delegate));
@@ -67,8 +74,20 @@ public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U>
         return deriveFromDelegate(input, delegate.getOrCalculate(input));
     }
 
+    /**
+     * Derives the result from the delegate calculation.
+     *
+     * @param input the input for the calculation
+     * @param delegate the result of the delegate calculation
+     * @return the derived result
+     */
     protected abstract S deriveFromDelegate(T input, U delegate);
 
+    /**
+     * Gets the delegate {@link ResolvedPart}.
+     *
+     * @return the delegate {@link ResolvedPart}
+     */
     protected ResolvedPart<U, T> getDelegate() {
         return delegate;
     }

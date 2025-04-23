@@ -33,14 +33,19 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.VoxelScore;
 
 /**
- * A score that is calculated on a single channel only
+ * A score that is calculated on a single channel only.
+ *
+ * <p>This abstract class extends {@link VoxelScore} to provide a base for voxel scores that operate
+ * on a single energy channel.
  *
  * @author Owen Feehan
  */
 public abstract class SingleChannel extends VoxelScore {
 
     // START BEAN PROPERTIES
+    /** The index of the energy channel to use for score calculation. */
     @BeanField @Getter @Setter private int energyChannelIndex = 0;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -48,5 +53,11 @@ public abstract class SingleChannel extends VoxelScore {
         return deriveScoreFromVoxel(voxelIntensities[energyChannelIndex]);
     }
 
+    /**
+     * Derives a score from a single voxel intensity.
+     *
+     * @param voxelIntensity the intensity of the voxel in the specified energy channel
+     * @return the calculated score for the voxel
+     */
     protected abstract double deriveScoreFromVoxel(int voxelIntensity);
 }

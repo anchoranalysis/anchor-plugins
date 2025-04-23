@@ -50,6 +50,7 @@ public abstract class SummarizerInputFromManager<T extends InputFromManager, S>
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Summarizer<S> summarizer;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -59,6 +59,7 @@ public class RotateImageToMatchEXIFOrientation extends StackReaderOrientationCor
     // START BEAN PROPERTIES
     /** Reads the image that is subsequently flattened. */
     @BeanField @Getter @Setter private StackReaderOrientationCorrection reader;
+
     // END BEAN PROPERTIES
 
     @Override

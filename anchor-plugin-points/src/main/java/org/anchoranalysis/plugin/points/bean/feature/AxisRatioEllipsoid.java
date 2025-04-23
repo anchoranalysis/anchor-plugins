@@ -30,13 +30,18 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 
+/**
+ * Calculates the axis ratio of an {@link Ellipsoid}.
+ *
+ * <p>The axis ratio is defined as the ratio of the largest radius to the second largest radius.
+ */
 public class AxisRatioEllipsoid extends EllipsoidBase {
 
     @Override
-    protected double calc(FeatureInputSingleObject input, Ellipsoid me)
+    protected double calculateWithEllipsoid(FeatureInputSingleObject input, Ellipsoid ellipsoid)
             throws FeatureCalculationException {
 
-        double[] radii = me.radiiOrdered();
+        double[] radii = ellipsoid.radiiOrdered();
 
         return radii[0] / radii[1];
     }

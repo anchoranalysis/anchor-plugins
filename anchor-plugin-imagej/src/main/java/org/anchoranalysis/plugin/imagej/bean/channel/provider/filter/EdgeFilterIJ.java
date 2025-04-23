@@ -33,6 +33,10 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 
+/**
+ * Applies an edge detection filter to each slice of a {@link Channel} independently using ImageJ's
+ * FIND_EDGES filter.
+ */
 public class EdgeFilterIJ extends ChannelProviderUnary {
 
     @Override

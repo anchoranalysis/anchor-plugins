@@ -67,6 +67,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
 
     /** Size of feature evaluation cache for featureEvaluatorMatch */
     @BeanField @Getter @Setter private int cacheSize = 50;
+
     // END BEAN PROPERTIES
 
     private FeatureCalculatorSingle<FeatureInputSingleObject> evaluatorForMatch;

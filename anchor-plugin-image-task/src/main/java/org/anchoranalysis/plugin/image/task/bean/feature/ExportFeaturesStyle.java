@@ -49,7 +49,7 @@ public class ExportFeaturesStyle extends AnchorBean<ExportFeaturesStyle> {
      *
      * <p>When false, all columns are included.
      */
-    @BeanField @Getter @Setter boolean removeNaNColumns = true;
+    @BeanField @Getter @Setter private boolean removeNaNColumns = true;
 
     /**
      * When true, feature-values are shown as visually compressed as possible, including suppressing
@@ -57,10 +57,10 @@ public class ExportFeaturesStyle extends AnchorBean<ExportFeaturesStyle> {
      *
      * <p>When false, a fixed number of decimal places is shown for all feature-values.
      *
-     * <p>e.g. when true, {@code 2} is shown instead of {@code 2.0000000000} or {@code code 6.71}
-     * instead of {@code 6.71000000000000}
+     * <p>e.g. when true, {@code 2} is shown instead of {@code 2.0000000000} or {@code 6.71} instead
+     * of {@code 6.71000000000000}
      */
-    @BeanField @Getter @Setter boolean visuallyShortenDecimals = true;
+    @BeanField @Getter @Setter private boolean visuallyShortenDecimals = true;
 
     /**
      * When false, an image is reported as errored, if any exception is thrown during calculation.
@@ -68,9 +68,16 @@ public class ExportFeaturesStyle extends AnchorBean<ExportFeaturesStyle> {
      * <p>When true, then a value of {@link Double#NaN} is returned, and a message is written to the
      * error-log.
      */
-    @BeanField @Getter @Setter boolean suppressErrors = false;
+    @BeanField @Getter @Setter private boolean suppressErrors = false;
+
     // END BEAN PROPERTIES
 
+    /**
+     * Derives a {@link FeatureExporterContext} from the current style and given context.
+     *
+     * @param context the {@link InputOutputContext} to use for deriving the new context.
+     * @return a new {@link FeatureExporterContext} instance.
+     */
     public FeatureExporterContext deriveContext(InputOutputContext context) {
         return new FeatureExporterContext(
                 context, removeNaNColumns, visuallyShortenDecimals, suppressErrors);

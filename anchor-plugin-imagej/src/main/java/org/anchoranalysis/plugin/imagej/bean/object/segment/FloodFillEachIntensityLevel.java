@@ -65,6 +65,7 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
      * background).
      */
     @BeanField @Getter @Setter private int startingIntensity = 1;
+
     // END BEAN PROPERTIES
 
     @Override

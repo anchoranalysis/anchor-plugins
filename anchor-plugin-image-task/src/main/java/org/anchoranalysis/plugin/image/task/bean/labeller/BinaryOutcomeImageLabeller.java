@@ -34,10 +34,17 @@ import java.util.Set;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 
-/** @author Owen Feehan */
+/**
+ * Abstract base class for image labellers that produce binary outcomes (positive or negative).
+ *
+ * @author Owen Feehan
+ */
 public abstract class BinaryOutcomeImageLabeller extends ImageLabeller<NoSharedState> {
 
+    /** String representation for a positive classification. */
     private static final String POSITIVE = "positive";
+
+    /** String representation for a negative classification. */
     private static final String NEGATIVE = "negative";
 
     @Override
@@ -50,6 +57,12 @@ public abstract class BinaryOutcomeImageLabeller extends ImageLabeller<NoSharedS
         return Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(POSITIVE, NEGATIVE)));
     }
 
+    /**
+     * Converts a boolean classification result to its string representation.
+     *
+     * @param positive true if the classification is positive, false if negative
+     * @return {@link #POSITIVE} if true, {@link #NEGATIVE} if false
+     */
     protected static String classificationString(boolean positive) {
         return positive ? POSITIVE : NEGATIVE;
     }

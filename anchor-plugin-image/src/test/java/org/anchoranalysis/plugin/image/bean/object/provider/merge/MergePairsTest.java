@@ -29,11 +29,10 @@ package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 import static org.anchoranalysis.plugin.image.bean.object.provider.merge.MergeTestHelper.*;
 
 import java.nio.file.Path;
-import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import java.nio.file.Paths;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
@@ -45,7 +44,6 @@ import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class MergePairsTest {
 
@@ -59,9 +57,7 @@ class MergePairsTest {
      * @throws OperationFailedException
      */
     @Test
-    void testAllMerge()
-            throws BeanMisconfiguredException, CreateException, InitializeException,
-                    OperationFailedException {
+    void testAllMerge() throws CreateException, OperationFailedException {
         testLinear(EXPECTED_RESULT_ALL_INTERSECTING_MERGED, 26, 14, 1);
     }
 
@@ -71,9 +67,7 @@ class MergePairsTest {
      * @throws OperationFailedException
      */
     @Test
-    void testSomeMerge()
-            throws BeanMisconfiguredException, CreateException, InitializeException,
-                    OperationFailedException {
+    void testSomeMerge() throws CreateException, OperationFailedException {
         testLinear(EXPECTED_RESULT_FIRST_THREE_NOT_MERGING, 22, 12, 300);
     }
 
@@ -97,15 +91,17 @@ class MergePairsTest {
 
         MergePairs provider = new MergePairs();
 
+        // An arbitrary path
+        Path path = Paths.get(".");
+
         Feature<FeatureInputPairObjects> feature =
                 new Minimum(MockFeatureWithCalculationFixture.createMockFeatureWithCalculation());
 
         provider.setObjects(ProviderFixture.providerFor(objects));
         provider.setFeatureEvaluatorThreshold(
-                FeatureEvaluatorFixture.createEnergy(
-                        new Constant<>(threshold), logger, Mockito.mock(Path.class)));
+                FeatureEvaluatorFixture.createEnergy(new Constant<>(threshold), logger, path));
         provider.setFeatureEvaluatorMerge(
-                FeatureEvaluatorFixture.createEnergy(feature, logger, Mockito.mock(Path.class)));
+                FeatureEvaluatorFixture.createEnergy(feature, logger, path));
         provider.setRelation(new GreaterThanBean());
         return provider;
     }

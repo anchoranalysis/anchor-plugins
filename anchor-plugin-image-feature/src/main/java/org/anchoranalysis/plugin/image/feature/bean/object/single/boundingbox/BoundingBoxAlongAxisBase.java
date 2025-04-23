@@ -38,10 +38,15 @@ import org.anchoranalysis.spatial.axis.AxisConverter;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
+/**
+ * Base class for features that calculate a value along a specific axis of an object's bounding box.
+ */
 public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
 
     // START BEAN PARAMETERS
+    /** The axis along which to calculate the feature value ("x", "y", or "z"). */
     @BeanField @Getter @Setter private String axis = "x";
+
     // END BEAN PARAMETERS
 
     @Override
@@ -56,6 +61,12 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
         return calculateAxisValue(point);
     }
 
+    /**
+     * Extracts a {@link ReadableTuple3i} from the given {@link BoundingBox}.
+     *
+     * @param box the {@link BoundingBox} to extract from
+     * @return the extracted {@link ReadableTuple3i}
+     */
     protected abstract ReadableTuple3i extractTupleForBoundingBox(BoundingBox box);
 
     @Override
@@ -63,6 +74,13 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
         return String.format("%s", axis);
     }
 
+    /**
+     * Calculates the value along the specified axis for the given point.
+     *
+     * @param point the point to calculate the value for
+     * @return the calculated value
+     * @throws FeatureCalculationException if an error occurs during calculation
+     */
     private double calculateAxisValue(ReadableTuple3i point) throws FeatureCalculationException {
         try {
             return point.valueByDimension(AxisConverter.createFromString(axis));

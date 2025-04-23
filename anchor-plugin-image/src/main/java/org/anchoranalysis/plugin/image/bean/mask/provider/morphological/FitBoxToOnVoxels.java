@@ -52,6 +52,7 @@ public class FitBoxToOnVoxels extends MaskProviderUnary {
     // START BEAN PROPERTIES
     // If true, then each z slice is treated separately
     @BeanField @Getter @Setter private boolean slicesSeparately = false;
+
     // END BEAN PROPERTIES
 
     @Override

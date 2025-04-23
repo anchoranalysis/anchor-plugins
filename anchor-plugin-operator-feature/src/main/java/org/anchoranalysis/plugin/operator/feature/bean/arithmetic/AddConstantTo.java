@@ -29,6 +29,11 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.WithValueBase;
 
+/**
+ * A feature that adds a constant value to the result of another feature.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class AddConstantTo<T extends FeatureInput> extends WithValueBase<T> {
 
     @Override

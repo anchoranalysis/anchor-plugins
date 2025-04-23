@@ -44,6 +44,7 @@ public class FilterForExistingFiles extends FilesProviderUnary {
     // START BEAN PROPERTIES
     /** All files need to be present */
     @BeanField @Getter @Setter private List<DerivePath> paths = new ArrayList<>();
+
     // END BEAN PROPERTIES
 
     @Override

@@ -38,19 +38,31 @@ import org.anchoranalysis.plugin.image.task.feature.fixture.MultiInputFixture;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExportOutputter {
 
-    // Saved output locations for particular tests
+    /** Output directory for simple test case 1. */
     public static final String OUTPUT_DIRECTORY_SIMPLE_1 = "simple01/";
+
+    /** Output directory for merged pairs test case 1. */
     public static final String OUTPUT_DIRECTORY_MERGED_1 = "mergedPairs01/";
+
+    /** Output directory for merged pairs test case 2. */
     public static final String OUTPUT_DIRECTORY_MERGED_2 = "mergedPairs02/";
+
+    /** Output directory for merged pairs test case 3. */
     public static final String OUTPUT_DIRECTORY_MERGED_3 = "mergedPairs03/";
+
+    /** Output directory for image cache test case. */
     public static final String OUTPUT_DIRECTORY_IMAGE_CACHE = "imageCache/";
+
+    /** Output directory for simple test case with reference. */
     public static final String OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE = "simpleWithReference/";
 
-    // Used for tests where we expect an exception to be thrown, and thus never to actually be
-    // compared
-    // It doesn't physically exist
+    /**
+     * Used for tests where we expect an exception to be thrown, and thus never to actually be
+     * compared. It doesn't physically exist.
+     */
     public static final String OUTPUT_DIRECTORY_IRRELEVANT = "irrelevant/";
 
+    /** Array of output filenames that are always compared. */
     private static final String[] OUTPUTS_TO_COMPARE_ALWAYS = {
         "featuresAggregated.csv", "features.csv", "grouped/arbitraryGroup/featuresGroup.csv",
     };
@@ -59,9 +71,10 @@ public class ExportOutputter {
      * A list of relative-filenames of outputs to compare.
      *
      * @param inputStack whether to include an input-stack
+     * @param prefix prefix for file paths
      * @param energyStack whether to include an energy-stack
      * @param objects whether to include HDF5 objects
-     * @return
+     * @return an {@link Iterable} of output filenames to compare
      */
     public static Iterable<String> outputsToCompare(
             boolean inputStack, String prefix, boolean energyStack, boolean objects) {
@@ -86,7 +99,12 @@ public class ExportOutputter {
         return list;
     }
 
-    /** Adds the output relative-paths to the energy stacks to {@code list}. */
+    /**
+     * Adds the output relative-paths to the energy stacks to {@code list}.
+     *
+     * @param list the list to add energy stack paths to
+     * @param prefix prefix for file paths
+     */
     private static void addEnergyStacks(List<String> list, String prefix) {
         for (int index = 0; index < 3; index++) {
             list.add(String.format("%senergyStack/energyStack_0%d.tif", prefix, index));

@@ -44,6 +44,7 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.gradient.Sobel;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.Blur;
 import org.anchoranalysis.plugin.imagej.bean.channel.provider.filter.rank.MedianFilter2D;
 
+/** Adds edge filters and their gradients to a {@link Define} object. */
 public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 
     private static final String NAME_MEDIAN = "Median";
@@ -53,8 +54,10 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
     /** The ID of the channel that provides the input to the filter. */
     @BeanField @Getter @Setter private String channelID;
 
+    /** The radius of the median filter in meters. */
     @BeanField @Positive @Getter @Setter private double medianRadiusMeters = 0;
 
+    /** The sigma value for the Gaussian filter in meters. */
     @BeanField @Positive @Getter @Setter private double gaussianSigmaMeters = 0;
 
     /** If true, the median filter is included. */
@@ -62,6 +65,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 
     /** If true, the Gaussian filter is included. */
     @BeanField @Getter @Setter private boolean gaussian = true;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -76,17 +80,32 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         }
     }
 
+    /**
+     * Adds a filter type and its gradients to the {@link Define} object.
+     *
+     * @param define the {@link Define} object to add to
+     * @param filterName the name of the filter
+     * @param filterProvider the {@link AnchorBean} that provides the filter
+     * @throws DefineAddException if there's an error adding the filter
+     */
     private void addFilterType(Define define, String filterName, AnchorBean<?> filterProvider)
             throws DefineAddException {
         addWithName(define, filterName, filterProvider);
         new GradientsForFilter(filterName).addTo(define);
     }
 
+    /** Inner class for adding gradients for a specific filter. */
     @AllArgsConstructor
     private class GradientsForFilter {
 
         private String filterName;
 
+        /**
+         * Adds gradient filters to the {@link Define} object.
+         *
+         * @param define the {@link Define} object to add to
+         * @throws DefineAddException if there's an error adding the gradients
+         */
         public void addTo(Define define) throws DefineAddException {
 
             addForFilter(define, "_Gradient_Magnitude", edgeFilter(filterName));
@@ -123,6 +142,11 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         }
     }
 
+    /**
+     * Creates a median filter {@link ChannelProvider}.
+     *
+     * @return a {@link ChannelProvider} for the median filter
+     */
     private ChannelProvider createMedian() {
         MedianFilter2D provider = new MedianFilter2D();
         provider.setRadius((int) Math.round(medianRadiusMeters));
@@ -131,6 +155,11 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         return provider;
     }
 
+    /**
+     * Creates a Gaussian filter {@link ChannelProvider}.
+     *
+     * @return a {@link ChannelProvider} for the Gaussian filter
+     */
     private ChannelProvider createGaussian() {
         Blur provider = new Blur();
         provider.setStrategy(createBlurStrategy());
@@ -138,6 +167,11 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         return provider;
     }
 
+    /**
+     * Creates a {@link BlurStrategy} for the Gaussian filter.
+     *
+     * @return a {@link BlurStrategy} for the Gaussian filter
+     */
     private BlurStrategy createBlurStrategy() {
         BlurGaussian3D blurStrategy = new BlurGaussian3D();
         blurStrategy.setSigma(gaussianSigmaMeters);
@@ -145,6 +179,12 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         return blurStrategy;
     }
 
+    /**
+     * Creates a {@link ChannelProvider} that duplicates a channel.
+     *
+     * @param srcID the ID of the source channel
+     * @return a {@link ChannelProvider} that duplicates the specified channel
+     */
     private ChannelProvider createDup(String srcID) {
         Reference provider = new Reference();
         provider.setId(srcID);

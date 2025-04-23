@@ -63,6 +63,7 @@ public abstract class NamedFilesBase<T extends InputFromManager> extends InputMa
 
     // START BEAN PROPERTIES
     @BeanField @DefaultInstance @Getter @Setter private FileNamer namer;
+
     // END BEAN PROPERTIES
 
     /**

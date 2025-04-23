@@ -33,13 +33,21 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
+/**
+ * Extracts a specific slice from a collection of 3D objects.
+ *
+ * <p>This class extends {@link ObjectCollectionProviderUnary} to provide functionality for
+ * extracting a 2D slice at a specified z-index from a collection of 3D objects.
+ */
 public class SliceAt extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
-    /** Index in z-dimension of slice to extract */
+    /** Index in z-dimension of slice to extract. */
     @BeanField @Getter @Setter private int index = 0;
+
     // END BEAN PROPERTIES
 
+    // The createFromObjects method is overridden, so we don't add a doc-string for it
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects)
             throws ProvisionFailedException {

@@ -34,10 +34,13 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
+/** Labels images based on whether their descriptive name contains a specific string. */
 public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabeller {
 
     // START BEAN PROPERTIES
+    /** The string to search for in the image's descriptive name. */
     @BeanField @Getter @Setter private String contains;
+
     // END BEAN PROPERTIES
 
     @Override

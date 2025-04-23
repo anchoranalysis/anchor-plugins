@@ -55,6 +55,7 @@ public class LastDirectoryAsPrefix extends PathPrefixerAvoidResolve {
     @BeanField @Getter @Setter private PathPrefixerAvoidResolve prefixer;
 
     @BeanField @Getter @Setter private String delimiter = "_";
+
     // END BEAN PROPERTIES
 
     @Override

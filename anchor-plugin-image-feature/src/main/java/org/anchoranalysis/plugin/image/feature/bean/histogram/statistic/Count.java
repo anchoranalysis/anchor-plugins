@@ -44,6 +44,7 @@ public class Count extends FeatureHistogramStatistic {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private RelationToThreshold threshold;
+
     // END BEAN PROPERTIES
 
     @Override

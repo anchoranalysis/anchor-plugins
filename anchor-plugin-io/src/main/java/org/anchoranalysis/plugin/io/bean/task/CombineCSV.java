@@ -81,6 +81,7 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
     @BeanField @Getter @Setter private boolean transposed = false;
 
     @BeanField @Getter @Setter private boolean addName = true;
+
     // END BEAN PROPERTIES
 
     @Override

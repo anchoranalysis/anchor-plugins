@@ -46,6 +46,7 @@ public class TextureScore extends FeatureEnergyChannel {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int energyIndexGradient = 1;
+
     // END BEAN PROPERTIES
 
     @Override

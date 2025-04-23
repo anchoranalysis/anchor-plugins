@@ -59,6 +59,7 @@ public class ReflectInAxesWithinDistance extends PointsFitter {
 
     @BeanField @NonNegative @Getter @Setter
     private double distanceZ = -1; // Forces user to set a default
+
     // END BEAN PROPERTIES
 
     @Override

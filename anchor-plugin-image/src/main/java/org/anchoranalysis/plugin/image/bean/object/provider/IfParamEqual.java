@@ -55,6 +55,7 @@ public class IfParamEqual extends ObjectCollectionProvider {
     @BeanField @Getter @Setter private String key;
 
     @BeanField @Getter @Setter private String value;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -28,12 +28,19 @@ package org.anchoranalysis.plugin.operator.feature.statistics;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 /**
- * Supplies the result of a feature-calculation
+ * Supplies the result of a feature calculation.
  *
- * @author Owen Feehan
+ * <p>This functional interface provides a method to retrieve the result of a feature calculation,
+ * which may throw a {@link FeatureCalculationException} if the calculation fails.
  */
 @FunctionalInterface
 public interface FeatureResultSupplier {
 
+    /**
+     * Retrieves the result of a feature calculation.
+     *
+     * @return the calculated feature value as a double
+     * @throws FeatureCalculationException if an error occurs during the feature calculation
+     */
     double get() throws FeatureCalculationException;
 }

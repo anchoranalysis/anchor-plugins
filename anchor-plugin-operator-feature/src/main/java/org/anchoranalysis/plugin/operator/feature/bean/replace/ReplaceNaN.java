@@ -28,6 +28,14 @@ package org.anchoranalysis.plugin.operator.feature.bean.replace;
 
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * Replaces NaN (Not a Number) values in a feature's result with a specified replacement value.
+ *
+ * <p>This class extends {@link ReplaceUnusualValue} to specifically handle NaN values in the
+ * feature calculation results.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class ReplaceNaN<T extends FeatureInput> extends ReplaceUnusualValue<T> {
 
     @Override

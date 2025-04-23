@@ -48,6 +48,7 @@ public class Exclude<T extends InputFromManager> extends InputManagerUnary<T> {
     // START BEAN PROPERTIES
     /** A regular-expression to be matched against the identifiers of inputs. */
     @BeanField @Getter @Setter private RegEx regEx;
+
     // END BEAN PROPERITES
 
     @Override

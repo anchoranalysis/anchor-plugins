@@ -34,13 +34,28 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
+/** A slice thresholder that applies thresholding within a mask region. */
 public class SliceThresholderMask extends SliceThresholder {
 
+    /** Whether to clear voxels outside the mask. */
     private final boolean clearOutsideMask;
+
+    /** The object mask defining the region for thresholding. */
     private final ObjectMask object;
+
+    /** The minimum corner of the object's bounding box. */
     private final ReadableTuple3i cornerMin;
+
+    /** The maximum corner of the object's bounding box. */
     private final ReadableTuple3i cornerMax;
 
+    /**
+     * Creates a new {@link SliceThresholderMask}.
+     *
+     * @param clearOutsideMask whether to clear voxels outside the mask
+     * @param object the {@link ObjectMask} defining the region for thresholding
+     * @param binaryValues the {@link BinaryValuesByte} to use for output
+     */
     public SliceThresholderMask(
             boolean clearOutsideMask, ObjectMask object, BinaryValuesByte binaryValues) {
         super(binaryValues);
@@ -52,7 +67,7 @@ public class SliceThresholderMask extends SliceThresholder {
 
     @Override
     public void segmentAll(
-            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<UnsignedByteBuffer> voxelsOut) {
+            Voxels<?> voxelsIn, Voxels<?> voxelsThreshold, Voxels<UnsignedByteBuffer> voxelsOut) {
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             int relZ = z - cornerMin.z();
@@ -60,17 +75,27 @@ public class SliceThresholderMask extends SliceThresholder {
             sgmnSlice(
                     voxelsIn.extent(),
                     voxelsIn.slice(relZ),
-                    voxelsThrshld.slice(relZ),
+                    voxelsThreshold.slice(relZ),
                     voxelsOut.slice(relZ),
                     object.voxels().slice(z),
                     object.binaryValuesByte());
         }
     }
 
+    /**
+     * Segments a single slice of the image.
+     *
+     * @param extent the {@link Extent} of the slice
+     * @param voxelsIn the input {@link VoxelBuffer}
+     * @param voxelsThreshold the threshold {@link VoxelBuffer}
+     * @param voxelsOut the output {@link VoxelBuffer}
+     * @param voxelsMask the mask {@link VoxelBuffer}
+     * @param binaryValuesMask the {@link BinaryValuesByte} for the mask
+     */
     private void sgmnSlice(
             Extent extent,
             VoxelBuffer<?> voxelsIn,
-            VoxelBuffer<?> voxelsThrshld,
+            VoxelBuffer<?> voxelsThreshold,
             VoxelBuffer<UnsignedByteBuffer> voxelsOut,
             VoxelBuffer<UnsignedByteBuffer> voxelsMask,
             BinaryValuesByte binaryValuesMask) {
@@ -91,7 +116,7 @@ public class SliceThresholderMask extends SliceThresholder {
                     continue;
                 }
 
-                writeThresholdedByte(offset, out, voxelsIn, voxelsThrshld);
+                writeThresholdedByte(offset, out, voxelsIn, voxelsThreshold);
             }
         }
     }

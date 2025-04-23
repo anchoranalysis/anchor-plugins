@@ -33,9 +33,19 @@ import org.anchoranalysis.image.core.object.MatchedObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/** Helper class for matching objects based on intersection. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatcherIntersectionHelper {
 
+    /**
+     * Matches objects from the source collection with intersecting objects from the search
+     * collection.
+     *
+     * @param sourceObjects the collection of source objects to be matched
+     * @param searchObjects the collection of objects to search for intersections
+     * @return a list of {@link MatchedObject}s, each containing a source object and its
+     *     intersecting objects
+     */
     public static List<MatchedObject> matchIntersectingObjects(
             ObjectCollection sourceObjects, ObjectCollection searchObjects) {
 
@@ -49,6 +59,14 @@ public class MatcherIntersectionHelper {
                                                 searchObjects, objectSource)));
     }
 
+    /**
+     * Finds objects from the search collection that intersect with a given object.
+     *
+     * @param searchObjects the collection of objects to search for intersections
+     * @param toIntersectWith the object to check for intersections
+     * @return an {@link ObjectCollection} containing objects that intersect with {@code
+     *     toIntersectWith}
+     */
     private static ObjectCollection searchObjectsThatIntersectWith(
             ObjectCollection searchObjects, ObjectMask toIntersectWith) {
         return searchObjects.stream().filter(toIntersectWith::hasIntersectingVoxels);

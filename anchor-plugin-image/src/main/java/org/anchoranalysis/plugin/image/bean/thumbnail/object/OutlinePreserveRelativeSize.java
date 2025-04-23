@@ -114,6 +114,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
 
     /** How to convert an image so that it can be displayed. */
     @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
+
     // END BEAN PROPERTIES
 
     /**

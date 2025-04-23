@@ -32,13 +32,23 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
 
+/** Combines {@link ImageInitialization} with an {@link EnergyStack}. */
 @Value
 @AllArgsConstructor
 public class InitializationWithEnergyStack {
 
+    /** The image initialization. */
     ImageInitialization image;
+
+    /** The energy stack. */
     EnergyStack energyStack;
 
+    /**
+     * Creates a new instance with a given energy stack and initialization context.
+     *
+     * @param energyStack the {@link EnergyStack} to use.
+     * @param context the {@link InitializationContext} for creating the image initialization.
+     */
     public InitializationWithEnergyStack(EnergyStack energyStack, InitializationContext context) {
         this.energyStack = energyStack;
         this.image = InitializationFactory.createWithoutStacks(context);

@@ -36,10 +36,18 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
 
+/**
+ * A base class for a {@link ChannelProviderUnary} which also uses a binary mask.
+ *
+ * <p>This class extends {@link ChannelProviderUnary} to provide functionality for creating channels
+ * based on both an input channel and a binary mask.
+ */
 public abstract class UnaryWithMaskBase extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
+    /** The {@link MaskProvider} used to create the binary mask. */
     @BeanField @Getter @Setter private MaskProvider mask;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -49,6 +57,14 @@ public abstract class UnaryWithMaskBase extends ChannelProviderUnary {
         return createFromMaskedChannel(channel, maskChannel);
     }
 
+    /**
+     * Creates a new {@link Channel} from the input channel and mask.
+     *
+     * @param channel the input {@link Channel}
+     * @param mask the {@link Mask} to apply to the channel
+     * @return a new {@link Channel} created from the input channel and mask
+     * @throws ProvisionFailedException if the channel creation fails
+     */
     protected abstract Channel createFromMaskedChannel(Channel channel, Mask mask)
             throws ProvisionFailedException;
 }

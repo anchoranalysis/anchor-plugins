@@ -58,6 +58,7 @@ public class Intensity extends FeatureEnergyChannel {
 
     /** Iff true, zero-valued voxels are excluded from the histogram */
     @BeanField @Getter @Setter private boolean excludeZero = false;
+
     // END BEAN PROEPRTIES
 
     @Override

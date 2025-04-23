@@ -45,6 +45,7 @@ public class Convert<T> extends ConvertBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ConvertChannelTo<T> channelConverter;
+
     // END BEAN PROPERTIES
 
     @Override

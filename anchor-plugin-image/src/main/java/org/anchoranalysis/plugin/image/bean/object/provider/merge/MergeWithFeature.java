@@ -57,7 +57,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
     // START BEAN PROPERTIES
     /**
      * Requires for any potential merge that the bounding-boxes of the two objects must intersect or
-     * touch
+     * touch.
      */
     @BeanField @Getter @Setter private boolean requireBBoxNeighbors = true;
 
@@ -87,21 +87,35 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
         }
     }
 
-    /** Determines the payload for any given or potential vertex */
+    /**
+     * Determines the payload for any given or potential vertex.
+     *
+     * @return a {@link PayloadCalculator} for determining vertex payloads
+     * @throws OperationFailedException if the payload calculator cannot be created
+     */
     protected abstract PayloadCalculator createPayloadCalculator() throws OperationFailedException;
 
-    /** Determines the priority (and selection criteria) used to allow merges between neighbors */
+    /**
+     * Determines the priority (and selection criteria) used to allow merges between neighbors.
+     *
+     * @return an {@link AssignPriority} for determining merge priorities
+     * @throws OperationFailedException if the prioritizer cannot be created
+     */
     protected abstract AssignPriority createPrioritizer() throws OperationFailedException;
 
-    /** Is the payload considered in making decisions? (iff false, payload of nodes is irrelvant) */
+    /**
+     * Checks if the payload is considered in making decisions.
+     *
+     * @return true if the payload is used, false if the payload of nodes is irrelevant
+     */
     protected abstract boolean isPlayloadUsed();
 
     /**
-     * Tries to merge objects
+     * Tries to merge objects.
      *
      * @param objects objects to be merged
-     * @return
-     * @throws OperationFailedException
+     * @return the {@link ObjectCollection} after merging
+     * @throws OperationFailedException if the merge operation fails
      */
     private ObjectCollection mergeConnectedComponents(ObjectCollection objects)
             throws OperationFailedException {
@@ -129,11 +143,11 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
     }
 
     /**
-     * Search for suitable merges in graph, and merges them
+     * Search for suitable merges in graph, and merges them.
      *
-     * @param graph the graph containing objects that can maybe be merged
-     * @return
-     * @throws OperationFailedException
+     * @param graph the {@link MergeGraph} containing objects that can maybe be merged
+     * @return true if a merge was performed, false otherwise
+     * @throws OperationFailedException if the merge operation fails
      */
     private boolean tryMerge(MergeGraph graph) throws OperationFailedException {
 
@@ -149,6 +163,14 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
         return true;
     }
 
+    /**
+     * Creates a merge graph from a collection of objects.
+     *
+     * @param objects the {@link ObjectCollection} to create the graph from
+     * @param unitConverter an optional {@link UnitConverter} for unit conversions
+     * @return a {@link MergeGraph} representing the objects and their relationships
+     * @throws CreateException if the graph cannot be created
+     */
     private MergeGraph createGraph(ObjectCollection objects, Optional<UnitConverter> unitConverter)
             throws CreateException {
 
@@ -171,6 +193,12 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
         }
     }
 
+    /**
+     * Creates the before conditions for merging.
+     *
+     * @return an {@link UpdatableBeforeCondition} representing the conditions that must be met
+     *     before merging
+     */
     private UpdatableBeforeCondition beforeConditions() {
         return new AndCondition(
                 new WrapAsUpdatable(maybeDistanceCondition()),

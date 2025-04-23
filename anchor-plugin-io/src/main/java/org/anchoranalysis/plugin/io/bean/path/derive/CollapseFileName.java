@@ -53,6 +53,7 @@ public class CollapseFileName extends DerivePath {
 
     /** When true, the extension is appended to the directory. */
     @BeanField @Getter @Setter private boolean keepExtension = false;
+
     // END BEAN FIELDS
 
     @Override

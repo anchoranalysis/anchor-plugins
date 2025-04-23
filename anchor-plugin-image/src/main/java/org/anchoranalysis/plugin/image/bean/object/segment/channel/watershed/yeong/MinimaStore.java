@@ -33,23 +33,37 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.spatial.point.Point3i;
 
-// Stores minima points
+/** Stores and manages a collection of minima points for watershed segmentation. */
 class MinimaStore {
 
+    /** List of {@link Minima} objects representing the stored minima points. */
     private List<Minima> list = new ArrayList<>();
 
     /**
      * Adds a new minima, but duplicates the point (which is mutable and may change during
-     * iteration) before adding
+     * iteration) before adding.
+     *
+     * @param point the {@link Point3i} to be added as a new minima
      */
     public void addDuplicated(Point3i point) {
         list.add(new Minima(new Point3i(point)));
     }
 
+    /**
+     * Adds a list of points as a new minima.
+     *
+     * @param points the {@link List} of {@link Point3i} to be added as a new minima
+     */
     public void add(List<Point3i> points) {
         list.add(new Minima(points));
     }
 
+    /**
+     * Creates an {@link ObjectCollection} from the stored minima points.
+     *
+     * @return an {@link ObjectCollection} created from the stored minima points
+     * @throws CreateException if there's an error creating the objects
+     */
     public ObjectCollection createObjects() throws CreateException {
         return ObjectCollectionFactory.mapFrom(
                 list,
@@ -57,6 +71,11 @@ class MinimaStore {
                 minima -> CreateObjectFromPoints.create(minima.getListPoints()));
     }
 
+    /**
+     * Returns the number of minima stored.
+     *
+     * @return the number of minima in the store
+     */
     public int size() {
         return list.size();
     }

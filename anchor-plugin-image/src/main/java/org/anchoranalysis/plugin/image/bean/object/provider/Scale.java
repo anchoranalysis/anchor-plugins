@@ -54,6 +54,7 @@ public class Scale extends WithDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
+
     // END BEAN PROPERTIES
 
     @Override

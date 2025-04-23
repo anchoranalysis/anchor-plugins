@@ -45,6 +45,7 @@ public class SingleChannel extends ChannelMapCreator {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String channelName = "defaultName";
+
     // END BEAN PROPERTIES
 
     @Override

@@ -34,11 +34,21 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/** Calculates a specified quantile value from a {@link Histogram}. */
 public class Quantile extends FeatureHistogramStatistic {
 
-    // START BEAN PROPERTIES
+    /**
+     * The quantile to calculate from the histogram.
+     *
+     * <p>This value should be between 0.0 and 1.0, where:
+     *
+     * <ul>
+     *   <li>0.0 represents the minimum value
+     *   <li>0.5 represents the median
+     *   <li>1.0 represents the maximum value
+     * </ul>
+     */
     @BeanField @Getter @Setter private double quantile = 0.0; // NOSONAR
-    // END BEAN PROPERTIES
 
     @Override
     protected double calculateStatisticFrom(Histogram histogram)

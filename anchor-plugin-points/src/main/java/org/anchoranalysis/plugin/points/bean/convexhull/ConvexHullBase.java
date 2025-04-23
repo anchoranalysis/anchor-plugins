@@ -34,10 +34,13 @@ import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.contour.FindContour;
 import org.anchoranalysis.image.core.mask.Mask;
 
+/** Base class for convex hull implementations. */
 public abstract class ConvexHullBase extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
+    /** Whether to erode the mask at the boundary before finding the contour. */
     @BeanField @Getter @Setter private boolean erodeAtBoundary = false;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -45,5 +48,13 @@ public abstract class ConvexHullBase extends MaskProviderUnary {
         return createFromMask(mask, FindContour.createFrom(mask, 1, true, erodeAtBoundary));
     }
 
+    /**
+     * Creates a convex hull from a mask and its outline.
+     *
+     * @param mask the input {@link Mask}
+     * @param outline the outline {@link Mask} of the input mask
+     * @return the convex hull {@link Mask}
+     * @throws ProvisionFailedException if the convex hull creation fails
+     */
     protected abstract Mask createFromMask(Mask mask, Mask outline) throws ProvisionFailedException;
 }

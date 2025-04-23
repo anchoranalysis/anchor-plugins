@@ -32,7 +32,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.image.bean.channel.aggregator.MeanProjection;
 import org.anchoranalysis.plugin.image.task.bean.InputFixture;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
@@ -47,7 +46,7 @@ class AggregateChannelTaskTest extends GroupedStackTestBase {
 
     private static final String OUTPUT_NAME = "someOutput";
 
-    private static List<String> FILENAMES_TO_COMPARE =
+    private static final List<String> FILENAMES_TO_COMPARE =
             Arrays.asList("stack00.png", "stack01.png", "stack02.png");
 
     /**
@@ -56,7 +55,7 @@ class AggregateChannelTaskTest extends GroupedStackTestBase {
      * <p>This means the input images have different sizes.
      */
     @Test
-    void testDoNotResize() throws OperationFailedException, ImageIOException {
+    void testDoNotResize() {
         assertThrows(OperationFailedException.class, () -> doTest(false, false, Optional.empty()));
     }
 

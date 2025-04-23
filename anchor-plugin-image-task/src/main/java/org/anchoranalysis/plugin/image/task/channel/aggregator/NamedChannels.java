@@ -46,17 +46,20 @@ public class NamedChannels implements Iterable<Entry<String, Channel>> {
     /** A mapping from name to {@link Channel}, ordered by name. */
     private Map<String, Channel> channels = new TreeMap<>();
 
-    // START REQUIRED ARGUMENTS
     /** Whether the channels originate from a {@link Stack} that is RGB, or not. */
     @Getter private boolean rgb;
-    // END REQUIRED ARGUMENTS
 
+    /**
+     * Creates a new {@link NamedChannels} instance.
+     *
+     * @param rgb whether the channels originate from an RGB {@link Stack} or not.
+     */
     public NamedChannels(boolean rgb) {
         this.rgb = rgb;
     }
 
     /**
-     * Creates by combining multiple existing existing {@link NamedChannels}.
+     * Creates by combining multiple existing {@link NamedChannels}.
      *
      * @param channelsToCombine the {@link NamedChannels} to combine.
      * @throws OperationFailedException if the RGB-state is inconsistent across {@link Stack}s.
@@ -93,7 +96,7 @@ public class NamedChannels implements Iterable<Entry<String, Channel>> {
      *
      * @param name a unique name for the channel.
      * @param channel the channel to add.
-     * @throws OperationFailedException if a channel with the same name, has already been previously
+     * @throws OperationFailedException if a channel with the same name has already been previously
      *     added.
      */
     public void add(String name, Channel channel) throws OperationFailedException {
@@ -113,7 +116,12 @@ public class NamedChannels implements Iterable<Entry<String, Channel>> {
         return channels.keySet();
     }
 
-    /** Add all {@link Channel}s in {@code source}. */
+    /**
+     * Add all {@link Channel}s in {@code source}.
+     *
+     * @param source the {@link NamedChannels} to add from.
+     * @throws OperationFailedException if a channel with the same name already exists.
+     */
     private void addAll(NamedChannels source) throws OperationFailedException {
         for (Map.Entry<String, Channel> entry : source.channels.entrySet()) {
             add(entry.getKey(), entry.getValue());

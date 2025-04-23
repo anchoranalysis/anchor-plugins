@@ -55,6 +55,7 @@ public class BinarySegmentByObject extends UnaryWithChannelBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private BinarySegmentation binarySgmn;
+
     // END BEAN PROPERTIES
 
     @Override

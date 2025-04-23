@@ -35,14 +35,21 @@ import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.plugin.image.bean.dictionary.DictionaryCondition;
 
-// If a param is equal to a particular value, do something
+/**
+ * Provides a channel based on a condition from a dictionary.
+ *
+ * <p>This class extends {@link ChannelProviderUnary} to return either the input channel or an
+ * alternative channel based on a condition specified in a dictionary.
+ */
 public class IfParamEquals extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
+    /** The condition to evaluate from the dictionary. */
     @BeanField @Getter @Setter private DictionaryCondition condition;
-    // END BEAN PROPERTIES
 
+    /** The channel provider to use if the condition is false. */
     @BeanField @Getter @Setter private ChannelProvider channelElse;
+
     // END BEAN PROPERTIES
 
     @Override

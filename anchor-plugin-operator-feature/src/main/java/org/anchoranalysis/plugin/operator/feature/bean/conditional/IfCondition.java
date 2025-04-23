@@ -54,6 +54,7 @@ public class IfCondition<T extends FeatureInput> extends FeatureUnaryGeneric<T> 
     @BeanField @Getter @Setter private Feature<T> featureElse;
 
     @BeanField @Getter @Setter private RelationToThreshold threshold;
+
     // END BEAN PROPERTIES
 
     @Override

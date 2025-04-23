@@ -42,31 +42,50 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphol
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateErosion;
 import org.anchoranalysis.spatial.box.Extent;
 
+/** Calculates a shell {@link ObjectMask} by performing dilation and erosion operations. */
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class CalculateShellObjectMask
         extends CalculationPart<ObjectMask, FeatureInputSingleObject> {
 
+    /** Resolved part for calculating dilation. */
     private final ResolvedPart<ObjectMask, FeatureInputSingleObject> calculateDilation;
+
+    /** Resolved part for calculating erosion. */
     private final ResolvedPart<ObjectMask, FeatureInputSingleObject> calculateErosion;
+
+    /** Number of iterations for the second erosion operation. */
     private final int iterationsErosionSecond;
+
+    /** Whether to perform 3D operations. */
     private final boolean do3D;
+
+    /** Whether to invert the shell object. */
     private final boolean inverse;
 
+    /**
+     * Creates a new {@link CalculateShellObjectMask} instance.
+     *
+     * @param resolver the {@link CalculationPartResolver} for {@link FeatureInputSingleObject}
+     * @param iterations the {@link MorphologicalIterations} to use
+     * @param iterationsErosionSecond number of iterations for the second erosion operation
+     * @param inverse whether to invert the shell object
+     * @return a new {@link CalculationPart} for calculating shell object masks
+     */
     public static CalculationPart<ObjectMask, FeatureInputSingleObject> of(
             CalculationPartResolver<FeatureInputSingleObject> resolver,
             MorphologicalIterations iterations,
             int iterationsErosionSecond,
             boolean inverse) {
-        ResolvedPart<ObjectMask, FeatureInputSingleObject> ccDilation =
+        ResolvedPart<ObjectMask, FeatureInputSingleObject> partDilation =
                 CalculateDilation.of(
                         resolver, iterations.getIterationsDilation(), iterations.isDo3D());
-        ResolvedPart<ObjectMask, FeatureInputSingleObject> ccErosion =
+        ResolvedPart<ObjectMask, FeatureInputSingleObject> partErosion =
                 CalculateErosion.ofResolved(
                         resolver, iterations.getIterationsErosion(), iterations.isDo3D());
 
         return new CalculateShellObjectMask(
-                ccDilation, ccErosion, iterationsErosionSecond, iterations.isDo3D(), inverse);
+                partDilation, partErosion, iterationsErosionSecond, iterations.isDo3D(), inverse);
     }
 
     @Override
@@ -103,6 +122,13 @@ public class CalculateShellObjectMask
                 iterationsErosionSecond);
     }
 
+    /**
+     * Creates a shell object by applying dilation and erosion operations.
+     *
+     * @param input the {@link FeatureInputSingleObject} to process
+     * @return the created shell {@link ObjectMask}
+     * @throws FeatureCalculationException if an error occurs during calculation
+     */
     private ObjectMask createShellObject(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
@@ -116,6 +142,13 @@ public class CalculateShellObjectMask
         return dilated;
     }
 
+    /**
+     * Applies a second erosion operation if necessary.
+     *
+     * @param object the {@link ObjectMask} to erode
+     * @return the eroded {@link ObjectMask}
+     * @throws FeatureCalculationException if an error occurs during erosion
+     */
     private ObjectMask maybeErodeSecondTime(ObjectMask object) throws FeatureCalculationException {
         try {
             if (iterationsErosionSecond > 0) {
@@ -130,7 +163,10 @@ public class CalculateShellObjectMask
 
     /**
      * Assigns off pixels to an object-mask based on another object-mask specified in
-     * global-cordinates
+     * global-coordinates.
+     *
+     * @param toAssignTo the {@link ObjectMask} to assign off pixels to
+     * @param objectMask the {@link ObjectMask} used as a reference for off pixels
      */
     private static void assignOffTo(ObjectMask toAssignTo, ObjectMask objectMask) {
         toAssignTo.assignOff().toObject(objectMask);

@@ -53,6 +53,7 @@ public class SegmentChannelByObject extends UnaryWithChannelBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private SegmentChannelIntoObjects segment;
+
     // END BEAN PROPERTIES
 
     @Override

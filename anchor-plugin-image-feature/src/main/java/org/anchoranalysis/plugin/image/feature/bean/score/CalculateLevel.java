@@ -31,12 +31,16 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/** Calculates a level score based on voxel intensity and a given threshold. */
 public class CalculateLevel extends CalculateLevelBase {
 
     // START BEAN PROPERTIES
+    /** The maximum distance from the threshold level to consider. */
     @BeanField @Getter @Setter private double distanceMax = 20;
+
     // END BEAN PROPERTIES
 
+    /** A divisor used in the calculation, derived from {@link #distanceMax}. */
     private double distanceMaxDivider;
 
     @Override

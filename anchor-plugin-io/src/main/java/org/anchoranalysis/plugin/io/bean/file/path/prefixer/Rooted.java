@@ -58,6 +58,7 @@ public class Rooted extends PathPrefixer {
 
     /** The name of the root-path to associate with this fileset. */
     @BeanField @Getter @Setter private String rootName;
+
     // END BEAN PROPERTIES
 
     @Override

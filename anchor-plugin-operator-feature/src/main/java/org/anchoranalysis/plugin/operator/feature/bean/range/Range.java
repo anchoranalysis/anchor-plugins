@@ -35,21 +35,24 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * The statistical range between two values i.e. the max-value minus the min-value.
+ * Calculates the statistical range between two feature values, with optional weighting.
  *
- * <p>Optionally two different weights can be applied, depending on whether the first or second
- * value is the higher one.
+ * <p>The range is calculated as the absolute difference between two feature values. Different
+ * weights can be applied depending on which value is greater.
  *
- * @author Owen Feehan
- * @param <T>
+ * @param <T> the type of {@link FeatureInput} this feature operates on
  */
 public class Range<T extends FeatureInput> extends FeatureBinary<T> {
 
-    // START BEAN PROPERTIES
+    /**
+     * Weight applied when the first item's value is greater than the second. Default value is 1.0.
+     */
     @BeanField @Getter @Setter private double weightItem1Greater = 1.0;
 
+    /**
+     * Weight applied when the second item's value is greater than the first. Default value is 1.0.
+     */
     @BeanField @Getter @Setter private double weightItem2Greater = 1.0;
-    // END BEAN PROPERTIES
 
     @Override
     public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {

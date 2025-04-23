@@ -37,6 +37,7 @@ public class Limit extends FilesProviderUnary {
 
     // START BEANS
     @BeanField @Getter @Setter private int maxNumberItems = 0;
+
     // END BEANS
 
     @Override

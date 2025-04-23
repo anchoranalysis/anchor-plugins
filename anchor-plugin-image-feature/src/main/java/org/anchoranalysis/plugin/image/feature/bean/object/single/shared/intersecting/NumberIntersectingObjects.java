@@ -32,6 +32,7 @@ import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
+/** A feature that calculates the number of objects intersecting with the input object. */
 public class NumberIntersectingObjects extends FeatureIntersectingObjects {
 
     @Override

@@ -45,20 +45,21 @@ import org.anchoranalysis.math.statistics.moment.ImageMoments;
  */
 public abstract class ImageMomentsBase extends FeatureSingleObject {
 
-    /* Minimum number of voxels, otherwise moments aren't calculated */
+    /** Minimum number of voxels, otherwise moments aren't calculated. */
     private static final int MIN_NUM_VOXELS = 12;
 
     // START BEAN PROPERTIES
-    /** If true co-voariance is suprpessed in z-dimension */
+    /** If true co-variance is suppressed in z-dimension. */
     @BeanField @Getter @Setter private boolean suppressZ = false;
 
     /**
-     * A value to return if there are too few voxels (less than {@code MIN_NUM_VOXELS} to calculate
-     * moments
+     * A value to return if there are too few voxels (less than {@code MIN_NUM_VOXELS}) to calculate
+     * moments.
      *
      * <p>A warning message is also written to the log.
      */
     @BeanField @Getter @Setter private double valueIfTooFewVoxels = Double.NaN;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -76,11 +77,31 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
         return calculateFromAllMoments(calculateMoments(input));
     }
 
+    /**
+     * Calculates the feature value from the {@link ImageMoments}.
+     *
+     * @param moments the {@link ImageMoments} to use for calculation
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double calculateFromAllMoments(ImageMoments moments)
             throws FeatureCalculationException;
 
+    /**
+     * Generates an error message when there are too few pixels to calculate moments.
+     *
+     * @return the error message as a {@link String}
+     * @throws FeatureCalculationException if generating the error message fails
+     */
     protected abstract String errorMessageIfTooFewPixels() throws FeatureCalculationException;
 
+    /**
+     * Calculates the {@link ImageMoments} for the input object.
+     *
+     * @param input the {@link FeatureCalculationInput} containing the object
+     * @return the calculated {@link ImageMoments}
+     * @throws FeatureCalculationException if the calculation fails
+     */
     private ImageMoments calculateMoments(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 

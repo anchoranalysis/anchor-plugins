@@ -59,6 +59,7 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ChannelProvider channelLookup;
+
     // END BEAN PROPERTIES
 
     @Override

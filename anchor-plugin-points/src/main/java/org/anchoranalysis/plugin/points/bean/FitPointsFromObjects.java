@@ -46,21 +46,25 @@ import org.anchoranalysis.spatial.point.Point2i;
 import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.PointConverter;
 
+/** A {@link MarkCollectionProvider} that fits points from objects to create marks. */
 public class FitPointsFromObjects extends MarkCollectionProvider {
 
-    /// START BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    /** The {@link PointsFitterToMark} used to fit points to marks. */
     @BeanField @Getter @Setter private PointsFitterToMark pointsFitter;
 
+    /** The {@link MarkFactory} used to create new marks. */
     @BeanField @Getter @Setter private MarkFactory markFactory;
 
-    /** If true, Reduces the set of points by applying a convex-hull operation */
+    /** If true, reduces the set of points by applying a convex-hull operation. */
     @BeanField @Getter @Setter private boolean convexHull = true;
 
     /**
-     * If true, if too few points exist to make a mark, or otherwise a fitting errors, it is simply
-     * not included (with only a log error) If false, an exception is thrown
+     * If true, ignores fitting failures and continues processing. If false, throws an exception on
+     * fitting failure.
      */
     @BeanField @Getter @Setter private boolean ignoreFittingFailure = true;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -77,6 +81,14 @@ public class FitPointsFromObjects extends MarkCollectionProvider {
         }
     }
 
+    /**
+     * Creates a mark from an object mask.
+     *
+     * @param object the {@link ObjectMask} to create a mark from
+     * @param dimensions the {@link Dimensions} of the image space
+     * @return an {@link Optional} containing the created {@link Mark}, or empty if creation failed
+     * @throws ProvisionFailedException if mark creation fails and ignoreFittingFailure is false
+     */
     private Optional<Mark> createMarkFromObject(ObjectMask object, Dimensions dimensions)
             throws ProvisionFailedException {
         try {
@@ -92,6 +104,13 @@ public class FitPointsFromObjects extends MarkCollectionProvider {
         }
     }
 
+    /**
+     * Applies the convex hull operation to the object's outline points if convexHull is true.
+     *
+     * @param object the {@link ObjectMask} to extract points from
+     * @return a {@link List} of {@link Point2i} representing the object's outline or convex hull
+     * @throws OperationFailedException if the convex hull operation fails
+     */
     private List<Point2i> maybeApplyConvexHull(ObjectMask object) throws OperationFailedException {
         try {
             List<Point2i> points = ConvexHullUtilities.pointsOnOutline(object);
@@ -105,6 +124,14 @@ public class FitPointsFromObjects extends MarkCollectionProvider {
         }
     }
 
+    /**
+     * Fits points to a mark using the pointsFitter.
+     *
+     * @param pointsToFit the {@link List} of {@link Point3f} to fit
+     * @param dimensions the {@link Dimensions} of the image space
+     * @return an {@link Optional} containing the fitted {@link Mark}, or empty if fitting failed
+     * @throws ProvisionFailedException if mark fitting fails and ignoreFittingFailure is false
+     */
     private Optional<Mark> fitToMark(List<Point3f> pointsToFit, Dimensions dimensions)
             throws ProvisionFailedException {
 
@@ -118,16 +145,25 @@ public class FitPointsFromObjects extends MarkCollectionProvider {
         }
     }
 
-    private Optional<Mark> handleFittingFailure(String errorMsg) throws ProvisionFailedException {
+    /**
+     * Handles fitting failures based on the ignoreFittingFailure flag.
+     *
+     * @param errorMessage the error message describing the fitting failure
+     * @return an {@link Optional} that is empty if ignoreFittingFailure is true
+     * @throws ProvisionFailedException if ignoreFittingFailure is false
+     */
+    private Optional<Mark> handleFittingFailure(String errorMessage)
+            throws ProvisionFailedException {
         if (ignoreFittingFailure) {
             getLogger()
                     .messageLogger()
-                    .logFormatted("Ignoring mark due to a fitting error. %s", errorMsg);
+                    .logFormatted("Ignoring mark due to a fitting error. %s", errorMessage);
             return Optional.empty();
         } else {
             throw new ProvisionFailedException(
                     String.format(
-                            "Cannot create mark from points due to fitting error.%n%s", errorMsg));
+                            "Cannot create mark from points due to fitting error.%n%s",
+                            errorMessage));
         }
     }
 }

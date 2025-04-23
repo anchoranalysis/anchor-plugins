@@ -38,10 +38,13 @@ import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.mark.points.PointListFactory;
 
+/** Creates a {@link MarkCollection} of point marks from an {@link ObjectCollection}. */
 public class PointsFromObjects extends MarkCollectionProvider {
 
+    /** Provider for the object collection from which to create point marks. */
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -49,6 +52,12 @@ public class PointsFromObjects extends MarkCollectionProvider {
         return createMarksFromObjects(objects.get());
     }
 
+    /**
+     * Creates a {@link MarkCollection} of point marks from an {@link ObjectCollection}.
+     *
+     * @param objectCollection the collection of objects to convert to point marks
+     * @return a new {@link MarkCollection} containing point marks derived from the objects
+     */
     private static MarkCollection createMarksFromObjects(ObjectCollection objectCollection) {
 
         MarkCollection out = new MarkCollection();

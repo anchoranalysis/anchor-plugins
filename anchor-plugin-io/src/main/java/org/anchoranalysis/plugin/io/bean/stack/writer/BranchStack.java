@@ -47,6 +47,7 @@ public class BranchStack extends StackWriterDelegateBase {
 
     /** Otherwise the writer to use. */
     @BeanField @Getter @Setter private StackWriter writerElse;
+
     // END BEAN PROPERTIES
 
     @Override

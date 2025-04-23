@@ -37,6 +37,7 @@ public class StaticFilePath extends FilePath {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String path;
+
     // END BEAN PROPERTIES
 
     @Override

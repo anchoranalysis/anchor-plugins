@@ -58,6 +58,7 @@ public class Sequence extends BinarySegmentation {
      */
     @BeanField @OptionalBean @Getter @Setter
     private List<BinarySegmentation> list = new ArrayList<>();
+
     // END BEAN PROPERTIES
 
     @Override

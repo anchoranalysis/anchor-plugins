@@ -65,6 +65,7 @@ public class MaskAsObject extends ComparableSource {
 
     /** If true the {@link Mask} is inverted before conversion into an {@link ObjectCollection}. */
     @BeanField @Getter @Setter private boolean invert = false;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -47,9 +47,12 @@ import org.anchoranalysis.plugin.annotation.bean.label.GroupedAnnotationLabels;
 public class ImageLabelStrategy extends SinglePathStrategy {
 
     // START BEAN PROPERTIES
+    /** List of {@link AnnotationLabel}s available for annotation. */
     @BeanField @Getter @Setter private List<AnnotationLabel> labels;
 
+    /** The weight to use for the width of the description. */
     @BeanField @Getter @Setter private int weightWidthDescription;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -63,8 +66,14 @@ public class ImageLabelStrategy extends SinglePathStrategy {
         }
     }
 
-    // This is actually called twice during a typically opening of an annotation
-    // But overhead is minor (assuming not very many labels)
+    /**
+     * Creates a {@link GroupedAnnotationLabels} from the current labels.
+     *
+     * <p>This is actually called twice during a typical opening of an annotation. But overhead is
+     * minor (assuming not very many labels).
+     *
+     * @return a new {@link GroupedAnnotationLabels} instance.
+     */
     public GroupedAnnotationLabels groupedLabels() {
         return new GroupedAnnotationLabels(labels);
     }

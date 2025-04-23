@@ -29,8 +29,14 @@ package org.anchoranalysis.plugin.imagej.bean.channel.provider.filter.moments;
 import ij.plugin.filter.RankFilters;
 import org.anchoranalysis.plugin.imagej.bean.channel.provider.WithFilterBase;
 
+/** Applies a 2D mean filter to a channel using ImageJ's {@link RankFilters}. */
 public class MeanFilter2D extends WithFilterBase {
 
+    /**
+     * Creates a new {@link MeanFilter2D} instance.
+     *
+     * <p>Initializes the filter with the MEAN operation from {@link RankFilters}.
+     */
     public MeanFilter2D() {
         super(RankFilters.MEAN);
     }

@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.points.convexhull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -38,13 +37,26 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point2i;
 
-// Strongly influenced by http://rsb.info.nih.gov/ij/macros/ConvexHull.txt
+/**
+ * Utility methods for calculating convex hulls on 2D points.
+ *
+ * <p>Strongly influenced by http://rsb.info.nih.gov/ij/macros/ConvexHull.txt
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvexHullUtilities {
 
+    /** The default minimum number of points required for convex hull calculation. */
     private static final int DEFAULT_MIN_NUM_POINTS = 5;
 
-    /** Like {@link #convexHull2D(List, int)} but uses a default minimum number of points. */
+    /**
+     * Apply a convex-hull algorithm to filter a set of points using the default minimum number of
+     * points.
+     *
+     * @param points points to filter
+     * @return the filtered points on convex-hull if the minimum number of points exists, otherwise
+     *     the input points unchanged
+     * @throws OperationFailedException if the count variable becomes too high during calculation
+     */
     public static List<Point2i> convexHull2D(List<Point2i> points) throws OperationFailedException {
         return convexHull2D(points, DEFAULT_MIN_NUM_POINTS);
     }
@@ -56,9 +68,9 @@ public class ConvexHullUtilities {
      *
      * @param points points to filter
      * @param minNumberPoints a minimum of number of points (before any convex hull filtering) that
-     *     must be found.
-     * @return the filtered points on convex-hull iff the minimum number of points exists, otherwise
-     *     the input points unchanged.
+     *     must be found
+     * @return the filtered points on convex-hull if the minimum number of points exists, otherwise
+     *     the input points unchanged
      * @throws OperationFailedException if the count variable becomes too high during calculation
      */
     public static List<Point2i> convexHull2D(List<Point2i> points, int minNumberPoints)
@@ -79,7 +91,28 @@ public class ConvexHullUtilities {
         }
     }
 
-    /** "Gift wrap" algorithm for convex-hull from ImageJ */
+    /**
+     * Get points on all outlines of a collection of objects.
+     *
+     * @param objects the collection of objects
+     * @return a list of {@link Point2i} representing points on all outlines
+     */
+    public static List<Point2i> pointsOnAllOutlines(ObjectCollection objects) {
+        return PointsFromObject.listFromAllOutlines2i(objects);
+    }
+
+    /**
+     * Get points on the outline of a single object.
+     *
+     * @param object the object mask
+     * @return a list of {@link Point2i} representing points on the outline
+     * @throws CreateException if there's an error creating the point list
+     */
+    public static List<Point2i> pointsOnOutline(ObjectMask object) throws CreateException {
+        return PointsFromObject.listFromOutline2i(object);
+    }
+
+    /** "Gift wrap" algorithm for convex-hull from ImageJ. */
     private static List<Point2i> filterPointsGiftWrap(List<Point2i> points) // NOSONAR
             throws OperationFailedException {
 
@@ -148,20 +181,14 @@ public class ConvexHullUtilities {
         return createPointsList(n2, xx, yy);
     }
 
+    /** Create a list of {@link Point2i} from arrays of x and y coordinates. */
     private static List<Point2i> createPointsList(int numPoints, int[] xx, int[] yy) {
         return IntStream.range(0, numPoints)
                 .mapToObj(index -> new Point2i(xx[index], yy[index]))
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    public static List<Point2i> pointsOnAllOutlines(ObjectCollection objects) {
-        return PointsFromObject.listFromAllOutlines2i(objects);
-    }
-
-    public static List<Point2i> pointsOnOutline(ObjectMask object) throws CreateException {
-        return PointsFromObject.listFromOutline2i(object);
-    }
-
+    /** Calculate the starting index for the convex hull algorithm. */
     private static int calculateStartingIndex(List<Point2i> pointsIn) {
 
         int smallestY = Integer.MAX_VALUE;

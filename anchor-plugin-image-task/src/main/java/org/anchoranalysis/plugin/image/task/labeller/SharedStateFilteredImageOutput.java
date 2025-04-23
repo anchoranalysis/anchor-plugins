@@ -46,32 +46,41 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.labeller.ImageLabeller;
 
 /**
- * @author Owen Feehan
+ * Manages filtered image output with shared state across multiple images.
+ *
  * @param <T> type of initialization for the {@link ImageLabeller}.
  */
 public class SharedStateFilteredImageOutput<T> {
 
+    /** The image labeller used to filter and label images. */
     private ImageLabeller<T> filter;
+
+    /** The base outputter for writing results. */
     private Outputter baseOutputter;
 
+    /** Optional grouped multiplexed outputters for different labels. */
     private Optional<GroupedMultiplexOutputters> outputters;
 
+    /** Optional CSV writer for recording image names and their corresponding groups. */
     private Optional<FeatureCSVWriter> csvWriter;
 
+    /** The initialization data for the image labeller. */
     private T initialization;
 
+    /** Flag to track if the groupIdentifierFor method has been called. */
     private boolean groupIdentifierForCalled = false;
 
+    /** The output name for the labels sub-directory where image copies are placed. */
     private final String outputNameImages;
 
     /**
-     * @param baseOutputter
-     * @param filter the filter must not yet have been inited()
-     * @param outputNameMapping the output-name for the CSV that is created showing the mapping
-     *     between inputs and labels.
-     * @param outputNameImages the output-name for the labels sub-directory in which copies images
-     *     are placed in sub-directories.
-     * @throws CreateException
+     * Creates a new {@link SharedStateFilteredImageOutput}.
+     *
+     * @param baseOutputter the base {@link Outputter} for writing results
+     * @param filter the {@link ImageLabeller} to use (must not be initialized yet)
+     * @param outputNameMapping the output name for the CSV file mapping inputs to labels
+     * @param outputNameImages the output name for the labels sub-directory
+     * @throws CreateException if there's an error during creation
      */
     public SharedStateFilteredImageOutput(
             Outputter baseOutputter,
@@ -97,6 +106,12 @@ public class SharedStateFilteredImageOutput<T> {
         }
     }
 
+    /**
+     * Writes a row to the CSV file with image name and group identifier.
+     *
+     * @param name the name of the image
+     * @param groupIdentifier the group identifier for the image
+     */
     public synchronized void writeRow(String name, String groupIdentifier) {
         List<TypedValue> row = new ArrayList<>();
         row.add(new TypedValue(name));
@@ -105,11 +120,19 @@ public class SharedStateFilteredImageOutput<T> {
         csvWriter.ifPresent(writer -> writer.addRow(row));
     }
 
+    /** Closes the CSV writer. */
     public synchronized void close() {
         csvWriter.ifPresent(FeatureCSVWriter::close);
     }
 
-    /** Determines a particular group-identifier for an input */
+    /**
+     * Determines a particular group-identifier for an input.
+     *
+     * @param input the {@link ProvidesStackInput} to label
+     * @param context the {@link InputOutputContext} for the operation
+     * @return the label for the input
+     * @throws OperationFailedException if the labelling operation fails
+     */
     public String labelFor(ProvidesStackInput input, InputOutputContext context)
             throws OperationFailedException {
 
@@ -128,11 +151,23 @@ public class SharedStateFilteredImageOutput<T> {
         return filter.labelFor(initialization, input, context);
     }
 
-    /** groupIdentifierFor should always called at least once before getOutputManagerFor */
+    /**
+     * Gets the outputter for a specific group identifier.
+     *
+     * @param groupIdentifier the group identifier
+     * @return an {@link Optional} containing the {@link Outputter} for the group, if it exists
+     */
     public Optional<Outputter> getOutputterFor(String groupIdentifier) {
         return outputters.map(outputter -> outputter.getOutputterFor(groupIdentifier));
     }
 
+    /**
+     * Gets the filter initialization, initializing it if necessary.
+     *
+     * @param pathForBinding the {@link Path} to use for initialization
+     * @return the initialization data
+     * @throws InitializeException if initialization fails
+     */
     public T getFilterInitialization(Path pathForBinding) throws InitializeException {
         if (initialization == null) {
             initialization = filter.initialize(pathForBinding);
@@ -140,6 +175,12 @@ public class SharedStateFilteredImageOutput<T> {
         return initialization;
     }
 
+    /**
+     * Initializes the filter outputters.
+     *
+     * @param pathForBinding the {@link Path} to use for initialization
+     * @throws InitializeException if initialization fails
+     */
     private void initFilterOutputters(Path pathForBinding) throws InitializeException {
         Optional<Outputter> outputterLabelsSubdirectory =
                 baseOutputter.writerSelective().createSubdirectory(outputNameImages, false);

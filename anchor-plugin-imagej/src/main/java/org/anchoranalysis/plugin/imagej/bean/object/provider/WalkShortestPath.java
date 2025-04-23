@@ -44,39 +44,53 @@ import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
- * Traces out the shortest-path (a line) between two points in an object-mask.
+ * Traces out the shortest-path (a line) between two or more points in an object-mask.
  *
- * <p>This ensures the two points are connected (4/6 neighborhood)
- *
- * @author Owen Feehan
+ * <p>This ensures the points are connected (4/6 neighborhood)
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class WalkShortestPath {
 
-    /** Walks a 4-connected line between two points, producing a minimal object-mask for both */
+    /**
+     * Walks a 4-connected line between two points, producing a minimal object-mask for both.
+     *
+     * @param point1 the first point
+     * @param point2 the second point
+     * @return an {@link ObjectMask} containing the line between the two points
+     * @throws OperationFailedException if the operation fails
+     */
     public static ObjectMask walkLine(Point3i point1, Point3i point2)
             throws OperationFailedException {
         return walkLineInternal(Arrays.asList(point1, point2));
     }
 
     /**
-     * Joins a series of points together by drawling a line between each success pair of points
+     * Joins a series of points together by drawing a line between each successive pair of points.
      *
      * @param points the points which define the line
-     * @return an object-mask with a line draw between successive points (like a polygon)
+     * @return an {@link ObjectMask} with a line drawn between successive points (like a polygon)
+     * @throws OperationFailedException if fewer than two points are provided or points are not
+     *     coplanar
      */
     public static ObjectMask walkLine(List<Point3d> points) throws OperationFailedException {
 
         if (points.size() < 2) {
             throw new OperationFailedException(
                     String.format(
-                            "A minimum of two points is requred to walk a line, but there are only %d points.",
+                            "A minimum of two points is required to walk a line, but there are only %d points.",
                             points.size()));
         }
 
         return walkLineInternal(PointConverter.convert3i(points));
     }
 
+    /**
+     * Internal method to walk a line between a list of integer points.
+     *
+     * @param points the list of points to connect
+     * @return an {@link ObjectMask} containing the connected line
+     * @throws OperationFailedException if the points are not coplanar
+     */
     private static ObjectMask walkLineInternal(List<Point3i> points)
             throws OperationFailedException {
 
@@ -104,6 +118,12 @@ class WalkShortestPath {
         return object;
     }
 
+    /**
+     * Checks if all points in the list are coplanar (have the same z-coordinate).
+     *
+     * @param points the list of points to check
+     * @throws OperationFailedException if the points are not coplanar
+     */
     private static void checkCoplanar(List<Point3i> points) throws OperationFailedException {
 
         Point3i firstPoint = null;
@@ -118,12 +138,22 @@ class WalkShortestPath {
             if (firstPoint.z() != point.z()) {
                 throw new OperationFailedException(
                         String.format(
-                                "the first point in the list (%d) and another point (%d) have different z values. This algorithm only supports co-planar points (parallel to XY-axis)",
+                                "The first point in the list (%d) and another point (%d) have different z values. This algorithm only supports co-planar points (parallel to XY-axis)",
                                 firstPoint.z(), point.z()));
             }
         }
     }
 
+    /**
+     * Draws a line on a voxel buffer between two points.
+     *
+     * @param plane the voxel buffer to draw on
+     * @param extent the extent of the voxel buffer
+     * @param binaryValues the binary values to use for drawing
+     * @param point1 the first point
+     * @param point2 the second point
+     * @param cornerMin the minimum corner of the bounding box
+     */
     private static void drawLineOnVoxelBuffer(
             VoxelBuffer<UnsignedByteBuffer> plane,
             Extent extent,
@@ -141,12 +171,16 @@ class WalkShortestPath {
                 point2.y() - cornerMin.y());
     }
 
-    /*
-     * From ImageProcessor.java in ImageJ
+    /**
+     * Draws a 4-connected line using Bresenham's algorithm.
      *
-     * Draws a line using the Bresenham's algorithm that is 4-connected instead of 8-connected.<br>
-    Based on code from http://stackoverflow.com/questions/5186939/algorithm-for-drawing-a-4-connected-line<br>
-    Author: Gabriel Landini (G.Landini at bham.ac.uk)
+     * @param plane the voxel buffer to draw on
+     * @param extent the extent of the voxel buffer
+     * @param binaryValues the binary values to use for drawing
+     * @param x1 x-coordinate of the first point
+     * @param y1 y-coordinate of the first point
+     * @param x2 x-coordinate of the second point
+     * @param y2 y-coordinate of the second point
      */
     private static void drawLine4(
             VoxelBuffer<UnsignedByteBuffer> plane,
@@ -178,10 +212,26 @@ class WalkShortestPath {
         drawPoint(plane, extent, binaryValues, x2, y2);
     }
 
+    /**
+     * Returns the sign of the difference between two integers.
+     *
+     * @param x1 the first integer
+     * @param x2 the second integer
+     * @return 1 if x1 < x2, -1 otherwise
+     */
     private static int sgn(int x1, int x2) {
         return x1 < x2 ? 1 : -1;
     }
 
+    /**
+     * Draws a single point on the voxel buffer.
+     *
+     * @param plane the voxel buffer to draw on
+     * @param extent the extent of the voxel buffer
+     * @param binaryValues the binary values to use for drawing
+     * @param x x-coordinate of the point
+     * @param y y-coordinate of the point
+     */
     private static void drawPoint(
             VoxelBuffer<UnsignedByteBuffer> plane,
             Extent extent,

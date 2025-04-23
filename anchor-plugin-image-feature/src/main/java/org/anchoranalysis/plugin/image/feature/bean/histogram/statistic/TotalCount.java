@@ -29,6 +29,12 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Calculates the total count of all entries in a {@link Histogram}.
+ *
+ * <p>This represents the sum of frequencies for all values in the histogram, which is equivalent to
+ * the total number of pixels or data points represented by the histogram.
+ */
 public class TotalCount extends FeatureHistogramStatistic {
 
     @Override

@@ -30,11 +30,14 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.WithValueBase;
 
 /**
- * Calculates the underlying feature, but replaces the result with a constant if it happens to be an
- * "unusual" value
+ * Calculates the underlying feature, but replaces the result with a constant if it is an "unusual"
+ * value.
  *
- * @author Owen Feehan
- * @param <T>
+ * <p>This abstract class extends {@link WithValueBase} to provide a mechanism for replacing
+ * specific unusual values (e.g., NaN, Infinity) in feature calculation results with a predefined
+ * constant.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
  */
 public abstract class ReplaceUnusualValue<T extends FeatureInput> extends WithValueBase<T> {
 
@@ -52,5 +55,11 @@ public abstract class ReplaceUnusualValue<T extends FeatureInput> extends WithVa
         return featureDescription;
     }
 
+    /**
+     * Determines if the feature result is considered unusual and should be replaced.
+     *
+     * @param featureResult the result of the feature calculation
+     * @return true if the result is unusual and should be replaced, false otherwise
+     */
     protected abstract boolean isResultUnusual(double featureResult);
 }

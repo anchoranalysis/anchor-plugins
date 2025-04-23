@@ -43,19 +43,21 @@ import org.anchoranalysis.plugin.operator.feature.bean.FromDictionary;
  * Permutes a property on a feature with a sequence of integers.
  *
  * @author Owen Feehan
- * @param <T> feature-input
+ * @param <T> feature-input type
  */
 public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputDictionary>
         extends PermuteFeatureBase<T> {
 
-    // START BEAN PROPERTIES
+    /** Prefix for the parameter key. */
     @BeanField @Getter @Setter private String paramPrefix;
 
+    /** Defines how to permute the property with a sequence of integers. */
     @BeanField @Getter @Setter private PermutePropertySequenceInteger permuteProperty;
-    // END BEAN PROPERTIES
 
-    // Possible defaultInstances for beans......... saved from checkMisconfigured for delayed checks
-    // elsewhere
+    /**
+     * Possible default instances for beans, saved from checkMisconfigured for delayed checks
+     * elsewhere.
+     */
     private BeanInstanceMap defaultInstances;
 
     @Override
@@ -80,12 +82,32 @@ public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputDictio
         return delegate.get();
     }
 
+    /**
+     * Creates a delegate {@link PermuteFeature} for the given feature.
+     *
+     * @param feature the feature to permute
+     * @return a new {@link PermuteFeature} instance
+     * @throws ProvisionFailedException if the delegate cannot be created
+     */
     protected abstract PermuteFeature<Integer, T> createDelegate(Feature<T> feature)
             throws ProvisionFailedException;
 
+    /**
+     * Configures the {@link PermutePropertySequenceInteger} for this permutation.
+     *
+     * @param permuteProperty the property to configure
+     * @return the configured {@link PermutePropertySequenceInteger}
+     */
     protected abstract PermutePropertySequenceInteger configurePermuteProperty(
             PermutePropertySequenceInteger permuteProperty);
 
+    /**
+     * Creates a parameter feature for the permutation.
+     *
+     * @param suffix the suffix for the parameter key
+     * @param appendNumber whether to append a number to the key
+     * @return a new {@link Feature} instance
+     */
     protected Feature<T> createParam(String suffix, boolean appendNumber) {
         FromDictionary<T> param = new FromDictionary<>();
         param.setKeyPrefix(paramPrefix);
@@ -94,6 +116,12 @@ public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputDictio
         return param;
     }
 
+    /**
+     * Returns the sequence number as a string if appendNumber is true, otherwise an empty string.
+     *
+     * @param appendNumber whether to append the number
+     * @return the sequence number or an empty string
+     */
     private String sequenceNumberOrEmpty(boolean appendNumber) {
         if (appendNumber) {
             return Integer.toString(permuteProperty.getSequence().getStart());
@@ -102,6 +130,11 @@ public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputDictio
         }
     }
 
+    /**
+     * Configures the permute property on the delegate.
+     *
+     * @param delegate the delegate to configure
+     */
     private void configurePermutePropertyOnDelegate(PermuteFeature<Integer, T> delegate) {
         PermutePropertySequenceInteger permutePropertyConfigured =
                 configurePermuteProperty(

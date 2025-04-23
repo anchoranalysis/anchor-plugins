@@ -35,22 +35,27 @@ import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.interse
 
 class FeatureHelper {
 
+    /** Value returned when no objects are present. */
     static final int VALUE_NO_OBJECTS = -1;
 
-    static final int EXPECTED_NUM_PIXELS_FIRST_CIRCLE = 81;
+    /** Expected number of pixels in the first circle. */
+    static final int EXPECTED_NUMBER_PIXELS_FIRST_CIRCLE = 81;
 
-    static final int EXPECTED_NUM_PIXELS_SECOND_CIRCLE = 149;
+    /** Expected number of pixels in the second circle. */
+    static final int EXPECTED_NUMBER_PIXELS_SECOND_CIRCLE = 149;
 
-    static final int EXPECTED_NUM_PIXELS_SECOND_LAST_CIRCLE = 529;
+    /** Expected number of pixels in the second-last circle. */
+    static final int EXPECTED_NUMBER_PIXELS_SECOND_LAST_CIRCLE = 529;
 
     /**
-     * The threshold placed on the number of voxels rejects the smaller (initial) circles before
-     * passing the later larger ones
+     * Creates a {@link FeatureIntersectingObjects} with a threshold.
      *
-     * <p>Therefore the counts returned in these tests are initially 0 and latterly the same as
-     * {#link {@link NumberIntersectingObjectsTest}}
+     * <p>The threshold placed on the number of voxels rejects the smaller (initial) circles before
+     * passing the later larger ones. Therefore the counts returned in these tests are initially 0
+     * and latterly the same as {@link NumberIntersectingObjectsTest}.
      *
-     * @return
+     * @param feature the {@link FeatureIntersectingObjectsThreshold} to configure
+     * @return a configured {@link FeatureIntersectingObjects}
      */
     public static FeatureIntersectingObjects createWithThreshold(
             FeatureIntersectingObjectsThreshold feature) {
@@ -59,11 +64,13 @@ class FeatureHelper {
     }
 
     /**
-     * A pair feature (the number-of-voxels of the first object) is set on whatever feature is
-     * passed
+     * Creates a {@link FeatureIntersectingObjects} with a pair feature.
      *
-     * @param feature feature to set new pair featore on as property
-     * @return feature with the proprty changed
+     * <p>A pair feature (the number-of-voxels of the first object) is set on whatever feature is
+     * passed.
+     *
+     * @param feature feature to set new pair feature on as property
+     * @return feature with the property changed
      */
     public static FeatureIntersectingObjects createWithFeature(
             FeatureIntersectingObjectsSingleElement feature) {
@@ -72,6 +79,11 @@ class FeatureHelper {
         return feature;
     }
 
+    /**
+     * Creates a pair feature that returns the number of voxels of the first object.
+     *
+     * @return a new {@link FeaturePairObjects} instance
+     */
     private static FeaturePairObjects createPairFeature() {
         return new First(new NumberVoxels());
     }

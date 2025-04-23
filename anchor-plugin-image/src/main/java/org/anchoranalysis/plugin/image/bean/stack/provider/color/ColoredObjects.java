@@ -45,6 +45,7 @@ public class ColoredObjects extends ColoredBaseWithGenerator {
     // START BEAN PROPERTIES
     /** Objects to draw on a background */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
     @Override

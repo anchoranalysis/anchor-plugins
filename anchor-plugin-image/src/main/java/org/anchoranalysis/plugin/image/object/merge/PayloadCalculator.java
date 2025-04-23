@@ -29,8 +29,21 @@ package org.anchoranalysis.plugin.image.object.merge;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Calculates a payload value for an {@link ObjectMask}.
+ *
+ * <p>This functional interface is used to compute a numeric value associated with an object mask,
+ * which can be used in various algorithms, such as object merging or prioritization.
+ */
 @FunctionalInterface
 public interface PayloadCalculator {
 
+    /**
+     * Calculates the payload value for a given object mask.
+     *
+     * @param object the {@link ObjectMask} for which to calculate the payload
+     * @return the calculated payload value as a double
+     * @throws FeatureCalculationException if an error occurs during the calculation
+     */
     double calculate(ObjectMask object) throws FeatureCalculationException;
 }

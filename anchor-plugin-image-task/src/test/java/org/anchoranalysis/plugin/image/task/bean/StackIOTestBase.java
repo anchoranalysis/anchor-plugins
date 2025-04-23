@@ -39,9 +39,13 @@ import org.junit.jupiter.api.io.TempDir;
  */
 public abstract class StackIOTestBase {
 
-    // START: Ensure needed instances exist in the default BeanInstanceMap
+    /** The {@link StackReader} instance used for reading image stacks. */
     protected static final StackReader STACK_READER = BeanInstanceMapFixture.ensureStackReader();
 
+    /**
+     * Sets up the necessary instances in the default {@link
+     * org.anchoranalysis.bean.xml.BeanInstanceMap}.
+     */
     @BeforeAll
     static void setupWriter() {
         BeanInstanceMapFixture.ensureStackWriter(false);
@@ -49,14 +53,18 @@ public abstract class StackIOTestBase {
         BeanInstanceMapFixture.ensureInterpolator();
     }
 
+    /** Removes the static writer from the {@link org.anchoranalysis.bean.xml.BeanInstanceMap}. */
     @AfterAll
     static void teardown() {
         // Remove the static writer, as we want the global state to stay neutral
         // for future tests (especially as this test uses TIFFs).
         BeanInstanceMapFixture.removeStackWriter();
     }
-    // END: Ensure needed instances exist in the default BeanInstanceMap
 
-    /** Where the output is written to. */
+    /**
+     * The directory where the output is written to.
+     *
+     * <p>This is automatically created and managed by JUnit using the {@link TempDir} annotation.
+     */
     @TempDir protected Path directory; // NOSONAR
 }

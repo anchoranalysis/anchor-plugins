@@ -33,6 +33,7 @@ import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadata;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
+/** Context for exporting features, containing configuration and output settings. */
 @Value
 @AllArgsConstructor
 public class FeatureExporterContext {
@@ -58,7 +59,13 @@ public class FeatureExporterContext {
      */
     private final boolean suppressErrors;
 
-    /** Creates a {@link FeatureCSVWriter} for the non-aggregated results. */
+    /**
+     * Creates a {@link FeatureCSVWriter} for the non-aggregated results.
+     *
+     * @param metadata the metadata for the CSV file
+     * @return an optional {@link FeatureCSVWriter} if creation is successful, empty otherwise
+     * @throws OutputWriteFailedException if there's an error creating the CSV writer
+     */
     public Optional<FeatureCSVWriter> csvWriter(FeatureCSVMetadata metadata)
             throws OutputWriteFailedException {
         return FeatureCSVWriter.create(metadata, context.getOutputter(), visuallyShortenDecimals);

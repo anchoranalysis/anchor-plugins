@@ -42,14 +42,16 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * Base class for features that calculate touching with a dilated bounding box intersection
+ * Base class for features that calculate touching with a dilated bounding box intersection.
  *
  * @author Owen Feehan
  */
 public abstract class TouchingVoxels extends FeaturePairObjects {
 
     // START BEAN PROPERTIES
+    /** Whether to perform calculations in 3D (true) or 2D (false). */
     @BeanField @Getter @Setter private boolean do3D = true;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -69,25 +71,50 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
                 inputSessionless.getFirst(), inputSessionless.getSecond(), boxIntersect.get());
     }
 
+    /**
+     * Calculates the feature value for the intersection of two objects.
+     *
+     * @param object1 the first {@link ObjectMask}
+     * @param object2 the second {@link ObjectMask}
+     * @param boxIntersect the {@link BoundingBox} of the intersection
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double calculateWithIntersection(
             ObjectMask object1, ObjectMask object2, BoundingBox boxIntersect)
             throws FeatureCalculationException;
 
     /**
-     * The intersection of the bounding box of one object-mask with the (dilated by 1 bounding-box)
-     * of the other
+     * Creates a {@link CountKernel} for the given object mask.
+     *
+     * @param object2Relative the {@link ObjectMask} to create the kernel for
+     * @return the created {@link CountKernel}
+     */
+    protected CountKernel createCountKernelMask(ObjectMask object2Relative) {
+        return new CountKernelNeighborhoodMask(object2Relative);
+    }
+
+    /**
+     * Creates {@link KernelApplicationParameters} based on the current configuration.
+     *
+     * @return the created {@link KernelApplicationParameters}
+     */
+    protected KernelApplicationParameters createParameters() {
+        return new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, do3D);
+    }
+
+    /**
+     * Calculates the intersection of the bounding box of one object-mask with the (dilated by 1
+     * bounding-box) of the other.
+     *
+     * @param input the {@link FeatureCalculationInput} containing the pair of objects
+     * @return an {@link Optional} containing the intersecting {@link BoundingBox}, or empty if
+     *     there's no intersection
+     * @throws FeatureCalculationException if the calculation fails
      */
     private Optional<BoundingBox> boxIntersectDilated(
             FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
         return input.calculate(new CalculateIntersectionOfDilatedBoundingBox(do3D));
-    }
-
-    protected CountKernel createCountKernelMask(ObjectMask object2Relative) {
-        return new CountKernelNeighborhoodMask(object2Relative);
-    }
-
-    protected KernelApplicationParameters createParameters() {
-        return new KernelApplicationParameters(OutsideKernelPolicy.AS_OFF, do3D);
     }
 }

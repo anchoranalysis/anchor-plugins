@@ -49,6 +49,7 @@ public class Dilate extends MorphologicalOperatorBase {
 
     // START BEAN FIELDS
     @BeanField @Getter @Setter private boolean bigNeighborhood = false;
+
     // END BEAN FIELDS
 
     // Assumes imgChannelOut has the same ImgChannelRegions

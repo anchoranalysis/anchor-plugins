@@ -35,6 +35,12 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.OutlineKernelBase;
 
+/**
+ * Calculates the number of voxels at the border of an object.
+ *
+ * <p>This feature applies an outline kernel to the object and counts the number of voxels that are
+ * part of the object's border.
+ */
 public class NumberVoxelsAtBorder extends OutlineKernelBase {
 
     @Override
@@ -46,6 +52,13 @@ public class NumberVoxelsAtBorder extends OutlineKernelBase {
         return numberBorderPixels(object, parameters);
     }
 
+    /**
+     * Calculates the number of border voxels for a given object.
+     *
+     * @param object the {@link ObjectMask} to analyze
+     * @param parameters the {@link KernelApplicationParameters} for applying the kernel
+     * @return the number of voxels at the border of the object
+     */
     public static int numberBorderPixels(
             ObjectMask object, KernelApplicationParameters parameters) {
         OutlineKernel kernel = new OutlineKernel();

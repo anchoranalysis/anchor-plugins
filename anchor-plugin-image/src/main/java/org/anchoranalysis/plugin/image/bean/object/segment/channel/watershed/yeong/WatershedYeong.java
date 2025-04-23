@@ -71,6 +71,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
     // START PROPERTIES
     /** If true, exits early and just returns the minima, without any further segmentation */
     @BeanField @Getter @Setter private boolean exitWithMinima = false;
+
     // END PROPERTIES
 
     @Override

@@ -36,11 +36,20 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBoxDistance;
 import org.anchoranalysis.spatial.point.Point3d;
 
+/**
+ * A {@link BeforeCondition} that checks if two {@link ObjectMask}s are within a specified maximum
+ * distance.
+ */
 @AllArgsConstructor
 public class DistanceCondition implements BeforeCondition {
 
+    /** The maximum allowed distance between objects. */
     private final Optional<UnitValueDistance> maxDistance;
+
+    /** Whether to ignore the Z-dimension when calculating distances. */
     private final boolean suppressZ;
+
+    /** Logger for outputting messages. */
     private final MessageLogger logger;
 
     @Override
@@ -56,6 +65,15 @@ public class DistanceCondition implements BeforeCondition {
         }
     }
 
+    /**
+     * Checks if two {@link ObjectMask}s are within the maximum allowed distance.
+     *
+     * @param source the source {@link ObjectMask}
+     * @param destination the destination {@link ObjectMask}
+     * @param unitConverter an optional {@link UnitConverter} for unit conversions
+     * @return true if the objects are within the maximum distance, false otherwise
+     * @throws OperationFailedException if the distance check fails
+     */
     private boolean isWithinMaxDistance(
             ObjectMask source, ObjectMask destination, Optional<UnitConverter> unitConverter)
             throws OperationFailedException {
@@ -85,6 +103,15 @@ public class DistanceCondition implements BeforeCondition {
         }
     }
 
+    /**
+     * Checks if the distance between two points is within the maximum allowed distance.
+     *
+     * @param unitConverter an optional {@link UnitConverter} for unit conversions
+     * @param point1 the first {@link Point3d}
+     * @param point2 the second {@link Point3d}
+     * @return the resolved maximum distance
+     * @throws OperationFailedException if the distance resolution fails
+     */
     private double resolveDistance(
             Optional<UnitConverter> unitConverter, Point3d point1, Point3d point2)
             throws OperationFailedException {

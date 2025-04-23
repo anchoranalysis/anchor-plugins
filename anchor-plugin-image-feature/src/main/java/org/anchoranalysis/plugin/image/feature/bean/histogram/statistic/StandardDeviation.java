@@ -31,6 +31,13 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Calculates the standard deviation of values in a {@link Histogram}.
+ *
+ * <p>The standard deviation is a measure of the amount of variation or dispersion of a set of
+ * values. It is the square root of the variance, which is the average of the squared differences
+ * from the mean.
+ */
 public class StandardDeviation extends FeatureHistogramStatistic {
 
     @Override

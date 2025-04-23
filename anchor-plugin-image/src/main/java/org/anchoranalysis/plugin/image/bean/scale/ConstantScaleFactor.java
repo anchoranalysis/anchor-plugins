@@ -56,6 +56,7 @@ public class ConstantScaleFactor extends ScaleCalculator {
     // START BEAN PROPERTIES
     /** The constant floating-point value to scale each dimension by. */
     @Positive @BeanField @Getter @Setter private double value = 1.0;
+
     // END BEAN PROPERTIES
 
     @Override

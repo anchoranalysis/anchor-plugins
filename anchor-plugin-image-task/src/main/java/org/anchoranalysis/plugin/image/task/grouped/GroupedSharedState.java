@@ -54,6 +54,7 @@ public class GroupedSharedState<S, T> {
     @Getter
     private ConsistentChannelNamesChecker channelNamesChecker = new ConsistentChannelNamesChecker();
 
+    /** The group map for storing and retrieving grouped data. */
     private GroupMapByName<S, T> groupMap;
 
     // START REQUIRED ARGUMENTS
@@ -62,14 +63,18 @@ public class GroupedSharedState<S, T> {
 
     /** How to create the group-map when needed. */
     private final Function<ConsistentChannelChecker, GroupMapByName<S, T>> createGroupMap;
+
     // END REQUIRED ARGUMENTS
 
+    /**
+     * Gets the group map, creating it if it doesn't exist yet.
+     *
+     * @return the {@link GroupMapByName} instance.
+     */
     public synchronized GroupMapByName<S, T> getGroupMap() {
-
         if (groupMap == null) {
             this.groupMap = createGroupMap.apply(channelChecker);
         }
-
         return groupMap;
     }
 }

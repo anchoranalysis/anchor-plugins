@@ -36,21 +36,30 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;
 
+/** A provider that references an existing {@link Mask} by its identifier. */
 @NoArgsConstructor
 public class Reference extends MaskProvider {
 
     // START BEAN PROPERTIES
+    /** The identifier of the mask to reference. */
     @BeanField @Getter @Setter private String id = "";
 
     /**
-     * If true the channel is duplicated after it is retrieved, to prevent overwriting exisiting
-     * data This is a shortcut to avoid embedding beans in a ChannelProviderDuplicate
+     * If true, the mask is duplicated after it is retrieved, to prevent overwriting existing data.
+     * This is a shortcut to avoid embedding beans in a MaskProviderDuplicate.
      */
     @BeanField @Getter @Setter private boolean duplicate = false;
+
     // END BEAN PROPERTIES
 
+    /** The referenced mask. */
     private Mask mask;
 
+    /**
+     * Creates a new {@code Reference} with the specified identifier.
+     *
+     * @param id the identifier of the mask to reference
+     */
     public Reference(String id) {
         this.id = id;
     }

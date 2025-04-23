@@ -56,6 +56,7 @@ public class ConvertNamedChannelsToStack extends InputManager<StackSequenceInput
     @BeanField @Getter @Setter @AllowEmpty private String channelName;
 
     @BeanField @Getter @Setter private int timeIndex = 0;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -61,6 +61,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     @BeanField @Getter @Setter private boolean ignoreFileNotFoundAppend = false;
 
     @BeanField @Getter @Setter private boolean skipMissingChannels = false;
+
     // END BEAN PROPERTIES
 
     @Override

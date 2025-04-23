@@ -68,6 +68,7 @@ public class MultiFileReader extends StackReader {
 
     /** If non-empty a regular-expression is applied to directories. */
     @BeanField @AllowEmpty @Getter @Setter private String regExDirectory = "";
+
     // END BEAN PROPERTIES
 
     @Override

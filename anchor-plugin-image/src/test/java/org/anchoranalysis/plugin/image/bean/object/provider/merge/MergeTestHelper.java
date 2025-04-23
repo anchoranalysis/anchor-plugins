@@ -40,23 +40,33 @@ import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 
+/** Helper class for testing merge operations on object collections. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MergeTestHelper {
 
+    /** Number of intersecting objects in the test collection. */
     private static final int NUMBER_INTERSECTING = 8;
+
+    /** Number of non-intersecting objects in the test collection. */
     private static final int NUMBER_NOT_INTERSECTING = 3;
 
-    /** Everything that intersects merged */
+    /** Expected result when all intersecting objects are merged. */
     public static final int EXPECTED_RESULT_ALL_INTERSECTING_MERGED = NUMBER_NOT_INTERSECTING + 1;
 
+    /** Expected result when the first three objects are not merged. */
     public static final int EXPECTED_RESULT_FIRST_THREE_NOT_MERGING =
             NUMBER_NOT_INTERSECTING + 3 + 1;
 
-    /** Linear intersection (intersects with left and right neighbor) among the first 8 objects, and then 3 more than don't intersect
+    /**
+     * Linear intersection (intersects with left and right neighbor) among the first 8 objects, and
+     * then 3 more that don't intersect.
      *
-     * <pre>i.e. a pattern     a--b--c--d--e--f--g--h i j k   where  --  represents a neighbor hood relation</pre>
+     * <pre>
+     * i.e. a pattern     a--b--c--d--e--f--g--h i j k   where  --  represents a neighborhood relation
+     * </pre>
      *
      * <pre>The sizes of the 11 objects increase i.e. 81, 149, 253, 377, 529, ....., 1653, 1961
+     * </pre>
      */
     public static final ObjectCollection OBJECTS_LINEAR_INTERSECTING =
             IntersectingCircleObjectsFixture.generateIntersectingObjects(
@@ -64,7 +74,7 @@ class MergeTestHelper {
 
     /**
      * Tests the initialization and execution of a provider of object-masks that results in a number
-     * of merged-objects
+     * of merged-objects.
      *
      * @param expectedFinalMergeCount the expected size() of the object-masks returned by the
      *     provider
@@ -73,7 +83,7 @@ class MergeTestHelper {
      * @param expectedCalculationCount the expected number of times the execute() method is called
      *     on the Calculation
      * @param provider a provider of object-masks
-     * @throws OperationFailedException
+     * @throws OperationFailedException if an error occurs during the operation
      */
     public static void testProviderOn(
             int expectedFinalMergeCount,

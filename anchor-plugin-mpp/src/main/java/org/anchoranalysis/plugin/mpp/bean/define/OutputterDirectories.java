@@ -1,6 +1,8 @@
+package org.anchoranalysis.plugin.mpp.bean.define;
+
 /*-
  * #%L
- * anchor-plugin-image-feature
+ * anchor-mpp-sgmn
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,19 +26,27 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
-import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
-import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
+/**
+ * Directories into which collections of different types of objects are written to in a
+ * <i>define</i> experiment
+ *
+ * @author Owen Feehan
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+class OutputterDirectories {
 
-public class ShapeRegularityMIP extends FeatureSingleObject {
+    /** Where stacks are typically placed in a define-experiment output */
+    public static final String STACKS = "stacks";
 
-    @Override
-    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
-            throws FeatureCalculationException {
-        return ShapeRegularityCalculator.calculateShapeRegularity(
-                input.get().getObject().duplicate().flattenZ());
-    }
+    /** Where collections of objects are typically placed in a define-experiment output */
+    public static final String OBJECTS = "objects";
+
+    /** Where collections of histograms are typically placed in a define-experiment output */
+    public static final String HISTOGRAMS = "histograms";
+
+    /** Where collections of marks are typically placed in a define-experiment output */
+    public static final String MARKS = "marks";
 }

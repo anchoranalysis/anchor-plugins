@@ -85,6 +85,7 @@ public class InputFixture {
      * @param includeGroupInIdentifier when true, the group is prefixed (with a separator) into the
      *     identifier. when false, it is omitted entirely.
      * @return a list of inputs, with identifiers determined as above.
+     * @throws ImageIOException if an error occurs while reading the images.
      */
     public List<? super StackSequenceInputFixture> createInputs(
             StackReader stackReader, boolean includeGroupInIdentifier) throws ImageIOException {
@@ -135,12 +136,25 @@ public class InputFixture {
         return paths;
     }
 
-    /** What group to prepend to a particular filename. */
+    /**
+     * What group to prepend to a particular filename.
+     *
+     * @param index the index of the filename.
+     * @return the group identifier as a string.
+     */
     private static String groupIdentifier(int index) {
         return (index < 2) ? GROUP1 : GROUP2;
     }
 
-    /** Forms an identifier from a particular filename, by prepending a group. */
+    /**
+     * Forms an identifier from a particular filename, by prepending a group.
+     *
+     * @param filename the filename to form an identifier from.
+     * @param index the index of the filename.
+     * @param includeGroupInIdentifier whether to include the group in the identifier.
+     * @return an {@link Optional} containing the formed identifier, or an empty {@link Optional} if
+     *     no identifier could be formed.
+     */
     private static Optional<String> addGroupToIdentifier(
             String filename, int index, boolean includeGroupInIdentifier) {
         String identifierWithoutExtension = ExtensionUtilities.removeExtension(filename);

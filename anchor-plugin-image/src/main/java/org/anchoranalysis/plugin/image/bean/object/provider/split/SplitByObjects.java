@@ -47,13 +47,22 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Splits objects in a collection based on intersections with another set of objects.
+ *
+ * <p>This class extends {@link WithDimensionsBase} to provide functionality for splitting objects
+ * in one collection based on their intersections with objects in another collection.
+ */
 public class SplitByObjects extends WithDimensionsBase {
 
+    /** Factory for creating objects from connected components. */
     private static final ObjectsFromConnectedComponentsFactory CONNECTED_COMPONENTS_CREATOR =
             new ObjectsFromConnectedComponentsFactory();
 
     // START BEAN PROPERTIES
+    /** Provider for the collection of objects used to split the input objects. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsSplitBy;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -75,6 +84,14 @@ public class SplitByObjects extends WithDimensionsBase {
                                         dimensions.extent()));
     }
 
+    /**
+     * Splits a single object based on its intersections with a collection of other objects.
+     *
+     * @param objectToSplit The {@link ObjectMask} to be split.
+     * @param objectsSplitBy The {@link ObjectCollection} used to split the object.
+     * @param extent The {@link Extent} of the image space.
+     * @return A new {@link ObjectCollection} containing the split objects.
+     */
     private ObjectCollection splitObject(
             ObjectMask objectToSplit, ObjectCollection objectsSplitBy, Extent extent) {
 
@@ -102,10 +119,11 @@ public class SplitByObjects extends WithDimensionsBase {
     }
 
     /**
-     * Perform a flood fill for each number, exposing it like a binary image of {@code 0} and {@code
-     * i}.
+     * Performs a flood fill for each identifier in the voxel buffer.
      *
-     * <p>The code will not change pixels that don't match <i>on</i>.
+     * @param count The number of unique identifiers.
+     * @param voxelsWithIdentifiers The {@link BoundedVoxels} containing identifiers.
+     * @return An {@link ObjectCollection} of flood-filled objects.
      */
     private ObjectCollection floodFillEachIdentifier(
             int count, BoundedVoxels<UnsignedIntBuffer> voxelsWithIdentifiers) {
@@ -113,7 +131,13 @@ public class SplitByObjects extends WithDimensionsBase {
                 1, count, index -> createObjectForIndex(index, voxelsWithIdentifiers));
     }
 
-    /** Creates objects from all connected-components in a buffer with particular voxel values */
+    /**
+     * Creates objects from all connected components in a buffer with particular voxel values.
+     *
+     * @param voxelEqualTo The voxel value to consider as part of the object.
+     * @param voxels The {@link BoundedVoxels} containing the voxel data.
+     * @return An {@link ObjectCollection} of created objects.
+     */
     private static ObjectCollection createObjectForIndex(
             int voxelEqualTo, BoundedVoxels<UnsignedIntBuffer> voxels) {
         BinaryVoxels<UnsignedIntBuffer> binaryVoxels =
@@ -126,6 +150,13 @@ public class SplitByObjects extends WithDimensionsBase {
                 .shiftBy(voxels.cornerMin());
     }
 
+    /**
+     * Finds objects in a collection that have bounding boxes intersecting with a given object.
+     *
+     * @param objects The {@link ObjectCollection} to search in.
+     * @param toIntersectWith The {@link ObjectMask} to intersect with.
+     * @return An {@link ObjectCollection} of objects with intersecting bounding boxes.
+     */
     private static ObjectCollection findObjectsWithIntersectingBoundingBox(
             ObjectCollection objects, ObjectMask toIntersectWith) {
         return objects.stream()

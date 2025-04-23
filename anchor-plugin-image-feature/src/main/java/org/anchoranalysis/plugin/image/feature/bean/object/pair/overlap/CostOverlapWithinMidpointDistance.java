@@ -53,6 +53,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
     @BeanField @Getter @Setter private double minOverlap = 0.6;
 
     @BeanField @Getter @Setter private boolean suppressZ = true;
+
     // END BEAN PROPERTIES
 
     @Override

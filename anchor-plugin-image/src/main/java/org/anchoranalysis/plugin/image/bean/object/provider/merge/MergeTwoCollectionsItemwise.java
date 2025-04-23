@@ -53,6 +53,7 @@ public class MergeTwoCollectionsItemwise extends ObjectCollectionProvider {
 
     /** Second collection with items to be merged */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects2;
+
     // END BEAN PROPERTIES
 
     @Override

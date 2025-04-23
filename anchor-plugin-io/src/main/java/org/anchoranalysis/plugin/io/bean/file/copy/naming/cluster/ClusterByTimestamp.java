@@ -121,6 +121,7 @@ public class ClusterByTimestamp extends CopyFilesNaming<ClusterMembership> {
      * taken from the current system time-zone settings.
      */
     @BeanField @Getter @Setter private int timeZoneOffset = -1;
+
     // END BEAN ARGUMENTS
 
     @Override

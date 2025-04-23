@@ -57,6 +57,7 @@ public class MergeGreedyToIncreaseObjectFeature extends MergeWithOptionalDistanc
 
     @BeanField @OptionalBean @Getter @Setter
     private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
+
     // END BEAN PROPERTIES
 
     @Override

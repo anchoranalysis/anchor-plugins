@@ -36,8 +36,8 @@ import org.anchoranalysis.spatial.point.Point2i;
 /**
  * A fixture for generating collections of intersecting and non-intersecting circular objects.
  *
- * <p>This class provides utility methods to create object collections with specific
- * configurations of intersecting and non-intersecting circles for testing purposes.</p>
+ * <p>This class provides utility methods to create object collections with specific configurations
+ * of intersecting and non-intersecting circles for testing purposes.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntersectingCircleObjectsFixture {
@@ -53,8 +53,8 @@ public class IntersectingCircleObjectsFixture {
      *
      * @param numberIntersecting the number of intersecting circles to produce
      * @param numberNotIntersecting the number of non-intersecting circles to produce
-     * @param sameSize if true, all circles have the same radius ({@code INITIAL_RADIUS}); 
-     *                 if false, the radius gradually increments
+     * @param sameSize if true, all circles have the same radius ({@code INITIAL_RADIUS}); if false,
+     *     the radius gradually increments
      * @return an ObjectCollection containing the generated circular objects
      */
     public static ObjectCollection generateIntersectingObjects(
@@ -77,9 +77,7 @@ public class IntersectingCircleObjectsFixture {
         return ObjectCollectionFactory.of(first, second);
     }
 
-    /** 
-     * Increments the center-point (and maybe the radius) as new circles are generated.
-     */
+    /** Increments the center-point (and maybe the radius) as new circles are generated. */
     private static class RunningCircleCreator {
 
         private boolean sameSize;

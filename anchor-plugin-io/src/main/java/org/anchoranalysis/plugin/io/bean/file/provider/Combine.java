@@ -42,6 +42,7 @@ public class Combine extends FilesProviderWithoutDirectory {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private List<FilesProvider> list = new ArrayList<>();
+
     // END BEAN PROPERTIES
 
     @Override

@@ -36,13 +36,27 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 
+/**
+ * Converts a feature value from one unit type to another.
+ *
+ * <p>This class extends {@link FeatureUnaryGeneric} to provide unit conversion functionality for
+ * feature values using {@link SpatialUnits}.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class ConvertUnits<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
-    // START BEAN PROPERTIES
+    /**
+     * The unit type to convert from. An empty string means no conversion is applied when converting
+     * from this unit.
+     */
     @BeanField @AllowEmpty @Getter @Setter private String unitTypeFrom = "";
 
+    /**
+     * The unit type to convert to. An empty string means no conversion is applied when converting
+     * to this unit.
+     */
     @BeanField @AllowEmpty @Getter @Setter private String unitTypeTo = "";
-    // END BEAN PROPERTIES
 
     @Override
     protected double calculate(FeatureCalculationInput<T> input)

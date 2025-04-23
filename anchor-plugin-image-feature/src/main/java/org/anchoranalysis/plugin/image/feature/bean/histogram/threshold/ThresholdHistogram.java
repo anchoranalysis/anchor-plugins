@@ -50,6 +50,7 @@ public class ThresholdHistogram extends FeatureHistogram {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
+
     // END BEAN PROPERTIES
 
     @Override

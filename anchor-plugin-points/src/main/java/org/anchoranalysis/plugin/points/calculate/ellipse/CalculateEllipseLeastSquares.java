@@ -37,12 +37,19 @@ import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.plugin.points.bean.fitter.LinearLeastSquaresEllipseFitter;
 
+/**
+ * Calculates the best-fit ellipse for an {@link ObjectMask} using linear least squares.
+ *
+ * <p>This class fits an {@link Ellipse} to the center of gravity slice of the input object.
+ */
 @EqualsAndHashCode(callSuper = false)
 public class CalculateEllipseLeastSquares
         extends CalculationPart<ObjectWithEllipse, FeatureInputSingleObject> {
 
+    /** Factory for creating ellipses using the linear least squares method. */
     @EqualsAndHashCode.Exclude private EllipseFactory factory;
 
+    /** Creates a new instance of {@link CalculateEllipseLeastSquares}. */
     public CalculateEllipseLeastSquares() {
         factory = new EllipseFactory(new LinearLeastSquaresEllipseFitter());
     }
@@ -66,6 +73,12 @@ public class CalculateEllipseLeastSquares
         }
     }
 
+    /**
+     * Extracts the center of gravity slice from a 3D {@link ObjectMask}.
+     *
+     * @param object the 3D object mask
+     * @return a 2D object mask representing the center of gravity slice
+     */
     private static ObjectMask extractEllipseSlice(ObjectMask object) {
         int zSliceCenter = (int) object.centerOfGravity().z();
         return object.extractSlice(zSliceCenter, false);

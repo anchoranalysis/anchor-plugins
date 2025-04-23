@@ -43,7 +43,7 @@ class NumberIntersectingObjectsAboveThresholdTest {
     @Test
     void testSameSizes()
             throws FeatureCalculationException, InitializeException, OperationFailedException {
-        InteresectingObjectsTestHelper.testPositions(
+        IntersectingObjectsTestHelper.testPositions(
                 "sameSize",
                 FEATURE,
                 true,
@@ -56,7 +56,7 @@ class NumberIntersectingObjectsAboveThresholdTest {
     @Test
     void testDifferentSizes()
             throws FeatureCalculationException, InitializeException, OperationFailedException {
-        InteresectingObjectsTestHelper.testPositions(
+        IntersectingObjectsTestHelper.testPositions(
                 "differentSize",
                 FEATURE,
                 false,

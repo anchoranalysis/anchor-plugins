@@ -46,6 +46,7 @@ public class CutBelowThreshold extends HistogramProviderUnary {
     @BeanField @Getter @Setter private int threshold = 0;
 
     @BeanField @Getter @Setter private boolean merge = false;
+
     // END BEAN PROPERTIES
 
     @Override

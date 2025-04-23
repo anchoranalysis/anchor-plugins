@@ -81,8 +81,10 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
      * <p>In this way, {@code histogram} can approximate a function of the original histogram.
      */
     @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogram;
+
     // END BEAN PROPERTIES
 
+    /** Creates a new {@link FromHistogram} instance. */
     public FromHistogram() {
         super("histogram");
     }
@@ -105,6 +107,14 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         return new ResultsVectorWithThumbnail(() -> calculateFeature(input, context));
     }
 
+    /**
+     * Calculates the feature results for a given input.
+     *
+     * @param input the {@link FileInput} to process
+     * @param context the {@link FeatureCalculationContext} for calculation
+     * @return a {@link ResultsVectorWithThumbnail} containing the calculated features
+     * @throws OperationFailedException if feature calculation fails
+     */
     private ResultsVector calculateFeature(
             FileInput input, FeatureCalculationContext<FeatureList<FeatureInputHistogram>> context)
             throws OperationFailedException {
@@ -129,6 +139,14 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         }
     }
 
+    /**
+     * Filters the input histogram using the provided {@link HistogramProvider}.
+     *
+     * @param inputtedHistogram the input {@link Histogram}
+     * @param context the {@link InputOutputContext}
+     * @return the filtered {@link Histogram}
+     * @throws OperationFailedException if the operation fails
+     */
     private Histogram filterHistogramFromProvider(
             Histogram inputtedHistogram, InputOutputContext context)
             throws OperationFailedException {
@@ -145,6 +163,14 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         }
     }
 
+    /**
+     * Creates an {@link ImageInitialization} with the input histogram.
+     *
+     * @param inputtedHist the input {@link Histogram}
+     * @param context the {@link InputOutputContext}
+     * @return a new {@link ImageInitialization} instance
+     * @throws OperationFailedException if the operation fails
+     */
     private ImageInitialization createImageInitialization(
             Histogram inputtedHist, InputOutputContext context) throws OperationFailedException {
         // Create a shared-objects and initialise
@@ -153,6 +179,15 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         return initialization;
     }
 
+    /**
+     * Creates a {@link FeatureCalculatorMulti} for {@link FeatureInputHistogram}.
+     *
+     * @param features the {@link FeatureList} to use for calculation
+     * @param modelDirectory the directory containing the model
+     * @param logger the {@link Logger} for logging
+     * @return a new {@link FeatureCalculatorMulti} instance
+     * @throws InitializeException if initialization fails
+     */
     private static FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(
             FeatureList<FeatureInputHistogram> features, Path modelDirectory, Logger logger)
             throws InitializeException {
@@ -163,6 +198,13 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
                 logger);
     }
 
+    /**
+     * Reads a {@link Histogram} from a CSV file.
+     *
+     * @param input the {@link FileInput} containing the CSV file
+     * @return the read {@link Histogram}
+     * @throws CSVReaderException if reading the CSV fails
+     */
     private static Histogram readHistogramFromCSV(FileInput input) throws CSVReaderException {
         File file = input.getFile();
 

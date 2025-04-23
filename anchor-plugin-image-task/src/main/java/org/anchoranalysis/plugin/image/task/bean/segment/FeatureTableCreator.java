@@ -49,6 +49,7 @@ import org.anchoranalysis.spatial.axis.Axis;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FeatureTableCreator {
 
+    /** Factory for creating {@link NamedFeatureStore} instances with parameters only. */
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.parametersOnly();
 
@@ -59,6 +60,7 @@ class FeatureTableCreator {
      * @param features any user-specified features, if they exist.
      * @param combineObjects how objects are combined together, to form the feature-table.
      * @return a newly created {@link FeatureTableCalculator}.
+     * @throws CreateException if the feature calculator cannot be created.
      */
     public static FeatureTableCalculator<FeatureInputSingleObject> tableCalculator(
             Optional<List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>>> features,
@@ -74,7 +76,7 @@ class FeatureTableCreator {
     /**
      * Creates default features for describing the results of instance-segmentation.
      *
-     * @return the default features.
+     * @return the default {@link NamedFeatureStore} with features for instance segmentation.
      */
     private static NamedFeatureStore<FeatureInputSingleObject> defaultInstanceSegmentation() {
         NamedFeatureStore<FeatureInputSingleObject> store = new NamedFeatureStore<>();

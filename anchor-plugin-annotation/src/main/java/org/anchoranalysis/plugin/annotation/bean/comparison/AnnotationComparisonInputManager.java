@@ -43,19 +43,30 @@ import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 
+/**
+ * An input manager for annotation comparison that extends {@link InputManagerWithStackReader}.
+ *
+ * @param <T> the type of input managed, which must extend {@link InputFromManager}
+ */
 public class AnnotationComparisonInputManager<T extends InputFromManager>
         extends InputManagerWithStackReader<AnnotationComparisonInput<T>> {
 
     // START BEAN PROPERTIES
+    /** The input manager for the base input type T. */
     @BeanField @Getter @Setter private InputManager<T> input;
 
+    /** The name of the left side in the comparison. */
     @BeanField @Getter @Setter private String nameLeft;
 
+    /** The name of the right side in the comparison. */
     @BeanField @Getter @Setter private String nameRight;
 
+    /** The comparable source for the left side of the comparison. */
     @BeanField @Getter @Setter private ComparableSource comparerLeft;
 
+    /** The comparable source for the right side of the comparison. */
     @BeanField @Getter @Setter private ComparableSource comparerRight;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -28,8 +28,20 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
 import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase;
 
+/**
+ * Creates a new channel by taking the maximum value of corresponding voxels from two input
+ * channels.
+ *
+ * <p>This class extends {@link TwoVoxelMappingBase} to perform a pixel-wise maximum operation
+ * between two input channels.
+ */
 public class MaxTwoChannels extends TwoVoxelMappingBase {
 
+    /**
+     * Constructs a new MaxTwoChannels instance.
+     *
+     * <p>Initializes the superclass with a function that computes the maximum of two integers.
+     */
     public MaxTwoChannels() {
         super(Math::max);
     }

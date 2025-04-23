@@ -34,7 +34,6 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong.WatershedYeong;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
@@ -54,19 +53,17 @@ class WatershedYeongTest {
             new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory("watershed01/"));
 
     @Test
-    void testNoMasksNoSeeds()
-            throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
+    void testNoMasksNoSeeds() throws SegmentationFailedException, TestDataLoadException {
         segment(PATH_EXPECTED_NO_MASKS_NO_SEEDS, Optional.empty());
     }
 
     @Test
-    void testMasksNoSeeds()
-            throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
+    void testMasksNoSeeds() throws SegmentationFailedException, TestDataLoadException {
         segment(PATH_EXPECTED_MASKS_NO_SEEDS, Optional.of(PATH_MASK));
     }
 
     private void segment(String pathObjectsExpected, Optional<String> pathMask)
-            throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
+            throws SegmentationFailedException, TestDataLoadException {
 
         Optional<ObjectMask> objectMask = pathMask.map(this::maskAsObject);
 
@@ -80,8 +77,7 @@ class WatershedYeongTest {
     }
 
     private ObjectMask maskAsObject(String path) {
-        return new ObjectMask(
-                BinaryVoxelsFactory.reuseByte(channelFor(PATH_MASK).voxels().asByte()));
+        return new ObjectMask(BinaryVoxelsFactory.reuseByte(channelFor(path).voxels().asByte()));
     }
 
     private Channel channelFor(String path) {

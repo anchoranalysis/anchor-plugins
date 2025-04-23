@@ -84,7 +84,7 @@ class OutputterHelper {
      * @param outputNameNonFlattened the output-name to use for the non-flattened stacks.
      * @param outputNamedFlattened the output-name to use for the flattened stacks.
      * @param outputter the outputter to use for writing the stacks
-     * @throws JobExecutionException
+     * @throws JobExecutionException if there's an error during job execution.
      */
     public static void outputStacks(
             DualNamedStacks dualStacks,
@@ -110,6 +110,13 @@ class OutputterHelper {
     /**
      * Outputs as a directory if there are multiple stacks, or as a single-stack if there is just
      * one.
+     *
+     * @param stacks the named provider of stacks to output.
+     * @param outputName the name for the output.
+     * @param outputter the outputter to use.
+     * @param suppressOutputNameIfPossible whether to suppress the output name if possible.
+     * @param always2D whether to always treat the output as 2D.
+     * @throws JobExecutionException if there's an error during job execution.
      */
     private static void outputStacks(
             NamedProvider<Stack> stacks,
@@ -139,7 +146,16 @@ class OutputterHelper {
         }
     }
 
-    /** Writes a single-stack <i>only</i> to the filesystem. */
+    /**
+     * Writes a single-stack <i>only</i> to the filesystem.
+     *
+     * @param stacks the named provider of stacks.
+     * @param outputName the name for the output.
+     * @param writer the writer to use.
+     * @param suppressOutputNameIfPossible whether to suppress the output name if possible.
+     * @param always2D whether to always treat the output as 2D.
+     * @throws OutputWriteFailedException if there's an error writing the output.
+     */
     private static void outputSingleStack(
             NamedProvider<Stack> stacks,
             String outputName,
@@ -156,7 +172,13 @@ class OutputterHelper {
         }
     }
 
-    /** Extracts any arbtirary stack from a named-provider. */
+    /**
+     * Extracts any arbitrary stack from a named-provider.
+     *
+     * @param stacks the named provider of stacks.
+     * @return an arbitrary stack from the provider.
+     * @throws AnchorImpossibleSituationException if no stack could be extracted.
+     */
     private static Stack extractArbitraryStack(NamedProvider<Stack> stacks) {
         try {
             return stacks.getArbitraryElement();

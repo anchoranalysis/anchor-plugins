@@ -44,6 +44,7 @@ public class PrincipalAxisOrientation extends SpecificAxisBase {
     // START BEAN PROPERTIES
     /** Which axis to read from (x,y,z) */
     @BeanField @Getter @Setter private String axis = "x";
+
     // END BEAN PROPERTIES
 
     @Override

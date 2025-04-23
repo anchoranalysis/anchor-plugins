@@ -71,6 +71,7 @@ public class InferFromHeader extends ImageMetadataReader {
      * ImageMetadata}.
      */
     @BeanField @Getter @Setter private List<HeaderFormat> formats = createDefaultFormats();
+
     // END BEAN PROPERTIES
 
     @Override

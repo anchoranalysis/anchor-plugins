@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 
 /**
- * Specifies a certain number of iterations of the morphological operations of dilation and erosion
+ * Specifies a certain number of iterations of the morphological operations of dilation and erosion.
  *
  * @author Owen Feehan
  */
@@ -41,37 +41,55 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 public class MorphologicalIterations extends AnchorBean<MorphologicalIterations> {
 
     // START BEAN PROPERTIES
-    /** Number of times to perform morphological dilation */
+    /** Number of times to perform morphological dilation. */
     @BeanField @NonNegative @Getter @Setter private int iterationsDilation = 0;
 
-    /** Number of times to perform morphological erosion */
+    /** Number of times to perform morphological erosion. */
     @BeanField @NonNegative @Getter @Setter private int iterationsErosion = 0;
 
-    /** Whether to perform the morphological dimensions in 3D or 2D */
+    /** Whether to perform the morphological dimensions in 3D or 2D. */
     @BeanField @Getter @Setter private boolean do3D = true;
+
     // END BEAN PROPERTIES
 
     /**
-     * Checks that at least one of {@code iterationsDilation} and {@code iterationsErosion} is more
-     * than 0
+     * Checks if at least one of {@code iterationsDilation} and {@code iterationsErosion} is more
+     * than 0.
+     *
+     * @return true if at least one of the iteration counts is positive, false otherwise
      */
     public boolean isAtLeastOnePositive() {
         return iterationsDilation > 0 || iterationsErosion > 0;
     }
 
-    /** A string that uniquely identifies all properties in the bean, but friendly to humans */
+    /**
+     * Creates a string that uniquely identifies all properties in the bean, in a human-friendly
+     * format.
+     *
+     * @return a human-friendly string describing all properties
+     */
     public String describePropertiesFriendly() {
         return String.format(
                 "iterationsDilation=%d,iterationsErosion=%d,do3D=%s",
                 iterationsDilation, iterationsErosion, do3D ? "true" : "false");
     }
 
-    /** A string that uniquely identifies all properties in the bean, but NOT friendly to humans */
+    /**
+     * Creates a string that uniquely identifies all properties in the bean, in a compact format.
+     *
+     * @return a compact string uniquely identifying all properties
+     */
     public String uniquelyIdentifyAllProperties() {
         return iterationsDilation + "_" + iterationsErosion + "_" + do3D;
     }
 
-    /** Copies the bean setting an new value for {@code iterationsDilation} */
+    /**
+     * Creates a copy of this bean with a new value for {@code iterationsDilation}.
+     *
+     * @param iterationsDilationsToAssign the new value for iterationsDilation
+     * @return a new {@link MorphologicalIterations} instance with the updated iterationsDilation
+     *     value
+     */
     public MorphologicalIterations copyChangeIterationsDilation(int iterationsDilationsToAssign) {
         MorphologicalIterations duplicated = duplicateBean();
         duplicated.setIterationsDilation(iterationsDilationsToAssign);

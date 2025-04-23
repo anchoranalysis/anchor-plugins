@@ -51,6 +51,7 @@ public class SpecifyDimensions extends DimensionsProvider {
 
     /** Length of Z dimension. */
     @BeanField @Getter @Setter int sizeZ = 1;
+
     // END BEAN PROPERTIES
 
     /**

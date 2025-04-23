@@ -51,6 +51,7 @@ public class RepeatSlice extends FromDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ChannelProvider slice;
+
     // END BEAN PROPERTIES
 
     @Override

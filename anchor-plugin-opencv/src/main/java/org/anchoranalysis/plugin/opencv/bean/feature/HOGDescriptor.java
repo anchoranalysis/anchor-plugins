@@ -53,6 +53,7 @@ public class HOGDescriptor extends FeatureListProvider<FeatureInputStack> {
 
     /** Parameters used for calculating HOG */
     @BeanField @Getter @Setter private HOGParameters parameters = new HOGParameters();
+
     // END BEAN PROPERTIES
 
     @Override

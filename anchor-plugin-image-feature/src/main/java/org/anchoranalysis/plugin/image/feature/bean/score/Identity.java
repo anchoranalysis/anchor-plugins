@@ -32,27 +32,34 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.VoxelScore;
 
+/** A voxel score that can optionally normalize and adjust the intensity values. */
 public class Identity extends VoxelScore {
 
     // START BEAN PROPERTIES
+    /** The index of the energy channel to use for calculations. */
     @BeanField @Getter @Setter private int energyChannelIndex = 0;
 
+    /** Whether to normalize the voxel intensity values. */
     @BeanField @Getter @Setter private boolean normalize = true;
 
+    /** The factor to apply for values below 0.5 when normalizing. */
     @BeanField @Getter @Setter private double factorLow = 1.0;
 
+    /** The factor to apply for values above 0.5 when normalizing. */
     @BeanField @Getter @Setter private double factorHigh = 1.0;
 
+    /** Whether to keep extreme values (0 and 1) unchanged when normalizing. */
     @BeanField @Getter @Setter private boolean keepExtremes = false;
+
     // END BEAN PROPERTIES
 
     @Override
     public double calculate(int[] voxelIntensities) throws FeatureCalculationException {
 
-        double pxlValue = voxelIntensities[energyChannelIndex];
+        double pixelValue = voxelIntensities[energyChannelIndex];
 
         if (normalize) {
-            double val = pxlValue / 255;
+            double val = pixelValue / 255;
 
             if (keepExtremes) {
                 if (val == 0.0) {
@@ -72,7 +79,7 @@ public class Identity extends VoxelScore {
             }
 
         } else {
-            return pxlValue;
+            return pixelValue;
         }
     }
 }

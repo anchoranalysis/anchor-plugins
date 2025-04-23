@@ -106,6 +106,7 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
 
     /** Iff true, bins with zero-counts are not written as a row in the CSV file. */
     @BeanField @Getter @Setter private boolean csvIgnoreZeros = false;
+
     // END BEAN PROPERTIES
 
     @Override

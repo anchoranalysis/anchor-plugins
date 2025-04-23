@@ -69,8 +69,8 @@ import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value ScaleImageIndependently#OUTPUT_SCALED}</td><td>yes</td><td>A scaled copy of the input image.</td></tr>
- * <tr><td>{@value ScaleImageIndependently#OUTPUT_SCALED_FLATTENED}</td><td>no</td><td>A scaled copy of the maximum-intensity-projection of the input image.</td></tr>
+ * <tr><td>{@value #OUTPUT_SCALED}</td><td>yes</td><td>A scaled copy of the input image.</td></tr>
+ * <tr><td>{@value #OUTPUT_SCALED_FLATTENED}</td><td>no</td><td>A scaled copy of the maximum-intensity-projection of the input image.</td></tr>
  * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
@@ -86,7 +86,6 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
     /** Output-name for a scaled copy the maximum-intensity-projection of the input image. */
     private static final String OUTPUT_SCALED_FLATTENED = "scaledFlattened";
 
-    // START BEAN PROPERTIES
     /** Calculates what scale-factor to apply on the image. */
     @BeanField @Getter @Setter protected ScaleCalculator scaleCalculator;
 
@@ -98,7 +97,6 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
 
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
-    // END BEAN PROPERTIES
 
     @Override
     public InputTypesExpected inputTypesExpected() {
@@ -138,6 +136,14 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_SCALED);
     }
 
+    /**
+     * Populates and outputs the scaled stacks.
+     *
+     * @param sharedState the shared state of the task.
+     * @param initialization the image initialization.
+     * @param context the input-output context.
+     * @throws JobExecutionException if the job execution fails.
+     */
     private void populateAndOutput(
             S sharedState, ImageInitialization initialization, InputOutputContext context)
             throws JobExecutionException {
@@ -162,6 +168,16 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
         }
     }
 
+    /**
+     * Populates stacks from shared objects.
+     *
+     * @param sharedState the shared state of the task.
+     * @param initialization the image initialization.
+     * @param stacksToAddTo the stacks to add to.
+     * @param dualEnabled the dual enabled state.
+     * @param context the input-output context.
+     * @throws JobExecutionException if the job execution fails.
+     */
     private void populateStacksFromSharedObjects(
             S sharedState,
             ImageInitialization initialization,
@@ -212,7 +228,7 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
      * @param voxelsResizer how to resize the voxels in a channel.
      * @param sharedState the shared-state of the task.
      * @return the scaled version of the stack.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the scaling operation fails.
      */
     protected abstract Stack scaleStack(
             Stack stack,

@@ -47,7 +47,9 @@ import org.anchoranalysis.image.core.mask.Mask;
 public abstract class FromMaskBase extends ChannelProvider {
 
     // START BEAN PROPERTIES
+    /** The {@link MaskProvider} used to create the binary mask. */
     @BeanField @Getter @Setter private MaskProvider mask;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -56,5 +58,12 @@ public abstract class FromMaskBase extends ChannelProvider {
         return createFromMask(maskChannel);
     }
 
+    /**
+     * Creates a {@link Channel} from the provided {@link Mask}.
+     *
+     * @param mask the {@link Mask} to create the channel from
+     * @return the created {@link Channel}
+     * @throws ProvisionFailedException if the channel creation fails
+     */
     protected abstract Channel createFromMask(Mask mask) throws ProvisionFailedException;
 }

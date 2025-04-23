@@ -60,6 +60,7 @@ public class Intensity extends FeatureStack {
 
     /** Optionally, index of another channel that masks the histogram. -1 disables. */
     @BeanField @Getter @Setter private int energyIndexMask = -1;
+
     // END BEAN PROEPRTIES
 
     @Override

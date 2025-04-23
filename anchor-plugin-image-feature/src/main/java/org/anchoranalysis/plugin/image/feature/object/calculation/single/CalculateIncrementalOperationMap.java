@@ -34,17 +34,30 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 
+/** Calculates incremental operations on {@link ObjectMask}s and stores the results in a map. */
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateIncrementalOperationMap
         extends CalculationPartMap<
                 ObjectMask, FeatureInputSingleObject, Integer, FeatureCalculationException> {
+
+    /** Flag indicating whether to perform 3D operations. */
     private boolean do3D;
 
+    /**
+     * Creates a new instance with the specified 3D flag.
+     *
+     * @param do3D whether to perform 3D operations
+     */
     protected CalculateIncrementalOperationMap(boolean do3D) {
         super(100);
         this.do3D = do3D;
     }
 
+    /**
+     * Copy constructor.
+     *
+     * @param other the {@link CalculateIncrementalOperationMap} to copy from
+     */
     protected CalculateIncrementalOperationMap(CalculateIncrementalOperationMap other) {
         super(100);
         this.do3D = other.do3D;
@@ -84,10 +97,24 @@ public abstract class CalculateIncrementalOperationMap
         }
     }
 
+    /**
+     * Applies the incremental operation to the input object.
+     *
+     * @param object the input {@link ObjectMask}
+     * @param extent the {@link Extent} of the object
+     * @param do3D whether to perform 3D operations
+     * @return the resulting {@link ObjectMask} after applying the operation
+     * @throws OperationFailedException if the operation fails
+     */
     protected abstract ObjectMask applyOperation(ObjectMask object, Extent extent, boolean do3D)
             throws OperationFailedException;
 
-    /** Lowest existing key. 0 if no key exists. */
+    /**
+     * Finds the highest existing key that is less than or equal to the given maximum.
+     *
+     * @param max the maximum key to search for
+     * @return the highest existing key, or 0 if no key exists
+     */
     private int findHighestExistingKey(int max) {
         for (int i = max; i >= 1; i--) {
             if (this.hasKey(i)) {

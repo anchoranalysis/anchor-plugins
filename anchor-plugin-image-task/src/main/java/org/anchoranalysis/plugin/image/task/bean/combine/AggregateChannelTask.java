@@ -90,6 +90,7 @@ public class AggregateChannelTask extends GroupedStackBase<Channel, ChannelAggre
 
     /** How to name the aggregated channel in the output. */
     @BeanField @Getter @Setter private String outputName;
+
     // END BEAN PROPERTIES
 
     @Override

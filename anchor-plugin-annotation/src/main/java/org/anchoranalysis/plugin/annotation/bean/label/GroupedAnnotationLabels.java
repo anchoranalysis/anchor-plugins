@@ -31,25 +31,46 @@ import java.util.Set;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
-/** A set of annotation labels partitoned into their unique groups */
+/** A set of {@link AnnotationLabel}s partitioned into their unique groups. */
 public class GroupedAnnotationLabels {
 
-    // <String,AnnotationLabel>
+    // Key, Value types are <String,AnnotationLabel>
     private MultiMap map = new MultiValueMap();
 
+    /**
+     * Creates a new instance of GroupedAnnotationLabels.
+     *
+     * @param labels the collection of {@link AnnotationLabel}s to group.
+     */
     public GroupedAnnotationLabels(Collection<AnnotationLabel> labels) {
         labels.forEach(label -> map.put(label.getGroup(), label));
     }
 
+    /**
+     * Gets the number of unique groups.
+     *
+     * @return the number of groups.
+     */
     public int numberGroups() {
         return map.keySet().size();
     }
 
+    /**
+     * Gets the set of group keys.
+     *
+     * @return a set of group keys.
+     */
     @SuppressWarnings("unchecked")
     public Set<String> keySet() {
         return map.keySet();
     }
 
+    /**
+     * Gets the collection of {@link AnnotationLabel}s for a specific group.
+     *
+     * @param key the group key.
+     * @return a collection of {@link AnnotationLabel}s belonging to the specified group.
+     */
     @SuppressWarnings("unchecked")
     public Collection<AnnotationLabel> get(String key) {
         return (Collection<AnnotationLabel>) map.get(key);

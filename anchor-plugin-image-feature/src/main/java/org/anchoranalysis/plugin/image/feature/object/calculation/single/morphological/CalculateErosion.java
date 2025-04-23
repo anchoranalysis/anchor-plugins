@@ -35,9 +35,22 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateObjectMask;
 
+/**
+ * Calculates the erosion of an {@link ObjectMask}.
+ *
+ * <p>This class extends {@link CalculateObjectMask} to perform erosion operations on object masks.
+ */
 @EqualsAndHashCode(callSuper = true)
 public class CalculateErosion extends CalculateObjectMask {
 
+    /**
+     * Creates a new {@link CalculationPart} for calculating erosion.
+     *
+     * @param cache the {@link CalculationPartResolver} to use for caching
+     * @param iterations the number of erosion iterations to perform
+     * @param do3D whether to perform 3D erosion (true) or 2D erosion (false)
+     * @return a {@link CalculationPart} for the erosion calculation
+     */
     public static CalculationPart<ObjectMask, FeatureInputSingleObject> of(
             CalculationPartResolver<FeatureInputSingleObject> cache, int iterations, boolean do3D) {
         ResolvedPartMap<ObjectMask, FeatureInputSingleObject, Integer> map =
@@ -46,11 +59,25 @@ public class CalculateErosion extends CalculateObjectMask {
         return new CalculateErosion(iterations, map);
     }
 
+    /**
+     * Creates a new {@link ResolvedPart} for calculating erosion.
+     *
+     * @param cache the {@link CalculationPartResolver} to use for caching
+     * @param iterations the number of erosion iterations to perform
+     * @param do3D whether to perform 3D erosion (true) or 2D erosion (false)
+     * @return a {@link ResolvedPart} for the erosion calculation
+     */
     public static ResolvedPart<ObjectMask, FeatureInputSingleObject> ofResolved(
             CalculationPartResolver<FeatureInputSingleObject> cache, int iterations, boolean do3D) {
         return cache.search(of(cache, iterations, do3D));
     }
 
+    /**
+     * Private constructor for {@link CalculateErosion}.
+     *
+     * @param iterations the number of erosion iterations to perform
+     * @param map the {@link ResolvedPartMap} for caching erosion results
+     */
     private CalculateErosion(
             int iterations, ResolvedPartMap<ObjectMask, FeatureInputSingleObject, Integer> map) {
         super(iterations, map);

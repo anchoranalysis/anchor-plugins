@@ -51,6 +51,7 @@ public class ExtractIdentifierAndPath<T extends InputFromManager>
      * it is printed as two lines.
      */
     @BeanField @Getter @Setter private int maxPathWidth = 40;
+
     // END BEAN PROPERTIES
 
     @Override

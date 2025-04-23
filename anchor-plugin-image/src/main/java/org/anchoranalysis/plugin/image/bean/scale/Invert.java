@@ -46,6 +46,7 @@ public class Invert extends ScaleCalculator {
     // START BEAN PROPERTIES
     /** The delegate {@link ScaleCalculator} whose calculation will be inverted. */
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
+
     // END BEAN PROPERTIES
 
     @Override

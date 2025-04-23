@@ -60,6 +60,7 @@ public class FromChannel extends DimensionsProvider {
 
     /** The {@link ChannelProvider} to use for dimensions. */
     @BeanField @OptionalBean @Getter @Setter private ChannelProvider channel;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -52,8 +52,8 @@ import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**
- * After using applying a {@link Define} on inputs, output produced entities (images, histograms,
- * objects etc.)
+ * Applies a {@link Define} on inputs and outputs produced entities (images, histograms, objects
+ * etc.).
  *
  * <p>The following outputs are produced:
  *
@@ -72,14 +72,25 @@ import org.anchoranalysis.mpp.mark.Mark;
  */
 public class DefineOutputter extends AnchorBean<DefineOutputter> {
 
-    // START BEAN PROPERTIES
+    /** The {@link Define} to be applied on inputs. */
     @BeanField @OptionalBean @Getter @Setter private Define define = new Define();
 
+    /** If true, suppresses the creation of subfolders for outputs. */
     @BeanField @Getter @Setter private boolean suppressSubfolders = false;
-    // END BEAN PROPERTIES
 
+    /**
+     * Functional interface for processing an {@link ImageInitialization}.
+     *
+     * @param <T> the type of initialization to process
+     */
     @FunctionalInterface
     public interface Processor<T> {
+        /**
+         * Processes the initialization.
+         *
+         * @param initialization the initialization to process
+         * @throws OperationFailedException if the processing operation fails
+         */
         void process(T initialization) throws OperationFailedException;
     }
 
@@ -92,6 +103,14 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
         SharedObjectsOutputter.addAllOutputNamesTo(outputEnabled);
     }
 
+    /**
+     * Processes the input using the provided operation.
+     *
+     * @param <S> the type of the input
+     * @param input the input to process
+     * @param operation the operation to apply on the initialization
+     * @throws OperationFailedException if the operation fails
+     */
     public <S> void process(
             InputBound<MultiInput, S> input, Processor<ImageInitialization> operation)
             throws OperationFailedException {
@@ -109,6 +128,14 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
         }
     }
 
+    /**
+     * Creates an {@link ImageInitialization} from the given context and input.
+     *
+     * @param context the initialization context
+     * @param input the input to create the initialization from
+     * @return the created {@link ImageInitialization}
+     * @throws CreateException if the initialization creation fails
+     */
     protected ImageInitialization createInitialization(
             InitializationContext context, ExportSharedObjects input) throws CreateException {
         return MarksInitializationFactory.create(
@@ -116,6 +143,16 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
                 .image();
     }
 
+    /**
+     * Creates an {@link ImageInitialization} from the given context, shared objects, and
+     * dictionary.
+     *
+     * @param context the initialization context
+     * @param sharedObjects optional shared objects
+     * @param dictionary optional dictionary
+     * @return the created {@link ImageInitialization}
+     * @throws CreateException if the initialization creation fails
+     */
     protected ImageInitialization createInitialization(
             InitializationContext context,
             Optional<SharedObjects> sharedObjects,
@@ -133,6 +170,14 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
         return initialization;
     }
 
+    /**
+     * Outputs shared objects and optionally an energy stack.
+     *
+     * @param sharedObjects the shared objects to output
+     * @param energyStack optional energy stack to output
+     * @param outputter the outputter to use
+     * @throws OutputWriteFailedException if the output operation fails
+     */
     protected void outputSharedObjects(
             SharedObjects sharedObjects, Optional<EnergyStack> energyStack, Outputter outputter)
             throws OutputWriteFailedException {

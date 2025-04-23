@@ -75,6 +75,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Overlappin
     @BeanField @Getter @Setter private int numberDecimalPlaces = 3;
 
     @BeanField @Getter @Setter private boolean removeTouchingBorderXY = false;
+
     // END BEAN PROPERTIES
 
     @Override

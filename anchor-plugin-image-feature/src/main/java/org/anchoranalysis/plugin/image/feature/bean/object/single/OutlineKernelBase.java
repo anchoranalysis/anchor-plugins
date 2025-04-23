@@ -38,14 +38,19 @@ import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/** Base class for features that apply a kernel to the outline of an object. */
 public abstract class OutlineKernelBase extends FeatureSingleObject {
 
     // START BEAN PROPERTIES
+    /** If true, considers voxels outside the object at the threshold as part of the object. */
     @BeanField @Getter @Setter private boolean outsideAtThreshold = false;
 
+    /** If true, ignores voxels at the threshold when applying the kernel. */
     @BeanField @Getter @Setter private boolean ignoreAtThreshold = false;
 
+    /** If true, applies the kernel in 3D; otherwise, applies it in 2D. */
     @BeanField @Getter @Setter private boolean do3D = false;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -59,12 +64,26 @@ public abstract class OutlineKernelBase extends FeatureSingleObject {
                 inputSessionless::getEnergyStackRequired);
     }
 
+    /**
+     * Calculates the feature value using the specified parameters.
+     *
+     * @param object the {@link ObjectMask} to calculate the feature on
+     * @param parameters the {@link KernelApplicationParameters} for applying the kernel
+     * @param energyStack a supplier for the {@link EnergyStack}
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if the calculation fails
+     */
     protected abstract double calculateWithParameters(
             ObjectMask object,
             KernelApplicationParameters parameters,
             CheckedSupplier<EnergyStack, FeatureCalculationException> energyStack)
             throws FeatureCalculationException;
 
+    /**
+     * Creates the {@link KernelApplicationParameters} based on the bean properties.
+     *
+     * @return the created {@link KernelApplicationParameters}
+     */
     private KernelApplicationParameters createParameters() {
         return new KernelApplicationParameters(
                 OutsideKernelPolicy.of(ignoreAtThreshold, outsideAtThreshold), do3D);

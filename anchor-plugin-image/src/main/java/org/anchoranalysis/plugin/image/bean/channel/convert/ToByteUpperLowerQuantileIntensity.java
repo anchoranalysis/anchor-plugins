@@ -35,12 +35,21 @@ import org.anchoranalysis.image.core.channel.convert.attached.histogram.UpperLow
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Converts a channel to unsigned byte format using upper and lower quantile intensities from a
+ * histogram.
+ *
+ * <p>This class extends {@link ConvertChannelToWithHistogram} to provide a specific implementation
+ * for converting channels to unsigned byte format based on quantile intensities.
+ */
 public class ToByteUpperLowerQuantileIntensity
         extends ConvertChannelToWithHistogram<UnsignedByteBuffer> {
 
     // START BEAN PROPERTIES
+    /** The lower quantile value for intensity scaling. */
     @BeanField @Getter @Setter private double quantileLower = 0.0;
 
+    /** The upper quantile value for intensity scaling. */
     @BeanField @Getter @Setter private double quantileUpper = 1.0;
 
     /** Sets the min by multiplying the quantileLower by this constant. */
@@ -48,6 +57,7 @@ public class ToByteUpperLowerQuantileIntensity
 
     /** Sets the max by multiplying the quantileUpper by this constant. */
     @BeanField @Getter @Setter private double scaleUpper = 1.0;
+
     // END BEAN PROPERTIES
 
     @Override

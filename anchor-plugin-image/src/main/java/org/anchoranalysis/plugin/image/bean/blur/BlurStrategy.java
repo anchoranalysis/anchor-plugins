@@ -37,22 +37,44 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 
 /**
- * A method for applying blurring to an image
+ * A method for applying blurring to an image.
  *
  * @author Owen Feehan
  */
 public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
 
     // START BEAN PROPERTIES
+    /** The sigma value for the blur operation. */
     @BeanField @Positive @Getter @Setter private double sigma = 3;
 
-    @BeanField @Getter @Setter
-    private boolean sigmaInMeters = false; // Treats sigma if it's microns
+    /**
+     * If true, treats sigma as if it's in meters (physical units). If false, treats sigma as if
+     * it's in pixels.
+     */
+    @BeanField @Getter @Setter private boolean sigmaInMeters = false;
+
     // END BEAN PROPERTIES
 
+    /**
+     * Applies the blur operation to the given voxels.
+     *
+     * @param voxels the {@link VoxelsUntyped} to blur
+     * @param dimensions the {@link Dimensions} of the voxels
+     * @param logger the {@link MessageLogger} for logging messages
+     * @throws OperationFailedException if the blur operation fails
+     */
     public abstract void blur(VoxelsUntyped voxels, Dimensions dimensions, MessageLogger logger)
             throws OperationFailedException;
 
+    /**
+     * Calculates the sigma value to use for blurring, considering the dimensions and whether sigma
+     * is in meters.
+     *
+     * @param dimensions the {@link Dimensions} of the image
+     * @param logger the {@link MessageLogger} for logging messages
+     * @return the calculated sigma value
+     * @throws OperationFailedException if the calculation fails or the sigma is too large
+     */
     protected double calculateSigma(Dimensions dimensions, MessageLogger logger)
             throws OperationFailedException {
 

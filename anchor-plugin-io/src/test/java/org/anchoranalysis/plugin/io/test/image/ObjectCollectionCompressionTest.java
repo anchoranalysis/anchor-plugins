@@ -53,7 +53,8 @@ class ObjectCollectionCompressionTest {
 
     @Test
     void testCompression()
-            throws SetOperationFailedException, DeserializationFailedException,
+            throws SetOperationFailedException,
+                    DeserializationFailedException,
                     BindFailedException {
 
         ObjectCollectionWithSize uncompressed = calculateUncompressed(PATH_UNCOMPRESSED_OBJECTS);
@@ -81,7 +82,8 @@ class ObjectCollectionCompressionTest {
 
     private static ObjectCollectionWithSize calculateCompressed(
             ObjectCollection objectsUncompressed, Path root)
-            throws SetOperationFailedException, DeserializationFailedException,
+            throws SetOperationFailedException,
+                    DeserializationFailedException,
                     BindFailedException {
 
         Path pathOut = NonImageFileFormat.HDF5.buildPath(root, TEMPORARY_FOLDER_OUT);
@@ -95,7 +97,8 @@ class ObjectCollectionCompressionTest {
 
     private static ObjectCollection writeAndReadAgain(
             ObjectCollection objects, Path pathRoot, Path pathOut)
-            throws SetOperationFailedException, DeserializationFailedException,
+            throws SetOperationFailedException,
+                    DeserializationFailedException,
                     BindFailedException {
         // Write the objects to the filesystem and read again
         writeObjects(objects, pathRoot, generator(true, true));

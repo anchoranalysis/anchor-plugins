@@ -50,6 +50,7 @@ public class Threshold extends FromChannelBase {
     // START BEAN
     /** The thresholder that will convert a channel into a binary-channel */
     @BeanField @Getter @Setter private Thresholder thresholder;
+
     // END BEAN
 
     @Override

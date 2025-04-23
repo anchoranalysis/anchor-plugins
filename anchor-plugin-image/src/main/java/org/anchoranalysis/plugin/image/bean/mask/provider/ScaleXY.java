@@ -49,6 +49,7 @@ public class ScaleXY extends MaskProviderUnary {
     // START BEAN PROPERTIES
     /** Determines how much to scale by. */
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
+
     // END BEAN PROPERTIES
 
     @Override

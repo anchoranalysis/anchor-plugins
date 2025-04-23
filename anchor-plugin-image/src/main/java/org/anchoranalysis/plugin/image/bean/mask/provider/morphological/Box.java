@@ -61,6 +61,7 @@ public class Box extends FromDimensionsBase {
 
     /** Maximum Z coordinate inclusive. */
     @BeanField @Getter @Setter private int maxZ = Integer.MAX_VALUE;
+
     // END BEAN PROPERTIES
 
     @Override

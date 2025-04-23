@@ -49,19 +49,41 @@ import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
 public abstract class MergeBase extends WithContainerBase {
 
     // START BEAN PROPERTIES
-    /* Image-resolution */
+    /** Provider for image dimensions. */
     @BeanField @OptionalBean @Getter @Setter private DimensionsProvider dimensions;
+
     // END BEAN PROPERTIES
 
+    /** Functional interface for merging objects. */
     @FunctionalInterface
     protected static interface MergeObjects {
+        /**
+         * Merges a collection of objects.
+         *
+         * @param objects the {@link ObjectCollection} to merge
+         * @return the merged {@link ObjectCollection}
+         * @throws OperationFailedException if the merge operation fails
+         */
         ObjectCollection mergeObjects(ObjectCollection objects) throws OperationFailedException;
     }
 
+    /**
+     * Gets an optional {@link UnitConverter} based on the image resolution.
+     *
+     * @return an {@link Optional} containing a {@link UnitConverter} if resolution is available,
+     *     empty otherwise
+     * @throws OperationFailedException if retrieving the resolution fails
+     */
     protected Optional<UnitConverter> unitConvertOptional() throws OperationFailedException {
         return resolutionOptional().map(Resolution::unitConvert);
     }
 
+    /**
+     * Gets the required {@link Resolution}.
+     *
+     * @return the {@link Resolution}
+     * @throws OperationFailedException if the resolution is not available
+     */
     protected Resolution resolutionRequired() throws OperationFailedException {
         return resolutionOptional()
                 .orElseThrow(
@@ -71,13 +93,13 @@ public abstract class MergeBase extends WithContainerBase {
     }
 
     /**
-     * Merges either in a container, or altogether
+     * Merges objects either in a container or altogether.
      *
-     * @param objects
+     * @param objects the {@link ObjectCollection} to merge
      * @param mergeFunc a function that merges a collection of objects together (changes the
      *     collection in place)
-     * @return
-     * @throws OperationFailedException
+     * @return the merged {@link ObjectCollection}
+     * @throws OperationFailedException if the merge operation fails
      */
     protected ObjectCollection mergeMultiplex(ObjectCollection objects, MergeObjects mergeFunc)
             throws OperationFailedException {
@@ -97,6 +119,12 @@ public abstract class MergeBase extends WithContainerBase {
         }
     }
 
+    /**
+     * Gets an optional {@link Resolution} from the dimensions provider.
+     *
+     * @return an {@link Optional} containing a {@link Resolution} if available, empty otherwise
+     * @throws OperationFailedException if retrieving the resolution fails
+     */
     private Optional<Resolution> resolutionOptional() throws OperationFailedException {
         try {
             return OptionalProviderFactory.create(dimensions).flatMap(Dimensions::resolution);
@@ -105,11 +133,28 @@ public abstract class MergeBase extends WithContainerBase {
         }
     }
 
+    /**
+     * Merges all objects in the collection.
+     *
+     * @param merger the {@link MergeObjects} function to use for merging
+     * @param objects the {@link ObjectCollection} to merge
+     * @return the merged {@link ObjectCollection}
+     * @throws OperationFailedException if the merge operation fails
+     */
     private static ObjectCollection mergeAll(MergeObjects merger, ObjectCollection objects)
             throws OperationFailedException {
         return ObjectCollectionFactory.of(merger.mergeObjects(objects));
     }
 
+    /**
+     * Merges objects within a container.
+     *
+     * @param merger the {@link MergeObjects} function to use for merging
+     * @param objects the {@link ObjectCollection} to merge
+     * @param containerObjects the container {@link ObjectCollection}
+     * @return the merged {@link ObjectCollection}
+     * @throws OperationFailedException if the merge operation fails
+     */
     private static ObjectCollection mergeInContainer(
             MergeObjects merger, ObjectCollection objects, ObjectCollection containerObjects)
             throws OperationFailedException {

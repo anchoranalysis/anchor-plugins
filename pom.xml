@@ -3,13 +3,33 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-pom</artifactId>
-		<version>[0.2.6,1.0.0)</version>
+		<version>1.0.0-SNAPSHOT</version>
     </parent> 
 
     <artifactId>anchor-parent-plugins</artifactId>
-	<version>0.0.11-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 	<name>anchor-parent-plugins</name>
+	
+	<url>http://www.anchoranalysis.org/</url>
+	
+	<description>Plugins for the Anchor Image Analysis software that are normally (MIT) licensed.</description>
+
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>https://github.com/anchoranalysis/anchor-plugins/blob/master/LICENSE.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+	
+	<developers>
+        <developer>
+            <id>owenfeehan</id>
+            <name>Owen Feehan</name>
+		  <organizationUrl>http://www.owenfeehan.com</organizationUrl>
+        </developer>
+    </developers>
 	
 	<!-- For tagging releases. -->
   	<scm>
@@ -18,12 +38,14 @@
 		<url>https://github.com/anchoranalysis/anchor-plugins</url>
 		<tag>HEAD</tag>
 	</scm>
-	
-	<!-- For connecting to SonarCloud. -->
-	<properties>
-	  <sonar.projectKey>anchoranalysis_anchor-plugins</sonar.projectKey>
-	</properties>
   
+  	<!-- For connecting to SonarCloud. -->
+	<properties>
+		<sonar.organization>anchoranalysis</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>anchoranalysis_anchor-plugins</sonar.projectKey>
+	</properties>
+	
     <modules>
 
         <module>anchor-plugin-image</module>
@@ -44,6 +66,23 @@
 		<module>anchor-test-experiment</module>
 		<module>anchor-test-feature-plugins</module>
     </modules>
+	
+    <repositories>
+				
+		<!-- Provides a means of reaching Snapshots on Maven Central -->
+	  <repository>
+		<name>Central Portal Snapshots</name>
+		<id>central-portal-snapshots</id>
+		<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+		<releases>
+		  <enabled>false</enabled>
+		</releases>
+		<snapshots>
+		  <enabled>true</enabled>
+		</snapshots>
+	  </repository>
+
+   	</repositories>	
 	
     <build>
 				
@@ -77,6 +116,22 @@
 		  </resource>
 		  
 		</resources>	
+		
+		<plugins>
+		
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<configuration>
+						<!-- When using a release parent pom, this should be true to prevent parent POM from being automatically deployed, relying instead on manually using the release plugin. 
+						When using a snapshot parent pom, this should be false.
+						-->
+						<skip>false</skip>
+					</configuration>
+					<inherited>false</inherited>
+			  </plugin>
+					
+		</plugins>
     </build>
 	
 	<dependencies>

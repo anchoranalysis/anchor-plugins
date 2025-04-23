@@ -29,6 +29,13 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
+/**
+ * Calculates the minimum coordinate of an object's bounding box along a specified axis.
+ *
+ * <p>This feature returns the minimum coordinate of the bounding box along the axis specified in
+ * the parent class. The minimum coordinate represents the lowest voxel position that is part of the
+ * object.
+ */
 public class BoundingBoxMinimumAlongAxis extends BoundingBoxAlongAxisBase {
 
     @Override

@@ -36,19 +36,20 @@ import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
+/** Utility class for applying Gaussian blur to ImgLib2 images. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class GaussianBlurUtilities {
 
     /**
      * Applies a Gaussian blur to an ImgLib2 image.
      *
-     * <p>This is a mutable operation that alters the current image
+     * <p>This is a mutable operation that alters the current image.
      *
      * @param <T> ImgLib2 data-type
-     * @param img the image
+     * @param img the {@link Img} to blur
      * @param sigma the sigma parameter for the gaussian blur for each dimension (should be length
      *     3)
-     * @throws IncompatibleTypeException
+     * @throws IncompatibleTypeException if the image type is incompatible with the blur operation
      */
     public static <T extends NumericType<T>> void applyBlur(
             Img<? extends RealType<?>> img, double[] sigma) {

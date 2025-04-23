@@ -39,10 +39,13 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithOptionalDimensionsBase;
 
+/** Base class for object collection providers that apply a filter to the objects. */
 public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDimensionsBase {
 
     // START BEAN PROPERTIES
+    /** The filter to apply to the object collection. */
     @BeanField @Getter @Setter private ObjectFilter filter;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -51,21 +54,40 @@ public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDim
         return createFromObjects(objects, Optional.empty(), createDims());
     }
 
+    /**
+     * Filters the given object collection using the specified filter.
+     *
+     * @param objects the {@link ObjectCollection} to filter
+     * @param dimensions optional {@link Dimensions} of the objects
+     * @param objectsRejected optional list to store rejected {@link ObjectMask}s
+     * @return the filtered {@link ObjectCollection}
+     * @throws ProvisionFailedException if filtering fails
+     */
     protected ObjectCollection filter(
             ObjectCollection objects,
-            Optional<Dimensions> dim,
+            Optional<Dimensions> dimensions,
             Optional<List<ObjectMask>> objectsRejected)
             throws ProvisionFailedException {
         try {
-            return filter.filter(objects, dim);
+            return filter.filter(objects, dimensions);
         } catch (OperationFailedException e) {
             throw new ProvisionFailedException(e);
         }
     }
 
+    /**
+     * Creates an {@link ObjectCollection} from the given objects, potentially applying a filter and
+     * considering dimensions.
+     *
+     * @param objects the input {@link ObjectCollection}
+     * @param objectsRejected optional list to store rejected {@link ObjectMask}s
+     * @param dimensions optional {@link Dimensions} of the objects
+     * @return the created {@link ObjectCollection}
+     * @throws ProvisionFailedException if creation fails
+     */
     protected abstract ObjectCollection createFromObjects(
             ObjectCollection objects,
             Optional<List<ObjectMask>> objectsRejected,
-            Optional<Dimensions> dim)
+            Optional<Dimensions> dimensions)
             throws ProvisionFailedException;
 }

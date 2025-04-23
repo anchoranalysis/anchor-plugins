@@ -43,7 +43,7 @@ import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
 /**
  * Write {@code channels} to the file-system as separate channels.
  *
- * @name Owen Feehan
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OutputChannelsSeparately {
@@ -51,10 +51,11 @@ class OutputChannelsSeparately {
     /**
      * Write each {@link Channel} separately into a subdirectory.
      *
-     * @param <T> the aggregator that combines {@link NamedChannels}s
+     * @param <T> the aggregator type that combines {@link NamedChannels}s
      * @param namedAggregators the aggregators, each with an associated name.
-     * @param outputName the name to use for the channel, if only a single output is written.
-     * @param context the subdirectory to write to.
+     * @param outputNameSingle the name to use for the channel, if only a single output is written.
+     * @param createContext a function that creates an {@link InputOutputContext} based on whether
+     *     multiple outputs are being written.
      */
     public static <T extends ChannelAggregator> void output(
             Collection<Entry<String, T>> namedAggregators,
@@ -74,7 +75,7 @@ class OutputChannelsSeparately {
     /**
      * Write each {@link Channel} separately into a subdirectory (the context).
      *
-     * @param <T> the aggregator that combines {@link NamedChannels}s
+     * @param <T> the aggregator type that combines {@link NamedChannels}s
      * @param namedAggregators the aggregators, each with an associated name.
      * @param outputName the name to use for the channel, if defined. If not defined, the name of
      *     the aggregator is used.
@@ -95,7 +96,14 @@ class OutputChannelsSeparately {
                                         context));
     }
 
-    /** Writes a {@link Channel} into a subdirectory. */
+    /**
+     * Writes a {@link Channel} into a subdirectory.
+     *
+     * @param <T> the aggregator type that combines {@link NamedChannels}s
+     * @param outputName the name to use for the output.
+     * @param aggregator the {@link ChannelAggregator} to extract the channel from.
+     * @param context the {@link InputOutputContext} to write to.
+     */
     private static <T extends ChannelAggregator> void writeChannel(
             String outputName, T aggregator, InputOutputContext context) {
         context.getOutputter()
@@ -104,8 +112,13 @@ class OutputChannelsSeparately {
     }
 
     /**
-     * Gets the aggregated-channel from an {@code aggregator} throwing an {@code
+     * Gets the aggregated-channel from an {@code aggregator} throwing an {@link
      * OutputWriteFailedException} if failure occurs.
+     *
+     * @param <T> the aggregator type that combines {@link NamedChannels}s
+     * @param aggregator the {@link ChannelAggregator} to extract the channel from.
+     * @return the extracted {@link Channel}
+     * @throws OutputWriteFailedException if the channel extraction fails.
      */
     private static <T extends ChannelAggregator> Channel extractChannel(T aggregator)
             throws OutputWriteFailedException {

@@ -32,6 +32,12 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithValueBase;
 
+/**
+ * Base class for arithmetic operations that conditionally overwrite voxel values with a constant.
+ *
+ * <p>This class extends {@link UnaryWithValueBase} to provide a framework for operations that
+ * selectively replace voxel values with a constant based on a condition.
+ */
 public abstract class ArithmeticWithConstantConditionallyWriteBase extends UnaryWithValueBase {
 
     @Override
@@ -41,11 +47,22 @@ public abstract class ArithmeticWithConstantConditionallyWriteBase extends Unary
         return channel;
     }
 
-    /** Whether to overwrite the current voxel-value with the constant? */
+    /**
+     * Determines whether to overwrite the current voxel value with the constant.
+     *
+     * @param voxel the current voxel value
+     * @param constant the constant value to potentially overwrite with
+     * @return true if the voxel should be overwritten, false otherwise
+     */
     protected abstract boolean shouldOverwriteVoxelWithConstant(int voxel, int constant);
 
+    /**
+     * Processes all voxels in the given {@link Voxels} object, potentially overwriting values.
+     *
+     * @param voxels the {@link Voxels} object to process
+     * @param constantToAssign the constant value to potentially assign to voxels
+     */
     private void processVoxels(Voxels<?> voxels, double constantToAssign) {
-
         int constantAsInt = (int) Math.floor(constantToAssign);
 
         IterateVoxelsAll.assignEachMatchingPoint(

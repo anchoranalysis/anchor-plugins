@@ -37,13 +37,20 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
+/**
+ * A fixture that implements {@link ProvidesStackInput} for testing purposes. It provides a single
+ * {@link Stack} as a {@link TimeSeries}.
+ */
 @AllArgsConstructor
 public class StackAsProviderFixture implements ProvidesStackInput {
 
     /** The constant string used as an identifier for the stack. */
     public static final String IDENTIFIER = "arbitraryIdentifier";
 
+    /** The stack to be provided. */
     private Stack stack;
+
+    /** The name to be used when adding the stack to a store. */
     private String name;
 
     @Override

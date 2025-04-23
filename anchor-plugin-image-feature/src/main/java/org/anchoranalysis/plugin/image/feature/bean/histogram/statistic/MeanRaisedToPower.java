@@ -26,19 +26,23 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
 
-/***
- * Calculates the mean value in a histogram, and raises it to a power.
- */
+/** Calculates the mean value in a {@link Histogram}, and raises it to a power. */
 public class MeanRaisedToPower extends FeatureHistogramStatistic {
 
-    // START BEAN PROPERTIES
-    private double power = 1.0;
-    // END BEAN PROPERTIES
+    /**
+     * The power to which the mean value is raised.
+     *
+     * <p>Default value is 1.0, which leaves the mean unchanged.
+     */
+    @BeanField @Getter @Setter private double power = 1.0;
 
     @Override
     protected double calculateStatisticFrom(Histogram histogram)
@@ -48,13 +52,5 @@ public class MeanRaisedToPower extends FeatureHistogramStatistic {
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
-    }
-
-    public double getPower() {
-        return power;
-    }
-
-    public void setPower(double power) {
-        this.power = power;
     }
 }

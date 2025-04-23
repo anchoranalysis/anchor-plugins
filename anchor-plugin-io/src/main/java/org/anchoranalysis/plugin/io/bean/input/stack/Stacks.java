@@ -55,6 +55,7 @@ public class Stacks extends InputManagerWithStackReader<StackSequenceInput> {
     @BeanField @Getter @Setter private InputManager<FileInput> fileInput;
 
     @BeanField @Getter @Setter private boolean useLastSeriesIndexOnly;
+
     // END BEANS
 
     public Stacks(InputManager<FileInput> fileInput) {

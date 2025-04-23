@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -63,7 +62,7 @@ class FeatureListImageTest {
 
     private static TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
-    private static EnergyStack ENERGY_STACK = EnergyStackFixture.create(true, true);
+    private static final EnergyStack ENERGY_STACK = EnergyStackFixture.create(true, true);
 
     @BeforeEach
     void setUp() {
@@ -85,8 +84,7 @@ class FeatureListImageTest {
 
     @Test
     void testHistogram()
-            throws InitializeException, FeatureCalculationException, CreateException,
-                    NamedFeatureCalculateException {
+            throws InitializeException, CreateException, NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputHistogram> session =
                 createAndStart(histogramFeatures(loader));
@@ -111,9 +109,7 @@ class FeatureListImageTest {
     }
 
     @Test
-    void testImage()
-            throws InitializeException, NamedFeatureCalculateException, CreateException,
-                    FeatureCalculationException {
+    void testImage() throws InitializeException, NamedFeatureCalculateException, CreateException {
 
         FeatureCalculatorMulti<FeatureInputSingleObject> session =
                 createAndStart(objectFeatures(loader));
@@ -180,8 +176,7 @@ class FeatureListImageTest {
         return FeaturesFromXMLFixture.createFeatureList("objectFeatureList.xml", loader);
     }
 
-    private static FeatureInputHistogram createParameters(Histogram histogram)
-            throws CreateException {
+    private static FeatureInputHistogram createParameters(Histogram histogram) {
         return new FeatureInputHistogram(histogram, ENERGY_STACK.resolution());
     }
 
@@ -189,7 +184,7 @@ class FeatureListImageTest {
             FeatureCalculatorMulti<FeatureInputSingleObject> session,
             ObjectMask objectMaskToCalculate,
             Object... expectedVals)
-            throws NamedFeatureCalculateException, CreateException {
+            throws NamedFeatureCalculateException {
         assertCalc(
                 session.calculate(
                         new FeatureInputSingleObject(objectMaskToCalculate, ENERGY_STACK)),

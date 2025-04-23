@@ -47,6 +47,7 @@ public class Blur extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private BlurStrategy strategy = new BlurGaussianEachSlice2D();
+
     // END BEAN PROPERTIES
 
     @Override

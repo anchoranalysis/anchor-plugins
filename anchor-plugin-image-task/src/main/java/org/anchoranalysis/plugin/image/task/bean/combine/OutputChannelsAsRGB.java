@@ -46,13 +46,13 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 /**
  * Write {@code channels} to the file-system as a single RGB image.
  *
- * @name Owen Feehan
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OutputChannelsAsRGB {
 
     /**
-     * Whether the channels have appropriate names to output as RGB image?
+     * Whether the channels have appropriate names to output as RGB image.
      *
      * @param <T> element-type
      * @param namedElements elements each with a corresponding name.
@@ -84,10 +84,11 @@ class OutputChannelsAsRGB {
     /**
      * Write the channels as a single RGB image to the file-system.
      *
-     * @param channelSupplier returns a channel when called with each of the three standard names in
-     *     {@link RGBChannelNames}.
+     * @param channelSupplier returns a {@link Channel} when called with each of the three standard
+     *     names in {@link RGBChannelNames}.
      * @param context where to write the image.
      * @param outputName the output-name to write them as.
+     * @throws IOException if an I/O error occurs during writing.
      */
     public static void output(
             CheckedFunction<String, Channel, OperationFailedException> channelSupplier,

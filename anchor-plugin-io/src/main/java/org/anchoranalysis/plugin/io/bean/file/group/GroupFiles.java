@@ -105,6 +105,7 @@ public class GroupFiles extends InputManagerWithStackReader<NamedChannelsInput> 
      * included.
      */
     @BeanField @OptionalBean @Getter @Setter private CheckParsedFilePathBag checkParsedFilePathBag;
+
     // END BEAN PROPERTIES
 
     @Override

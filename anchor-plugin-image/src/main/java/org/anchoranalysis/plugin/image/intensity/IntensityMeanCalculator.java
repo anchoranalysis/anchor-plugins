@@ -36,14 +36,34 @@ import org.anchoranalysis.math.arithmetic.RunningSum;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
+/** Utility class for calculating mean intensity of objects in a channel. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntensityMeanCalculator {
 
+    /**
+     * Calculates the mean intensity of an object in a channel.
+     *
+     * @param channel the {@link Channel} containing intensity values
+     * @param object the {@link ObjectMask} defining the region of interest
+     * @return the mean intensity of the object
+     * @throws FeatureCalculationException if the calculation fails
+     */
     public static double calculateMeanIntensityObject(Channel channel, ObjectMask object)
             throws FeatureCalculationException {
         return calculateMeanIntensityObject(channel, object, false);
     }
 
+    /**
+     * Calculates the mean intensity of an object in a channel, with an option to exclude zero
+     * values.
+     *
+     * @param channel the {@link Channel} containing intensity values
+     * @param object the {@link ObjectMask} defining the region of interest
+     * @param excludeZero if true, zero intensity values are excluded from the calculation
+     * @return the mean intensity of the object
+     * @throws FeatureCalculationException if the calculation fails or if there are no non-zero
+     *     pixels
+     */
     public static double calculateMeanIntensityObject(
             Channel channel, ObjectMask object, boolean excludeZero)
             throws FeatureCalculationException {
@@ -69,6 +89,13 @@ public class IntensityMeanCalculator {
         return running.mean();
     }
 
+    /**
+     * Checks if a bounding box is contained within an extent.
+     *
+     * @param box the {@link BoundingBox} to check
+     * @param extent the {@link Extent} that should contain the box
+     * @throws FeatureCalculationException if the box is not contained within the extent
+     */
     private static void checkContained(BoundingBox box, Extent extent)
             throws FeatureCalculationException {
         if (!extent.contains(box)) {

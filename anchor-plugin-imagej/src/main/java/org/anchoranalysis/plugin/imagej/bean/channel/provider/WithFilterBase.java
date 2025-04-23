@@ -31,6 +31,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 
+/** A base class for applying ImageJ rank filters to channels. */
 @AllArgsConstructor
 public abstract class WithFilterBase extends WithRadiusBase {
 

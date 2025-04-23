@@ -47,6 +47,7 @@ public class GreaterThanThreshold extends HistogramProviderUnary {
     // START BEAN PROPERTIES
     /** Calculates the level for the threshold */
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
+
     // END BEAN PROPERTIES
 
     @Override

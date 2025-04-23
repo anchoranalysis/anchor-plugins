@@ -41,8 +41,11 @@ import org.anchoranalysis.spatial.axis.AxisConverter;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Calculates deterministicly a point that is definitely inside the object-mask. A selected axis is
- * outputted.
+ * Calculates deterministically a point that is definitely inside the object-mask and outputs a
+ * selected axis value.
+ *
+ * <p>This feature finds an arbitrary point inside the object-mask and returns the coordinate value
+ * for the specified axis.
  *
  * @author Owen Feehan
  */
@@ -50,11 +53,19 @@ import org.anchoranalysis.spatial.point.Point3i;
 public class ArbitraryInsidePoint extends FeatureSingleObject {
 
     // START BEAN PROPERTIES
+    /** The axis to output. Can be "x", "y", or "z". */
     @BeanField @Getter @Setter private String axis = "x";
 
+    /** The value to return if no point is found inside the object-mask. */
     @BeanField @Getter @Setter private double emptyValue = 0;
+
     // END BEAN PROPERTIES
 
+    /**
+     * Creates an ArbitraryInsidePoint with a specified axis.
+     *
+     * @param axis the axis to output ("x", "y", or "z")
+     */
     public ArbitraryInsidePoint(String axis) {
         this.axis = axis;
     }

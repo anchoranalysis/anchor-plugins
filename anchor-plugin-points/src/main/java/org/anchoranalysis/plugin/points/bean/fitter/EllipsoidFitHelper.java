@@ -34,9 +34,19 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.spatial.point.Point3d;
 
+/** Helper class for fitting ellipsoids to point data. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidFitHelper {
 
+    /**
+     * Creates a {@link FitResult} from the matrix A and center matrix.
+     *
+     * @param matrixA the matrix A representing the ellipsoid
+     * @param matrixCenter the matrix representing the center of the ellipsoid
+     * @param suppressZCovariance whether to suppress Z covariance
+     * @return a {@link FitResult} containing the fitted ellipsoid parameters
+     * @throws PointsFitterException if there's an error during the fitting process
+     */
     public static FitResult createFitResultFromMatrixAandCenter(
             DoubleMatrix2D matrixA, DoubleMatrix2D matrixCenter, boolean suppressZCovariance)
             throws PointsFitterException {
@@ -58,12 +68,25 @@ public class EllipsoidFitHelper {
         return fitResult;
     }
 
+    /**
+     * Sets the center point of the {@link FitResult} from the first column of the center matrix.
+     *
+     * @param fitResult the {@link FitResult} to update
+     * @param matrixCenter the matrix containing the center coordinates
+     */
     private static void setCenterFromFirstColumn(FitResult fitResult, DoubleMatrix2D matrixCenter) {
         fitResult.setCenterPoint(
                 new Point3d(
                         matrixCenter.get(0, 0), matrixCenter.get(1, 0), matrixCenter.get(2, 0)));
     }
 
+    /**
+     * Creates matrix E from matrix R, optionally suppressing Z covariance.
+     *
+     * @param matrixR the input matrix R
+     * @param suppressZCovariance whether to suppress Z covariance
+     * @return the created matrix E
+     */
     private static DoubleMatrix2D createMatrixE(
             DoubleMatrix2D matrixR, boolean suppressZCovariance) {
         DoubleMatrix2D e = matrixR.viewPart(0, 0, 3, 3);
@@ -81,6 +104,14 @@ public class EllipsoidFitHelper {
         return e;
     }
 
+    /**
+     * Sets the radii and rotation matrix of the {@link FitResult} from the eigenvalue decomposition
+     * of matrix E.
+     *
+     * @param fitResult the {@link FitResult} to update
+     * @param e the matrix E to decompose
+     * @throws PointsFitterException if there's an error during the eigenvalue decomposition
+     */
     private static void setRadiiFromDecomposition(FitResult fitResult, DoubleMatrix2D e)
             throws PointsFitterException {
         try {
@@ -99,11 +130,25 @@ public class EllipsoidFitHelper {
         }
     }
 
+    /**
+     * Calculates the radius from the diagonal of the eigenvalue decomposition matrix.
+     *
+     * @param evd the {@link EigenvalueDecomposition}
+     * @param index the index of the diagonal element to use
+     * @return the calculated radius
+     */
     private static double radiusFromDiagonal(EigenvalueDecomposition evd, int index) {
         double valFromDiagonal = evd.getD().get(index, index);
         return Math.sqrt(1 / Math.abs(valFromDiagonal));
     }
 
+    /**
+     * Creates matrix R from matrix A and the center matrix.
+     *
+     * @param matrixA the matrix A
+     * @param matrixCenter the center matrix
+     * @return the created matrix R
+     */
     private static DoubleMatrix2D createMatrixR(
             DoubleMatrix2D matrixA, DoubleMatrix2D matrixCenter) {
 

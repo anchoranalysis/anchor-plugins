@@ -37,17 +37,33 @@ import org.anchoranalysis.spatial.orientation.OrientationRotationMatrix;
 import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point3d;
 
+/** Represents the result of fitting an ellipsoid to a set of points. */
 @Data
 public class FitResult {
 
+    /** The center point of the fitted ellipsoid. */
     private Point3d centerPoint;
+
+    /** The radius of the ellipsoid along the X-axis. */
     private double radiusX;
+
+    /** The radius of the ellipsoid along the Y-axis. */
     private double radiusY;
+
+    /** The radius of the ellipsoid along the Z-axis. */
     private double radiusZ;
 
     /** The rotation matrix, which must be considered immutable to be used here. */
     private DoubleMatrix2D rotMatrix;
 
+    /**
+     * Applies the fit result to an {@link Ellipsoid} mark.
+     *
+     * @param mark the {@link Ellipsoid} to update
+     * @param sceneDim the dimensions of the scene
+     * @param shell the shell thickness
+     * @throws PointsFitterException if the ellipsoid is outside the scene
+     */
     public void applyFitResultToMark(Ellipsoid mark, Dimensions sceneDim, double shell)
             throws PointsFitterException {
 
@@ -62,19 +78,34 @@ public class FitResult {
         }
     }
 
+    /**
+     * Applies a subtraction and scaling to the radii of the ellipsoid.
+     *
+     * @param subtract the value to subtract from each radius
+     * @param scale the scale factor to apply after subtraction
+     */
     public void applyRadiiSubtractScale(double subtract, double scale) {
         radiusX = (radiusX - subtract) * scale;
         radiusY = (radiusY - subtract) * scale;
         radiusZ = (radiusZ - subtract) * scale;
     }
 
+    /**
+     * Imposes a minimum radius on all axes of the ellipsoid.
+     *
+     * @param minRadius the minimum allowed radius
+     */
     public void imposeMinimumRadius(double minRadius) {
-        // We set a minimum radius on eve
         radiusX = Math.max(radiusX, minRadius);
         radiusY = Math.max(radiusY, minRadius);
         radiusZ = Math.max(radiusZ, minRadius);
     }
 
+    /**
+     * Creates a {@link Point3d} from the radii of the ellipsoid.
+     *
+     * @return a {@link Point3d} representing the radii
+     */
     private Point3d radiiAsPoint() {
         return new Point3d(radiusX, radiusY, radiusZ);
     }

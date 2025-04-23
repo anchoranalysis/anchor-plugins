@@ -44,6 +44,7 @@ public class IntersectsWithContainer extends WithContainerBase {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
     private boolean inverse = false; // If set, we return the objects that DO NOT intersect
+
     // END BEAN PROPERTIES
 
     @Override

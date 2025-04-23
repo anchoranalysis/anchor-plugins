@@ -61,6 +61,7 @@ public class PatternSpan extends FileNamer {
     // START BEAN PROPERTIES
     /** Iff true, a case sensitive search is used to match patterns. */
     @BeanField @Getter @Setter private boolean caseSensitive = false;
+
     // END BEAN PROPERTIES
 
     @Override

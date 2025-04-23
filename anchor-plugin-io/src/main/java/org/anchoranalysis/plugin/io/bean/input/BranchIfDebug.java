@@ -54,6 +54,7 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManagerUnary
      * <p>Note that only the first item is ever read from this input-manager.
      */
     @BeanField @OptionalBean @Getter @Setter private InputManager<T> inputDebug;
+
     // END BEAN PROPERTIES
 
     @Override

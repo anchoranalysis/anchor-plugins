@@ -40,13 +40,21 @@ import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
 
+/**
+ * Helper class for applying filters to {@link Channel}s and {@link BinaryVoxels} using ImageJ
+ * operations.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FilterHelper {
 
     /**
-     * Applies a 2D rank-filter to each slice independently.
+     * Applies a 2D rank-filter to each slice independently of a {@link Channel}.
      *
-     * @throws OperationFailedException if <code>channel</code> contains an unsupported data-type.
+     * @param channel the channel to apply the filter to
+     * @param radius the radius of the filter
+     * @param filterType the type of rank filter to apply
+     * @return the filtered channel
+     * @throws OperationFailedException if {@code channel} contains an unsupported data-type
      */
     public static Channel applyRankFilter(Channel channel, int radius, int filterType)
             throws OperationFailedException {
@@ -64,8 +72,8 @@ public class FilterHelper {
      *
      * <p>The slice is exposed as a {@link ImageProcessor}.
      *
-     * @param channel the channel whose slices will be processed.
-     * @param consumer successively applied to the {@link ImageProcessor} derived from each slice.
+     * @param channel the channel whose slices will be processed
+     * @param consumer successively applied to the {@link ImageProcessor} derived from each slice
      * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
      *     (the only two supported types)
      */
@@ -81,13 +89,13 @@ public class FilterHelper {
     }
 
     /**
-     * Applies a {@link Consumer} to each slice independently of a {@code
-     * BinaryVoxels<UnsignedByteBuffer>}.
+     * Applies a {@link Consumer} to each slice independently of a {@link BinaryVoxels} with {@link
+     * UnsignedByteBuffer}.
      *
      * <p>The slice is exposed as a {@link ImageProcessor}.
      *
-     * @param voxels the voxels whose slices will be processed.
-     * @param consumer successively applied to the {@link ImageProcessor} derived from each slice.
+     * @param voxels the voxels whose slices will be processed
+     * @param consumer successively applied to the {@link ImageProcessor} derived from each slice
      */
     public static void processEachSlice(
             BinaryVoxels<UnsignedByteBuffer> voxels, Consumer<ImageProcessor> consumer) {

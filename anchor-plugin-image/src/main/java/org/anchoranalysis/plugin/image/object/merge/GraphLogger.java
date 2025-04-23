@@ -26,22 +26,31 @@
 
 package org.anchoranalysis.plugin.image.object.merge;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
 
+/** A logger for graph operations, using a {@link DescribeGraph} to generate descriptions. */
+@AllArgsConstructor
 public class GraphLogger {
 
+    /** The {@link DescribeGraph} used to generate descriptions of graph elements. */
     private DescribeGraph describeGraph;
+
+    /** The {@link Logger} used to output messages. */
     private Logger logger;
 
-    public GraphLogger(DescribeGraph describeGraph, Logger logger) {
-        super();
-        this.describeGraph = describeGraph;
-        this.logger = logger;
-    }
-
+    /**
+     * Logs a description of a potential edge merge.
+     *
+     * @param src the source {@link ObjectVertex}
+     * @param dest the destination {@link ObjectVertex}
+     * @param merged the resulting merged {@link ObjectVertex}
+     * @param priority the priority of the merge
+     * @param doMerge whether the merge will be performed
+     */
     public void describeEdge(
             ObjectVertex src,
             ObjectVertex dest,
@@ -51,20 +60,37 @@ public class GraphLogger {
         log(describeGraph.describeEdge(src, dest, merged, priority, doMerge));
     }
 
+    /**
+     * Logs a description of a merge operation that has been decided upon.
+     *
+     * @param omMerged the resulting merged {@link ObjectVertex}
+     * @param bestImprovement the {@link TypedEdge} representing the best improvement for merging
+     */
     public void describeMerge(
             ObjectVertex omMerged, TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement) {
         log(describeGraph.describeMerge(omMerged, bestImprovement));
     }
 
+    /** Logs a description of the entire graph. */
     public void logDescription() {
         log(describeGraph.describe());
     }
 
-    private void log(String str) {
-        logger.messageLogger().log(str);
-    }
-
+    /**
+     * Gets the error reporter associated with the logger.
+     *
+     * @return the {@link ErrorReporter} for reporting errors
+     */
     public ErrorReporter getErrorReporter() {
         return logger.errorReporter();
+    }
+
+    /**
+     * Logs a message using the internal logger.
+     *
+     * @param str the message to log
+     */
+    private void log(String str) {
+        logger.messageLogger().log(str);
     }
 }

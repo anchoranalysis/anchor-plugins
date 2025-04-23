@@ -35,10 +35,20 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
+/**
+ * An abstract base class for creating a channel from an existing channel and a collection of
+ * objects.
+ *
+ * <p>This class extends {@link ChannelProviderUnary} to provide a framework for creating channels
+ * based on an input channel and a collection of objects. Subclasses must implement the {@code
+ * createFromChannel} method.
+ */
 public abstract class UnaryWithObjectsBase extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
+    /** The provider for the collection of objects to be used in channel creation. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -46,6 +56,14 @@ public abstract class UnaryWithObjectsBase extends ChannelProviderUnary {
         return createFromChannel(channel, objects.get());
     }
 
+    /**
+     * Creates a new channel from an existing channel and a collection of objects.
+     *
+     * @param channel the input {@link Channel}
+     * @param objects the {@link ObjectCollection} to be used in channel creation
+     * @return a new {@link Channel} created from the input channel and objects
+     * @throws ProvisionFailedException if the channel creation fails
+     */
     protected abstract Channel createFromChannel(Channel channel, ObjectCollection objects)
             throws ProvisionFailedException;
 }

@@ -43,17 +43,24 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
- * Calculate a feature, treating a mask as a single-object on the energy-stack
+ * Calculates a feature, treating a mask as a single-object on the energy-stack.
+ *
+ * <p>This class extends {@link FeatureSingleObjectFromShared} to provide functionality for treating
+ * a mask as a single object when calculating features.
  *
  * @author Owen Feehan
+ * @param <T> feature-input type that extends {@link FeatureInputEnergy}
  */
 public class MaskAsSingleObject<T extends FeatureInputEnergy>
         extends FeatureSingleObjectFromShared<T> {
 
     // START BEAN PROPERTIES
+    /** The provider for the mask to be treated as a single object. */
     @BeanField @SkipInit @Getter @Setter private MaskProvider mask;
+
     // END BEAN PROPERTIES
 
+    /** The created mask after initialization. */
     private Mask createdMask;
 
     @Override

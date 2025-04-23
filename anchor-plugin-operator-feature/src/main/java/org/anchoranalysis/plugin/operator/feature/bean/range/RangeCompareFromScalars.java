@@ -32,15 +32,29 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-/** A base-class for setting the boundaries of the range using constant scalars */
+/**
+ * A base class for setting the boundaries of a range using constant scalar values.
+ *
+ * <p>This class extends {@link RangeCompareBase} to provide a mechanism for defining a range with
+ * fixed minimum and maximum values.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public abstract class RangeCompareFromScalars<T extends FeatureInput> extends RangeCompareBase<T> {
 
     // START BEAN PROPERTIES
-    /** Boundary value indicating minimally-allowed range value */
+    /**
+     * Boundary value indicating the minimally-allowed range value. Default value is {@link
+     * Double#NEGATIVE_INFINITY}.
+     */
     @BeanField @Getter @Setter private double min = Double.NEGATIVE_INFINITY;
 
-    /** Boundary value indicating maximally-allowed range value */
+    /**
+     * Boundary value indicating the maximally-allowed range value. Default value is {@link
+     * Double#POSITIVE_INFINITY}.
+     */
     @BeanField @Getter @Setter private double max = Double.POSITIVE_INFINITY;
+
     // END BEAN PROPERTIES
 
     @Override

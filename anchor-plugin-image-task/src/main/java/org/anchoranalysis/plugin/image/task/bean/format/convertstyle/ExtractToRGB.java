@@ -65,6 +65,7 @@ public class ExtractToRGB extends ChannelConvertStyle {
      */
     @BeanField @OptionalBean @Getter @Setter
     private ChannelConvertStyle fallback = new IndependentChannels();
+
     // END BEAN PROPERTIES
 
     @Override

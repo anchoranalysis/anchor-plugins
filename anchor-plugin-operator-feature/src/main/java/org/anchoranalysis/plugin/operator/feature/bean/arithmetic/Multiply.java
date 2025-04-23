@@ -32,6 +32,11 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * A feature that multiplies the results of multiple features together.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class Multiply<T extends FeatureInput> extends FeatureFromList<T> {
 
     @Override

@@ -41,6 +41,7 @@ public class FromEntries extends ChannelMapCreator {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private List<IndexedChannel> list = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     @Override

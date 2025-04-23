@@ -51,26 +51,29 @@ import org.anchoranalysis.spatial.point.Point3i;
  *
  * <p>Each vertex has a payload (double) value associated with it, that is a function of the
  * object-mask.
- *
- * @author Owen Feehan
  */
 public class MergeGraph {
 
-    // START: Set from constructor
+    /** Calculates a payload value for any {@link ObjectMask}. */
     private PayloadCalculator payloadCalculator;
-    // END: Set from constructor
 
+    /** The underlying graph structure. */
     private NeighborGraph graph;
+
+    /** Logger for graph operations. */
     private GraphLogger logger;
+
+    /** Assigns priority to potential merges. */
     private AssignPriority prioritizer;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param payloadCalculator means to calculate a payload for any object
-     * @param beforeCondition
+     * @param beforeCondition condition to check before merging
      * @param unitConverter converts units from voxels to physical measurements and vice-versa
      * @param prioritizer means to assign priority to the merge of any two objects
+     * @param logger logger for outputting messages
      * @param logPayload whether to include the payload in logging messages
      */
     public MergeGraph(
@@ -88,6 +91,13 @@ public class MergeGraph {
         this.logger = new GraphLogger(new DescribeGraph(graph, logPayload), logger);
     }
 
+    /**
+     * Adds objects to the graph.
+     *
+     * @param objects the {@link ObjectCollection} to add
+     * @return a list of {@link ObjectVertex} objects created from the input objects
+     * @throws OperationFailedException if the operation fails
+     */
     public List<ObjectVertex> addObjectsToGraph(ObjectCollection objects)
             throws OperationFailedException {
 
@@ -103,6 +113,13 @@ public class MergeGraph {
         return listAdded;
     }
 
+    /**
+     * Merges two vertices in the graph.
+     *
+     * @param bestImprovement the edge representing the best merge improvement
+     * @return the newly created merged {@link ObjectVertex}
+     * @throws OperationFailedException if the merge operation fails
+     */
     public ObjectVertex merge(TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement)
             throws OperationFailedException {
 
@@ -118,6 +135,11 @@ public class MergeGraph {
         return omMerged;
     }
 
+    /**
+     * Finds the edge with the maximum priority for merging.
+     *
+     * @return the {@link TypedEdge} with the highest priority, or null if no valid edges exist
+     */
     public TypedEdge<ObjectVertex, PrioritisedVertex> findMaxPriority() {
 
         TypedEdge<ObjectVertex, PrioritisedVertex> max = null;
@@ -128,7 +150,7 @@ public class MergeGraph {
 
             PrioritisedVertex edge = entry.getPayload();
 
-            // We skip any edges that don't off an improvement
+            // We skip any edges that don't offer an improvement
             if (!edge.isConsiderForMerge()) {
                 continue;
             }
@@ -167,17 +189,30 @@ public class MergeGraph {
         return max;
     }
 
+    /** Logs a description of the current graph state. */
     public void logGraphDescription() {
         logger.logDescription();
     }
 
+    /**
+     * Retrieves all vertices in the graph as an {@link ObjectCollection}.
+     *
+     * @return an {@link ObjectCollection} containing all objects in the graph
+     */
     public ObjectCollection verticesAsObjects() {
         return graph.verticesAsObjects();
     }
 
-    private ObjectVertex createVertex(ObjectMask obj) throws OperationFailedException {
+    /**
+     * Creates a new {@link ObjectVertex} from an {@link ObjectMask}.
+     *
+     * @param mask the {@link ObjectMask} to create a vertex from
+     * @return a new {@link ObjectVertex}
+     * @throws OperationFailedException if the vertex creation fails
+     */
+    private ObjectVertex createVertex(ObjectMask mask) throws OperationFailedException {
         try {
-            return new ObjectVertex(obj, payloadCalculator.calculate(obj));
+            return new ObjectVertex(mask, payloadCalculator.calculate(mask));
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }

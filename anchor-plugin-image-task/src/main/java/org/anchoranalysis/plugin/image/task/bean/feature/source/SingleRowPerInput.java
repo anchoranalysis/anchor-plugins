@@ -130,10 +130,19 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
      *
      * @param input the input.
      * @return any additional labels for the input.
+     * @throws OperationFailedException if the operation fails
      */
     protected abstract Optional<String[]> additionalLabelsFor(T input)
             throws OperationFailedException;
 
+    /**
+     * Calculates labelled results for a given input.
+     *
+     * @param input the input to process
+     * @param context the context for feature calculation
+     * @return labelled results with thumbnail
+     * @throws OperationFailedException if the operation fails
+     */
     private LabelledResultsVectorWithThumbnail calculateLabelledResults(
             T input, FeatureCalculationContext<FeatureList<S>> context)
             throws OperationFailedException {
@@ -146,7 +155,14 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
         }
     }
 
-    /** Row-labels for a particular input. */
+    /**
+     * Creates row labels for a particular input.
+     *
+     * @param input the input to create labels for
+     * @param groupGeneratorName optional name of the group generator
+     * @return row labels
+     * @throws OperationFailedException if the operation fails
+     */
     private RowLabels labelsFor(T input, Optional<String> groupGeneratorName)
             throws OperationFailedException {
         Optional<String[]> additionalLabels = additionalLabelsFor(input);
@@ -160,7 +176,13 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
         return new RowLabels(Optional.of(nonGroupLabels), groupGeneratorName.map(SimpleName::new));
     }
 
-    /** Combines a {@link String} with optional additional others to form an array. */
+    /**
+     * Combines a {@link String} with optional additional others to form an array.
+     *
+     * @param identifier the main identifier string
+     * @param others optional additional strings
+     * @return combined array of strings
+     */
     private static String[] combine(String identifier, Optional<String[]> others) {
         if (others.isPresent()) {
             String[] out = new String[others.get().length + 1];

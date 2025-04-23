@@ -35,8 +35,8 @@ import org.anchoranalysis.feature.results.ResultsVector;
 /**
  * Utility class for testing ResultsVector objects.
  *
- * <p>This class provides methods to assert the equality of ResultsVector objects
- * with expected values, using a small epsilon for floating-point comparisons.</p>
+ * <p>This class provides methods to assert the equality of ResultsVector objects with expected
+ * values, using a small epsilon for floating-point comparisons.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResultsVectorTestUtilities {
@@ -46,11 +46,13 @@ public class ResultsVectorTestUtilities {
     /**
      * Asserts that a ResultsVector matches the expected values within a small epsilon.
      *
-     * <p>If the assertion fails, it prints debug information to the console before throwing an AssertionError.</p>
+     * <p>If the assertion fails, it prints debug information to the console before throwing an
+     * AssertionError.
      *
      * @param results the ResultsVector to check
      * @param expectedVals the expected values to compare against
-     * @throws AssertionError if the ResultsVector does not match the expected values within the epsilon
+     * @throws AssertionError if the ResultsVector does not match the expected values within the
+     *     epsilon
      */
     public static void assertCalc(ResultsVector results, Object... expectedVals) {
         boolean areEquals = results.equalsPrecision(eps, expectedVals);

@@ -32,7 +32,6 @@ import java.io.File;
 import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.file.FileNamerContext;
 import org.anchoranalysis.io.input.file.NamedFile;
 import org.anchoranalysis.plugin.io.bean.file.namer.patternspan.PatternSpan;
@@ -44,45 +43,45 @@ class PatternSpanTest {
     private static final Logger LOGGER = LoggerFixture.suppressedLogger();
 
     @Test
-    void testSimple() throws InputReadFailedException {
+    void testSimple() {
 
-        String inputs[] = {"/a/b/c.txt", "/a/d/c.txt", "/a/e/c.txt"};
+        String[] inputs = {"/a/b/c.txt", "/a/d/c.txt", "/a/e/c.txt"};
 
-        String expected[] = {"b", "d", "e"};
+        String[] expected = {"b", "d", "e"};
         applyTest(inputs, expected);
     }
 
     @Test
-    void testPaths() throws InputReadFailedException {
-        String inputs[] = {
+    void testPaths() {
+        String[] inputs = {
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/Klosters (Feb 2020)/P1210904.JPG"
         };
 
-        String expected[] = {"P1210940", "Klosters (Feb 2020)/P1210904"};
+        String[] expected = {"P1210940", "Klosters (Feb 2020)/P1210904"};
 
         applyTest(inputs, expected);
     }
 
     @Test
-    void testEmptyString() throws InputReadFailedException {
-        String inputs[] = {
+    void testEmptyString() {
+        String[] inputs = {
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG.TXT"
         };
 
-        String expected[] = {"P1210940.JPG", "P1210940.JPG.TXT"};
+        String[] expected = {"P1210940.JPG", "P1210940.JPG.TXT"};
 
         applyTest(inputs, expected);
     }
 
     // When there is no extension, the right-side should be kept
     @Test
-    void testWithoutExtension() throws InputReadFailedException {
+    void testWithoutExtension() {
 
-        String inputs[] = {"/a/b/c", "/a/d/c", "/a/e/c"};
+        String[] inputs = {"/a/b/c", "/a/d/c", "/a/e/c"};
 
-        String expected[] = {"b/c", "d/c", "e/c"};
+        String[] expected = {"b/c", "d/c", "e/c"};
         applyTest(inputs, expected);
     }
 
@@ -90,10 +89,10 @@ class PatternSpanTest {
         List<File> files = filesFromStrs(paths);
 
         PatternSpan span = new PatternSpan();
-        List<NamedFile> ret = span.deriveName(files, new FileNamerContext(LOGGER));
+        List<NamedFile> derived = span.deriveName(files, new FileNamerContext(LOGGER));
 
         for (int i = 0; i < expected.length; i++) {
-            assertIndexEquals(ret, i, expected[i]);
+            assertIndexEquals(derived, i, expected[i]);
         }
     }
 

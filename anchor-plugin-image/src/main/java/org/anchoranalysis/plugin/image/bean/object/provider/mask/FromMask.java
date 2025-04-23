@@ -45,6 +45,7 @@ public class FromMask extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Provider<Mask> mask;
+
     // END BEAN PROPERTIES
 
     @Override

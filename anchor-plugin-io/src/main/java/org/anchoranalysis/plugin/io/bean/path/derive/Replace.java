@@ -46,6 +46,7 @@ public class Replace extends DerivePath {
 
     /** What to replace in the path */
     @BeanField @Getter @Setter private String replacement;
+
     // END BEAN FIELDS
 
     @Override

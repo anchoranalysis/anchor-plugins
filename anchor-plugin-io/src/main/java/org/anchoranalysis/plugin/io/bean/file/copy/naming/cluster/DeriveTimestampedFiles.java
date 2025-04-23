@@ -47,6 +47,7 @@ class DeriveTimestampedFiles {
 
     // START REQUIRED ARGUMENTS
     private final List<TimestampPattern> dateTimePatterns;
+
     // END REQUIRED ARGUMENTS
 
     /**

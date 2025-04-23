@@ -47,18 +47,26 @@ import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 
+/**
+ * A {@link MarkProposer} that fits points to a mark using a {@link PointsProposer} and a {@link
+ * PointsFitter}.
+ */
 public class FitPoints extends MarkProposer {
 
     // START BEAN PROPERTIES
+    /** The {@link PointsProposer} used to generate points. */
     @BeanField @Getter @Setter private PointsProposer pointsProposer;
 
+    /** The {@link PointsFitter} used to fit points to a mark. */
     @BeanField @Getter @Setter private PointsFitter pointsFitter;
 
+    /** Whether to report fitter errors. */
     @BeanField @Getter @Setter private boolean reportFitterErrors = true;
+
     // END BEAN PROPERTIES
 
-    @SuppressWarnings("unused")
-    private Logger logger;
+    /** The logger for recording errors. */
+    @Getter private Logger logger;
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {

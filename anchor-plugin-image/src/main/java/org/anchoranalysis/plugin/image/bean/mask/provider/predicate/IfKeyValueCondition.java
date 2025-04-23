@@ -43,6 +43,7 @@ public class IfKeyValueCondition extends IfPredicateBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DictionaryCondition condition;
+
     // END BEAN PROPERTIES
 
     @Override

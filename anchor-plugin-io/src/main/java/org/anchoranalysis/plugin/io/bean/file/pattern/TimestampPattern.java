@@ -88,6 +88,7 @@ public class TimestampPattern extends AnchorBean<TimestampPattern> {
      * from 0 for the first group.
      */
     @BeanField @Getter @Setter private int indexSeconds = 5;
+
     // END BEAN PROPERTIES
 
     /** The compiled version of {@code regularExpression}. */

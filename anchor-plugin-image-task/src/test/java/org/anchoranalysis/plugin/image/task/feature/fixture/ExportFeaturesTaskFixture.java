@@ -59,10 +59,13 @@ import org.mockito.Mockito;
 public abstract class ExportFeaturesTaskFixture<
         S extends InputFromManager, T extends FeatureInputEnergy, V> {
 
+    /** The group name used for grouping. */
     private static final String GROUP = "arbitraryGroup";
 
+    /** The energy stack used for feature calculations. */
     @Getter private EnergyStackWithoutParameters energyStack;
 
+    /** The loader for feature-related objects. */
     @Getter protected final FeaturesLoader featureLoader;
 
     /**
@@ -93,6 +96,12 @@ public abstract class ExportFeaturesTaskFixture<
         this.energyStack = createEnergyStack(true, false, false);
     }
 
+    /**
+     * Creates an {@link ExportFeatures} task.
+     *
+     * @return the created task
+     * @throws CreateException if the task cannot be created
+     */
     public ExportFeatures<S, V, T> createTask() throws CreateException {
 
         ExportFeatures<S, V, T> task = new ExportFeatures<>();
@@ -109,20 +118,46 @@ public abstract class ExportFeaturesTaskFixture<
         return task;
     }
 
+    /**
+     * Creates a {@link FeatureSource} for the task.
+     *
+     * @param energyStack the energy stack to use
+     * @param featureLoader the feature loader to use
+     * @return the created feature source
+     * @throws CreateException if the source cannot be created
+     */
     protected abstract FeatureSource<S, V, T> createSource(
             EnergyStackWithoutParameters energyStack, FeaturesLoader featureLoader)
             throws CreateException;
 
+    /**
+     * Creates a list of {@link FeatureListProvider}s for the task.
+     *
+     * @param featureLoader the feature loader to use
+     * @return the created list of feature list providers
+     */
     protected abstract List<NamedBean<FeatureListProvider<T>>> createFeatures(
             FeaturesLoader featureLoader);
 
+    /**
+     * Creates an {@link EnergyStackWithoutParameters} with specified properties.
+     *
+     * @param bigSizeEnergy whether to create a big-sized energy stack
+     * @param singleChannel whether to create a single-channel energy stack
+     * @param includeResolution whether to include resolution information
+     * @return the created energy stack
+     */
     private EnergyStackWithoutParameters createEnergyStack(
             boolean bigSizeEnergy, boolean singleChannel, boolean includeResolution) {
         return EnergyStackFixture.create(bigSizeEnergy, false, singleChannel, includeResolution)
                 .withoutParameters();
     }
 
-    /** Create a {@link Grouper} that always assigns a constant string as the group. */
+    /**
+     * Creates a mock {@link Grouper} that always assigns a constant string as the group.
+     *
+     * @return the created mock grouper
+     */
     private static Grouper createGrouperMock() {
         Grouper grouper = Mockito.mock(Grouper.class);
         when(grouper.createInputGrouper(any())).thenReturn(Optional.of(value -> GROUP));

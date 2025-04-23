@@ -29,34 +29,64 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Creates reference (i.e. Providers that reference an existing object) of different types
+ * Creates reference (i.e. Providers that reference an existing object) of different types.
  *
- * <p>This is particularly useful to avoid to referring to multiple identically named {@code
- * Reference} classes in the same file, necessitating the use of the fully qualified class name.
+ * <p>This is particularly useful to avoid referring to multiple identically named {@code Reference}
+ * classes in the same file, necessitating the use of the fully qualified class name.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReferenceFactory {
 
+    /**
+     * Creates a reference to a stack.
+     *
+     * @param id the identifier of the stack
+     * @return a new {@link org.anchoranalysis.plugin.image.bean.stack.provider.Reference}
+     */
     public static org.anchoranalysis.plugin.image.bean.stack.provider.Reference stack(String id) {
         return new org.anchoranalysis.plugin.image.bean.stack.provider.Reference(id);
     }
 
+    /**
+     * Creates a reference to a channel.
+     *
+     * @param id the identifier of the channel
+     * @return a new {@link org.anchoranalysis.plugin.image.bean.channel.provider.Reference}
+     */
     public static org.anchoranalysis.plugin.image.bean.channel.provider.Reference channel(
             String id) {
         return new org.anchoranalysis.plugin.image.bean.channel.provider.Reference(id);
     }
 
+    /**
+     * Creates a reference to objects.
+     *
+     * @param id the identifier of the objects
+     * @return a new {@link org.anchoranalysis.plugin.image.bean.object.provider.Reference}
+     */
     public static org.anchoranalysis.plugin.image.bean.object.provider.Reference objects(
             String id) {
         return new org.anchoranalysis.plugin.image.bean.object.provider.Reference(id);
     }
 
+    /**
+     * Creates a reference to a mask.
+     *
+     * @param id the identifier of the mask
+     * @return a new {@link org.anchoranalysis.plugin.image.bean.mask.provider.Reference}
+     */
     public static org.anchoranalysis.plugin.image.bean.mask.provider.Reference mask(String id) {
         return new org.anchoranalysis.plugin.image.bean.mask.provider.Reference(id);
     }
 
+    /**
+     * Creates a reference to a histogram.
+     *
+     * @param id the identifier of the histogram
+     * @return a new {@link org.anchoranalysis.plugin.image.bean.histogram.provider.Reference}
+     */
     public static org.anchoranalysis.plugin.image.bean.histogram.provider.Reference histogram(
             String id) {
         return new org.anchoranalysis.plugin.image.bean.histogram.provider.Reference(id);

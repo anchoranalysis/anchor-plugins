@@ -32,8 +32,14 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
+/** A slice thresholder that applies thresholding to the entire image without using a mask. */
 public class SliceThresholderWithoutMask extends SliceThresholder {
 
+    /**
+     * Creates a new {@link SliceThresholderWithoutMask}.
+     *
+     * @param binaryValues the {@link BinaryValuesByte} to use for output
+     */
     public SliceThresholderWithoutMask(BinaryValuesByte binaryValues) {
         super(binaryValues);
     }
@@ -42,7 +48,7 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
     public void segmentAll(
             Voxels<?> voxelsIn, Voxels<?> voxelsThreshold, Voxels<UnsignedByteBuffer> voxelsOut) {
         for (int z = 0; z < voxelsIn.extent().z(); z++) {
-            sgmnSlice(
+            segmentSlice(
                     voxelsIn.extent(),
                     voxelsIn.slice(z),
                     voxelsThreshold.slice(z),
@@ -50,7 +56,15 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
         }
     }
 
-    private void sgmnSlice(
+    /**
+     * Segments a single slice of the image.
+     *
+     * @param extent the {@link Extent} of the slice
+     * @param voxelsIn the input {@link VoxelBuffer}
+     * @param voxelsThreshold the threshold {@link VoxelBuffer}
+     * @param bufferOut the output {@link VoxelBuffer}
+     */
+    private void segmentSlice(
             Extent extent,
             VoxelBuffer<?> voxelsIn,
             VoxelBuffer<?> voxelsThreshold,

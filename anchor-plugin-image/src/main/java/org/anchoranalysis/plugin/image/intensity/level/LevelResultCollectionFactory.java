@@ -40,14 +40,26 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/** Factory for creating {@link LevelResultCollection} objects. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LevelResultCollectionFactory {
 
+    /**
+     * Creates a {@link LevelResultCollection} from a channel and object collection.
+     *
+     * @param channel the {@link Channel} to process
+     * @param objects the {@link ObjectCollection} to process
+     * @param calculateLevel the {@link CalculateLevel} bean to use for level calculation
+     * @param numberDilations the number of dilations to apply to each object
+     * @param logger the {@link MessageLogger} for logging messages
+     * @return a new {@link LevelResultCollection}
+     * @throws CreateException if an error occurs during creation
+     */
     public static LevelResultCollection createCollection(
             Channel channel,
             ObjectCollection objects,
             CalculateLevel calculateLevel,
-            int numDilations,
+            int numberDilations,
             MessageLogger logger)
             throws CreateException {
 
@@ -61,13 +73,13 @@ public class LevelResultCollectionFactory {
                     "Creating level result %s", objectMask.centerOfGravity().toString());
 
             // Optional dilation
-            if (numDilations != 0) {
+            if (numberDilations != 0) {
                 objectForCalculateLevel =
                         MorphologicalDilation.dilate(
                                 objectMask,
                                 Optional.of(channel.extent()),
                                 channel.dimensions().z() > 1,
-                                numDilations,
+                                numberDilations,
                                 false);
             } else {
                 objectForCalculateLevel = objectMask;
@@ -82,11 +94,11 @@ public class LevelResultCollectionFactory {
                 throw new CreateException(e);
             }
 
-            LevelResult res = new LevelResult(level, objectMask, histogram);
+            LevelResult result = new LevelResult(level, objectMask, histogram);
 
-            logger.logFormatted("Level result is %d", res.getLevel());
+            logger.logFormatted("Level result is %d", result.getLevel());
 
-            all.add(res);
+            all.add(result);
         }
         return all;
     }

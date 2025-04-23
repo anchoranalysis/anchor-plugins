@@ -77,6 +77,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     /** How to read a {@link Mat} for a particular {@link Path}. */
     private final CheckedFunction<Path, Mat, IOException> readDecodeMat;
+
     // END REQUIRED ARGUMENTS
 
     /** Lazily opened stack. */

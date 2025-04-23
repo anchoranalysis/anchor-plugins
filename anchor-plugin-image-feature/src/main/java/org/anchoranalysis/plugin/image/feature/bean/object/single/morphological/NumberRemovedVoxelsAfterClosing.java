@@ -47,6 +47,7 @@ public class NumberRemovedVoxelsAfterClosing extends FeatureSingleObject {
     @BeanField @Getter @Setter private int iterations = 1;
 
     @BeanField @Getter @Setter private boolean do3D = true;
+
     // END BEAN PROPERTIES
 
     @Override

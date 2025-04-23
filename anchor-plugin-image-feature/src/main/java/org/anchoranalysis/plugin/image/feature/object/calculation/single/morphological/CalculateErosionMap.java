@@ -34,13 +34,29 @@ import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateIncrementalOperationMap;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Calculates a map of eroded {@link ObjectMask}s for different iteration counts.
+ *
+ * <p>This class extends {@link CalculateIncrementalOperationMap} to perform erosion operations on
+ * object masks and cache the results for different iteration counts.
+ */
 @EqualsAndHashCode(callSuper = true)
 public class CalculateErosionMap extends CalculateIncrementalOperationMap {
 
+    /**
+     * Creates a new {@link CalculateErosionMap}.
+     *
+     * @param do3D whether to perform 3D erosion (true) or 2D erosion (false)
+     */
     public CalculateErosionMap(boolean do3D) {
         super(do3D);
     }
 
+    /**
+     * Copy constructor for {@link CalculateErosionMap}.
+     *
+     * @param other the {@link CalculateIncrementalOperationMap} to copy from
+     */
     protected CalculateErosionMap(CalculateIncrementalOperationMap other) {
         super(other);
     }

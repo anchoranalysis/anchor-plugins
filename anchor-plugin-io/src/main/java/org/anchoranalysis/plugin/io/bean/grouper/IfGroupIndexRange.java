@@ -53,6 +53,7 @@ public class IfGroupIndexRange extends Grouper {
     // START BEAN PROPERTIES
     /** Fallback to use when no group-index-range is specified. */
     @BeanField @Getter @Setter private Grouper group = new WithoutGrouping();
+
     // END BEAN PROPERTIES
 
     @Override

@@ -49,6 +49,7 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
     // START BEAN PROPERTIES
     /** The list of {@link InputManager}s that will be concatenated. */
     @BeanField @Getter @Setter private List<InputManager<T>> list = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     @Override

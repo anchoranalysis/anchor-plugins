@@ -29,6 +29,12 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.border;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Checks if an object's bounding box is at the border of the image in the XY plane.
+ *
+ * <p>This feature returns 1.0 if the object's bounding box touches any of the X or Y borders of the
+ * image, and 0.0 otherwise.
+ */
 public class AtBorderXY extends AtBorderBase {
 
     @Override

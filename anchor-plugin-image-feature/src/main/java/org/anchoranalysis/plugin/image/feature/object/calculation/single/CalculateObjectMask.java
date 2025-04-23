@@ -35,22 +35,26 @@ import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/** Calculates an {@link ObjectMask} based on a specified number of iterations. */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateObjectMask
         extends CalculationPart<ObjectMask, FeatureInputSingleObject> {
 
+    /** The number of iterations to perform. */
     private final int iterations;
+
+    /** A map to store and retrieve calculated {@link ObjectMask}s. */
     private final ResolvedPartMap<ObjectMask, FeatureInputSingleObject, Integer> map;
 
     /**
-     * Copy constructor
+     * Copy constructor.
      *
-     * @param src where to copy from
+     * @param source the {@link CalculateObjectMask} to copy from
      */
-    protected CalculateObjectMask(CalculateObjectMask src) {
-        this.iterations = src.iterations;
-        this.map = src.map;
+    protected CalculateObjectMask(CalculateObjectMask source) {
+        this.iterations = source.iterations;
+        this.map = source.map;
     }
 
     @Override

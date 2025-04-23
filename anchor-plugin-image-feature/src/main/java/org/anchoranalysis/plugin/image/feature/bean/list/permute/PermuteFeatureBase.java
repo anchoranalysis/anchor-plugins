@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -45,23 +47,21 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public abstract class PermuteFeatureBase<T extends FeatureInput> extends FeatureListProvider<T> {
 
-    // START BEAN PROPERTIES
-    @BeanField @SkipInit private Feature<T> feature;
-    // END BEAN PROPERTIES
+    /** The feature to be permuted. */
+    @BeanField @Getter @Setter @SkipInit private Feature<T> feature;
 
     @Override
     public FeatureList<T> get() throws ProvisionFailedException {
         return createPermutedFeaturesFor(feature);
     }
 
+    /**
+     * Creates permuted features for the given feature.
+     *
+     * @param feature the feature to permute
+     * @return a {@link FeatureList} containing the permuted features
+     * @throws ProvisionFailedException if the permuted features cannot be created
+     */
     protected abstract FeatureList<T> createPermutedFeaturesFor(Feature<T> feature)
             throws ProvisionFailedException;
-
-    public Feature<T> getFeature() {
-        return feature;
-    }
-
-    public void setFeature(Feature<T> feature) {
-        this.feature = feature;
-    }
 }

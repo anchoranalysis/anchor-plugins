@@ -3,74 +3,85 @@
   <parent>
     <groupId>org.anchoranalysis.anchor</groupId>
     <artifactId>anchor-parent-plugins</artifactId>
-    <version>0.0.11-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>anchor-test-feature-plugins</artifactId>
-  <version>0.0.4-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <description>Helper routines for testing features.</description>
     <dependencies>
    
 	    <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-test</artifactId>
-		  <version>[0.3.1,1.0.0)</version>
+		  <version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-math</artifactId>
-		  <version>[0.2.1,1.0.0)</version>
+		  <version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>anchor-test-feature</artifactId>
-          <version>[0.2.1,1.0.0)</version>
-        </dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-core</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-bean</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-image-voxel</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-image-core</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-feature-session</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
 		
 	  <dependency>
           <groupId>${project.groupId}</groupId>
           <artifactId>anchor-spatial</artifactId>
-          <version>[0.2.1,1.0.0)</version>
+          <version>1.0.0-SNAPSHOT</version>
         </dependency>
         
         <dependency>
           <groupId>${project.groupId}</groupId>
           <artifactId>anchor-image-feature</artifactId>
-          <version>[0.2.1,1.0.0)</version>
+          <version>1.0.0-SNAPSHOT</version>
         </dependency>
 		
 	   <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-feature</artifactId>
-		  <version>[0.2.1,1.0.0)</version>
+		  <version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		        
         <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-mpp</artifactId>
-		  <version>[0.2.1,1.0.0)</version>
+		  <version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
 	    <!-- Needed to expand scope outside "test" which is inherited from the parent pom -->
-        <dependency>
-		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-engine</artifactId>
-		    <version>${junit.version}</version>
-		    <scope>compile</scope>
-		</dependency>
-
-        <dependency>
-		    <groupId>org.junit.vintage</groupId>
-		    <artifactId>junit-vintage-engine</artifactId>
-		    <version>${junit.version}</version>
-		    <scope>compile</scope>
-		</dependency>
-				
 		<dependency>
-		  <groupId>${project.groupId}</groupId>
-		  <artifactId>anchor-experiment</artifactId>
-		  <version>[0.2.1,1.0.0)</version>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter</artifactId>
+		    <version>${junit.version}</version>
+		    <scope>compile</scope>
 		</dependency>
 		
 	</dependencies>

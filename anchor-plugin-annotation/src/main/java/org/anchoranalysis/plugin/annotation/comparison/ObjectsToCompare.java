@@ -29,12 +29,13 @@ package org.anchoranalysis.plugin.annotation.comparison;
 import lombok.Value;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
+/** Holds two {@link ObjectCollection}s for comparison purposes. */
 @Value
 public class ObjectsToCompare {
 
-    /** Objects on left-side of the comparison */
+    /** Objects on left-side of the comparison. */
     private final ObjectCollection left;
 
-    /** Objects on right-side of the comparison */
+    /** Objects on right-side of the comparison. */
     private final ObjectCollection right;
 }

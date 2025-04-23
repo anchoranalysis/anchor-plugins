@@ -64,6 +64,7 @@ public abstract class GroupMapByName<S, T> {
      */
     private final MapCreateCountdown<Optional<String>, MapCreate<String, T>> map;
 
+    /** A word to describe a single instance of T in user error messages. */
     private final String nounT;
 
     /** Adds a single-item into an aggregator. */
@@ -108,6 +109,7 @@ public abstract class GroupMapByName<S, T> {
     /**
      * Adds an item with a non-group identifier, and also optionally a group identifier.
      *
+     * @param groupIdentifier optional group identifier.
      * @param singleItemsToAdd the single-items to add, each with a corresponding non-group name.
      * @throws OperationFailedException if the operation cannot successfully complete.
      */
@@ -149,7 +151,14 @@ public abstract class GroupMapByName<S, T> {
             Optional<String> outputNameSingle)
             throws IOException;
 
-    /** Adds all the single-items to an aggregator retrieved from {@code map}. */
+    /**
+     * Adds all the single-items to an aggregator retrieved from {@code map}.
+     *
+     * @param groupIdentifier optional group identifier.
+     * @param map the map to add items to.
+     * @param singleItemsToAdd the single-items to add.
+     * @throws OperationFailedException if the operation fails.
+     */
     private void addAllItemsToMap(
             Optional<String> groupIdentifier,
             MapCreate<String, T> map,
@@ -178,7 +187,7 @@ public abstract class GroupMapByName<S, T> {
      * @param groupIdentifier the identifier of the group to output (if it exists).
      * @param groupMap the corresponding map of elements for {@code groupIdentifier}.
      * @param context in which directory to perform the outputting.
-     * @throws IOException if outputting doesn't occur successfully.
+     * @throws OperationFailedException if outputting doesn't occur successfully.
      */
     private void outputGroup(
             Optional<String> groupIdentifier,
@@ -214,6 +223,7 @@ public abstract class GroupMapByName<S, T> {
      * @param multipleOutputs whether each group will produce multiple outputs or a single output.
      * @param context the context in which to maybe create a subdirectory, or else use as-is.
      * @param groupKey the key associated with the particular group.
+     * @return the {@link InputOutputContext} for the subdirectory or the original context.
      */
     private static InputOutputContext maybeCreateSubdirectory(
             boolean multipleOutputs, InputOutputContext context, Optional<String> groupKey) {

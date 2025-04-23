@@ -53,6 +53,7 @@ public class Objects extends ComparableSource {
     // START BEAN PROPERTIES
     /** Where to find the objects to compare, as a function of the source file-path. */
     @BeanField @Getter @Setter private DerivePath derivePath;
+
     // END BEAN PROPERTIES
 
     @Override

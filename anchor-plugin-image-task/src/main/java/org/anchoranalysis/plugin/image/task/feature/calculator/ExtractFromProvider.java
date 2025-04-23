@@ -42,9 +42,19 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 
+/** Utility class for extracting stacks and features from providers. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractFromProvider {
 
+    /**
+     * Extracts an {@link EnergyStack} from a {@link StackProvider}.
+     *
+     * @param stackEnergy the stack provider to extract from
+     * @param initialization the image initialization context
+     * @param logger the logger for recording messages
+     * @return the extracted {@link EnergyStack}
+     * @throws OperationFailedException if the extraction fails
+     */
     public static EnergyStack extractStack(
             StackProvider stackEnergy, ImageInitialization initialization, Logger logger)
             throws OperationFailedException {
@@ -61,7 +71,16 @@ class ExtractFromProvider {
     }
 
     /**
-     * Creates and initializes a single-feature that is provided via a {@link FeatureListProvider}
+     * Creates and initializes a single-feature that is provided via a {@link FeatureListProvider}.
+     *
+     * @param <T> the type of feature input
+     * @param featureListProvider the provider of the feature list
+     * @param featureProviderName the name of the feature provider
+     * @param initialization the feature-related initialization context
+     * @param logger the logger for recording messages
+     * @return the extracted {@link Feature}
+     * @throws FeatureCalculationException if the extraction fails or if more than one feature is
+     *     provided
      */
     public static <T extends FeatureInput> Feature<T> extractFeature(
             FeatureListProvider<T> featureListProvider,

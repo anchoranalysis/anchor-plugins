@@ -59,6 +59,7 @@ public class FillHoles extends ObjectCollectionProviderUnary {
     // START BEAN PROPERTIES
     /** */
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
+
     // END BEAN PROPERTIES
 
     @Override

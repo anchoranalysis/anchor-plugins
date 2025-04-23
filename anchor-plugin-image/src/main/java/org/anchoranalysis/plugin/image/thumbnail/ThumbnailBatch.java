@@ -33,11 +33,17 @@ import org.anchoranalysis.image.core.stack.DisplayStack;
  * properties (identical scale etc.)
  *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> the type of element for which thumbnails are created
  */
 @FunctionalInterface
 public interface ThumbnailBatch<T> {
 
-    /** Creates a thumbnail for an element in the batch */
+    /**
+     * Creates a thumbnail for an element in the batch.
+     *
+     * @param element the element for which to create a thumbnail
+     * @return a {@link DisplayStack} representing the thumbnail
+     * @throws CreateException if the thumbnail creation fails
+     */
     DisplayStack thumbnailFor(T element) throws CreateException;
 }

@@ -34,9 +34,21 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
+/** Utility class for removing intersecting voxels between objects in a collection. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectIntersectionRemover {
 
+    /**
+     * Removes intersecting voxels from a collection of objects.
+     *
+     * @param objects the {@link ObjectCollection} to process
+     * @param dimensions the {@link Dimensions} of the space containing the objects
+     * @param errorDisconnectedObjects if true, throws an exception if an object becomes
+     *     disconnected
+     * @return a new {@link ObjectCollection} with intersecting voxels removed
+     * @throws OperationFailedException if an object becomes disconnected and
+     *     errorDisconnectedObjects is true
+     */
     public static ObjectCollection removeIntersectingVoxels(
             ObjectCollection objects, Dimensions dimensions, boolean errorDisconnectedObjects)
             throws OperationFailedException {
@@ -67,6 +79,13 @@ public class ObjectIntersectionRemover {
         return objectsDuplicated;
     }
 
+    /**
+     * Removes intersecting voxels between two objects if they intersect.
+     *
+     * @param objectWrite the {@link ObjectMask} to modify
+     * @param objectRead the {@link ObjectMask} to compare against
+     * @param dimensions the {@link Dimensions} of the space containing the objects
+     */
     private static void removeIntersectingVoxelsIfIntersects(
             ObjectMask objectWrite, ObjectMask objectRead, Dimensions dimensions) {
         Optional<BoundingBox> intersection =
@@ -83,6 +102,13 @@ public class ObjectIntersectionRemover {
         }
     }
 
+    /**
+     * Removes intersecting voxels between two objects within a given intersection box.
+     *
+     * @param objectWrite the first {@link ObjectMask} to modify
+     * @param objectRead the second {@link ObjectMask} to modify
+     * @param intersection the {@link BoundingBox} of the intersection
+     */
     private static void removeIntersectingVoxels(
             ObjectMask objectWrite, ObjectMask objectRead, BoundingBox intersection) {
 
@@ -95,17 +121,25 @@ public class ObjectIntersectionRemover {
     }
 
     /**
-     * Sets voxels to be <i>off</i> if they match a (a certain part of a) a second-mask
+     * Sets voxels to be <i>off</i> if they match a (a certain part of a) a second-mask.
      *
-     * @param object the object-mask
+     * @param objectToAlter the {@link ObjectMask} to modify
+     * @param object the {@link ObjectMask} to compare against
      * @param restrictTo only consider this part of the mask (expressed in global coordinates, and
-     *     whose extent must be the same as {@code boxToBeAssigned}
+     *     whose extent must be the same as {@code boxToBeAssigned})
      */
     private static void assignOffVoxels(
             ObjectMask objectToAlter, ObjectMask object, BoundingBox restrictTo) {
         objectToAlter.assignOff().toObject(object, restrictTo);
     }
 
+    /**
+     * Throws an exception if the object becomes disconnected.
+     *
+     * @param objectWrite the {@link ObjectMask} to check
+     * @param description a description of when the check is performed (e.g., "before" or "after")
+     * @throws OperationFailedException if the object becomes disconnected
+     */
     private static void maybeErrorDisconnectedObjects(ObjectMask objectWrite, String description)
             throws OperationFailedException {
         if (!objectWrite.checkIfConnected()) {

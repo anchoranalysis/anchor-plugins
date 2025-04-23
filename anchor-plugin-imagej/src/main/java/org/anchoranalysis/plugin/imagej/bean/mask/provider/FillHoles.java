@@ -47,14 +47,22 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.imagej.mask.ApplyImageJMorphologicalOperation;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Fills holes in a mask, with options to skip holes touching the border or exceeding a maximum
+ * volume.
+ *
+ * <p>This class extends {@link MaskProviderUnary} to provide functionality for filling holes in
+ * binary masks.
+ */
 public class FillHoles extends MaskProviderUnary {
 
-    // START BEAN PROPERTIES
+    /**
+     * The maximum volume of a hole to be filled. If null, no maximum volume constraint is applied.
+     */
     @BeanField @OptionalBean @Getter @Setter private UnitValueExtent maxVolume = null;
 
-    /** If true we do not fill any objects that touch the border */
+    /** If true, holes that touch the border of the mask are not filled. Default value is true. */
     @BeanField @Getter @Setter private boolean skipAtBorder = true;
-    // END BEAN PROPERTIES
 
     @Override
     public Mask createFromMask(Mask mask) throws ProvisionFailedException {
@@ -72,6 +80,13 @@ public class FillHoles extends MaskProviderUnary {
         }
     }
 
+    /**
+     * Fills holes in the input mask.
+     *
+     * @param mask the input mask
+     * @return a new mask with holes filled
+     * @throws ProvisionFailedException if the operation fails
+     */
     private Mask fillMask(Mask mask) throws ProvisionFailedException {
         Mask maskInverted = new Mask(mask.channel(), mask.binaryValuesInt().createInverted());
 
@@ -88,6 +103,13 @@ public class FillHoles extends MaskProviderUnary {
         return maskDuplicated;
     }
 
+    /**
+     * Filters objects from the mask based on the class's criteria.
+     *
+     * @param mask the input mask
+     * @return a collection of filtered objects
+     * @throws UnitValueException if there's an issue with unit conversion
+     */
     private ObjectCollection filterObjectsFromMask(Mask mask) throws UnitValueException {
 
         ObjectsFromConnectedComponentsFactory objectCreator =
@@ -97,6 +119,14 @@ public class FillHoles extends MaskProviderUnary {
                 objectCreator.createUnsignedByte(mask.binaryVoxels()), mask.dimensions());
     }
 
+    /**
+     * Filters objects based on the class's criteria.
+     *
+     * @param objects the collection of objects to filter
+     * @param dimensions the dimensions of the image
+     * @return a filtered collection of objects
+     * @throws UnitValueException if there's an issue with unit conversion
+     */
     private ObjectCollection filterObjects(ObjectCollection objects, Dimensions dimensions)
             throws UnitValueException {
 
@@ -108,6 +138,13 @@ public class FillHoles extends MaskProviderUnary {
                                 includeObject(objectMask, dimensions.extent(), maxVolumeResolved));
     }
 
+    /**
+     * Determines the maximum volume in voxels based on the maxVolume field.
+     *
+     * @param dimensions the dimensions of the image
+     * @return the maximum volume in voxels
+     * @throws UnitValueException if there's an issue with unit conversion
+     */
     private double determineMaxVolume(Dimensions dimensions) throws UnitValueException {
         if (maxVolume != null) {
             return maxVolume.resolveToVoxels(dimensions.unitConvert());
@@ -116,6 +153,14 @@ public class FillHoles extends MaskProviderUnary {
         }
     }
 
+    /**
+     * Determines whether an object should be included based on the class's criteria.
+     *
+     * @param object the object to check
+     * @param extent the extent of the image
+     * @param maxVolumeResolved the maximum volume in voxels
+     * @return true if the object should be included, false otherwise
+     */
     private boolean includeObject(ObjectMask object, Extent extent, double maxVolumeResolved) {
         // It's not allowed touch the border
         if (skipAtBorder && object.boundingBox().atBorderXY(extent)) {
@@ -126,6 +171,15 @@ public class FillHoles extends MaskProviderUnary {
         return maxVolume == null || object.numberVoxelsOn() <= maxVolumeResolved;
     }
 
+    /**
+     * Creates a mask from filled objects and combines it with the source mask.
+     *
+     * @param filled the collection of filled objects
+     * @param source the source mask
+     * @param dimensions the dimensions of the image
+     * @param binaryValuesOut the binary values for the output mask
+     * @return the combined mask
+     */
     private static Mask fillHoles(
             ObjectCollection filled,
             Mask source,

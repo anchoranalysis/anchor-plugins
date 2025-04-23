@@ -68,6 +68,7 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
     @BeanField @Getter @Setter private double minRadius = 0.55;
 
     @BeanField @Getter @Setter private boolean suppressZCovariance = false;
+
     // END BEAN PROPERTIES
 
     @Override

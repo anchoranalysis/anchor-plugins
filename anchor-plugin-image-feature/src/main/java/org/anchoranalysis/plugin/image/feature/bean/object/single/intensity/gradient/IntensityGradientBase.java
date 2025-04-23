@@ -37,18 +37,36 @@ import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.spatial.point.Point3d;
 
+/** Base class for features that calculate intensity gradients from multiple channels. */
 public abstract class IntensityGradientBase extends FeatureSingleObject {
 
-    // START BEAN PROPERTIES
+    /**
+     * Index of the channel in the energy stack to use for the X-component of the gradient. A value
+     * of -1 indicates that this component should not be used.
+     */
     @BeanField @NonNegative @Getter @Setter private int energyIndexX = -1;
 
+    /**
+     * Index of the channel in the energy stack to use for the Y-component of the gradient. A value
+     * of -1 indicates that this component should not be used.
+     */
     @BeanField @NonNegative @Getter @Setter private int energyIndexY = -1;
 
+    /**
+     * Index of the channel in the energy stack to use for the Z-component of the gradient. A value
+     * of -1 indicates that this component should not be used.
+     */
     @BeanField @OptionalBean @Getter @Setter private int energyIndexZ = -1;
 
+    /** A constant value to subtract from each voxel intensity before calculating the gradient. */
     @BeanField @Getter @Setter private int subtractConstant = 0;
-    // END BEAN PROPERTIES
 
+    /**
+     * Creates a {@link CalculationPart} for calculating the gradient from the specified channels.
+     *
+     * @return a {@link CalculationPart} that calculates a list of {@link Point3d} representing the
+     *     gradient vectors
+     */
     protected CalculationPart<List<Point3d>, FeatureInputSingleObject> gradientCalculation() {
         return new CalculateGradientFromChannels(
                 energyIndexX, energyIndexY, energyIndexZ, subtractConstant);

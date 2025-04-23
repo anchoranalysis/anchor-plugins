@@ -48,7 +48,6 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
-import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
 
 /**
  * Derives various types of outputs (images, histograms etc.) from {@link MultiInput}s.
@@ -83,6 +82,7 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
      * If non-empty, the identifier for a dictionary that is treated as part of the energy-stack.
      */
     @BeanField @AllowEmpty @Getter @Setter private String dictionary = "";
+
     // END BEAN PROPERTIES
 
     @Override

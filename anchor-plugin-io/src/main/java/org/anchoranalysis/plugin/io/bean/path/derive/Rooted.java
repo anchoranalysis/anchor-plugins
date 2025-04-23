@@ -54,6 +54,7 @@ public class Rooted extends DerivePath {
 
     /** if true, the pathIn and pathOut are logged. Useful for debugging */
     @BeanField @Getter @Setter private boolean logPath = false;
+
     // END BEAN PROPERTIES
 
     private Logger logger = Logger.getLogger(Rooted.class.getName());

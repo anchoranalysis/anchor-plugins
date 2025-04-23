@@ -44,19 +44,32 @@ import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.point.Point3f;
 
+/** A bean for fitting points to a mark using a specified points fitter. */
 public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 
     // START BEAN PROPERTIES
+    /** The {@link PointsFitter} used to fit points to a mark. */
     @BeanField @Getter @Setter private PointsFitter pointsFitter;
 
+    /** Provides the {@link Dimensions} for the fitting operation. */
     @BeanField @Getter @Setter private DimensionsProvider dimensions;
 
-    /** If an object has fewer points than before being fitted, we ignore */
+    /** The minimum number of points required for fitting. Objects with fewer points are ignored. */
     @BeanField @Positive @Getter @Setter private int minNumPoints = 1;
 
+    /** Provides the {@link ObjectCollection} to be used in the fitting process. */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+
     // END BEAN PROPERTIES
 
+    /**
+     * Fits a list of points to a mark using the specified points fitter.
+     *
+     * @param pointsForFitter the list of {@link Point3f} to fit
+     * @param mark the {@link Mark} to fit the points to
+     * @param dim the {@link Dimensions} of the image
+     * @throws OperationFailedException if the fitting operation fails
+     */
     public void fitPointsToMark(List<Point3f> pointsForFitter, Mark mark, Dimensions dim)
             throws OperationFailedException {
         try {
@@ -66,10 +79,22 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
         }
     }
 
+    /**
+     * Creates and returns the {@link ObjectCollection} using the specified provider.
+     *
+     * @return the created {@link ObjectCollection}
+     * @throws ProvisionFailedException if the object collection cannot be created
+     */
     public ObjectCollection createObjects() throws ProvisionFailedException {
         return objects.get();
     }
 
+    /**
+     * Creates and returns the {@link Dimensions} using the specified provider.
+     *
+     * @return the created {@link Dimensions}
+     * @throws ProvisionFailedException if the dimensions cannot be created
+     */
     public Dimensions createDim() throws ProvisionFailedException {
         return dimensions.get();
     }

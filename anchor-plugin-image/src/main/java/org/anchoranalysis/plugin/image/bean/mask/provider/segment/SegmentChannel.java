@@ -72,6 +72,7 @@ public class SegmentChannel extends FromChannelBase {
      * has an <i>on</i> voxel
      */
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
+
     // END BEAN PROPERTIES
 
     @Override

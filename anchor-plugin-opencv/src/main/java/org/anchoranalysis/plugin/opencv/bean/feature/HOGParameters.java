@@ -47,8 +47,8 @@ import org.opencv.objdetect.HOGDescriptor;
  * Parameters for calculating a HOG Descriptor covering window-size, block-size etc.
  *
  * <p>This class should implement a meaningful {@link Object#equals(Object)} and {@link #hashCode()}
- * on its properties as it may be used a {@link CalculationPart}. The {@code interpolator}) is
- * not considered.
+ * on its properties as it may be used a {@link CalculationPart}. The {@code interpolator}) is not
+ * considered.
  *
  * @author Owen Feehan
  */
@@ -83,6 +83,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
     /** The interpolator to use for scaling images. */
     @EqualsAndHashCode.Exclude @BeanField @Getter @Setter @DefaultInstance
     private Interpolator interpolator;
+
     // END BEAN PROPERTIES
 
     /**

@@ -77,6 +77,7 @@ class MapPart extends NamedChannelsInputPart {
 
     /** Records the execution-times of certain operations. */
     private final ExecutionTimeRecorder executionTimeRecorder;
+
     // END REQUIRED ARGUMENTS
 
     /** The currently opened-image-file. Lazily opened, null until first created. */

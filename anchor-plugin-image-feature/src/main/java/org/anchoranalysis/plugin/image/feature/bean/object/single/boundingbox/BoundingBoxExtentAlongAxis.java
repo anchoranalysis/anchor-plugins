@@ -29,6 +29,12 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
+/**
+ * Calculates the extent of an object's bounding box along a specified axis.
+ *
+ * <p>This feature returns the size of the bounding box along the axis specified in the parent
+ * class.
+ */
 public class BoundingBoxExtentAlongAxis extends BoundingBoxAlongAxisBase {
 
     @Override

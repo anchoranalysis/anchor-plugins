@@ -53,6 +53,7 @@ public class FlattenAsChannel extends StackReader {
     // START BEAN PROPERTIES
     /** Reads the image that is subsequently flattened. */
     @BeanField @Getter @Setter private StackReader stackReader;
+
     // END BEAN PROPERTIES
 
     @Override

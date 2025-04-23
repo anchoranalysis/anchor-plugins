@@ -31,7 +31,14 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.math.statistics.ZScoreCalculator;
 import org.anchoranalysis.plugin.operator.feature.statistics.FeatureResultSupplier;
 
-// Z-score of a value
+/**
+ * Calculates the Z-score of a value based on the mean and standard deviation.
+ *
+ * <p>The Z-score represents the number of standard deviations a value is from the mean. It is
+ * calculated as (value - mean) / standard_deviation.
+ *
+ * @param <T> the type of {@link FeatureInput} this feature operates on
+ */
 public class ZScore<T extends FeatureInput> extends StatisticalBase<T> {
 
     @Override

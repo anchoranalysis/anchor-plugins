@@ -46,6 +46,7 @@ public class Dilate extends ObjectCollectionProviderMorphological {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean bigNeighborhood = false;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -56,6 +56,7 @@ public class ScaleXY extends ChannelProviderUnary {
 
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
+
     // End BEAN PROPERTIES
 
     @Override

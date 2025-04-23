@@ -37,15 +37,16 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 
 /**
- * Like {@link ColoredBase} but uses a generator to determine the colors for the objects
+ * Like {@link ColoredBase} but uses a generator to determine the colors for the objects.
  *
  * @author Owen Feehan
  */
 public abstract class ColoredBaseWithGenerator extends ColoredBase {
 
     // START BEAN PROPERTIES
-    /** Colors to use for drawing objects */
+    /** Colors to use for drawing objects. */
     @BeanField @Getter @Setter private ColorScheme colors = DEFAULT_COLOR_SET_GENERATOR;
+
     // END BEAN PROPERTIES
 
     @Override
@@ -55,14 +56,22 @@ public abstract class ColoredBaseWithGenerator extends ColoredBase {
     }
 
     /**
-     * The objects to draw (without any colors) on the background
+     * The objects to draw (without any colors) on the background.
      *
-     * @param backgroundDimensions the dimensions of the background
-     * @return the objects to be drawn on the background
+     * @param backgroundDimensions the dimensions of the background.
+     * @return the {@link ObjectCollection} to be drawn on the background.
+     * @throws CreateException if the objects cannot be created.
      */
     protected abstract ObjectCollection objectsToDraw(Dimensions backgroundDimensions)
             throws CreateException;
 
+    /**
+     * Adds colors to the created objects.
+     *
+     * @param objectsCreated the {@link ObjectCollection} to add colors to.
+     * @return a {@link ColoredObjectCollection} with colors added to the objects.
+     * @throws CreateException if colors cannot be added to the objects.
+     */
     private ColoredObjectCollection addColors(ObjectCollection objectsCreated)
             throws CreateException {
         try {

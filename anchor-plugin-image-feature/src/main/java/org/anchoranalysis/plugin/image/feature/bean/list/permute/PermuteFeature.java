@@ -78,6 +78,7 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
      * present, but not both.
      */
     @BeanField @Getter @Setter private List<PermuteProperty<S>> permutations = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     @Override
@@ -102,8 +103,7 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
 
                 list =
                         new PermutedCopyCreator<Feature<T>>(
-                                        Feature::getCustomName,
-                                        (feat, name) -> feat.setCustomName(name))
+                                        Feature::getCustomName, Feature::setCustomName)
                                 .createPermutedCopies(list, permute, assigner);
             } catch (AssignPermutationException e) {
                 throw new ProvisionFailedException(

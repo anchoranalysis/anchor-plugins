@@ -49,6 +49,7 @@ public class ColoredMask extends ColoredBase {
     @BeanField @Getter @Setter private MaskProvider mask;
 
     @BeanField @Getter @Setter private RGBColorBean color = new RGBColorBean(Color.green);
+
     // END BEAN PROPERTIES
 
     @Override

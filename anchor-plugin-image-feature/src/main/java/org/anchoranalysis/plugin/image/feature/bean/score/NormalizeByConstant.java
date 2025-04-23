@@ -30,10 +30,21 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
+/**
+ * Normalizes the voxel intensity by dividing it by a constant value.
+ *
+ * <p>This class extends {@link SingleChannel} to process a single channel of voxel intensities.
+ */
 public class NormalizeByConstant extends SingleChannel {
 
     // START BEAN PROPERTIES
+    /**
+     * The constant value to divide the voxel intensity by.
+     *
+     * <p>Default value is 255, which is typical for 8-bit image normalization.
+     */
     @BeanField @Getter @Setter private double value = 255;
+
     // END BEAN PROPERTIES
 
     @Override

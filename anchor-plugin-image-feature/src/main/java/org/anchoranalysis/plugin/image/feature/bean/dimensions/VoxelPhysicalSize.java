@@ -48,6 +48,7 @@ public class VoxelPhysicalSize<T extends FeatureInputEnergy> extends ForSpecific
      * Double.Nan} (if false).
      */
     private @BeanField @Getter @Setter boolean acceptMissingResolution = false;
+
     // END BEAN FIELDS
 
     @Override

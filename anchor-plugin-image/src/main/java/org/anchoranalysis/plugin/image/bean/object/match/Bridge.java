@@ -49,6 +49,7 @@ public class Bridge extends ObjectMatcher {
 
     /** Used to match each intermediary-object to a final-object */
     @BeanField @Getter @Setter private ObjectMatcher objectMatcher;
+
     // END BEAN PROPERTIES
 
     @Override

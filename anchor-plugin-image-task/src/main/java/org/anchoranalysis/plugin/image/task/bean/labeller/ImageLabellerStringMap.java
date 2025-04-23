@@ -53,6 +53,7 @@ public class ImageLabellerStringMap<T>
     @BeanField @Getter @Setter private ImageLabeller<T> filter;
 
     @BeanField @Getter @Setter private StringMap map;
+
     // END BEAN PROPERTIES
 
     @Override

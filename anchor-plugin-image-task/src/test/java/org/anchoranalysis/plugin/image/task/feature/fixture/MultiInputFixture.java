@@ -30,11 +30,16 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 
+/** Fixture for creating {@link MultiInput} objects for testing purposes. */
 public class MultiInputFixture {
 
+    /** The name used for the object collection in the {@link MultiInput}. */
     public static final String OBJECTS_NAME = "objectsTest";
 
+    /** The number of intersecting objects to generate. */
     public static final int NUMBER_INTERSECTING_OBJECTS = 4;
+
+    /** The number of non-intersecting objects to generate. */
     public static final int NUMBER_NOT_INTERSECTING_OBJECTS = 2;
 
     /**
@@ -45,7 +50,7 @@ public class MultiInputFixture {
     public static final int NUMBER_PAIRS_INTERSECTING = 3;
 
     /**
-     * This creates a MultiInput with an object-collection {@code OBJECTS_NAME}
+     * Creates a {@link MultiInput} with an object-collection {@code OBJECTS_NAME}.
      *
      * <p>It contains 6 unique objects, 4 of whom intersect, and 2 who don't intersect at all.
      *
@@ -53,8 +58,8 @@ public class MultiInputFixture {
      *
      * <p>See the constants in the fixture to represent these numbers.
      *
-     * @param energyStack
-     * @return
+     * @param energyStack the {@link EnergyStackWithoutParameters} to use in the {@link MultiInput}
+     * @return a new {@link MultiInput} instance
      */
     public static MultiInput createInput(EnergyStackWithoutParameters energyStack) {
         MultiInput input =

@@ -50,6 +50,7 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Summarizer<S> summarizer = new SummarizerCount<>();
+
     // END BEAN PROPERTIES
 
     @Override

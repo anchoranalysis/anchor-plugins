@@ -62,19 +62,17 @@ class HOGFeatureTest {
     }
 
     @Test
-    void testGrayscale16bit() throws FeatureCalculationException {
+    void testGrayscale16bit() {
         assertFailure(loader.carGrayscale16BitAsEnergy(), 0);
     }
 
     @Test
-    void testOutsideBounds() throws FeatureCalculationException {
+    void testOutsideBounds() {
         assertFailure(loader.carRGBAsEnergy(), 60000);
     }
 
     private void assertFailure(EnergyStackWithoutParameters stack, int index) {
-        assertThrows(
-                FeatureCalculationException.class,
-                () -> featureValueForIndex(loader.carRGBAsEnergy(), 60000));
+        assertThrows(FeatureCalculationException.class, () -> featureValueForIndex(stack, index));
     }
 
     private void assertFeatureValueFirst(EnergyStackWithoutParameters stack, double expectedValue)

@@ -31,6 +31,7 @@ import org.anchoranalysis.annotation.io.comparer.StatisticsToExport;
  * Like {@link ImageCounter} but also exports statistics.
  *
  * @author Owen Feehan
+ * @param <T> the payload-type for annotated images.
  */
 public interface ImageCounterWithStatistics<T> extends ImageCounter<T> {
 

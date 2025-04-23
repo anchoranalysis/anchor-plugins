@@ -62,6 +62,7 @@ public class FilePathPattern extends SummarizerPath {
 
     /** if true, the extension is removed from paths before finding the pattern. */
     @Getter @Setter private boolean removeExtension = true;
+
     // END BEAN PROPERTIES
 
     private List<Path> list = new ArrayList<>();

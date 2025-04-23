@@ -58,6 +58,7 @@ public class WriteResolutionXml extends StackWriter {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private StackWriter writer;
+
     // END BEAN PROPERTIES
 
     @Override

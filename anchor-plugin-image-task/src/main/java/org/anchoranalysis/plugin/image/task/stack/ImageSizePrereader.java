@@ -65,6 +65,7 @@ public class ImageSizePrereader {
 
     /** Logging and execution time recording. */
     private final OperationContext context;
+
     // END REQUIRED ARGUMENTS
 
     /**

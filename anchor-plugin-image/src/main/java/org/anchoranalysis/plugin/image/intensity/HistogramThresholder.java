@@ -32,10 +32,18 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/** Utility class for thresholding histograms. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramThresholder {
 
-    /** Retains the portion of the histogram greater or equal to the calculated-level. */
+    /**
+     * Retains the portion of the histogram greater or equal to the calculated-level.
+     *
+     * @param histogram the {@link Histogram} to threshold
+     * @param calculateLevel the {@link CalculateLevel} to determine the threshold
+     * @return the thresholded {@link Histogram}
+     * @throws OperationFailedException if the threshold calculation fails
+     */
     public static Histogram withCalculateLevel(Histogram histogram, CalculateLevel calculateLevel)
             throws OperationFailedException {
         int threshold = calculateLevel.calculateLevel(histogram);

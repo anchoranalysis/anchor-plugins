@@ -40,12 +40,16 @@ import org.anchoranalysis.mpp.init.PointsInitialization;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.point.Point3f;
 
+/** A {@link PointsFitter} that references another {@link PointsFitter} by its ID. */
 public class Reference extends PointsFitter {
 
     // START BEAN
+    /** The ID of the referenced {@link PointsFitter}. */
     @BeanField @Getter @Setter private String id;
+
     // END BEAN
 
+    /** The actual {@link PointsFitter} instance referenced by the ID. */
     private PointsFitter pointsFitter;
 
     @Override

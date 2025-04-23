@@ -68,6 +68,7 @@ public class FitTo extends ScaleCalculator {
      * disabled when {@code == 1}
      */
     private @BeanField @Getter @Setter int multipleOf = 1;
+
     // END BEAN PROPERTIES
 
     @Override

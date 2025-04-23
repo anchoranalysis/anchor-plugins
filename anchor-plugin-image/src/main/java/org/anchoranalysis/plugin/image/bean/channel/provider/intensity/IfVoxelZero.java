@@ -65,6 +65,7 @@ public class IfVoxelZero extends ChannelProviderUnary {
      * this channel instead
      */
     @BeanField @Getter @Setter private ChannelProvider channelIfVoxelZero;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -48,12 +48,12 @@ class MaxFeatureIntersectingObjectsTest {
     @Test
     void testSameSizes()
             throws FeatureCalculationException, InitializeException, OperationFailedException {
-        InteresectingObjectsTestHelper.testPositions(
+        IntersectingObjectsTestHelper.testPositions(
                 "sameSize",
                 FEATURE,
                 true,
-                FeatureHelper.EXPECTED_NUM_PIXELS_FIRST_CIRCLE,
-                FeatureHelper.EXPECTED_NUM_PIXELS_FIRST_CIRCLE,
+                FeatureHelper.EXPECTED_NUMBER_PIXELS_FIRST_CIRCLE,
+                FeatureHelper.EXPECTED_NUMBER_PIXELS_FIRST_CIRCLE,
                 FeatureHelper.VALUE_NO_OBJECTS,
                 FeatureHelper.VALUE_NO_OBJECTS);
     }
@@ -68,12 +68,12 @@ class MaxFeatureIntersectingObjectsTest {
     @Test
     void testDifferentSizes()
             throws FeatureCalculationException, InitializeException, OperationFailedException {
-        InteresectingObjectsTestHelper.testPositions(
+        IntersectingObjectsTestHelper.testPositions(
                 "differentSize",
                 FEATURE,
                 false,
-                FeatureHelper.EXPECTED_NUM_PIXELS_FIRST_CIRCLE,
-                FeatureHelper.EXPECTED_NUM_PIXELS_SECOND_CIRCLE,
+                FeatureHelper.EXPECTED_NUMBER_PIXELS_FIRST_CIRCLE,
+                FeatureHelper.EXPECTED_NUMBER_PIXELS_SECOND_CIRCLE,
                 FeatureHelper.VALUE_NO_OBJECTS,
                 FeatureHelper.VALUE_NO_OBJECTS);
     }

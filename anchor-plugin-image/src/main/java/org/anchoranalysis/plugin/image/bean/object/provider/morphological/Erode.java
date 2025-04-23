@@ -50,6 +50,7 @@ public class Erode extends ObjectCollectionProviderMorphological {
     @BeanField @Getter @Setter private boolean rejectIterationIfAllLow = false;
 
     @BeanField @Getter @Setter private boolean rejectIterationIfDisconnected = false;
+
     // END BEAN PROPERTIES
 
     @Override

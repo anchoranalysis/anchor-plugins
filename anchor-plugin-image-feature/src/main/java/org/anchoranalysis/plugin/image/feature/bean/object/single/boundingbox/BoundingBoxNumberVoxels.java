@@ -31,6 +31,13 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
+/**
+ * Calculates the number of voxels in the bounding box of an object.
+ *
+ * <p>This feature returns the volume of the bounding box, which is equivalent to the number of
+ * voxels it contains. It does not consider whether these voxels are actually part of the object or
+ * not.
+ */
 public class BoundingBoxNumberVoxels extends FeatureSingleObject {
 
     @Override

@@ -44,9 +44,10 @@ import org.anchoranalysis.test.TestLoader;
  */
 public class FeaturesLoader {
 
-    /** The "single" and "pair" and "image" features in use. */
+    /** The "single" features in use. */
     private LoadFeatures<FeatureInputSingleObject> single;
 
+    /** The "pair" features in use. */
     private LoadFeatures<FeatureInputPairObjects> pair;
 
     /** Features on the entire image (the entire stack). */
@@ -55,12 +56,17 @@ public class FeaturesLoader {
     /** An expanded set of image features compared to {@code image}. */
     private LoadFeatures<FeatureInputStack> imageExpanded;
 
-    /** The features used for the shared-feature set */
+    /** The features used for the shared-feature set. */
     private LoadFeatures<FeatureInput> shared;
 
-    /** The features used for aggregating results */
+    /** The features used for aggregating results. */
     private LoadFeatures<FeatureInputResults> aggregated;
 
+    /**
+     * Creates a new {@link FeaturesLoader}.
+     *
+     * @param loader the {@link TestLoader} to use for loading XML files
+     */
     public FeaturesLoader(TestLoader loader) {
         this.single = new LoadFeatures<>(loader, "single");
         this.pair = new LoadFeatures<>(loader, "pair");
@@ -70,70 +76,119 @@ public class FeaturesLoader {
         this.aggregated = new LoadFeatures<>(loader, "aggregated");
     }
 
+    /**
+     * Gets the list of single-object features.
+     *
+     * @return a list of {@link NamedBean}s containing {@link FeatureListProvider}s for {@link
+     *     FeatureInputSingleObject}
+     */
     public List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> single() {
         return single.asNamedBean();
     }
 
+    /**
+     * Gets the list of pair-object features.
+     *
+     * @return a list of {@link NamedBean}s containing {@link FeatureListProvider}s for {@link
+     *     FeatureInputPairObjects}
+     */
     public List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> pair() {
         return pair.asNamedBean();
     }
 
+    /**
+     * Gets the list of image features.
+     *
+     * @return a list of {@link NamedBean}s containing {@link FeatureListProvider}s for {@link
+     *     FeatureInputStack}
+     */
     public List<NamedBean<FeatureListProvider<FeatureInputStack>>> image() {
         return image.asNamedBean();
     }
 
+    /**
+     * Gets the expanded list of image features.
+     *
+     * @return a list of {@link NamedBean}s containing {@link FeatureListProvider}s for {@link
+     *     FeatureInputStack}
+     */
     public List<NamedBean<FeatureListProvider<FeatureInputStack>>> imageExpanded() {
         return imageExpanded.asNamedBean();
     }
 
+    /**
+     * Gets the list of shared features.
+     *
+     * @return a list of {@link NamedBean}s containing {@link FeatureListProvider}s for {@link
+     *     FeatureInput}
+     */
     public List<NamedBean<FeatureListProvider<FeatureInput>>> shared() {
         return shared.asNamedBean();
     }
 
+    /**
+     * Gets the list of aggregated features.
+     *
+     * @return a list of {@link NamedBean}s containing {@link FeatureListProvider}s for {@link
+     *     FeatureInputResults}
+     */
     public List<NamedBean<FeatureListProvider<FeatureInputResults>>> aggregated() {
         return aggregated.asNamedBean();
     }
 
+    /** Changes the single-object features to reference shared features. */
     public void changeSingleToReferenceShared() {
         changeSingleTo("referenceWithShared");
     }
 
+    /** Changes the single-object features to reference with include. */
     public void changeSingleToReferenceWithInclude() {
         changeSingleTo("referenceWithInclude");
     }
 
+    /** Changes the single-object features to shell features. */
     public void changeSingleToShellFeatures() {
         changeSingleTo("singleWithShell");
     }
 
     /**
-     * Uses this feature instead of whatever list has been loaded for the single-features
+     * Uses a specific feature instead of the loaded list for single-object features.
      *
      * <p>It does not initialize the feature.
+     *
+     * @param feature the {@link Feature} to use for {@link FeatureInputSingleObject}
      */
     public void changeSingleTo(Feature<FeatureInputSingleObject> feature) {
         single.useSingleFeature(feature);
     }
 
     /**
-     * Uses this feature instead of whatever list has been loaded for the pair-features
+     * Uses a specific feature instead of the loaded list for pair-object features.
      *
      * <p>It does not initialize the feature.
+     *
+     * @param feature the {@link Feature} to use for {@link FeatureInputPairObjects}
      */
     public void changePairTo(Feature<FeatureInputPairObjects> feature) {
         pair.useSingleFeature(feature);
     }
 
     /**
-     * Uses this feature instead of whatever list has been loaded for the pair-features
+     * Uses a specific feature instead of the loaded list for image features.
      *
      * <p>It does not initialize the feature.
+     *
+     * @param feature the {@link Feature} to use for {@link FeatureInputStack}
      */
     public void changeImageTo(Feature<FeatureInputStack> feature) {
         image.useSingleFeature(feature);
     }
 
-    /** Additionally include a shell feature in the "single" features */
+    /**
+     * Changes the single-object features to an alternative XML list.
+     *
+     * @param alternativeFileName the name of the alternative XML file to use
+     */
     private void changeSingleTo(String alternativeFileName) {
         single.useAlternativeXMLList(alternativeFileName);
     }

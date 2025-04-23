@@ -45,10 +45,23 @@ public class ImageCounterList<T extends Assignment<ObjectMask>>
 
     private List<ImageCounter<T>> delegate = new ArrayList<>();
 
+    /**
+     * Adds an {@link ImageCounter} to the list.
+     *
+     * @param e the {@link ImageCounter} to add.
+     * @return true if the counter was added successfully, false otherwise.
+     */
     public boolean add(ImageCounter<T> e) {
         return delegate.add(e);
     }
 
+    /**
+     * Adds a collection of {@link ImageCounter}s to the list.
+     *
+     * @param <S> the type of {@link ImageCounter}s in the collection.
+     * @param e the collection of {@link ImageCounter}s to add.
+     * @return true if the collection was added successfully, false otherwise.
+     */
     public <S extends ImageCounter<T>> boolean addAll(Collection<S> e) {
         return delegate.addAll(e);
     }
@@ -72,6 +85,11 @@ public class ImageCounterList<T extends Assignment<ObjectMask>>
         return delegate.iterator();
     }
 
+    /**
+     * Returns a sequential {@link Stream} with this list as its source.
+     *
+     * @return a sequential {@link Stream} over the elements in this list.
+     */
     public Stream<ImageCounter<T>> stream() {
         return delegate.stream();
     }

@@ -46,15 +46,27 @@ import org.anchoranalysis.spatial.point.Point3i;
 public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
 
     // START PROPERTIES
+    /** Optional provider for a background channel to use in intensity-based conditions. */
     @BeanField @OptionalBean @Getter @Setter private ChannelProvider backgroundChannelProvider;
 
+    /** Number of iterations to apply the morphological operation. */
     @BeanField @Positive @Getter @Setter private int iterations = 1;
 
+    /** Minimum intensity value for voxels to be considered in the operation. */
     @BeanField @Getter @Setter private int minIntensityValue = 0;
 
+    /** Whether to suppress 3D operations and only perform 2D operations. */
     @BeanField @Getter @Setter private boolean suppress3D = false;
+
     // END PROPERTIES
 
+    /**
+     * Applies the morphological operation to the source mask.
+     *
+     * @param source the source mask to apply the operation to
+     * @param do3D whether to perform the operation in 3D
+     * @throws ProvisionFailedException if the operation fails
+     */
     protected abstract void applyMorphologicalOperation(Mask source, boolean do3D)
             throws ProvisionFailedException;
 
@@ -67,6 +79,12 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
         return mask;
     }
 
+    /**
+     * Creates a precondition for the morphological operation based on intensity values.
+     *
+     * @return an optional predicate that checks if a voxel meets the intensity condition
+     * @throws ProvisionFailedException if creating the precondition fails
+     */
     protected Optional<Predicate<Point3i>> precondition() throws ProvisionFailedException {
         if (minIntensityValue > 0) {
             Voxels<UnsignedByteBuffer> background =
@@ -77,6 +95,14 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
         }
     }
 
+    /**
+     * Checks if a voxel meets the intensity condition.
+     *
+     * @param voxels the voxels to check
+     * @param point the point to check
+     * @param minIntensityValue the minimum intensity value
+     * @return true if the voxel meets the intensity condition, false otherwise
+     */
     private static boolean intensityCondition(
             Voxels<UnsignedByteBuffer> voxels, Point3i point, int minIntensityValue) {
         return minIntensityValue == 0 || voxels.extract().voxel(point) >= minIntensityValue;

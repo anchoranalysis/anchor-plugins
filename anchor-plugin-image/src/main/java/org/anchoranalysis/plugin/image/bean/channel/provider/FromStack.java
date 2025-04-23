@@ -42,11 +42,17 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.ProviderAsStack;
 import org.anchoranalysis.image.core.stack.Stack;
 
-/** Extracts a channel from a provider of a stack */
+/**
+ * Extracts a channel from a provider of a stack.
+ *
+ * <p>This class extends {@link ChannelProvider} to provide a single channel from a stack, which can
+ * be specified either by a provider ID or directly as a {@link ProviderAsStack}.
+ */
 @NoArgsConstructor
 public class FromStack extends ChannelProvider {
 
     // START BEAN PROPERTIES
+    /** The index of the channel to extract from the stack. */
     @BeanField @Getter @Setter private int channelIndex = 0;
 
     /**
@@ -60,8 +66,14 @@ public class FromStack extends ChannelProvider {
      * specified.
      */
     @BeanField @OptionalBean @Getter @Setter private ProviderAsStack stack;
+
     // END BEAN PROPERTIES
 
+    /**
+     * Creates a new instance with a specified stack provider.
+     *
+     * @param stack the {@link ProviderAsStack} to use for providing the stack
+     */
     public FromStack(ProviderAsStack stack) {
         this.stack = stack;
     }
@@ -80,6 +92,7 @@ public class FromStack extends ChannelProvider {
         }
     }
 
+    /** The cached channel extracted from the stack. */
     private Channel channel;
 
     @Override
@@ -96,6 +109,12 @@ public class FromStack extends ChannelProvider {
         return channel;
     }
 
+    /**
+     * Retrieves the stack from either the specified provider or the stack provider ID.
+     *
+     * @return the {@link Stack} from which to extract the channel
+     * @throws ProvisionFailedException if the stack cannot be retrieved
+     */
     private Stack stackFromSource() throws ProvisionFailedException {
         if (stack != null) {
             return stack.getAsStack();

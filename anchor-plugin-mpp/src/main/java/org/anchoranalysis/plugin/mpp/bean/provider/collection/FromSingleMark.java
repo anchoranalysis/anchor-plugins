@@ -34,11 +34,11 @@ import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
+/** Creates a {@link MarkCollection} from a single mark provided by a {@link SingleMarkProvider}. */
 public class FromSingleMark extends MarkCollectionProvider {
 
-    /// START BEAN PROPERTIES
+    /** The provider for a single mark. */
     @BeanField @Getter @Setter private SingleMarkProvider markProvider;
-    // END BEAN PROPERTIES
 
     @Override
     public MarkCollection get() throws ProvisionFailedException {

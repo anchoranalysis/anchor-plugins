@@ -64,6 +64,7 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
     @BeanField @Getter @Setter private ChannelProvider channelThreshold;
 
     @BeanField @Getter @Setter private boolean clearOutsideMask = true;
+
     // END BEAN PROPERTIES
 
     @Override

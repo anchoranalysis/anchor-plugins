@@ -70,6 +70,7 @@ class MontageLabels {
     // START REQUIRED ARGUMENTS
     /** Records the execution time of certain operations. */
     private final ExecutionTimeRecorder executionTimeRecorder;
+
     // END REQUIRED ARGUMENTS
 
     /** A running sum of the x- and y- sizes of the queued bounding-boxes. */

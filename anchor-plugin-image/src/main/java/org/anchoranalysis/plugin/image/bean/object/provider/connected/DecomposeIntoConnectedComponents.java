@@ -47,6 +47,7 @@ public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUn
     // START BEAN PROPERTIES
     /** if true, uses 8 neighborhood instead of 4, and similarly in 3d */
     @BeanField @Getter @Setter private boolean bigNeighborhood = false;
+
     // END BEAN PROPERTIES
 
     @Override

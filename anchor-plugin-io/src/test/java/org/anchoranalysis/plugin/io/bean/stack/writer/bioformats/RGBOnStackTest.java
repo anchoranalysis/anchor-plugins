@@ -45,7 +45,7 @@ import org.junit.jupiter.api.Test;
 class RGBOnStackTest {
 
     /** A 8-Bit RGB Stack. */
-    private static ChannelSpecification CHANNEL_SPECIFICATION =
+    private static final ChannelSpecification CHANNEL_SPECIFICATION =
             new ChannelSpecification(UnsignedByteVoxelType.INSTANCE, 3, true);
 
     @Test

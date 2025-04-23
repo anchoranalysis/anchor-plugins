@@ -46,6 +46,17 @@ import org.anchoranalysis.math.statistics.moment.ImageMoments;
  */
 public class PrincipalAxisEccentricity extends ImageMomentsBase {
 
+    /**
+     * Calculates the eccentricity from two eigenvalues.
+     *
+     * @param eigenvalSmaller the smaller eigenvalue
+     * @param eigenvalLarger the larger eigenvalue
+     * @return the calculated eccentricity as a {@link Double}
+     */
+    public static double calculateEccentricity(double eigenvalSmaller, double eigenvalLarger) {
+        return Math.sqrt(1.0 - eigenvalSmaller / eigenvalLarger);
+    }
+
     @Override
     protected double calculateFromAllMoments(ImageMoments moments)
             throws FeatureCalculationException {
@@ -66,10 +77,6 @@ public class PrincipalAxisEccentricity extends ImageMomentsBase {
         double eccentricity = calculateEccentricity(moments1, moments0);
         assert (!Double.isNaN(eccentricity));
         return eccentricity;
-    }
-
-    public static double calculateEccentricity(double eigenvalSmaller, double eigenvalLarger) {
-        return Math.sqrt(1.0 - eigenvalSmaller / eigenvalLarger);
     }
 
     @Override
