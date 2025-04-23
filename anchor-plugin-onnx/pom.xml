@@ -27,6 +27,18 @@
   		<artifactId>anchor-inference</artifactId>
   		<version>1.0.0-SNAPSHOT</version>
   	</dependency>
+  	
+  	<dependency>
+  		<groupId>${project.groupId}</groupId>
+  		<artifactId>anchor-image-voxel</artifactId>
+  		<version>1.0.0-SNAPSHOT</version>
+  	</dependency>
+  	
+  	<dependency>
+  		<groupId>${project.groupId}</groupId>
+  		<artifactId>anchor-image-bean</artifactId>
+  		<version>1.0.0-SNAPSHOT</version>
+  	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
@@ -51,6 +63,12 @@
 	  <artifactId>anchor-mpp</artifactId>
   	  <version>1.0.0-SNAPSHOT</version>
   	</dependency>
+  	
+  	<dependency>
+    	<groupId>commons-io</groupId>
+    	<artifactId>commons-io</artifactId>
+    	<version>${commons-io.version}</version>
+    </dependency>
 
 	<!--  START: ONNX Runtime dependencies -->
 	
@@ -70,14 +88,6 @@
       <version>1.0.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
-    
-     <dependency>
-       <groupId>org.mockito</groupId>
-       <artifactId>mockito-core</artifactId>
-       <version>${mockito.version}</version>
-       <scope>test</scope>
-     </dependency>
-     
      
      <dependency>
 	  <groupId>${project.groupId}</groupId>
@@ -92,6 +102,13 @@
 	  <version>1.2.0</version>
 	  <scope>test</scope>
 	</dependency>
+	  	
+  	<dependency>
+	  <groupId>${project.groupId}</groupId>	
+	  <artifactId>anchor-imagej</artifactId>
+  	  <version>1.0.0-SNAPSHOT</version>
+  	  <scope>test</scope>
+  	</dependency>
 
 	
      <!--  END: Test dependencies -->

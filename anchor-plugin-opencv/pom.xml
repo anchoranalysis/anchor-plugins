@@ -39,18 +39,18 @@
 	  <artifactId>anchor-image-core</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>anchor-mpp</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-    </dependency>	
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-bean</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
+		        
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>anchor-feature</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
@@ -69,24 +69,37 @@
 	  <artifactId>anchor-image-inference</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-feature</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-math</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-spatial</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+	</dependency>
 		     
 	<dependency>
 	  <groupId>${project.groupId}</groupId>     
       <artifactId>anchor-plugin-io</artifactId>
   	  <version>1.0.0-SNAPSHOT</version>
   	 </dependency>
-        	
-	<dependency>
-        <groupId>io.vavr</groupId>
-        <artifactId>vavr</artifactId>
-        <version>${vavr.version}</version>
-    </dependency>
-        
-    <dependency>
-       <groupId>org.mockito</groupId>
-       <artifactId>mockito-core</artifactId>
-       <version>${mockito.version}</version>
-     </dependency>
+  	 
+  	 
+  	<dependency>
+	  <groupId>com.google.guava</groupId>
+	  <artifactId>guava</artifactId>
+	  <version>${guava.version}-jre</version>
+	</dependency>
    
 
 	<!--  START: OpenCV dependencies -->
@@ -103,17 +116,31 @@
     <!-- START: Test dependencies -->
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>anchor-test</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>anchor-test-image</artifactId>
       <version>1.0.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
-          	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-plugin-image</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
-	  <scope>test</scope>
-	</dependency>
+    
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>anchor-imagej</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>anchor-feature-session</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>	
      <!--  END: Test dependencies -->
     	
 </dependencies>

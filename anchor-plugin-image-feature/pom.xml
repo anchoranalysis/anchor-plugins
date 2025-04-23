@@ -47,12 +47,6 @@
 		
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-math</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-image</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
@@ -110,7 +104,14 @@
        <version>1.0.0-SNAPSHOT</version>
        <scope>test</scope>
      </dependency>
-        
+
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-math</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+	  <scope>test</scope>
+	</dependency>
+	        
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
