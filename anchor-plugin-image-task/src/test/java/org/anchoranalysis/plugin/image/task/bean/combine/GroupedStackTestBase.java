@@ -48,10 +48,6 @@ import org.anchoranalysis.test.experiment.task.ExecuteTaskHelper;
 import org.anchoranalysis.test.image.io.BeanInstanceMapFixture;
 import org.junit.jupiter.api.Test;
 
-import com.google.common.collect.Streams;
-
-import io.vavr.collection.Stream;
-
 /**
  * Base class for tests that read or write image-stacks.
  *

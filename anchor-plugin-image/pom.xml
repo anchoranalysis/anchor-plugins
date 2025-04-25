@@ -19,11 +19,21 @@
 	  <artifactId>anchor-core</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
+    <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-math</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-io-input</artifactId>
+	  <artifactId>anchor-io-output</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-spatial</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-beans-shared</artifactId>
@@ -31,12 +41,13 @@
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-experiment</artifactId>
+	  <artifactId>anchor-overlay</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
-	</dependency>	
+	</dependency>
+	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-overlay</artifactId>
+	  <artifactId>anchor-imagej</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	
@@ -52,7 +63,7 @@
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-bean</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
-	</dependency>	
+	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
@@ -64,6 +75,12 @@
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-io</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-voxel</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>	
 
 	<dependency>
@@ -74,7 +91,7 @@
 		
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
-	  <artifactId>anchor-imagej</artifactId>
+	  <artifactId>anchor-inference</artifactId>
   	  <version>1.0.0-SNAPSHOT</version>
   	</dependency>
 	  
@@ -88,13 +105,6 @@
 	  <artifactId>anchor-feature-session</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>	
-		
-	
-	<dependency>
-	  <groupId>org.apache.commons</groupId>
-	  <artifactId>commons-math3</artifactId>
-	  <version>${commons-math3.version}</version>
-	</dependency>
 	<dependency>
 	  <groupId>commons-lang</groupId>
 	  <artifactId>commons-lang</artifactId>
@@ -116,12 +126,17 @@
         <artifactId>vavr</artifactId>
         <version>${vavr.version}</version>
     </dependency>
-
-	<!-- For Advanced manipulation of streams -->
+	
 	<dependency>
-	    <groupId>one.util</groupId>
-	    <artifactId>streamex</artifactId>
-	    <version>${streamex.version}</version>
+	    <groupId>net.imglib2</groupId>
+	    <artifactId>imglib2</artifactId>
+	    <version>${imglib2.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>net.imglib2</groupId>
+	    <artifactId>imglib2-algorithm</artifactId>
+	    <version>${imglib2-algorithm.version}</version>
 	</dependency>
 	
     <!-- START: Test dependencies -->
@@ -132,6 +147,13 @@
       <scope>test</scope>
     </dependency>
 
+	<dependency>
+	  <groupId>${project.groupId}</groupId>    
+      <artifactId>anchor-test</artifactId>
+  	  <version>1.0.0-SNAPSHOT</version>
+  	  <scope>test</scope>
+  	</dependency>
+  	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>    
       <artifactId>anchor-test-image</artifactId>
