@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.image.task.bean.combine;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Arrays;

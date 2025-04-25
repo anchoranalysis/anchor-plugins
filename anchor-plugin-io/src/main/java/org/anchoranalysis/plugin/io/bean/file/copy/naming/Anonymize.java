@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.input.file.FileWithDirectoryInput;
@@ -95,7 +94,7 @@ public class Anonymize extends CopyFilesNaming<AnonymizeSharedState> {
      * (inclusive).
      */
     private static List<Integer> createSequence(int maxNumberExclusive) {
-        return IntStream.range(0, maxNumberExclusive).boxed().collect(Collectors.toList());
+        return IntStream.range(0, maxNumberExclusive).boxed().toList();
     }
 
     private static <T> Map<Integer, T> mapIndexToElement(List<T> list) {
