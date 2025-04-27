@@ -25,8 +25,9 @@
  */
 package org.anchoranalysis.plugin.image.task.bean.combine;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -162,8 +163,8 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
                 (List<ProvidesStackInput>) INPUT_FIXTURE.createInputs(STACK_READER, true);
 
         if (additionalStack.isPresent()) {
-            inputs.add(
-                    new StackSequenceInputFixture(
+        	inputs = new ArrayList<>(inputs);
+            inputs.add( new StackSequenceInputFixture(
                             additionalStack.get(), "someDir", "someFilename", Optional.empty()));
         }
         doTest(resizeTo, groups, inputs);

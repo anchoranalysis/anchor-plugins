@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.stack.writer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

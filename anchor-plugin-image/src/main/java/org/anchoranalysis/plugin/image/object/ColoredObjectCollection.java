@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -66,7 +65,7 @@ public class ColoredObjectCollection {
      * @param stream the stream.
      */
     public ColoredObjectCollection(Stream<ColoredObject> stream) {
-        this.list = stream.collect(Collectors.toList());
+        this.list = stream.toList();
     }
 
     /**

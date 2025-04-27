@@ -49,19 +49,13 @@
 	  <artifactId>anchor-mpp</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
-	
+
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-overlay</artifactId>
+	  <artifactId>anchor-spatial</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-math</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
-	</dependency>
-	
+		
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-opencv</artifactId>
@@ -69,17 +63,21 @@
 	</dependency>
 	
 	<dependency>
-		<groupId>${project.groupId}</groupId>
-		<artifactId>anchor-test-image</artifactId>
-  		<version>1.0.0-SNAPSHOT</version>
-		<scope>test</scope>
-	</dependency>
+	  <groupId>colt</groupId>
+	  <artifactId>colt</artifactId>
+	  <version>${colt.version}</version>
+	</dependency>	
 	
 	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-mpp-io</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
-	  <scope>test</scope>
+		<groupId>com.github.quickhull3d</groupId>
+		<artifactId>quickhull3d</artifactId>
+		<version>1.0.0</version>
+	</dependency>
+
+	<dependency>
+		<groupId>ca.umontreal.iro.simul</groupId>
+		<artifactId>ssj</artifactId>
+		<version>${ssj.version}</version>
 	</dependency>
 	
 	<dependency>
@@ -99,29 +97,24 @@
 	  <artifactId>ejml-all</artifactId>
 	  <version>0.34</version>
 	</dependency>
-	
-	<dependency>
-	  <groupId>commons-lang</groupId>
-	  <artifactId>commons-lang</artifactId>
-	  <version>${commons-lang.version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>colt</groupId>
-	  <artifactId>colt</artifactId>
-	  <version>${colt.version}</version>
-	</dependency>	
-	
-	<dependency>
-		<groupId>com.github.quickhull3d</groupId>
-		<artifactId>quickhull3d</artifactId>
-		<version>1.0.0</version>
-	</dependency>
+
+	<!-- START: Test Dependencies -->
 
 	<dependency>
-		<groupId>ca.umontreal.iro.simul</groupId>
-		<artifactId>ssj</artifactId>
-		<version>${ssj.version}</version>
+		<groupId>${project.groupId}</groupId>
+		<artifactId>anchor-test</artifactId>
+  		<version>1.0.0-SNAPSHOT</version>
+		<scope>test</scope>
 	</dependency>
-	
+				
+	<dependency>
+		<groupId>${project.groupId}</groupId>
+		<artifactId>anchor-test-image</artifactId>
+  		<version>1.0.0-SNAPSHOT</version>
+		<scope>test</scope>
+	</dependency>
+
+	<!-- END: Test Dependencies -->
+
 </dependencies>
 </project>

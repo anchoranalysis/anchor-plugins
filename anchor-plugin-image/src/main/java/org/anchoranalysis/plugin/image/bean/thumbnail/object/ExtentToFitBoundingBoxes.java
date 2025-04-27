@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -58,8 +57,7 @@ class ExtentToFitBoundingBoxes {
 
         List<ReadableTuple3i> cornersMax =
                 boundingBoxes
-                        .map(BoundingBox::calculateCornerMaxInclusive)
-                        .collect(Collectors.toList());
+                        .map(BoundingBox::calculateCornerMaxInclusive).toList();
 
         return new Extent(
                 maxDimensionValue(cornersMax, ReadableTuple3i::x) + 1,

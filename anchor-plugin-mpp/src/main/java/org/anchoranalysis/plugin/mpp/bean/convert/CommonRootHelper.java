@@ -30,7 +30,6 @@ import com.owenfeehan.pathpatternfinder.commonpath.PathElements;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -76,8 +75,7 @@ class CommonRootHelper {
                 .map(InputFromManager::pathForBinding)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(CommonRootHelper::normalizePath)
-                .collect(Collectors.toList());
+                .map(CommonRootHelper::normalizePath).toList();
     }
 
     private static Path normalizePath(Path pathUnormalized) {

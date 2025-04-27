@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.plugin.io.bean.metadata.reader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -71,9 +71,9 @@ class InferFromHeaderTest {
             throws ImageIOException {
         // The defaultStackReader should never be called during testing, so we pass a null.
         ImageMetadata metadata = loadMetadata(filename);
-        assertEquals("image width", expectedWidth, metadata.getDimensions().x());
-        assertEquals("image height", expectedHeight, metadata.getDimensions().y());
-        assertEquals("number of channels", expectedNumberChannels, metadata.getNumberChannels());
+        assertEquals(expectedWidth, metadata.getDimensions().x(), "image width");
+        assertEquals(expectedHeight, metadata.getDimensions().y(), "image height");
+        assertEquals(expectedNumberChannels, metadata.getNumberChannels(), "number of channels");
     }
 
     private void testExpectRejection(String filename) {

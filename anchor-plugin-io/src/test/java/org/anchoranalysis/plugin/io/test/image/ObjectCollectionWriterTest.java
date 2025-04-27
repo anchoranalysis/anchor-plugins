@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.io.test.image;
 
 import static org.anchoranalysis.plugin.io.test.image.HelperReadWriteObjects.*;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
