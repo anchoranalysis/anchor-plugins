@@ -46,8 +46,7 @@ class MinFeatureIntersectingObjectsAboveThresholdTest {
      * @throws OperationFailedException
      */
     @Test
-    void testSameSizes()
-            throws FeatureCalculationException, InitializeException, OperationFailedException {
+    void testSameSizes() throws FeatureCalculationException, OperationFailedException {
         IntersectingObjectsTestHelper.testPositions(
                 "sameSize",
                 FEATURE,
@@ -66,8 +65,7 @@ class MinFeatureIntersectingObjectsAboveThresholdTest {
      * @throws OperationFailedException
      */
     @Test
-    void testDifferentSizes()
-            throws FeatureCalculationException, InitializeException, OperationFailedException {
+    void testDifferentSizes() throws FeatureCalculationException, OperationFailedException {
         IntersectingObjectsTestHelper.testPositions(
                 "differentSize",
                 FEATURE,

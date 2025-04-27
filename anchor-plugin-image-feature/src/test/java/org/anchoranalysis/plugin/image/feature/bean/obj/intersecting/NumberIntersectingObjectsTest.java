@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
-import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.NumberIntersectingObjects;
@@ -40,20 +39,18 @@ class NumberIntersectingObjectsTest {
     static final int EXPECTED_NO_INTERSECTION = 0;
 
     @Test
-    void testSameSizes()
-            throws FeatureCalculationException, InitializeException, OperationFailedException {
+    void testSameSizes() throws FeatureCalculationException, OperationFailedException {
         testForSpecificExpectedValues("sameSize", true);
     }
 
     @Test
-    void testDifferentSizes()
-            throws FeatureCalculationException, InitializeException, OperationFailedException {
+    void testDifferentSizes() throws FeatureCalculationException, OperationFailedException {
         testForSpecificExpectedValues("differentSize", false);
     }
 
     // As expected-values are the same, we have a helper function
     private void testForSpecificExpectedValues(String messagePrefix, boolean sameSize)
-            throws OperationFailedException, FeatureCalculationException, InitializeException {
+            throws OperationFailedException, FeatureCalculationException {
         IntersectingObjectsTestHelper.testPositions(
                 messagePrefix,
                 new NumberIntersectingObjects(),

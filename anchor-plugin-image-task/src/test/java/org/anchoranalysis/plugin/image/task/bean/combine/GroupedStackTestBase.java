@@ -163,8 +163,9 @@ abstract class GroupedStackTestBase extends StackIOTestBase {
                 (List<ProvidesStackInput>) INPUT_FIXTURE.createInputs(STACK_READER, true);
 
         if (additionalStack.isPresent()) {
-        	inputs = new ArrayList<>(inputs);
-            inputs.add( new StackSequenceInputFixture(
+            inputs = new ArrayList<>(inputs);
+            inputs.add(
+                    new StackSequenceInputFixture(
                             additionalStack.get(), "someDir", "someFilename", Optional.empty()));
         }
         doTest(resizeTo, groups, inputs);

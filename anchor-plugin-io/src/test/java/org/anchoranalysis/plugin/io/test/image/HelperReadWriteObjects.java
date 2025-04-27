@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.io.test.image;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.time.OperationContext;
@@ -56,7 +55,7 @@ class HelperReadWriteObjects {
 
     public static void writeObjects(
             ObjectCollection objects, Path path, Generator<ObjectCollection> generator)
-            throws SetOperationFailedException, BindFailedException {
+            throws BindFailedException {
 
         Outputter outputter = OutputterFixture.outputter(Optional.of(path));
 

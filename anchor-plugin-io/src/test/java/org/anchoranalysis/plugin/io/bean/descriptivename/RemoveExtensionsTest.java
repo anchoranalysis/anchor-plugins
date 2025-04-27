@@ -46,7 +46,7 @@ class RemoveExtensionsTest {
     private static final Logger LOGGER = LoggerFixture.suppressedLogger();
 
     @Test
-    void testPreserveExt() throws InputReadFailedException {
+    void testPreserveExtension() throws InputReadFailedException {
 
         List<NamedFile> df = applyTest(true, listOfFiles());
 
@@ -56,7 +56,7 @@ class RemoveExtensionsTest {
     }
 
     @Test
-    void testNonUnique() throws InputReadFailedException {
+    void testNonUnique() {
         assertThrows(InputReadFailedException.class, () -> applyTest(false, listOfFiles()));
     }
 
