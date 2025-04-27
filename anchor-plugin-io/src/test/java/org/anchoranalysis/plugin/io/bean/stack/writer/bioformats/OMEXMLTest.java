@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -57,14 +56,14 @@ class OMEXMLTest extends OMETestBase { // NOSONAR
     }
 
     @Test
-    void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
+    void testThreeChannelsRGBUnsignedByte() {
         assertThrows(
                 ImageIOException.class,
                 () -> tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE));
     }
 
     @Test
-    void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
+    void testThreeChannelsRGBUnsignedShort() {
         assertThrows(
                 ImageIOException.class,
                 () -> tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE));

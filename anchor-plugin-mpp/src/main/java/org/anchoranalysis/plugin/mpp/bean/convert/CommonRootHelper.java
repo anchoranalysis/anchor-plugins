@@ -75,7 +75,8 @@ class CommonRootHelper {
                 .map(InputFromManager::pathForBinding)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(CommonRootHelper::normalizePath).toList();
+                .map(CommonRootHelper::normalizePath)
+                .toList();
     }
 
     private static Path normalizePath(Path pathUnormalized) {

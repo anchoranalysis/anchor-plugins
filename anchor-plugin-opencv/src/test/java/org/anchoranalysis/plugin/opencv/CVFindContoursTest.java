@@ -31,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Contour;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -46,11 +45,11 @@ class CVFindContoursTest {
             new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
-    void test01() throws CreateException, OperationFailedException, SetOperationFailedException {
+    void test01() throws CreateException, OperationFailedException {
         testFor("01");
     }
 
-    private void testFor(String suffix) throws CreateException, OperationFailedException {
+    private void testFor(String suffix) throws OperationFailedException {
 
         ObjectMask object = loader.openLargestObjectFrom(suffix);
 

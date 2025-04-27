@@ -28,8 +28,6 @@ package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
@@ -50,12 +48,7 @@ class AnchorMetadataXmlTest {
     @TempDir Path directory;
 
     @Test
-    void test()
-            throws ImageIOException,
-                    ParserConfigurationException,
-                    SAXException,
-                    IOException,
-                    URISyntaxException {
+    void test() throws ImageIOException, ParserConfigurationException, SAXException {
 
         Resolution resolution = createMockResolution();
 
