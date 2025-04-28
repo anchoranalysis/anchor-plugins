@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 class OverlapRelativeToSecondTest {
 
     @Test
-    void testOverlapping() throws FeatureCalculationException, InitializeException {
+    void testOverlapping() throws FeatureCalculationException {
         FeatureInputPairTester.testTwoSizesOverlappingDouble(
                 new OverlapRelativeToSecond(),
                 FeatureInputPairTester.OVERLAP_RATIO_TO_MAX_VOLUME_DIFFERENT_SIZE,
