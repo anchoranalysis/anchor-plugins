@@ -72,26 +72,25 @@ public class BMP extends HeaderFormat {
             return Optional.empty();
         }
 
-        switch (bitDepth.get()) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                return createMetadata(extent.get(), 1, 8, attributes);
-            case 16:
-                return createMetadata(extent.get(), 2, 8, attributes);
-            case 24:
-                return createMetadata(extent.get(), 3, 8, attributes);
-            case 32:
-                return createMetadata(extent.get(), 4, 8, attributes);
-            default:
-                throw new ImageIOException(
-                        String.format("Unrecognised bitsPerPixel of %d", bitDepth.get()));
-        }
+        int pixelDepth = inferPixelDepth(bitDepth.get());
+        return createMetadata(extent.get(), pixelDepth, 8, attributes);
+    }
+
+    /**
+     * Infer the pixel-depth from the bits-per-pixel.
+     *
+     * @throws ImageIOException if bitDepth is unrecognized.
+     */
+    private static int inferPixelDepth(int bitDepth) throws ImageIOException {
+        return switch (bitDepth) {
+            case 1, 2, 3, 4, 5, 6, 7, 8 -> 1;
+            case 16 -> 2;
+            case 24 -> 3;
+            case 32 -> 4;
+            default ->
+                    throw new ImageIOException(
+                            String.format("Unrecognised bitsPerPixel of %d", bitDepth));
+        };
     }
 
     private static Optional<ImageMetadata> createMetadata(

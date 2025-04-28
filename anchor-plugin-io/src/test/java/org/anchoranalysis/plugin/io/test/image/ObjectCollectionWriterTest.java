@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -59,10 +58,7 @@ class ObjectCollectionWriterTest {
     }
 
     @Test
-    void testHdf5()
-            throws SetOperationFailedException,
-                    DeserializationFailedException,
-                    BindFailedException {
+    void testHdf5() throws DeserializationFailedException, BindFailedException {
         ObjectCollection objects = fixture.createMockObjects(2, 7);
         writeObjects(objects, directory, generator(true, false));
 

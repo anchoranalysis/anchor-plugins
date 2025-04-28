@@ -78,8 +78,7 @@ public class ScaleImageIndependently extends ScaleImage<NoSharedState> {
     }
 
     private Channel scaleChannel(
-            Channel channel, boolean binary, ScaleFactor scaleFactor, VoxelsResizer voxelsResizer)
-            throws OperationFailedException {
+            Channel channel, boolean binary, ScaleFactor scaleFactor, VoxelsResizer voxelsResizer) {
         return ScaleChannelHelper.scaleChannel(channel, binary, scaleFactor, voxelsResizer);
     }
 }

@@ -35,10 +35,20 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 
-/** Extracts a histogram from an image for a given key */
+/** Extracts a mask from an image for a given key. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MaskExtracter {
 
+    /**
+     * Extracts a mask from a channel source.
+     *
+     * @param source the {@link ChannelSource} to extract the channel from.
+     * @param maskStackName the name of the mask stack.
+     * @param maskValue the value to use for the mask (either 0 or 255).
+     * @return an {@link Optional} containing the extracted {@link Mask}, or empty if the
+     *     maskStackName is empty.
+     * @throws OperationFailedException if the operation fails.
+     */
     public static Optional<Mask> extractMask(
             ChannelSource source, String maskStackName, int maskValue)
             throws OperationFailedException {
@@ -50,15 +60,21 @@ class MaskExtracter {
         }
     }
 
+    /**
+     * Creates binary values for the mask based on the given mask value.
+     *
+     * @param maskValue the value to use for the mask (either 0 or 255).
+     * @return a {@link BinaryValuesInt} object representing the binary values for the mask.
+     * @throws OperationFailedException if the maskValue is not 0 or 255.
+     */
     private static BinaryValuesInt createMaskBinaryValues(int maskValue)
             throws OperationFailedException {
-        if (maskValue == 255) {
-            return new BinaryValuesInt(0, 255);
-        } else if (maskValue == 0) {
-            return new BinaryValuesInt(255, 0);
-        } else {
-            throw new OperationFailedException(
-                    "Only mask-values of 255 or 0 are current supported");
-        }
+        return switch (maskValue) {
+            case 255 -> new BinaryValuesInt(0, 255);
+            case 0 -> new BinaryValuesInt(255, 0);
+            default ->
+                    throw new OperationFailedException(
+                            "Only mask-values of 255 or 0 are currently supported");
+        };
     }
 }

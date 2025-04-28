@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.touching;
 
-import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.FeatureInputPairTester;
 import org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.HasTouchingVoxels;
@@ -35,7 +34,7 @@ import org.junit.jupiter.api.Test;
 class HasTouchingVoxelsTest {
 
     @Test
-    void testOverlapping() throws FeatureCalculationException, InitializeException {
+    void testOverlapping() throws FeatureCalculationException {
 
         FeatureInputPairTester.testTwoSizesOverlappingDouble(new HasTouchingVoxels(), 1, 1);
     }

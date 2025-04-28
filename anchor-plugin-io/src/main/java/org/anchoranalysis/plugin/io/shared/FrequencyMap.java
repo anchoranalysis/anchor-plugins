@@ -35,43 +35,55 @@ import org.anchoranalysis.core.value.LanguageUtilities;
  * Counts the frequency of certain strings, and describes the contents in human language.
  *
  * @author Owen Feehan
- * @param <T> key-type (should have .toString() representation that is meaningful to humans)
+ * @param <T> key-type (should have {@link Object#toString()} representation that is meaningful to
+ *     humans)
  */
 public class FrequencyMap<T> {
 
+    /** A map to store the frequency of each key. */
     private Map<T, Integer> map = new TreeMap<>();
 
+    /**
+     * Increments the count for a given key.
+     *
+     * @param key the key whose count should be incremented
+     */
     public synchronized void incrementCount(T key) {
-
         Integer count = map.get(key);
-
-        if (count == null) {
-            map.put(key, 1);
-        } else {
-            map.put(key, count + 1);
-        }
+        Integer countToAssign = count == null ? 1 : count + 1;
+        map.put(key, countToAssign);
     }
 
-    public synchronized String describe(String dscrNoun) {
+    /**
+     * Describes the frequency map contents in human-readable language.
+     *
+     * @param noun the noun to use in the description (e.g., "color", "shape")
+     * @return a {@link String} describing the contents of the frequency map
+     */
+    public synchronized String describe(String noun) {
         int numKeys = map.keySet().size();
 
-        if (numKeys == 0) {
-            return "No inputs have been found yet.";
-        } else if (numKeys == 1) {
-            return String.format("with uniform %s = %s", dscrNoun, map.keySet().iterator().next());
-        } else {
-            return describeDiverse(dscrNoun);
-        }
+        return switch (numKeys) {
+            case 0 -> "No inputs have been found yet.";
+            case 1 -> String.format("with uniform %s = %s", noun, map.keySet().iterator().next());
+            default -> describeDiverse(noun);
+        };
     }
 
-    private String describeDiverse(String dscrNoun) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("with diverse %s:", LanguageUtilities.pluralize(dscrNoun)));
+    /**
+     * Describes the frequency map when it contains diverse entries.
+     *
+     * @param noun the noun to use in the description (e.g., "color", "shape")
+     * @return a {@link String} describing the diverse contents of the frequency map
+     */
+    private String describeDiverse(String noun) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("with diverse %s:", LanguageUtilities.pluralize(noun)));
 
         for (Entry<T, Integer> entry : map.entrySet()) {
-            sb.append(String.format(" %s(%d)", entry.getKey(), entry.getValue()));
+            builder.append(String.format(" %s(%d)", entry.getKey(), entry.getValue()));
         }
 
-        return sb.toString();
+        return builder.toString();
     }
 }

@@ -43,9 +43,11 @@ import org.anchoranalysis.spatial.box.Extent;
  */
 public class MaxProjection<T> extends ProjectableBufferAggregator<T> {
 
+    private static final MaxIntensityProjection DELEGATE = new MaxIntensityProjection();
+
     @Override
     protected ProjectableBuffer<T> create(VoxelDataType dataType, Extent extent)
             throws OperationFailedException {
-        return MaxIntensityProjection.create(dataType, extent);
+        return DELEGATE.create(dataType, extent);
     }
 }

@@ -90,19 +90,16 @@ public class PNG extends HeaderFormat {
         if (!colorType.isPresent()) {
             return Optional.empty();
         }
-        switch (colorType.get()) {
-            case 0:
-                return Optional.of(1); // Grayscale
-            case 2:
-            case 3:
-                return Optional.of(3); // Truecolor or indexed
-            case 4:
-                return Optional.of(2); // Grayscale and alpha
-            case 6:
-                return Optional.of(4); // Truecolor and alpha
-            default:
-                throw new ImageIOException(
-                        "Unrecognised color-type in PNG header: " + colorType.get());
-        }
+        int numberChannels =
+                switch (colorType.get()) {
+                    case 0 -> 1; // Grayscale
+                    case 2, 3 -> 3; // Truecolor or indexed
+                    case 4 -> 2; // Grayscale and alpha
+                    case 6 -> 4; // Truecolor and alpha
+                    default ->
+                            throw new ImageIOException(
+                                    "Unrecognised color-type in PNG header: " + colorType.get());
+                };
+        return Optional.of(numberChannels);
     }
 }

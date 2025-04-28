@@ -113,7 +113,7 @@ public class StackSequenceInputFixture implements StackSequenceInput {
     public void addToStoreWithName(
             String name, NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
-        stacks.add(name, () -> createTimeSequence());
+        stacks.add(name, this::createTimeSequence);
     }
 
     @Override

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
-import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.FeatureInputPairTester;
@@ -35,7 +34,7 @@ import org.junit.jupiter.api.Test;
 class FirstOnlyTest {
 
     @Test
-    void testOverlapping() throws FeatureCalculationException, InitializeException {
+    void testOverlapping() throws FeatureCalculationException {
 
         FeatureInputPairTester.testSimpleInt(OrderHelper.addFeatureToOrder(new First()), 2821);
     }

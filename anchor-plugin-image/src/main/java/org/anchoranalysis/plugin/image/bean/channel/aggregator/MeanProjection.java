@@ -41,9 +41,11 @@ import org.anchoranalysis.spatial.box.Extent;
  */
 public class MeanProjection<T> extends ProjectableBufferAggregator<T> {
 
+    private static final MeanIntensityProjection DELEGATE = new MeanIntensityProjection();
+
     @Override
     protected ProjectableBuffer<T> create(VoxelDataType dataType, Extent extent)
             throws OperationFailedException {
-        return MeanIntensityProjection.create(dataType, extent);
+        return DELEGATE.create(dataType, extent);
     }
 }

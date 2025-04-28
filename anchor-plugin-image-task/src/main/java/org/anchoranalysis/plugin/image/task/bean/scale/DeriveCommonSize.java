@@ -26,7 +26,8 @@
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
@@ -41,7 +42,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DeriveCommonSize {
 
     /**
@@ -66,13 +67,11 @@ class DeriveCommonSize {
             List<SizeMapping> sizes,
             CheckedFunction<SizeMapping, SizeMapping, OperationFailedException> scaler)
             throws OperationFailedException {
-        return FunctionalList.mapToList(
-                sizes, OperationFailedException.class, mapping -> scaler.apply(mapping));
+        return FunctionalList.mapToList(sizes, OperationFailedException.class, scaler::apply);
     }
 
     /** Derives the maximum of all sizes in {@code mappings}. */
-    private static Extent deriveMaxSize(List<SizeMapping> mappings)
-            throws OperationFailedException {
+    private static Extent deriveMaxSize(List<SizeMapping> mappings) {
         return new Extent(
                 maxSizeSingleDimension(mappings, Extent::x),
                 maxSizeSingleDimension(mappings, Extent::y),
@@ -81,9 +80,9 @@ class DeriveCommonSize {
 
     /** Derives the maximum of all sizes in {@code mappings} - along a single dimension. */
     private static int maxSizeSingleDimension(
-            List<SizeMapping> mappings, Function<Extent, Integer> extractDimension) {
+            List<SizeMapping> mappings, ToIntFunction<Extent> extractDimension) {
         return mappings.stream()
-                .mapToInt(mapping -> extractDimension.apply(mapping.getExtent()))
+                .mapToInt(mapping -> extractDimension.applyAsInt(mapping.getExtent()))
                 .max()
                 .orElse(0);
     }

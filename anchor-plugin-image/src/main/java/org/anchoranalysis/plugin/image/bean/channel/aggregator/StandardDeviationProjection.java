@@ -43,9 +43,12 @@ import org.anchoranalysis.spatial.box.Extent;
  */
 public class StandardDeviationProjection<T> extends ProjectableBufferAggregator<T> {
 
+    private static final StandardDeviationIntensityProjection DELEGATE =
+            new StandardDeviationIntensityProjection();
+
     @Override
     protected ProjectableBuffer<T> create(VoxelDataType dataType, Extent extent)
             throws OperationFailedException {
-        return StandardDeviationIntensityProjection.create(dataType, extent);
+        return DELEGATE.create(dataType, extent);
     }
 }

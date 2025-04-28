@@ -59,7 +59,7 @@ public class SortByFeature extends ObjectCollectionProviderWithFeature {
 
         @Override
         public int compareTo(ObjectWithFeatureValue other) {
-            return Double.valueOf(other.featureVal).compareTo(featureVal);
+            return Double.compare(other.featureVal, featureVal);
         }
     }
 

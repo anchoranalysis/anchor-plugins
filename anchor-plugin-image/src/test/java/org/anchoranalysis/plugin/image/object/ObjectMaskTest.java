@@ -72,7 +72,7 @@ class ObjectMaskTest {
     }
 
     @Test
-    void testIntersect() throws OperationFailedException {
+    void testIntersect() {
 
         ObjectCollection objects = TwoIntersectingCirclesFixture.create();
 
