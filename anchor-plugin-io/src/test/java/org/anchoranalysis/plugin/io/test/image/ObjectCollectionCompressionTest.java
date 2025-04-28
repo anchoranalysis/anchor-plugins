@@ -97,9 +97,7 @@ class ObjectCollectionCompressionTest {
 
     private static ObjectCollection writeAndReadAgain(
             ObjectCollection objects, Path pathRoot, Path pathOut)
-            throws SetOperationFailedException,
-                    DeserializationFailedException,
-                    BindFailedException {
+            throws DeserializationFailedException, BindFailedException {
         // Write the objects to the filesystem and read again
         writeObjects(objects, pathRoot, generator(true, true));
         return readObjects(pathOut, LoggerFixture.suppressedLogger());

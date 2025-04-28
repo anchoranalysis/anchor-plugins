@@ -35,48 +35,104 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 
+/** A collection of {@link FileDetails} objects with methods to query their properties. */
 public class ParsedFilePathBag implements Iterable<FileDetails> {
 
+    /** The list of {@link FileDetails} objects. */
     private List<FileDetails> list = new ArrayList<>();
 
-    // channelNum and sliceNum can be null, indicating that we don't know the values
+    /**
+     * Adds a {@link FileDetails} object to the collection.
+     *
+     * @param fileDetails the {@link FileDetails} object to add
+     */
     public void add(FileDetails fileDetails) {
         list.add(fileDetails);
     }
 
+    @Override
     public Iterator<FileDetails> iterator() {
         return list.iterator();
     }
 
+    /**
+     * Gets the range of channel numbers across all {@link FileDetails}.
+     *
+     * @return an {@link Optional} containing the {@link IntegerRange} of channel numbers, or empty
+     *     if not applicable
+     */
     public Optional<IntegerRange> rangeChannelNum() {
         return range(FileDetails::getChannelIndex);
     }
 
+    /**
+     * Gets the range of slice numbers across all {@link FileDetails}.
+     *
+     * @return an {@link Optional} containing the {@link IntegerRange} of slice numbers, or empty if
+     *     not applicable
+     */
     public Optional<IntegerRange> rangeSliceNum() {
         return range(FileDetails::getSliceIndex);
     }
 
+    /**
+     * Gets the range of time indices across all {@link FileDetails}.
+     *
+     * @return an {@link Optional} containing the {@link IntegerRange} of time indices, or empty if
+     *     not applicable
+     */
     public Optional<IntegerRange> rangeTimeIndex() {
         return range(FileDetails::getTimeIndex);
     }
 
+    /**
+     * Calculates the range of values obtained by applying a function to all {@link FileDetails}.
+     *
+     * @param func the function to apply to each {@link FileDetails}
+     * @return an {@link Optional} containing the {@link IntegerRange} of values, or empty if not
+     *     applicable
+     */
+    @SuppressWarnings("null")
     private Optional<IntegerRange> range(Function<FileDetails, Optional<Integer>> func) {
-        return OptionalUtilities.mapBoth(
-                getMin(func), getMax(func), (min, max) -> new IntegerRange(min, max));
+        return OptionalUtilities.mapBoth(getMin(func), getMax(func), IntegerRange::new);
     }
 
+    /**
+     * Gets the maximum value obtained by applying a function to all {@link FileDetails}.
+     *
+     * @param func the function to apply to each {@link FileDetails}
+     * @return an {@link Optional} containing the maximum value, or empty if not applicable
+     */
     private Optional<Integer> getMax(Function<FileDetails, Optional<Integer>> func) {
         return fileDetailsStream(func).max(Comparator.naturalOrder());
     }
 
+    /**
+     * Gets the minimum value obtained by applying a function to all {@link FileDetails}.
+     *
+     * @param func the function to apply to each {@link FileDetails}
+     * @return an {@link Optional} containing the minimum value, or empty if not applicable
+     */
     public Optional<Integer> getMin(Function<FileDetails, Optional<Integer>> func) {
         return fileDetailsStream(func).min(Comparator.naturalOrder());
     }
 
+    /**
+     * Creates a stream of integer values obtained by applying a function to all {@link
+     * FileDetails}.
+     *
+     * @param func the function to apply to each {@link FileDetails}
+     * @return a {@link Stream} of integer values
+     */
     private Stream<Integer> fileDetailsStream(Function<FileDetails, Optional<Integer>> func) {
         return list.stream().map(func).filter(Optional::isPresent).map(Optional::get);
     }
 
+    /**
+     * Gets the number of {@link FileDetails} objects in the collection.
+     *
+     * @return the size of the collection
+     */
     public int size() {
         return list.size();
     }

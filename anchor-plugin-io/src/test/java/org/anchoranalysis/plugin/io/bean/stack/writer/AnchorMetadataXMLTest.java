@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import javax.xml.parsers.ParserConfigurationException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
@@ -41,14 +40,13 @@ import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
-class AnchorMetadataXmlTest {
+class AnchorMetadataXMLTest {
 
     @TempDir Path directory;
 
     @Test
-    void test() throws ImageIOException, ParserConfigurationException, SAXException {
+    void test() throws ImageIOException {
 
         Resolution resolution = createMockResolution();
 

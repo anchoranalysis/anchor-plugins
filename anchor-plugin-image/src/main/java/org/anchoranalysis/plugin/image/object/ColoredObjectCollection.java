@@ -132,7 +132,7 @@ public class ColoredObjectCollection {
      * @return a newly created list of colors, in identical order to the collection.
      */
     public ColorList deriveColorList() {
-        return new ColorList(list.stream().map(colored -> colored.getColor()));
+        return new ColorList(list.stream().map(ColoredObject::getColor));
     }
 
     /**

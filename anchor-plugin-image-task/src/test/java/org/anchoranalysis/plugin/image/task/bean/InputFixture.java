@@ -48,10 +48,10 @@ import org.anchoranalysis.test.image.io.TestLoaderImage;
 public class InputFixture {
 
     /** The string to prepend for the <b>first</b> group, including a trailing separator. */
-    public static String GROUP1 = "group1/";
+    public static final String GROUP1 = "group1/";
 
     /** The string to prepend for the <b>second</b> group, including a trailing separator. */
-    public static String GROUP2 = "group2/";
+    public static final String GROUP2 = "group2/";
 
     /** The relative-path in the test resources to the directory containing the input files. */
     private final String testPath;

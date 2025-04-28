@@ -59,12 +59,10 @@ public enum DateStyle {
 
     /** Derives a pattern for the formatter for the particular date-style. */
     public String pattern() {
-        if (this == INCLUDE_ENTIRELY) {
-            return DATE_WITH_YEAR_PATTERN;
-        } else if (this == IGNORE_YEAR) {
-            return DATE_WITHOUT_YEAR_PATTERN;
-        } else {
-            throw new AnchorImpossibleSituationException();
-        }
+        return switch (this) {
+            case INCLUDE_ENTIRELY -> DATE_WITH_YEAR_PATTERN;
+            case IGNORE_YEAR -> DATE_WITHOUT_YEAR_PATTERN;
+            case OMIT -> throw new AnchorImpossibleSituationException();
+        };
     }
 }

@@ -79,13 +79,11 @@ class BackgroundSelector {
         }
 
         int numberChannels = backgroundSource.getNumberChannels();
-        if (numberChannels == 0) {
-            return Optional.empty();
-        } else if (numberChannels == 3 || numberChannels == 1) {
-            return Optional.of(displayer.deriveFrom(backgroundSource));
-        } else {
-            return Optional.of(extractChannelAsStack(backgroundSource, 0));
-        }
+        return switch (numberChannels) {
+            case 0 -> Optional.empty();
+            case 1, 3 -> Optional.of(displayer.deriveFrom(backgroundSource));
+            default -> Optional.of(extractChannelAsStack(backgroundSource, 0));
+        };
     }
 
     private DisplayStack extractChannelAsStack(Stack stack, int index) throws CreateException {

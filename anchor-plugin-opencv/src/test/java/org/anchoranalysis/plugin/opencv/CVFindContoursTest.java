@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.opencv;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Contour;
@@ -45,7 +44,7 @@ class CVFindContoursTest {
             new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
-    void test01() throws CreateException, OperationFailedException {
+    void test01() throws OperationFailedException {
         testFor("01");
     }
 

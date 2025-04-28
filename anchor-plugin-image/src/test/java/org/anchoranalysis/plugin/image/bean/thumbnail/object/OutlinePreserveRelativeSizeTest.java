@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -76,7 +75,7 @@ class OutlinePreserveRelativeSizeTest {
     }
 
     @Test
-    void testThumbnails() throws OperationFailedException, CreateException {
+    void testThumbnails() throws OperationFailedException {
 
         doTestAndAssert(OBJECTS, NUMBER_TOTAL, true);
 

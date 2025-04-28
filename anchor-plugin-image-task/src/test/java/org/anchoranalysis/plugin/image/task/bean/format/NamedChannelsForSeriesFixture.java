@@ -143,8 +143,9 @@ class NamedChannelsForSeriesFixture implements NamedChannelsMap {
         throwUnsupportedException();
     }
 
+    @SuppressWarnings("null")
     private Optional<Channel> getChannelRGB(String channelName) {
-        return RGBChannelNames.deriveIndex(channelName).map(index -> stack.getChannel(index));
+        return RGBChannelNames.deriveIndex(channelName).map(stack::getChannel);
     }
 
     private Optional<Channel> getChannelNumeric(String channelName) {

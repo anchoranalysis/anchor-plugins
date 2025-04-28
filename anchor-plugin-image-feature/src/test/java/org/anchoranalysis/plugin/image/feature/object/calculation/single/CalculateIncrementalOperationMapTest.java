@@ -45,20 +45,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CalculateIncrementalOperationMapTest {
 
+    private static final EnergyStack ENERGY_STACK = EnergyStackFixture.create(true, true);
+
+    private static final FeatureInputSingleObject INPUT =
+            new FeatureInputSingleObject(mock(ObjectMask.class), ENERGY_STACK);
+
     @Spy
     private CalculateIncrementalOperationMap mockMap =
             spy(CalculateIncrementalOperationMapFixture.class);
-
-    private EnergyStack energyStack = EnergyStackFixture.create(true, true);
-
-    private FeatureInputSingleObject input =
-            new FeatureInputSingleObject(mock(ObjectMask.class), energyStack);
 
     @BeforeEach
     void setup() throws OperationFailedException {
         // An arbitrary object
         when(mockMap.applyOperation(any(), any(), anyBoolean()))
-                .thenReturn(new CutOffCornersObjectFixture(energyStack.dimensions()).create1());
+                .thenReturn(new CutOffCornersObjectFixture(ENERGY_STACK.dimensions()).create1());
     }
 
     @Test
@@ -66,24 +66,24 @@ class CalculateIncrementalOperationMapTest {
 
         int first = 8;
         int additional = 3;
-        int less_than_first = first - 2;
+        int lessThanFirst = first - 2;
 
         // Seek a number of objects, where nothing already exists in the cache
-        callMockAndVerify(input, first, 1, first);
+        callMockAndVerify(INPUT, first, 1, first);
 
         // Seek an additional number more, given that NUM_FIRST already exists
-        callMockAndVerify(input, first + additional, 2, first + additional);
+        callMockAndVerify(INPUT, first + additional, 2, first + additional);
 
         // Seek a number we already know is in the cache
-        callMockAndVerify(input, less_than_first, 2, first + additional);
+        callMockAndVerify(INPUT, lessThanFirst, 2, first + additional);
     }
 
     @Test
     void testInvalidate() throws FeatureCalculationException {
         // Grow to an initial number
-        int NUM_INITIAL = 6;
-        mockMap.getOrCalculate(input, NUM_INITIAL);
-        assertStoredCount(NUM_INITIAL);
+        int num_initial = 6;
+        mockMap.getOrCalculate(INPUT, num_initial);
+        assertStoredCount(num_initial);
 
         // Invalidate and check that all objects are gone
         mockMap.invalidate();

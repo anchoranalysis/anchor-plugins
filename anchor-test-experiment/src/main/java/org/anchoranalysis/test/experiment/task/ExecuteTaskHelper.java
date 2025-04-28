@@ -277,7 +277,7 @@ public class ExecuteTaskHelper {
 
     private static OutputEnabledRules createOutputRules(Optional<String> specificOutputEnabled) {
         if (specificOutputEnabled.isPresent()) {
-            return specificOutputEnabled.map(NoneExcept::new).get();
+            return new NoneExcept(specificOutputEnabled.get());
         } else {
             return new Permissive();
         }
