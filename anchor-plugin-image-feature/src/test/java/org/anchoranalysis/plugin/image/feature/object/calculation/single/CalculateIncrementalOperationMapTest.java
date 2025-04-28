@@ -81,9 +81,9 @@ class CalculateIncrementalOperationMapTest {
     @Test
     void testInvalidate() throws FeatureCalculationException {
         // Grow to an initial number
-        int num_initial = 6;
-        mockMap.getOrCalculate(INPUT, num_initial);
-        assertStoredCount(num_initial);
+        int numInitial = 6;
+        mockMap.getOrCalculate(INPUT, numInitial);
+        assertStoredCount(numInitial);
 
         // Invalidate and check that all objects are gone
         mockMap.invalidate();
