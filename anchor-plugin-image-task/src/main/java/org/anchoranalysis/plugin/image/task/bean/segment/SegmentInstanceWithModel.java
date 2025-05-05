@@ -30,14 +30,17 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -51,7 +54,6 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.io.csv.metadata.LabelHeaders;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
-import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
@@ -176,6 +178,15 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
      */
     private EachObjectIndependently combineObjects;
 
+    private BeanInstanceMap defaultInstances;
+
+    @Override
+    public void checkMisconfigured(BeanInstanceMap defaultInstances)
+            throws BeanMisconfiguredException {
+        super.checkMisconfigured(defaultInstances);
+        this.defaultInstances = defaultInstances;
+    }
+
     @Override
     public InputTypesExpected inputTypesExpected() {
         // A stack is needed, not individual channels
@@ -204,7 +215,10 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
             return new SharedStateSegmentInstance<>(
                     modelPool, tableCalculator, headers, OUTPUT_SUMMARY_CSV, context);
 
-        } catch (CreateModelFailedException | InitializeException | CreateException e) {
+        } catch (CreateModelFailedException
+                | InitializeException
+                | CreateException
+                | BeanMisconfiguredException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -249,7 +263,7 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
                                         combineObjects()));
             }
 
-        } catch (SegmentationFailedException | OperationFailedException | InitializeException e) {
+        } catch (AnchorFriendlyCheckedException e) {
             throw new JobExecutionException(e);
         }
     }
@@ -287,9 +301,10 @@ public class SegmentInstanceWithModel<T extends InferenceModel>
     }
 
     /** How to combine objects to form features. */
-    private EachObjectIndependently combineObjects() {
+    private EachObjectIndependently combineObjects() throws BeanMisconfiguredException {
         if (combineObjects == null) {
             combineObjects = new EachObjectIndependently(interpolator);
+            combineObjects.checkMisconfigured(defaultInstances);
         }
         return combineObjects;
     }
