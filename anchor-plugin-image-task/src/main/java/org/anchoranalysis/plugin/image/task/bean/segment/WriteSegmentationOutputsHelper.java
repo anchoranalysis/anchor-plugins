@@ -60,11 +60,11 @@ class WriteSegmentationOutputsHelper {
 
     /**
      * A suffix appended to some of the existing output-names, to generate an equivalent output but
-     * but on a scaled version of the input image.
+     * the (possible) scaled version of the input image that is used for segmentation.
      *
      * <p>The scaled version corresponds to the image inputted to the model for inference.
      */
-    static final String OUTPUT_NAME_SCALED_SUFFIX = "InputScale";
+    static final String OUTPUT_NAME_SEGMENT_SCALED_SUFFIX = "SegmentScale";
 
     // START REQUIRED ARGUMENTS
     /**
@@ -94,22 +94,25 @@ class WriteSegmentationOutputsHelper {
                 HDF5ObjectsGenerator::new,
                 segmentedObjects.getObjects().atInputScale()::objects);
 
+        writeOuputsAtScale(writer, segmentedObjects.getObjects().atInputScale(), "");
         writeOuputsAtScale(
-                writer, segmentedObjects.getObjects().atInputScale(), OUTPUT_NAME_SCALED_SUFFIX);
-        writeOuputsAtScale(writer, segmentedObjects.getObjects().atModelScale(), "");
+                writer,
+                segmentedObjects.getObjects().atModelScale(),
+                OUTPUT_NAME_SEGMENT_SCALED_SUFFIX);
     }
 
     private void writeOuputsAtScale(
-            WriterRouterErrors writer, SegmentedObjectsAtScale memoized, String outputNameSuffix) {
+            WriterRouterErrors writer, SegmentedObjectsAtScale segmented, String outputNameSuffix) {
+
         writer.write(
                 OUTPUT_MERGED_AS_MASK + outputNameSuffix,
-                () -> new ObjectsMergedAsMaskGenerator(memoized.background().dimensions()),
-                memoized::objects);
+                () -> new ObjectsMergedAsMaskGenerator(segmented.background().dimensions()),
+                segmented::objects);
 
         writer.write(
                 OUTPUT_OUTLINE + outputNameSuffix,
-                () -> outlineGenerator(memoized.size(), memoized.backgroundDisplayStack()),
-                memoized::objectsWithProperties);
+                () -> outlineGenerator(segmented.size(), segmented.backgroundDisplayStack()),
+                segmented::objectsWithProperties);
     }
 
     private DrawObjectsGenerator outlineGenerator(int objectsSize, DisplayStack background) {
