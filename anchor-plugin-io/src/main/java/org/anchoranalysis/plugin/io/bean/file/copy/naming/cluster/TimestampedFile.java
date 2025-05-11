@@ -27,21 +27,11 @@ package org.anchoranalysis.plugin.io.bean.file.copy.naming.cluster;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.time.ZoneOffset;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-import loci.common.services.ServiceException;
-import loci.formats.services.EXIFServiceImpl;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.format.ImageFileFormat;
-import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.math.statistics.MeanScale;
 import org.anchoranalysis.math.statistics.VarianceCalculatorDouble;
-import org.anchoranalysis.plugin.io.bean.file.pattern.TimestampPattern;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 
 /**
@@ -64,9 +54,6 @@ import org.apache.commons.math3.ml.clustering.Clusterable;
  */
 class TimestampedFile implements Clusterable {
 
-    /** Patterns that can extract a timestamp from a filename. */
-    private final List<TimestampPattern> filenamePatterns;
-
     /** The file whose attributes will be used to cluster. */
     @Getter private final File file;
 
@@ -74,7 +61,7 @@ class TimestampedFile implements Clusterable {
     @Getter private long timestamp;
 
     /**
-     * A normalzed version of {@code timestamp} after standard-deviation has been calculated for the
+     * A normalized version of {@code timestamp} after standard-deviation has been calculated for the
      * entire population.
      */
     private double normalizedTimestamp;
@@ -85,48 +72,23 @@ class TimestampedFile implements Clusterable {
      * @param file the file.
      * @param varianceCreationTime a running-sum style calculator for variance, to which the
      *     date-time is added.
-     * @param filenamePatterns patterns that can extract a date-time from a filename.
+     * @param dateTimeAssociator method to associate a date-time with a file.
      * @param offset the offset to assume the time-stamp belongs in.
      * @throws CreateException if an IO error occurs accessing the file.
      */
     public TimestampedFile(
             File file,
             VarianceCalculatorDouble varianceCreationTime,
-            List<TimestampPattern> filenamePatterns,
+            DateTimeAssociator dateTimeAssociator,
             ZoneOffset offset)
             throws CreateException {
         try {
             this.file = file;
-            this.filenamePatterns = filenamePatterns;
-            this.timestamp = associateDateTime(file, offset);
+            this.timestamp = dateTimeAssociator.associateDateTime(file, offset);
             varianceCreationTime.add(timestamp);
         } catch (IOException e) {
             throw new CreateException(e);
         }
-    }
-
-    /**
-     * Finds a date-time to associate with the file.
-     *
-     * <p>Preference is given to a date-time that can be extracted from the filename, falling
-     * backing to file creation-time.
-     */
-    private long associateDateTime(File file, ZoneOffset offset) throws IOException {
-
-        if (ImageFileFormat.JPEG.matches(file.getName())) {
-            Optional<Long> exifTimestamp = readEXIFCreationTime(file);
-            if (exifTimestamp.isPresent()) {
-                return exifTimestamp.get();
-            }
-        }
-
-        Optional<Long> extractedTime = extractTimeFromFilename(file.getName(), offset);
-
-        if (extractedTime.isPresent()) {
-            return extractedTime.get();
-        }
-
-        return readFileCreationTime(file);
     }
 
     /**
@@ -141,37 +103,5 @@ class TimestampedFile implements Clusterable {
     @Override
     public double[] getPoint() {
         return new double[] {normalizedTimestamp};
-    }
-
-    /** Matches certain times. */
-    private Optional<Long> extractTimeFromFilename(String fileName, ZoneOffset offset) {
-        Stream<Optional<Long>> extractedDateTime =
-                filenamePatterns.stream().map(pattern -> pattern.match(fileName, offset));
-        return OptionalUtilities.orFlat(extractedDateTime);
-    }
-
-    /** Reads the file-creation time. */
-    private static long readFileCreationTime(File file) throws IOException {
-        BasicFileAttributes attributes =
-                Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-
-        // The creation time converted to seconds
-        return attributes.creationTime().toMillis() / 1000;
-    }
-
-    /** Reads the creation-time from an EXIF header if it is available. */
-    private static Optional<Long> readEXIFCreationTime(File file) {
-        EXIFServiceImpl exif = new EXIFServiceImpl();
-        try {
-            exif.initialize(file.toString());
-        } catch (ServiceException | IOException e) {
-            return Optional.empty();
-        }
-
-        if (exif.getCreationDate() != null) {
-            return Optional.of(exif.getCreationDate().toInstant().getEpochSecond());
-        } else {
-            return Optional.empty();
-        }
     }
 }
