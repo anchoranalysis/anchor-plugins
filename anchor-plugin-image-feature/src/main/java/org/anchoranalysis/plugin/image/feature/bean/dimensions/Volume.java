@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 public class Volume<T extends FeatureInputEnergy> extends FromDimensionsBase<T> {
 
     @Override
-    protected double calculateFromDimensions(Dimensions dim) {
-        return dim.extent().calculateVolume();
+    protected double calculateFromDimensions(Dimensions dimensions) {
+        return dimensions.extent().calculateVolume();
     }
 }

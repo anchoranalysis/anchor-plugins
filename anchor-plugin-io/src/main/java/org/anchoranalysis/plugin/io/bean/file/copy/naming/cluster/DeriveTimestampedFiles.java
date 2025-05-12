@@ -69,7 +69,7 @@ class DeriveTimestampedFiles {
         VarianceCalculatorDouble varianceCalculator = new VarianceCalculatorDouble();
 
         DateTimeAssociator associator = new DateTimeAssociator(dateTimePatterns);
-        
+
         try {
             List<TimestampedFile> extracted =
                     FunctionalList.mapToList(

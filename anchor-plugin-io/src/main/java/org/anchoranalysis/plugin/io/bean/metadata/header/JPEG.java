@@ -33,11 +33,13 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.core.stack.ImageFileAttributes;
+import org.anchoranalysis.image.core.stack.ImageLocation;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.bioformats.metadata.AcquisitionDateReader;
+import org.anchoranalysis.io.bioformats.metadata.LocationReader;
+import org.anchoranalysis.io.bioformats.metadata.MetadataReader;
 import org.anchoranalysis.io.bioformats.metadata.OrientationReader;
-import org.anchoranalysis.io.bioformats.metadata.ReadMetadataUtilities;
 
 /**
  * The headers found in a JPEG file.
@@ -60,8 +62,7 @@ public class JPEG extends HeaderFormat {
         // Infer width and height from the metadata.
         // Image resolution is ignored.
         Optional<Dimensions> dimensions =
-                FromExifIfPossible.inferExtentFromEXIFOr(metadata, orientation)
-                        .map(Dimensions::new);
+                ExtentFromMetadata.inferFromEXIFOr(metadata, orientation).map(Dimensions::new);
 
         if (dimensions.isPresent()) {
             return inferRemainingAttributes(metadata, dimensions.get(), attributes);
@@ -89,6 +90,8 @@ public class JPEG extends HeaderFormat {
         Optional<ZonedDateTime> acqusitionDate =
                 AcquisitionDateReader.readAcquisitionDate(metadata);
 
+        Optional<ImageLocation> location = LocationReader.readLocation(metadata);
+
         // Assume any image with three channels is RGB encoded.
         boolean rgb = numberChannels.get() == 3;
         return Optional.of(
@@ -101,6 +104,7 @@ public class JPEG extends HeaderFormat {
                         bitDepth.get(),
                         timestamps,
                         acqusitionDate,
+                        location,
                         Optional.empty())); // NOSONAR
     }
 
@@ -111,7 +115,7 @@ public class JPEG extends HeaderFormat {
      * @return the number of channels.
      */
     private static Optional<Integer> inferNumberChannels(Metadata metadata) {
-        return ReadMetadataUtilities.readInt(
+        return MetadataReader.readInt(
                 metadata, JpegDirectory.class, JpegDirectory.TAG_NUMBER_OF_COMPONENTS);
     }
 
@@ -122,7 +126,7 @@ public class JPEG extends HeaderFormat {
      * @return the bit depth.
      */
     private static Optional<Integer> inferBitDepth(Metadata metadata) {
-        return ReadMetadataUtilities.readInt(
+        return MetadataReader.readInt(
                 metadata, JpegDirectory.class, JpegDirectory.TAG_DATA_PRECISION);
     }
 }

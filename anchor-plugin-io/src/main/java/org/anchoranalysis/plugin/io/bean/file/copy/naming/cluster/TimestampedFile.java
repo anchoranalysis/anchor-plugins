@@ -61,8 +61,8 @@ class TimestampedFile implements Clusterable {
     @Getter private long timestamp;
 
     /**
-     * A normalized version of {@code timestamp} after standard-deviation has been calculated for the
-     * entire population.
+     * A normalized version of {@code timestamp} after standard-deviation has been calculated for
+     * the entire population.
      */
     private double normalizedTimestamp;
 

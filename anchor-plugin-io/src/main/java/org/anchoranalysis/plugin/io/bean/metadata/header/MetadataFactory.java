@@ -51,6 +51,7 @@ class MetadataFactory {
                 bitDepth,
                 timestamps,
                 Optional.empty(),
+                Optional.empty(),
                 Optional.empty());
     }
 }

@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageLocation;
 import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -112,6 +113,12 @@ public class OpenedMultiFile implements OpenedImageFile {
     public ImageTimestampsAttributes timestamps() throws ImageIOException {
         throw new ImageIOException(
                 "Timestamps are not supported for multi-files, as it is not well-defined which file should be used.");
+    }
+
+    @Override
+    public Optional<ImageLocation> location() throws ImageIOException {
+        throw new ImageIOException(
+                "A location is not supported for multi-files, as it is not well-defined which file should be used.");
     }
 
     @Override

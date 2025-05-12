@@ -33,7 +33,8 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.io.bioformats.metadata.ReadMetadataUtilities;
+import org.anchoranalysis.io.bioformats.metadata.ExtentReader;
+import org.anchoranalysis.io.bioformats.metadata.MetadataReader;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
@@ -58,7 +59,7 @@ public class BMP extends HeaderFormat {
         }
 
         Optional<Extent> extent =
-                ReadMetadataUtilities.readFromWidthHeightTags(
+                ExtentReader.read(
                         directory,
                         BmpHeaderDirectory.TAG_IMAGE_WIDTH,
                         BmpHeaderDirectory.TAG_IMAGE_HEIGHT);
@@ -67,7 +68,7 @@ public class BMP extends HeaderFormat {
         }
 
         Optional<Integer> bitDepth =
-                ReadMetadataUtilities.readInt(directory, BmpHeaderDirectory.TAG_BITS_PER_PIXEL);
+                MetadataReader.readInt(directory, BmpHeaderDirectory.TAG_BITS_PER_PIXEL);
         if (!bitDepth.isPresent()) {
             return Optional.empty();
         }

@@ -36,6 +36,7 @@ import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageLocation;
 import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
 import org.anchoranalysis.image.core.stack.RGBChannelNames;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -45,6 +46,7 @@ import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.io.bioformats.metadata.ImageTimestampsAttributesFactory;
+import org.anchoranalysis.io.bioformats.metadata.LocationReader;
 import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
 import org.opencv.core.Mat;
 
@@ -83,8 +85,11 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     /** Lazily opened stack. */
     private Stack stack;
 
-    /** Lazily recorded timestamps. */
+    /** Lazily-recorded timestamps. */
     private ImageTimestampsAttributes timestamps;
+
+    /** Lazily-recorded image-location. */
+    private Optional<ImageLocation> location;
 
     @Override
     public TimeSeries open(int seriesIndex, Logger logger) throws ImageIOException {
@@ -148,6 +153,14 @@ class OpenedRasterOpenCV implements OpenedImageFile {
             timestamps = ImageTimestampsAttributesFactory.fromPath(path);
         }
         return timestamps;
+    }
+
+    @Override
+    public Optional<ImageLocation> location() throws ImageIOException {
+        if (location == null) {
+            location = LocationReader.readLocation(path);
+        }
+        return location;
     }
 
     @Override

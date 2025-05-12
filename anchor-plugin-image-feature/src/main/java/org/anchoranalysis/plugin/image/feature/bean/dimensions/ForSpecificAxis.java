@@ -47,9 +47,10 @@ public abstract class ForSpecificAxis<T extends FeatureInputEnergy> extends From
     @BeanField @Getter @Setter private String axis = "x";
 
     @Override
-    protected double calculateFromDimensions(Dimensions dim) throws FeatureCalculationException {
+    protected double calculateFromDimensions(Dimensions dimensions)
+            throws FeatureCalculationException {
         try {
-            return calculateForAxis(dim, AxisConverter.createFromString(axis));
+            return calculateForAxis(dimensions, AxisConverter.createFromString(axis));
         } catch (AxisConversionException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }

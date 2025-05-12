@@ -11,14 +11,11 @@ import java.util.stream.Stream;
 import loci.common.services.ServiceException;
 import loci.formats.services.EXIFServiceImpl;
 import lombok.RequiredArgsConstructor;
-
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.plugin.io.bean.file.pattern.TimestampPattern;
 
-/**
- * Associates a date-time with a file based on various criteria.
- */
+/** Associates a date-time with a file based on various criteria. */
 @RequiredArgsConstructor
 class DateTimeAssociator {
 
@@ -27,7 +24,7 @@ class DateTimeAssociator {
 
     /**
      * Finds a date-time to associate with the file.
-     * 
+     *
      * <p>If there's a JPEG extension, a creation-time is read from EXIF metadata, if it exists.
      *
      * <p>Then preference is given to a date-time that can be extracted from the filename, falling
@@ -60,7 +57,8 @@ class DateTimeAssociator {
      *
      * @param fileName the name of the file to extract the timestamp from.
      * @param offset the {@link ZoneOffset} to use for the extracted timestamp.
-     * @return an {@link Optional} containing the extracted timestamp, or empty if no timestamp could be extracted.
+     * @return an {@link Optional} containing the extracted timestamp, or empty if no timestamp
+     *     could be extracted.
      */
     private Optional<Long> extractTimeFromFilename(String fileName, ZoneOffset offset) {
         Stream<Optional<Long>> extractedDateTime =
@@ -85,7 +83,8 @@ class DateTimeAssociator {
      * Reads the creation time from the EXIF metadata of a JPEG file.
      *
      * @param file the {@link File} to read the EXIF metadata from.
-     * @return an {@link Optional} containing the EXIF creation time as seconds since the epoch, or empty if no EXIF creation time could be read.
+     * @return an {@link Optional} containing the EXIF creation time as seconds since the epoch, or
+     *     empty if no EXIF creation time could be read.
      */
     private static Optional<Long> readEXIFCreationTime(File file) {
         EXIFServiceImpl exif = new EXIFServiceImpl();
