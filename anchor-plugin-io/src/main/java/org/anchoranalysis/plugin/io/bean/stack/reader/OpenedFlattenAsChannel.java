@@ -33,6 +33,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.ImageLocation;
 import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -121,6 +122,11 @@ class OpenedFlattenAsChannel implements OpenedImageFile {
     @Override
     public ImageTimestampsAttributes timestamps() throws ImageIOException {
         return delegate.timestamps();
+    }
+
+    @Override
+    public Optional<ImageLocation> location() throws ImageIOException {
+        return delegate.location();
     }
 
     @Override

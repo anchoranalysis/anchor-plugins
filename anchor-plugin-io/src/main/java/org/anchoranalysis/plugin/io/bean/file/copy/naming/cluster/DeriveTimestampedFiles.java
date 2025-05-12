@@ -68,6 +68,8 @@ class DeriveTimestampedFiles {
             throws OperationFailedException {
         VarianceCalculatorDouble varianceCalculator = new VarianceCalculatorDouble();
 
+        DateTimeAssociator associator = new DateTimeAssociator(dateTimePatterns);
+
         try {
             List<TimestampedFile> extracted =
                     FunctionalList.mapToList(
@@ -77,7 +79,7 @@ class DeriveTimestampedFiles {
                                     new TimestampedFile(
                                             input.getFile(),
                                             varianceCalculator,
-                                            dateTimePatterns,
+                                            associator,
                                             offset));
             scaler = deriveScaler(varianceCalculator);
             extracted.forEach(attributes -> attributes.normalize(scaler));

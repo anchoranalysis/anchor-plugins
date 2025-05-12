@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.io.bioformats.metadata.ReadMetadataUtilities;
+import org.anchoranalysis.io.bioformats.metadata.ExtentReader;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
@@ -49,7 +49,7 @@ import org.anchoranalysis.spatial.box.Extent;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class FromExifIfPossible {
+class ExtentFromMetadata {
 
     /**
      * Infers the {@link Extent} from the metadata.
@@ -60,12 +60,12 @@ class FromExifIfPossible {
      * @return the extent, if it is existed, orientated to match {@code orientation}.
      * @throws ImageIOException if metadata exists in an invalid state.
      */
-    public static Optional<Extent> inferExtentFromEXIFOr(
+    public static Optional<Extent> inferFromEXIFOr(
             Metadata metadata, Optional<OrientationChange> orientation) throws ImageIOException {
 
         Optional<Extent> extent =
                 OptionalUtilities.orFlatSupplier(
-                        () -> readExif(metadata), () -> readOther(metadata));
+                        () -> extentFromExif(metadata), () -> extentFromJPEG(metadata));
 
         if (extent.isPresent()) {
             if (orientation.isPresent()) {
@@ -78,16 +78,18 @@ class FromExifIfPossible {
         }
     }
 
-    private static Optional<Extent> readExif(Metadata metadata) throws ImageIOException {
-        return ReadMetadataUtilities.readFromWidthHeightTags(
+    /** Reads the width and height from EXIF metadata-tags, if they are present in the metadata. */
+    private static Optional<Extent> extentFromExif(Metadata metadata) throws ImageIOException {
+        return ExtentReader.read(
                 metadata,
                 ExifIFD0Directory.class,
                 ExifDirectoryBase.TAG_IMAGE_WIDTH,
                 ExifDirectoryBase.TAG_IMAGE_HEIGHT);
     }
 
-    private static Optional<Extent> readOther(Metadata metadata) throws ImageIOException {
-        return ReadMetadataUtilities.readFromWidthHeightTags(
+    /** Reads the width and height from JPEG metadata-tags, if they are present in the metadata. */
+    private static Optional<Extent> extentFromJPEG(Metadata metadata) throws ImageIOException {
+        return ExtentReader.read(
                 metadata,
                 JpegDirectory.class,
                 JpegDirectory.TAG_IMAGE_WIDTH,

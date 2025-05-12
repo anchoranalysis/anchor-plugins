@@ -111,6 +111,7 @@ class GroupingInput extends NamedChannelsInput {
                 bitDepth(logger),
                 timestamps.getAttributes(),
                 timestamps.getAcqusitionTime(),
+                Optional.empty(),
                 Optional.empty());
     }
 

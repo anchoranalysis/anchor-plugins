@@ -2,7 +2,7 @@
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2025 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,22 +23,22 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.plugin.image.feature.bean.metadata;
 
-package org.anchoranalysis.plugin.image.feature.bean.dimensions;
-
-import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageLocation;
 
 /**
- * Calculates the volume (x, y and z dimensions) of the scene from the dimensions
+ * Extracts the <b>latitude</b> from the image metadata.
  *
- * @author Owen Feehan
- * @param <T> feature-input-type
+ * <p>It is specified in degrees where positive values are north of the equator, and negative values
+ * are south of it.
+ *
+ * <p>If the location is unknown, then Double.NaN is returned.
  */
-public class Volume<T extends FeatureInputEnergy> extends FromDimensionsBase<T> {
+public class Latitude extends ExtractFromLocation {
 
     @Override
-    protected double calculateFromDimensions(Dimensions dimensions) {
-        return dimensions.extent().calculateVolume();
+    protected double extractValue(ImageLocation location) {
+        return location.getLatitude();
     }
 }
