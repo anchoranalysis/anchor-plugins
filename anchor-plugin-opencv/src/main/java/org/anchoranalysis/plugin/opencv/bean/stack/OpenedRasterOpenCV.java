@@ -85,11 +85,19 @@ class OpenedRasterOpenCV implements OpenedImageFile {
     /** Lazily opened stack. */
     private Stack stack;
 
-    /** Lazily-recorded timestamps. */
-    private ImageTimestampsAttributes timestamps;
+    /**
+     * Lazily-recorded timestamps.
+     *
+     * <p>When the {@link Optional} is empty, it implies the value has not been read yet.
+     */
+    private Optional<ImageTimestampsAttributes> timestamps;
 
-    /** Lazily-recorded image-location. */
-    private Optional<ImageLocation> location;
+    /**
+     * Lazily-recorded image-location.
+     *
+     * <p>When the outer-most {@link Optional} is empty, it implies the value has not been read yet.
+     */
+    private Optional<Optional<ImageLocation>> location = Optional.empty();
 
     @Override
     public TimeSeries open(int seriesIndex, Logger logger) throws ImageIOException {
@@ -149,18 +157,18 @@ class OpenedRasterOpenCV implements OpenedImageFile {
 
     @Override
     public ImageTimestampsAttributes timestamps() throws ImageIOException {
-        if (timestamps == null) {
-            timestamps = ImageTimestampsAttributesFactory.fromPath(path);
+        if (timestamps.isEmpty()) {
+            timestamps = Optional.of(ImageTimestampsAttributesFactory.fromPath(path));
         }
-        return timestamps;
+        return timestamps.get();
     }
 
     @Override
     public Optional<ImageLocation> location() throws ImageIOException {
-        if (location == null) {
-            location = LocationReader.readLocation(path);
+        if (location.isEmpty()) {
+            location = Optional.of(LocationReader.readLocation(path));
         }
-        return location;
+        return location.get();
     }
 
     @Override
