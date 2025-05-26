@@ -96,7 +96,9 @@ public class Anonymize extends CopyFilesNaming<AnonymizeSharedState> {
      * (inclusive).
      */
     private static List<Integer> createSequence(int maxNumberExclusive) {
-        return IntStream.range(0, maxNumberExclusive).boxed().collect(Collectors.toCollection(ArrayList::new));
+        return IntStream.range(0, maxNumberExclusive)
+                .boxed()
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private static <T> Map<Integer, T> mapIndexToElement(List<T> list) {
