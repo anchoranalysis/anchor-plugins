@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.1</version>
     </parent>
   <artifactId>anchor-plugin-io</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <description>Plugins for input-output operations.</description>
    <licenses>
     <license>
@@ -190,6 +190,6 @@
 
 
   <scm>
-    <tag>anchor-plugin-io-1.0.1</tag>
+    <tag>anchor-parent-plugins-1.0.1</tag>
   </scm>
 </project>

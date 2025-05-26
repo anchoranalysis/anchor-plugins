@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.1</version>
     </parent> 
     <artifactId>anchor-plugin-opencv</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
 	<description>Plugins that call OpenCV.</description>
     
    <dependencies>
@@ -91,7 +91,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>     
       <artifactId>anchor-plugin-io</artifactId>
-  	  <version>1.0.1-SNAPSHOT</version>
+  	  <version>1.0.1</version>
   	 </dependency>
   	 
   	 

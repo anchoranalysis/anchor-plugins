@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.1</version>
     </parent>
   <artifactId>anchor-plugin-image-task</artifactId>
- <version>1.0.1-SNAPSHOT</version>
+ <version>1.0.1</version>
  <description>Plugins for tasks related to images.</description>
   <dependencies>
 	
@@ -108,13 +108,13 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-image</artifactId>
-	  <version>1.0.1-SNAPSHOT</version>
+	  <version>1.0.1</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-image-feature</artifactId>
-	  <version>1.0.1-SNAPSHOT</version>
+	  <version>1.0.1</version>
 	</dependency>
 	
 	<dependency>
@@ -138,7 +138,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-test-experiment</artifactId>
-	  <version>1.0.1-SNAPSHOT</version>
+	  <version>1.0.1</version>
 	  <scope>test</scope>
   	</dependency>
 
@@ -152,7 +152,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>  	
   	  <artifactId>anchor-plugin-io</artifactId>
-  	  <version>1.0.1-SNAPSHOT</version>
+  	  <version>1.0.1</version>
   	  <scope>test</scope>
   	</dependency>
 
@@ -166,7 +166,7 @@
   	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test-feature-plugins</artifactId>
-	  <version>1.0.1-SNAPSHOT</version>
+	  <version>1.0.1</version>
 	  <scope>test</scope>
 	</dependency>
 
