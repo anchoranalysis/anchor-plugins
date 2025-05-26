@@ -6,7 +6,7 @@
 		<version>1.0.0</version>
     </parent>
   <artifactId>anchor-plugin-io</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <description>Plugins for input-output operations.</description>
    <licenses>
     <license>
@@ -188,4 +188,8 @@
         <!--  END: Test dependencies -->
 	</dependencies>
 
+
+  <scm>
+    <tag>anchor-plugin-io-1.0.1</tag>
+  </scm>
 </project>
