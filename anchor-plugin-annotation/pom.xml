@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
-		<version>1.0.1</version>
+		<version>1.0.2-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-plugin-annotation</artifactId>
- <version>1.0.1</version>
+ <version>1.0.2-SNAPSHOT</version>
  <description>Plugins for annotating images.</description>
   <dependencies>
 
