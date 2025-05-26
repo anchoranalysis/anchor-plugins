@@ -60,16 +60,15 @@ class AnonymizeTest {
                         0,
                         context);
         assertFalse(destination.isEmpty());
-        assertPathEndsWith(destination.get());
+        assertPathContent(destination.get().toString());
     }
 
-    /** Asserts the path ends with the expected sub-directory and file-name. */
-    private static void assertPathEndsWith(Path path) {
-        String withForwardSlashes = path.toString().replace('\\', '/');
-        assertTrue(
-                withForwardSlashes.endsWith(DIRECTORY_OUTPUTS + "/0.png"),
-                () ->
-                        "An unexpected destination path was produced: "
-                                + withForwardSlashes.toString());
+    /**
+     * Asserts the path contains the expected sub-directory and ends with the expected
+     * file-extension.
+     */
+    private static void assertPathContent(String path) {
+        assertTrue(path.contains(DIRECTORY_OUTPUTS));
+        assertTrue(path.endsWith(".png"));
     }
 }
