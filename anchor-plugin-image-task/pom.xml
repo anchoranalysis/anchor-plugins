@@ -3,124 +3,124 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.3-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-plugin-image-task</artifactId>
- <version>1.0.0-SNAPSHOT</version>
+ <version>1.0.3-SNAPSHOT</version>
  <description>Plugins for tasks related to images.</description>
   <dependencies>
 	
    <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-beans-shared</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-spatial</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-generator</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature-session</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-math</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-bean</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-feature</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-imagej</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-input</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-output</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-io</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-voxel</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-experiment</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-inference</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature-io</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-image</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.3-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-image-feature</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.3-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-inference</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	
 	<dependency>
@@ -138,42 +138,42 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-test-experiment</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.3-SNAPSHOT</version>
 	  <scope>test</scope>
   	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>  	
 	  <artifactId>anchor-test-image</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	  <scope>test</scope>
   	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>  	
   	  <artifactId>anchor-plugin-io</artifactId>
-  	  <version>1.0.0-SNAPSHOT</version>
+  	  <version>1.0.3-SNAPSHOT</version>
   	  <scope>test</scope>
   	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>  	
   	  <artifactId>anchor-test</artifactId>
-  	  <version>1.0.0-SNAPSHOT</version>
+  	  <version>1.0.0</version>
   	  <scope>test</scope>
   	</dependency>
   	  	
   	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test-feature-plugins</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.3-SNAPSHOT</version>
 	  <scope>test</scope>
 	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp-io</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	  <scope>test</scope>
 	</dependency>
 		

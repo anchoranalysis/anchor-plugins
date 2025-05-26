@@ -3,65 +3,65 @@
   <parent>
     <groupId>org.anchoranalysis.anchor</groupId>
     <artifactId>anchor-parent-plugins</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
   </parent>
   <artifactId>anchor-test-experiment</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.3-SNAPSHOT</version>
   <description>Test fixtures and utilities have dependencies on anchor-experiment.</description>
     <dependencies>
    
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test-image</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	
    	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 
    	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-inference</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 
    	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-input</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 			
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-output</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test-io-output</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-experiment</artifactId>
-  	  <version>1.0.0-SNAPSHOT</version>
+  	  <version>1.0.0</version>
   	</dependency>
  
     <dependency>
