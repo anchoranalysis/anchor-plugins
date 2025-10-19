@@ -13,67 +13,67 @@
 	    <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-test</artifactId>
-		  <version>1.0.0</version>
+		  <version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-math</artifactId>
-		  <version>1.0.0</version>
+		  <version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-core</artifactId>
-		  <version>1.0.0</version>
+		  <version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-bean</artifactId>
-		  <version>1.0.0</version>
+		  <version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-image-voxel</artifactId>
-		  <version>1.0.0</version>
+		  <version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-image-core</artifactId>
-		  <version>1.0.0</version>
+		  <version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-feature-session</artifactId>
-		  <version>1.0.0</version>
+		  <version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		
 	  <dependency>
           <groupId>${project.groupId}</groupId>
           <artifactId>anchor-spatial</artifactId>
-          <version>1.0.0</version>
+          <version>1.0.1-SNAPSHOT</version>
         </dependency>
         
         <dependency>
           <groupId>${project.groupId}</groupId>
           <artifactId>anchor-image-feature</artifactId>
-          <version>1.0.0</version>
+          <version>1.0.1-SNAPSHOT</version>
         </dependency>
 		
 	   <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-feature</artifactId>
-		  <version>1.0.0</version>
+		  <version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		        
         <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-mpp</artifactId>
-		  <version>1.0.0</version>
+		  <version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
 	    <!-- Needed to expand scope outside "test" which is inherited from the parent pom -->
