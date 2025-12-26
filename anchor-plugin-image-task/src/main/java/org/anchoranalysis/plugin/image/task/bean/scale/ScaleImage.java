@@ -190,17 +190,18 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
         for (String key : inputKeys) {
 
             DualEnabled enabledForKey;
-			try {
-				enabledForKey = dualEnabled.and(
-				        () ->
-				                OutputterHelper.isSecondLevelOutputEnabled(
-				                        OUTPUT_SCALED, key, context),
-				        () ->
-				                OutputterHelper.isSecondLevelOutputEnabled(
-				                        OUTPUT_SCALED_FLATTENED, key, context));
-			} catch (OutputWriteFailedException e) {
-				throw new JobExecutionException(e);
-			}
+            try {
+                enabledForKey =
+                        dualEnabled.and(
+                                () ->
+                                        OutputterHelper.isSecondLevelOutputEnabled(
+                                                OUTPUT_SCALED, key, context),
+                                () ->
+                                        OutputterHelper.isSecondLevelOutputEnabled(
+                                                OUTPUT_SCALED_FLATTENED, key, context));
+            } catch (OutputWriteFailedException e) {
+                throw new JobExecutionException(e);
+            }
 
             if (enabledForKey.isEitherEnabled()) {
                 try {

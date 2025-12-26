@@ -151,10 +151,10 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
         // group
         // to write an appropriate histogram.
         try {
-			createWriter().writeHistogramToFile(individual, name, context);
-		} catch (OutputWriteFailedException e) {
-			throw new OperationFailedException(e);
-		}
+            createWriter().writeHistogramToFile(individual, name, context);
+        } catch (OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
 
         consumeIndividual.accept(name, individual);
     }

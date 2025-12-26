@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -76,11 +75,14 @@ class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
         // Anchor's task execution
         InputOutputContext context = createContext.apply(namedAggregators.size() > 1);
         for (Map.Entry<String, Histogram> namedAggregator : namedAggregators) {
-        	try {
-				writer.writeHistogramToFile(namedAggregator.getValue(), singleIdentifier.orElse(namedAggregator.getKey()), context);
-			} catch (OutputWriteFailedException e) {
-				throw new IOException(e);
-			}
+            try {
+                writer.writeHistogramToFile(
+                        namedAggregator.getValue(),
+                        singleIdentifier.orElse(namedAggregator.getKey()),
+                        context);
+            } catch (OutputWriteFailedException e) {
+                throw new IOException(e);
+            }
         }
     }
 }

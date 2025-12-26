@@ -49,7 +49,8 @@ class GroupedHistogramWriter {
     }
 
     public void writeHistogramToFile(
-            Histogram histogram, String channelName, InputOutputContext context) throws OutputWriteFailedException {
+            Histogram histogram, String channelName, InputOutputContext context)
+            throws OutputWriteFailedException {
 
         if (context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
             context.getOutputter()

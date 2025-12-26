@@ -94,12 +94,12 @@ class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByNa
                     createContext.apply(false),
                     resolveOutputName(outputNameSingle));
         } else {
-        	try {
-	            OutputChannelsSeparately.output(
-	                    namedAggregators, () -> resolveOutputName(outputNameSingle), createContext);
-        	} catch (OutputWriteFailedException e) {
-        		throw new IOException(e);
-        	}
+            try {
+                OutputChannelsSeparately.output(
+                        namedAggregators, () -> resolveOutputName(outputNameSingle), createContext);
+            } catch (OutputWriteFailedException e) {
+                throw new IOException(e);
+            }
         }
     }
 

@@ -71,7 +71,8 @@ class OutputterHelper {
      *     first-level output.
      */
     public static boolean isSecondLevelOutputEnabled(
-            String outputNameFirstLevel, String keySecondLevel, InputOutputContext context) throws OutputWriteFailedException {
+            String outputNameFirstLevel, String keySecondLevel, InputOutputContext context)
+            throws OutputWriteFailedException {
         return context.getOutputter()
                 .outputsEnabled()
                 .second(outputNameFirstLevel)

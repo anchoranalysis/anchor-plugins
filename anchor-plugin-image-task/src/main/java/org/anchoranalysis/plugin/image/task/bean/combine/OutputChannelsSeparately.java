@@ -63,7 +63,8 @@ class OutputChannelsSeparately {
     public static <T extends ChannelAggregator> void output(
             Collection<Entry<String, T>> namedAggregators,
             Supplier<String> outputNameSingle,
-            Function<Boolean, InputOutputContext> createContext) throws OutputWriteFailedException {
+            Function<Boolean, InputOutputContext> createContext)
+            throws OutputWriteFailedException {
         if (namedAggregators.size() > 1) {
             // Write using the name of each aggregator as there are multiple aggregators.
             InputOutputContext context = createContext.apply(true);
@@ -89,18 +90,15 @@ class OutputChannelsSeparately {
     private static <T extends ChannelAggregator> void outputIntoContext(
             Collection<Entry<String, T>> namedAggregators,
             Optional<String> outputName,
-            InputOutputContext context) throws OutputWriteFailedException {
+            InputOutputContext context)
+            throws OutputWriteFailedException {
         // We can write these group outputs in parallel, as we no longer in the parallel part of
         // Anchor's task execution
-    	CheckedStream.forEach(
-    			namedAggregators.parallelStream(),
-    			OutputWriteFailedException.class,
+        CheckedStream.forEach(
+                namedAggregators.parallelStream(),
+                OutputWriteFailedException.class,
                 entry ->
-                        writeChannel(
-                                outputName.orElse(entry.getKey()),
-                                entry.getValue(),
-                                context)
-    	);
+                        writeChannel(outputName.orElse(entry.getKey()), entry.getValue(), context));
     }
 
     /**
@@ -114,7 +112,8 @@ class OutputChannelsSeparately {
      *     first-level output.
      */
     private static <T extends ChannelAggregator> void writeChannel(
-            String outputName, T aggregator, InputOutputContext context) throws OutputWriteFailedException {
+            String outputName, T aggregator, InputOutputContext context)
+            throws OutputWriteFailedException {
         context.getOutputter()
                 .writerSecondLevel(outputName)
                 .write(outputName, ChannelGenerator::new, () -> extractChannel(aggregator));
