@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
@@ -73,11 +75,12 @@ class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
         // We can write these group outputs in parallel, as we no longer in the parallel part of
         // Anchor's task execution
         InputOutputContext context = createContext.apply(namedAggregators.size() > 1);
-        namedAggregators.forEach(
-                namedAggregator ->
-                        writer.writeHistogramToFile(
-                                namedAggregator.getValue(),
-                                singleIdentifier.orElse(namedAggregator.getKey()),
-                                context));
+        for (Map.Entry<String, Histogram> namedAggregator : namedAggregators) {
+        	try {
+				writer.writeHistogramToFile(namedAggregator.getValue(), singleIdentifier.orElse(namedAggregator.getKey()), context);
+			} catch (OutputWriteFailedException e) {
+				throw new IOException(e);
+			}
+        }
     }
 }

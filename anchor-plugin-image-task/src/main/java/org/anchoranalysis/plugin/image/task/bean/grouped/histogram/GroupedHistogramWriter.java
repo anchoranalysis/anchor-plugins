@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 import org.anchoranalysis.image.io.histogram.output.HistogramCSVGenerator;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
 
@@ -48,7 +49,7 @@ class GroupedHistogramWriter {
     }
 
     public void writeHistogramToFile(
-            Histogram histogram, String channelName, InputOutputContext context) {
+            Histogram histogram, String channelName, InputOutputContext context) throws OutputWriteFailedException {
 
         if (context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
             context.getOutputter()

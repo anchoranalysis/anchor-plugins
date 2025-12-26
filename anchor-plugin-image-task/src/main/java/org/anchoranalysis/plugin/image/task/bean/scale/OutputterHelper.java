@@ -67,9 +67,11 @@ class OutputterHelper {
      * @param keySecondLevel the second level unique key
      * @param context input-output context
      * @return true iff the particular output is enabled.
+     * @throws OutputWriteFailedException if outputName has not already been recorded as a
+     *     first-level output.
      */
     public static boolean isSecondLevelOutputEnabled(
-            String outputNameFirstLevel, String keySecondLevel, InputOutputContext context) {
+            String outputNameFirstLevel, String keySecondLevel, InputOutputContext context) throws OutputWriteFailedException {
         return context.getOutputter()
                 .outputsEnabled()
                 .second(outputNameFirstLevel)

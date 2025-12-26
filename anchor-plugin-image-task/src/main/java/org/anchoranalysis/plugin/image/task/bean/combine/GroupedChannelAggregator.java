@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.bean.channel.ChannelAggregator;
 import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.channel.aggregator.NamedChannels;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
@@ -93,8 +94,12 @@ class GroupedChannelAggregator<T extends ChannelAggregator> extends GroupMapByNa
                     createContext.apply(false),
                     resolveOutputName(outputNameSingle));
         } else {
-            OutputChannelsSeparately.output(
-                    namedAggregators, () -> resolveOutputName(outputNameSingle), createContext);
+        	try {
+	            OutputChannelsSeparately.output(
+	                    namedAggregators, () -> resolveOutputName(outputNameSingle), createContext);
+        	} catch (OutputWriteFailedException e) {
+        		throw new IOException(e);
+        	}
         }
     }
 
