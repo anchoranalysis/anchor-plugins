@@ -7,61 +7,62 @@
     </parent> 
     <artifactId>anchor-plugin-onnx</artifactId>
     <version>1.0.3-SNAPSHOT</version>
+    <name>Anchor Plugin - ONNX</name>
 	<description>Plugins that call the ONNX runtime.</description>
 	
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>
 	
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>
 	
 	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>anchor-inference</artifactId>
-  		<version>1.0.0</version>
+  		<version>1.1.2</version>
   	</dependency>
   	
   	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>anchor-image-voxel</artifactId>
-  		<version>1.0.0</version>
+  		<version>1.1.2</version>
   	</dependency>
   	
   	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>anchor-image-bean</artifactId>
-  		<version>1.0.0</version>
+  		<version>1.1.2</version>
   	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-inference</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-spatial</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>	
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-mpp</artifactId>
-  	  <version>1.0.0</version>
+  	  <version>1.1.2</version>
   	</dependency>
   	
   	<dependency>
@@ -75,7 +76,7 @@
 	<dependency>
 		<groupId> com.microsoft.onnxruntime</groupId>
 		<artifactId>onnxruntime_gpu </artifactId>
-		<version>1.9.0</version>
+		<version>${onnx-runtime.version}</version>
 	</dependency>
         
     <!--  END: ONNX Runtime dependencies -->
@@ -85,7 +86,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>anchor-test-image</artifactId>
-      <version>1.0.0</version>
+      <version>1.1.2</version>
       <scope>test</scope>
     </dependency>
      
@@ -106,7 +107,7 @@
   	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-imagej</artifactId>
-  	  <version>1.0.0</version>
+  	  <version>1.1.2</version>
   	  <scope>test</scope>
   	</dependency>
 
@@ -128,9 +129,7 @@
 	  	<dependency>
 			<groupId> com.microsoft.onnxruntime</groupId>
 			<artifactId>onnxruntime</artifactId>
-			<!-- There seems to be problems on MacOS with the onnx runtime so we 
-			deliberately run an older version. -->
-			<version>1.12.1</version>
+			<version>${onnx-runtime.version}</version>
 		</dependency>
 	  </dependencies>
 	</profile>

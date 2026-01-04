@@ -43,6 +43,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
@@ -149,7 +150,11 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
         // We only write the individual file, if it's not part of a group. Otherwise we rely on the
         // group
         // to write an appropriate histogram.
-        createWriter().writeHistogramToFile(individual, name, context);
+        try {
+            createWriter().writeHistogramToFile(individual, name, context);
+        } catch (OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
 
         consumeIndividual.accept(name, individual);
     }

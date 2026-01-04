@@ -25,9 +25,10 @@
  */
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
-import java.util.function.BooleanSupplier;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.core.functional.checked.CheckedBooleanSupplier;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /** Whether two different types of outputs are enabled. */
 @Value
@@ -59,9 +60,13 @@ class DualEnabled {
      * @param nonFlattenedToCombine the second argument for a logical and with {@code nonFlattened}
      * @param flattenedToCombine the second argument for a logical and with {@code flattened}
      * @return a newly created {@link DualEnabled} that is the result of the logical and.
+     * @throws OutputWriteFailedException if outputName has not already been recorded as a
+     *     first-level output.
      */
     public DualEnabled and(
-            BooleanSupplier nonFlattenedToCombine, BooleanSupplier flattenedToCombine) {
+            CheckedBooleanSupplier<OutputWriteFailedException> nonFlattenedToCombine,
+            CheckedBooleanSupplier<OutputWriteFailedException> flattenedToCombine)
+            throws OutputWriteFailedException {
         return new DualEnabled(
                 nonFlattened && nonFlattenedToCombine.getAsBoolean(),
                 flattened && flattenedToCombine.getAsBoolean());

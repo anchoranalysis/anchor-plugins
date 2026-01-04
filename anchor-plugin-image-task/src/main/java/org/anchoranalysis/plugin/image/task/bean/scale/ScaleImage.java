@@ -47,6 +47,7 @@ import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.input.StackSequenceInput;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.stack.InitializationFactory;
 
@@ -188,14 +189,19 @@ public abstract class ScaleImage<S> extends Task<StackSequenceInput, S> {
         Set<String> inputKeys = initialization.stacks().keys();
         for (String key : inputKeys) {
 
-            DualEnabled enabledForKey =
-                    dualEnabled.and(
-                            () ->
-                                    OutputterHelper.isSecondLevelOutputEnabled(
-                                            OUTPUT_SCALED, key, context),
-                            () ->
-                                    OutputterHelper.isSecondLevelOutputEnabled(
-                                            OUTPUT_SCALED_FLATTENED, key, context));
+            DualEnabled enabledForKey;
+            try {
+                enabledForKey =
+                        dualEnabled.and(
+                                () ->
+                                        OutputterHelper.isSecondLevelOutputEnabled(
+                                                OUTPUT_SCALED, key, context),
+                                () ->
+                                        OutputterHelper.isSecondLevelOutputEnabled(
+                                                OUTPUT_SCALED_FLATTENED, key, context));
+            } catch (OutputWriteFailedException e) {
+                throw new JobExecutionException(e);
+            }
 
             if (enabledForKey.isEitherEnabled()) {
                 try {

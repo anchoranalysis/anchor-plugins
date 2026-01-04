@@ -33,6 +33,7 @@ import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.image.bean.channel.ChannelAggregator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
@@ -56,11 +57,14 @@ class OutputChannelsSeparately {
      * @param outputNameSingle the name to use for the channel, if only a single output is written.
      * @param createContext a function that creates an {@link InputOutputContext} based on whether
      *     multiple outputs are being written.
+     * @throws OutputWriteFailedException if outputName has not already been recorded as a
+     *     first-level output.
      */
     public static <T extends ChannelAggregator> void output(
             Collection<Entry<String, T>> namedAggregators,
             Supplier<String> outputNameSingle,
-            Function<Boolean, InputOutputContext> createContext) {
+            Function<Boolean, InputOutputContext> createContext)
+            throws OutputWriteFailedException {
         if (namedAggregators.size() > 1) {
             // Write using the name of each aggregator as there are multiple aggregators.
             InputOutputContext context = createContext.apply(true);
@@ -80,20 +84,21 @@ class OutputChannelsSeparately {
      * @param outputName the name to use for the channel, if defined. If not defined, the name of
      *     the aggregator is used.
      * @param context the subdirectory to write to.
+     * @throws OutputWriteFailedException if outputName has not already been recorded as a
+     *     first-level output.
      */
     private static <T extends ChannelAggregator> void outputIntoContext(
             Collection<Entry<String, T>> namedAggregators,
             Optional<String> outputName,
-            InputOutputContext context) {
+            InputOutputContext context)
+            throws OutputWriteFailedException {
         // We can write these group outputs in parallel, as we no longer in the parallel part of
         // Anchor's task execution
-        namedAggregators.parallelStream()
-                .forEach(
-                        entry ->
-                                writeChannel(
-                                        outputName.orElse(entry.getKey()),
-                                        entry.getValue(),
-                                        context));
+        CheckedStream.forEach(
+                namedAggregators.parallelStream(),
+                OutputWriteFailedException.class,
+                entry ->
+                        writeChannel(outputName.orElse(entry.getKey()), entry.getValue(), context));
     }
 
     /**
@@ -103,9 +108,12 @@ class OutputChannelsSeparately {
      * @param outputName the name to use for the output.
      * @param aggregator the {@link ChannelAggregator} to extract the channel from.
      * @param context the {@link InputOutputContext} to write to.
+     * @throws OutputWriteFailedException if outputName has not already been recorded as a
+     *     first-level output.
      */
     private static <T extends ChannelAggregator> void writeChannel(
-            String outputName, T aggregator, InputOutputContext context) {
+            String outputName, T aggregator, InputOutputContext context)
+            throws OutputWriteFailedException {
         context.getOutputter()
                 .writerSecondLevel(outputName)
                 .write(outputName, ChannelGenerator::new, () -> extractChannel(aggregator));

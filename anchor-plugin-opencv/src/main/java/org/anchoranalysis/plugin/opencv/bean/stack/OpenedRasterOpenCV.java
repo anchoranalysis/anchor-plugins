@@ -90,7 +90,7 @@ class OpenedRasterOpenCV implements OpenedImageFile {
      *
      * <p>When the {@link Optional} is empty, it implies the value has not been read yet.
      */
-    private Optional<ImageTimestampsAttributes> timestamps;
+    private Optional<ImageTimestampsAttributes> timestamps = Optional.empty();
 
     /**
      * Lazily-recorded image-location.

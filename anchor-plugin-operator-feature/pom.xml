@@ -7,37 +7,38 @@
     </parent>
   <artifactId>anchor-plugin-operator-feature</artifactId>
   <version>1.0.3-SNAPSHOT</version>
+  <name>Anchor Plugin - Operator Feature</name>
   <description>Generic features working on varying input-types.</description>
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-beans-shared</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-math</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.1.2</version>
 	</dependency>
 	
 	<dependency>

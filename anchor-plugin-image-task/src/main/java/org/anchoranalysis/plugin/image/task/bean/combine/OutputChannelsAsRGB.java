@@ -104,7 +104,7 @@ class OutputChannelsAsRGB {
 
             context.getOutputter()
                     .writerPermissive()
-                    .write(outputName, () -> new StackGenerator(true), stack::asStack);
+                    .write(outputName, () -> new StackGenerator(false), stack::asStack);
 
         } catch (OperationFailedException e) {
             throw new IOException(
