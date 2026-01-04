@@ -8,7 +8,7 @@
   <artifactId>anchor-plugin-image</artifactId>
   <version>1.0.3-SNAPSHOT</version>
   <name>Anchor Plugin - Image</name>
-  <description>Plugins for image-related operations.</descriptio>
+  <description>Plugins for image-related operations.</description>
   <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
