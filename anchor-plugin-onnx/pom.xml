@@ -7,6 +7,7 @@
     </parent> 
     <artifactId>anchor-plugin-onnx</artifactId>
     <version>1.0.3-SNAPSHOT</version>
+    <name>Anchor Plugin - ONNX</name>
 	<description>Plugins that call the ONNX runtime.</description>
 	
    <dependencies>
@@ -75,7 +76,7 @@
 	<dependency>
 		<groupId> com.microsoft.onnxruntime</groupId>
 		<artifactId>onnxruntime_gpu </artifactId>
-		<version>1.9.0</version>
+		<version>${onnx-runtime.version}</version>
 	</dependency>
         
     <!--  END: ONNX Runtime dependencies -->

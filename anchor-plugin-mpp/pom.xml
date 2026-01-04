@@ -1,13 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-	<parent>
+   <parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
 		<version>1.0.3-SNAPSHOT</version>
-    </parent> 
-  	<artifactId>anchor-plugin-mpp</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
-	<description>Plugins related to marked-point-processes (particularly proposers and providers).</description>
+   </parent> 
+   <artifactId>anchor-plugin-mpp</artifactId>
+   <version>1.0.3-SNAPSHOT</version>
+   <name>Anchor Plugin - Marked Point Processes</name>
+   <description>Plugins related to marked-point-processes (particularly proposers and providers).</description>
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>

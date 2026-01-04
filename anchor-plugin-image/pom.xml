@@ -6,8 +6,9 @@
 		<version>1.0.3-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-plugin-image</artifactId>
-<version>1.0.3-SNAPSHOT</version>
-<description>Plugins for image-related operations.</description>
+  <version>1.0.3-SNAPSHOT</version>
+  <name>Anchor Plugin - Image</name>
+  <description>Plugins for image-related operations.</descriptio>
   <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>

@@ -6,10 +6,10 @@
 		<version>1.0.3-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-plugin-image-task</artifactId>
- <version>1.0.3-SNAPSHOT</version>
- <description>Plugins for tasks related to images.</description>
+  <version>1.0.3-SNAPSHOT</version>
+  <name>Anchor Plugin - Image Task</name>
+  <description>Plugins for tasks related to images.</description>
   <dependencies>
-	
    <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
