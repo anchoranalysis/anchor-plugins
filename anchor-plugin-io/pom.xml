@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent-plugins</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.3</version>
     </parent>
   <artifactId>anchor-plugin-io</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.3</version>
   <name>Anchor Plugin - Image I/O</name>
   <description>Plugins for input-output operations.</description>
    <licenses>
@@ -191,7 +191,7 @@
 
 
   <scm>
-    <tag>HEAD</tag>
+    <tag>anchor-parent-plugins-1.0.3</tag>
     <connection>scm:git:git@github.com:anchoranalysis/anchor-plugins.git</connection>
     <developerConnection>scm:git:git@github.com:anchoranalysis/anchor-plugins.git</developerConnection>
     <url>https://github.com/anchoranalysis/anchor-plugins</url>
